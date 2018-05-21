@@ -80,18 +80,6 @@ export class MarketingsPageComponent implements OnInit {
     coupon: any;
     couponId: any;
 
-    /*
-    * {
-     couponDefType: '',
-     couponDefAmount: '',
-     couponDefDiscount: '',
-     useLimitMoney: '',
-     disabledWeekDate: '',
-     disabledTimeStart: '',
-     disabledTimeEnd: '',
-     } = this.couponList[0]
-    * */
-
     //选择门店
     cityStoreList: any = [];
     storesChangeNum: any = '0';

@@ -27,7 +27,7 @@
       <div class="date-box">
         <span class="date-left-btn iconfont icon-left2" [class.prevent-color]="preventDateLeft" (click)="onDateChangeClick('left')"></span>
         <div class="date">
-          <!--<nz-datepicker [nzSize]="'large'" (ngModelChange)="dateChange($event)" [(ngModel)]="date" ></nz-datepicker>-->
+            <nz-date-picker [nzFormat]="dateFormat" (ngModelChange)="dateChange($event)" [(ngModel)]="date"></nz-date-picker>
         </div>
         <span class="date-right-btn iconfont icon-right" [class.prevent-color]="preventDateRight" (click)="onDateChangeClick('right')"></span>
       </div>
