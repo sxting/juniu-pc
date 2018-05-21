@@ -93,16 +93,14 @@
 
         <nz-card nzTitle="常用功能" [nzBordered]="false" class="ant-card__body-nopadding mb-lg project-list">
             <div *ngFor="let item of function" nz-card-grid class="project-grid" (click)="onFunctionItemClick(item)">
-                <nz-card [nzBordered]="false" class="ant-card__body-nopadding mb0">
-                    <nz-card nz-card-meta [nzTitle]="noticeTitle">
-                        <ng-template #noticeTitle>
-                            <div class="card-title">
-                                <img [src]="item.logo" style="width: 35px;height: 35px; margin-bottom: 12px">
-                                <br>
-                                <span>{{item.title}}</span>
-                            </div>
-                        </ng-template>
-                    </nz-card>
+                <nz-card [nzBordered]="false" class="ant-card__body-nopadding mb0" nz-card-meta [nzTitle]="noticeTitle">
+                    <ng-template #noticeTitle>
+                        <div class="card-title">
+                            <img [src]="item.logo" style="width: 35px;height: 35px; margin-bottom: 12px">
+                            <br>
+                            <span>{{item.title}}</span>
+                        </div>
+                    </ng-template>
                 </nz-card>
             </div>
         </nz-card>
