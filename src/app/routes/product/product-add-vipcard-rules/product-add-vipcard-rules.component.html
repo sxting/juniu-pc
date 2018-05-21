@@ -1,0 +1,15 @@
+<page-header [title]="'创建会员卡'">
+    创建一张会员卡，展示在收银开卡页面，供收银员选择；也可以展示在微信和支付宝卡包。
+</page-header>
+<nz-card [nzBordered]="false">
+    <nz-steps [(nzCurrent)]="item.step">
+        <nz-step nzTitle="基本信息"></nz-step>
+        <nz-step nzTitle="卡规则设置"></nz-step>
+        <nz-step nzTitle="适用范围"></nz-step>
+        <nz-step nzTitle="完成"></nz-step>
+    </nz-steps>
+    <app-rules-step1 *ngIf="item.step==0"></app-rules-step1>
+    <app-rules-step2 *ngIf="item.step==1"></app-rules-step2>
+    <app-rules-step3 *ngIf="item.step==2"></app-rules-step3>
+    <app-rules-step4 *ngIf="item.step==3"></app-rules-step4>
+</nz-card>

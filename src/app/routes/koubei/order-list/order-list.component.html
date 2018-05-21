@@ -1,0 +1,171 @@
+<page-header [title]="'口碑订单'"></page-header>
+<nz-card [nzBordered]="false">
+    <form nz-form [nzLayout]="'inline'" (ngSubmit)="getData()" class="search__form">
+        <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
+            <nz-col nzMd="8" nzSm="24">
+                <nz-form-item>
+                    <nz-form-label nzFor="productId">{{timeText}}时间</nz-form-label>
+                    <nz-form-control>
+                        <input nz-input  [(ngModel)]="productId" name="productId" placeholder="请选择开始时间" id="productId">
+                    </nz-form-control>
+                </nz-form-item>
+            </nz-col>
+            <nz-col nzMd="8" nzSm="24">
+                <nz-form-item>
+                    <nz-form-label nzFor="storeId">选择门店</nz-form-label>
+                    <nz-form-control>
+                        <nz-select [(ngModel)]="storeId" name="storeId" id="storeId" [nzPlaceHolder]="'请选择一个门店'" [nzShowSearch]="true">
+                            <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.storeName" [nzValue]="i.storeId"></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </nz-col>
+            <nz-col nzMd="8" nzSm="24" *ngIf="expandForm&&switchOrderListBtns">
+                <nz-form-item>
+                    <nz-form-label nzFor="productName">搜 索</nz-form-label>
+                    <nz-form-control>
+                        <input nz-input [(ngModel)]="productName" name="productName" placeholder="请输入订单号" id="productName">
+                    </nz-form-control>
+                </nz-form-item>
+            </nz-col>
+            <nz-col [nzSpan]="expandForm ? 24 : 8" [class.text-right]="expandForm" *ngIf="switchOrderListBtns">
+                <button nz-button type="submit" [nzType]="'primary'" [nzLoading]="loading">查询</button>
+                <a (click)="expandForm=!expandForm">
+                    {{expandForm ? '收起' : '展开'}}
+                    <i class="anticon" [class.anticon-down]="!expandForm" [class.anticon-up]="expandForm"></i>
+                </a>
+            </nz-col>
+            <nz-col [nzSpan]="8" *ngIf="switchHexiaoListBtns">
+                <button nz-button type="submit" [nzType]="'primary'" [nzLoading]="loading">查询</button>
+            </nz-col>
+        </nz-row>
+    </form>
+</nz-card>
+
+<!--订单列表-->
+<nz-card [nzBordered]="false" *ngIf="switchOrderListBtns">
+    <div class="title clearfix" style="margin-bottom: 24px">
+        <nz-radio-group [(ngModel)]="status" class="mr-md fl" >
+            <label nz-radio-button *ngFor="let item of checkArrBtns;let i =index"  [nzValue]="item.status" (click)="onCheckingStatusClick(item.status)">
+                <span>{{item.name}}</span>
+            </label>
+        </nz-radio-group>
+        <button nz-button (click)="checkingKoubeiProductList()" [nzType]="'primary'" class="fr">
+            <span>核销对账</span>
+        </button>
+    </div>
+    <nz-table #basicTable [nzShowPagination]="false" [nzData]="orderListInfor">
+        <thead nz-thead class="ui-grid-thead">
+            <tr>
+                <th nz-th class="" *ngFor="let item of orderTheadName;let i = index">{{item}}</th>
+            </tr>
+        </thead>
+        <tbody nz-tbody class="ui-grid-tbody">
+            <tr nz-tbody-tr *ngFor="let item of orderListInfor;let i = index">
+                <td nz-td>{{i+1}}</td>
+                <td nz-td>{{item.orderTime}}</td>
+                <td nz-td>{{item.transNo}}</td>
+                <td nz-td>{{item.content}}</td>
+                <td nz-td>{{item.verifyFrequency == 'simple'? '单次核销':'多次核销'}}</td>
+                <td nz-td>{{item.amount/100}}</td>
+                <td nz-td>{{item.statusTransf}}</td>
+                <td nz-td class="operation">
+                    <span (click)="checkingProductDetailInfor(productDetail,item.orderNo)">查看</span>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+    <div class="nzPaginationBox">
+        <nz-pagination class="nzPagination" [nzTotal]="countTotal" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
+    </div>
+</nz-card>
+
+<!--核销列表-->
+<nz-card [nzBordered]="false" *ngIf="switchHexiaoListBtns">
+    <div class="title clearfix" style="margin-bottom: 24px">
+        <button nz-button (click)="exportExcel()" [nzType]="'primary'" class="fl">
+            <span>导出Excel</span>
+        </button>
+        <button nz-button (click)="comeBack()" [nzType]="'primary'" class="fl" style="margin-left: 20px">
+            <span>返回</span>
+        </button>
+    </div>
+    <nz-table #basicTable [nzShowPagination]="false" [nzData]="vouchersListInfor">
+        <thead nz-thead class="ui-grid-thead">
+        <tr>
+            <th nz-th class="" *ngFor="let item of marketingTheadName;let i = index">{{item}}</th>
+        </tr>
+        </thead>
+        <tbody nz-tbody class="ui-grid-tbody">
+            <tr nz-tbody-tr *ngFor="let item of vouchersListInfor;let j = index">
+                <td nz-td>{{j+1}}</td>
+                <td nz-td>{{item.settleTime}}</td>
+                <td nz-td>{{item.settleNo}}</td>
+                <td nz-td>{{item.settleStoreName}}</td>
+                <td nz-td>{{item.content}}</td>
+                <td nz-td>{{item.amount/100}}</td>
+                <td nz-td class="operation">
+                    <span (click)="checkingProductDetailInfor(productDetail,item.orderNo)">查看</span>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+    <div class="nzPaginationBox">
+        <nz-pagination class="nzPagination" [nzTotal]="countTotal" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
+    </div>
+</nz-card>
+
+<!--查看详情-->
+<ng-template #productDetail>
+    <div class="reserve-record-alert">
+        <div class="content-title"><span></span>订单详情</div>
+        <div class="orderpage_detail_list">
+            <table>
+                <tr class="ui-grid-row">
+                    <td class="">交易号</td>
+                    <td class="" style="width:390px;">{{transNo}}</td>
+                    <td class="">订单状态</td>
+                    <td class="trans-status" style="width:165px;">{{orderDetailStatus}}</td>
+                </tr>
+                <tr>
+                    <td class="">下单时间</td>
+                    <td class="" style="width:390px;">{{orderDetailOrderTime}}</td>
+                    <td class="">商品数量</td>
+                    <td class="" style="width:165px;">{{voucherNum}}</td>
+                </tr>
+                <tr>
+                    <td class="">购买门店</td>
+                    <td class="" style="width:390px;">{{orderDetailStoreName}}</td>
+                    <td class="">订单金额</td>
+                    <td class="" style="width:165px;">{{orderDetailAmount/100}}</td>
+                </tr>
+                <tr>
+                    <td class="">订单备注</td>
+                    <td class="" colspan="3">{{orderDetailContent? orderDetailContent : '－'}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="content-title"><span></span>核销信息</div>
+        <p *ngIf="showTips" style="text-align: center;">暂无核销信息</p>
+        <div class="orderpage_detail_list">
+            <table class="">
+                <tbody *ngFor="let listInfor of orderDetailVouchers;let index = index">
+                <tr>
+                    <td class="">商品名称</td>
+                    <td class="" style="width:270px;">{{listInfor.productName}}</td>
+                    <td class="">实收金额</td>
+                    <td class="" style="width:103px;">{{listInfor.amount/100}}</td>
+                    <td class="">核销状态</td>
+                    <td class="State_verification" style="width:80px;">{{listInfor.statusTransf}}</td>
+                </tr>
+                <tr>
+                    <td class="voucher_time">核销时间</td>
+                    <td class="" style="width:270px;">{{listInfor.settleTime}}</td>
+                    <td class="">核销门店</td>
+                    <td class="" colspan="3">{{listInfor.settleStoreName}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</ng-template>

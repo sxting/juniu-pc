@@ -1,0 +1,15 @@
+.picBox{
+    margin: 0 auto;
+    display: flex;
+    width: 80%;
+    justify-content: space-between;
+    flex-wrap:wrap;
+    margin-top: 20px;
+    margin-bottom: 20px;    
+}
+.picBox>div{
+    width: 300px;
+    height: 400px;
+    margin: 10px 0;
+    border: 1px solid #e5e5e5;
+}

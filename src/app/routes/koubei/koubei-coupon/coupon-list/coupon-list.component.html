@@ -1,0 +1,36 @@
+<page-header></page-header>
+<ul class="btns_switch clearfix">
+    <li [class.btns_active]="statusFlag == 1" (click)="onStatusClick(1)">进行中</li>
+    <li [class.btns_active]="statusFlag == 0" (click)="onStatusClick(0)">已结束</li>
+</ul>
+<div class="table_data clearfix">
+    <nz-table #nzTable [nzData]="activityInfos" [nzShowPagination]="false">
+        <thead class="ui-grid-thead">
+        <tr>
+            <th class="">序号</th>
+            <th class="">活动名称</th>
+            <th class="">开始时间</th>
+            <th class="">结束时间</th>
+            <th class="">优惠方式</th>
+            <th class="">使用门槛</th>
+            <th class="">操作</th>
+        </tr>
+        </thead>
+        <tbody class="ui-grid-tbody">
+        <tr *ngFor="let item of activityInfos;let i = index">
+            <td>{{i+1}}</td>
+            <td>{{item.marketingName}}</td>
+            <td>{{item.startTime}}</td>
+            <td>{{item.endTime}}</td>
+            <td>{{item.PreferentialWay}}</td>
+            <td>{{item.chType}}</td>
+            <td class="operation">
+                <span (click)="marketingEdit(item.marketingId,item.marketingType)">编辑</span>
+                <span class="iconfont icon-line1" *ngIf="statusFlag == 1"></span>
+                <span (click)="offShelf(i,item.marketingId,statusFlag)">{{statusFlag == 1? '下架':''}}</span>
+            </td>
+        </tr>
+        </tbody>
+    </nz-table>
+    <nz-pagination style="float: right;padding-top: 10px;" (nzPageIndexClickChange)="paginate($event)"  nzShowTotal [nzPageSize]="10" [nzPageIndex]="currentPage" [nzTotal]="totalItems"></nz-pagination>
+</div>

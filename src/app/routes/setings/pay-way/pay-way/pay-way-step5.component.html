@@ -1,0 +1,65 @@
+<div *ngIf="item.status == '0'">
+    <div class="icon pt-md"><i class="anticon anticon-clock-circle icon-lg text-going"></i></div>
+    <h1 class="h2 pt-md">审核中</h1>
+</div>
+
+<div *ngIf="item.status == '1'">
+    <div class="icon pt-md"><i class="anticon anticon-check-circle text-success icon-lg"></i></div>
+    <h1 class="h2 pt-md">审核通过</h1>
+</div>
+
+<div *ngIf="item.status == '2'">
+    <div class="icon pt-md"><i class="anticon anticon-close-circle icon-lg text-error"></i></div>
+    <h1 class="h2 pt-md">审核未通过</h1>
+</div>
+
+<p class="pt-md text-grey" *ngIf="item.status == '2' && data.examineStatusRemark">{{data.examineStatusRemark}}</p>  <!--审核不通过时显示-->
+<p class="pt-md text-grey" *ngIf="item.status == '0' || item.status == '1'">商户号：{{data.mchId}}</p>
+
+<div class="extra mt-md" *ngIf="item.status == '2'">  <!--审核不通过时显示-->
+    <div nz-row class="mb-md">
+        <div nz-col [nzSm]="8" class="text-right">激活状态：</div>
+        <div nz-col [nzSm]="16">
+            <span *ngIf="data.activateStatus == '0'">未激活</span>
+            <span *ngIf="data.activateStatus == '1'">激活成功</span>
+            <span *ngIf="data.activateStatus == '2'">激活失败</span>
+            <span *ngIf="data.activateStatus == '3'">需要再次激活</span>
+            <span *ngIf="data.activateStatus == '4'">冻结</span>
+        </div>
+    </div>
+    <div nz-row class="mb-md" *ngIf="data.activateStatusRemark">
+        <div nz-col [nzSm]="8" class="text-right">激活备注：</div>
+        <div nz-col [nzSm]="16">{{data.activateStatusRemark}}</div>
+    </div>
+</div>
+
+<div class="extra mt-md" *ngIf="item.status == '0' || item.status == '1'">
+    <div nz-row class="mb-md">
+        <div nz-col [nzSm]="8" class="text-right">收款账户：</div>
+        <div nz-col [nzSm]="16">{{data.cardNo}}</div>
+    </div>
+    <div nz-row class="mb-md">
+        <div nz-col [nzSm]="8" class="text-right">微信支付费率：</div>
+        <div nz-col [nzSm]="16">{{data.wechatRate/10}}%</div>
+    </div>
+    <div nz-row class="mb-md">
+        <div nz-col [nzSm]="8" class="text-right">支付宝费率：</div>
+        <div nz-col [nzSm]="16">{{data.alipaysRate/10}}%</div>
+    </div>
+</div>
+
+<!--审核通过时显示-->
+<div nz-row class="my-md py-md" *ngIf="item.status == '1'">
+    <div nz-col>
+        <button nz-button [nzType]="'primary'" (click)="onDownloadBtnClick()">下载付款码</button>
+        <button nz-button class="ml-sm" (click)="onPayRecordBtnClick()">查看到账记录</button>
+    </div>
+</div>
+
+<!--审核不通过时显示-->
+<div nz-row class="my-md py-md" *ngIf="item.status == '2'">
+    <div nz-col>
+        <button nz-button [nzType]="'primary'" (click)="reUpload()">重新上传</button>
+    </div>
+</div>
+

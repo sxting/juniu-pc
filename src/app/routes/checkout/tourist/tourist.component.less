@@ -1,0 +1,726 @@
+.renlianBOX{
+    width: 100%;
+    height: 210px;
+}
+.borderLeft{
+    width: 100%;
+    position: relative;
+}
+.width100{
+    width: 100%;
+}
+.settingsCollapsedTrue{
+    position: absolute;
+    top: 80px;
+    left: 80px;
+    right: 20px;
+    bottom: 0;
+}
+.settingsCollapsedFalse{
+    position: absolute;
+    top: 80px;
+    left: 220px;
+    right: 20px;
+    bottom: 20px;
+}
+.renlianTrue{
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    top: 10px;
+    bottom: -32px;  
+}
+.renlianFalse{
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    top: 10px;
+    bottom: -32px;
+}
+.absoluteBox{
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    right: 24px;
+    bottom: 24px;
+    min-width: 802px;
+    >div{
+        position: absolute;
+        top: 0;
+        bottom: 0;
+    }
+    >.absoluteLeft{
+        left:0;
+        min-width: 400px;
+        right: 402px;
+    }
+    >.absoluteRight{
+        width: 402px;
+        right: 0;
+        border-left: 1px solid #e8e8e8;        
+        .xfqingdan{
+            width:100%;
+            height: 490px;
+            padding-left: 10px;
+        }
+        .xiaoji{
+            height: 220px;
+            border-top: 1px solid #e8e8e8;
+            position: absolute;
+            bottom: -20px;
+            left: 10px;
+            right: 0px;
+            background: #FFFFFF;
+            border: 1px solid #DFDFDF;
+            box-shadow: 0 1px 2px 0 #DEDEDE;
+            border-radius: 4px;
+            .formItem{
+                min-height: 50px;
+                padding: 0 15px;
+                // padding-top: 10px;
+                margin-bottom: 0 !important;
+            }
+        }
+        .shoukaBottom{
+            height: 100px !important;
+        }
+    }
+}
+.formItemBorder{
+    border-bottom: 1px solid #e8e8e8;
+}
+.lineHeight50{
+    height: 50px;
+    line-height: 50px;
+}
+.shouyinMiddle{
+    height: 100px;
+    border-bottom: 1px solid #e8e8e8;
+}
+.shouyinBottom{
+    padding-top: 10px;
+    position: absolute;
+    padding-top: 10px;
+    bottom: 0;
+    top: 100px;
+    left: 0;
+    right: 0;
+}
+.shouyinBottom>div{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 45px;
+    overflow-y: auto;
+    padding: 0 24px;
+}
+.shouyinTop{
+    border-bottom: 1px solid #e8e8e8;
+}
+.shopBox{
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+}
+.shopBigBox{
+    margin-bottom: 20px;
+}
+.shopBox>div{
+    width: 178px;
+    height: 116px;
+    border: 1px solid #e8e8e8;
+    background: #FCFCFC;
+    border-radius: 5px ;
+    margin-right: 10px;
+    margin-top: 10px;
+    box-shadow: 0 1px 2px 0 #DEDEDE;
+    cursor: pointer;
+    .shopTitle{
+        padding-left: 12px;
+        height: 30px;
+        line-height: 30px;
+        font-size:14px;
+        font-family: PingFangSC-Regular;
+        color: #666666;
+    }
+    .shopName{
+        height: 50px;
+        overflow:hidden;
+        text-overflow:ellipsis; 
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+        padding: 0 10px;
+    }
+    .shopMoney{
+        font-size: 18px;
+    }
+    .shopName,.shopMoney{
+        text-align: center;
+    }
+}
+.shopBigBox .shopBox>.shopBigBox1:hover{
+    background: #fff;
+    box-shadow: 0 1px 6px 0 #FE7070;
+    transform: scale(1.1, 1.1);
+    transition: .3s transform;
+    z-index: 9999;
+    .shopTitle{
+        background: #FE7070;
+        color: #fff;
+    }
+    .shopMoney{
+        color: #FF4141;
+    }
+}
+.shopBigBox .shopBox>.shopBigBox2:hover{
+    background: #fff;
+    transform: scale(1.1, 1.1);
+    transition: .3s transform;
+    box-shadow: 0 1px 6px 0 #6FC4FF;
+    .shopTitle{
+        background: #6FC4FF;
+        color: #fff;
+    }
+    .shopMoney{
+        color: #6FC4FF;
+    }
+}
+.click{
+    box-shadow: 0 1px 4px 0 #FFDCDC;
+    position: relative;
+    .shopNum{
+        position: absolute;
+        right: -5px;
+        display: inline-block;
+        width: 20px;
+        text-align: center;
+        height: 20px;
+        font-size: 12px;
+        line-height: 20px;
+        position: absolute;
+        border-radius: 50%;
+        top: -10px;
+        border: 1px solid #fff;
+    }
+}
+.shopBigBox .click&&.shopBigBox1{
+    .shopTitle{
+        background: #FE7070;
+        color: #fff;
+    }
+    .shopMoney{
+        color: #FF4141;
+    }
+    .shopNum{
+        background: #FE7070;
+    }
+}
+.shopBigBox .click&&.shopBigBox2{
+    .shopTitle{
+        background: #6FC4FF;
+        color: #fff;
+    }
+    .shopMoney{
+        color: #3FB0FF;
+    }
+    .shopNum{
+        background: #6FC4FF;
+    }
+}
+.vipBar{
+    height: 80px;
+    width: 100%;
+    background: #FFEAD3;
+    border: 1px solid #DFDFDF;
+    box-shadow: 0 1px 2px 0 #DEDEDE;
+    border-radius: 4px;
+    padding:12px 24px;
+    position: relative;    
+    .img,.vipBarRight{
+        float: left;
+    }
+    .close{
+        right: 5px;
+        position: absolute;
+        top: 0px;
+        font-size: 17px;
+        cursor: pointer;
+    }
+    .img{
+        width: 50px;
+        height: 50px;
+        // border-radius: 50%;
+        // background: #d3f1f1;
+        margin-right: 11px;
+        // background-image: url(nan.2701afe….png);
+        background-repeat: no-repeat;
+        background-size: 100%;
+    }
+    .nan{
+        background-image: url('../../../../assets/img/nan.png')
+    }
+    .nv{
+        background-image: url('../../../../assets/img/nv.png')
+    }
+    .vipBarRight>div{
+        font-family: PingFangSC-Regular;
+        font-size: 14px;
+        color: #333333;
+        line-height: 14px;
+        margin-bottom: 10px;
+        margin-top: 8px;
+    }
+    .vipBarRight>div>span{
+        display: inline-block;
+        position: absolute;
+        width: 100px;
+        height: 24px;
+        line-height: 24px;
+        opacity: 0.8;
+        right: 0;
+        bottom: 19px;
+        background: #FFFFFF;
+        border-radius: 20px 0 0 20px;
+        text-align: center;
+        font-size: 12px;
+        cursor: pointer;
+    }
+}
+.swxzVIP{
+    display: flex;
+    line-height: 56px;
+    background: #FCFCFC;
+    border: 1px solid #DFDFDF;
+    border-radius: 4px;
+    color: #F0F0F0;
+    .icon-gerenxinxi{
+        font-size: 40px;
+    }
+    .zwxx{
+        color: #CCCCCC;
+        margin-left: 20px;
+    }
+}
+.icon-jiantou::before{
+    content:"";
+}
+.icon-jiantou::after{
+    content:"\e611";
+}
+.xfBox{
+    position: absolute;
+    top: 125px;
+    left: 10px;
+    right: 0;
+    bottom: 210px;
+    overflow-y: auto;
+    background: #FFFFFF;
+    border: 1px solid #DFDFDF;
+    box-shadow: 0 1px 2px 0 #DEDEDE;
+    border-radius: 4px;
+}
+.shoukaMiddle{
+    bottom: 90px !important;
+}
+.xfBox>div>.xfTop{
+    overflow: hidden;
+    height: 40px;
+    line-height: 40px;
+    padding-left: 20px;
+    cursor: pointer;
+    div{
+        float: left;
+        margin-right: 14px;
+        overflow: hidden;
+        border-bottom: 1px solid rgba(204,204,204,0.30);
+    }
+    .xfMiddle{
+        width: 50px;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+    }
+    .xfRight{
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+        width: 190px;
+    }
+    .xfxiala{
+        float: right;
+    }
+}
+.textAline{
+    text-align: center;
+}
+.numBox{
+    display: flex;
+    width: 90px;
+    height: 32px;
+    border-radius: 4px;
+    border: 1px solid #d9d9d9;
+    line-height: 32px;
+    justify-content: space-around;
+    text-align: center;
+    cursor: pointer;
+    div{
+        width: 33%;
+        height: 100%;
+    }
+}
+.shopTypeBox{
+    height: 35px;
+    line-height: 35px;
+}
+.huise{
+    background: #F9F9F9;
+}
+.shiti{
+    color: #6FC4FF;
+}
+.fuwu{
+    color: #FF4141;
+}
+.colorRed{
+    font-family: PingFangSC-Regular;
+    color: rgba(255,102,0,0.70);
+    cursor: pointer;
+}
+.CardBigBox{
+    display: flex;
+    flex-wrap: wrap;
+    >div{
+        width: 266px;
+        height: 78px;
+        border-radius: 5px ;
+        margin-right: 10px;
+        margin-top: 10px;
+        cursor: pointer;
+        position: relative;        
+    }
+    .cardName{
+        margin: 15px 0 16px 30px;
+        font-family: PingFangSC-Medium;
+        font-size: 16px;
+        color: #FFFFFF;
+        line-height: 16px;
+    }
+    .cardMoney{
+        font-size: 12px;
+        color: #FFFFFF;
+        line-height: 12px;
+        margin-left: 30px;
+        .money{
+            font-size: 20px;
+            margin-right: 4px;
+            color: #FFFFFF;
+        }
+    }
+    
+    .chongzhi{
+        position: absolute;
+        color: #fff;
+        right: 10px;
+        bottom: 10px;
+        width: 40px;
+        text-align: center;
+        height: 24px;
+        line-height: 24px;
+        border: 1px solid #fff;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+}
+.youhuiBox{
+    display: flex;
+    flex-wrap: wrap;
+    >div{
+        width: 220px;
+        height: 70px;
+        border-radius: 5px ;
+        margin-right: 10px;
+        margin-top: 10px;
+        cursor: pointer;
+        position: relative;        
+    }
+    .youhui{
+        background: url('../../../../assets/img/youhui.png') left center no-repeat;
+        display: flex;
+        color: #fff;    
+        >div:nth-of-type(1){
+            margin: 15px 25px 0 20px;
+        }
+        >div:nth-of-type(2){
+            font-size: 12px;
+            margin-top: 10px;
+        }
+    }
+
+}
+.cardMoneyP{
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    width: 142px;
+    display: flex;
+    justify-content:space-between;
+}
+.STORED{
+    background: url('../../../../assets/img/cardBg1.jpg') left center no-repeat;
+}
+.REBATE{
+    background: url('../../../../assets/img/cardBg2.jpg') left center no-repeat;
+}
+.METERING{
+    background: url('../../../../assets/img/cardBg3.jpg') left center no-repeat;
+}
+.TIMES{
+    background: url('../../../../assets/img/cardBg4.jpg') left center no-repeat;
+}
+.cardTypeListBox{
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    >div>div:hover{
+        transform: scale(1.1, 1.1);
+        transition: .3s transform;
+        background: #FFFFFF;
+        box-shadow: 0 1px 4px 0 rgba(255,102,0,0.50);
+        border-radius: 4.51px;
+        .TOP{
+            .ziBox>div{
+                background: #FF6600;
+            }
+            .cardMoney{
+                color: #FF6600;;
+            }
+        }
+        .BOTTOM{
+            border-top: 1px solid #FFECDF;
+        }
+    }
+    .click{
+        background: #FFFFFF !important;
+        box-shadow: 0 1px 4px 0 rgba(255,102,0,0.50) !important;
+        border-radius: 4.51px !important;
+        .TOP{
+            .ziBox>div{
+                background: #FF6600 !important;
+            }
+            .cardMoney{
+                color: #FF6600 !important;
+            }
+        }
+        .BOTTOM{
+            border-top: 1px solid #FFECDF !important;
+        }
+    }
+    >div>div{
+        width: 270px;
+        height: 150px;
+        background: #FCFCFC;
+        border: 1px solid #E0E0E0;
+        box-shadow: 0 1px 3px 0 rgba(222,222,222,0.50);
+        border-radius: 4px;
+        margin-right: 20px;
+        margin-top: 10px;
+        cursor: pointer;
+        position: relative;
+        .TOP{
+            overflow: hidden;
+            >div{
+                float: left;
+            }
+            .ziBox{
+                margin: 43px 0 0 33px;
+            }
+            .ziBox>div{
+                width: 46px;
+                height: 46px;
+                opacity: 0.8;
+                background: #AAAAAA;
+                border-radius: 5px;
+                font-family: PingFangSC-Regular;
+                font-size: 27.5px;
+                color: #FFFFFF;
+                text-align: center;
+                line-height: 46px;
+            }
+            .cardName{
+                margin: 32px 0 20px 29px;
+                font-family: PingFangSC-Regular;
+                font-size: 18px;
+                color: #333333;
+                overflow: hidden;
+                text-overflow:ellipsis;
+                white-space: nowrap;
+                width: 144px;
+            }
+            .cardMoney{
+                font-family: PingFangSC-Regular;
+                font-size: 18px;
+                color: #333333;
+                margin-left: 31px;
+            }
+        }
+        .BOTTOM{
+            margin-top: 17px;
+            height: 33px;
+            line-height: 33px;
+            padding-left: 23px;
+            font-family: PingFangSC-Regular;
+            font-size: 12px;
+            color: #666666;
+            overflow: hidden;
+            border-top: 1px solid #E0E0E0;
+        }
+        .icon-success{
+            position: absolute;
+            color: #FF6600;
+            right: 10px;
+            top: 10px;
+        }
+    }
+}
+.kongbaiBox{
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -112px;
+    margin-top: -48px;
+    opacity: 0.6;
+    font-family: PingFangSC-Regular;
+    color: #B4B4B4;
+    .iconfont{
+        font-size: 50px;
+    }
+    .ziti{
+        font-size: 14px;
+    }
+}
+.kongbaiBox2{
+    margin-left: -70px !important;
+}
+.yhjBox{
+    height: 51px;
+    padding-top: 10px;
+    overflow: hidden;
+    label{
+        line-height: 12px;
+        font-size: 12px;
+        .iconfont{
+            font-size: 12px;
+            margin-right: 5px;
+        }
+        .icon-quan{
+            color: #FF293E;
+        }
+        .icon-card{
+            color: #FFb421;            
+        }
+        .ziti{
+            padding-left: 24px;
+            width: 170px;
+            overflow: hidden;
+            text-overflow:ellipsis;
+            white-space: nowrap;
+            display: inline-block;
+        }
+    }
+}
+.kouka{
+    height: 70px;
+    .kouka2{
+        overflow-y: auto;
+        height: 70px !important;
+        label{
+            margin-left: 0 !important;
+        }
+    }
+}
+.VipXQ{
+    overflow: hidden;
+    .vipxinx{
+        overflow: hidden;        
+    }
+    .topname{
+        font-size: 20px;
+        font-weight: 500;
+    }
+    h3{
+        margin-top: 10px;
+    }
+}
+.nzPaginationBox{
+    margin: 20px;
+    overflow: hidden;
+}
+.nzPagination{
+    float: right;
+}
+.iconBox{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 20px 0;
+    >div{
+        width: 80px;
+        height: 80px;
+        text-align: center;
+        line-height: 60px;
+        border-radius: 5px;
+        padding: 10px;
+        cursor: pointer;
+    }
+    .iconfont{
+        height: 40px;
+        line-height: 40px;
+        font-size: 40px;
+    }
+    .zi{
+        height: 20px;
+        font-size: 12px;
+        line-height: 20px;
+    }
+    .wbox{
+        box-shadow: 0 1px 6px 0 #04c104;
+    }
+    .zbox{
+        box-shadow: 0 1px 6px 0 #0090e4;
+    }
+    .xbox{
+        box-shadow: 0 1px 6px 0 #ff5c63;
+    }
+    .ybox{
+        box-shadow: 0 1px 6px 0 #f48e04;
+    }
+    .icon-w{
+        color: #04c104;
+    }
+    .icon-z{
+        color: #0090e4;
+    }
+    .icon-x{
+        color: #ff5c63;
+    }
+    .icon-y{
+        color: #f48e04;
+    }
+}
+.kaitongVIP{
+    float: right;
+    width: 109px;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    border: 1px solid #ff6600;
+    color: #ff6600;
+    border-radius: 5px;
+    margin-top: 24px;
+    margin-right: 10px;
+    cursor: pointer;
+}

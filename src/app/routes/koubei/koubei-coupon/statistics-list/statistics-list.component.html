@@ -1,0 +1,117 @@
+<page-header></page-header>
+<div class="table_data clearfix">
+    <nz-table #nzTable [nzData]="activityEffectInfos" [nzShowPagination]="false">
+        <thead class="ui-grid-thead">
+        <tr>
+            <th class="">活动标题</th>
+            <th class="">活动收益金额(元)</th>
+            <th class="">券领取数(张)</th>
+            <th class="">券核销数(张)</th>
+            <th class="">券核销率</th>
+            <th class="">活动开始时间</th>
+            <th class="">操作</th>
+        </tr>
+        </thead>
+        <tbody class="ui-grid-tbody">
+        <tr *ngFor="let list of activityEffectInfos;let i = index">
+            <td>{{list.activityName}}</td>
+            <td>{{list.amount/100}}</td>
+            <td>{{list.takenCount}}</td>
+            <td>{{list.voucherCount}}</td>
+            <td>{{list.voucherRate}}</td>
+            <td>{{list.beginDate}}</td>
+            <td class="operation" (click)="viewActivityEffects(list.marketingId, activityAlert)">查看活动效果</td>
+        </tr>
+        </tbody>
+    </nz-table>
+    <!--页码-->
+    <nz-pagination style="float: right;padding: 10px 0 0px;" (nzPageIndexClickChange)="paginate($event)"  nzShowTotal [nzPageSize]="10" [nzPageIndex]="currentPage" [nzTotal]="totalItems"></nz-pagination>
+</div>
+
+<ng-template #activityAlert>
+    <div class="marketing_data">
+        <ul class="Voucher clearfix">
+            <li>
+                <div class="member-home-bottom-t">
+                    <div class="member-home-t-t  member-home-t-t1"></div>
+                    <div class="member-home-t-b">今日带动营业额(元)</div>
+                </div>
+                <div class="member-home-bottom-b">
+                    <div class="member-home-b-l">
+                        <div class="member-home-b-l-t member-home-t-t"></div>
+                        <div class="member-home-b-l-b member-home-t-b member-home-t-b-color">{{activityDetailInfos?.todayAmount/100}}</div>
+                    </div>
+                    <div class="member-home-b-r">
+                        <div class="member-home-b-l-t member-home-t-t"></div>
+                        <div class="member-home-b-l-b member-home-t-b">累计：{{activityDetailInfos?.totalAmount/100}}</div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="member-home-bottom-t">
+                    <div class="member-home-t-t  member-home-t-t1"></div>
+                    <div class="member-home-t-b">今日发券量</div>
+                </div>
+                <div class="member-home-bottom-b">
+                    <div class="member-home-b-l">
+                        <div class="member-home-b-l-t member-home-t-t"></div>
+                        <div class="member-home-b-l-b member-home-t-b member-home-t-b-color">{{activityDetailInfos?.todayTakenCount}}</div>
+                    </div>
+                    <div class="member-home-b-r">
+                        <div class="member-home-b-l-t member-home-t-t"></div>
+                        <div class="member-home-b-l-b member-home-t-b">累计：{{activityDetailInfos?.totalTakenCount}}</div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="member-home-bottom-t">
+                    <div class="member-home-t-t  member-home-t-t1"></div>
+                    <div class="member-home-t-b">今日核销量</div>
+                </div>
+                <div class="member-home-bottom-b">
+                    <div class="member-home-b-l">
+                        <div class="member-home-b-l-t member-home-t-t"></div>
+                        <div class="member-home-b-l-b member-home-t-b member-home-t-b-color">{{activityDetailInfos?.todayVoucherCount}}</div>
+                    </div>
+                    <div class="member-home-b-r">
+                        <div class="member-home-b-l-t member-home-t-t"></div>
+                        <div class="member-home-b-l-b member-home-t-b">累计：{{activityDetailInfos?.totalVoucherCount}}</div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="member-home-bottom-t">
+                    <div class="member-home-t-t  member-home-t-t1"></div>
+                    <div class="member-home-t-b">今日核销率</div>
+                </div>
+                <div class="member-home-bottom-b">
+                    <div class="member-home-b-l">
+                        <div class="member-home-b-l-t member-home-t-t"></div>
+                        <div class="member-home-b-l-b member-home-t-b member-home-t-b-color">{{activityDetailInfos?.todayVoucherRate*100}}%</div>
+                    </div>
+                    <div class="member-home-b-r">
+                        <div class="member-home-b-l-t member-home-t-t"></div>
+                        <div class="member-home-b-l-b member-home-t-b">累计：{{activityDetailInfos?.totalVoucherRate*100}}%</div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="marketing_data">
+        <h2><span class="line"></span>走势图</h2>
+        <ul class="echart clearfix">
+            <li>
+                <div class="canves_table" id="echart_first"></div>
+                <p class="echart_bg_1">收益金额</p>
+            </li>
+            <li>
+                <div class="canves_table" id="echart_second"></div>
+                <p class="echart_bg_2">笔单价</p>
+            </li>
+            <li>
+                <div  class="canves_table" id="echart_third"></div>
+                <p class="echart_bg_3">核销量</p>
+            </li>
+        </ul>
+    </div>
+</ng-template>

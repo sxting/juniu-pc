@@ -1,0 +1,40 @@
+<page-header></page-header>
+<div class="memberAnalysis-top ">
+    <h3 class="flex-1 text-lg borderLeft">批量导入</h3>
+    <div class="addStaffBox-main">
+        <div class="">
+            <div class="addStaffBox-main-left ">选择门店</div>
+            <div class="addStaffBox-main-right">
+                <nz-select [(ngModel)]="selectedOption" style="width:240px;" (ngModelChange)="selectStoreInfo($event)" [nzPlaceHolder]="'请选择一个门店'"
+                    [nzShowSearch]="true">
+                    <nz-option [nzLabel]="'请选择一个门店'" [nzValue]="'ALL'">
+                    </nz-option>
+                    <nz-option *ngFor="let item of storeList" [nzLabel]="item.storeName" [nzValue]="item">
+                    </nz-option>
+                </nz-select>
+            </div>
+        </div>
+        <div>
+            <div class="addStaffBox-main-left ">上传数据</div>
+            <div class="addStaffBox-main-right">
+                <input type="file" (change)="change($event)" multiple="false" />
+            </div>
+        </div>
+        <div class="beizhu">上传文件前请确认文件数据与系统模版一致</div>
+        <button class="buttons" nz-button nzType="primary" type="submit" [nzLoading]="submitting">确认导入</button>
+    </div>
+
+    <div style="margin-top:50px;">
+        <h3 class="flex-1 text-lg borderLeft">导入记录</h3>
+        <simple-table #st [columns]="columns" [data]="data" [loading]="loading" (checkboxChange)="checkboxChange($event)" (filterChange)="customerlistHttp()">
+            <ng-template>
+                <ng-template st-row="status" let-i>
+                    <nz-badge [nzStatus]="i.statusType" [nzText]="i.statusText"></nz-badge>
+                </ng-template>
+            </ng-template>
+        </simple-table>
+        <div class="nzPaginationBox">
+            <nz-pagination class="nzPagination" [nzTotal]="Total" [nzPageSize]="10" (nzPageIndexChange)="getData($event)"></nz-pagination>
+        </div>
+    </div>
+</div>

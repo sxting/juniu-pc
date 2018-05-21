@@ -1,0 +1,42 @@
+<div class="step1">
+    <h3 class="title">请选择您的账户类型：</h3>
+    <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzSm="8" nzMd="8" nzLg="8" (click)="onCardItemClick('qiye')">
+            <nz-card class="card-item" [class.selected]="item.type === 'qiye'">
+                <h3 class="card-title">企业账户</h3>
+                <p>需要准备:</p>
+                <ul>
+                    <li>1. 营业执照照片</li>
+                    <li>2. 法人身份证照片</li>
+                    <li>3. 企业基本信息</li>
+                    <li>4. 法人基本信息</li>
+                    <li>5. 开户行信息</li>
+                    <li>6. 银行账户信息</li>
+                </ul>
+            </nz-card>
+        </div>
+        <div nz-col nzXs="24" nzSm="8" nzMd="8" nzLg="8" (click)="onCardItemClick('geti')">
+            <nz-card class="card-item" [class.selected]="item.type === 'geti'">
+                <h3 class="card-title">个体工商户</h3>
+                <p>需要准备:</p>
+                <ul>
+                    <li>1. 营业执照照片</li>
+                    <li>2. 法人身份证照片</li>
+                    <li>3. 商户基本信息</li>
+                    <li>4. 法人基本信息</li>
+                    <li>5. 开户行信息</li>
+                    <li>6. 银行账户信息</li>
+                    <li>7. 法人银行卡照片</li>
+                </ul>
+            </nz-card>
+        </div>
+        <div nz-col nzXs="24" nzSm="8" nzMd="8" nzLg="8">
+            <nz-card class="card-item dis-selected">
+                <h3 class="card-title">连锁加盟</h3>
+                <p>暂时无法在线配置，请联系桔牛客服010-80441899</p>
+            </nz-card>
+        </div>
+    </div>
+
+    <button class="center-btn" nz-button nzType="primary" (click)="_submitForm()">下一步</button>
+</div>

@@ -1,0 +1,137 @@
+<page-header></page-header>
+
+<div nz-row [nzGutter]="24">
+    <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
+        <g2-card
+            [title]="'今日营收（元）'"
+            total="{{IncomeData.todayIncomeAmount/100}}"
+            contentHeight="44px"
+            [footer]="footer1">
+            <trend flag="up" style="display:block; margin-top:2px;">
+                周同比
+                <span class="pl-sm">{{(IncomeData.todayIncomeAmount/IncomeData.lastweekDayIncomeAmount) ? (IncomeData.todayIncomeAmount/IncomeData.lastweekDayIncomeAmount)*100 : 0}}%</span>
+            </trend>
+            <trend flag="down">
+                日环比
+                <span class="pl-sm">{{(IncomeData.todayIncomeAmount/IncomeData.yesterdayIncomeAmount) ? (IncomeData.todayIncomeAmount/IncomeData.yesterdayIncomeAmount)*100 : 0}}%</span>
+            </trend>
+            <ng-template #footer1>
+                <p class="text-truncate mb0">日均销售额<span class="ml-sm">￥{{IncomeData.aveIncome/100}}</span></p>
+            </ng-template>
+        </g2-card>
+    </div>
+
+    <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
+        <g2-card
+            [title]="'今日交易（笔）'"
+            total="{{transationCount.todayCount}}"
+            contentHeight="44px"
+            [footer]="footer2">
+            <trend flag="up" style="display:block; margin-top:2px;">
+                周同比<span class="pl-sm">
+                {{transationCount.todayCount/transationCount.lastWeekDayCount ? (transationCount.todayCount/transationCount.lastWeekDayCount)*100 : 0}}%</span>
+            </trend>
+            <trend flag="down">
+                日环比
+                <span class="pl-sm">{{transationCount.todayCount/transationCount.yesterdayCount ? (transationCount.todayCount/transationCount.yesterdayCount)*100 : 0}}%</span>
+            </trend>
+            <ng-template #footer2>
+                <p class="text-truncate mb0">日均交易笔<span class="ml-sm">{{transationCount.avgCount}}笔</span></p>
+            </ng-template>
+        </g2-card>
+    </div>
+
+    <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
+        <g2-card
+            [title]="'今日新增会员（名）'"
+            total="{{newCustomerInfo.customerCount}}"
+            contentHeight="44px"
+            [footer]="footer3">
+            <trend flag="up" style="display:block; margin-top:2px;">周同比<span class="pl-sm">{{newCustomerInfo.weekRatio?(newCustomerInfo.weekRatio*100+'%'): '--'}}</span></trend>
+            <trend flag="down">日环比<span class="pl-sm">{{newCustomerInfo.dayRatio?newCustomerInfo.dayRatio*100+'%':'--'}}</span></trend>
+            <ng-template #footer3>
+                <p class="text-truncate mb0">日均新增会员<span class="ml-sm">{{newCustomerInfo.avgdayNum}}名</span></p>
+            </ng-template>
+        </g2-card>
+    </div>
+
+    <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
+        <g2-card
+            [title]="'今日开卡张数（张）'"
+            total="{{openCardData.openCardNum}}"
+            contentHeight="44px"
+            [footer]="footer4">
+            <trend flag="up" style="display:block; margin-top:2px;">周同比<span class="pl-sm">{{openCardData.weekRatio?openCardData.weekRatio*100+'%':'--'}}</span></trend>
+            <trend flag="down">日环比<span class="pl-sm">{{openCardData.dayRatio?openCardData.dayRatio*100+'%':'--'}}</span></trend>
+            <ng-template #footer4>
+                <p class="text-truncate mb0">日均开卡数<span class="ml-sm">{{openCardData.avgdayNum}}张</span></p>
+            </ng-template>
+        </g2-card>
+    </div>
+</div>
+
+<div nz-row [nzGutter]="24">
+    <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="12">
+        <nz-card nzTitle="待办事项" [nzBordered]="false">
+            <div nz-row>
+                <div nz-col [nzXs]="24" [nzSm]="8" class="header-info">
+                    <span class="text-grey-dark">新增预约-<span>待处理</span></span>
+                    <span class="d-block display-2">{{newReserveCount}}笔预约</span>
+                    <em></em>
+                </div>
+                <div nz-col [nzXs]="24" [nzSm]="8" class="header-info">
+                    <span class="text-grey-dark">系统通知-<span>代查看</span></span>
+                    <span class="d-block display-2">{{messageCount}}条消息</span>
+                    <em></em>
+                </div>
+                <div nz-col [nzXs]="24" [nzSm]="8" class="header-info">
+                    <span class="text-grey-dark">新增挂单-<span>代收款</span></span>
+                    <span class="d-block display-2">1笔挂单</span>
+                </div>
+            </div>
+        </nz-card>
+
+        <nz-card nzTitle="常用功能" [nzBordered]="false" class="ant-card__body-nopadding mb-lg project-list">
+            <div *ngFor="let item of function" nz-card-grid class="project-grid" (click)="onFunctionItemClick(item)">
+                <nz-card [nzBordered]="false" class="ant-card__body-nopadding mb0">
+                    <nz-card nz-card-meta [nzTitle]="noticeTitle">
+                        <ng-template #noticeTitle>
+                            <div class="card-title">
+                                <img [src]="item.logo" style="width: 35px;height: 35px; margin-bottom: 12px">
+                                <br>
+                                <span>{{item.title}}</span>
+                            </div>
+                        </ng-template>
+                    </nz-card>
+                </nz-card>
+            </div>
+        </nz-card>
+
+    </div>
+
+    <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="12">
+        <nz-card [nzBordered]="false" nzTitle="会员持卡分布" [nzBodyStyle]="{'padding.px': 12}" style="min-height: 464px" class="sales-card">
+            <g2-pie
+                [hasLegend]="true"
+                subTitle="持卡总数"
+                [height]="248"
+                [lineWidth]="4"
+                [total]="cardsTotal"
+                [data]="cardGroupTypeData">
+            </g2-pie>
+        </nz-card>
+    </div>
+</div>
+
+
+<div class="seven-day-flow">
+    <div class="sub-title"><span>近七日流水走势</span></div>
+    <div id="seven_day_flow"></div>
+</div>
+
+<!--<nz-card nzTitle="近七日流水走势" [nzBordered]="false" class="offline-card mt-lg">-->
+    <!--<div class="px-lg">-->
+        <!--<g2-timeline [data]="sevenDayFlowData"-->
+                     <!--[titleMap]="{ y1: '线下购买', y2: '在线支付' }"></g2-timeline>-->
+    <!--</div>-->
+<!--</nz-card>-->

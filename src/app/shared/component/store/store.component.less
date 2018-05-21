@@ -1,0 +1,132 @@
+@import 'node_modules/@delon/theme/styles/default';
+
+.select-store-btn {
+  color: @primary-color;
+  cursor: pointer;
+}
+/*按城市选择门店弹框*/
+.shop-city-box-bg {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 4;
+}
+.shop-city-box {
+  background-color: #fff;
+  position: absolute;
+  height: 372px;
+  width: 700px;
+  /*top: 50%;*/
+  /*margin-top: -186px;*/
+  bottom: 20%;
+  left: 50%;
+  margin-left: -350px;
+  border: 1px solid #D9D9D9;
+  box-shadow: 1px 3px 4px 0 rgba(0,0,0,0.22);
+}
+.shop-city-subtitle {
+  font-family: 'PingFangSC-Medium';
+  height: 48px;
+  line-height: 48px;
+  border-bottom: 1px solid #D9D9D9;
+  padding: 0 24px;
+}
+.shop-city-subtitle-text {
+  font-size: 16px;
+  color: #666666;
+}
+.shop-city-close-btn {
+  color: #ffffff;
+  background-color: #D9D9D9;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  position: absolute;
+  top: 12px;
+  right: 20px;
+  text-align: center;
+  line-height: 22px;
+  font-family: 'sans-serif';
+  font-size: 22px;
+}
+.city-stores-box {
+  //padding: 24px;
+  height: 274px;
+  box-sizing: border-box;
+}
+.city-stores {
+    width: 48%;
+  //width: 314px;
+  height: 226px;
+  border: 1px solid #D9D9D9;
+  box-sizing: border-box;
+  padding-top: 10px;
+  padding-left: 15px;
+}
+.city-stores-left {
+  float: left;
+}
+.city-stores-right {
+  float: right;
+}
+.stores-title {
+  font-size: 16px;
+}
+.city-stores .line-vertical {
+  display: inline-block;
+  width: 4px;
+  height: 20px;
+  background-color: #2db7f5;
+  vertical-align: sub;
+}
+.city-list {
+  padding-top: 10px;
+}
+.city-list .city {
+  font-size: 14px;
+}
+.city-stores-container {
+  height: 170px;
+  overflow-y: scroll;
+}
+.city-stores-container ul {
+  padding-left: 10px;
+}
+.city-stores-container ul li{
+  font-size: 12px;
+}
+.city-stores-container input {
+  margin-right: 3px;
+}
+.city-stores-bottom {
+  border-top: 1px solid #CCCCCC;
+  padding: 10px 24px;
+}
+.update-stores {
+  color: #2DB7F5;
+  border: 1px solid #2DB7F5;
+  text-align: center;
+  width: 96px;
+  height: 28px;
+  line-height: 28px;
+  border-radius: 5px;
+  /*display: inline-block;*/
+  display: none;
+}
+.city-stores-bottom button {
+  color: #ffffff;
+  text-align: center;
+  background-color: #2DB7F5;
+  float: right;
+  width: 96px;
+  height: 28px;
+  line-height: 28px;
+  border-radius: 5px;
+  border: none;
+  font-family: 'PingFangSC-Regular';
+  font-size: 14px;
+  outline: none;
+}

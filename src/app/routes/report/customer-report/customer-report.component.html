@@ -1,0 +1,86 @@
+
+<page-header [title]="'顾客报表'"></page-header>
+<nz-card [nzBordered]="false">
+    <form nz-form [nzLayout]="'inline'" class="search__form">
+        <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
+            <nz-col nzMd="8" nzSm="24">
+                <nz-form-item>
+                    <nz-form-label nzFor="status">选择门店</nz-form-label>
+                    <nz-form-control>
+                        <nz-select [(ngModel)]="storeId" name="storeList" id="storeList" [nzPlaceHolder]="'全部门店'" [nzShowSearch]="true">
+                            <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.storeName" [nzValue]="idx"></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </nz-col>
+            <nz-col nzMd="8" nzSm="24">
+                <nz-form-item>
+                    <nz-form-label nzFor="yyyymm">选择日期</nz-form-label>
+                    <nz-form-control>
+                        <input nz-input [(ngModel)]="yyyymm" name="yyyymm" placeholder="请选择日期" id="yyyymm">
+                    </nz-form-control>
+                </nz-form-item>
+            </nz-col>
+        </nz-row>
+    </form>
+</nz-card>
+
+<div nz-row [nzGutter]="24">
+    <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
+        <g2-card [title]="'当日客流量'"
+                 total="8,848"
+                 contentHeight="46px"
+                 [action]="action2"
+                 [footer]="footer2">
+            <ng-template #action2>
+                <nz-tooltip [nzTitle]="'当日客流量'">
+                    <i nz-tooltip class="anticon anticon-info-circle-o"></i>
+                </nz-tooltip>
+            </ng-template>
+            <g2-mini-area
+                color="#975FE4"
+                height="46"
+                [data]="visitData">
+            </g2-mini-area>
+        </g2-card>
+    </div>
+    <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
+        <g2-card [title]="'会员占比'"
+                 total="78%"
+                 contentHeight="46px"
+                 [action]="action2"
+                 [footer]="footer2">
+            <ng-template #action2>
+                <nz-tooltip [nzTitle]="'会员占比'">
+                    <i nz-tooltip class="anticon anticon-info-circle-o"></i>
+                </nz-tooltip>
+            </ng-template>
+            <g2-mini-area
+                color="#975FE4"
+                height="46"
+                [data]="data">
+            </g2-mini-area>
+        </g2-card>
+    </div>
+</div>
+<nz-card [nzBordered]="true">
+    <nz-table #basicTable [nzShowPagination]="false" [nzData]="monthReportListInfor">
+        <thead nz-thead class="ui-grid-thead">
+            <tr>
+                <th nz-th class="" *ngFor="let item of theadName;let i = index">{{item}}</th>
+            </tr>
+        </thead>
+        <tbody nz-tbody class="ui-grid-tbody">
+            <tr nz-tbody-tr *ngFor="let item of monthReportListInfor; let i = index">
+                <td>{{item.payDate}}</td>
+                <td>{{item.customerName}}</td>
+                <td>{{item.customerName}}</td>
+                <td>{{item.type}}</td>
+                <td>￥{{item.paidMoney/100}}</td>
+            </tr>
+        </tbody>
+    </nz-table>
+    <div class="nzPaginationBox">
+        <nz-pagination class="nzPagination" style="float: right;padding: 20px 0" [nzTotal]="totalElements" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
+    </div>
+</nz-card>

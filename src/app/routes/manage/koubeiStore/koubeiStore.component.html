@@ -1,0 +1,75 @@
+<div class="ad-page-header" style="margin: 0 -24px; border-bottom:none !important;">
+    <nz-breadcrumb>
+        <nz-breadcrumb-item>首页</nz-breadcrumb-item>
+        <nz-breadcrumb-item>管理</nz-breadcrumb-item>
+        <nz-breadcrumb-item>门店</nz-breadcrumb-item>
+        <nz-breadcrumb-item>编辑口碑门店</nz-breadcrumb-item>
+    </nz-breadcrumb>
+</div>
+<nz-card [nzBordered]="false">
+    <form nz-form [formGroup]="form" (ngSubmit)="submit()">
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzFor="storeName">主店名称</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+                <input nz-input formControlName="storeName" id="storeName" placeholder="请输入主门店名称">
+                <!-- <nz-form-explain *ngIf="form.get('title').dirty && form.get('title').errors">请输入门店名称</nz-form-explain> -->
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzFor="fenstoreName">分店名称</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+                <input nz-input formControlName="fenstoreName" id="fenstoreName" placeholder="请输入分门店名称">
+                <!-- <nz-form-explain *ngIf="form.get('title').dirty && form.get('title').errors">请输入门店名称</nz-form-explain> -->
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzFor="address">所在省市区</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+                <nz-cascader [nzOptions]="nzOptions" formControlName="address" id="address" (ngModelChange)="onChanges($event)">
+                </nz-cascader>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzFor="Alladdress">详细地址</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+                <div id="pickerBox">
+                    <input nz-input id="pickerInput" placeholder="输入关键字选取地点" />
+                    <div id="poiInfo"></div>
+                </div>
+            </nz-form-control>
+        </nz-form-item>
+
+    </form>
+</nz-card>
+<nz-form-item style="background:#fff;margin-bottom:0 !important;">
+    <nz-form-label nzXs="24" nzSm="7">地图</nz-form-label>
+    <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <div id="container" class="map" tabindex="0"></div>
+    </nz-form-control>
+</nz-form-item>
+<nz-form-item style="background:#fff;margin-bottom:0 !important;">
+    <nz-form-label nzXs="24" nzSm="7">营业时间</nz-form-label>
+    <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+    </nz-form-control>
+</nz-form-item>
+<nz-form-item style="background:#fff;margin-bottom:0 !important;">
+    <nz-form-label nzXs="24" nzSm="7">门店电话</nz-form-label>
+    <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <input nz-input placeholder="请输入门店电话，多个电话请用','隔开">
+        <p>请输入11位手机号码或座机号，座机号需填写区号和电话，如： 010-12345678</p>
+        <p>门店电话是方便消费者联系门店，请尽量填写门店的固定电话、手机号码，或者门店的统一热线电话</p>
+    </nz-form-control>
+</nz-form-item>
+<nz-form-item style="background:#fff;margin-bottom:0 !important;">
+    <nz-form-label nzXs="24" nzSm="7">店长手机号</nz-form-label>
+    <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <input nz-input placeholder="请输入店长手机号">
+        <p>店长手机号用于接收门店预约通知等消息通知</p>
+    </nz-form-control>
+</nz-form-item>
+<nz-form-item style="background:#fff;">
+    <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
+        <button nz-button nzType="primary" type="submit" (click)="submit()" [nzLoading]="submitting">提交</button>
+    </nz-form-control>
+</nz-form-item>

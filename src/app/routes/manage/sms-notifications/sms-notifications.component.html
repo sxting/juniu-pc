@@ -1,0 +1,50 @@
+<div class="ad-page-header" style="margin: 0 -24px; border-bottom:none !important;">
+    <nz-breadcrumb>
+        <nz-breadcrumb-item>主页</nz-breadcrumb-item>
+        <nz-breadcrumb-item>管理</nz-breadcrumb-item>
+        <nz-breadcrumb-item>员工</nz-breadcrumb-item>
+        <nz-breadcrumb-item>短信通知</nz-breadcrumb-item>
+    </nz-breadcrumb>
+    <page-header>
+        顾客在线上预约到店时，会向店长或技师发送预约短信，这里用来设置此短信发送到的手机号码，默认为员工手机号码。
+    </page-header>
+</div>
+<nz-card [nzBordered]="false">
+    <form nz-form [formGroup]="form" (ngSubmit)="submit()">
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzFor="staffName">员工姓名</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10">{{staffName}}</nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzFor="staffName">职位</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10">{{roleName}}</nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="phone">员工接收短信的手机号</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+                <input nz-input formControlName="phone" id="phone" placeholder="">
+                <ng-container *ngIf="phone.dirty || phone.touched">
+                    <nz-form-explain style="color: red" *ngIf="phone.errors?.required">请输入手机号</nz-form-explain>
+                    <nz-form-explain style="color: red" *ngIf="phone.errors?.pattern">手机号码有误,请重新输入</nz-form-explain>
+                </ng-container>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label  nzXs="24" nzSm="7" nzFor="receiveType">员工接收的预约通知</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+                <nz-select formControlName="receiveType" name="storeNotice" id="storeNotice" [nzShowSearch]="true"  (ngModelChange)="onChangesRoles($event)" >
+                    <nz-option *ngFor="let i of storeNotice; let idx = index" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
+                <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">保存</button>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+
+</nz-card>

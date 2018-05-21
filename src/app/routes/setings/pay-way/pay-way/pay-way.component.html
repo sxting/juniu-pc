@@ -1,0 +1,26 @@
+<div class="content__title ad-page-header">
+    <nz-breadcrumb>
+        <nz-breadcrumb-item>主页</nz-breadcrumb-item>
+        <nz-breadcrumb-item>设置</nz-breadcrumb-item>
+        <nz-breadcrumb-item>支付通道</nz-breadcrumb-item>
+        <nz-breadcrumb-item>支付通道设置</nz-breadcrumb-item>
+    </nz-breadcrumb>
+    <h1 class="title ng-star-inserted">支付通道设置</h1>
+    <div class="row">
+        <div class="desc">申请微信、支付宝线上支付需要提交商家资料，经过银行审核通过后方可使用。</div>
+    </div>
+</div>
+<nz-card [nzBordered]="false">
+    <nz-steps [(nzCurrent)]="item.step">
+        <nz-step class="mgb-20" nzTitle="选择账户类型"></nz-step>
+        <nz-step class="mgb-20" nzTitle="商家基本信息"></nz-step>
+        <nz-step class="mgb-20" nzTitle="银行账户信息"></nz-step>
+        <nz-step class="mgb-20" nzTitle="证件照片上传"></nz-step>
+        <nz-step class="mgb-20" nzTitle="完成"></nz-step>
+    </nz-steps>
+    <app-pay-way-step1 *ngIf="item.step==0"></app-pay-way-step1>
+    <app-pay-way-step2 *ngIf="item.step==1"></app-pay-way-step2>
+    <app-pay-way-step3 *ngIf="item.step==2"></app-pay-way-step3>
+    <app-pay-way-step4 *ngIf="item.step==3"></app-pay-way-step4>
+    <app-pay-way-step5 *ngIf="item.step==4"></app-pay-way-step5>
+</nz-card>

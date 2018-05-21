@@ -1,0 +1,82 @@
+<form nz-form class="step4" [formGroup]="form" (ngSubmit)="_submitForm()">
+    <nz-form-item class="form-item">
+        <nz-form-label class="lh-62" nzSpan="5" nzRequired>营业执照</nz-form-label>
+        <nz-form-control [nzSpan]="19">
+            <div class="step4-img-box">
+                <img class="upload-img" src="./assets/img/upload.png">
+                <input type="file" accept="image" formControlName="image_id1" (change)="uploadImage($event, 1)">
+                <img class="image" [src]="imagePath1" *ngIf="imagePath1">
+            </div>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item class="form-item" *ngIf="item.type === 'qiye'">
+        <nz-form-label class="lh-62" nzSpan="5" nzRequired>银行开户许可证</nz-form-label>
+        <nz-form-control [nzSpan]="19">
+            <div class="step4-img-box">
+                <img class="upload-img" src="./assets/img/upload.png">
+                <input type="file" accept="image" formControlName="image_id2" (change)="uploadImage($event, 2)">
+                <img class="image" [src]="imagePath2" *ngIf="imagePath2">
+            </div>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item class="form-item">
+        <nz-form-label class="lh-62" nzSpan="5" nzRequired>门头照</nz-form-label>
+        <nz-form-control [nzSpan]="19">
+            <div class="step4-img-box">
+                <img class="upload-img" src="./assets/img/upload.png">
+                <input type="file" accept="image" formControlName="image_id3" (change)="uploadImage($event, 3)">
+                <img class="image" [src]="imagePath3" *ngIf="imagePath3">
+            </div>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item class="form-item" *ngIf="item.type === 'geti'">
+        <nz-form-label class="lh-62" nzSpan="5" nzRequired>银行卡照片</nz-form-label>
+        <nz-form-control [nzSpan]="19">
+            <div class="step4-img-box img4-box">
+                <img class="upload-img" src="./assets/img/upload-zm.png">
+                <input type="file" accept="image" formControlName="image_id4" (change)="uploadImage($event, 4)">
+                <img class="image" [src]="imagePath4" (click)="onImgClick(alertBigImg, image_id4, imagePath4)">
+                <i class="icon-magnifier-add"></i>
+            </div>
+            <div class="step4-img-box img4-box">
+                <img class="upload-img" src="./assets/img/upload-back.png">
+                <input type="file" accept="image" formControlName="image_id5" (change)="uploadImage($event, 5)">
+                <img class="image" [src]="imagePath5" (click)="onImgClick(alertBigImg, image_id5, imagePath5)">
+                <i class="icon-magnifier-add"></i>
+            </div>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item class="form-item">
+        <nz-form-label class="lh-62" nzSpan="5" nzRequired>法人身份证</nz-form-label>
+        <nz-form-control [nzSpan]="19">
+            <div class="step4-img-box img4-box">
+                <img class="upload-img" src="./assets/img/upload-zm.png">
+                <input type="file" accept="image" formControlName="image_id6" (change)="uploadImage($event, 6)">
+                <img class="image" [src]="imagePath6" (click)="onImgClick(alertBigImg, image_id6, imagePath6)">
+                <i class="icon-magnifier-add"></i>
+            </div>
+            <div class="step4-img-box img4-box">
+                <img class="upload-img" src="./assets/img/upload-back.png">
+                <input type="file" accept="image" formControlName="image_id7" (change)="uploadImage($event, 7)">
+                <img class="image" [src]="imagePath7" (click)="onImgClick(alertBigImg, image_id7, imagePath7)">
+                <i class="icon-magnifier-add"></i>
+            </div>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item style="margin-top: 80px">
+        <nz-form-control [nzSpan]="19" [nzOffset]="5">
+            <!--[disabled]="form.invalid"-->
+            <button nz-button [nzType]="'primary'">提交</button>
+            <button nz-button (click)="prev()">上一步</button>
+        </nz-form-control>
+    </nz-form-item>
+</form>
+
+<ng-template #alertBigImg style="padding: 0">
+    <img class="big-img" [src]="bigImgPath" alt="">
+</ng-template>

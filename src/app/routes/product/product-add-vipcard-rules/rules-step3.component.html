@@ -1,0 +1,39 @@
+<form nz-form [formGroup]="form" (ngSubmit)="_submitForm()">
+    <nz-form-item>
+        <nz-form-label nzXs="24" nzSm="5" nzFor="public">适用商品</nz-form-label>
+        <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+            <nz-radio-group formControlName="productTypes">
+                <label nz-radio *ngFor="let list of productTypes" [nzValue]="list.value" (click)="onSelectAlertBtnProduct(alertProduct, '适用商品', list.value)">{{list.name}}</label>
+            </nz-radio-group>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzXs="24" nzSm="5" nzFor="public">适用门店</nz-form-label>
+        <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+            <nz-radio-group formControlName="storeType">
+                <label nz-radio *ngFor="let item of storeStatus"  [nzValue]="item.value" (click)="onSelectAlertBtn(alertStore, '门店', item.value)">{{item.name}}</label>
+            </nz-radio-group>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-control nzSpan="19" nzOffset="5">
+            <button nz-button nzType="primary" [disabled]="form.invalid">完成</button>
+            <button nz-button (click)="prev()">上一步</button>
+        </nz-form-control>
+    </nz-form-item>
+</form>
+<div class="border-top-1 mt-lg px-lg text-grey-dark">
+<h3 class="h3 my-md">卡规则设置说明</h3>
+<p class="mb-sm">1. 会员卡适用商品：会员卡默认适用于全部项目和商品；如果设置了会员卡适用的商品，则在顾客消费的商品中，只有指定的商品才可以使用会员卡的余额或享受会员卡的折扣。</p>
+<p class="mb-sm">2. 会员卡适用门店：会员卡默认适用于所有门店；如果设置了会员卡适用的门店，则顾客在非适用门店消费时，不可使用相应的会员卡。</p>
+</div>
+
+<!--选择门店弹框-->
+<ng-template #alertStore>
+    <app-select-transfer [cityStoreList]="cityStoreList" [allStaffNum]="allStoresNum" (staffIds)="getSelectStoresIds($event)"></app-select-transfer>
+</ng-template>
+
+<!--选择商品弹框-->
+<ng-template #alertProduct>
+    <app-select-transfer [cityStoreList]="productListInfor" [allStaffNum]="allProductNumber" (staffIds)="getProductIds($event)"></app-select-transfer>
+</ng-template>

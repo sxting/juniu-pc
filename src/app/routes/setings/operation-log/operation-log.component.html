@@ -1,0 +1,70 @@
+<page-header></page-header>
+<nz-card [nzBordered]="false" [nzBodyStyle]="{'padding.px': 12}">
+    <nz-tabset>
+        <nz-tab nzTitle="系统数据修改">
+        </nz-tab>
+        <nz-tab nzTitle="后台管理设置">
+        </nz-tab>
+    </nz-tabset>
+</nz-card>
+<div class="seachbox" style="">
+    <span>
+        <span>选择日期:</span>
+        <span></span>
+    </span>
+    <span>
+        <span>选择门店:</span>
+        <span>
+            <nz-select style="width:100px;" [nzPlaceHolder]="'请选择'" [nzShowSearch]="true">
+                <nz-option [nzLabel]="'hehe1'" [nzValue]="1"></nz-option>
+                <nz-option [nzLabel]="'hehe2'" [nzValue]="2"></nz-option>
+                <nz-option [nzLabel]="'hehe3'" [nzValue]="3"></nz-option>
+            </nz-select>
+        </span>
+    </span>
+    <span>
+        <span>操作人:</span>
+        <span>
+            <nz-select style="width:100px;" [nzPlaceHolder]="'请选择'" [nzShowSearch]="true">
+                <nz-option [nzLabel]="'hehe1'" [nzValue]="1"></nz-option>
+                <nz-option [nzLabel]="'hehe2'" [nzValue]="2"></nz-option>
+                <nz-option [nzLabel]="'hehe3'" [nzValue]="3"></nz-option>
+            </nz-select>
+        </span>
+    </span>
+    <span>
+        <span>操作类型:</span>
+        <span>
+            <nz-select style="width:100px;" [nzPlaceHolder]="'请选择'" [nzShowSearch]="true">
+                <nz-option [nzLabel]="'hehe1'" [nzValue]="1"></nz-option>
+                <nz-option [nzLabel]="'hehe2'" [nzValue]="2"></nz-option>
+                <nz-option [nzLabel]="'hehe3'" [nzValue]="3"></nz-option>
+            </nz-select>
+        </span>
+    </span>
+</div>
+<div class="tableBox">
+    <nz-table #basicTable [nzShowPagination]="false" [nzData]="data">
+        <thead>
+            <tr>
+                <th>操作时间</th>
+                <th>操作类型</th>
+                <th>操作人</th>
+                <th>操作门店</th>
+                <th>修改参数</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of data">
+                <td>{{item.customerId}}</td>
+                <td>{{item.birthday}}</td>
+                <td>{{item.customerName}}</td>
+                <td>{{item.genderName}}</td>
+                <td>{{item.phone}}</td>
+            </tr>
+        </tbody>
+    </nz-table>
+    <div class="nzPaginationBox">
+        <nz-pagination class="nzPagination" [nzTotal]="Total" [nzPageSize]="10" (nzPageIndexChange)="getData($event)"></nz-pagination>
+    </div>
+</div>

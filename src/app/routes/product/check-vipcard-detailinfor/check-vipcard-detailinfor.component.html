@@ -1,0 +1,122 @@
+<page-header [title]="'查看会员卡详情'">
+    会员卡创建后，一些参数可以修改，比如卡名称、卡面图片、适用商品和门店；而卡类型、售价等参数不可修改。
+</page-header>
+<nz-card [nzBordered]="false">
+    <form nz-form [formGroup]="form" (ngSubmit)="submit()">
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7">卡类型</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10"><nz-form-text>{{cardTypeName}}</nz-form-text></nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="cardConfigName">卡名称</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+                <input nz-input formControlName="cardConfigName" id="productName" placeholder="请输入卡名称">
+                <nz-form-explain *ngIf="form.get('cardConfigName').dirty && form.get('cardConfigName').errors">请输入卡名称</nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7">售价</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10"><nz-form-text>{{price}}元</nz-form-text></nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7">卡面图片</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+                <nz-form-text style="color: #1890ff;cursor: pointer">点击修改图片</nz-form-text>
+                <!--修改卡面背景-->
+                <div class="right right-2">
+                    <div id="clipArea"></div>
+                    <div class="img-top">
+                        <div class="logo">logo</div>
+                        <div class="wenzi">
+                            <div class="wenzi-top">商家名称</div>
+                            <div class="wenzi-bottom">会员卡名称</div>
+                        </div>
+                        <div class="erweima icon-erweima iconfont"></div>
+                    </div>
+                    <div class="img-bottom">
+                        <div class="img-tel">会员手机号</div>
+                    </div>
+                </div>
+            </nz-form-control>
+        </nz-form-item>
+        <!--期限卡-->
+        <nz-form-item *ngIf="cardType === 'TIMES'">
+            <nz-form-label nzXs="24" nzSm="7">可使用天数</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10"><nz-form-text>{{balance}}天</nz-form-text></nz-form-control>
+        </nz-form-item>
+        <!--计次卡-->
+        <nz-form-item *ngIf="cardType === 'METERING'">
+            <nz-form-label nzXs="24" nzSm="7">可使用次数</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10"><nz-form-text>{{balance}}次</nz-form-text></nz-form-control>
+        </nz-form-item>
+        <!--储值卡-->
+        <nz-form-item *ngIf="cardType === 'STORED'">
+            <nz-form-label nzXs="24" nzSm="7">卡内充值金额</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10"><nz-form-text>{{balance/100}}元</nz-form-text></nz-form-control>
+        </nz-form-item>
+        <!--折扣卡-->
+        <nz-form-item *ngIf="cardType === 'REBATE'">
+            <nz-form-label nzXs="24" nzSm="7">折扣</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10"><nz-form-text>{{rebate}}折</nz-form-text></nz-form-control>
+        </nz-form-item>
+        <nz-form-item *ngIf="ifShow">
+            <nz-form-label nzXs="24" nzSm="7" nzFor="validateType">使用有效期{{ifShowErrorTips}}</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+                <nz-radio-group formControlName="validateType">
+                    <label nz-radio *ngFor="let list of validateType" [nzValue]="list.type" (click)="changeData()">
+                        {{list.name}}
+                        <p class="ifshow" *ngIf="list.type === 'days'">
+                            <input style="width: 100px;margin: 0 5px;" nz-input formControlName="effectivityDays" id="effectivityDays" placeholder="请输入天数" (change)="checkData()"/>天内有效
+                        </p>
+                    </label>
+                </nz-radio-group>
+                <ng-container *ngIf="form.value.validateType === 'days'&& effectivityDays.dirty || effectivityDays.touched">
+                    <nz-form-explain class="errorTips" *ngIf="effectivityDays.errors?.required">使用有效期不可为空</nz-form-explain>
+                    <nz-form-explain class="errorTips" *ngIf="effectivityDays.errors?.pattern">使用有效期至少为一天</nz-form-explain>
+                    <nz-form-explain class="errorTips" *ngIf="form.value.effectivityDays && !ifShowErrorTips">使用有效期只能为正整数</nz-form-explain>
+                </ng-container>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item  *ngIf="ifShow">
+            <nz-form-label nzXs="24" nzSm="7" nzFor="isPinCard">是否可销卡</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10"  *ngIf="cardType === 'STORED' || cardType === 'REBATE' || cardType === 'METERING'">
+                <nz-radio-group formControlName="isPinCard">
+                    <label nz-radio *ngFor="let item of isPinCardArr" [nzValue]="item.ifPin">{{item.name}}</label>
+                </nz-radio-group>
+            </nz-form-control>
+            <!-- 期限卡不可销卡 -->
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10" *ngIf="cardType === 'TIMES'"><nz-form-text>不可销卡</nz-form-text></nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzFor="productTypes">适用商品</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+                <nz-radio-group formControlName="productTypes">
+                    <label nz-radio *ngFor="let list of productTypesArr" [nzValue]="list.value" (click)="onSelectAlertBtnProduct(alertProduct, '适用商品', list.value)">{{list.name}}</label>
+                </nz-radio-group>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzFor="storeType">适用门店</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+                <nz-radio-group formControlName="storeType">
+                    <label nz-radio *ngFor="let item of storeStatus"  [nzValue]="item.value" (click)="onSelectAlertBtn(alertStore, '门店', item.value)">{{item.name}}</label>
+                </nz-radio-group>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
+                <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">保存</button>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</nz-card>
+
+<!--选择弹框-->
+<ng-template #alertStore>
+    <app-select-transfer [cityStoreList]="cityStoreList" [allStaffNum]="allStoresNum" (staffIds)="getSelectStoresIds($event)"></app-select-transfer>
+</ng-template>
+
+<!--选择商品弹框-->
+<ng-template #alertProduct>
+    <app-select-transfer [cityStoreList]="productListInfor" [allStaffNum]="allProductNumber" (staffIds)="getProductIds($event)"></app-select-transfer>
+</ng-template>

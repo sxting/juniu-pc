@@ -1,0 +1,555 @@
+.main_wrap {
+    font-family: PingFangSC-Regular;
+    position: absolute;
+    top: 56px;
+    right: 0;
+    bottom: 0;
+    left: 260px;
+    overflow: auto;
+    z-index: 1;
+}
+
+.position {
+    height: 40px;
+}
+
+.position span {
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    line-height: 40px;
+    color: #1A1A1A;
+}
+
+.position span:last-of-type {
+    color: #ff6600;
+}
+
+.content_juniu {
+    height: 100%;
+    padding: 10px;
+    background: #fff;
+}
+
+.content_juniu .marketing_means {
+    background-color: #fff;
+    margin-bottom: 20px;
+}
+
+.content_juniu .marketing_means:last-of-type {
+    margin-bottom: 0;
+}
+
+.content_juniu .marketing_means h2 {
+    font-family: PingFangSC-Medium;
+    font-size: 16px;
+    color: #1A1A1A;
+    height: 50px;
+    line-height: 50px;
+    padding-left: 20px;
+    background: #FFFFFF;
+}
+
+.marketing_means h2>span {
+    display: inline-block;
+    width: 4px;
+    height: 16px;
+    background-color: #FF6600;
+    margin-right: 10px;
+    transform: translateY(2px);
+}
+
+.select-box {
+    display: flex;
+    padding: 10px;
+}
+
+.activty-box {
+    margin-right: 20px;
+}
+
+.youhuijuan-box {
+    margin-right: 60px;
+}
+
+.fbNewActivity {
+    width: 120px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    background: #ff6600;
+    color: #fff;
+    border-radius: 5px;
+    margin-left: 20px;
+    cursor: pointer;
+    float: left;
+}
+
+.btns_switch {
+    border-bottom: 1px solid #e9e9e9;
+    padding-left: 20px;
+    background-color: #fff;
+    margin-top: -1px;
+    margin-bottom: 0;
+    cursor: pointer;
+    float: right;
+}
+
+.btns_switch li {
+    font-family: PingFangSC-Regular;
+    font-size: 16px;
+    color: #222222;
+    line-height: 50px;
+    width: 70px;
+    float: left;
+    margin-left: 20px;
+    text-align: center;
+}
+
+.btns_switch li:first-of-type {
+    margin-left: 0px;
+}
+
+.btns_switch li.btns_active {
+    color: #FF6600;
+    border-bottom: 2px solid #FF6600;
+}
+
+.click-box {
+    overflow: hidden;
+}
+
+.existing-table {
+    margin-top: 20px;
+}
+
+.existing-table table {
+    width: 100%;
+}
+
+.existing-table tr {
+    height: 40px;
+    text-align: center;
+}
+
+.existing-table thead {
+    text-align: center;
+    line-height: 40px;
+    background: #e5e5e5;
+}
+
+.alert-order-msg {
+    top: 120px !important;
+    padding-right: 20px !important;
+    padding-top: 20px;
+}
+
+
+/*分类弹框*/
+
+.content-title {
+    font-family: 'PingFangSC-Medium';
+    font-size: 16px;
+    color: #333333;
+    height: 16px;
+    padding-left: 10px;
+    line-height: 16px;
+    border-left: 4px solid #FF6600;
+    margin-bottom: 20px;
+}
+
+.alert-order-msg-bg .alert-order-msg {
+    width: 1000px !important;
+    height: 650px !important;
+    top: 50px !important;
+    margin-left: -500px !important;
+}
+
+.alert-order-msg-main {
+    padding-left: 50px;
+}
+
+.alert-order-msg-main>div {
+    display: flex;
+    margin-top: 30px;
+}
+
+.addStaffBox-main-left {
+    width: 76px;
+    text-align: right;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #666666;
+    line-height: 24px;
+    height: 24px;
+    margin-right: 20px;
+}
+
+.alert-order-msg-main>div .nameinput {
+    width: 228px;
+    height: 24px;
+    padding-left: 6px;
+}
+
+.alert-create-box-main {
+    width: 300px;
+    height: 360px;
+    margin: 10px auto 0;
+}
+
+.marketing_means .Voucher {
+    padding: 30px 0 30px 20px;
+    margin-bottom: 20px;
+}
+
+.marketing_means .Voucher li {
+    width: 220px;
+    height: 120px;
+    float: left;
+    -webkit-font-smoothing: antialiased;
+    cursor: pointer;
+    margin-left: 15px;
+}
+
+.marketing_means .Voucher li:first-child {
+    margin-left: 0;
+}
+
+.marketing_means .Voucher li:hover {
+    box-shadow: 2px 2px 4px 0 rgba(1, 1, 1, 0.20);
+}
+
+.marketing_means .Voucher li .func_title {
+    height: 80px;
+    border-bottom: 1px dashed #FFFFFF;
+    border-radius: 4px 4px 8px 8px;
+    text-align: center;
+}
+
+.marketing_means .Voucher li .func_title.danpin {
+    background-color: #30A2DB;
+    border-top: 1px dashed #30A2DB;
+}
+
+.marketing_means .Voucher li .func_title.xinpin {
+    background-color: #FC980A;
+    border-top: 1px dashed #FC980A;
+}
+
+.marketing_means .Voucher li .func_title.vip {
+    background-color: #d755aa;
+    border-top: 1px dashed #d755aa;
+}
+
+.marketing_means .Voucher li .func_title.erci {
+    background-color: #ce6849;
+    border-top: 1px dashed #ce6849;
+}
+
+.marketing_means .Voucher li .func_title.weixin {
+    background-color: #97d45a;
+    border-top: 1px dashed #97d45a;
+}
+
+.marketing_means .Voucher li .func_title .type_voucher {
+    font-family: PingFangSC-Medium;
+    font-size: 20px;
+    color: #FFFFFF;
+    margin: 15px 0 6px;
+}
+
+.marketing_means .Voucher li .func_title>span {
+    display: block;
+}
+
+.marketing_means .Voucher li .func_title>span:last-of-type {
+    font-family: PingFangSC-Regular;
+    font-size: 12px;
+    color: #FFFFFF;
+}
+
+.marketing_means .Voucher li .btn_set {
+    height: 40px;
+    line-height: 40px;
+    width: 100%;
+    text-align: center;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #FFFFFF;
+    border-radius: 8px 8px 4px 4px;
+}
+
+.marketing_means .Voucher li .btn_set.danpin {
+    background: #30A2DB;
+}
+
+.marketing_means .Voucher li .btn_set.xinpin {
+    background: #FC980A;
+}
+
+.marketing_means .Voucher li .btn_set.vip {
+    background: #d755aa;
+}
+
+.marketing_means .Voucher li .btn_set.erci {
+    background: #ce6849;
+}
+
+.marketing_means .Voucher li .btn_set.weixin {
+    background: #97d45a;
+}
+
+.alert-order-msg {
+    top: 120px !important;
+    padding-right: 20px !important;
+    padding-top: 20px;
+}
+
+
+/*分类弹框*/
+
+.content-title {
+    font-family: 'PingFangSC-Medium';
+    font-size: 16px;
+    color: #333333;
+    height: 16px;
+    padding-left: 10px;
+    line-height: 16px;
+    border-left: 4px solid #FF6600;
+    margin-bottom: 20px;
+}
+
+.alert-order-msg-bg .alert-order-msg {
+    width: 800px;
+    height: 300px;
+    margin-left: -400px;
+}
+
+.alert-order-msg-main {
+    padding-left: 50px;
+}
+
+.alert-order-msg-main>div {
+    display: flex;
+    margin-top: 30px;
+}
+
+.addStaffBox-main-left {
+    width: 76px;
+    text-align: right;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #666666;
+    line-height: 24px;
+    height: 24px;
+    margin-right: 20px;
+}
+
+.alert-order-msg-main>div .nameinput {
+    width: 228px;
+    height: 24px;
+    padding-left: 6px;
+}
+
+.alert-create-box-main {
+    width: 300px;
+    height: 360px;
+    margin: 10px auto 0;
+}
+
+.chakan {
+    cursor: pointer;
+}
+
+.main_wrap {
+    font-family: PingFangSC-Regular;
+    position: absolute;
+    top: 56px;
+    right: 20px;
+    bottom: 0;
+    left: 260px;
+    z-index: 1;
+}
+
+* {
+    box-sizing: content-box !important;
+}
+
+.position {
+    height: 40px;
+    line-height: 40px;
+    background-color: rgb(242, 242, 242);
+}
+
+.position span {
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    line-height: 40px;
+    color: #1A1A1A;
+}
+
+.position span:last-of-type {
+    color: #FF6600;
+}
+
+.member-home-top {
+    width: 96%;
+    height: 200px;
+    background: #fff;
+    padding: 20px;
+}
+
+.member-title {
+    font-family: PingFangSC-Medium;
+    font-size: 16px;
+    color: #333333;
+    line-height: 16px;
+    padding-left: 5px;
+    border-left: 4px solid #FF6600;
+}
+
+.member-top-middle {
+    margin-top: 35px;
+    height: 30px;
+    line-height: 30px;
+}
+
+.member-top-middle>span {
+    margin-right: 10px;
+}
+
+.member-top-middle>select {
+    width: 374px;
+    height: 28px;
+    padding-left: 10px;
+}
+
+.member-home-bottom {
+    margin-top: 20px;
+    display: flex;
+}
+
+.member-home-bottom>div {
+    width: 30%;
+    height: 156px;
+    border: 1px solid #e5e5e5;
+    margin-right: 20px;
+    text-align: center;
+    padding-top: 30px;
+}
+
+.member-home-bottom-b {
+    /* display: flex; */
+    margin-top: 40px;
+}
+
+.member-home-bottom-b>div {
+    margin: 0 auto;
+    width: 50%;
+}
+
+.member-home-t-b {
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #1A1A1A;
+    line-height: 14px;
+}
+
+.member-home-t-t {
+    font-family: PingFangSC-Medium;
+    font-size: 20px;
+    color: #1A1A1A;
+    line-height: 18px;
+    margin-bottom: 10px;
+}
+
+.member-home-t-t1 {
+    color: #F25854;
+}
+
+.member-home-t-t2 {
+    color: #FC980A;
+}
+
+.member-home-t-t3 {
+    color: #30A2DB;
+}
+
+.middle {
+    margin-top: 20px;
+    display: flex;
+    width: 100%;
+    /* padding-right: 20px; */
+    justify-content: space-around;
+}
+
+.middle-r-top {
+    height: 30px;
+    display: flex;
+    padding-top: 60px;
+}
+
+.middle-r-top>div {
+    width: 32%;
+    text-align: center;
+    height: 50px;
+    position: relative;
+}
+
+.middle-r-top>div::before {
+    position: absolute;
+    right: 0;
+    top: 5px;
+    color: #e5e5e5;
+    font-size: 20px;
+}
+
+.middle>div {
+    /* width: 46%; */
+    background: #fff;
+    height: 310px;
+    padding: 20px;
+    width: 100%;
+}
+
+.middle-r-title {
+    font-family: PingFangSC-Medium;
+    font-size: 16px;
+    color: #333333;
+    line-height: 16px;
+    border-left: 4px solid #FF6600;
+    padding-left: 5px;
+}
+
+.empty::before {
+    font-size: 50px;
+    color: #f4f4f4;
+}
+
+.echartShow {
+    display: none;
+}
+
+.member-home-t-b-color {
+    color: #ff6600;
+    font-size: 30px;
+    margin-bottom: 30px;
+}
+
+.Alertshow {
+    display: block;
+}
+
+.Alerthidden {
+    display: none;
+}
+.buttons{
+    cursor: pointer;
+    color: #ff6600;
+}
+.nzPaginationBox{
+    margin: 20px;
+    overflow: hidden;
+}
+.nzPagination{
+    float: right;
+}

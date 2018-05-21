@@ -1,0 +1,22 @@
+#top_chart {
+    height: 440px;
+}
+.charttitle{
+    height: 57px;
+    line-height: 56px;
+    padding-left: 20px;
+    border-bottom: 1px solid #e8e8e8;
+    color: rgba(0, 0, 0, 0.85);
+    font-weight: 500;
+    font-size: 16px;
+}
+.tabsetBox{
+    display: flex;
+    justify-content: space-between;
+    background: #fff;
+    padding: 0 20px;
+    margin-top: 20px;
+}
+#seven_day_flow {
+    height: 440px;
+}

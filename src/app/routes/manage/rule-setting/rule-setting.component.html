@@ -1,0 +1,115 @@
+<page-header [title]="'提成规则设置'">
+    设置员工的提成规则，在收银时选择员工，可以即时计算员工的绩效和提成。
+</page-header>
+<nz-card [nzBordered]="false">
+    <form nz-form [formGroup]="form" (ngSubmit)="submit()">
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="ruleName">规则名称</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+                <input nz-input formControlName="ruleName" id="ruleName" placeholder="请输入提成规则名称">
+                <nz-form-explain class="errorTips"  *ngIf="form.get('ruleName').dirty && form.get('ruleName').errors">请输入提成规则名称</nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item style="margin-bottom: 40px;">
+            <nz-form-label nzXs="24" nzSm="7" nzFor="type">提成</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+                <nz-radio-group formControlName="type">
+                    <label class="lable-title" style="display: block" nz-radio *ngFor="let item of extractArr" [nzValue]="item.type" (change)="changeTypesData(item.type)">{{item.name}}
+                        <p *ngIf="item.type === 'MONEY'" style="display: inline-block">
+                            <input style="width: 150px;" nz-input formControlName="deductMoney" placeholder="请输入提成金额"> 元
+                        </p>
+                        <!--按比例提成-->
+                        <div *ngIf="item.type === 'RATE'" class="clearfix rate">
+                            <p class="fl" style="margin-right: 20px;">
+                                <label style="margin-right: 5px;">指定技师</label>
+                                <input style="width: 50px;" nz-input formControlName="assignRate" placeholder=""> %
+                            </p>
+                            <p class="fl">
+                                <label style="margin-right: 5px;">非指定技师</label>
+                                <input style="width: 50px;" nz-input formControlName="normalRate" placeholder=""> %
+                            </p>
+                        </div>
+                    </label>
+                    <ng-container>
+                        <nz-form-explain class="errorTips" *ngIf="form.value.type === 'RATE' && assignRate.errors?.pattern">非指定比例提成只能是有两位小数的数字</nz-form-explain>
+                        <nz-form-explain class="errorTips" *ngIf="form.value.type === 'RATE' && normalRate.errors?.pattern">指定比例提成只能是有两位小数的数字</nz-form-explain>
+                        <nz-form-explain class="errorTips" *ngIf="form.value.type === 'RATE' && ifShowErrorRateTips">按比例提成率不可为空</nz-form-explain>
+                        <nz-form-explain class="errorTips" *ngIf="form.value.type === 'MONEY'&& ifShowErrorMoneyips">提成金额不可为空</nz-form-explain>
+                        <nz-form-explain class="errorTips" *ngIf="form.value.type === 'RATE' && deductMoney.errors?.pattern">指定比例提成只能是有两位小数的数字</nz-form-explain>
+                    </ng-container>
+                </nz-radio-group>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzRequired>选择会员卡</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+                <div class="right-block fl">
+                    <span>已选择 {{selectCardNumber}} 张会员卡</span>
+                    <span class="space"></span>
+                    <span class="select-store-btn" (click)="onSelectStaffBtn(alertCard,'会员卡')">选择会员卡</span>
+                </div>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzRequired>选择服务项目</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+                <div class="right-block fl">
+                    <span>已选择 {{selectSeviceItemsNumber}} 项服务项目</span>
+                    <span class="space"></span>
+                    <span class="select-store-btn" (click)="onSelectStaffBtn(alertSeviceItems, '服务项目')">选择服务项目</span>
+                </div>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzRequired>选择实体商品</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+                <div class="right-block fl">
+                    <span>已选择 {{selectProductNumber}} 个实体商品</span>
+                    <span class="space"></span>
+                    <span class="select-store-btn" (click)="onSelectStaffBtn(alertProduct, '实体商品')">选择实体商品</span>
+                </div>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzRequired>选择员工</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+                <div class="right-block fl">
+                    <span>已选择 {{selectStaffNum}} 名员工</span>
+                    <span class="space"></span>
+                    <span class="select-store-btn" (click)="onSelectStaffBtn(alertStaff, '员工')">选择员工</span>
+                </div>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
+                <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">保存</button>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</nz-card>
+
+<!--选择员工弹框-->
+<ng-template #alertStaff>
+    <app-select-transfer [cityStoreList]="staffListInfor" [allStaffNum]="allStaffNum" (staffIds)="getStaffIds($event)"
+                         (selectStaffNum)="getSelectStaffNum($event)"></app-select-transfer>
+</ng-template>
+
+<!--选择商品弹框-->
+<ng-template #alertProduct>
+    <app-select-transfer [cityStoreList]="productListInfor" [allStaffNum]="allProductNumber" (staffIds)="getproductIds($event)"
+                         (selectStaffNum)="getSelectProductNumber($event)"></app-select-transfer>
+</ng-template>
+
+<!--选择会员卡弹框-->
+<ng-template #alertCard>
+    <app-select-transfer [cityStoreList]="cardListInfor" [allStaffNum]="allCardNumber" (staffIds)="getCardConfigRuleIds($event)"
+                         (selectStaffNum)="getSelectCardNumber($event)"></app-select-transfer>
+</ng-template>
+
+<!--选择服务项目弹框-->
+<ng-template #alertSeviceItems>
+    <app-select-transfer [cityStoreList]="seviceItemsListInfor" [allStaffNum]="seviceItemsNumber" (staffIds)="getSeviceItemsIds($event)"
+                         (selectStaffNum)="getSelectSeviceItemsNumber($event)"></app-select-transfer>
+</ng-template>
+
+

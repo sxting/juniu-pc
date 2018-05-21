@@ -1,0 +1,192 @@
+<page-header></page-header>
+
+<div nz-row [nzGutter]="24" class="pt-lg">
+    <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
+        <g2-card [title]="'今日新增会员(名)'" total="{{topData?.customerInfoDTO.customerCount?topData?.customerInfoDTO.customerCount:0}}"
+            contentHeight="44px" [footer]="footer1">
+            <trend flag="{{topData?.customerInfoDTO.weekRatio<0?'down':'up'}}" style="display:block; margin-top:2px;">周同比
+                <span class="pl-sm">{{(topData?.customerInfoDTO.weekRatio
+                    <0?topData?.customerInfoDTO.weekRatio*-1:topData?.customerInfoDTO.weekRatio)||0}}%</span>
+            </trend>
+            <trend flag="{{topData?.customerInfoDTO.dayRatio<0?'down':'up'}}">日环比
+                <span class="pl-sm">{{(topData?.customerInfoDTO.dayRatio
+                    <0?topData?.customerInfoDTO.dayRatio*-1:topData?.customerInfoDTO.dayRatio)||0}}%</span>
+            </trend>
+            <ng-template #footer1>
+                <p class="text-truncate mb0">日均新增会员
+                    <span class="ml-sm">{{topData?.customerInfoDTO.avgdayNum?topData?.customerInfoDTO.avgdayNum:0}}名</span>
+                </p>
+            </ng-template>
+        </g2-card>
+    </div>
+
+    <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
+        <g2-card [title]="'今日开卡张数(张)'" total="{{topData?.openCardDTO.openCardNum?topData?.openCardDTO.openCardNum:0}}" contentHeight="44px"
+            [footer]="footer2">
+            <trend flag="{{topData?.openCardDTO.weekRatio<0?'down':'up'}}" style="display:block; margin-top:2px;">周同比
+                <span class="pl-sm">{{(topData?.openCardDTO.weekRatio
+                    <0?topData?.openCardDTO.weekRatio*-1:topData?.openCardDTO.weekRatio)||0}}%</span>
+            </trend>
+            <trend flag="{{topData?.openCardDTO.dayRatio<0?'down':'up'}}">日环比
+                <span class="pl-sm">{{(topData?.openCardDTO.dayRatio
+                    <0?topData?.openCardDTO.dayRatio*-1:topData?.openCardDTO.dayRatio)||0}}%</span>
+            </trend>
+            <ng-template #footer2>
+                <p class="text-truncate mb0">日均开卡数
+                    <span class="ml-sm">{{(topData?.openCardDTO.avgdayNum)||0}}张</span>
+                </p>
+            </ng-template>
+        </g2-card>
+    </div>
+
+    <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
+        <g2-card [title]="'会员转化率'" total="{{topData?.memberInfoDTO.avgdayNum?topData?.memberInfoDTO.avgdayNum:0}}%" contentHeight="44px"
+            [footer]="footer4">
+            <g2-mini-progress height="46" percent="{{topData?.memberInfoDTO.avgdayNum?topData?.memberInfoDTO.avgdayNum:0}}" strokeWidth="8"
+                target="{{topData?.memberInfoDTO.avgdayNum?topData?.memberInfoDTO.avgdayNum:0}}" color="#13C2C2"></g2-mini-progress>
+            <ng-template #footer4>
+                <trend flag="{{topData?.memberInfoDTO.weekRatio<0?'down':'up'}}" style="margin-top:2px;float: left;">周同比
+                    <span class="pl-sm">{{(topData?.memberInfoDTO.weekRatio
+                        <0?topData?.memberInfoDTO.weekRatio*-1:topData?.memberInfoDTO.weekRatio)||0}}%</span>
+                </trend>
+                <trend flag="{{topData?.memberInfoDTO.dayRatio<0?'down':'up'}}" style="float: right;">日环比
+                    <span class="pl-sm">{{(topData?.memberInfoDTO.dayRatio
+                        <0?topData?.memberInfoDTO.dayRatio*-1:topData?.memberInfoDTO.dayRatio)||0}}%</span>
+                </trend>
+            </ng-template>
+        </g2-card>
+
+    </div>
+
+    <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
+        <g2-card [title]="'男女比例分布'" contentHeight="120px" [footer]="footer3">
+            <g2-pie [hasLegend]="true" [height]="120" [lineWidth]="4" [data]="salesPieData">
+            </g2-pie>
+        </g2-card>
+    </div>
+</div>
+<div style="margin:0 !important;overflow:hidden;">
+    <div nz-row [nzGutter]="24">
+        <nz-card [nzBordered]="false" nzTitle="会员消费水平(月均)" [nzBodyStyle]="{'padding.px': 12}" style="min-height: 464px" class="sales-card">
+            <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="16">
+                <g2-bar height="375" [data]="salesData"></g2-bar>
+            </div>
+            <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="8">
+                <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+                    <div class="rank-list">
+                        <h4 class="rank-title">各区间消费人数</h4>
+                        <ul>
+                            <li *ngFor="let i of salesData; let idx = index">
+                                <div>
+                                    <span class="icon spans" [ngClass]="{'active': idx < 3}">{{idx+1}}</span>
+                                    <span class="span1 spans">{{i.name}}</span>
+                                    <span class="span2 spans">{{i.value}}</span>
+                                    <span class="span3 spans" (click)="chakanXQ(i.customerIds,modalContent)">查看详情</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nz-card>
+
+
+    </div>
+</div>
+<div style="margin:0 !important;overflow:hidden;">
+    <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="12">
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzXs="24" nzSm="24" nzLg="24" nzLg="24" class="mb-lg">
+                    <div class="title">消费频次统计
+                        <nz-tabset style="float: right;" (nzSelectChange)="change($event)" [nzSelectedIndex]="index">
+                            <nz-tab nzTitle="饼图"></nz-tab>
+                            <nz-tab nzTitle="详情"></nz-tab>
+                        </nz-tabset>
+                    </div>
+                    <g2-pie *ngIf="index === 0" style="padding-top:50px;background:#fff;" [hasLegend]="true" subTitle="消费频次统计" [height]="248"
+                        [lineWidth]="4" [total]="salesTotal1" [data]="salesPieData1">
+                    </g2-pie>
+                    <div *ngIf="index !== 0" style="background: #fff;padding:25px 50px 37px;height: 303px;">
+                        <div class="rank-list">
+                            <ul>
+                                <li *ngFor="let i of salesPieData1; let idx = index">
+                                    <div>
+                                        <span class="icon spans" [ngClass]="{'active': idx < 3}">{{idx+1}}</span>
+                                        <span class="span1 spans">{{i.name}}</span>
+                                        <span class="span2 spans">{{i.value}}</span>
+                                        <span class="span3 spans" (click)="chakanXQ(i.customerIds,modalContent)">查看详情</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="12">
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzXs="24" nzSm="24" nzLg="24" nzLg="24" class="mb-lg">
+                    <div class="title">最后一次消费时间
+                        <nz-tabset style="float: right;" (nzSelectChange)="change2($event)" [nzSelectedIndex]="index2">
+                            <nz-tab nzTitle="饼图"></nz-tab>
+                            <nz-tab nzTitle="详情"></nz-tab>
+                        </nz-tabset>
+                    </div>
+                    <g2-pie *ngIf="index2 === 0" style="padding-top:50px;background:#fff;" [hasLegend]="true" subTitle="最后一次消费时间" [height]="248"
+                        [lineWidth]="4" [total]="salesTotal2" [data]="salesPieData2">
+                    </g2-pie>
+                    <div *ngIf="index2 !== 0" style="background: #fff;padding: 25px 50px 37px;height: 303px;">
+                        <div class="rank-list">
+                            <ul>
+                                <li *ngFor="let i of salesPieData2; let idx = index">
+                                    <div>
+                                        <span class="icon spans" [ngClass]="{'active': idx < 3}">{{idx+1}}</span>
+                                        <span class="span1 spans">{{i.name}}</span>
+                                        <span class="span2 spans">{{i.value}}</span>
+                                        <span class="span3 spans" (click)="chakanXQ(i.customerIds,modalContent)">查看详情</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #modalContent>
+    <div class="fbyxhd">发布营销活动</div>
+    <div>
+
+    </div>
+    <nz-table #basicTable [nzShowPagination]="false" [nzData]="vipXQ">
+        <thead>
+            <tr>
+                <th>会员编号</th>
+                <th>创建日期</th>
+                <th>姓名</th>
+                <th>性别</th>
+                <th>手机号</th>
+                <th>累计消费金额(元)</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of vipXQ">
+                <td>{{item.customerId}}</td>
+                <td>{{item.date}}</td>
+                <td>{{item.customerName}}</td>
+                <td>{{item.genderName}}</td>
+                <td>{{item.phone}}</td>
+                <td>{{item.money / 100}}</td>
+            </tr>
+        </tbody>
+
+    </nz-table>
+    <div class="nzPaginationBox">
+        <nz-pagination class="nzPagination" [nzTotal]="vipXQ.length" [nzPageSize]="10" (nzPageIndexChange)="getData2($event)"></nz-pagination>
+    </div>
+</ng-template>

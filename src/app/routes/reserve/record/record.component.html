@@ -1,0 +1,23 @@
+<page-header></page-header>
+
+<div class="content-box">
+    <div class="stores-box">
+        <span class="set-left">选择门店</span>
+
+        <nz-select style="width: 200px; margin-left: 40px;" [(ngModel)]="selectedOption" (ngModelChange)="onStoresChange($event)" [nzShowSearch]="true">
+            <nz-option [nzLabel]="'请选择一个门店'" [nzValue]="''"></nz-option>
+            <nz-option *ngFor="let store of stores" [nzLabel]="store.storeName" [nzValue]="store.storeId"></nz-option>
+        </nz-select>
+    </div>
+    <div class="time-box">
+        选择预约时段
+        <div class="dis-inb">
+            <!--<nz-datepicker [ngModel]="startDate" (ngModelChange)="startDate=$event" [nzShowTime]="true"-->
+                           <!--[nzFormat]="'YYYY-MM-DD HH:mm:ss'"></nz-datepicker>-->
+            至
+            <!--<nz-datepicker [ngModel]="endDate" (ngModelChange)="endDate=$event" [nzShowTime]="true"-->
+                           <!--[nzFormat]="'YYYY-MM-DD HH:mm:ss'"></nz-datepicker>-->
+        </div>
+    </div>
+    <button class="record-btn" (click)="onRecordBtnClick()">导出记录</button>
+</div>

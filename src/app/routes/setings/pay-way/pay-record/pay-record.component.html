@@ -1,0 +1,62 @@
+<page-header [title]="'支付通道'">每天支付通道会与您自动结算，并将款项打到您配置的银行账户中。</page-header>
+<div class="container">
+    <nz-card class="set-box">
+        <img src="/assets/img/wechat_pay.svg" alt="wechat">
+        <img src="/assets/img/alipay.svg" alt="alipay">
+        <!--审核中和审核未通过以及未申请-->
+        <div *ngIf="status != '1'">
+            <p class="no-set">暂未设置</p>
+            <button nz-button (click)="goPayWay()">点击设置</button>
+        </div>
+        <!--审核通过显示-->
+        <div class="setted" *ngIf="status == '1'">
+            <p class="color-000">已设置</p>
+            <p>微信支付费率：0.55%</p>
+            <p>支付宝支付费率：0.55%</p>
+            <button nz-button class="fix-btn" (click)="goPayWay()">点击修改</button>
+        </div>
+    </nz-card>
+    <nz-table [nzData]="dataList1" [nzShowPagination]="false">
+        <thead>
+        <tr>
+            <th *ngFor="let item of theadName"><span>{{item}}</span></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of dataList1">
+            <td>{{item.date}}</td>
+            <td>{{item.accountNo}}</td>
+            <td>{{item.remark}}</td>
+            <td>{{item.amount}}</td>
+            <td (click)="onDetailBtnClick(alertBox, item.date)">查看交易明细</td>
+        </tr>
+        </tbody>
+    </nz-table>
+</div>
+
+<ng-template #alertBox>
+    <div class="alert-box">
+        <button nz-button [nzType]="'default'" class="excel-btn" (click)="excel()"><span>导出Excel</span></button>
+        <nz-table [nzData]="dataList2" [nzShowPagination]="false">
+            <thead>
+            <tr>
+                <th *ngFor="let item of alertTheadName"><span>{{item}}</span></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of dataList2">
+                <td>{{item.transactionTime}}</td>
+                <td>{{item.type.indexOf('alipay') > -1 ? '支付宝' : '微信'}}</td>
+                <!--"type":"pay.alipay.micropayv3",-->
+                <td>{{item.transactionNo}}</td>
+                <td>{{item.paidAmount}}</td>
+                <td>{{item.fee}}</td>
+                <td>{{item.settlementAmount}}</td>
+            </tr>
+            </tbody>
+        </nz-table>
+        <div class="nzPaginationBox">
+            <nz-pagination class="nzPagination" (nzPageIndexClickChange)="paginate($event)" (nzPageIndexChange)="paginate($event)" [nzPageIndex]="1" [nzTotal]="countPage"></nz-pagination>
+        </div>
+    </div>
+</ng-template>

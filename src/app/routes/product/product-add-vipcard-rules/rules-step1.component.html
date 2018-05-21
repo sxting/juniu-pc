@@ -1,0 +1,44 @@
+<form nz-form [formGroup]="form" (ngSubmit)="_submitForm()">
+    <nz-form-item>
+        <nz-form-label nzSpan="5" nzRequired>会员卡类型</nz-form-label>
+        <nz-form-control [nzSpan]="19">
+            <nz-select formControlName="cardType">
+                <nz-option *ngFor="let item of cardTypesArr" [nzLabel]="item.name" [nzValue]="item.type"></nz-option>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzSpan="5" nzRequired nzFor="cardConfigName">卡名称</nz-form-label>
+        <nz-form-control nzSpan="19">
+            <input maxlength="16" nz-input formControlName="cardConfigName" id="cardConfigName" placeholder="请输入卡名称">
+            <ng-container *ngIf="cardConfigName.dirty || cardConfigName.touched">
+                <nz-form-explain class="errorTips" *ngIf="cardConfigName.errors?.required">请输入卡名称</nz-form-explain>
+            </ng-container>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzSpan="5" nzFor="card_img">卡面图片(选填)</nz-form-label>
+        <nz-form-control nzSpan="19">
+            <div class="pics_box clearfix">
+                <div class="img-box">
+                    <img class="upload-img" src="./assets/img/upload.png">
+                    <input type="file" accept="image" (change)="uploadImage($event)">
+                    <img class="image" [src]="imagePath" *ngIf="imagePath">
+                </div>
+            </div>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-control nzSpan="19" nzOffset="5">
+            <button nz-button nzType="primary">下一步</button>
+        </nz-form-control>
+    </nz-form-item>
+</form>
+<div class="border-top-1 mt-lg px-lg text-grey-dark">
+    <h3 class="h3 my-md">会员卡类型说明</h3>
+    <p class="mb-sm">1. 储值卡：可以设定充值多少送多少：比如充值500元送300元，则收款500元，卡内余额800元；</p>
+    <p class="mb-sm">2. 折扣卡：可以设定充值多少打几折：比如充值1000打8折，则收款1000元，卡内余额1000元，用此卡进行消费可以打8折（可指定项目）；</p>
+    <p class="mb-sm">3. 计次卡：可以设定充值多少消费几次指定的项目：比如充值300元总监剪发10次，则收款300元，该卡可以消费10次总监剪发，或按照正常价格消费其他项目；</p>
+    <p class="mb-sm">4. 期限卡：可以设定充值多少，有效期内任意次数消费某些指定的项目：比如充值2000元，一年内不限次数头发护理。</p>
+</div>
+

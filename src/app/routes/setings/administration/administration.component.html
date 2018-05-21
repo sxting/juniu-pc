@@ -1,0 +1,171 @@
+<page-header></page-header>
+<nz-card nzTitle="基本信息" [nzBordered]="false" [nzBodyStyle]="{'padding.px': 12}">
+    <div class="addStaffBox-main">
+        <div class="">
+            <div class="addStaffBox-main-left ">手机号:</div>
+            <div class="addStaffBox-main-right">
+                15811392601
+                <span class="buttons" (click)="phoneCheck(modalContent1)">点击修改</span>
+            </div>
+        </div>
+        <div>
+            <div class="addStaffBox-main-left ">密码:</div>
+            <div class="addStaffBox-main-right">
+                *********
+                <span class="buttons" (click)="passsWordCheck(modalContent2)">点击修改</span>
+            </div>
+        </div>
+        <div>
+            <div class="addStaffBox-main-left ">商家名称:</div>
+            <div class="addStaffBox-main-right">
+                桔牛
+            </div>
+        </div>
+        <div>
+            <div class="addStaffBox-main-left ">姓名:</div>
+            <div class="addStaffBox-main-right">
+                超级管理员
+            </div>
+        </div>
+        <div>
+            <div class="addStaffBox-main-left ">职位:</div>
+            <div class="addStaffBox-main-right">
+                超级管理员
+            </div>
+        </div>
+    </div>
+</nz-card>
+<nz-card nzTitle="基本信息" [nzBordered]="false" [nzBodyStyle]="{'padding.px': 12}">
+    <div class="addStaffBox-main">
+        <div class="">
+            <div class="addStaffBox-main-left ">支付宝授权状态:</div>
+            <div class="addStaffBox-main-right">
+                未授权
+                <span class="buttons" (click)="shouquan(modalContent3)">点击授权</span>
+            </div>
+        </div>
+        <div>
+            <div class="addStaffBox-main-left ">支付宝授权状态:</div>
+            <div class="addStaffBox-main-right">
+                已授权 PID：2088 0227 3142 5391
+                <span class="buttons" (click)="qxshouquan()">取消授权</span>
+            </div>
+        </div>
+    </div>
+</nz-card>
+<ng-template #modalContent1>
+    <form nz-form [formGroup]="form" (ngSubmit)="submit()">
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7">原手机号</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="16">
+                {{oldphone}}
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzFor="captcha">验证码</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="16">
+                <nz-row [nzGutter]="8">
+                    <nz-col [nzSpan]="16">
+                        <nz-input-group nzSize="large" nzPrefixIcon="anticon anticon-mail">
+                            <input nz-input maxlength="6" formControlName="captcha" placeholder="验证码">
+                        </nz-input-group>
+                        <nz-form-explain *ngIf="captcha.dirty && captcha.errors">
+                            请输入验证码！
+                        </nz-form-explain>
+                    </nz-col>
+                    <nz-col [nzSpan]="8">
+                        <button nz-button nzSize="large" (click)="getCaptcha('count')" [disabled]="count" class="ant-btn__block">{{ count ? count + 's' : '获取验证码' }}</button>
+                    </nz-col>
+                </nz-row>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzFor="mobile">新手机号</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="16">
+                <nz-input-group nzSize="large" nzPrefixIcon="anticon anticon-phone">
+                    <input nz-input formControlName="mobile" maxlength="11" placeholder="手机号">
+                </nz-input-group>
+                <nz-form-explain *ngIf="mobile.dirty && mobile.errors">请输入正确的手机号！</nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzFor="captcha2">验证码</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="16">
+                <nz-row [nzGutter]="8">
+                    <nz-col [nzSpan]="16">
+                        <nz-input-group nzSize="large" nzPrefixIcon="anticon anticon-mail">
+                            <input nz-input maxlength="6" formControlName="captcha2" placeholder="验证码">
+                        </nz-input-group>
+                        <nz-form-explain *ngIf="captcha2.dirty && captcha2.errors">
+                            请输入验证码！
+                        </nz-form-explain>
+                    </nz-col>
+                    <nz-col [nzSpan]="8">
+                        <button nz-button nzSize="large" (click)="getCaptcha('count1')" [disabled]="count1" class="ant-btn__block">{{ count1 ? count1 + 's' : '获取验证码' }}</button>
+                    </nz-col>
+                </nz-row>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</ng-template>
+<ng-template #modalContent2>
+    <form nz-form [formGroup]="form2" (ngSubmit)="submit2()">
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzFor="oldpassword">原密码</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="16">
+                <nz-input-group nzSize="large" nzPrefixIcon="anticon anticon-lock">
+                    <input nz-input formControlName="oldpassword" maxlength="11" placeholder="原密码">
+                </nz-input-group>
+                <nz-form-explain *ngIf="oldpassword.dirty && oldpassword.errors">密码格式有误！</nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzFor="newpassword">新密码</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="16">
+                <nz-input-group nzSize="large" nzPrefixIcon="anticon anticon-lock">
+                    <input nz-input formControlName="newpassword" maxlength="11" placeholder="新密码">
+                </nz-input-group>
+                <nz-form-explain *ngIf="newpassword.dirty && newpassword.errors">密码格式有误！</nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzFor="renewpassword">重复密码</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="16">
+                <nz-input-group nzSize="large" nzPrefixIcon="anticon anticon-lock">
+                    <input nz-input formControlName="renewpassword" maxlength="11" placeholder="重复密码">
+                </nz-input-group>
+                <nz-form-explain *ngIf="renewpassword.dirty && renewpassword.errors">密码格式有误！</nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7">手机号</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="16">
+                {{oldphone}}
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzFor="captcha3">验证码</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="16">
+                <nz-row [nzGutter]="8">
+                    <nz-col [nzSpan]="16">
+                        <nz-input-group nzSize="large" nzPrefixIcon="anticon anticon-mail">
+                            <input nz-input maxlength="6" formControlName="captcha3" placeholder="验证码">
+                        </nz-input-group>
+                        <nz-form-explain *ngIf="captcha3.dirty && captcha3.errors">
+                            请输入验证码！
+                        </nz-form-explain>
+                    </nz-col>
+                    <nz-col [nzSpan]="8">
+                        <button nz-button nzSize="large" (click)="getCaptcha('count')" [disabled]="count" class="ant-btn__block">{{ count ? count + 's' : '获取验证码' }}</button>
+                    </nz-col>
+                </nz-row>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</ng-template>
+<ng-template #modalContent3>
+    <p>支付宝授权是将桔牛系统与支付宝口碑商家系统打通的必要条件。</p>
+    <p>支付宝授权可以一键完成当面付付款通道的开通、门店数据的打通和商品、预约等业务场景的授权。</p>
+    <p>请使用商家总账号支付宝App，扫描下方二维码进行授权。</p>
+    <div class="erweimabox"></div>
+</ng-template>

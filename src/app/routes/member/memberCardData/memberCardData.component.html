@@ -1,0 +1,104 @@
+<page-header></page-header>
+
+<div nz-row [nzGutter]="24" class="pt-lg">
+    <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
+        <g2-card [title]="'今日开卡张数(张)'" total="{{topData?.openCardDTO.openCardNum}}" contentHeight="44px" [footer]="footer1">
+            <trend flag="{{topData?.openCardDTO.weekRatio<0?'down':'up'}}" style="display:block; margin-top:2px;">周同比
+                <span class="pl-sm">{{topData?.openCardDTO.weekRatio<0?topData?.openCardDTO.weekRatio*-1:topData?.openCardDTO.weekRatio}}%</span>
+            </trend>
+            <trend flag="{{topData?.openCardDTO.dayRatio<0?'down':'up'}}">日环比
+                <span class="pl-sm">{{topData?.openCardDTO.dayRatio<0?topData?.openCardDTO.dayRatio*-1:topData?.openCardDTO.dayRatio}}%</span>
+            </trend>
+            <ng-template #footer1>
+                <p class="text-truncate mb0">日均开卡数
+                    <span class="ml-sm">{{topData?.openCardDTO.avgdayNum}}张</span>
+                </p>
+            </ng-template>
+        </g2-card>
+    </div>
+
+    <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
+        <g2-card [title]="'今日开卡收益'" total="{{topData?.openCardIncome.openCardIncome/100}}" contentHeight="44px" [footer]="footer2">
+            <trend flag="{{topData?.openCardIncome.weekRatio<0?'down':'up'}}" style="display:block; margin-top:2px;">周同比
+                <span class="pl-sm">{{topData?.openCardIncome.weekRatio?topData?.openCardIncome.weekRatio<0?topData?.openCardIncome.weekRatio*-1:topData?.openCardIncome.weekRatio:0}}%</span>
+            </trend>
+            <trend flag="{{topData?.openCardIncome.dayRatio<0?'down':'up'}}">日环比
+                <span class="pl-sm">{{topData?.openCardIncome.dayRatio?topData?.openCardIncome.dayRatio<0?topData?.openCardIncome.dayRatio*-1:topData?.openCardIncome.dayRatio:0}}%</span>
+            </trend>
+            <ng-template #footer2>
+                <p class="text-truncate mb0">日均开卡收益
+                    <span class="ml-sm">{{topData?.openCardIncome.avgdayNum/100}}元</span>
+                </p>
+            </ng-template>
+        </g2-card>
+    </div>
+
+    <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
+        <g2-card [title]="'今日扣卡数'" total="{{topData?.buckleCardDTO.buckleCardNum}}" contentHeight="44px" [footer]="footer3">
+            <trend flag="{{topData?.buckleCardDTO.weekRatio<0?'down':'up'}}" style="display:block; margin-top:2px;">周同比
+                <span class="pl-sm">{{topData?.buckleCardDTO.weekRatio?topData?.buckleCardDTO.weekRatio<0?topData?.buckleCardDTO.weekRatio*-1:topData?.buckleCardDTO.weekRatio:0}}%</span>
+            </trend>
+            <trend flag="{{topData?.buckleCardDTO.dayRatio<0?'down':'up'}}">日环比
+                <span class="pl-sm">{{topData?.buckleCardDTO.dayRatio?topData?.buckleCardDTO.dayRatio<0?topData?.buckleCardDTO.dayRatio*-1:topData?.buckleCardDTO.dayRatio:0}}%</span>
+            </trend>
+            <ng-template #footer3>
+                <p class="text-truncate mb0">日均扣卡数
+                    <span class="ml-sm">{{topData?.buckleCardDTO.avgdayNum}}</span>
+                </p>
+            </ng-template>
+        </g2-card>
+    </div>
+
+    <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
+        <g2-card [title]="'今日扣卡金额'" total="{{topData?.buckleCardIncome.buckleCardIncome/100}}" contentHeight="44px" [footer]="footer4">
+            <trend flag="{{topData?.buckleCardIncome.weekRatio<0?'down':'up'}}" style="display:block; margin-top:2px;">周同比
+                <span class="pl-sm">{{topData?.buckleCardIncome.weekRatio?topData?.buckleCardIncome.weekRatio<0?topData?.buckleCardIncome.weekRatio*-1:topData?.buckleCardIncome.weekRatio:0}}%</span>
+            </trend>
+            <trend flag="{{topData?.buckleCardIncome.dayRatio<0?'down':'up'}}">日环比
+                <span class="pl-sm">{{topData?.buckleCardIncome.dayRatio?topData?.buckleCardIncome.dayRatio<0?topData?.buckleCardIncome.dayRatio*-1:topData?.buckleCardIncome.dayRatio:0}}%</span>
+            </trend>
+            <ng-template #footer4>
+                <p class="text-truncate mb0">日均扣卡金额
+                    <span class="ml-sm">{{topData?.buckleCardIncome.avgdayNum?topData?.buckleCardIncome.avgdayNum/100:0}}</span>
+                </p>
+            </ng-template>
+        </g2-card>
+    </div>
+</div>
+
+<div style="display:flex;justify-content: space-between;">
+    <div style="width:49%;background:#fff;">
+        <nz-card [nzBordered]="false" nzTitle="开卡分布" [nzBodyStyle]="{'padding.px': 12}" style="min-height: 464px;" class="sales-card">
+            <g2-pie [hasLegend]="true" style="margin-top:80px;" subTitle="持卡总数" [height]="248" [lineWidth]="4" [total]="salesTotal" [data]="salesPieData">
+            </g2-pie>
+        </nz-card>
+
+
+    </div>
+    <div style="width:49%;background:#fff;" class="chartBox">
+        <div class="charttitle">开卡类型分布</div>
+        <div id="top_chart">
+
+        </div>
+    </div>
+
+</div>
+<div class="tabsetBox" >
+    <nz-tabset (nzSelectChange)="console($event)">
+        <nz-tab nzTitle="销量">
+        </nz-tab>
+        <nz-tab nzTitle="销售额">
+        </nz-tab>
+    </nz-tabset>
+    <nz-tabset (nzSelectChange)="console2($event)">
+        <nz-tab nzTitle="近七天">
+        </nz-tab>
+        <nz-tab nzTitle="近一个月">
+        </nz-tab>
+        <nz-tab nzTitle="全年">
+        </nz-tab>
+    </nz-tabset>
+</div>
+<div class="seven-day-flow" style="background:#fff;">
+    <div id="seven_day_flow"></div>
+</div>

@@ -1,0 +1,105 @@
+@import 'node_modules/@delon/theme/styles/default';
+
+.mgb-20 {
+    margin-bottom: 20px;
+}
+
+.step1 {
+    .title {
+        padding: 40px 0 30px;
+    }
+    .card-title {
+        text-align: center;
+    }
+    p {
+        padding: 6px 0;
+    }
+    .card-item {
+        height: 263px;
+        cursor: pointer;
+    }
+    .selected {
+        border: 1px solid @primary-color;
+        box-shadow: 1px 1px 4px;
+    }
+    .dis-selected {
+        color: #999;
+        h3 {
+            color: #999;
+        }
+    }
+}
+
+.step4 {
+    .form-item {
+        margin-bottom: 60px;
+    }
+    .lh-62 {
+        line-height: 62px;
+    }
+    .step4-img-box {
+        display: inline-block;
+        position: relative;
+
+        img, input {
+            width: 104px;
+            height: 104px;
+            border: 1px dashed #e5e5e5;
+            border-radius: 4px;
+            position: absolute;
+        }
+        .upload-img, input {
+            left: 0;
+            top: 0;
+        }
+        input {
+            opacity: 0;
+        }
+        .image {
+            left: 120px;
+            padding: 5px;
+        }
+    }
+
+    .img4-box {
+        width: 240px;
+
+        .image {
+            padding-bottom: 36px;
+            cursor: pointer;
+        }
+
+        i {
+            font-size: 16px;
+            position: absolute;
+            top: 80px;
+            right: 30px;
+            color: #888;
+        }
+    }
+}
+
+app-pay-way-step5 {
+    display: block;
+    text-align: center;
+    width: 72%;
+    max-width: 560px;
+    margin: 0 auto;
+}
+
+.extra {
+    background: #fafafa;
+    padding: 24px 40px;
+    border-radius: 2px;
+    text-align: left;
+}
+
+.center-btn {
+    margin: 20px auto;
+    display: block;
+}
+
+.big-img {
+    width: 500px;
+    height: 300px;
+}

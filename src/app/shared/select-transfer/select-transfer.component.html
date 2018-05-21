@@ -1,0 +1,51 @@
+
+<!--多选穿梭框-->
+<div class="reserve-record-alert">
+    <!--左边-->
+    <div class="list">
+        <p class="head_store clearfix">
+            <span class="fl select-all" (click)="selectAllShops(ifSelectAll)">
+                <input type="checkbox" [checked]="ifSelectAll" style="margin-right: 8px"/>
+                <span>全选</span>
+            </span>
+            全部{{allName}}
+        </p>
+        <div class="show_all_stores">
+            <div class="city-list" *ngFor="let city of cityStoreList; let cityIndex=index">
+                <!--城市-->
+                <div class="select_all_btn">
+                    <input class="select_all_input" type="checkbox" [checked]="city.change"  (click)="onSelectAllStoresInputClick(cityIndex, city.change)"/>
+                    <span class="city">{{city.roleName}}</span>
+                </div>
+                <!--门店-->
+                <ul class="shop_names">
+                    <li *ngFor="let store of city.staffs; let storeIndex=index">
+                        <input type="checkbox" [checked]="store.change" (click)="onSelectStoreInputClick(cityIndex, storeIndex)" />
+                        <span>{{store.staffName}}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!--右边-->
+    <div class="list">
+        <p class="head_store">已选{{allName}}</p>
+        <div class="show_all_stores">
+            <div  *ngFor="let city of cityStoreList">
+                <div class="city-list bbn" *ngIf="city.checked == true">
+                    <!--城市-->
+                    <div class="select_all_btn">
+                        <span class="city">{{city.roleName}}</span>
+                    </div>
+                    <!--门店-->
+                    <ul class="shop_names">
+                        <li *ngFor="let store of city.staffs">
+                            <span *ngIf="store.change == true">{{store.staffName}}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

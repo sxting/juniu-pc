@@ -1,0 +1,342 @@
+<div class="content__title ad-page-header">
+    <nz-breadcrumb>
+        <nz-breadcrumb-item>主页</nz-breadcrumb-item>
+        <nz-breadcrumb-item>口碑</nz-breadcrumb-item>
+        <nz-breadcrumb-item>发布优惠券</nz-breadcrumb-item>
+        <nz-breadcrumb-item>单品券</nz-breadcrumb-item>
+    </nz-breadcrumb>
+</div>
+
+<div class="coupon-msg-box">
+    <div class="coupon-sub-title"><span></span>单品券基本信息</div>
+    <ul class="clearfix">
+        <!--活动名称-->
+        <li>
+            <span class="left-block" [class.color-ccc]="isEdit == true"><span class="icon-asterisks-1-copy iconfont"></span>活动名称</span>
+            <div class="right-block">
+                <div *ngIf="isEdit">
+                    <p>{{couponName}}</p>
+                </div>
+                <div *ngIf="!isEdit">
+                    <input style="width: 300px" type="text" maxlength="16" [(ngModel)]="couponName" placeholder="请输入活动名称，限1-16个字"> 限16字
+                </div>
+            </div>
+        </li>
+        <!--优惠方式-->
+        <li>
+            <span class="left-block" [class.color-ccc]="isEdit == true"><span class="icon-asterisks-1-copy iconfont"></span>优惠方式</span>
+            <div class="right-block">
+                <div *ngIf="isEdit">
+                    <span *ngIf="voucherType == 'MONEY'">立减{{lijianPrice}}元</span>
+                    <span *ngIf="voucherType == 'REDUCETO'">减到{{yhPrice}}元</span>
+                </div>
+                <div *ngIf="!isEdit">
+                    <div class="mgb-big">
+                        <p class="mgb"><input type="radio" checked name="yhtype" (click)="onYhTypeClick('lijian')"> 立减</p>
+                        <div><input [(ngModel)]="lijianPrice" type="number" min="0" placeholder="请输入金额"> 元</div>
+                        <p class="coupon-input-tip">单品优惠券面额，例如：金额2元，商品原价10元，用户仅需付8元。</p>
+                    </div>
+                    <div>
+                        <p class="mgb"><input type="radio" name="yhtype" (click)="onYhTypeClick('jiandao')"> 减到固定优惠价</p>
+                        <div>
+                            商品原价 <input [(ngModel)]="originPrice" min="0" type="number" placeholder="请输入金额"> 元 <span class="space"></span> 优惠价 <input [(ngModel)]="yhPrice" type="number" min="0" placeholder="请输入金额"> 元</div>
+                        <p class="coupon-input-tip">优惠价即为用户需付款金额，例如：原价10元，优惠价2元，用户仅需付2元。</p>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <!--适用门店-->
+        <li>
+            <span class="left-block"><span class="icon-asterisks-1-copy iconfont"></span>适用门店</span>
+            <div class="right-block">
+                <span>{{storesChangeNum}}家门店</span> <span class="space"></span>
+                <span class="select-store-btn" (click)="onSelectStoreBtnClick()">{{isEdit ? '新增门店': '选择门店'}}</span>
+            </div>
+        </li>
+        <!--总数量-->
+        <li>
+            <span class="left-block" style="line-height: 29px"><span class="icon-asterisks-1-copy iconfont" *ngIf="!isEdit"></span>总数量</span>
+            <div class="right-block">
+                <div *ngIf="isEdit">
+                    <span style="line-height: 30px" *ngIf="totalNumber ==0">不限制</span>
+                    <div *ngIf="totalNumber != 0">
+                        原总数{{totalNumber}}，追加 <input type="text" [(ngModel)]="zhuijia" maxlength="5" placeholder="请输入数量">
+                    </div>
+                </div>
+                <div *ngIf="!isEdit">
+                    <select (change)="onNumberChange($event)">
+                        <option [value]="false">不限制</option>
+                        <option [value]="true">设定总数</option>
+                    </select>
+                    <div *ngIf="showNumberInput == 'true'" class="dis-inb">
+                        <input [(ngModel)]="totalNumber" type="text" maxlength="5" placeholder="请输入数量">
+                    </div>
+                </div>
+            </div>
+        </li>
+        <!--上架时间-->
+        <li style="overflow: visible" class="clearfix">
+            <span class="left-block" style="line-height: 29px;"><span class="icon-asterisks-1-copy iconfont"></span>上架时间</span>
+            <div class="right-block">
+                <div *ngIf="isEdit">
+                    {{sjBeginDate}} 至
+                    <div class="dis-inb">
+                        <!--<nz-datepicker [(ngModel)]="sjEndDate"></nz-datepicker>-->
+                        <!--<nz-timepicker [(ngModel)]="sjEndTime" [nzFormat]="'HH:mm'"></nz-timepicker>-->
+                    </div>
+                </div>
+                <div *ngIf="!isEdit">
+                    <!--<nz-datepicker [(ngModel)]="sjStartDate"></nz-datepicker>-->
+                    <!--<nz-timepicker [(ngModel)]="sjStartTime" [nzFormat]="'HH:mm'"></nz-timepicker>-->
+                    <span style="margin-left:18px;">至</span>
+                    <!--<nz-datepicker [(ngModel)]="sjEndDate"></nz-datepicker>-->
+                    <!--<nz-timepicker [(ngModel)]="sjEndTime" [nzFormat]="'HH:mm'"></nz-timepicker>-->
+                </div>
+            </div>
+        </li>
+        <!--背景图片-->
+        <li>
+            <span class="left-block"><span class="icon-asterisks-1-copy iconfont"></span>背景图片</span>
+            <div class="right-block">
+                <div class="img-box">
+                    <img class="image" [src]="imagePath">
+                    <span class="iconfont icon-camera"></span>
+                    <input type="file" accept="image" (change)="uploadImage($event)">
+                </div>
+                <p class="coupon-input-tip">大小：不超过2M。格式：bmp、png、 jpeg、 jpg、 gif,建议尺寸：924px*380px以上.</p>
+            </div>
+        </li>
+        <!--商品名称-->
+        <li>
+            <span class="left-block"><span class="icon-asterisks-1-copy iconfont"></span>商品名称</span>
+            <div class="right-block">
+                <input style="width: 300px;" maxlength="20" type="text" [(ngModel)]="productName" placeholder="请输入商品名称，限1-20个字"> 限20字
+            </div>
+        </li>
+        <!--商品详情-->
+        <li>
+            <span class="left-block"><span class="icon-asterisks-1-copy iconfont"></span>商品详情</span>
+            <div class="right-block">
+                <input style="width: 300px;" maxlength="20" type="text" [(ngModel)]="productDetail" placeholder="请输入商品详情，限1-20个字"> 限20字
+            </div>
+        </li>
+        <!--商品编码-->
+        <li>
+            <span class="left-block"><span class="icon-asterisks-1-copy iconfont"></span>商品编码</span>
+            <div class="right-block">
+                <input style="width: 300px;" maxlength="20" type="text" [(ngModel)]="productCode" placeholder="请输入商品编码">
+                <p class="coupon-input-tip">请输入1个或多个商品编码，用英文逗号隔开，如商家没有收银系统，可填“0”</p>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<div class="coupon-set">
+    <div class="coupon-sub-title"><span></span>单品券规则设置</div>
+    <ul class="clearfix">
+        <!--领取限制-->
+        <li>
+            <span class="left-block" [class.color-ccc]="isEdit == true">领取限制</span>
+            <div class="right-block">
+                <div *ngIf="isEdit" class="margin-top">
+                    <span *ngIf="perCouponNumber == ''">不限制</span>
+                    <span *ngIf="perCouponNumber != ''">每人{{perCouponNumber}}张</span>
+                </div>
+                <div *ngIf="!isEdit">
+                    <select (change)="onCollectLimitChange($event)">
+                        <option [value]="false">不限制</option>
+                        <option [value]="true">设定每人领取总张数</option>
+                    </select>
+                    <div *ngIf="showCollectLimitInput == 'true'" class="dis-inb">
+                        <input type="text" maxlength="3" [(ngModel)]="perCouponNumber" placeholder="请输入数量"> <span>张/人</span>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <!--每日领取限制-->
+        <li>
+            <span class="left-block" [class.color-ccc]="isEdit == true">每日领取限制</span>
+            <div class="right-block">
+                <div *ngIf="isEdit" class="margin-top">
+                    <span *ngIf="perDayCouponNumber == ''">不限制</span>
+                    <span *ngIf="perDayCouponNumber != ''">每人每日领取{{perDayCouponNumber}}张</span>
+                </div>
+                <div *ngIf="!isEdit">
+                    <select name="" (change)="onPerDayCollectLimitChange($event)">
+                        <option [value]="false">不限制</option>
+                        <option [value]="true">设定每人每日领取总张数</option>
+                    </select>
+                    <div *ngIf="showPerDayCollectLimitInput == 'true'" class="dis-inb">
+                        <input type="text" maxlength="3" [(ngModel)]="perDayCouponNumber" placeholder="请输入数量"> <span>张/人/日</span>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <!--券有效期-->
+        <li>
+            <!--编辑的指定时间 line-height: 100px;-->
+            <span class="left-block"><span class="icon-asterisks-1-copy iconfont"></span>券有效期</span>
+            <div class="right-block">
+                <div *ngIf="isEdit">
+                    <div *ngIf="showEffectiveInput == 'RELATIVE'">
+                        相对时间 <span class="space"></span> 领取后 <input [(ngModel)]="EffectiveTimeDay" type="number" placeholder="请输入天数"> 日内有效
+                    </div>
+                    <div *ngIf="showEffectiveInput == 'FIXED'">
+                        <span>指定时间</span> <span class="space"></span> <span>{{zdBeginDate}} 至</span>
+                        <div class="dis-inb">
+                            <!--<nz-datepicker [(ngModel)]="zdEndDate"></nz-datepicker>-->
+                            <!--<nz-timepicker [(ngModel)]="zdEndtime" [nzFormat]="'HH:mm'"></nz-timepicker>-->
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="!isEdit">
+                    <select name="" (change)="onEffectiveChange($event)">
+                        <option [value]="'RELATIVE'">相对时间</option>
+                        <option [value]="'FIXED'">指定时间</option>
+                    </select>
+                    <!--相对时间-->
+                    <div *ngIf="showEffectiveInput == 'RELATIVE'" class="dis-inb">
+                        领取后 <input type="text" maxlength="3" [(ngModel)]="EffectiveTimeDay" placeholder="请输入天数"> 日内有效
+                    </div>
+                    <!--指定时间-->
+                    <div *ngIf="showEffectiveInput == 'FIXED'" style="margin-top: 10px;">
+                        <!--<nz-datepicker [(ngModel)]="zdStartDate"></nz-datepicker>-->
+                        <!--<nz-timepicker [(ngModel)]="zdStartTime" [nzFormat]="'HH:mm'"></nz-timepicker>-->
+                        <span style="margin-left: 18px">至</span>
+                        <!--<nz-datepicker [(ngModel)]="zdEndDate"></nz-datepicker>-->
+                        <!--<nz-timepicker [(ngModel)]="zdEndtime" [nzFormat]="'HH:mm'"></nz-timepicker>-->
+                    </div>
+                </div>
+            </div>
+        </li>
+        <!--使用时段-->
+        <li>
+            <span class="left-block" [class.color-ccc]="isEdit == true">使用时段</span>
+            <div class="right-block">
+                <div *ngIf="isEdit" class="margin-top">
+                    <!--每周一、周二、周三、周四、周五  10:00-24:00-->
+                    <div *ngIf="useTime?.time == null">不限制</div>
+                    <ul *ngIf="useTime?.time != null">
+                        <li *ngFor="let item of useTime">
+                            每<span style="padding-right: 5px" *ngFor="let day of item.weekdays">{{day}}</span>
+                            <span>{{item.time}}</span>
+                        </li>
+                    </ul>
+                </div>
+                <div *ngIf="!isEdit">
+                    <select name="" (change)="onUseTimeChange($event)">
+                        <option [value]="false">不限制</option>
+                        <option [value]="true">指定每周使用时段</option>
+                    </select>
+                    <div *ngIf="showUseTimeInput == 'true'" class="use-times-box">
+                        <div *ngFor="let time of timesArr; let i=index">
+                            <ul>
+                                <li *ngFor="let week of time.week; let j=index"><input (change)="weekChange(i, j)" type="checkbox" [checked]="week.checked"><span> {{week.name}}</span></li>
+                            </ul>
+                            <div class="time-box">
+                                <div class="dis-inb">
+                                    <!--<nz-timepicker [(ngModel)]="time.startTime" [nzFormat]="'HH:mm'"></nz-timepicker>至-->
+                                    <!--<nz-timepicker [(ngModel)]="time.endTime" [nzFormat]="'HH:mm'"></nz-timepicker>-->
+                                </div>
+                                <span class="add-btn" (click)="onAddTimeClick()">添加</span>
+                                <span class="add-btn" *ngIf="i > 0" (click)="onDeleteTimeClick(i)">删除</span>
+                            </div>
+                        </div>
+                        <p class="coupon-input-tip">最多设置5组</p>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <!--自动续期-->
+        <li *ngIf="showAutoRenewal">
+            <span class="left-block">自动续期</span>
+            <div class="right-block">
+                <div *ngIf="isEdit" style="line-height: 30px;">
+                    <div *ngIf="autoRenewal">已设置自动延期</div>
+                    <div *ngIf="!autoRenewal">未设置自动延期</div>
+                </div>
+                <div *ngIf="!isEdit">
+                    <div><input type="checkbox" checked (click)="onAutoRenewalClick()"> <span>自动延长上架时间</span></div>
+                    <p class="coupon-input-tip">上架时间结束时，若未领取完，则自动延期，每次延期30天。</p>
+                </div>
+            </div>
+        </li>
+        <!--领取人群限制-->
+        <li>
+            <span class="left-block">领取人群限制</span>
+            <div class="right-block">
+                <span style="line-height: 30px;">全部用户</span>
+            </div>
+        </li>
+        <!--使用须知-->
+        <li>
+            <span class="left-block">使用须知</span>
+            <div class="right-block">
+                <div style="margin-bottom: 15px" *ngFor="let item of useKnow; let i = index">
+                    <input style="width: 300px;" type="text" maxlength="20" placeholder="每条限5-20个字" [(ngModel)]="item.text">
+                    <span class="add-btn" (click)="onUseKnowAddBtnClick()">添加</span>
+                    <span class="add-btn" *ngIf="i > 0" (click)="onDeleteUseKnowClick(i)">删除</span>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <div class="submit-box"><button (click)="onSubmitClick()">提交</button></div>
+</div>
+
+<!--按城市选择门店弹框-->
+<div class="shop-city-box-bg" *ngIf="showStoreSelect">
+    <div class="shop-city-box">
+        <div class="shop-city-subtitle">
+            <span class="shop-city-subtitle-text">选择门店</span>
+        </div>
+        <div class="city-stores-box">
+            <div class="city-stores city-stores-left">
+                <div class="stores-title">
+                    <span class="line-vertical"></span>
+                    <span>可选门店</span>
+                </div>
+                <div class="city-stores-container city-stores-no-selected-box">
+                    <div class="city-list" *ngFor="let city of cityStoreList; let cityIndex=index">
+                        <!--城市-->
+                        <div class="select_all_btn">
+                            <input class="select_all_input" type="checkbox" [checked]="city.change" (click)="onSelectAllStoresInputClick(cityIndex, city.change)" />
+                            <span class="city">{{city.cityName}}</span>
+                        </div>
+                        <!--门店-->
+                        <ul class="">
+                            <li *ngFor="let store of city.stores; let storeIndex=index">
+                                <input type="checkbox" [checked]="store.change" (click)="onSelectStoreInputClick(cityIndex, storeIndex)" />
+                                <span>{{store.storeName}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="city-stores city-stores-right">
+                <div class="stores-title">
+                    <span class="line-vertical"></span>
+                    <span>已选门店</span>
+                </div>
+                <div class="city-stores-container city-stores-selected-box">
+                    <div class="city-list" *ngFor="let city of cityStoreList">
+                        <div *ngIf="city.checked == true">
+                            <div>
+                                <span class="city">{{city.cityName}}</span>
+                            </div>
+                            <ul class="">
+                                <li *ngFor="let store of city.stores">
+                                    <span *ngIf="store.change == true">{{store.storeName}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="city-stores-bottom">
+            <span class="update-stores">更新营业店铺</span>
+            <span style="display: none">更新成功</span>
+            <button class="city-stores-save" (click)="onStoreSaveClick()">保存</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,108 @@
+<!--选择门店按钮-->
+<span class="select-store-btn" (click)="onSelectStoreBtnClick(storeSelect)">{{isEdit ? '新增门店': '选择门店'}}</span>
+<!--按城市选择门店弹框-->
+<ng-template #storeSelect class="shop-city-box">
+    <div>
+        <div class="city-stores-box">
+            <div class="city-stores city-stores-left">
+                <div class="stores-title">
+                    <span class="line-vertical"></span>
+                    <span>可选门店</span>
+                </div>
+                <div class="city-stores-container city-stores-no-selected-box">
+                    <div class="city-list" *ngFor="let city of cityStoreList; let cityIndex=index">
+                        <!--城市-->
+                        <div class="select_all_btn">
+                            <input class="select_all_input" type="checkbox" [checked]="city.change" (click)="onSelectAllStoresInputClick(cityIndex, city.change)" />
+                            <span class="city">{{city.cityName}}</span>
+                        </div>
+                        <!--门店-->
+                        <ul class="">
+                            <li *ngFor="let store of city.stores; let storeIndex=index">
+                                <input type="checkbox" [checked]="store.change" (click)="onSelectStoreInputClick(cityIndex, storeIndex)" />
+                                <span>{{store.storeName}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="city-stores city-stores-right">
+                <div class="stores-title">
+                    <span class="line-vertical"></span>
+                    <span>已选门店</span>
+                </div>
+                <div class="city-stores-container city-stores-selected-box">
+                    <div class="city-list" *ngFor="let city of cityStoreList">
+                        <div *ngIf="city.checked == true">
+                            <div>
+                                <span class="city">{{city.cityName}}</span>
+                            </div>
+                            <ul class="">
+                                <li *ngFor="let store of city.stores">
+                                    <span *ngIf="store.change == true">{{store.storeName}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<div class="shop-city-box-bg" *ngIf="showStoreSelect">
+  <div class="shop-city-box">
+    <div class="shop-city-subtitle">
+      <span class="shop-city-subtitle-text">选择门店</span>
+      <!--<span class="shop-city-close-btn">x</span>-->
+    </div>
+    <div class="city-stores-box">
+      <div class="city-stores city-stores-left">
+        <div class="stores-title">
+          <span class="line-vertical"></span>
+          <span>可选门店</span>
+        </div>
+        <div class="city-stores-container city-stores-no-selected-box">
+          <div class="city-list" *ngFor="let city of cityStoreList; let cityIndex=index">
+            <!--城市-->
+            <div class="select_all_btn">
+              <input class="select_all_input" type="checkbox" [checked]="city.change" (click)="onSelectAllStoresInputClick(cityIndex, city.change)" />
+              <span class="city">{{city.cityName}}</span>
+            </div>
+            <!--门店-->
+            <ul class="">
+              <li *ngFor="let store of city.stores; let storeIndex=index">
+                <input type="checkbox" [checked]="store.change" (click)="onSelectStoreInputClick(cityIndex, storeIndex)" />
+                <span>{{store.storeName}}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="city-stores city-stores-right">
+        <div class="stores-title">
+          <span class="line-vertical"></span>
+          <span>已选门店</span>
+        </div>
+        <div class="city-stores-container city-stores-selected-box">
+          <div class="city-list" *ngFor="let city of cityStoreList">
+            <div *ngIf="city.checked == true">
+              <div>
+                <span class="city">{{city.cityName}}</span>
+              </div>
+              <ul class="">
+                <li *ngFor="let store of city.stores">
+                  <span *ngIf="store.change == true">{{store.storeName}}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="city-stores-bottom">
+      <span class="update-stores">更新营业店铺</span>
+      <span style="display: none">更新成功</span>
+      <button class="city-stores-save" (click)="onStoreSaveClick()">保存</button>
+    </div>
+  </div>
+</div>

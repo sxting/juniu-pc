@@ -1,0 +1,89 @@
+.memberAnalysis-top{
+    background: #fff;
+    width: 100%;
+    padding: 20px; 
+}
+.addvip-bottom {
+    display: flex;
+    margin-top: 20px;
+}
+.addvip-bottom>div {
+    width: 300px;
+    height: 156px;
+    margin-right: 20px;
+    color: #fff;
+    text-align: center;
+    font-family: PingFangSC-Medium;
+    font-size: 14px;
+    color: #FFFFFF;
+    border-radius: 5px;
+}
+
+.addvip-bottom>div:nth-of-type(3) {
+    background: url('../../../../assets/img/card-bg1.jpg') left center no-repeat;
+}
+
+.addvip-bottom>div:nth-of-type(2) {
+    background: url('../../../../assets/img/card-bg2.jpg') left center no-repeat;
+}
+
+.addvip-bottom>div:nth-of-type(1) {
+    background: url('../../../../assets/img/card-bg3.jpg') left center no-repeat;
+}
+
+.addvip-bottom>div:nth-of-type(4) {
+    background: url('../../../../assets/img/card-bg4.jpg') left center no-repeat;
+}
+
+.addvip-bottom>div div:nth-of-type(3) {
+    width: 100px;
+    height: 30px;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    line-height: 30px;
+    margin: 20px auto;
+    cursor: pointer;
+}
+
+.addvip-bottom>div div:nth-of-type(1) {
+    margin-top: 20px;
+}
+
+.addvip-bottom>div div:nth-of-type(2) {
+    margin-top: 20px;
+}
+.addStaffBox-main-left {
+    width: 76px;
+    text-align: right;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #666666;
+    line-height: 24px;
+    height: 24px;
+    margin-right: 20px;
+}
+.addStaffBox-main>div {
+    display: flex;
+    margin-top: 30px;
+}
+
+.addStaffBox-main>div .addStaffBox-main-left {
+    width: 90px;
+    text-align: right;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #666666;
+    line-height: 24px;
+    height: 24px;
+    margin-right: 20px;
+}
+.memberAnalysis-bottom{
+    padding-top:30px; 
+}
+.nzPaginationBox{
+    margin: 20px;
+    overflow: hidden;
+}
+.nzPagination{
+    float: right;
+}

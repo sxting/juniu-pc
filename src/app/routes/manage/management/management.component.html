@@ -1,0 +1,36 @@
+<page-header></page-header>
+<div class="storeMain">
+    <div class="buttonBox">
+        <button class="buttons" nz-button [routerLink]="['/manage/management/addManagement']" >新增职位</button>
+    </div>
+    <nz-table #basicTable [nzShowPagination]="false" [nzData]="data">
+        <thead>
+            <tr>
+                <th>职位编号</th>
+                <th>职位</th>
+                <th>职位归属</th>
+                <th>拥有权限</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of data">
+                <td>{{item.customerId}}</td>
+                <td>{{item.birthday}}</td>
+                <td>{{item.customerName}}</td>
+                <td>{{item.phone}}</td>
+                <td>
+                    <span class="button" (click)="bianji()">编辑</span>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <span class="button" (click)="fufei()">升级</span>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <span class="button" (click)="shanchu()">删除</span>
+                </td>
+
+            </tr>
+        </tbody>
+    </nz-table>
+    <div class="nzPaginationBox">
+        <nz-pagination class="nzPagination" [nzTotal]="Total" [nzPageSize]="10" (nzPageIndexChange)="getData($event)"></nz-pagination>
+    </div>
+</div>

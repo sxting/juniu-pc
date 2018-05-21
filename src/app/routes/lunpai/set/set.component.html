@@ -1,0 +1,58 @@
+<page-header></page-header>
+
+<div class="stores-box">
+    选择门店
+    <nz-select style="width: 200px;" [(ngModel)]="selectedOption" (ngModelChange)="onSelectStoreClick($event)" [nzShowSearch]="true">
+        <nz-option *ngFor="let store of stores" [nzLabel]="store.storeName" [nzValue]="store.storeId"></nz-option>
+    </nz-select>
+</div>
+
+<div class="rule-list-box">
+    <div class="add-rule-btn" (click)="onAddRuleBtnClick('', ruleSetAlert)">新增轮牌规则</div>
+    <div class="rule-list">
+        <table>
+            <tr>
+                <td>序号</td>
+                <td>轮牌规则名称</td>
+                <td>包含员工（姓名）</td>
+                <td>操作</td>
+            </tr>
+            <tr *ngFor="let rule of TurnRuleList, let index = index">
+                <td>0{{index+1}}</td>
+                <td>{{rule.turnRuleName}}</td>
+                <td>{{rule.staffs}}</td>
+                <td>
+                    <span (click)="onAddRuleBtnClick(rule.turnRuleId, ruleSetAlert)">编辑</span>
+                    |
+                    <span (click)="onDeleteBtnClick(rule.turnRuleId)">删除</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!--规则设置弹框-->
+
+<ng-template #ruleSetAlert>
+    <div class="name-box">
+        <span class="iconfont icon-asterisks-1-copy"></span>
+        <span class="left-text">轮牌组名称</span>
+        <input type="text" placeholder="请输入轮牌组名称，限1-20个字" maxlength="20" [(ngModel)]="turnRuleName">
+    </div>
+
+    <div class="craftsman-box">
+        <span class="iconfont icon-asterisks-1-copy"></span>
+        <span class="left-text">选择员工</span>
+        <div class="craftsman-list">
+            <div class="occupation" *ngFor="let role of staffList; let roleIndex=index">
+                <div [class.prevent-color]="role.selected"><input type="checkbox" [checked]="role.change" [disabled]="role.selected" (click)="onSelectAllStaffsInputClick(roleIndex, role.change)">{{role.roleName}}</div>
+                <ul>
+                    <!--li class="prevent-color"-->
+                    <li *ngFor="let staff of role.staffs; let staffIndex=index" [class.prevent-color]="staff.selected">
+                        <input type="checkbox" [checked]="staff.change" [disabled]="staff.selected" (click)="onSelectStaffInputClick(roleIndex, staffIndex)">{{staff.staffName}}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</ng-template>

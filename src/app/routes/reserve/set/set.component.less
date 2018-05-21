@@ -1,0 +1,314 @@
+.content-box {
+    padding-left: 20px;
+    padding-bottom: 40px;
+    font-size: 14px;
+    color: #222;
+    right: 0;
+    box-sizing: border-box;
+    background-color: #fff;
+    font-family: 'PingFangSC-Regular';
+}
+.content-title {
+    font-family: 'PingFangSC-Medium';
+    font-size: 16px;
+    color: #333333;
+    height: 70px;
+    line-height: 70px;
+}
+.content-title span {
+    display: inline-block;
+    width: 4px;
+    height: 16px;
+    background-color: #FF6600;
+    margin-right: 10px;
+    transform: translateY(2px);
+}
+.content-box ul li {
+    /*height: 28px;*/
+    line-height: 28px;
+    margin-bottom: 30px;
+}
+.content-box ul .set-left {
+    padding-right: 20px;
+}
+.content-box ul select {
+    width: 300px;
+    height: 28px;
+    border: 1px solid #E5E5E5;
+    border-radius: 2px;
+    background-color: #fff;
+    outline: none;
+    font-size: 14px;
+    color: #1A1A1A;
+}
+
+.reserve-time, .reserve-product, .reserve-staff {
+    width: 200px;
+    height: 120px;
+    float: left;
+    margin-right: 20px;
+    background: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    color: #222;
+    text-align: center;
+    box-sizing: border-box;
+    font-size: 14px;
+    cursor: pointer;
+    position: relative;
+    padding-top: 28px;
+}
+.icon-time, .icon-shangpin1, .icon-man {
+    font-size: 36px;
+    color: #3DA1F3;
+}
+.icon-shangpin1 {
+    color: #FA9E05;
+}
+.icon-man {
+    color: #48B508;
+}
+/*不能选预约方式*/
+.prevent-click {
+    color: #ccc;
+    border: 1px solid #e5e5e5;
+}
+
+.reserve-type-tip {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    font-size: 14px;
+    background-color: rgba(0,0,0,0.6);
+    line-height: 21px;
+    padding: 28px 20px;
+    text-align: left;
+    box-sizing: border-box;
+    color: #fff;
+}
+.selected-border {
+    border: 1px solid #ff6600;
+    box-shadow: 0 1px 3px 0;
+}
+.selected-type {
+    position: absolute;
+    right: 0;
+    top: 1px;
+    font-size: 30px;
+    color: #ff6600;
+}
+
+
+.set-time-box {
+    display: inline-block;
+}
+.save-btn {
+    width: 100px;
+    height: 40px;
+    background-color: #FF6600;
+    color: #ffffff;
+    line-height: 40px;
+    text-align: center;
+    border: none;
+    border-radius: 4px;
+    font-size: 18px;
+    margin-left: 350px;
+    margin-top: 30px;
+}
+
+/*先预约手艺人，再预约商品*/
+.order-craftsman, .order-product-table {
+    border-left: 1px solid #E5E5E5;
+    border-top: 1px solid #E5E5E5;
+    text-align: center;
+    margin-left: 80px;
+    min-width: 645px;
+    margin-right: 100px;
+}
+table tr {
+    height: 30px;
+}
+table tr:first-child {
+    height: 40px;
+    background: #f3f3f3;
+}
+table td {
+    border-right: 1px solid #E5E5E5;
+    border-bottom: 1px solid #E5E5E5;
+    padding: 0 13px;
+    position: relative;
+    min-height: 100px;
+}
+table td input {
+    margin-right: 10px;
+}
+.order-craftsman td input[type=text] {
+    margin: 0;
+    width: 76px;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #ccc;
+    height: 30px;
+}
+.wechat-input {
+    margin-left: 25px;
+}
+.line-vertical {
+    display: inline-block;
+    width: 1px;
+    height: 12px;
+    background-color: #E5E5E5;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+/*.order-craftsman tr td:last-child span {*/
+/*cursor: pointer;*/
+/*}*/
+.none {
+    color: #999;
+}
+.order-craftsman .staff-set-box {
+    min-height: 50px;
+    margin-bottom: 40px;
+    line-height: 30px;
+    padding-top: 10px;
+}
+.order-product .staff-set-box {
+    line-height: 30px;
+    padding-top: 10px;
+}
+.staff-set {
+    color: #666;
+}
+.order-product .set-btn {
+    color: #ff6600;
+    border: 1px solid #ff6600;
+    padding: 1px 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    width: 120px;
+    margin: 10px auto;
+}
+.order-craftsman .set-btn {
+    color: #ff6600;
+    border: 1px solid #ff6600;
+    padding: 1px 5px;
+    border-radius: 4px;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    margin-left: -34px;
+    cursor: pointer;
+}
+/*只预约商品，点击更改弹框*/
+.select-product-box {
+    line-height: 20px;
+}
+.select-product-box span {
+    display: inline-block;
+    padding: 0 5px;
+}
+.alert-product-list {
+    position: relative;
+}
+.product-list-box {
+
+}
+.product-list-table {
+    border-left: 1px solid #E5E5E5;
+    border-top: 1px solid #E5E5E5;
+    width: 380px;
+}
+.product-list-table tr td:first-child {
+    text-align: left;
+    padding-left: 15px;
+    max-width: 170px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+.cancel-btn, .commit-btn {
+    width: 80px;
+    height: 30px;
+    border: 1px solid #FF6600;
+    color: #FF6600;
+    line-height: 30px;
+    text-align: center;
+    font-family: 'PingFangSC-Regular';
+    font-size: 14px;
+    margin: 10px auto 30px;
+    background-color: #fff;
+    border-radius: 4px;
+    display: inline-block;
+}
+.alert-product-list .commit-btn, .alert-work-plan .commit-btn{
+    margin-left: 120px;
+    margin-right: 20px;
+    color: #ffffff;
+    background-color: #FF6600;
+}
+.add-product-link {
+    width: 80px;
+    margin: 0 auto;
+    color: #FF6600;
+    text-align: center;
+    cursor: pointer;
+    position: absolute;
+    bottom: -62px;
+}
+/*手艺人排班*/
+.alert-work-plan {
+    width: 486px;
+    /*padding-right: 20px;*/
+}
+.alert-work-plan .content-title {
+    height: 56px;
+}
+.work-plan-box {
+    height: 328px;
+    overflow: auto;
+}
+.work-plan-box ul {
+    height: 55px;
+}
+.work-plan-box li{
+    float: left;
+    width: 61px;
+    margin-top: 20px;
+    font-size: 12px;
+    font-family: 'PingFangSC-Regular';
+    color: #1A1A1A;
+}
+.work-plan-item {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #E5E5E5;
+    position: relative;
+}
+.line-span {
+    position: absolute;
+    width: 20px;
+    height: 2px;
+    bottom: -1px;
+    right: 0;
+    background-color: #fff;
+}
+.work-plan-item:last-child {
+    border-bottom: none;
+}
+.coupon-input-tip {
+    color: #999999;
+    font-size: 14px;
+    margin-top: 10px;
+    position: absolute;
+    bottom: 15px;
+}
+.add-btn {
+    color: #FF6600;
+    padding-left: 30px;
+    cursor: pointer;
+}
+.dis-inb {
+    display: inline-block;
+}
+.jn-color {
+    color: #ff6600;
+}

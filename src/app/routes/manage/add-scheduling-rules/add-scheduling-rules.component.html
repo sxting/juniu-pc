@@ -1,0 +1,64 @@
+
+<page-header [title]="'排班规则设置'">设置员工的上班时间，同步线上线下可预约时间。</page-header>
+<nz-card [nzBordered]="false">
+    <form nz-form [formGroup]="form">
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="ruleName">规则名称</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+                <input nz-input formControlName="ruleName" id="ruleName" placeholder="请输入排班规则名称">
+                <nz-form-explain *ngIf="form.get('ruleName').dirty && form.get('ruleName').errors">请输入提成规则名称</nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzRequired>选择员工</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+                <div class="right-block clearfix">
+                    <span>已选择 {{selectStaffNumber}} 个员工</span>
+                    <span style="margin-right: 20px;"></span>
+                    <span (click)="onSelectStaffBtn(alert,'员工')" style="color: #1890ff;cursor: pointer;text-decoration: underline;">选择员工</span>
+                </div>
+                <nz-form-explain style="color: #f5222d" *ngIf="selectStaffNumber === 0 && ifShowStaffTips">请选择员工</nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+    <nz-form-item>
+        <nz-form-label nzXs="24" nzSm="7" nzRequired>上班时间</nz-form-label>
+        <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+            <div class="work-plan-box">
+                <div class="work-plan-item" *ngFor="let time of timesArr; let i=index">
+                    <ul>
+                        <li *ngFor="let week of time.week; let j=index">
+                            <input (change)="weekChange(i, j)" type="checkbox" [checked]="week.checked"><span> {{week.name}}</span>
+                        </li>
+                    </ul>
+                    <div class="time-box">
+                        <div class="dis-inb">
+                            <!--<nz-time-picker [(ngModel)]="time.startTime" nzFormat="HH:mm"></nz-time-picker>-->
+                            <!--<nz-timepicker [(ngModel)]="time.startTime" [nzFormat]="'HH:mm'"></nz-timepicker>-->
+                            <input class="time" type="text" [(ngModel)]="time.startTime">
+                        </div>
+                        <span style="padding:0 15px 0 30px">至</span>
+                        <div class="dis-inb">
+                            <input class="time" type="text" [(ngModel)]="time.endTime">
+                        </div>
+                        <span class="add-btn" (click)="onAddTimeClick()">添加</span>
+                        <span class="add-btn" *ngIf="i > 0" (click)="onDeleteTimeClick(i)">删除</span>
+                    </div>
+                    <span class="line-span"></span>
+                </div>
+            </div>
+            <p class="coupon-input-tip">最多设置5组</p>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item (click)="submit()">
+        <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
+            <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">保存</button>
+        </nz-form-control>
+    </nz-form-item>
+</nz-card>
+
+<!--选择员工弹框-->
+<ng-template #alert>
+    <app-select-transfer [cityStoreList]="staffListInfor" [allStaffNum]="allStaffNumber" (staffIds)="getSelectStaffIds($event)"
+                         (selectStaffNum)="getSelectStaffNumber($event)"></app-select-transfer>
+</ng-template>

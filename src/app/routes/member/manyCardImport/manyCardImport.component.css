@@ -1,0 +1,46 @@
+.memberAnalysis-top{
+    background: #fff;
+    width: 100%;
+    padding: 20px; 
+}
+.addStaffBox-main-left {
+    width: 76px;
+    text-align: right;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #666666;
+    line-height: 24px;
+    height: 24px;
+    margin-right: 20px;
+}
+.addStaffBox-main>div {
+    display: flex;
+    margin-top: 30px;
+}
+
+.addStaffBox-main>div .addStaffBox-main-left {
+    width: 90px;
+    text-align: right;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #666666;
+    line-height: 24px;
+    height: 24px;
+    margin-right: 20px;
+}
+.buttons{
+    margin: 50px 110px;
+}
+.beizhu{
+    margin-left: 110px;
+    margin-top: 5px !important;
+    font-size: 12px;
+    color: #999;
+}
+.nzPaginationBox{
+    margin: 20px;
+    overflow: hidden;
+}
+.nzPagination{
+    float: right;
+}

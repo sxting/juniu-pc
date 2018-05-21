@@ -1,0 +1,70 @@
+<page-header></page-header>
+<div class="container">
+    <div class="status-box">
+        <ul class="btns_switch clearfix">
+            <li [class.btns_active]="statusFlag === 0" (click)="onStatusClick(0,'ALL')">全部活动</li>
+            <li [class.btns_active]="statusFlag === 1" (click)="onStatusClick(1,'RUNING')">进行中</li>
+            <li [class.btns_active]="statusFlag === 2" (click)="onStatusClick(2,'INIT')">未开始</li>
+            <li [class.btns_active]="statusFlag === 3" (click)="onStatusClick(3,'STOP')">已结束</li>
+        </ul>
+    </div>
+
+    <div class="select-box">
+        <div class="activty-box">
+            活动类型
+            <nz-select style="width: 200px;" (ngModelChange)="activeTypeSelect($event)" [(ngModel)]="selectedOption1">
+                <nz-option *ngFor="let option of options1" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+            </nz-select>
+        </div>
+        <div class="youhuijuan-box">
+            优惠券类型
+            <nz-select style="width: 120px;" (ngModelChange)="couponTypeSelect($event)" [(ngModel)]="selectedOption2">
+                <nz-option *ngFor="let option of options2" [nzLabel]="option.label" [nzValue]="option.value">
+                </nz-option>
+            </nz-select>
+        </div>
+        <div class="store-box">
+            按门店筛选
+            <nz-select [nzShowSearch]="true" style="min-width: 200px;" (ngModelChange)="storeChange($event)" [(ngModel)]="selectedStore">
+                <nz-option *ngFor="let option of storeOptions" [nzLabel]="option.storeName" [nzValue]="option.storeId">
+                </nz-option>
+            </nz-select>
+        </div>
+    </div>
+
+    <div class="mainBox">
+        <div class="existing-table">
+            <table>
+                <thead>
+                <tr>
+                    <td>序号</td>
+                    <td>活动类型</td>
+                    <td>优惠券类型</td>
+                    <td>活动名称</td>
+                    <td>活动状态</td>
+                    <td>活动时间</td>
+                    <td>操作</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let item of data;let ind = index;">
+                    <td>{{ind+1}}</td>
+                    <td>{{item.marketingType==='MEMBER'?'会员营销':item.marketingType==='SECOND'?'二次营销':'微信领劵'}}</td>
+                    <td>{{item.couponDef.couponDefType==='MONEY'?'代金券':item.couponDef.couponDefType==='DISCOUNT'?'折扣券':'礼品券'}}</td>
+                    <td>{{item.marketingName}}</td>
+                    <td>{{item.marketingStatus==='RUNING'?'进行中':item.marketingStatus==='INIT'?'未开始':'已结束'}}</td>
+                    <td>{{item.marketingStartTime}}--{{item.marketingEndTime}}</td>
+                    <td>
+                        <span (click)="activtyRouter(item.marketingType,item.marketingStatus,item.marketingId)">查询详情</span>
+                        <span style="margin-left:20px;" *ngIf="item.marketingStatus==='INIT'||item.marketingStatus==='RUNING'" (click)="effectStopHttp(item.marketingId)">停止</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="paginate"><nz-pagination (nzPageIndexClickChange)="paginate($event)" (nzPageIndexChange)="paginate($event)" [nzPageIndex]="1" [nzTotal]="countTotal"></nz-pagination></div>
+    </div>
+
+</div>
+
+

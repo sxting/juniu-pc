@@ -1,0 +1,141 @@
+<page-header #ph [title]="''">
+    <nz-radio-group [(ngModel)]="putaway" class="mr-md fr">
+        <label nz-radio-button [nzValue]="'1'" (click)="onStatusClick()">
+            <span>售卖中</span>
+        </label>
+        <label nz-radio-button [nzValue]="'0'" (click)="onStatusClick()">
+            <span>已下架</span>
+        </label>
+    </nz-radio-group>
+    <button nz-button (click)="addProduct()" [nzType]="'primary'" class="fl">
+        <span>新增商品</span>
+    </button>
+    <button nz-button  *ngIf="ifAlipayPidShow"  (click)="refreshProductList()"  [nzType]="'default'" class="fl refresh">
+        <span>刷新商品列表</span>
+    </button>
+</page-header>
+<nz-card [nzBordered]="false">
+    <form nz-form [nzLayout]="'inline'" (ngSubmit)="getData()" class="search__form">
+        <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
+            <nz-col nzMd="8" nzSm="24">
+                <nz-form-item>
+                    <nz-form-label nzFor="storeList">选择门店</nz-form-label>
+                    <nz-form-control>
+                        <nz-select [(ngModel)]="storeId" name="status" id="status" [nzPlaceHolder]="'全部门店'" [nzShowSearch]="true">
+                            <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.storeName" [nzValue]="i.storeId"></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </nz-col>
+            <nz-col nzMd="8" nzSm="24">
+                <nz-form-item>
+                    <nz-form-label nzFor="productName">商品名称</nz-form-label>
+                    <nz-form-control>
+                        <input nz-input [(ngModel)]="productName" name="productName" placeholder="请输入商品名称" id="productName">
+                    </nz-form-control>
+                </nz-form-item>
+            </nz-col>
+            <nz-col nzMd="8" nzSm="24" *ngIf="expandForm">
+                <nz-form-item>
+                    <nz-form-label nzFor="productId">商品ID</nz-form-label>
+                    <nz-form-control>
+                        <input nz-input  [(ngModel)]="productId" name="productId" placeholder="请输入商品ID" id="productId">
+                    </nz-form-control>
+                </nz-form-item>
+            </nz-col>
+            <nz-col [nzSpan]="expandForm ? 24 : 8" [class.text-right]="expandForm">
+                <button nz-button type="submit" [nzType]="'primary'"  [nzLoading]="loading">查询</button>
+                <a (click)="expandForm=!expandForm">
+                    {{expandForm ? '收起' : '展开'}}
+                    <i class="anticon" [class.anticon-down]="!expandForm" [class.anticon-up]="expandForm"></i>
+                </a>
+            </nz-col>
+        </nz-row>
+    </form>
+    <nz-table #basicTable [nzShowPagination]="false" nzBordered [nzData]="koubeiProductListInfor">
+        <thead nz-thead class="ui-grid-thead">
+        <tr><th nz-th class="" *ngFor="let item of theadName">{{item}}</th></tr>
+        </thead>
+        <tbody nz-tbody class="ui-grid-tbody">
+        <tr *ngFor="let item of koubeiProductListInfor;let i = index">
+            <td>{{i+1}}</td>
+            <td>{{item.categoryName?item.categoryName:'-'}}</td>
+            <td class="item_name">
+                <span>{{item.productName?item.productName:'-'}}</span>
+                <div class="qr_code_box" (click)="showQrCode(i+1,item.alipayItemId)">
+                    <span class="ico-ecode icon-erweima iconfont"></span>
+                </div>
+            </td>
+            <td style="position: relative;">
+                <span>{{item.alipayItemId}}</span>
+                <div class="this_detail_infor" [style.display]="activeIndex == i+1?'block':'none'">
+                    <span class="iconfont icon-close" (click)="hideQrcode()"></span>
+                    <h4>支付宝扫一扫立即购买</h4>
+                    <div class="code" [id]="'qr_code'+i" [class.qrcode]="activeIndex == i+1"></div>
+                    <h5>{{item.productName}}</h5>
+                </div>
+            </td>
+            <td>{{item.originalPrice/100}}</td>
+            <td>{{item.currentPrice/100}}</td>
+            <td>{{item.itemStatus}}</td>
+            <td class="operation" style="width: 210px;">
+                <span (click)="editProduct(item.koubeiProductId)">编辑</span>
+                <span class="iconfont icon-line1"></span>
+                <span (click)="operationProduct(i,item.koubeiProductId,putaway)">{{putaway == '1'? '下架':'上架'}}</span>
+                <p class="koubeike" *ngIf="putaway === '1'">
+                    <span class="iconfont icon-line1"></span>
+                    <span (click)="extension(koubeike,item.alipayItemId)">去推广</span>
+                </p>
+                <p class="delete" *ngIf="putaway === '0'">
+                    <span class="iconfont icon-line1"></span>
+                    <span (click)="delete(item.koubeiProductId)">删除</span>
+                </p>
+                <p class="fix_copy_btn" (click)="copyProduct(item.koubeiProductId,copy)">
+                    <span class="icon-jian iconfont action-link pro-fix-copy"  title="点击复制此商品"></span>
+                </p>
+            </td>
+        </tr>
+        </tbody>
+    </nz-table>
+    <div class="nzPaginationBox">
+        <nz-pagination class="nzPagination" style="float: right;padding: 20px 0" [nzTotal]="totalElements" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
+    </div>
+</nz-card>
+<span (click)="associatedAccountClick(associatedAccount)">点击啊关联账号</span>
+<!--口碑客设置弹框-->
+<ng-template #koubeike>
+    <div class="reserve-record-alert">
+        <iframe class="all-iframe" id="koubeikeFrame" [src]="trustedUrl" frameborder="0" scrolling="auto" height="100%" width="100%"></iframe>
+    </div>
+</ng-template>
+
+<!--关联口碑账号-->
+<ng-template #associatedAccount>
+    <div class="associatedAccount">
+        <p>系统检测到您尚未关联口碑账号，暂时无法使用此功能。</p>
+        <p>如果您尚未注册口碑账号，您可以 <a class="" href="javascript:;">点此注册</a></p>
+        <p>如果您已注册口碑账号，您可以使用口碑商家总账号支付宝扫描下方二维码，进行授权关联。</p>
+    </div>
+    <div class="associatedAccount-steps">
+        <nz-card [nzBordered]="false">
+            <nz-steps>
+                <nz-step nzTitle="步骤一"></nz-step>
+                <nz-step nzTitle="步骤二"></nz-step>
+                <nz-step nzTitle="步骤三"></nz-step>
+            </nz-steps>
+            <div class="clearfix steps">
+                <p class="fl">
+                    <span>打开支付宝App</span>
+                    <span>登录口碑商家总账号</span>
+                </p>
+                <p class="fl">扫描下方二维码</p>
+                <p class="fl">点击“确认授权”按钮</p>
+            </div>
+            <div class="steps-images">
+                <img src="../../../../assets/img/pay.png" />
+                <img src="../../../../assets/img/sure.png" />
+                <img src="../../../../assets/img/sure.png" />
+            </div>
+        </nz-card>
+    </div>
+</ng-template>

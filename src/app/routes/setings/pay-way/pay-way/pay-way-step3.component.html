@@ -1,0 +1,105 @@
+<form nz-form [formGroup]="form" (ngSubmit)="_submitForm()">
+    <!--<nz-form-item>-->
+        <!--<nz-form-label nzSpan="5" nzRequired nzFor="kaihu_name">开户名称</nz-form-label>-->
+        <!--<nz-form-control nzSpan="16">-->
+            <!--<nz-input-group nzCompact>-->
+                <!--<input nz-input formControlName="kaihu_name" placeholder="请输入开户名称">-->
+            <!--</nz-input-group>-->
+            <!--<nz-form-explain class="error-color" *ngIf="kaihu_name.dirty && kaihu_name.errors">请输入开户名称</nz-form-explain>-->
+        <!--</nz-form-control>-->
+    <!--</nz-form-item>-->
+    <nz-form-item>
+        <nz-form-label nzSpan="5" nzRequired nzFor="kaihuren">开户人</nz-form-label>
+        <nz-form-control nzSpan="16">
+            <nz-input-group nzCompact>
+                <input nz-input formControlName="kaihuren" placeholder="请输入开户人姓名" disabled="{{item.itemData}}">
+            </nz-input-group>
+            <nz-form-explain class="error-color" *ngIf="kaihuren.dirty && kaihuren.errors">请输入开户人姓名</nz-form-explain>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzSpan="5" nzRequired nzFor="kaihur_shenfz">开户人身份证号</nz-form-label>
+        <nz-form-control nzSpan="16">
+            <nz-input-group nzCompact>
+                <input nz-input formControlName="kaihur_shenfz" placeholder="请输入开户人身份证号">
+            </nz-input-group>
+            <ng-container *ngIf="kaihur_shenfz.dirty">
+                <nz-form-explain class="error-color" *ngIf="kaihur_shenfz.errors?.required">请输入开户人身份证号</nz-form-explain>
+                <nz-form-explain class="error-color" *ngIf="kaihur_shenfz.errors?.pattern">请输入合法的身份证号码</nz-form-explain>
+            </ng-container>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzSpan="5" nzRequired nzFor="kaihur_tel">开户人手机号</nz-form-label>
+        <nz-form-control nzSpan="16">
+            <nz-input-group nzCompact>
+                <input nz-input formControlName="kaihur_tel" placeholder="请输入开户人手机号">
+            </nz-input-group>
+            <ng-container *ngIf="kaihur_tel.dirty">
+                <nz-form-explain class="error-color" *ngIf="kaihur_tel.errors?.required">请输入开户人手机号</nz-form-explain>
+                <nz-form-explain class="error-color" *ngIf="kaihur_tel.errors?.pattern">请输入正确的手机号</nz-form-explain>
+            </ng-container>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzSpan="5" nzRequired>所在省/市/区</nz-form-label>
+        <nz-form-control [nzSpan]="16">
+            <nz-cascader [nzPlaceHolder]="'请选择地址'"
+                         formControlName="in_shengshiqu"
+                         [nzOptions]="provinces"
+                         [nzLoadData]="loadData"
+                         (nzChange)="selectCity($event)" >
+                <!--(ngModelChange)="selectCity($event)" -->
+            </nz-cascader>
+            <!--<nz-select formControlName="in_shengshiqu">-->
+                <!--<nz-option [nzLabel]="4" [nzValue]="4"></nz-option>-->
+            <!--</nz-select>-->
+            <nz-form-explain class="error-color" *ngIf="in_shengshiqu.dirty && in_shengshiqu.errors">请选择所在省/市/区</nz-form-explain>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzSpan="5" nzRequired>开户行</nz-form-label>
+        <nz-form-control [nzSpan]="16">
+            <nz-select formControlName="kaihuhang" [nzShowSearch]="true" (ngModelChange)="onBankChange($event)" [nzPlaceHolder]="'请选择开户行'">
+                <nz-option *ngFor="let item of bankList" [nzLabel]="item.bankName" [nzValue]="item.bankId"></nz-option>
+            </nz-select>
+            <nz-form-explain class="error-color" *ngIf="kaihuhang.dirty && kaihuhang.errors">请选择开户名称</nz-form-explain>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzSpan="5" nzRequired nzFor="zhihang_name">支行名称</nz-form-label>
+        <nz-form-control nzSpan="16">
+            <nz-select formControlName="zhihang_name" [nzPlaceHolder]="'请选择支行'">
+                <nz-option *ngFor="let item of bankBranchList" [nzLabel]="item.branchName" [nzValue]="item.branchId + ',' + item.branchName"></nz-option>
+                    <!--branchId,branchName-->
+            </nz-select>
+            <nz-form-explain class="error-color" *ngIf="zhihang_name.dirty && zhihang_name.errors">请选择支行</nz-form-explain>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item *ngIf="item.type === 'qiye'">
+        <nz-form-label nzSpan="5" nzRequired nzFor="jiesuan_zhanghao">结算银行账号</nz-form-label>
+        <nz-form-control nzSpan="16">
+            <nz-input-group nzCompact>
+                <input nz-input formControlName="jiesuan_zhanghao" placeholder="请输入结算银行账号">
+            </nz-input-group>
+            <nz-form-explain class="error-color" *ngIf="jiesuan_zhanghao.dirty && jiesuan_zhanghao.errors">请输入结算银行账号</nz-form-explain>
+            <nz-form-explain>支付通道配置成功后，收款都将打入此账号</nz-form-explain>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item *ngIf="item.type === 'geti'">
+        <nz-form-label nzSpan="5" nzRequired nzFor="yinhang_kaohao">银行卡号</nz-form-label>
+        <nz-form-control nzSpan="16">
+            <nz-input-group nzCompact>
+                <input nz-input formControlName="yinhang_kaohao" placeholder="请输入结算银行卡号">
+            </nz-input-group>
+            <nz-form-explain class="error-color" *ngIf="yinhang_kaohao.dirty && yinhang_kaohao.errors">请输入结算银行账号</nz-form-explain>
+            <nz-form-explain>支付通道配置成功后，收款都将打入此账号</nz-form-explain>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-control [nzSpan]="16" [nzOffset]="5">
+            <button nz-button [nzType]="'primary'">下一步</button>
+            <button nz-button (click)="prev()">上一步</button>
+        </nz-form-control>
+    </nz-form-item>
+</form>

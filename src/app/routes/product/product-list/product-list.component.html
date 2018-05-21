@@ -1,0 +1,45 @@
+<page-header #ph [title]="''">
+    <nz-radio-group [(ngModel)]="putaway" class="mr-md fr">
+        <label nz-radio-button [nzValue]="'1'" (click)="onStatusClick()">
+            <span>售卖中</span>
+        </label>
+        <label nz-radio-button [nzValue]="'0'" (click)="onStatusClick()">
+            <span>已下架</span>
+        </label>
+    </nz-radio-group>
+    <button nz-button (click)="addNewProduct()" [nzType]="'primary'" class="fl">
+        <span>新增实体商品</span>
+    </button>
+</page-header>
+
+<nz-card [nzBordered]="false">
+    <nz-table #basicTable [nzShowPagination]="false" [nzData]="productListInfor">
+        <thead nz-thead class="ui-grid-thead">
+        <tr>
+            <th nz-th class="">商品编码</th>
+            <th nz-th class="">商品分类</th>
+            <th nz-th class="">商品名称</th>
+            <th nz-th class="">库存</th>
+            <th nz-th class="">售价(元)</th>
+            <th nz-th class="">操作</th>
+        </tr>
+        </thead>
+        <tbody nz-tbody class="ui-grid-tbody">
+        <tr nz-tbody-tr *ngFor="let item of productListInfor;let i = index">
+            <td nz-td>{{item.productNo}}</td>
+            <td nz-td>{{item.categoryName}}</td>
+            <td nz-td>{{item.productName}}</td>
+            <td nz-td>{{item.stock}}</td>
+            <td nz-td>{{item.currentPrice/100}}</td>
+            <td nz-td class="operation" style="cursor: pointer">
+                <span style="color: #FF6600" (click)="editProduct(item.productId)">查看详情</span>
+                <span class="iconfont icon-line1"></span>
+                <span style="color: #1890ff" (click)="operationProduct(item.productId,item.putaway)">{{statusFlag == 1? '下架':'上架'}}</span>
+            </td>
+        </tr>
+        </tbody>
+    </nz-table>
+    <div class="nzPaginationBox">
+        <nz-pagination class="nzPagination" style="float: right;padding: 20px 0" [nzTotal]="totalElements" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
+    </div>
+</nz-card>

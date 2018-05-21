@@ -1,0 +1,162 @@
+<page-header></page-header>
+
+<div class="page">
+    <div class="content-box">
+        <div class="content-title"><span></span>预约设置</div>
+        <ul>
+            <li>
+                <span class="set-left">选择门店</span>
+                <nz-select style="width: 200px;" [(ngModel)]="selectedOption" (ngModelChange)="onStoresChange($event)" [nzShowSearch]="true">
+                    <nz-option [nzLabel]="'请选择一个门店'" [nzValue]="''"></nz-option>
+                    <nz-option *ngFor="let store of stores" [nzLabel]="store.storeName" [nzValue]="store.storeId"></nz-option>
+                </nz-select>
+            </li>
+            <li>
+                <span class="set-left">营业时间</span>
+                <div class="set-time-box">
+                    <!--<nz-timepicker [(ngModel)]="startTime" [nzFormat]="'HH:mm'"></nz-timepicker> 至-->
+                    <!--<nz-timepicker [(ngModel)]="endTime" [nzFormat]="'HH:mm'"></nz-timepicker>-->
+                </div>
+            </li>
+            <li>
+                <span class="set-left">预约方式</span>
+                <div class="dis-inb jn-color" *ngIf="!storeId">预约是基于门店进行设置的，所以在选择预约方式前请先选择门店</div>
+                <div class="dis-inb" style="vertical-align:text-top;" *ngIf="storeId">
+                    <div class="reserve-type-box">
+                        <div class="reserve-time" [class.selected-border]="orderType == 'TIME'" (click)="orderTypeChange('TIME')" (mouseenter)="onReserveTypeHover('TIME')" (mouseleave)="onReserveTypeLeave()">
+                            <span class="iconfont icon-time"></span> <br>
+                            <span>只预约时间</span>
+                            <div *ngIf="hoverType === 'TIME'" class="reserve-type-tip">
+                                选择该预约方式后，顾客可根据自己的时间选择完成预约。
+                            </div>
+                            <div *ngIf="orderType == 'TIME'" class="selected-type iconfont icon-yousanjiaogou_ic"></div>
+                        </div>
+
+                        <div class="reserve-product" [class.selected-border]="orderType == 'PRODUCT'" (click)="orderTypeChange('PRODUCT')" (mouseenter)="onReserveTypeHover('PRODUCT')" (mouseleave)="onReserveTypeLeave()">
+                            <span class="iconfont icon-shangpin1"></span> <br>
+                            <span>只预约商品</span>
+                            <div *ngIf="hoverType === 'PRODUCT'" class="reserve-type-tip">
+                                选择该预约方式后，顾客可选择想要体验的服务项目后完成预约。
+                            </div>
+                            <div *ngIf="orderType == 'PRODUCT'" class="selected-type iconfont icon-yousanjiaogou_ic"></div>
+                        </div>
+
+                        <div class="reserve-staff" [class.selected-border]="orderType == 'MAN'" (click)="orderTypeChange('MAN')" (mouseenter)="onReserveTypeHover('MAN')" (mouseleave)="onReserveTypeLeave()">
+                            <span class="iconfont icon-man"></span> <br>
+                            <span style="line-height: 22px"><p>先预约手艺人</p>  <p>再预约商品</p></span>
+                            <div *ngIf="hoverType === 'MAN'" class="reserve-type-tip">
+                                选择该预约方式后，顾客可选择想要预约的手艺人及服务项目完成预约。
+                            </div>
+                            <div *ngIf="orderType == 'MAN'" class="selected-type iconfont icon-yousanjiaogou_ic"></div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+        <!--只预约商品时显示-->
+        <div class="order-product" *ngIf="orderType == 'PRODUCT'">
+            <table class="order-product-table">
+                <tr>
+                    <td>可预约商品</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="staff-set-box">
+                            <div *ngIf="selectedProductList.length == 0" class="none">
+                                暂无可预约商品
+                            </div>
+                            <div class="select-product-box">
+                                <span style="padding: 0 5px" *ngFor="let item of selectedProductList">{{item.productName}}</span>
+                            </div>
+                        </div>
+                        <div class="set-btn" (click)="onChangeProductBtnClick(productListAlert)">
+                            设置可预约商品
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!--预约手艺人-->
+        <table class="order-craftsman" *ngIf="orderType == 'MAN' && storeId">
+            <tr>
+                <td>可预约手艺人</td>
+                <!--<td>可预约时间</td>-->
+                <td>可预约商品</td>
+            </tr>
+            <tr *ngFor="let craftsman of craftsmanList;let i = index">
+                <td style="white-space:nowrap">
+                    <input type="checkbox" [checked]="craftsman.checked" (click)="onStaffInputClick(craftsman.staffId)">
+                    {{craftsman.staffName}}
+                </td>
+                <!--<td>-->
+                    <!--<div class="staff-set-box">-->
+                        <!--<div class="none" *ngIf="craftsman.schedulings.length == 0">暂无排班</div>-->
+                        <!--<div *ngIf="craftsman.schedulings.length > 0" class="staff-set">-->
+                            <!--&lt;!&ndash;<div *ngIf="craftsman.schedulings.length > 0">&ndash;&gt;-->
+                            <!--<p style="white-space:nowrap" *ngFor="let scheduling of craftsman.schedulings">{{scheduling.weeksText}} {{scheduling.startTime}}-{{scheduling.endTime}}</p>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="set-btn" (click)="onWorkPlanSpanClick(craftsman.staffId, craftsman.staffName, workPlanAlert)">设置排班</div>-->
+                <!--</td>-->
+                <td>
+                    <div class="staff-set-box">
+                        <div class="none" *ngIf="craftsman.products.length == 0">暂无可预约商品</div>
+                        <div *ngIf="craftsman.products.length > 0" class="staff-set">
+                            <span style="padding: 0 5px;" *ngFor="let product of craftsman.products">{{product.productName}}</span>
+                        </div>
+                    </div>
+                    <div class="set-btn" style="margin-left: -55px;" (click)="onOrderProductSpanClick(craftsman.staffId, craftsman.staffName, productListAlert)">设置可预约商品</div>
+                </td>
+            </tr>
+        </table>
+        <button class="save-btn" (click)="onSaveBtnClick()">保存</button>
+    </div>
+</div>
+<!--预约商品弹框-->
+<ng-template #productListAlert>
+    <div class="alert-product-list alert-order-msg">
+        <div class="product-list-box">
+            <table class="product-list-table">
+                <tr>
+                    <td><input type="checkbox" [checked]="seceltAllProduct" (click)="onSelectAllProductClick()">全选</td>
+                </tr>
+                <tr *ngFor="let product of productList,let index = index">
+                    <td><input type="checkbox" [checked]="product.checked" (click)="onSelectProductClick(index)">
+                        {{product.productName}}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="add-product-link" (click)="goAddProduct()">去新增商品</div>
+    </div>
+</ng-template>
+
+<!--排班弹框-->
+<ng-template #workPlanAlert>
+    <div class="alert-order-msg alert-work-plan">
+        <div class="work-plan-box">
+            <div class="work-plan-item" *ngFor="let time of timesArr; let i=index">
+                <ul>
+                    <li *ngFor="let week of time.week; let j=index">
+                        <input (change)="weekChange(i, j)" type="checkbox" [checked]="week.checked"><span> {{week.name}}</span>
+                    </li>
+                </ul>
+                <div class="time-box">
+                    <div class="dis-inb">
+                        <!--<nz-timepicker [(ngModel)]="time.startTime" [nzFormat]="'HH:mm'"></nz-timepicker>-->
+                    </div>
+                    <!--<span class="space"></span><span class="space"></span>-->
+                    <span style="padding:0 15px 0 30px">至</span>
+                    <div class="dis-inb">
+                        <!--<nz-timepicker [(ngModel)]="time.endTime" [nzFormat]="'HH:mm'"></nz-timepicker>-->
+                    </div>
+                    <span class="add-btn" (click)="onAddTimeClick()">添加</span>
+                    <span class="add-btn" *ngIf="i > 0" (click)="onDeleteTimeClick(i)">删除</span>
+                </div>
+                <span class="line-span"></span>
+            </div>
+        </div>
+        <p class="coupon-input-tip">最多设置5组</p>
+    </div>
+</ng-template>

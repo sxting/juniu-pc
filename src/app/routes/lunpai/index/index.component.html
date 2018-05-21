@@ -1,0 +1,69 @@
+<page-header></page-header>
+
+<div class="status-box">
+    <ul>
+        <li>
+            <span class="service-bg"></span> 服务中
+        </li>
+        <li>
+            <span class="free-bg"></span> 空闲
+        </li>
+        <li>
+            <span class="rest-bg"></span> 休息中
+        </li>
+    </ul>
+</div>
+
+<div class="lunpai-content">
+    <!--按技师类别循环-->
+    <div *ngFor="let item of craftsmanList">
+        <div class="sub-title-box">
+            <span></span>
+            <span>{{item.name}}</span>
+            <span class="lunpai-btn" (click)="onCandleClick('lunpai', item.id, '', '', alertBox)">轮牌</span>
+        </div>
+        <ul>
+            <li *ngFor="let craftman of item.list" (mouseenter)="onLiHover(craftman?.staff?.staffId, craftman.state)">
+                <img [src]="craftman?.staff?.headPortrait ? 'https://oss.juniuo.com/juniuo-pic/picture/juniuo/'+craftman?.staff?.headPortrait+'/resize_82_82/mode_fill' : headImg" >
+                <p class="nickname"
+                   [class.rest-bg]="craftman.state == 'REST'"
+                   [class.service-bg]="craftman.state == 'BUSY'"
+                   [class.free-bg]="craftman.state == 'IDLE'"
+                >{{craftman?.staff?.staffName}}</p>
+                <!--鼠标划过时显示-->
+                <div *ngIf="craftsmanId == craftman?.staff?.staffId" class="hover-box" (mouseleave)="onHoverLeave()">
+                    <div *ngIf="status == 'BUSY'"><button (click)="onCandleClick('qipai', item.id, craftman?.staff?.headPortrait, craftman?.staff?.staffName, alertBox)">起牌</button></div>
+                    <div *ngIf="status == 'REST'"><button (click)="onCandleClick('shangpai', item.id, craftman?.staff?.headPortrait, craftman?.staff?.staffName, alertBox)">上牌</button></div>
+                    <div *ngIf="status == 'IDLE'">
+                        <button (click)="onCandleClick('daopai', item.id, craftman?.staff?.headPortrait, craftman?.staff?.staffName, alertBox)">倒牌</button>
+                        <button (click)="onCandleClick('xiapai', item.id, craftman?.staff?.headPortrait, craftman?.staff?.staffName, alertBox)">下牌</button>
+                        <button (click)="onCandleClick('koupai', item.id, craftman?.staff?.headPortrait, craftman?.staff?.staffName, alertBox)">扣牌</button>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!--点击轮牌等的弹出框-->
+<div *ngIf="showAlertBox" class="alert-box-bg">
+    <div class="alert-box">
+        <div class="craftman-box">
+            <img [src]="headPortrait? 'https://oss.juniuo.com/juniuo-pic/picture/juniuo/'+headPortrait+'/resize_82_82/mode_fill' : headImg" alt="">
+            <p class="nickname"
+               [class.rest-bg]="type == 'xiapai' || type == 'koupai'"
+               [class.service-bg]="type == 'lunpai' || type == 'daopai'"
+               [class.free-bg]="type == 'qipai' || type == 'shangpai'"
+            >{{staffName}}</p>
+        </div>
+        <div class="alert-tip-text">
+            <span *ngIf="type == 'lunpai'">已过牌</span>
+            <span *ngIf="type == 'qipai'">已起牌</span>
+            <span *ngIf="type == 'shangpai'">已上牌</span>
+            <span *ngIf="type == 'daopai'">已倒牌</span>
+            <span *ngIf="type == 'xiapai'">已下牌</span>
+            <span *ngIf="type == 'koupai'">已扣牌</span>
+        </div>
+        <div class="sure-btn" (click)="onSureBtnClick()">确定</div>
+    </div>
+</div>

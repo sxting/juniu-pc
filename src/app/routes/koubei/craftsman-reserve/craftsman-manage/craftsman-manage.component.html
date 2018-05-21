@@ -1,0 +1,241 @@
+<page-header></page-header>
+
+<section class="content_juniu">
+    <div class="add-craftsman-btn">
+        <span (click)="onEditClick('', alertEditBox)">新增手艺人</span>
+    </div>
+    <div class="content-title"><span></span>现有手艺人</div>
+    <div class="select-store-box">
+        所属门店
+        <nz-select style="min-width: 300px;" [(ngModel)]="selectedOption" (ngModelChange)="onStoresChange()" [nzShowSearch]="true">
+            <nz-option *ngFor="let store of stores" [nzLabel]="store.storeName" [nzValue]="store.storeId"></nz-option>
+        </nz-select>
+    </div>
+
+    <nz-table #nzTable [nzData]="craftsmanList" [nzShowPagination]="false">
+        <thead>
+        <tr>
+            <th *ngFor="let item of theadName"><span>{{item}}</span></th>
+        </tr>
+        </thead>
+        <tbody >
+        <tr *ngFor="let item of craftsmanList; let i = index">
+            <td>
+                <input type="checkbox" class="select-staff-input" [checked]="item.selected" (click)="onSelectStaffClick(item.staffId, item.selected)">
+                {{item.staffName}}
+            </td>
+            <td>{{item.phone}}</td>
+            <td>{{item.storeName}}</td>
+            <td class="candle-box">
+                <span (click)="onEditClick(item.staffId, alertEditBox)">编辑</span> |
+                <span (click)="onScheduleClick(item.staffId, item.staffName, alertScheduleBox)">排班</span>
+            </td>
+        </tr>
+        </tbody>
+    </nz-table>
+    <div class="paginate">
+        <nz-pagination (nzPageIndexClickChange)="paginate($event)" (nzPageIndexChange)="paginate($event)" [nzPageIndex]="1" [nzTotal]="countPage"></nz-pagination>
+    </div>
+</section>
+
+<!--点击编辑弹出手艺人编辑弹出框-->
+<ng-template #alertEditBox>
+    <form nz-form [formGroup]="form" (ngSubmit)="submit()">
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="staff_name">姓名</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="17" nzMd="17">
+                <input nz-input formControlName="staff_name" maxlength="5" placeholder="请输入姓名，5个字以内" *ngIf="!staffId">
+                <span *ngIf="staffId">{{staffName}}</span>
+                <nz-form-explain class="error-color" *ngIf="staff_name.dirty && staff_name.errors">请填写姓名</nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="account_form">手艺人口碑账号</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="17" nzMd="17">
+                <span *ngIf="!staffId" class="no-wrap">商家支付宝账号#
+                    <input nz-input formControlName="account_form" class="width-auto" placeholder="请输入字母和数字">
+                    <nz-form-explain class="error-color" style="margin-left: 108px" *ngIf="account_form.dirty && account_form.errors">请填写口碑账号</nz-form-explain>
+                </span>
+                <span *ngIf="staffId">商家支付宝账号# {{account}}</span>
+                <nz-form-explain style="color: rgba(0, 0, 0, 0.65);">该账号仅用于手艺人登录口碑掌柜app</nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="staff_name">头像</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="17" nzMd="17">
+                <div class="head-pic">
+                    <img class="image" src="{{imagePath}}" [hidden]="!imagePath">
+                    <span class="iconfont icon-tianjia"></span>
+                    <input type="file" accept="image" (change)="uploadImage($event)">
+                </div>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item style="margin-top: 20px">
+            <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="nick_name">昵称</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="17" nzMd="17">
+                <input nz-input formControlName="nick_name" maxlength="5" placeholder="请输入昵称，5个字以内">
+                <nz-form-explain class="error-color" *ngIf="nick_name.dirty &&nick_name.errors">请填写昵称</nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzRequired>职业</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="17" nzMd="17">
+                <select class="select" (change)="onCareerChange($event)">
+                    <option [value]="''">请选择一个职业</option>
+                    <option *ngFor="let item of careersList" [selected]="item == careers" [value]="item">{{item}}</option>
+                </select>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="title_form">头衔</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="17" nzMd="17">
+                <input nz-input formControlName="title_form" maxlength="10" placeholder="手艺人在店内的职务，10个字以内">
+                <ng-container *ngIf="title_form.dirty">
+                    <nz-form-explain class="error-color" *ngIf="title_form.errors?.required">请填写头衔</nz-form-explain>
+                </ng-container>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="phone_form">手机号</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="17" nzMd="17">
+                <input nz-input formControlName="phone_form" placeholder="输入手艺人手机号">
+                <ng-container *ngIf="phone_form.dirty">
+                    <nz-form-explain class="error-color" *ngIf="phone_form.errors?.required">请填写手机号</nz-form-explain>
+                    <nz-form-explain class="error-color" *ngIf="phone_form.errors?.pattern">请填写正确的手机号</nz-form-explain>
+                </ng-container>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzRequired>从业起始年月日</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="17" nzMd="17">
+
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="weight_form">推荐权重</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="17" nzMd="17">
+                <input nz-input formControlName="weight_form">
+                <nz-form-explain *ngIf="weight_form.dirty && weight_form.errors">请输入合理的推荐权重</nz-form-explain>
+                <nz-form-explain style="color: rgba(0, 0, 0, 0.65);">请输入整数，0表示不展示，值越大，排序越靠前</nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzRequired>所属门店</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="17" nzMd="17">
+                <select class="select" (change)="onStaffStoresChange($event)">
+                    <option [value]="''">请选择手艺人所属门店</option>
+                    <option *ngFor="let store of stores" [selected]="store.storeId == staffStoreId" [value]="store.storeId">{{store.storeName}}</option>
+                </select>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
+                <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">提交</button>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</ng-template>
+
+
+<ng-template #alertEditBox2>
+    <ul class="alert-box">
+        <li>
+            <span>姓名：</span>
+            <input *ngIf="!staffId" [(ngModel)]="staffName" type="text" maxlength="5" placeholder="请输入姓名，5个字以内">
+            <span *ngIf="staffId">{{staffName}}</span>
+        </li>
+        <li>
+            <span>手艺人口碑账号：</span>
+            <span *ngIf="!staffId">商家支付宝账号# <input [(ngModel)]="account" style="width: 196px" type="text" placeholder="请输入字母和数字"></span>
+            <span *ngIf="staffId">商家支付宝账号# {{account}}</span>
+            <p class="account-tip">该账号仅用于手艺人登录口碑掌柜app</p>
+        </li>
+        <li>
+            <span>头像：</span>
+            <div class="head-pic">
+                <img class="image" src="{{imagePath}}" [hidden]="!imagePath">
+                <span class="iconfont icon-tianjia"></span>
+                <input type="file" accept="image" (change)="uploadImage($event)">
+            </div>
+        </li>
+        <li>
+            <span>昵称：</span>
+            <input [(ngModel)]="nickName" maxlength="5" placeholder="请输入昵称，5个字以内">
+        </li>
+        <li>
+            <span>职业：</span>
+            <select (change)="onCareerChange($event)">
+                <option [value]="''">请选择一个职业</option>
+                <option *ngFor="let item of careersList" [selected]="item == careers" [value]="item">{{item}}</option>
+            </select>
+        </li>
+        <li>
+            <span>头衔：</span>
+            <input [(ngModel)]="title" maxlength="10" placeholder="手艺人在店内的职务，10个字以内">
+        </li>
+        <li>
+            <span>手机号：</span>
+            <input [(ngModel)]="phone" placeholder="输入手艺人手机号">
+        </li>
+        <li>
+            <span>从业起始年月日：</span>
+            <div class="dis-inb">
+                <!--<nz-datepicker [(ngModel)]="careerBegin" ></nz-datepicker>-->
+            </div>
+        </li>
+        <li>
+            <span>推荐权重：</span>
+            <div style="display: inline-block;vertical-align: text-top;color: #ccc;">
+                <input style="color: #333;" oninput="if(value>99999)value=99999;if(value<0)value='';" [(ngModel)]="weight" placeholder="">
+                <p>请输入整数，0表示不展示，值越大，排序越靠前</p>
+            </div>
+        </li>
+        <li>
+            <span>所属门店：</span>
+            <select (change)="onStaffStoresChange($event)">
+                <option [value]="''">请选择手艺人所属门店</option>
+                <option *ngFor="let store of stores" [selected]="store.storeId == staffStoreId" [value]="store.storeId">{{store.storeName}}</option>
+            </select>
+        </li>
+    </ul>
+</ng-template>
+
+<!--点击排班弹出手艺人排班弹出框-->
+<ng-template #alertScheduleBox>
+    <div class="work-plan-box">
+        <div class="work-plan-item" *ngFor="let time of timesArr; let i=index">
+            <ul>
+                <li *ngFor="let week of time.week; let j=index"><input (change)="weekChange(i, j)" type="checkbox"
+                                                                       [checked]="week.checked"><span> {{week.name}}</span>
+                </li>
+            </ul>
+            <div class="time-box">
+                <div class="dis-inb">
+                    <!--<nz-timepicker [(ngModel)]="time.startTime" [nzFormat]="'HH:mm'"></nz-timepicker>-->
+                    <!-- <p-calendar [(ngModel)]="time.startTime" [timeOnly]='true'></p-calendar> -->
+                </div>
+                <!--<span class="space"></span><span class="space"></span>-->
+                <span style="padding:0 15px 0 30px">至</span>
+                <div class="dis-inb">
+
+                    <!--<nz-timepicker [(ngModel)]="time.endTime" [nzFormat]="'HH:mm'"></nz-timepicker>-->
+                    <!-- <p-calendar [(ngModel)]="time.endTime" [timeOnly]='true'></p-calendar> -->
+                </div>
+                <span class="add-btn" (click)="onAddTimeClick()">添加</span>
+                <span class="add-btn" *ngIf="i > 0" (click)="onDeleteTimeClick(i)">删除</span>
+            </div>
+            <span class="line-span"></span>
+        </div>
+    </div>
+    <p class="coupon-input-tip">最多设置5组</p>
+</ng-template>

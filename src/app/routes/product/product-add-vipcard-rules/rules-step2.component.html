@@ -1,0 +1,96 @@
+<form nz-form [formGroup]="form" (ngSubmit)="_submitForm()">
+    <nz-form-item>
+        <nz-form-label nzSpan="5" nzRequired>售价(元)</nz-form-label>
+        <nz-form-control nzSpan="19">
+        <input maxlength="10" nz-input formControlName="pay_account" id="pay_account" placeholder="请输入卡售价">
+            <ng-container *ngIf="pay_account.dirty || pay_account.touched">
+                <nz-form-explain class="errorTips" *ngIf="pay_account.errors?.required">卡售价不可为空</nz-form-explain>
+                <nz-form-explain class="errorTips" *ngIf="pay_account.errors?.pattern">卡售价只能是整数或者带有两位小数的数字</nz-form-explain>
+            </ng-container>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzSpan="5" nzRequired nzFor="amount">{{showText}}</nz-form-label>
+        <nz-form-control nzSpan="19">
+            <input maxlength="10" nz-input formControlName="amount" id="amount" [placeholder]="placeholder" (change)="changeAmount()">
+            <!--储值卡-->
+            <p class="tips-box" *ngIf="cardType === 'STORED' && form.value.amount && ifShow">
+                <span>充{{form.value.pay_account}}送{{giveMoney}}</span>
+                <span>相当于{{discount}}折</span>
+            </p>
+            <!--折扣-->
+            <p class="tips-box" *ngIf="cardType === 'REBATE' && form.value.amount && ifShow">
+                <span>{{form.value.amount}}折</span>
+            </p>
+            <!--计次卡-->
+            <p class="tips-box" *ngIf="cardType === 'METERING' && form.value.amount && ifShow">
+                <span>{{form.value.amount}}次卡</span>
+            </p>
+            <!--期限卡-->
+            <p class="tips-box" *ngIf="cardType === 'TIMES' && form.value.amount && ifShow">
+                <span>{{times}}</span>
+            </p>
+            <ng-container *ngIf="cardType === 'STORED' && amount.dirty || amount.touched">
+                <nz-form-explain class="errorTips" *ngIf="cardType === 'STORED' && amount.errors?.required">请输入储值卡内充值金额</nz-form-explain>
+                <nz-form-explain class="errorTips" *ngIf="cardType === 'STORED' && amount.errors?.pattern">卡内充值金额只能是整数或者带有两位小数的数字</nz-form-explain>
+                <nz-form-explain class="errorTips" *ngIf="cardType === 'STORED' && !ifShow">卡内充值金额不能小于售价</nz-form-explain>
+            </ng-container>
+            <ng-container *ngIf="cardType === 'REBATE' && amount.dirty || amount.touched">
+                <nz-form-explain class="errorTips" *ngIf="cardType === 'REBATE' && amount.errors?.required">请输入折扣卡的折扣</nz-form-explain>
+                <nz-form-explain class="errorTips" *ngIf="cardType === 'REBATE' && amount.errors?.minlength">折扣卡的折扣只能是整数或者带有两位小数的数字</nz-form-explain>
+                <nz-form-explain class="errorTips" *ngIf="cardType === 'REBATE' && !ifShow">折扣卡的折扣只能是0.10-9.90范围之内的小数(例如：0.90)</nz-form-explain>
+            </ng-container>
+            <ng-container *ngIf="cardType === 'METERING' && amount.dirty || amount.touched">
+                <nz-form-explain class="errorTips" *ngIf="cardType === 'METERING' && amount.errors?.required">请输入计次卡的次数</nz-form-explain>
+                <nz-form-explain class="errorTips" *ngIf="cardType === 'METERING' && amount.errors?.minlength">计次卡次数只是数字</nz-form-explain>
+                <nz-form-explain class="errorTips" *ngIf="cardType === 'METERING' && !ifShow">计次卡的次数只能是正整数</nz-form-explain>
+            </ng-container>
+            <ng-container *ngIf="cardType === 'TIMES' && amount.dirty || amount.touched">
+                <nz-form-explain class="errorTips" *ngIf="cardType === 'TIMES' && amount.errors?.required">请输入期限卡的天数</nz-form-explain>
+                <nz-form-explain class="errorTips" *ngIf="cardType === 'TIMES' && amount.errors?.minlength && !ifShow">期限卡的天数只能是数字</nz-form-explain>
+                <nz-form-explain class="errorTips" *ngIf="cardType === 'TIMES' && !ifShow">期限卡的天数只能是正整数</nz-form-explain>
+            </ng-container>
+        </nz-form-control>
+    </nz-form-item>
+    <!--注意:  期限卡没有这一项,并且不可销卡-->
+    <nz-form-item *ngIf="cardType === 'STORED' || cardType === 'REBATE' || cardType === 'METERING'">
+        <nz-form-label nzXs="24" nzSm="5" nzFor="validateType">使用有效期</nz-form-label>
+        <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+            <nz-radio-group formControlName="validateType">
+                <label nz-radio *ngFor="let list of validateType" [nzValue]="list.type" (click)="changeData()">
+                    {{list.name}}
+                    <p class="ifshow" *ngIf="list.type === 'days'">
+                        <input style="margin: 0 10px;" nz-input formControlName="effectivityDays" id="effectivityDays" placeholder="请输入天数"/>天内有效
+                    </p>
+                </label>
+            </nz-radio-group>
+            <ng-container *ngIf="form.value.validateType === 'days'&& effectivityDays.dirty || effectivityDays.touched">
+                <nz-form-explain class="errorTips" *ngIf="effectivityDays.errors?.required">使用有效期不可为空</nz-form-explain>
+                <nz-form-explain class="errorTips" *ngIf="effectivityDays.errors?.pattern">使用有效期至少为一天</nz-form-explain>
+            </ng-container>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzXs="24" nzSm="5" nzFor="isPinCard">是否可销卡</nz-form-label>
+        <nz-form-control nzXs="24" nzSm="12" nzMd="10"  *ngIf="cardType === 'STORED' || cardType === 'REBATE' || cardType === 'METERING'">
+            <nz-radio-group formControlName="isPinCard">
+                <label nz-radio *ngFor="let item of isPinCardArr" [nzValue]="item.ifPin">{{item.name}}</label>
+            </nz-radio-group>
+        </nz-form-control>
+        <!-- 期限卡不可销卡 -->
+        <nz-form-control nzXs="24" nzSm="12" nzMd="10" *ngIf="cardType === 'TIMES'"><nz-form-text>不可销卡</nz-form-text></nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-control nzSpan="19" nzOffset="5">
+            <button nz-button [nzType]="'primary'">下一步</button>
+            <button nz-button (click)="prev()">上一步</button>
+        </nz-form-control>
+    </nz-form-item>
+</form>
+<div class="border-top-1 mt-lg px-lg text-grey-dark">
+    <h3 class="h3 my-md">卡规则设置说明</h3>
+    <p class="mb-sm">1. 卡售价为开卡时的售卖价格，卡内充值金额为开卡后卡内可以消费的余额。</p>
+    <p class="mb-sm">2. 使用有效期默认为永久有效；若设置了使用有效期，卡片会在开卡后的有效期内可以使用，超过有效期将自动失效。</p>
+    <p class="mb-sm">3. 请在开卡时告知顾客所开会员卡的有效期；若有效期少于30天，且余额超过5%，系统会给顾客发送短信提醒。</p>
+    <p class="mb-sm">4. 会员卡默认不可销卡；若设置可销卡，且顾客提出销卡要求，则系统会将顾客在该卡上的消费历史折算成商品原价，重新计算会员卡余额后进行销卡和退款操作。</p>
+</div>

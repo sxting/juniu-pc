@@ -1,0 +1,34 @@
+<page-header></page-header>
+
+<nz-card nzTitle="微信领券" [nzBordered]="false">
+    <ul class="card">
+        <li *ngFor="let item of list1">
+            <div class="item" (click)="onItemClick(item.id, item.name, item.desc)">
+                <img [src]="item.img" alt="">
+                <p>{{item.name}}</p>
+            </div>
+        </li>
+    </ul>
+</nz-card>
+
+<nz-card nzTitle="微信抽奖" [nzBordered]="false" *ngIf="">
+    <ul class="card">
+        <li *ngFor="let item of list2">
+            <div class="item" (click)="onItemClick(item.id, item.name, item.desc)">
+                <img [src]="item.img" alt="">
+                <p>{{item.name}}</p>
+            </div>
+        </li>
+    </ul>
+</nz-card>
+
+<nz-card nzTitle="朋友圈广告" [nzBordered]="false" *ngIf="">
+    <ul class="card">
+        <li *ngFor="let item of list2">
+            <div class="item" (click)="onItemClick(item.id, item.name, item.desc)">
+                <img [src]="item.img" alt="">
+                <p>{{item.name}}</p>
+            </div>
+        </li>
+    </ul>
+</nz-card>

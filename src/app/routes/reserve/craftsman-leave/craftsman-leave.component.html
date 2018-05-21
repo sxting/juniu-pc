@@ -1,0 +1,48 @@
+<page-header></page-header>
+<div class="page">
+    <div class="content-box" [class.l-50]="settings.layout.collapsed">
+        <div class="content-title"><span></span>员工休假</div>
+        <div class="select-store-box" >
+            选择门店
+            <nz-select style="width: 200px;" [(ngModel)]="selectedOption" (ngModelChange)="onSelectStoreChange($event)"
+                       [nzShowSearch]="true">
+                <nz-option [nzLabel]="'全部门店'" [nzValue]="allStores"></nz-option>
+                <nz-option *ngFor="let store of stores" [nzLabel]="store.storeName"
+                           [nzValue]="store.storeId"></nz-option>
+            </nz-select>
+
+        </div>
+        <div class="table-box clearfix">
+            <div class="prevent-line"></div>
+            <div class="table-container">
+                <!--手艺人-->
+                <div class="craftsman-box">
+                    <span class="craftsman-space"></span>
+                    <ul>
+                        <li *ngFor="let craftsman of craftsmanArr">
+                            <img [src]="craftsman.headPortrait || headPortrait" alt="">
+                            <p>{{craftsman.staffName}}</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <!--请假信息和日期-->
+                <div class="leave-content">
+                    <div class="table">
+                        <!--日期-->
+                        <div class="table-tr date-box">
+                            <span class="table-td" *ngFor="let date of dateArr">{{date.substring(5)}}</span>
+                        </div>
+                        <!--请假区域-->
+                        <div class="table-tr" *ngFor="let x of dataArr; let i = index">
+                            <span class="table-td" *ngFor="let y of x; let j = index" (click)="onLeaveTdClick(i, j)">
+                              <span *ngIf="(craftsmanVacationList[i].staffId == craftsmanArr[i]?.staffId) && (craftsmanVacationList[i].dateList.indexOf(dateArr[j]) > -1)"
+                                  class="iconfont icon-xiukexuan"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

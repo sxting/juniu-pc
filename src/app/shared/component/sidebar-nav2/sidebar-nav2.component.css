@@ -1,0 +1,7 @@
+.nav>li>a>.iconfont{
+    font-size: 22px !important;
+    vertical-align: middle
+}
+.nav>li>a{
+    overflow: hidden;
+}

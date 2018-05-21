@@ -1,0 +1,596 @@
+<page-header></page-header>
+<div *ngIf="false">
+    <!--基本信息-->
+    <section class="content_juniu">
+        <div class="marketing_means">
+            <h2>
+                <span class="line"></span>基本信息</h2>
+            <div class="edit_goods_infor clearfix">
+                <ul class="clearfix">
+                    <!--商品名称-->
+                    <li class="clearfix">
+                        <span class="left-block fl">
+                            <span class="icon-asterisks-1-copy iconfont"></span>活动名称</span>
+                        <div class="right-block fl">
+                            <input class="prductName" *ngIf="canMofidy" [(ngModel)]="pinTuanName" type="text" maxlength="20" id="productName" required
+                                placeholder="请输入活动名称，20个字以内">
+                            <input class="prductName" *ngIf="!canMofidy" [(ngModel)]="pinTuanName" disabled type="text" maxlength="20" id="productName"
+                                required placeholder="请输入活动名称，20个字以内1">
+
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                        <span class="left-block fl">
+                            <span class="icon-asterisks-1-copy iconfont"></span>活动图片</span>
+                        <div class="right-block fl">
+                            <juniu-upload-img [image]="pictureDetails" [uploadNum]="3" [syncAlipay]="syncAlipay" [bizType]="'shop'" [isClear]="isClear"
+                                (img)="getPictureDetails($event)"></juniu-upload-img>
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                        <span class="left-block fl">
+                            <span class="icon-asterisks-1-copy iconfont"></span>
+                            <span>库存</span>
+                        </span>
+                        <div class="right-block fl">
+                            <div>
+                                <input class="prductName" *ngIf="canMofidy" [(ngModel)]="inventory" type="number" maxlength="8" onkeyup="var num = parseFloat(value).toFixed(0);if(value>99999999)value=99999999;if(value<0)value=0;if(!/^\d+(?:\.\d{0})?$/.test(this.value)&&value!=0){
+                                    this.value = num;
+                                }" id="productName" required placeholder="请设定商品库存">
+                                <input class="prductName" *ngIf="!canMofidy" [(ngModel)]="inventory" disabled type="number" maxlength="8" onkeyup="var num = parseFloat(value).toFixed(0);if(value>99999999)value=99999999;if(value<0)value=0;if(!/^\d+(?:\.\d{0})?$/.test(this.value)&&value!=0){
+                                    this.value = num;
+                                }" id="productName" required placeholder="请设定商品库存">
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="clearfix">
+                        <span class="left-block fl">
+                            <span class="icon-asterisks-1-copy iconfont"></span>成团人数</span>
+                        <div class="right-block fl">
+                            <div class="select_input_box">
+                                <span class="ctSpan">
+                                    <input type="radio" *ngIf="canMofidy" (click)="ctrsFun(2)" checked name="ctrs">
+                                    <input type="radio" *ngIf="!canMofidy" disabled (click)="ctrsFun(2)" checked name="ctrs"> 2 人
+                                </span>
+                                <span class="ctSpan" *ngFor="let item of ctArr">
+                                    <input type="radio" *ngIf="canMofidy" (click)="ctrsFun(item.num)" name="ctrs"> {{canMofidy?item.text:''}}
+                                    <input type="radio" *ngIf="!canMofidy" disabled (click)="ctrsFun(item.num)" name="ctrs"> {{canMofidy?'':item.text}}
+
+                                </span>
+                                <input type="number" [(ngModel)]="peopleNumber" *ngIf="ctrsBoo">
+                            </div>
+                            <p class="product-tip">规定时间内拼团达到指定人数，则拼团成功，否则拼团失败且立即退款</p>
+
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                        <span class="left-block fl">
+                            <span></span>团购限时</span>
+                        <div class="right-block fl">
+                            <div class="select_input_box">
+                                <input class="prductName" *ngIf="canMofidy" [(ngModel)]="timeLimit" type="number" onkeyup="var num = parseFloat(value).toFixed(0);if(value>24)value=24;if(value<0)value=0;if(!/^\d+(?:\.\d{0})?$/.test(this.value)&&value!=0){
+                                    this.value = num;
+                                }" maxlength="2" id="productName" required placeholder="请输入限购时间">
+                                <input class="prductName" type="number" [(ngModel)]="timeLimit" onkeyup="var num = parseFloat(value).toFixed(0);if(value>24)value=24;if(value<0)value=0;if(!/^\d+(?:\.\d{0})?$/.test(this.value)&&value!=0){
+                                    this.value = num;
+                                }" maxlength="2" id="productName" *ngIf="!canMofidy" disabled required placeholder="请输入限购时间">
+                            </div>
+                            <p class="product-tip">可设定成团时长，团购限时不能超过24小时，默认选择24小时成团</p>
+
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                        <span class="left-block fl">
+                            <span class="icon-asterisks-1-copy iconfont"></span>原价</span>
+                        <div class="right-block fl">
+                            <div class="select_input_box">
+                                <input class="prductName" style="width:160px !important;" [(ngModel)]="originalPrice" *ngIf="canMofidy" onkeyup="clearNoNum(this);function clearNoNum(obj) {  
+                                    if(obj.value>99999999){
+                                        obj.value =99999999
+                                    }
+                                    if(obj.value<0){
+                                        obj.value =0
+                                    }
+                                    obj.value = obj.value.replace(/[^\d.]/g, ''); 
+                                        obj.value = obj.value.replace(/^\./g,'');
+                                        obj.value = obj.value.replace(/\.{2,}/g,'.'); 
+                                        obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3');
+                                
+                                }" type="text" maxlength="40" id="productName" required placeholder="请输入项目原价">
+
+                                <input class="prductName" style="width:160px !important;" [(ngModel)]="originalPrice" onkeyup="clearNoNum(this);function clearNoNum(obj) {  
+                                    if(obj.value>99999999){
+                                        obj.value =99999999
+                                    }
+                                    if(obj.value<0){
+                                        obj.value =0
+                                    }
+                                    obj.value = obj.value.replace(/[^\d.]/g, ''); 
+                                        obj.value = obj.value.replace(/^\./g,'');
+                                        obj.value = obj.value.replace(/\.{2,}/g,'.'); 
+                                        obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3');
+                                
+                                }" type="text" *ngIf="!canMofidy" disabled maxlength="40" id="productName" required placeholder="请输入项目原价">
+                            </div>
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                        <span class="left-block fl">
+                            <span class="icon-asterisks-1-copy iconfont"></span>拼团价</span>
+                        <div class="right-block fl">
+                            <div class="select_input_box">
+                                <input class="prductName" style="width:160px !important;" [(ngModel)]="presentPrice" *ngIf="canMofidy" type="text" onkeyup="clearNoNum(this);function clearNoNum(obj) {  
+                                    if(obj.value>99999999){
+                                        obj.value =99999999
+                                    }
+                                    if(obj.value<0){
+                                        obj.value =0
+                                    }
+                                    obj.value = obj.value.replace(/[^\d.]/g, ''); 
+                                        obj.value = obj.value.replace(/^\./g,'');
+                                        obj.value = obj.value.replace(/\.{2,}/g,'.'); 
+                                        obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3');
+                                
+                                }" maxlength="40" id="productName" required placeholder="请输入项目拼团价">
+                                <input class="prductName" style="width:160px !important;" [(ngModel)]="presentPrice" *ngIf="!canMofidy" disabled type="text"
+                                    onkeyup="clearNoNum(this);function clearNoNum(obj) {  
+                                    if(obj.value>99999999){
+                                        obj.value =99999999
+                                    }
+                                    if(obj.value<0){
+                                        obj.value =0
+                                    }
+                                    obj.value = obj.value.replace(/[^\d.]/g, ''); 
+                                        obj.value = obj.value.replace(/^\./g,'');
+                                        obj.value = obj.value.replace(/\.{2,}/g,'.'); 
+                                        obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3');
+                                
+                                }" maxlength="40" id="productName" required placeholder="请输入项目拼团价">
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <!--详细信息-->
+    <section class="content_juniu mt20">
+        <div class="marketing_means">
+            <div class="clearfix Industry_field_title">
+                <h2 class="fl">
+                    <span class="line"></span>详细信息</h2>
+                <!--<p class="fl Industry_field">-->
+                <!--<span (click)="footModule()">足疗按摩行业模板</span>-->
+                <!--<span (click)="parentalModule()">亲子教育行业模板</span>-->
+                <!--<span (click)="photoModule()">摄影行业模板</span>-->
+                <!--</p>-->
+            </div>
+            <div class="edit_goods_infor clearfix">
+                <ul class="clearfix">
+                    <li class="clearfix">
+                        <span class="left-block fl">详细内容</span>
+                        <div class="right-block fl descriptions">
+                            <form class="descriptions_form" *ngFor="let item of descriptions;let i = index">
+                                <input type="text" value="" maxlength="40" *ngIf="canMofidy" class="juniu_input" [value]="item.title" (change)="getDescriptData(i,$event.target.value)"
+                                    placeholder="请输入标题，最多输入40个字" />
+                                <input type="text" value="" maxlength="40" *ngIf="!canMofidy" disabled class="juniu_input" [value]="item.title" (change)="getDescriptData(i,$event.target.value)"
+                                    placeholder="请输入标题，最多输入40个字" />
+                                <div class="details_list_box">
+                                    <div class="form_parent" style="position:relative;" *ngFor="let detail of item.details;let index = index">
+                                        <textarea type="text" name="details" *ngIf="canMofidy" maxlength="100" class="desc_textarea" [value]="detail.item" (change)="getDetailValue(i,index,$event.target.value)"
+                                            placeholder="请输入内容，最多输入100个字，更多内容点“添加更多”"></textarea>
+
+                                        <textarea type="text" name="details" *ngIf="!canMofidy" disabled maxlength="100" class="desc_textarea" [value]="detail.item"
+                                            (change)="getDetailValue(i,index,$event.target.value)" placeholder="请输入内容，最多输入100个字，更多内容点“添加更多”"></textarea>
+                                        <span class="descriptions_add_btn descriptions_btns" (click)="addLineDecripDetail(i)">添加更多</span>
+                                        <span class="descriptions_minus_btn descriptions_btns" (click)="minuslineDetail(i,index)">删除</span>
+                                    </div>
+                                </div>
+                                <p class="double_btn">
+                                    <span class="descriptions_addAll_btn" (click)="addGroupDescription(i)">增加一组</span>
+                                    <span class="descriptions_minusAll_btn" (click)="pluseGroupDescription(i)">删除此组</span>
+                                </p>
+                            </form>
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                        <span class="left-block fl">购买须知</span>
+                        <div class="right-block fl descriptions">
+                            <form class="descriptions_form" *ngFor="let list of buyerNotes;let j = index">
+                                <input type="text" value="" maxlength="40" *ngIf="canMofidy" class="juniu_input" [value]="list.title" (change)="getnoteTitledata(j,$event.target.value)"
+                                    placeholder="请输入标题，最多输入40个字">
+                                <input type="text" value="" maxlength="40" *ngIf="!canMofidy" disabled class="juniu_input" [value]="list.title" (change)="getnoteTitledata(j,$event.target.value)"
+                                    placeholder="请输入标题，最多输入40个字">
+                                <div class="details_list_box">
+                                    <div class="form_parent" style="position:relative;" *ngFor="let detail of list.details;let noteIndex =index">
+                                        <textarea type="text" name="details" maxlength="100" *ngIf="canMofidy" class="desc_textarea" [value]="detail.item" (change)="getnoteDetaildata(j,noteIndex,$event.target.value)"
+                                            placeholder="请输入内容，最多输入100个字，更多内容点“添加更多”"></textarea>
+                                        <textarea type="text" name="details" maxlength="100" *ngIf="!canMofidy" disabled class="desc_textarea" [value]="detail.item"
+                                            (change)="getnoteDetaildata(j,noteIndex,$event.target.value)" placeholder="请输入内容，最多输入100个字，更多内容点“添加更多”"></textarea>
+                                        <span class="descriptions_add_btn descriptions_btns" (click)="addLineNoteDetail(j)">添加更多</span>
+                                        <span class="descriptions_minus_btn descriptions_btns" (click)="deleteNoteDetail(j,noteIndex)">删除</span>
+                                    </div>
+                                </div>
+                                <p class="double_btn">
+                                    <span class="descriptions_addAll_btn" (click)="addGroupBuynote()">增加一组</span>
+                                    <span class="descriptions_minusAll_btn" (click)="pluseGroupbuyNote(j)">删除此组</span>
+                                </p>
+                            </form>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+
+    <!--使用门店-->
+    <section class="content_juniu mt20">
+        <div class="marketing_means">
+            <h2>
+                <span class="line"></span>使用门店</h2>
+            <div class="edit_goods_infor clearfix">
+                <ul>
+                    <li class="clearfix">
+                        <span class="left-block fl">
+                            <span class="icon-asterisks-1-copy iconfont"></span>活动日期</span>
+                        <div class="right-block fl">
+                            <!-- <nz-datepicker style="width: 138px;" [nzDisabled]="!canMofidy" (ngModelChange)="_startTime=$event;_startValueChange($event)"
+                                [ngModel]="_startTime" [nzDisabledDate]="_disabledStartDate1" [nzFormat]="'YYYY-MM-DD'" [nzPlaceHolder]="'开始时间'"></nz-datepicker>
+                            <nz-datepicker style="width: 138px;" [nzDisabled]="!canMofidy" (ngModelChange)="_endTime=$event;_endValueChange($event)"
+                                [ngModel]="_endTime" [nzDisabledDate]="_disabledEndDate2" [nzFormat]="'YYYY-MM-DD'" [nzPlaceHolder]="'截止时间'"></nz-datepicker> -->
+                        </div>
+                    </li>
+                    <li class="clearfix" *ngIf="_endTime">
+                        <span class="left-block fl">
+                            <span class="icon-asterisks-1-copy iconfont"></span>核销截止日期</span>
+                        <div class="right-block fl">
+                            <!-- <nz-datepicker style="width: 300px;" [nzDisabled]="!canMofidy" [nzDisabledDate]="disabledDate" (ngModelChange)="_validateEndTime=$event;endValueChange($event)"
+                                [ngModel]="_validateEndTime" [nzFormat]="'YYYY-MM-DD'" [nzPlaceHolder]="'核销截止日期'"></nz-datepicker> -->
+                            <p class="product-tip">核销截止日期不能早于活动结束日期</p>
+
+                        </div>
+
+                    </li>
+                    <li class="clearfix">
+                        <span class="left-block fl">
+                            <span class=""></span>模拟成团</span>
+                        <div class="right-block fl">
+                            <nz-switch [(ngModel)]="mock" [nzDisabled]="!canMofidy">
+                                <span checked>开</span>
+                                <span unchecked>关</span>
+                            </nz-switch>
+                            <p class="product-tip">开启模拟成团后，若在规定时间之前未拼团成功，系统自动匹配虚拟顾客参与拼团，使得该拼团成功</p>
+                        </div>
+
+                    </li>
+                    <li class="clearfix">
+                        <span class="left-block fl">
+                            <span class="icon-asterisks-1-copy iconfont"></span>选择口碑门店</span>
+                        <div class="right-block fl">
+                            <span>{{storesChangeNum}} 家门店</span>
+                            <span class="space"></span>
+                            <span class="select-store-btn" (click)="onSelectStoreBtnClick(storeAlert)">{{isEdit ? '新增门店' : '选择门店'}}</span>
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                        <span class="left-block fl" style="height:28px"> </span>
+                        <div class="right-block fl" *ngIf="canMofidy">
+                            <button class="buttons" nz-button style="background:#ff6600;border:none;margin-right:10px;" nzType="primary" (click)="submitData()"
+                                type="submit">保存并发布</button>
+                            <button class="buttons" nz-button (click)="return()">返回</button>
+                            <!-- <button *ngIf="canMofidy" style="background:#fff;color:#ff6600;border:1px solid #ff6600;" (click)="return()">返回</button> -->
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+</div>
+<nz-card nzTitle="基本信息" [nzBordered]="false" [nzBodyStyle]="{'padding.px': 12}">
+    <form nz-form [formGroup]="form" (ngSubmit)="submit()">
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzFor="pinTuanName" nzSm="7" nzRequired>活动名称</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="8">
+                <nz-input-group nzSize="large">
+                    <input nz-input formControlName="pinTuanName" maxlength="20" placeholder="请输入活动名称，20个字以内">
+                </nz-input-group>
+                <nz-form-explain *ngIf="pinTuanName.dirty && pinTuanName.errors">活动名称字数不能少于两位</nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7" nzRequired>活动图片</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="8">
+                <juniu-upload-img [image]="pictureDetails" [uploadNum]="3" [syncAlipay]="syncAlipay" [bizType]="'shop'" [isClear]="isClear"
+                    (img)="getPictureDetails($event)"></juniu-upload-img>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzFor="inventory" nzSm="7" nzRequired>库存</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="8">
+                <nz-input-group nzSize="large">
+                    <input nz-input formControlName="inventory" maxlength="8" placeholder="请设定商品库存">
+                </nz-input-group>
+                <nz-form-explain *ngIf="inventory.dirty && inventory.errors">请输入正确的库存数量(库存为正整数)</nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzFor="peopleNumber" nzSm="7" nzRequired>成团人数</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="8">
+                <nz-input-group nzSize="large">
+                    <div style="margin-top:10px;">
+                        <span class="ctSpan">
+                            <input type="radio" *ngIf="canMofidy" (click)="ctrsFun(2)" checked name="ctrs">
+                            <input type="radio" *ngIf="!canMofidy" disabled (click)="ctrsFun(2)" checked name="ctrs"> 2 人
+                        </span>
+                        <span class="ctSpan" *ngFor="let item of ctArr">
+                            <input type="radio" *ngIf="canMofidy" (click)="ctrsFun(item.num)" name="ctrs"> {{canMofidy?item.text:''}}
+                            <input type="radio" *ngIf="!canMofidy" disabled (click)="ctrsFun(item.num)" name="ctrs"> {{canMofidy?'':item.text}}
+                        </span>
+                        <input nz-input formControlName="peopleNumber" [style.display]="ctrsBoo ? 'block' : 'none'">
+                    </div>
+                </nz-input-group>
+                <p class="product-tip">规定时间内拼团达到指定人数，则拼团成功，否则拼团失败且立即退款</p>
+                <nz-form-explain *ngIf="peopleNumber.dirty && peopleNumber.errors">请填写正确的拼团人数(正整数)</nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzFor="timeLimit" nzSm="7">团购限时</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="8">
+                <nz-input-group nzSize="large">
+                    <input nz-input formControlName="timeLimit" maxlength="2" placeholder="请输入限购时间">
+                </nz-input-group>
+                <p class="product-tip">可设定成团时长，团购限时不能超过24小时，默认选择24小时成团</p>
+                <nz-form-explain *ngIf="timeLimit.dirty && timeLimit.errors">限时时间在1-24之间</nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzFor="originalPrice" nzSm="7" nzRequired>原价</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="8">
+                <nz-input-group nzSize="large">
+                    <input nz-input formControlName="originalPrice" maxlength="8" placeholder="请输入项目原价">
+                </nz-input-group>
+                <nz-form-explain *ngIf="originalPrice.dirty && originalPrice.errors">原价格式书写有误</nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzFor="presentPrice" nzSm="7" nzRequired>拼团价 </nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="8">
+                <nz-input-group nzSize="large">
+                    <input nz-input formControlName="presentPrice" maxlength="8" placeholder="请输入项目拼团价">
+                </nz-input-group>
+                <nz-form-explain *ngIf="presentPrice.dirty && presentPrice.errors">拼团价格式书写有误</nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-card nzTitle="详细信息" [nzBordered]="false" [nzBodyStyle]="{'padding.px': 12}">
+
+            <nz-form-item>
+                <nz-form-label nzXs="24" nzFor="presentPrice" nzSm="7">详细内容</nz-form-label>
+                <nz-form-control nzXs="24" nzSm="12" nzMd="12">
+                    <section class="content_juniu">
+                        <div class="marketing_means">
+                            <div class="edit_goods_infor clearfix">
+                                <ul class="clearfix">
+                                    <li class="clearfix">
+                                        <div class="right-block fl descriptions">
+                                            <form class="descriptions_form" *ngFor="let item of descriptions;let i = index">
+                                                <input type="text" value="" maxlength="40" *ngIf="canMofidy" class="juniu_input" [value]="item.title" (change)="getDescriptData(i,$event.target.value)"
+                                                    placeholder="请输入标题，最多输入40个字" />
+                                                <input type="text" value="" maxlength="40" *ngIf="!canMofidy" disabled class="juniu_input" [value]="item.title" (change)="getDescriptData(i,$event.target.value)"
+                                                    placeholder="请输入标题，最多输入40个字" />
+                                                <div class="details_list_box">
+                                                    <div class="form_parent" style="position:relative;" *ngFor="let detail of item.details;let index = index">
+                                                        <textarea type="text" name="details" *ngIf="canMofidy" maxlength="100" class="desc_textarea" [value]="detail.item" (change)="getDetailValue(i,index,$event.target.value)"
+                                                            placeholder="请输入内容，最多输入100个字，更多内容点“添加更多”"></textarea>
+
+                                                        <textarea type="text" name="details" *ngIf="!canMofidy" disabled maxlength="100" class="desc_textarea" [value]="detail.item"
+                                                            (change)="getDetailValue(i,index,$event.target.value)" placeholder="请输入内容，最多输入100个字，更多内容点“添加更多”"></textarea>
+                                                        <span class="descriptions_add_btn descriptions_btns" (click)="addLineDecripDetail(i)">添加更多</span>
+                                                        <span class="descriptions_minus_btn descriptions_btns" (click)="minuslineDetail(i,index)">删除</span>
+                                                    </div>
+                                                </div>
+                                                <p class="double_btn">
+                                                    <span class="descriptions_addAll_btn" (click)="addGroupDescription(i)">增加一组</span>
+                                                    <span class="descriptions_minusAll_btn" (click)="pluseGroupDescription(i)">删除此组</span>
+                                                </p>
+                                            </form>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label nzXs="24" nzFor="presentPrice" nzSm="7">购买须知</nz-form-label>
+                <nz-form-control nzXs="24" nzSm="12" nzMd="12">
+                    <section class="content_juniu">
+                        <div class="marketing_means">
+                            <div class="edit_goods_infor clearfix">
+                                <ul class="clearfix">
+                                    <li class="clearfix">
+                                        <div class="right-block fl descriptions">
+                                            <form class="descriptions_form" *ngFor="let list of buyerNotes;let j = index">
+                                                <input type="text" value="" maxlength="40" *ngIf="canMofidy" class="juniu_input" [value]="list.title" (change)="getnoteTitledata(j,$event.target.value)"
+                                                    placeholder="请输入标题，最多输入40个字">
+                                                <input type="text" value="" maxlength="40" *ngIf="!canMofidy" disabled class="juniu_input" [value]="list.title" (change)="getnoteTitledata(j,$event.target.value)"
+                                                    placeholder="请输入标题，最多输入40个字">
+                                                <div class="details_list_box">
+                                                    <div class="form_parent" style="position:relative;" *ngFor="let detail of list.details;let noteIndex =index">
+                                                        <textarea type="text" name="details" maxlength="100" *ngIf="canMofidy" class="desc_textarea" [value]="detail.item" (change)="getnoteDetaildata(j,noteIndex,$event.target.value)"
+                                                            placeholder="请输入内容，最多输入100个字，更多内容点“添加更多”"></textarea>
+                                                        <textarea type="text" name="details" maxlength="100" *ngIf="!canMofidy" disabled class="desc_textarea" [value]="detail.item"
+                                                            (change)="getnoteDetaildata(j,noteIndex,$event.target.value)" placeholder="请输入内容，最多输入100个字，更多内容点“添加更多”"></textarea>
+                                                        <span class="descriptions_add_btn descriptions_btns" (click)="addLineNoteDetail(j)">添加更多</span>
+                                                        <span class="descriptions_minus_btn descriptions_btns" (click)="deleteNoteDetail(j,noteIndex)">删除</span>
+                                                    </div>
+                                                </div>
+                                                <p class="double_btn">
+                                                    <span class="descriptions_addAll_btn" (click)="addGroupBuynote()">增加一组</span>
+                                                    <span class="descriptions_minusAll_btn" (click)="pluseGroupbuyNote(j)">删除此组</span>
+                                                </p>
+                                            </form>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+                </nz-form-control>
+            </nz-form-item>
+        </nz-card>
+        <nz-card nzTitle="使用门店" [nzBordered]="false" [nzBodyStyle]="{'padding.px': 12}">
+            <nz-form-item>
+                <nz-form-label nzXs="24" nzFor="originalPrice" nzSm="7">活动日期</nz-form-label>
+                <nz-form-control nzXs="24" nzSm="12" nzMd="8">
+                    <!-- <nz-datepicker style="width: 138px;" [nzDisabled]="!canMofidy" (ngModelChange)="_startTime=$event;_startValueChange($event)"
+                                [ngModel]="_startTime" [nzDisabledDate]="_disabledStartDate1" [nzFormat]="'YYYY-MM-DD'" [nzPlaceHolder]="'开始时间'"></nz-datepicker>
+                            <nz-datepicker style="width: 138px;" [nzDisabled]="!canMofidy" (ngModelChange)="_endTime=$event;_endValueChange($event)"
+                                [ngModel]="_endTime" [nzDisabledDate]="_disabledEndDate2" [nzFormat]="'YYYY-MM-DD'" [nzPlaceHolder]="'截止时间'"></nz-datepicker> -->
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label nzXs="24" nzFor="mock" nzSm="7">模拟成团</nz-form-label>
+                <nz-form-control nzXs="24" nzSm="12" nzMd="8">
+                    <nz-switch formControlName="mock" [nzDisabled]="!canMofidy">
+                        <span checked>开</span>
+                        <span unchecked>关</span>
+                    </nz-switch>
+                    <p class="product-tip">开启模拟成团后，若在规定时间之前未拼团成功，系统自动匹配虚拟顾客参与拼团，使得该拼团成功</p>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label nzXs="24" nzSm="7">选择口碑门店</nz-form-label>
+                <nz-form-control nzXs="24" nzSm="12" nzMd="8">
+                    <span>{{storesChangeNum}} 家门店</span>
+                    <span class="space"></span>
+                    <span class="select-store-btn" (click)="onSelectStoreBtnClick(storeAlert)">{{isEdit ? '新增门店' : '选择门店'}}</span>
+                </nz-form-control>
+            </nz-form-item>
+
+        </nz-card>
+        <nz-form-item>
+            <nz-col [nzSpan]="7"> </nz-col>
+
+            <nz-col [nzSpan]="12">
+                <button class="buttons" nz-button nzType="primary" type="submit">保存并发布</button>
+                <button class="buttons" nz-button (click)="return()">返回</button>
+            </nz-col>
+
+        </nz-form-item>
+    </form>
+</nz-card>
+
+<ng-template #storeAlert>
+    <div class="stores" style="overflow:hidden;">
+        <ul class="right-block fl store_lists">
+            <li class="list">
+                <p class="head_store clearfix">
+                    <span class="fl select-all" (click)="selectAllShops(ifSelectAll)">
+                        <input type="checkbox" [checked]="ifSelectAll" />
+                        <span>全选</span>
+                    </span>
+                    全部口碑门店
+                </p>
+                <div class="show_all_stores">
+                    <div class="city-list" *ngFor="let city of cityStoreList; let cityIndex=index">
+                        <!--城市-->
+                        <div class="select_all_btn">
+                            <input class="select_all_input" type="checkbox" [checked]="city.change" (click)="onSelectAllStoresInputClick(cityIndex, city.change)"
+                            />
+                            <span class="city">{{city.cityName}}</span>
+                        </div>
+                        <!--门店-->
+                        <ul class="shop_names">
+                            <li *ngFor="let store of city.stores; let storeIndex=index">
+                                <input type="checkbox" [checked]="store.change" (click)="onSelectStoreInputClick(cityIndex, storeIndex)" />
+                                <span>{{store.shopName}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+            <li class="list">
+                <p class="head_store">已选口碑门店</p>
+                <div class="selected_stores">
+                    <div class="city-list bbn" *ngFor="let city of cityStoreList">
+                        <div *ngIf="city.checked == true">
+                            <!--城市-->
+                            <div class="select_all_btn">
+                                <span class="city">{{city.cityName}}</span>
+                            </div>
+                            <!--门店-->
+                            <ul class="shop_names">
+                                <li *ngFor="let store of city.stores">
+                                    <span *ngIf="store.change == true">{{store.shopName}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</ng-template>
+<!--门店-->
+<div class="alert-order-msg-bg stores" *ngIf="showStoreSelect">
+    <div class="alert-order-msg">
+        <!--关闭按钮-->
+        <span class="iconfont icon-tubiao06 close-alert-btn" (click)="onCloseProductTypesBtn()"></span>
+        <div class="content-title">
+            <span></span>选择门店</div>
+        <ul class="right-block fl store_lists">
+            <li class="list">
+                <p class="head_store clearfix">
+                    <span class="fl select-all" (click)="selectAllShops(ifSelectAll)">
+                        <input type="checkbox" [checked]="ifSelectAll" />
+                        <span>全选</span>
+                    </span>
+                    全部口碑门店
+                </p>
+                <div class="show_all_stores">
+                    <div class="city-list" *ngFor="let city of cityStoreList; let cityIndex=index">
+                        <!--城市-->
+                        <div class="select_all_btn">
+                            <input class="select_all_input" type="checkbox" [checked]="city.change" (click)="onSelectAllStoresInputClick(cityIndex, city.change)"
+                            />
+                            <span class="city">{{city.cityName}}</span>
+                        </div>
+                        <!--门店-->
+                        <ul class="shop_names">
+                            <li *ngFor="let store of city.stores; let storeIndex=index">
+                                <input type="checkbox" [checked]="store.change" (click)="onSelectStoreInputClick(cityIndex, storeIndex)" />
+                                <span>{{store.shopName}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+            <li class="list">
+                <p class="head_store">已选口碑门店</p>
+                <div class="selected_stores">
+                    <div class="city-list bbn" *ngFor="let city of cityStoreList">
+                        <div *ngIf="city.checked == true">
+                            <!--城市-->
+                            <div class="select_all_btn">
+                                <span class="city">{{city.cityName}}</span>
+                            </div>
+                            <!--门店-->
+                            <ul class="shop_names">
+                                <li *ngFor="let store of city.stores">
+                                    <span *ngIf="store.change == true">{{store.shopName}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <div class="save_btn_stores">
+            <span class="save_btn" (click)="onStoreSaveClick()">保存</span>
+        </div>
+    </div>
+</div>

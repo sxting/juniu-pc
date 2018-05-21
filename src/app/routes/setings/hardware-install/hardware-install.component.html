@@ -1,0 +1,10 @@
+<page-header></page-header>
+<div nz-row [nzGutter]="24" class="pt-lg">
+    <div nz-col nzXs="24" nzSm="24" *ngFor="let item of arr" nzLg="24" nzLg="8" class="mb-lg">
+        <nz-card [nzBordered]="false" [routerLink]="[item.link]"  [nzBodyStyle]="{'height':'300px','border-radius': '10px','text-align': 'center'}">
+            <div class="{{item.icon}} iconfont"></div>
+            <div class="middle">{{item.name}}</div>
+            <div class="bottom">{{item.text}}</div>
+        </nz-card>
+    </div>
+</div>

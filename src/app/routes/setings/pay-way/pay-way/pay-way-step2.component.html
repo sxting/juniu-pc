@@ -1,0 +1,111 @@
+<form nz-form [formGroup]="form" (ngSubmit)="_submitForm()">
+    <nz-form-item>
+        <nz-form-label nzSpan="5" nzRequired>行业类型</nz-form-label>
+        <nz-form-control [nzSpan]="16">
+            <nz-select formControlName="hangye_type" [nzPlaceHolder]="'请选择行业类型'">
+                <nz-option *ngFor="let hangyeType of hangyeTypeList" [nzLabel]="hangyeType.industryName" [nzValue]="hangyeType.industryId"></nz-option>
+            </nz-select>
+            <nz-form-explain class="error-color" *ngIf="hangye_type.dirty && hangye_type.errors">请选择行业类型</nz-form-explain>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzSpan="5" nzRequired nzFor="yingyezz_code">营业执照编码</nz-form-label>
+        <nz-form-control nzSpan="16">
+            <nz-input-group nzCompact>
+                <input nz-input formControlName="yingyezz_code" placeholder="请输入营业执照编码">
+            </nz-input-group>
+            <nz-form-explain class="error-color" *ngIf="yingyezz_code.dirty && yingyezz_code.errors">请输入正确的营业执照编码</nz-form-explain>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzSpan="5" nzRequired nzFor="shanghu_jc">商户简称</nz-form-label>
+        <nz-form-control nzSpan="16">
+            <nz-input-group nzCompact>
+                <input nz-input formControlName="shanghu_jc" placeholder="请输入商户简称">
+            </nz-input-group>
+            <nz-form-explain class="error-color" *ngIf="shanghu_jc.dirty && shanghu_jc.errors">请输入商户简称</nz-form-explain>
+            <nz-form-explain class="color-ccc">商户简称显示在支付结果页</nz-form-explain>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzSpan="5" nzRequired>商户地址</nz-form-label>
+        <nz-form-control [nzSpan]="16">
+            <nz-cascader [nzPlaceHolder]="'请选择商户地址'" formControlName="shanghu_address" [nzOptions]="provinces" [nzLoadData]="loadData" (nzChange)="selectCity($event)"></nz-cascader>
+            <nz-form-explain class="error-color" *ngIf="shanghu_address.dirty && shanghu_address.errors">请选择商户地址</nz-form-explain>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzSpan="5" nzRequired nzFor="detail_address">详细地址</nz-form-label>
+        <nz-form-control nzSpan="16">
+            <nz-input-group nzCompact>
+                <input nz-input formControlName="detail_address" placeholder="请输入详细地址">
+            </nz-input-group>
+            <nz-form-explain class="error-color" *ngIf="detail_address.dirty && detail_address.errors">请输入详细地址</nz-form-explain>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzSpan="5" nzRequired nzFor="fuzer">负责人</nz-form-label>
+        <nz-form-control nzSpan="16">
+            <nz-input-group nzCompact>
+                <input nz-input formControlName="fuzer" placeholder="请输入负责人姓名">
+            </nz-input-group>
+            <nz-form-explain class="error-color" *ngIf="fuzer.dirty && fuzer.errors">请输入负责人姓名</nz-form-explain>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzSpan="5" nzRequired nzFor="shenfz_number">身份证号码</nz-form-label>
+        <nz-form-control nzSpan="16">
+            <nz-input-group nzCompact>
+                <input nz-input formControlName="shenfz_number" placeholder="请输入负责人身份证号码">
+            </nz-input-group>
+            <ng-container *ngIf="shenfz_number.dirty">
+                <nz-form-explain class="error-color" *ngIf="shenfz_number.errors?.required">请输入负责人身份证号码</nz-form-explain>
+                <nz-form-explain class="error-color" *ngIf="shenfz_number.errors?.pattern">请输入合法的身份证号码</nz-form-explain>
+            </ng-container>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzSpan="5" nzRequired nzFor="tel">手机号</nz-form-label>
+        <nz-form-control nzSpan="16">
+            <nz-input-group nzCompact>
+                <input nz-input formControlName="tel" placeholder="请输入负责人手机号">
+            </nz-input-group>
+            <ng-container *ngIf="tel.dirty">
+                <nz-form-explain class="error-color" *ngIf="tel.errors?.required">请输入负责人手机号</nz-form-explain>
+                <nz-form-explain class="error-color" *ngIf="tel.errors?.pattern">请输入正确的手机号</nz-form-explain>
+            </ng-container>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzSpan="5" nzRequired nzFor="email">邮箱</nz-form-label>
+        <nz-form-control nzSpan="16">
+            <nz-input-group nzCompact>
+                <input nz-input formControlName="email" placeholder="请输入负责人邮箱">
+            </nz-input-group>
+            <ng-container *ngIf="email.dirty">
+                <nz-form-explain class="error-color" *ngIf="email.errors?.required">请输入负责人邮箱</nz-form-explain>
+                <nz-form-explain class="error-color" *ngIf="email.errors?.pattern">请输入正确的邮箱号</nz-form-explain>
+            </ng-container>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzSpan="5" nzRequired nzFor="service_tel">客服电话</nz-form-label>
+        <nz-form-control nzSpan="16">
+            <nz-input-group nzCompact>
+                <input nz-input formControlName="service_tel" placeholder="请输入客服电话">
+            </nz-input-group>
+            <ng-container *ngIf="service_tel.dirty">
+                <nz-form-explain class="error-color" *ngIf="service_tel.errors?.required">请输入客服电话</nz-form-explain>
+                <nz-form-explain class="error-color" *ngIf="service_tel.errors?.pattern">请输入正确的电话号</nz-form-explain>
+            </ng-container>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-control [nzSpan]="16" [nzOffset]="5">
+            <!--[disabled]="form.invalid"-->
+            <button nz-button [nzType]="'primary'">下一步</button>
+            <button nz-button (click)="prev()">上一步</button>
+        </nz-form-control>
+    </nz-form-item>
+</form>

@@ -1,0 +1,98 @@
+// 建议所有项目自定义样式放在该文件夹下
+@import 'node_modules/@delon/theme/styles/default';
+ul, li {
+  list-style: none;
+  margin:0;
+  padding:0;
+}
+p {
+  margin: 0;
+  padding: 0
+}
+button {
+  outline: none;
+}
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+.dis-inb {
+  display: inline-block;
+}
+
+.clearfix:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+.clearfix {
+  zoom: 1;
+}
+.jn-color {
+  color: @primary-color !important;
+}
+.text-going {
+  color: #FF6600;
+}
+.no-wrap {
+  white-space: nowrap;
+}
+.dis-none {
+  display: none !important;
+}
+.text-error {
+  color: #d51301;
+}
+.width-auto {
+  width: auto !important;
+}
+.pics_box{
+  mix-width: 500px;
+}
+
+.img-box {
+  width: 104px;
+  height: 104px;
+  line-height: 104px;
+  border: 1px dashed #E5E5E5;
+  text-align: center;
+  position: relative;
+  margin-right: 10px;
+  float: left;
+}
+.img-box:hover{
+  border: 1px dashed #1890ff;
+}
+.pics_box .img-box:last-child{
+  margin-right: 0px;
+}
+.img-box input[type=file] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: pink;
+  opacity: 0;
+}
+.img-box .image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.img-box .icon-close{
+  font-size: 20px;
+  color: #ff6600;
+  position: absolute;
+  right: 0;
+  top: 0;
+  line-height: 21px;
+  cursor: pointer;
+  z-index: 6;
+}
