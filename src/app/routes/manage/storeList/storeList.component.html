@@ -1,46 +1,48 @@
 <page-header></page-header>
 <div class="storeMain">
-    <div class="buttonBox">
-        <button class="buttons" nz-button [routerLink]="['/manage/storeList/storeEdit']" (click)="gotoEdit()">新增门店</button>
-        <div width="300px;">
-            <nz-input-group nzSuffixIcon="anticon anticon-search" (click)="search()">
-                <input [(ngModel)]="storeName" type="text" nz-input placeholder="请输入门店名称搜索">
-            </nz-input-group>
-        </div>
-
+  <div class="buttonBox">
+    <button class="buttons" nz-button [routerLink]="['/manage/storeList/storeEdit']" (click)="gotoEdit()">新增门店</button>
+    <div width="300px;">
+      <nz-input-group nzSuffixIcon="anticon anticon-search" (click)="search()">
+        <input [(ngModel)]="storeName" type="text" nz-input placeholder="请输入门店名称搜索">
+      </nz-input-group>
     </div>
-    <nz-table #basicTable [nzShowPagination]="false" [nzData]="data">
-        <thead>
-            <tr>
-                <th>门店编号</th>
-                <th>门店名称</th>
-                <th>线上展示渠道</th>
-                <th>系统版本</th>
-                <th>剩余有效期</th>
-                <th>操作</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let item of storeInfos">
-                <td>{{item.storeId}}</td>
-                <td>{{item.storeName}}</td>
-                <td>
-                    <span *ngFor="let i of item.releaseChannel">{{i}}</span>
-                </td>
-                <td>{{item.genderName}}</td>
-                <td>{{item.phone}}</td>
-                <td>
-                    <span class="button" (click)="bianji()">编辑</span>
-                    <nz-divider nzType="vertical"></nz-divider>
-                    <span class="button" (click)="fufei()">升级</span>
-                    <nz-divider nzType="vertical"></nz-divider>
-                    <span class="button" (click)="shanchu()">删除</span>
-                </td>
 
-            </tr>
-        </tbody>
-    </nz-table>
-    <div class="nzPaginationBox">
-        <nz-pagination class="nzPagination" [nzTotal]="Total" [nzPageSize]="10" (nzPageIndexChange)="getData($event)"></nz-pagination>
-    </div>
+  </div>
+  <nz-table #basicTable [nzShowPagination]="false" [nzData]="storeInfos">
+    <thead>
+      <tr>
+        <th>门店编号</th>
+        <th>门店名称</th>
+        <th>线上展示渠道</th>
+        <th>系统版本</th>
+        <th>剩余有效期</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of storeInfos">
+        <td>{{item.storeId}}</td>
+        <td>{{item.branchName}}</td>
+        <td>
+          <span class="iconfont icon-weixin4 {{item.platformListInfo.WECHAT?'weixin':''}}" (click)="storeTypeFun('weixin',item.platformListInfo.WECHAT,item.storeId)"></span>
+          <span class="iconfont icon-zhifubao1 {{item.platformListInfo.ALIPAY?'zhifubao':''}}" (click)="storeTypeFun('zhifubao',item.platformListInfo.WECHAT,item.storeId)"></span>
+        </td>
+        <td>{{item.systemVersion}}</td>
+        <td>{{item.validityPeriodDays||0}}天</td>
+        <td>
+          <span class="button" (click)="bianji(item.storeId)">编辑</span>
+          <nz-divider nzType="vertical"></nz-divider>
+          <span class="button" *ngIf="item.validityPeriodDays?item.validityPeriodDays>0:true" (click)="fufei()">升级</span>
+          <span class="button" *ngIf="item.validityPeriodDays?item.validityPeriodDays>0:false" (click)="fufei()">续费</span>
+          <nz-divider nzType="vertical"></nz-divider>
+          <span class="button" (click)="shanchu()">删除</span>
+        </td>
+
+      </tr>
+    </tbody>
+  </nz-table>
+  <div class="nzPaginationBox">
+    <nz-pagination class="nzPagination" [nzTotal]="Total" [nzPageSize]="10" (nzPageIndexChange)="getData($event)"></nz-pagination>
+  </div>
 </div>

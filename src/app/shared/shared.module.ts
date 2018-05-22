@@ -28,6 +28,8 @@ import { OrderService } from "@shared/component/reserve/shared/order.service";
 import { ManageService} from "../routes/manage/shared/manage.service";
 import { MarketingService} from "../routes/marketing/shared/marketing.service";
 import { UploadService } from './upload-img/shared/upload.service';
+import { ImageShowPipe } from '@shared/pipe/image.pipe';
+import { UploadImageComponent } from '@shared/upload-img/upload-img.component';
 
 const THIRDMODULES = [
   NgZorroAntdModule,
@@ -41,6 +43,7 @@ const JUNIUMODULES = [
   WaterWaveComponent,
   SidebarNav2Component,
   SelectTransferComponent,
+  UploadImageComponent,
   StoreComponent
 ];
 // endregion
@@ -67,7 +70,8 @@ const DIRECTIVES = [];
     // your components
     ...COMPONENTS,
     ...DIRECTIVES,
-    ...JUNIUMODULES
+    ...JUNIUMODULES,
+    ImageShowPipe
   ],
   exports: [
     CommonModule,
@@ -85,7 +89,8 @@ const DIRECTIVES = [];
     // your components
     ...COMPONENTS,
     ...DIRECTIVES,
-    ...JUNIUMODULES
+    ...JUNIUMODULES,
+    ImageShowPipe
   ],
   providers: [UploadService, ManageService, OrderService, MarketingService],
 })

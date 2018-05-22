@@ -1,63 +1,63 @@
 <div class="ad-page-header" style="margin: 0 -24px; border-bottom:none !important;">
-    <nz-breadcrumb>
-        <nz-breadcrumb-item>首页</nz-breadcrumb-item>
-        <nz-breadcrumb-item>管理</nz-breadcrumb-item>
-        <nz-breadcrumb-item>门店</nz-breadcrumb-item>
-        <nz-breadcrumb-item>新增门店</nz-breadcrumb-item>
-    </nz-breadcrumb>
-    <page-header [title]="'创建门店'">
-        要想管理一个门店，首先要创建这个门店。
-    </page-header>
+  <nz-breadcrumb>
+    <nz-breadcrumb-item>首页</nz-breadcrumb-item>
+    <nz-breadcrumb-item>管理</nz-breadcrumb-item>
+    <nz-breadcrumb-item>门店</nz-breadcrumb-item>
+    <nz-breadcrumb-item>新增门店</nz-breadcrumb-item>
+  </nz-breadcrumb>
+  <page-header [title]="'创建门店'">
+    要想管理一个门店，首先要创建这个门店。
+  </page-header>
 </div>
 
 <nz-card [nzBordered]="false">
-    <form nz-form [formGroup]="form" (ngSubmit)="submit()">
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7">商家名称</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <!-- <input nz-input formControlName="name" value="'审美'" id="name" placeholder="请输入商家名称"> -->
-                <span>审美</span>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzFor="storeName">门店名称</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input nz-input formControlName="storeName" id="storeName" placeholder="请输入门店名称">
-                <!-- <nz-form-explain *ngIf="form.get('title').dirty && form.get('title').errors">请输入门店名称</nz-form-explain> -->
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzFor="address">门店地址</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <nz-cascader [nzOptions]="cityArr" formControlName="address" id="address" (ngModelChange)="onChanges($event)">
-                </nz-cascader>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzFor="Alladdress">详细地址</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <div id="pickerBox">
-                    <input nz-input id="pickerInput" placeholder="输入关键字选取地点" />
-                    <div id="poiInfo"></div>
-                </div>
-            </nz-form-control>
-        </nz-form-item>
+  <form nz-form [formGroup]="form" (ngSubmit)="submit()">
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7">商家名称</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <!-- <input nz-input formControlName="name" value="'审美'" id="name" placeholder="请输入商家名称"> -->
+        <span>审美</span>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7" nzFor="storeName">门店名称</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <input nz-input formControlName="storeName" id="storeName" placeholder="请输入门店名称">
+        <!-- <nz-form-explain *ngIf="form.get('title').dirty && form.get('title').errors">请输入门店名称</nz-form-explain> -->
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7" nzFor="address">门店地址</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <nz-cascader [nzOptions]="cityArr" [(ngModel)]="values" [nzPlaceHolder]="'请选择门店地址'" formControlName="address" id="address" (ngModelChange)="onChanges($event)">
+        </nz-cascader>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7" nzFor="Alladdress">详细地址</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <div id="pickerBox">
+          <input nz-input id="pickerInput"  placeholder="输入关键字选取地点" />
+          <div id="poiInfo"></div>
+        </div>
+      </nz-form-control>
+    </nz-form-item>
 
-    </form>
+  </form>
 </nz-card>
 <nz-form-item style="background:#fff;margin-bottom:0 !important;">
-    <nz-form-label nzXs="24" nzSm="7">地图</nz-form-label>
-    <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <div id="container" class="map" tabindex="0"></div>
-    </nz-form-control>
+  <nz-form-label nzXs="24" nzSm="7">地图</nz-form-label>
+  <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+    <div id="container" class="map" tabindex="0"></div>
+  </nz-form-control>
 </nz-form-item>
 <nz-form-item style="background:#fff;">
-    <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
-        <button nz-button nzType="primary" type="submit" (click)="submit()" [nzLoading]="submitting">提交</button>
-    </nz-form-control>
+  <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
+    <button nz-button nzType="primary" type="submit" (click)="submit()" [nzLoading]="submitting">提交</button>
+  </nz-form-control>
 </nz-form-item>
 <!-- <div id="mapContainer">
-    <div id="tip">
-        <input type="text" id="keyword" name="keyword" value="请输入关键字：(选定后搜索)" onfocus='this.value=""' />
-    </div>
+  <div id="tip">
+    <input type="text" id="keyword" name="keyword" value="请输入关键字：(选定后搜索)" onfocus='this.value=""' />
+  </div>
 </div> -->
