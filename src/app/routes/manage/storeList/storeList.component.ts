@@ -15,6 +15,7 @@ export class StoreListComponent {
     data: any = [];
     Total: any = 0;
     storeInfos: any = [];
+    pageNo: any = 1;
     constructor(
         public msg: NzMessageService,
         private modalSrv: NzModalService,
@@ -22,15 +23,15 @@ export class StoreListComponent {
         private router: Router,
         private http: _HttpClient
     ) {
-        // this.storeListHttp();
+        this.storeListHttp();
     }
     search() {
         if (this.storeName) {
             console.log(this.storeName)
         }
     }
-    bianji() {
-
+    bianji(e: any) {
+        this.router.navigate(['/manage/storeList/storeEdit', { storeId: e }]);
     }
     fufei() {
 
@@ -39,7 +40,8 @@ export class StoreListComponent {
 
     }
     getData(e: any) {
-        console.log(e)
+        this.pageNo =e;
+        this.storeListHttp();
     }
     gotoEdit() {
         // this.router.navigateByUrl('/manage/shoplist/storeEdit');
@@ -48,14 +50,24 @@ export class StoreListComponent {
 
     storeListHttp() {
         let data = {
-            pageIndex: 1,
-            pageSize: 10
+            pageNo: this.pageNo,
+            pageSize: 10,
+            timestamp: new Date().getTime()
         }
         let that = this;
-        this.manageService.storeList(data).subscribe(
+        this.manageService.storeBatch(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    this.storeInfos = res.data.storeInfos;
+                    res.data.items.forEach(function (i: any) {
+                        i.platformListInfo = { ALIPAY: false, WECHAT: false }
+                    })
+                    res.data.items.forEach(function (i: any) {
+                        if (i.platformList.indexOf('ALIPAY') > -1) i.platformListInfo.ALIPAY = true;
+                        if (i.platformList.indexOf('WECHAT') > -1) i.platformListInfo.WECHAT = true;
+                    })
+                    this.storeInfos = res.data.items;
+                    this.Total = res.data.page.countTotal;
+
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -74,5 +86,10 @@ export class StoreListComponent {
             nzContent: err
         });
     }
-
+    storeTypeFun(type: any, boolean: any) {
+        if (type === 'weixin')
+            this.router.navigate(['/manage/storeList/wxStore']);
+        if (type === 'zhifubao')
+            this.router.navigate(['/manage/storeList/matchingkoubei']);
+    }
 }

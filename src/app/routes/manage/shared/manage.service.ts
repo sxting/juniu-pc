@@ -102,9 +102,9 @@ export class ManageService {
 
   //删除职位
   roleremove(data: any) {
-    let apiUrl = Config.API + '/account/role/remove.json';
+    let apiUrl = Config.API1 + '/account/merchant/role/delete.json';
     let param = FunctionUtil.obectToURLSearchParams(data);
-    return this.http.get(apiUrl, data)
+    return this.http.post(apiUrl, data)
       .map((response: Response) => response)
       .catch(error => {
         return Observable.throw(error);
@@ -113,8 +113,18 @@ export class ManageService {
 
   //编辑职位(创建修改)
   roleedit(data: any) {
-    let apiUrl = Config.API + '/account/role/edit.json';
+    let apiUrl = Config.API1 + '/account/merchant/role/modify.json';
     return this.http.post(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+  // 职位详情
+  roleDetail(data: any) {
+    let apiUrl = Config.API1 + '/account/merchant/role/detail.json';
+    let param = FunctionUtil.obectToURLSearchParams(data);
+    return this.http.get(apiUrl, data)
       .map((response: Response) => response)
       .catch(error => {
         return Observable.throw(error);
@@ -565,7 +575,7 @@ export class ManageService {
   //新增门店
   storeCreate(data: any) {
     // let apiUrl = Config.API + '/staff/set/push/wechat/pub/config.json';
-    let apiUrl = this.apiStaff + '/store/create.json';
+    let apiUrl = Config.API1 + 'account/merchant/store/create.json';
 
     return this.http.post(apiUrl, data)
       .map((response: Response) => response)
@@ -579,5 +589,64 @@ export class ManageService {
     return this.http.get(apiUrl).map((response: Response) => response).catch(error => {
       return Observable.throw(error);
     });
+  }
+
+  //门店批量查询
+  storeBatch(data) {
+    let apiUrl = Config.API1 + 'account/merchant/store/batch.json';
+    return this.http.get(apiUrl, data).map((response: Response) => response).catch(error => {
+      return Observable.throw(error);
+    });
+  }
+  //门店详情 
+  storeInfo(data) {
+    let apiUrl = Config.API1 + 'account/merchant/store/info.json';
+    return this.http.get(apiUrl, data).map((response: Response) => response).catch(error => {
+      return Observable.throw(error);
+    });
+  }
+
+  // 修改门店信息
+  modifyInfo(data: any) {
+    // lt apiUrl = Config.API + '/staff/set/push/wechat/pub/config.json';
+    let apiUrl = Config.API1 + 'account/merchant/store/modify/info.json';
+
+    return this.http.post(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+  //职位批量查询
+  roleBatch(data) {
+    let apiUrl = Config.API1 + 'account/merchant/role/batch.json';
+    return this.http.get(apiUrl, data).map((response: Response) => response).catch(error => {
+      return Observable.throw(error);
+    });
+  }
+  //全部模块
+  roleModules() {
+    let apiUrl = Config.API1 + 'account/merchant/role/modules.json';
+    return this.http.get(apiUrl).map((response: Response) => response).catch(error => {
+      return Observable.throw(error);
+    });
+  }
+  // 职位Select选择器数据
+  roleSelect() {
+    let apiUrl = Config.API1 + 'account/merchant/role/select.json';
+    return this.http.get(apiUrl).map((response: Response) => response).catch(error => {
+      return Observable.throw(error);
+    });
+  }
+  //创建职位
+  roleCreate(data: any) {
+    // lt apiUrl = Config.API + '/staff/set/push/wechat/pub/config.json';
+    let apiUrl = Config.API1 + 'account/merchant/role/create.json';
+
+    return this.http.post(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
   }
 }
