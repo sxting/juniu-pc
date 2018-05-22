@@ -16,13 +16,17 @@
         <nz-form-item *ngIf="paramsId <= 6">
             <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="activity_obj_days">活动对象</nz-form-label>
             <nz-form-control nzXs="24" nzSm="15" nzMd="16">
-                <div *ngIf="paramsId == '01'">最近 <input class="width-auto" nz-input formControlName="activity_obj_days" placeholder="请输入天数"> 天内未到店消费过的持卡会员</div>
-                <div *ngIf="paramsId == '02'">最近 <input class="width-auto" nz-input formControlName="activity_obj_days" placeholder="请输入天数"> 天内未到店消费过的潜在会员</div>
+                <div *ngIf="paramsId == '01' || paramsId == '02'">最近
+                    <input class="width-auto" nz-input formControlName="activity_obj_days"
+                           placeholder="请输入天数" (change)="onLastTimeInputChange()">
+                    <span *ngIf="paramsId == '01'">天内未到店消费过的持卡会员</span>
+                    <span *ngIf="paramsId == '02'">天内未到店消费过的潜在会员</span>
+                </div>
                 <div *ngIf="paramsId == '03'">过生日的会员</div>
                 <div *ngIf="paramsId == '04' || paramsId == '05' || paramsId == '06'">
-                    <input type="radio" name="activityObj" [checked]="activityObj == 'all'" (click)="onActivityObjClick('all')">全部会员
-                    <input type="radio" name="activityObj" [checked]="activityObj == 'chika'" (click)="onActivityObjClick('chika')">持卡会员
-                    <input type="radio" name="activityObj" [checked]="activityObj == 'qianzai'" (click)="onActivityObjClick('qianzai')">潜在会员
+                    <input type="radio" name="activityObj" [checked]="memberType == 'ALL'" (click)="onActivityObjClick('ALL')">全部会员
+                    <input type="radio" name="activityObj" [checked]="memberType == 'CARD'" (click)="onActivityObjClick('CARD')">持卡会员
+                    <input type="radio" name="activityObj" [checked]="memberType == 'CUSTOMER'" (click)="onActivityObjClick('CUSTOMER')">潜在会员
                 </div>
                 <ng-container *ngIf="activity_obj_days.dirty">
                     <nz-form-explain class="error-color" *ngIf="activity_obj_days.errors?.required">请输入天数</nz-form-explain>
@@ -48,7 +52,7 @@
         </nz-form-item>
 
         <nz-form-item *ngIf="paramsId == '03' || paramsId == '04' || paramsId == '11'">
-            <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="activity_name">发送时间</nz-form-label>
+            <nz-form-label nzXs="24" nzSm="5" nzRequired>发送时间</nz-form-label>
             <nz-form-control nzXs="24" nzSm="15" nzMd="15">
                 <div class="no-wrap" *ngIf="paramsId == '03'">
                     <input type="radio" name="sendTime" [checked]="sendTimeToday" (click)="onSendTimeClick(true)">当天发送
@@ -60,7 +64,9 @@
                     </ng-container>
                 </div>
                 <div class="no-wrap" *ngIf="paramsId == '04' || paramsId == '11'">
-                    <span class="jn-color">法定节假日</span>
+                    <nz-date-picker [nzFormat]="'yyyy-MM-dd'" formControlName="send_time"></nz-date-picker>
+                    <nz-form-explain class="error-color" *ngIf="send_time.dirty && send_time.errors">请选择发送时间</nz-form-explain>
+                    <!--<span class="jn-color">法定节假日</span>-->
                 </div>
             </nz-form-control>
         </nz-form-item>
@@ -68,12 +74,12 @@
         <nz-form-item [class.dis-none]="paramsId == '03' || paramsId == '04' || paramsId == '11'">
             <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="activity_name">活动日期</nz-form-label>
             <nz-form-control nzXs="24" nzSm="15" nzMd="15">
-                <!--<nz-date-picker></nz-date-picker>-->
+                <nz-range-picker [nzFormat]="'yyyy-MM-dd'" formControlName="active_date"></nz-range-picker>
             </nz-form-control>
         </nz-form-item>
 
         <nz-form-item *ngIf="paramsId == '07' || paramsId == '08' || paramsId == '09'">
-            <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="activity_name">发送门槛</nz-form-label>
+            <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="send_menkan">发送门槛</nz-form-label>
             <nz-form-control nzXs="24" nzSm="15" nzMd="15">
                 <div class="no-wrap">
                     消费满 <input class="width-auto" nz-input formControlName="send_menkan" placeholder="请输入金额"> 元发券
@@ -85,11 +91,36 @@
             </nz-form-control>
         </nz-form-item>
 
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="activity_name">活动门店</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="15" nzMd="15">
+                已选 {{storesChangeNum}} 家门店
+                <jn-store [isEdit]="isEdit" [cityStoreList]="cityStoreList"
+                          [getCalculateMemberNum]="true"
+                          [lastBuyTime]="lastBuyTime"
+                          [limitLastTime]="limitLastTime"
+                          [memberType]="memberType"
+                          (selectStoresIds)="getSelectStoresIds($event)"
+                          (selectStoresNames)="getSelectStoresNames($event)"
+                          (storesChangeNum)="getStoresChangeNum($event)"
+                          (calculateMemberNum)="getCalculateMemberNumber($event)"
+                          (needSendKey)="getNeedSendKey($event)"
+                          *ngIf="paramsId <= '06'">
+                </jn-store>
+                <jn-store [isEdit]="isEdit" [cityStoreList]="cityStoreList"
+                          (selectStoresIds)="getSelectStoresIds($event)"
+                          (selectStoresNames)="getSelectStoresNames($event)"
+                          (storesChangeNum)="getStoresChangeNum($event)"
+                          *ngIf="paramsId > '06'">
+                </jn-store>
+            </nz-form-control>
+        </nz-form-item>
+
         <nz-form-item [class.dis-none]="paramsId >= '11'">
             <nz-form-label nzXs="24" nzSm="5" nzFor="sms_content">短信内容</nz-form-label>
             <nz-form-control nzXs="24" nzSm="15" nzMd="15">
                 <textarea nz-input formControlName="sms_content" placeholder="请输入短信内容，不输入内容则默认不发送短信通知" value="{{smsInputValue}}" (change)="smsInputChange()"></textarea>
-                <nz-form-explain>共需发送105条短信</nz-form-explain>
+                <nz-form-explain [class.dis-none]="paramsId == '07' || paramsId == '08' || paramsId == '09'">共需发送{{calculateMemberNum}}条短信</nz-form-explain>
                 <nz-form-explain>
                     点击标签即可插入相应系统字段:
                     <span class="click-color" *ngFor="let item of smsMark"><span (click)="onSmsMark(item)">{{item}}</span></span>
@@ -97,15 +128,11 @@
             </nz-form-control>
         </nz-form-item>
 
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="activity_name">活动门店</nz-form-label>
+        <nz-form-item [class.dis-none]="paramsId >= '11'">
+            <nz-form-label nzXs="24" nzSm="5">短信发送时间</nz-form-label>
             <nz-form-control nzXs="24" nzSm="15" nzMd="15">
-                已选 {{storesChangeNum}} 家门店
-                <jn-store [isEdit]="isEdit" [cityStoreList]="cityStoreList"
-                          (selectStoresIds)="getSelectStoresIds($event)"
-                          (selectStoresNames)="getSelectStoresNames($event)"
-                          (storesChangeNum)="getStoresChangeNum($event)">
-                </jn-store>
+                <nz-date-picker [nzFormat]="'yyyy-MM-dd'" formControlName="sms_send_date"></nz-date-picker>
+                <nz-time-picker [nzFormat]="'HH:00'" style="margin-left: 10px" formControlName="sms_send_time"></nz-time-picker>
             </nz-form-control>
         </nz-form-item>
 
@@ -393,5 +420,3 @@
         </div>
     </div>
 </ng-template>
-
-<!--选择门店-->
