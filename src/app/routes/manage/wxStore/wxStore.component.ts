@@ -6,6 +6,7 @@ import { ManageService } from '../shared/manage.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { STORES_INFO } from '@shared/define/juniu-define';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-wxStore',
@@ -18,43 +19,13 @@ export class WxStoreComponent implements OnInit {
     submitting = false;
     form: FormGroup;
     values: any[] = null;
-    data = [];
+    data: any = [];
     isClear: boolean = false;
     showPics: any = [];
     syncAlipay: string = 'F';
     allproducks: any = [];
     objArr: any = [];
     allcards: any = [];
-    nzOptions = [{
-        value: 'zhejiang',
-        label: 'Zhejiang',
-        children: [{
-            value: 'hangzhou',
-            label: 'Hangzhou',
-            children: [{
-                value: 'xihu',
-                label: 'West Lake',
-                isLeaf: true
-            }]
-        }, {
-            value: 'ningbo',
-            label: 'Ningbo',
-            isLeaf: true
-        }]
-    }, {
-        value: 'jiangsu',
-        label: 'Jiangsu',
-        disabled: true,
-        children: [{
-            value: 'nanjing',
-            label: 'Nanjing',
-            children: [{
-                value: 'zhonghuamen',
-                label: 'Zhong Hua Men',
-                isLeaf: true
-            }]
-        }]
-    }];
     list: any[] = [];
 
 
@@ -76,6 +47,7 @@ export class WxStoreComponent implements OnInit {
     allproducksLoc: any = '';
     objArrLoc: any = '';
     allcardsLoc: any = '';
+    cityArr: any;
     constructor(
         private localStorageService: LocalStorageService,
         public msg: NzMessageService,
@@ -83,19 +55,24 @@ export class WxStoreComponent implements OnInit {
         private manageService: ManageService,
         private router: Router,
         private fb: FormBuilder,
+        private route: ActivatedRoute,
         private http: _HttpClient
     ) {
         this.form = this.fb.group({
             storeName: [null, []],
             address: [null, []],
             Alladdress: [null, []],
+            phone: [null, []],
+            time: [null, []],
         });
 
     }
     ngOnInit(): void {
-        this.getAllbuySearchs();
-        this.getStaffList();
-        this.getAllCardsList();
+        // this.getAllbuySearchs();
+        // this.getStaffList();
+        // this.getAllCardsList();
+        this.storeId = this.route.snapshot.params['storeId'];
+        this.getLocationHttp();
     }
     mouseAction(event: any): void {
         console.log(event);
@@ -423,5 +400,105 @@ export class WxStoreComponent implements OnInit {
     change(ret: {}): void {
         console.log('nzChange', ret);
     }
+    storeDetail() {
+        let self = this;
+        let data = {
+            storeId: this.storeId
+        }
+        this.manageService.storeDetail(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    let adress = []
+                    this.cityArr.forEach(function (i: any) {
+                        if (res.data.provinceCode === i.code) {
+                            adress.push(i.name)
+                            if (i.hasSubset) {
+                                i.subset.forEach(function (n: any) {
+                                    if (res.data.cityCode === n.code) {
+                                        adress.push(n.name)
+                                        if (n.hasSubset) {
+                                            n.subset.forEach(function (m: any) {
+                                                if (res.data.districtCode === m.code) {
+                                                    adress.push(m.name)
+                                                }
+                                            })
+                                        }
+                                    }
+                                })
+                            }
+                        }
 
+                    })
+                    self.form = this.fb.group({
+                        storeName: [res.data.branchName, []],
+                        address: [adress, []],
+                        Alladdress: [res.data.address, []],
+                        phone: [res.data.contactPhone, []],
+                        time: [res.data.businessHours, []],
+                    });
+                    this.data = {
+                        address: res.data.address,
+                        branchName: res.data.branchName,
+                        cityCode: res.data.cityCode,
+                        districtCode: res.data.districtCode,
+                        latitude: res.data.latitude,
+                        longitude: res.data.longitude,
+                        provinceCode: res.data.provinceCode,
+                        timestamp: new Date().getTime()
+                    }
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            (error) => {
+                this.msg.warning(error)
+            }
+        );
+    }
+    getLocationHttp() {
+        let self = this;
+        this.manageService.getLocation().subscribe(
+            (res: any) => {
+                if (res.success) {
+                    self.forEachFun(res.data.items);
+                    this.cityArr = res.data.items;
+                    if (self.route.snapshot.params['storeId']) {
+                        self.storeDetail();
+                    }
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            (error) => {
+                this.msg.warning(error)
+            }
+        );
+    }
+    forEachFun(arr: any, arr2?: any) {
+        let that = this;
+        arr.forEach(function (i: any) {
+            i.value = i.code;
+            i.label = i.name;
+            that.forEachFun2(i);
+        })
+    }
+    forEachFun2(arr: any) {
+        let that = this;
+        if (arr.hasSubset) {
+            arr.subset.forEach(function (n: any) {
+                n.value = n.code;
+                n.label = n.name;
+                that.forEachFun2(n);
+            })
+            arr.children = arr.subset;
+        } else {
+            arr.isLeaf = true;
+        }
+    }
 }

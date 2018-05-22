@@ -649,4 +649,11 @@ export class ManageService {
         return Observable.throw(error);
       });
   }
+  //查询门店详情（微信门店）
+  storeDetail(data) {
+    let apiUrl = Config.API1 + 'account/merchant/store/detail.json';
+    return this.http.get(apiUrl, data).map((response: Response) => response).catch(error => {
+      return Observable.throw(error);
+    });
+  }
 }

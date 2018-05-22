@@ -25,8 +25,8 @@
         <td>{{item.storeId}}</td>
         <td>{{item.branchName}}</td>
         <td>
-          <span class="iconfont icon-weixin4 {{item.platformListInfo.WECHAT?'weixin':''}}" (click)="storeTypeFun('weixin',item.platformListInfo.WECHAT)"></span>
-          <span class="iconfont icon-zhifubao1 {{item.platformListInfo.ALIPAY?'zhifubao':''}}" (click)="storeTypeFun('zhifubao',item.platformListInfo.WECHAT)"></span>
+          <span class="iconfont icon-weixin4 {{item.platformListInfo.WECHAT?'weixin':''}}" (click)="storeTypeFun('weixin',item.platformListInfo.WECHAT,item.storeId)"></span>
+          <span class="iconfont icon-zhifubao1 {{item.platformListInfo.ALIPAY?'zhifubao':''}}" (click)="storeTypeFun('zhifubao',item.platformListInfo.WECHAT,item.storeId)"></span>
         </td>
         <td>{{item.systemVersion}}</td>
         <td>{{item.validityPeriodDays||0}}天</td>

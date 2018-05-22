@@ -17,33 +17,33 @@
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7" nzFor="storeName">门店名称</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input nz-input formControlName="storeName" id="storeName" placeholder="请输入门店名称">
+                <input nz-input disabled formControlName="storeName" id="storeName" placeholder="请输入门店名称">
                 <!-- <nz-form-explain *ngIf="form.get('title').dirty && form.get('title').errors">请输入门店名称</nz-form-explain> -->
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7" nzFor="address">门店地址</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <nz-cascader [nzOptions]="nzOptions" formControlName="address" id="address" (ngModelChange)="onChanges($event)">
+                <nz-cascader  [nzDisabled]="true" formControlName="address" id="address" (ngModelChange)="onChanges($event)">
                 </nz-cascader>
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7" nzFor="Alladdress">详细地址</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input nz-input formControlName="Alladdress" id="Alladdress" placeholder="请输入详细地址">
+                <input nz-input disabled formControlName="Alladdress" id="Alladdress" placeholder="请输入详细地址">
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7">门店电话</nz-form-label>
+            <nz-form-label nzXs="24" nzFor="phone" nzSm="7">门店电话</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input nz-input placeholder="请输入详细地址">
+                <input nz-input formControlName="phone" id="phone" placeholder="请输入门店电话">
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7">营业时间</nz-form-label>
+            <nz-form-label nzXs="24" nzFor="time" nzSm="7">营业时间</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input nz-input placeholder="请输入详细地址">
+                <input nz-input formControlName="time" id="time" placeholder="请输入营业时间">
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>

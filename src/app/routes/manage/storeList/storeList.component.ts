@@ -40,7 +40,7 @@ export class StoreListComponent {
 
     }
     getData(e: any) {
-        this.pageNo =e;
+        this.pageNo = e;
         this.storeListHttp();
     }
     gotoEdit() {
@@ -86,10 +86,16 @@ export class StoreListComponent {
             nzContent: err
         });
     }
-    storeTypeFun(type: any, boolean: any) {
-        if (type === 'weixin')
-            this.router.navigate(['/manage/storeList/wxStore']);
-        if (type === 'zhifubao')
-            this.router.navigate(['/manage/storeList/matchingkoubei']);
+    storeTypeFun(type: any, boolean: any, e: any) {
+        if (boolean && type === 'weixin') {
+            this.router.navigate(['/manage/storeList/wxStore', { storeId: e }]);
+        } else if (!boolean && type === 'weixin') {
+            this.router.navigate(['/manage/bindWechartStore', { storeId: e }]);
+        }
+        if (boolean && type === 'zhifubao') {
+            this.router.navigate(['/manage/storeList/matchingkoubei', { storeId: e }]);
+        } else if (!boolean && type === 'zhifubao') {
+            this.router.navigate(['/manage/bindKoubeiStore', { storeId: e }]);
+        }
     }
 }
