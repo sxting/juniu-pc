@@ -31,6 +31,7 @@ export class AddManagementComponent implements OnInit {
     node: any;
     rolemodule: any;
     storeType: any;
+    nodes: any;
     constructor(
         private fb: FormBuilder,
         private modalSrv: NzModalService,
@@ -53,13 +54,11 @@ export class AddManagementComponent implements OnInit {
         this.form = this.fb.group({
             managementName: [null, []],
             managementStatus: [null, []],
-            nodes: [null, []]
         });
 
     }
     get managementName() { return this.form.controls.managementName; }
     get managementStatus() { return this.form.controls.managementStatus; }
-    get nodes() { return this.form.controls.nodes; }
     submit() {
         let that = this;
         console.log(this.form.controls.nodes.value);
@@ -91,25 +90,29 @@ export class AddManagementComponent implements OnInit {
     mouseAction(event: any): void {
         this.eventCheckedKeys = event.checkedKeys;
     }
+    selectStoreInfo(e) {
+        if (e === 'STORE') this.nodes = this.forEachFun(this.rolemodule.storeModuleList)
+        else this.nodes = this.forEachFun(this.rolemodule.merchantModuleList)
+    }
     //职位权限列表 rolemodules
     rolemodulesHttp(data?: any) {
         let that = this;
         this.manageService.roleModules().subscribe(
             (res: any) => {
                 if (res.success) {
-                    that.rolemodule = res.data.items;
+                    that.rolemodule = res.data;
                     if (data) {
                         this.form = this.fb.group({
                             managementName: [data.roleName, []],
                             managementStatus: [data.belongType, []],
-                            nodes: [this.forEachFun(res.data.items), []]
                         });
+                        this.nodes = data.belongType === 'MERCHANT' ? this.forEachFun(res.data.merchantModuleList) : this.forEachFun(res.data.storeModuleList)
                     } else {
                         this.form = this.fb.group({
                             managementName: [null, []],
                             managementStatus: [null, []],
-                            nodes: [this.forEachFun(res.data.items), []]
                         });
+                        this.nodes = this.forEachFun(res.data.merchantModuleList);
                     }
 
                 } else {
@@ -186,10 +189,6 @@ export class AddManagementComponent implements OnInit {
             data[i].children = data[i].subset;
             data[i].checked = false;
             data[i].expanded = true;
-            if (this.storeType === 'MERCHANT' && !data[i].belongMerchant)
-                data[i].disabled = true
-            if (this.storeType === 'STORE' && !data[i].belongStore)
-                data[i].disabled = true
             if (data[i].hasSubset) {
                 that.forEachFun(data[i].subset);
             } else {
@@ -197,7 +196,6 @@ export class AddManagementComponent implements OnInit {
             }
             arr.push(new NzTreeNode(data[i]));
         }
-        console.log(arr);
         return arr;
 
     }

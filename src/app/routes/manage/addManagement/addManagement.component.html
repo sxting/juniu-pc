@@ -5,7 +5,7 @@
 </div>
 
 <nz-card [nzBordered]="false">
-  <form nz-form [formGroup]="form" (ngSubmit)="submit()">
+  <form nz-form [formGroup]="form">
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7" nzFor="managementName">职位名称</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
@@ -15,7 +15,7 @@
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7" nzFor="managementStatus">职位归属</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <nz-select formControlName="managementStatus" id="managementStatus" [nzPlaceHolder]="'请选择一个门店'" [nzShowSearch]="true">
+        <nz-select formControlName="managementStatus" id="managementStatus" (ngModelChange)="selectStoreInfo($event)" [nzPlaceHolder]="'请选择一个门店'" [nzShowSearch]="true">
           <nz-option [nzLabel]="'总部'" [nzValue]="'MERCHANT'">
           </nz-option>
           <nz-option [nzLabel]="'门店'" [nzValue]="'STORE'">
@@ -23,19 +23,19 @@
         </nz-select>
       </nz-form-control>
     </nz-form-item>
-    <nz-form-item>
-      <nz-form-label nzXs="24" nzSm="7" nzFor="nodes">职位权限</nz-form-label>
-      <nz-form-control nzXs="24" nzSm="12" nzMd="10" style="height: 600px;overflow: hidden;overflow-y: auto;">
-        <nz-tree formControlName="nodes" id="nodes" [nzCheckable]="true" [nzMultiple]="true" [nzDefaultExpandedKeys]="expandKeys" [nzDefaultCheckedKeys]="checkedKeys"
-          [nzDefaultSelectedKeys]="selectedKeys" [nzDefaultExpandAll]="expandDefault" (nzCheckBoxChange)="mouseAction($event)">
-        </nz-tree>
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-      <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
-        <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">提交</button>
-        <button nz-button [routerLink]="['/manage/management']" type="submit">取消</button>
-      </nz-form-control>
-    </nz-form-item>
   </form>
+  <nz-form-item>
+    <nz-form-label nzXs="24" nzSm="7">职位权限</nz-form-label>
+    <nz-form-control nzXs="24" nzSm="12" nzMd="10" style="height: 600px;overflow: hidden;overflow-y: auto;">
+      <nz-tree [ngModel]="nodes" [nzCheckable]="true" [nzMultiple]="true" [nzDefaultExpandedKeys]="expandKeys" [nzDefaultCheckedKeys]="checkedKeys"
+        [nzDefaultSelectedKeys]="selectedKeys" [nzDefaultExpandAll]="expandDefault" (nzCheckBoxChange)="mouseAction($event)">
+      </nz-tree>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
+      <button nz-button nzType="primary" type="submit" (click)="submit()" [nzLoading]="submitting">提交</button>
+      <button nz-button [routerLink]="['/manage/management']" type="submit">取消</button>
+    </nz-form-control>
+  </nz-form-item>
 </nz-card>
