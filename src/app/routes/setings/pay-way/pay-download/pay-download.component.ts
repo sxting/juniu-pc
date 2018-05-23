@@ -6,6 +6,7 @@ import {STORES_INFO} from "@shared/define/juniu-define";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {UploadService} from "@shared/upload-img";
 import {SetingsService} from "../../shared/setings.service";
+import {Config} from "@shared/config/env.config";
 
 @Component({
   selector: 'app-pay-download',
@@ -68,26 +69,7 @@ export class PayDownloadComponent implements OnInit {
     }
 
     saveQrClick() {
-        this.downloadQr();
-    }
-
-    downloadQr() {
-        let data = {
-            storeId: this.storeId,
-            logo: this.imageId
-        };
-        this.setingsService.downloadQr(data).subscribe(
-            (res: any) => {
-                if(res.success) {
-
-                } else {
-                    this.modalSrv.error({
-                        nzTitle: '温馨提示',
-                        nzContent: res.errorInfo
-                    });
-                }
-            }
-        )
+        window.open(`${Config.API}finance/store/download/qr.do?storeId=${this.storeId}&logo=${this.imageId}`);
     }
 
 }

@@ -1,0 +1,24 @@
+<div class="step2">
+    <div class="title">您选择了：桔牛系统·专业版；售价：1680元/年/店</div>
+    <div class="table-box">
+        <table>
+            <tr>
+                <td>
+                    <span class="fl">请选择门店：</span>
+                    <span class="fr">
+                        <input type="checkbox" [checked]="seceltAll" (click)="onSelectAllClick()"> 全选
+                    </span>
+                </td>
+            </tr>
+            <tr *ngFor="let store of stores,let index = index">
+                <td>
+                    <input type="checkbox" [checked]="store.checked" (click)="onSelectClick(index)"> {{store.storeName}}
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="btn-box">
+        <button nz-button [nzType]="'primary'" (click)="_submitForm()">选好了，下一步</button>
+        <button nz-button (click)="prev()">返回上一步</button>
+    </div>
+</div>

@@ -1,7 +1,6 @@
 <page-header></page-header>
-<div class="container">
-    <ul>
-        <li></li>
-        <li></li>
-    </ul>
-</div>
+<nz-card [nzBordered]="false">
+    <soft-buy-step1 *ngIf="item.step==0"></soft-buy-step1>
+    <soft-buy-step2 *ngIf="item.step==1"></soft-buy-step2>
+    <soft-buy-step3 *ngIf="item.step==2"></soft-buy-step3>
+</nz-card>

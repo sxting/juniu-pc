@@ -18,13 +18,20 @@ import { PayWayStep4Component } from "./pay-way/pay-way/pay-way-step4.component"
 import { PayWayStep5Component } from "./pay-way/pay-way/pay-way-step5.component";
 import {TransferService} from "./pay-way/pay-way/transfer.service";
 import { VedioComponent } from './vedio/vedio.component';
+import {SoftBuyStep1Component} from "./software-buy/software-buy-step1";
+import {SoftBuyStep2Component} from "./software-buy/software-buy-step2";
+import {SoftBuyStep3Component} from "./software-buy/software-buy-step3";
+import {SoftTransferService} from "./software-buy/soft-transfer.service";
 
 const COMPONENT_NOROUNT = [
     PayWayStep1Component,
     PayWayStep2Component,
     PayWayStep3Component,
     PayWayStep4Component,
-    PayWayStep5Component
+    PayWayStep5Component,
+    SoftBuyStep1Component,
+    SoftBuyStep2Component,
+    SoftBuyStep3Component,
 ];
 
 @NgModule({
@@ -45,7 +52,7 @@ const COMPONENT_NOROUNT = [
     PayRecordComponent,
     VedioComponent
   ],
-  providers: [SetingsService, TransferService],
+  providers: [SetingsService, TransferService, SoftTransferService],
   entryComponents: COMPONENT_NOROUNT
 })
 export class SetingsModule { }
