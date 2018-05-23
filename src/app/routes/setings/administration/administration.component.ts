@@ -2,8 +2,10 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import { NzModalService } from 'ng-zorro-antd';
 import { SetingsService } from '../shared/setings.service';
-import { VAILCODE } from '@shared/define/juniu-define';
+import { VAILCODE, APP_TOKEN } from '@shared/define/juniu-define';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Config } from '@shared/config/env.config';
+import { LocalStorageService } from '@shared/service/localstorage-service';
 let wait = 60;
 let wait2 = 60;
 let wait3 = 60;
@@ -19,7 +21,8 @@ export class AdministrationComponent implements OnInit {
     phone: any = '16619811357';
     oldcode: any = '';
     newcode: any = '';
-
+    imgUrl: string = Config.API + 'account/manage/aliAuthorizationQRCode.img' +
+    `?token=${this.localStorageService.getLocalstorage(APP_TOKEN)}`;
     //表单
     form: FormGroup;
     form2: FormGroup;
@@ -46,6 +49,7 @@ export class AdministrationComponent implements OnInit {
         private setingsService: SetingsService,
         private http: _HttpClient,
         private fb: FormBuilder,
+        private localStorageService: LocalStorageService,
         private modalSrv: NzModalService
     ) {
         this.formReset();
@@ -128,26 +132,24 @@ export class AdministrationComponent implements OnInit {
         });
     }
     submit() {
-        this.mobile.markAsDirty();
-        this.mobile.updateValueAndValidity();
-        this.captcha.markAsDirty();
-        this.captcha.updateValueAndValidity();
-        this.captcha2.markAsDirty();
-        this.captcha2.updateValueAndValidity();
+        for (const i in this.form.controls) {
+            this.form.controls[i].markAsDirty();
+            this.form.controls[i].updateValueAndValidity();
+        }
         if (this.captcha.invalid || this.captcha2.invalid || this.mobile.invalid) return false;
-        else return true;
+        else {
+            this.modifyPhoneHttp(this.form.value.mobile, this.form.value.captcha2, this.form.value.captcha);
+        };
     }
     submit2() {
-        this.oldpassword.markAsDirty();
-        this.oldpassword.updateValueAndValidity();
-        this.newpassword.markAsDirty();
-        this.newpassword.updateValueAndValidity();
-        this.renewpassword.markAsDirty();
-        this.renewpassword.updateValueAndValidity();
-        this.captcha3.markAsDirty();
-        this.captcha3.updateValueAndValidity();
+        for (const i in this.form2.controls) {
+            this.form2.controls[i].markAsDirty();
+            this.form2.controls[i].updateValueAndValidity();
+        }
         if (this.oldpassword.invalid || this.renewpassword.invalid || this.captcha3.invalid || this.newpassword.invalid) return false;
-        else return true;
+        else {
+            this.modifyPasswordHttp(this.form2.value.renewpassword, this.form2.value.newPassword, this.form2.value.oldpassword, this.form2.value.captcha3);
+        };
     }
     /**
   * 获取验证码
@@ -158,11 +160,11 @@ export class AdministrationComponent implements OnInit {
             this.setingsService.getValidCode(phone, VAILCODE.VALID).subscribe(
                 (res: any) => {
                     if (res.success) {
-                        this[counts] = 59;
-                        this.interval$ = setInterval(() => {
-                            this[counts] -= 1;
-                            if (this[counts] <= 0)
-                                clearInterval(this.interval$);
+                        that[counts] = 59;
+                        that.interval$ = setInterval(() => {
+                            that[counts] -= 1;
+                            if (that[counts] <= 0)
+                                clearInterval(that.interval$);
                         }, 1000);
                     } else {
                         this.modalSrv.error({
@@ -175,6 +177,51 @@ export class AdministrationComponent implements OnInit {
         } else {
             this.errorAlter('手机号不能为空！');
         }
+    }
+    modifyPhoneHttp(newPhone, newValidCode, originValidCode) {
+        let data = {
+            newPhone: newPhone,
+            newValidCode: newValidCode,
+            originValidCode: originValidCode,
+            timestamp: new Date().getTime()
+        }
+        this.setingsService.modifyPhone(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.modalSrv.success({
+                        nzContent: '修改成功'
+                    })
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    })
+                }
+            }, error => this.errorAlter(error)
+        );
+    }
+    modifyPasswordHttp(confirmPassword, newPassword, originPassword, validCode) {
+        let data = {
+            confirmPassword: confirmPassword,
+            newPassword: newPassword,
+            originPassword: originPassword,
+            validCode: validCode,
+            timestamp: new Date().getTime()
+        }
+        this.setingsService.modifyPassword(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.modalSrv.success({
+                        nzContent: '修改成功'
+                    })
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    })
+                }
+            }, error => this.errorAlter(error)
+        );
     }
     errorAlter(err: any) {
         this.modalSrv.error({

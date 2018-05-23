@@ -35,7 +35,7 @@ export class AppComponent implements OnInit {
       .pipe(filter(evt => evt instanceof NavigationEnd))
       .subscribe(() => this.titleSrv.setTitle());
     this.tokenService.set({
-      token: '8dd59a71956aecc18665b9814017d26d',
+      token: '80c22a3aaff8d50197c45d97b6a80695',
       email: `cipchk@qq.com`,
       id: 10000,
       time: +new Date

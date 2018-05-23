@@ -222,4 +222,20 @@ export class SetingsService {
                 return Observable.throw(error);
             });
     }
+    // 修改手机号
+    modifyPhone(data: any) {
+        let apiUrl = Config.API1 + '/account/merchant/modify/phone.json';
+        return this.http.post(apiUrl, data).map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    // 修改密码
+    modifyPassword(data: any) {
+        let apiUrl = Config.API1 + '/account/merchant/modify/password.json';
+        return this.http.post(apiUrl, data).map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
 }

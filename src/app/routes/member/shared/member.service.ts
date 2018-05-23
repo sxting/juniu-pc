@@ -400,4 +400,13 @@ export class MemberService {
                 return Observable.throw(error);
             });
     }
+    //会员卡导入记录
+    improtCardRecord(data) {
+        // 类型 REGISTER或者VALID
+        let apiUrl = Config.API + '/member/improtCardRecord.json';
+        return this.http.get(apiUrl,data).map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
 }

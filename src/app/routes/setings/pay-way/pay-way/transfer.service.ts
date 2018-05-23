@@ -1,7 +1,4 @@
-import {Injectable, OnInit} from '@angular/core';
-import {NzModalService} from "ng-zorro-antd";
-import {SetingsService} from "../../shared/setings.service";
-import {ActivatedRoute} from "@angular/router";
+import {Injectable} from '@angular/core';
 
 @Injectable()
 export class TransferService {

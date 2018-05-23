@@ -48,7 +48,7 @@
             <div class="addStaffBox-main-left ">支付宝授权状态:</div>
             <div class="addStaffBox-main-right">
                 已授权 PID：2088 0227 3142 5391
-                <span class="buttons" (click)="qxshouquan()">取消授权</span>
+                <!-- <span class="buttons" (click)="qxshouquan()">取消授权</span> -->
             </div>
         </div>
     </div>
@@ -167,5 +167,7 @@
     <p>支付宝授权是将桔牛系统与支付宝口碑商家系统打通的必要条件。</p>
     <p>支付宝授权可以一键完成当面付付款通道的开通、门店数据的打通和商品、预约等业务场景的授权。</p>
     <p>请使用商家总账号支付宝App，扫描下方二维码进行授权。</p>
-    <div class="erweimabox"></div>
+    <div class="erweimabox">
+        <img [src]="imgUrl" style="width: 200px;height: 200px;display: block;margin: 10px auto;" alt="">
+    </div>
 </ng-template>

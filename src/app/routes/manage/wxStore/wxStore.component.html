@@ -17,40 +17,40 @@
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7" nzFor="storeName">门店名称</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <input nz-input formControlName="storeName" id="storeName" placeholder="请输入门店名称">
+        <input nz-input disabled formControlName="storeName" id="storeName" placeholder="请输入门店名称">
         <!-- <nz-form-explain *ngIf="form.get('title').dirty && form.get('title').errors">请输入门店名称</nz-form-explain> -->
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7" nzFor="address">门店地址</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <nz-cascader [nzOptions]="nzOptions" formControlName="address" id="address" (ngModelChange)="onChanges($event)">
+        <nz-cascader [nzDisabled]="true" formControlName="address" id="address" (ngModelChange)="onChanges($event)">
         </nz-cascader>
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7" nzFor="Alladdress">详细地址</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <input nz-input formControlName="Alladdress" id="Alladdress" placeholder="请输入详细地址">
+        <input nz-input disabled formControlName="Alladdress" id="Alladdress" placeholder="请输入详细地址">
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
-      <nz-form-label nzXs="24" nzSm="7">门店电话</nz-form-label>
+      <nz-form-label nzXs="24" nzFor="phone" nzSm="7">门店电话</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <input nz-input placeholder="请输入详细地址">
+        <input nz-input formControlName="phone" id="phone" placeholder="请输入门店电话">
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
-      <nz-form-label nzXs="24" nzSm="7">营业时间</nz-form-label>
+      <nz-form-label nzXs="24" nzFor="time" nzSm="7">营业时间</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <input nz-input placeholder="请输入详细地址">
+        <input nz-input formControlName="time" id="time" placeholder="请输入营业时间">
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7">门店图片</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <!--<juniu-upload-img [image]="pictureDetails" [uploadNum]="5" [syncAlipay]="syncAlipay" [bizType]="'shop'" [isClear]="isClear"-->
-          <!--(img)="getPictureDetails($event)"></juniu-upload-img>-->
+        <juniu-upload-img [image]="pictureDetails" [uploadNum]="5" [syncAlipay]="syncAlipay" [bizType]="'shop'" [isClear]="isClear"
+          (img)="getPictureDetails($event)"></juniu-upload-img>
         <div style="font-size:14px;line-height:16px;color:#b7b7b7;">
           门店图片展示在小程序首页的Banner位，您可以将门店内活动海报、门头照、内景照等宣传照片在此上传。 推荐尺寸4:3，大小请勿超过1M，以免影响加载速度。最多上传5张门店图片。
         </div>
@@ -64,64 +64,6 @@
           已展示{{productIdsCount}}个商品
           <span class="setClick" (click)="shezhi(modalContent1,'对应商品')">点击设置></span>
         </span>
-    <form nz-form [formGroup]="form" (ngSubmit)="submit()">
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7">商家名称</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <!-- <input nz-input formControlName="name" value="'审美'" id="name" placeholder="请输入商家名称"> -->
-                <span>审美</span>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzFor="storeName">门店名称</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input nz-input disabled formControlName="storeName" id="storeName" placeholder="请输入门店名称">
-                <!-- <nz-form-explain *ngIf="form.get('title').dirty && form.get('title').errors">请输入门店名称</nz-form-explain> -->
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzFor="address">门店地址</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <nz-cascader  [nzDisabled]="true" formControlName="address" id="address" (ngModelChange)="onChanges($event)">
-                </nz-cascader>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzFor="Alladdress">详细地址</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input nz-input disabled formControlName="Alladdress" id="Alladdress" placeholder="请输入详细地址">
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzFor="phone" nzSm="7">门店电话</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input nz-input formControlName="phone" id="phone" placeholder="请输入门店电话">
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzFor="time" nzSm="7">营业时间</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input nz-input formControlName="time" id="time" placeholder="请输入营业时间">
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7">门店图片</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <juniu-upload-img [image]="pictureDetails" [uploadNum]="5" [syncAlipay]="syncAlipay" [bizType]="'shop'" [isClear]="isClear"
-                    (img)="getPictureDetails($event)"></juniu-upload-img>
-                <div style="font-size:14px;line-height:16px;color:#b7b7b7;">
-                    门店图片展示在小程序首页的Banner位，您可以将门店内活动海报、门头照、内景照等宣传照片在此上传。 推荐尺寸4:3，大小请勿超过1M，以免影响加载速度。最多上传5张门店图片。
-                </div>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7">展示商品</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <nz-switch nzCheckedChildren="开" nzUnCheckedChildren="关"></nz-switch>
-                <span>
-                    已展示{{productIdsCount}}个商品
-                    <span class="setClick" (click)="shezhi(modalContent1,'对应商品')">点击设置></span>
-                </span>
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
