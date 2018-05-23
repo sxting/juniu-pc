@@ -54,6 +54,7 @@ export class OnlyCardImportComponent {
             title: '操作', buttons: [
                 { text: '查看详情', click: (item: any) => this.msg.success(`配置${item.no}`) },
             ]
+            
         }
     ];
     showStoredCardRule: boolean = false;//是否显示储值卡规则
