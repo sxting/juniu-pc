@@ -19,15 +19,18 @@ export class CustomerReportComponent implements OnInit {
     storeList: any[] = [];//门店列表
     storeId: string;//门店ID
     loading = false;
-    yyyymm: any;//选择月份的日期
+    yyyymmDate: any;//选择月份的日期
     visitData: any;
     data: any;
+    date: any;
     pageNo: any = 1;//页码
     pageSize: any = '10';//一页展示多少数据
     totalElements: any = 0;//商品总数
-    merchantId: string = '1502087435083367097829';
+    merchantId: string = '';
     theadName: any = ['时间', '顾客姓名', '服务技师', '类型', '金额'];//表头
     monthReportListInfor: any[] = [];//月报的信息列表
+    currentCount: any = ''; //当日客流量
+    memberPer: any = '';//会员占比
 
     constructor(
         private http: _HttpClient,
@@ -48,7 +51,6 @@ export class CustomerReportComponent implements OnInit {
         if (userInfo) {
             this.merchantId = userInfo.merchantId;
         }
-
         //门店列表
         if (this.localStorageService.getLocalstorage(STORES_INFO) && JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
             let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
@@ -56,20 +58,45 @@ export class CustomerReportComponent implements OnInit {
             this.storeList = storeList;
         }
 
+        let year = new Date().getFullYear();        //获取当前年份(2位)
+        let month = new Date().getMonth()+1;       //获取当前月份(0-11,0代表1月)
+        let changemonth = month < 10 ? '0' + month : '' + month;
+        let day = new Date().getDate();        //获取当前日(1-31)
+
+        this.yyyymmDate = new Date(year+'-'+changemonth+'-'+day);
+        this.date = year+'-'+changemonth+'-'+day;
+        this.batchQuery.date = this.date;
         //获取列表信息
         this.getDayCustomerHttp(this.batchQuery);
     }
 
-
     batchQuery = {
         merchantId: this.merchantId,
-        //date: FunctionUtil.changeDate(this.yyyymm),
-        date: '2018-04-16',
+        date: this.date,
         storeId: this.storeId,
         pageNo: this.pageNo,
         pageSize: this.pageSize,
     };
 
+    //选择日期
+    reportDateAlert(e: any) {
+      this.yyyymmDate = e;
+      let year = this.yyyymmDate.getFullYear();        //获取当前年份(2位)
+      let month = this.yyyymmDate.getMonth()+1;       //获取当前月份(0-11,0代表1月)
+      let changemonth = month < 10 ? '0' + month : '' + month;
+      let day = this.yyyymmDate.getDate();        //获取当前日(1-31)
+      let changeday = day < 10 ? '0' + day : '' + day;
+      this.date = year+'-'+changemonth+'-'+changeday;
+      this.batchQuery.date = this.date;
+      //获取商品报表信息
+      this.getDayCustomerHttp(this.batchQuery);
+    }
+
+    //选择门店
+    selectStore() {
+      this.batchQuery.storeId = this.storeId;
+      this.getDayCustomerHttp(this.batchQuery)
+    }
 
     //获取客流信息列表
     getDayCustomerHttp(data: any) {
@@ -95,18 +122,17 @@ export class CustomerReportComponent implements OnInit {
                             }
                         });
                     }
-
-                    that.totalElements = res.data.pageInfo.countTotal;
-
+                  this.currentCount = res.data.currentCount ? res.data.currentCount + '' : 0 + '';
+                  this.memberPer = res.data.currentCount ? ((res.data.currentCount - res.data.currentFitCount) / res.data.currentCount * 100).toFixed(0) + '%' : 0 + '%';
+                  that.totalElements = res.data.pageInfo.countTotal;
                     let dateArr = [];
                     let valueArr = [];
                     res.data.lastMonthVos.forEach(function (item: any) {
                         dateArr.push(item.name);
                         valueArr.push(item.value)
                     });
-
-                    //that.getLeftChart(dateArr, valueArr);
-                    //that.getRightChart(res.data.currentCount-res.data.currentFitCount, res.data.currentFitCount);
+                    that.getLeftChart(dateArr, valueArr);
+                    that.getRightChart(res.data.currentCount-res.data.currentFitCount, res.data.currentFitCount);
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',

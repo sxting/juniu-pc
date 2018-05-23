@@ -1,28 +1,28 @@
 
 <page-header [title]="'商品报表'"></page-header>
 <nz-card [nzBordered]="false">
-    <form nz-form [nzLayout]="'inline'" (ngSubmit)="getData()" class="search__form">
-        <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
-            <nz-col nzMd="8" nzSm="24">
-                <nz-form-item>
-                    <nz-form-label nzFor="status">选择门店</nz-form-label>
-                    <nz-form-control>
-                        <nz-select [(ngModel)]="storeId" (ngModelChange)="selectStore()" name="storeList" id="storeList" [nzPlaceHolder]="'全部门店'" [nzShowSearch]="true">
-                            <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.storeName" [nzValue]="i.storeId"></nz-option>
-                        </nz-select>
-                    </nz-form-control>
-                </nz-form-item>
-            </nz-col>
-            <nz-col nzMd="8" nzSm="24">
-                <nz-form-item>
-                    <nz-form-label nzFor="updatedAt">选择日期</nz-form-label>
-                    <nz-form-control>
-                        <input nz-input [(ngModel)]="yyyymm" name="yyyymm" placeholder="请选择日期" id="yyyymm">
-                    </nz-form-control>
-                </nz-form-item>
-            </nz-col>
-        </nz-row>
-    </form>
+  <div nz-form [nzLayout]="'inline'" class="search__form">
+    <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
+      <nz-col nzMd="8" nzSm="24">
+        <nz-form-item>
+          <nz-form-label nzFor="status">选择门店</nz-form-label>
+          <nz-form-control>
+            <nz-select [(ngModel)]="storeId" (ngModelChange)="selectStore()" name="storeList" id="storeList" [nzPlaceHolder]="'全部门店'" [nzShowSearch]="true">
+              <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.storeName" [nzValue]="i.storeId"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </nz-col>
+      <nz-col nzMd="8" nzSm="24">
+        <nz-form-item>
+          <nz-form-label nzFor="updatedAt">选择日期</nz-form-label>
+          <nz-form-control>
+            <nz-date-picker (ngModelChange)="reportDateAlert($event)" [nzFormat]="'YYYY-MM-DD'" [(ngModel)]="yyyymmDate" [nzAllowClear]="false"></nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </nz-col>
+    </nz-row>
+  </div>
 </nz-card>
 <div nz-row [nzGutter]="24">
     <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="12">

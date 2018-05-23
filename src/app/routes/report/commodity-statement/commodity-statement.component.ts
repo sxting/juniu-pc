@@ -4,6 +4,7 @@ import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ReportService } from "../shared/report.service";
 import { LocalStorageService } from "../../../shared/service/localstorage-service";
 import { FunctionUtil } from "../../../shared/funtion/funtion-util";
+import { STORES_INFO } from '@shared/define/juniu-define';
 
 @Component({
   selector: 'app-commodity-statement',
@@ -15,12 +16,14 @@ export class CommodityStatementComponent implements OnInit {
     storeList: any[] = [];//门店列表
     storeId: string = '';//选中的门店ID
     loading = false;
-    merchantId: string = '1502087435083367097829';
+    merchantId: string = '';
 
     countList: any  = [];//服务项目数量占比
     moneyList: any  = [];//服务项目销售额占比
     moneyListTotal: any = 0;
     countListTotal: any = 0;
+    date: any;//time
+    yyyymmDate: Date;//选择的时间
 
     constructor(
         private http: _HttpClient,
@@ -32,52 +35,47 @@ export class CommodityStatementComponent implements OnInit {
 
     batchQuery = {
         merchantId: this.merchantId,
-        //date: FunctionUtil.changeDate(this.yyyymm),
-        date: '2018-04-16',
+        date: this.date,
         storeId: this.storeId,
     };
 
     ngOnInit() {
-        this.storeList = [
-            {
-                "storeId":"1510060829539192121613",
-                "storeName":"测试主点6(分店)",
-                "provinceId":"110000",
-                "cityId":"110100",
-                "alipayShopId":""
-            },
-            {
-                "storeId":"1514190715796746866603",
-                "storeName":"桔牛测试门店(育文街分店)",
-                "provinceId":"150000",
-                "cityId":"152200",
-                "alipayShopId":"2016110300077000000019717987"
-            },
-            {
-                "storeId":"1509591898347914992743",
-                "storeName":"桔牛测试门店(育文街分店3)",
-                "provinceId":"110000",
-                "cityId":"110100",
-                "alipayShopId":""
-            },
-            {
-                "storeId":"1510021539877154857146",
-                "storeName":"测试门店",
-                "provinceId":"150000",
-                "cityId":"152200",
-                "alipayShopId":"2016080900077000000017955745"
-            },
-            {
-                "storeId":"1502116450377676060502",
-                "storeName":"西大望路店",
-                "provinceId":"110000",
-                "cityId":"110100",
-                "alipayShopId":""
-            },
-        ];
+      //门店列表
+      if (this.localStorageService.getLocalstorage(STORES_INFO) && JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
+        let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
+          JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
+        let list = {
+          storeId: '',
+          storeName: '全部门店'
+        };
+        storeList.splice(0, 0, list);//给数组第一位插入值
+        this.storeList = storeList;
+        this.storeId = '';
+      }
+      let year = new Date().getFullYear();        //获取当前年份(2位)
+      let month = new Date().getMonth()+1;       //获取当前月份(0-11,0代表1月)
+      let changemonth = month < 10 ? '0' + month : '' + month;
+      let day = new Date().getDate();        //获取当前日(1-31)
 
-        //获取商品报表信息
-        this.getDayCustomerHttp(this.batchQuery)
+      this.yyyymmDate = new Date(year+'-'+changemonth+'-'+day);
+      this.date = year+'-'+changemonth+'-'+day;
+      this.batchQuery.date = this.date;
+      //获取商品报表信息
+      this.getDayCustomerHttp(this.batchQuery)
+    }
+
+    //选择日期
+    reportDateAlert(e: any) {
+      this.yyyymmDate = e;
+      let year = this.yyyymmDate.getFullYear();        //获取当前年份(2位)
+      let month = this.yyyymmDate.getMonth()+1;       //获取当前月份(0-11,0代表1月)
+      let changemonth = month < 10 ? '0' + month : '' + month;
+      let day = this.yyyymmDate.getDate();        //获取当前日(1-31)
+      let changeday = day < 10 ? '0' + day : '' + day;
+      this.date = year+'-'+changemonth+'-'+changeday;
+      this.batchQuery.date = this.date;
+      //获取商品报表信息
+      this.getDayCustomerHttp(this.batchQuery);
     }
 
     //获取商品报表信息

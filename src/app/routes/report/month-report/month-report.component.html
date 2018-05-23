@@ -1,12 +1,12 @@
 <page-header [title]="'月报表'"></page-header>
 <nz-card [nzBordered]="false" style="margin-bottom: 0!important;">
-    <form nz-form [nzLayout]="'inline'"  class="search__form">
+    <div nz-form [nzLayout]="'inline'"  class="search__form">
         <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
             <nz-col nzMd="8" nzSm="24">
                 <nz-form-item>
                     <nz-form-label nzFor="status">选择门店</nz-form-label>
                     <nz-form-control>
-                        <nz-select [(ngModel)]="storeId" (ngModelChange)="selectStore()" name="storeList" id="storeList" [nzPlaceHolder]="'全部门店'" [nzShowSearch]="true">
+                        <nz-select style="width: 200px;" [(ngModel)]="storeId" (ngModelChange)="selectStore()" name="storeList" id="storeList" [nzPlaceHolder]="'全部门店'" [nzShowSearch]="true">
                             <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.storeName" [nzValue]="i.storeId"></nz-option>
                         </nz-select>
                     </nz-form-control>
@@ -16,18 +16,19 @@
                 <nz-form-item>
                     <nz-form-label nzFor="reportDate">选择月份</nz-form-label>
                     <nz-form-control>
-                        <input nz-input [(ngModel)]="reportDate" name="reportDate" placeholder="请选择月份" id="reportDate">
+                      <nz-month-picker  nzPlaceholder="Select Month" (ngModelChange)="reportDateAlert($event)" [nzAllowClear]="false"
+                                       [nzFormat]="'YYYY-MM'" [(ngModel)]="reportDate"></nz-month-picker>
                     </nz-form-control>
                 </nz-form-item>
             </nz-col>
         </nz-row>
-    </form>
+    </div>
 </nz-card>
 <div nz-row [nzGutter]="24" class="pt-lg">
     <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
         <g2-card
             [title]="'当月营收（元）'"
-            [total]='RevenueMonth/100'
+            [total]='RevenueMonth'
             contentHeight="44px"
             [action]="action1"
             [footer]="footer1">
@@ -65,7 +66,7 @@
     <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
         <g2-card
             [title]="'员工提成'"
-            [total]="StaffingMoney/100"
+            [total]="StaffingMoney"
             contentHeight="44px"
             [action]="action3"
             [footer]="footer3">

@@ -1,7 +1,7 @@
 
 <page-header [title]="'营收报表'"></page-header>
 <nz-card [nzBordered]="false">
-    <form nz-form [nzLayout]="'inline'" class="search__form">
+    <div nz-form [nzLayout]="'inline'" class="search__form">
         <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
             <nz-col nzMd="8" nzSm="24">
                 <nz-form-item>
@@ -17,13 +17,12 @@
                 <nz-form-item>
                     <nz-form-label nzFor="updatedAt">选择日期</nz-form-label>
                     <nz-form-control>
-                      <nz-date-picker style="width:200px;" (ngModelChange)="reportDateAlert($event)" [ngModel]="yyyymm"
-                                     [nzDisabledDate]="_disabledStartDate" [nzFormat]="'YYYY-MM-DD'"></nz-date-picker>
+                      <nz-date-picker (ngModelChange)="reportDateAlert($event)" [nzFormat]="'YYYY-MM-DD'" [(ngModel)]="yyyymm"></nz-date-picker>
                     </nz-form-control>
                 </nz-form-item>
             </nz-col>
         </nz-row>
-    </form>
+    </div>
 </nz-card>
 <div nz-row [nzGutter]="24">
     <div nz-col nzXs="24" nzSm="24" nzLg="12">

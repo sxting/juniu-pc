@@ -1,13 +1,13 @@
 
 <page-header [title]="'顾客报表'"></page-header>
 <nz-card [nzBordered]="false">
-    <form nz-form [nzLayout]="'inline'" class="search__form">
+    <div nz-form [nzLayout]="'inline'" class="search__form">
         <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
             <nz-col nzMd="8" nzSm="24">
                 <nz-form-item>
                     <nz-form-label nzFor="status">选择门店</nz-form-label>
                     <nz-form-control>
-                        <nz-select [(ngModel)]="storeId" name="storeList" id="storeList" [nzPlaceHolder]="'全部门店'" [nzShowSearch]="true">
+                        <nz-select style="width: 200px;" [(ngModel)]="storeId" name="storeList" id="storeList" [nzPlaceHolder]="'全部门店'" [nzShowSearch]="true">
                             <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.storeName" [nzValue]="idx"></nz-option>
                         </nz-select>
                     </nz-form-control>
@@ -17,23 +17,22 @@
                 <nz-form-item>
                     <nz-form-label nzFor="yyyymm">选择日期</nz-form-label>
                     <nz-form-control>
-                        <input nz-input [(ngModel)]="yyyymm" name="yyyymm" placeholder="请选择日期" id="yyyymm">
+                      <nz-date-picker (ngModelChange)="reportDateAlert($event)" [nzFormat]="'YYYY-MM-DD'" [(ngModel)]="yyyymmDate" [nzAllowClear]="false"></nz-date-picker>
                     </nz-form-control>
                 </nz-form-item>
             </nz-col>
         </nz-row>
-    </form>
+    </div>
 </nz-card>
 
 <div nz-row [nzGutter]="24">
     <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
         <g2-card [title]="'当日客流量'"
-                 total="8,848"
+                 [total]="currentCount"
                  contentHeight="46px"
-                 [action]="action2"
-                 [footer]="footer2">
-            <ng-template #action2>
-                <nz-tooltip [nzTitle]="'当日客流量'">
+                 [action]="action1">
+            <ng-template #action1>
+                <nz-tooltip [nzTitle]="'当日到店顾客消费总数'">
                     <i nz-tooltip class="anticon anticon-info-circle-o"></i>
                 </nz-tooltip>
             </ng-template>
@@ -46,12 +45,11 @@
     </div>
     <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
         <g2-card [title]="'会员占比'"
-                 total="78%"
+                 [total]="memberPer"
                  contentHeight="46px"
-                 [action]="action2"
-                 [footer]="footer2">
+                 [action]="action2">
             <ng-template #action2>
-                <nz-tooltip [nzTitle]="'会员占比'">
+                <nz-tooltip [nzTitle]="'当日到店顾客中会员占比'">
                     <i nz-tooltip class="anticon anticon-info-circle-o"></i>
                 </nz-tooltip>
             </ng-template>

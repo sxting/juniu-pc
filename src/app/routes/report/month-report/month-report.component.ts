@@ -4,6 +4,7 @@ import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ReportService } from "../shared/report.service";
 import { LocalStorageService } from "../../../shared/service/localstorage-service";
 import {FunctionUtil} from "../../../shared/funtion/funtion-util";
+import { STORES_INFO } from '@shared/define/juniu-define';
 declare var echarts: any;
 
 @Component({
@@ -14,7 +15,6 @@ declare var echarts: any;
 export class MonthReportComponent implements OnInit {
 
     loading = false;
-
     reportDate: Date;//时间Date形式
     reportDateChange: string;//时间字符串形式的
     // 门店相关的参数
@@ -22,16 +22,16 @@ export class MonthReportComponent implements OnInit {
     storeId: string = '';//门店ID
     merchantId: string = '';//商家ID
 
-    RevenueMonth: number;//当月营收
-    avgRevenueMonth: number;//平均当月营收
+    RevenueMonth: any;//当月营收
+    avgRevenueMonth: any;//平均当月营收
     RevenueLastMonth: string;//当月营收同比上月
     RevenueLastYear: string;//当月营收同比去年
-    StaffingMoney: number;//员工提成
-    avgStaffingMoney: number;//平均员工提成
+    StaffingMoney: any;//员工提成
+    avgStaffingMoney: any;//平均员工提成
     StaffingMoneyLastMonth: string;//员工提成同比上月
     StaffingMoneyLastYear: string;//员工提成同比去年
-    PassengerFlow: number;//客流量
-    avgPassengerFlow: number;//平均客流量
+    PassengerFlow: any;//客流量
+    avgPassengerFlow: any;//平均客流量
     PassengerFlowLastMonth: string;//客流量同比上月
     PassengerFlowLastYear: string;//客流量同比去年
     xData: any[] = [];//echarts图表X轴
@@ -53,24 +53,39 @@ export class MonthReportComponent implements OnInit {
     batchQuery = {
         storeId: this.storeId,
         merchantId: this.merchantId,
-        //yyyymm: this.reportDateChange
-        yyyymm: '2018-04'
+        yyyymm: this.reportDateChange
     };
 
     ngOnInit() {
 
-        // 门店
-        this.storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) ?
-            JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) : [];
+        let userInfo;
+        if (this.localStorageService.getLocalstorage('User-Info')) {
+          userInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info'));
+        }
+        if (userInfo) {
+          this.merchantId = userInfo.merchantId;
+        }
+        //门店列表
+        if (this.localStorageService.getLocalstorage(STORES_INFO) && JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
+          let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
+            JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
+          let list = {
+            storeId: '',
+            storeName: '全部门店'
+          };
+          storeList.splice(0, 0, list);//给数组第一位插入值
+          this.storeList = storeList;
+          this.storeId = '';
+        }
 
         let year = new Date().getFullYear();        //获取当前年份(2位)
         let month = new Date().getMonth()+1;       //获取当前月份(0-11,0代表1月)
         let changemonth = month < 10 ? '0' + month : '' + month;
-
         this.reportDateChange = year+'-'+changemonth;
 
         this.reportDate = new Date(this.reportDateChange);
         this.batchQuery.yyyymm = this.reportDateChange;
+        this.batchQuery.storeId = this.storeId;
         //获取页面信息
         this.getMonthreportInfor(this.batchQuery);
     }
@@ -157,7 +172,7 @@ export class MonthReportComponent implements OnInit {
             (res: any) => {
                 console.dir(res);
                 //客流量
-                self.PassengerFlow = res.data.currentMonthCount;
+                self.PassengerFlow = res.data.currentMonthCount? parseFloat(res.data.currentMonthCount) + '' : 0 + '';
                 self.avgPassengerFlow = res.data.avgCount;
                 let PassengerFlowThisMonth = Number(res.data.currentMonthCount);
                 let PassengerFlowLasrMonth = Number(res.data.lastMonthCount);
@@ -166,7 +181,7 @@ export class MonthReportComponent implements OnInit {
                 self.PassengerFlowLastYear = PassengerFlowLasrYear == 0? '－':((((PassengerFlowThisMonth)-(PassengerFlowLasrYear))/PassengerFlowLasrYear)*100).toFixed(2)+'%';
 
                 //当月营收
-                self.RevenueMonth = res.data.currentMonthMoney;
+                self.RevenueMonth = res.data.currentMonthMoney? parseFloat(res.data.currentMonthMoney)/100 + '' : 0 + '';
                 self.avgRevenueMonth = res.data.avgMoney;
                 let RevenueThisMonth = Number(res.data.currentMonthMoney);
                 let RevenueLasrMonth = Number(res.data.lastMonthMoney);
@@ -174,9 +189,8 @@ export class MonthReportComponent implements OnInit {
                 self.RevenueLastMonth = RevenueLasrMonth == 0? '－':((((RevenueThisMonth)-(RevenueLasrMonth))/RevenueLasrMonth)*100).toFixed(2)+'%';
                 self.RevenueLastYear = RevenueLasrYear == 0? '－':((((RevenueThisMonth)-(RevenueLasrYear))/RevenueLasrYear)*100).toFixed(2)+'%';
 
-
                 //员工提成
-                self.StaffingMoney = res.data.currentMonthDeduction;
+                self.StaffingMoney = res.data.currentMonthDeduction? parseFloat(res.data.currentMonthDeduction)/100 + '' : 0 + '';
                 self.avgStaffingMoney = res.data.avgDeduction;
                 let StaffingMoneyThisMonth = Number(res.data.currentMonthDeduction);
                 let StaffingMoneyLasrMonth = Number(res.data.avgDeduction);
@@ -205,6 +219,20 @@ export class MonthReportComponent implements OnInit {
     selectStore() {
         this.batchQuery.storeId = this.storeId;
         this.getMonthreportInfor(this.batchQuery);
+    }
+
+    //选择日期
+    reportDateAlert(e: any) {
+      this.reportDate = e;
+      let year = this.reportDate.getFullYear();        //获取当前年份(2位)
+      let month = this.reportDate.getMonth()+1;       //获取当前月份(0-11,0代表1月)
+      let changemonth = month < 10 ? '0' + month : '' + month;
+      let day = this.reportDate.getDate();        //获取当前日(1-31)
+      let changeday = day < 10 ? '0' + day : '' + day;
+      this.reportDateChange = year+'-'+changemonth+'-'+changeday;
+      this.batchQuery.yyyymm = this.reportDateChange;
+      //获取商品报表信息
+      this.getMonthreportInfor(this.batchQuery);
     }
 
 }

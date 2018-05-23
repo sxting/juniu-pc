@@ -17,10 +17,9 @@ export class RevenueReportComponent implements OnInit {
     storeList: any[] = [];//门店列表
     storeId: string = '';//选中的门店ID
     loading = false;
-    merchantId: string = '1502087435083367097829';
+    merchantId: string = '';
     yyyymm: any;//
     date: string = '';//time
-    _disabledStartDate: any;
     pageNo: any = 1;//页码
     pageSize: any = '10';//一页展示多少数据
     totalElements: any = 0;//商品总数
@@ -74,8 +73,7 @@ export class RevenueReportComponent implements OnInit {
         let day = new Date().getDate();        //获取当前日(1-31)
         this.yyyymm = new Date(year+'-'+changemonth+'-'+day);
         this.date = year+'-'+changemonth+'-'+day;
-      console.log(this.yyyymm);
-      //获取到营收列表
+        //获取到营收列表
         this.batchQuery.storeId = this.storeId;
         this.batchQuery.date = this.date;
         this.getCurrentIncomeHttp(this.batchQuery);
@@ -92,7 +90,7 @@ export class RevenueReportComponent implements OnInit {
     this.date = year+'-'+changemonth+'-'+changeday;
 
     this.batchQuery.date = this.date;
-
+    this.batchQuery.pageNo = 1;
     //请求员工提成信息
     this.getCurrentIncomeHttp(this.batchQuery);
   }
