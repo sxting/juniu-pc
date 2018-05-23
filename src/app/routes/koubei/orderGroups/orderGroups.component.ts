@@ -43,12 +43,8 @@ export class OrderGroupsComponent implements OnInit {
     koubeiProductVouchersListInfor: any = [];
     startTime: any;
     endTime: any;
-    _startTime: any;
-    _endTime: any;
-    startTime1: any;
-    endTime1: any;
-    _startTime1: any;
-    _endTime1: any;
+    startTime1 = '';
+    endTime1 = '';
     shopId: any;
     voucherDetailObj: any = {};
     ifShowdetailInfor2: boolean = false;
@@ -70,8 +66,16 @@ export class OrderGroupsComponent implements OnInit {
             JSON.parse(this.localStorageService.getLocalstorage(ALIPAY_SHOPS)) : [];
     }
 
-
-
+    onChange(result: Date): void {
+        this.startTime = this.formatDateTime(result[0], 'start');
+        this.endTime = this.formatDateTime(result[1], 'end');
+        this.orderListHttp();
+    }
+    onChange2(result: Date): void {
+        this.startTime1 = this.formatDateTime(result[0], 'start');
+        this.endTime1 = this.formatDateTime(result[1], 'end');
+        this.voucherListHttp();
+    }
     //关闭查看订单详情信息弹框
     onCloseCheckInforBtn() {
         this.ifShowdetailInfor = false;
@@ -84,8 +88,6 @@ export class OrderGroupsComponent implements OnInit {
         this.startTime1 = '';
         this.endTime1 = '';
         this.shopId = '';
-        this._startTime1 = '';
-        this._endTime1 = '';
         this.switchExcelBtns = false;
     }
     paginate(e: any) {
@@ -109,41 +111,41 @@ export class OrderGroupsComponent implements OnInit {
         this.orderListHttp();
     }
     // 导出Excel
-    exportExcel() {
-        if (!this._startTime1) {
-            this.errorAlter('请选择开始时间');
-            return;
-        }
-        if (!this.endTime1) {
-            this.errorAlter('请选择结束时间');
-            return;
-        }
-        if (!this.shopId) {
-            this.errorAlter('请选择门店');
-            return;
-        }
-        if (this._startTime1.getTime() >= this.endTime1.getTime()) {
-            this.errorAlter('开始时间需小于结束时间');
-            return;
-        }
-        if (Number(this.countTotal1) >= 1000) {
-            this.errorAlter('导出的数据量不能超过1000条，请重新选择时间段!!');
-            return;
-        }
-        let startDate = this.formatDateTime(this._startTime1, 'start');
-        let endDate = this.formatDateTime(this.endTime1, 'end');
-        let shopId = this.shopId;
-        let apiUrl = Config.API + 'order/koubei/voucherDownload.excel';
-        let token = this.localStorageService.getLocalstorage(APP_TOKEN);
-        window.location.href = apiUrl + "?token=" + token + "&startDate=" + startDate + "&endDate=" + endDate + "&shopId=" + shopId;
-    }
+    // exportExcel() {
+    //     if (!this.startTime) {
+    //         this.errorAlter('请选择开始时间');
+    //         return;
+    //     }
+    //     if (!this.endTime1) {
+    //         this.errorAlter('请选择结束时间');
+    //         return;
+    //     }
+    //     if (!this.shopId) {
+    //         this.errorAlter('请选择门店');
+    //         return;
+    //     }
+    //     if (this.startTime.getTime() >= this.endTime.getTime()) {
+    //         this.errorAlter('开始时间需小于结束时间');
+    //         return;
+    //     }
+    //     if (Number(this.countTotal1) >= 1000) {
+    //         this.errorAlter('导出的数据量不能超过1000条，请重新选择时间段!!');
+    //         return;
+    //     }
+    //     let startDate = this.formatDateTime(this.startTime1, 'start');
+    //     let endDate = this.formatDateTime(this.endTime1, 'end');
+    //     let shopId = this.shopId;
+    //     let apiUrl = Config.API + 'order/koubei/voucherDownload.excel';
+    //     let token = this.localStorageService.getLocalstorage(APP_TOKEN);
+    //     window.location.href = apiUrl + "?token=" + token + "&startDate=" + startDate + "&endDate=" + endDate + "&shopId=" + shopId;
+    // }
     searchName(type: any) {
         this.orderListHttp();
     }
     onCloseCheckptxxBtn() {
         this.ptxx = false;
     }
-    ptxxClick(tpl: TemplateRef<{}>,ind: any, peopleNumber: any, groupNo: any, status: any) {
+    ptxxClick(tpl: TemplateRef<{}>, ind: any, peopleNumber: any, groupNo: any, status: any) {
         this.tkstatus = status;
         // this.ptxx = true;
         this.modalSrv.create({
@@ -178,44 +180,39 @@ export class OrderGroupsComponent implements OnInit {
         let token = sessionStorage.getItem(APP_TOKEN);
         let that = this;
         if (status !== 'REFUND') {
-            swal({
-                title: '是否退款该订单?',
-                text: '你确定要这样做么!',
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: '确定!',
-                cancelButtonText: '取消!'
-            }).then(function () {
-                let data = {
-                    orderNo: groupNo,
-                    token: token
+            this.modalSrv.confirm({
+                nzTitle: '是否退款该订单?',
+                nzContent: '你确定要这样做么!',
+                nzOnOk: () => {
+                    let data = {
+                        orderNo: groupNo,
+                        token: token
+                    }
+    
+                    that.koubeiService.pintuanRefund(data).subscribe(
+                        (res: any) => {
+                            if (res.success) {
+                                this.modalSrv.success({
+                                    nzTitle: '退款成功',
+                                    nzContent: '这个订单已退款.'
+                                });
+                                that.orderListHttp();
+                                that.ptxx = false;
+                            } else {
+                                this.modalSrv.error({
+                                    nzTitle: '温馨提示',
+                                    nzContent: res.errorInfo
+                                });
+                            }
+                        },
+                        error => this.errorAlter(error)
+                    )
                 }
-
-                that.koubeiService.pintuanRefund(data).subscribe(
-                    (res: any) => {
-                        if (res.success) {
-                            this.modalSrv.success({
-                                nzTitle: '退款成功',
-                                nzContent: '这个订单已退款.'
-                            });
-                            that.orderListHttp();
-                            that.ptxx = false;
-                        } else {
-                            this.modalSrv.error({
-                                nzTitle: '温馨提示',
-                                nzContent: res.errorInfo
-                            });
-                        }
-                    },
-                    error => this.errorAlter(error)
-                )
-            });
+              });
         }
     }
     //订单详情
-    chakanXQ(tpl: TemplateRef<{}>,orderNo: any) {
+    chakanXQ(tpl: TemplateRef<{}>, orderNo: any) {
         // this.ifShowdetailInfor = true;
         this.modalSrv.create({
             nzTitle: '查看详情',
@@ -313,64 +310,6 @@ export class OrderGroupsComponent implements OnInit {
         let day = date.getDate();
         return year + '-' + (month.toString().length > 1 ? month : ('0' + month)) + '-' + (day.toString().length > 1 ? day : ('0' + day)) + (type === 'start' ? ' 00:00:00' : ' 23:59:59');
     }
-    _startValueChange(e: any) {
-        this._startTime = e;
-        this.startTime = this.formatDateTime(e, 'start');
-        if (this.endTime && this.startTime) {
-            this.orderListHttp();
-        }
-    }
-    _endValueChange(e: any) {
-        this._endTime = e;
-        this.endTime = this.formatDateTime(e, 'end');
-        if (this.endTime && this.startTime) {
-            this.orderListHttp();
-        }
-    }
-    _disabledStartDate1 = (endValue) => {
-        if (!endValue || !this._endTime) {
-            return false;
-        } else {
-            return endValue.getTime() >= this._endTime.getTime()
-        }
-    };
-
-    _disabledEndDate2 = (endValue) => {
-        if (!endValue || !this._startTime) {
-            return false;
-        } else {
-            return endValue.getTime() <= this._startTime.getTime()
-        }
-    };
-    _startValueChange1(e: any) {
-        this._startTime1 = e;
-        this.startTime1 = this.formatDateTime(e, 'start');
-        if (this.startTime1 && this.endTime1) {
-            this.voucherListHttp();
-        }
-    }
-    _endValueChange1(e: any) {
-        this._endTime1 = e;
-        this.endTime1 = this.formatDateTime(e, 'end');
-        if (this.startTime1 && this.endTime1) {
-            this.voucherListHttp();
-        }
-    }
-    _disabledStartDate = (endValue) => {
-        if (!endValue || !this._endTime1) {
-            return false;
-        } else {
-            return endValue.getTime() >= this._endTime1.getTime()
-        }
-    };
-
-    _disabledEndDate = (endValue) => {
-        if (!endValue || !this._startTime1) {
-            return false;
-        } else {
-            return endValue.getTime() <= this._startTime1.getTime()
-        }
-    };
 
     paginateVouchers(e: any) {
 
@@ -408,7 +347,7 @@ export class OrderGroupsComponent implements OnInit {
     }
 
 
-    checkingProductDetailInfor(tpl: TemplateRef<{}>,id: any) {
+    checkingProductDetailInfor(tpl: TemplateRef<{}>, id: any) {
         this.modalSrv.create({
             // nzTitle: '拼团信息',
             nzContent: tpl,

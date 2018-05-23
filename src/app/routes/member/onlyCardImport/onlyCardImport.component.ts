@@ -12,7 +12,7 @@ import { SimpleTableColumn } from '@delon/abc';
 })
 export class OnlyCardImportComponent {
 
-
+    merchantId: any = '1517308425509187014931';
     storeId: any;
     balance: any;
     cardConfigId: any;
@@ -23,7 +23,7 @@ export class OnlyCardImportComponent {
     phone: any;
     name: any;
     cardNum: any;
-    data2= [];
+    data2 = [];
     data = {
         storeId: this.storeId,
         balance: parseInt(this.balance + ''),
@@ -42,7 +42,7 @@ export class OnlyCardImportComponent {
     rulesList: any = [];
     storeName: any;
     status: any = 0;
-
+    pageIndex: any = 1;
     columns: SimpleTableColumn[] = [
         { title: '活动名称', index: 'no' },
         { title: '带动营业额(元)', index: 'description' },
@@ -62,6 +62,8 @@ export class OnlyCardImportComponent {
         private modalSrv: NzModalService,
         private memberService: MemberService,
         private http: _HttpClient) {
+        this.storeId = this.storeList ? this.storeList[0].storeId : '';
+        this.improtCardRecord();
     }
     alertAddCard(tpl: TemplateRef<{}>, type: string) {
         this.cardType = type;
@@ -218,7 +220,7 @@ export class OnlyCardImportComponent {
     selectRules(event: any) {
         this.cardConfigRuleId = event;
     }
-    console2(e:any){
+    console2(e: any) {
         this.status = e.index;
         console.log(this.status)
     }
@@ -253,6 +255,30 @@ export class OnlyCardImportComponent {
                         }
                     });
                     console.log(self.cardList);
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => FunctionUtil.errorAlter(error)
+        )
+    }
+
+    improtCardRecord() {
+        let self = this;
+        let data = {
+            storeId: this.storeId,
+            merchantId: this.merchantId,
+            pageIndex: this.pageIndex,
+            pageSize: 10
+        }
+        self.cardList = [];
+        this.memberService.improtCardRecord(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    console.log(res.data);
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',

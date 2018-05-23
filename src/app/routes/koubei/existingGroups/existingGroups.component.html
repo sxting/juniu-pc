@@ -1,5 +1,5 @@
 <page-header></page-header>
-<div >
+<div>
     <div class="existing-main">
         <div class="member-top-middle">
             <span>拼团类型</span>
@@ -11,14 +11,17 @@
                 </nz-option>
             </nz-select>
             <span>活动执行日期</span>
+            <!-- <nz-date-picker style="width: 138px;" [(ngModel)]="_startTime" (ngModelChange)="_startTime=$event;_startValueChange($event)"
+                nzShowTime></nz-date-picker> -->
+                <nz-range-picker [(ngModel)]="dateRange" (ngModelChange)="onChange($event)" nzShowTime></nz-range-picker>
             <!-- <nz-datepicker style="width: 138px;" (ngModelChange)="_startTime=$event;_startValueChange($event)"
                 [ngModel]="_startTime" [nzDisabledDate]="_disabledStartDate1" [nzFormat]="'YYYY-MM-DD'" [nzPlaceHolder]="'开始时间'"></nz-datepicker>
             <nz-datepicker style="width: 138px;" (ngModelChange)="_endTime=$event;_endValueChange($event)"
                 [ngModel]="_endTime" [nzDisabledDate]="_disabledEndDate2" [nzFormat]="'YYYY-MM-DD'" [nzPlaceHolder]="'截止时间'"></nz-datepicker> -->
             <!-- <select (change)="selectStoreInfo($event.target.value)">
-                  <option *ngIf="storeShow" [value]="ALL">请选择一个门店</option>
-                  <option *ngFor="let item of StoresInfo" [value]="item.storeId">{{item.storeName}}</option>
-                </select> -->
+                <option *ngIf="storeShow" [value]="ALL">请选择一个门店</option>
+                <option *ngFor="let item of StoresInfo" [value]="item.storeId">{{item.storeName}}</option>
+            </select> -->
         </div>
         <ul class="btns_switch clearfix">
             <li [class.btns_active]="statusFlag == 0" (click)="onStatusClick(0)">进行中</li>

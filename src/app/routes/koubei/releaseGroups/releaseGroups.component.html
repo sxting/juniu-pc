@@ -444,8 +444,9 @@
         </nz-card>
         <nz-card nzTitle="使用门店" [nzBordered]="false" [nzBodyStyle]="{'padding.px': 12}">
             <nz-form-item>
-                <nz-form-label nzXs="24" nzFor="originalPrice" nzSm="7">活动日期</nz-form-label>
+                <nz-form-label nzXs="24" nzFor="time" nzSm="7">活动日期</nz-form-label>
                 <nz-form-control nzXs="24" nzSm="12" nzMd="8">
+                    <nz-range-picker formControlName="time" nzShowTime></nz-range-picker>
                     <!-- <nz-datepicker style="width: 138px;" [nzDisabled]="!canMofidy" (ngModelChange)="_startTime=$event;_startValueChange($event)"
                                 [ngModel]="_startTime" [nzDisabledDate]="_disabledStartDate1" [nzFormat]="'YYYY-MM-DD'" [nzPlaceHolder]="'开始时间'"></nz-datepicker>
                             <nz-datepicker style="width: 138px;" [nzDisabled]="!canMofidy" (ngModelChange)="_endTime=$event;_endValueChange($event)"
@@ -465,7 +466,7 @@
             <nz-form-item>
                 <nz-form-label nzXs="24" nzSm="7">选择口碑门店</nz-form-label>
                 <nz-form-control nzXs="24" nzSm="12" nzMd="8">
-                    <span>{{storesChangeNum}} 家门店</span>
+                    <span>{{storesChangeNum || 0}} 家门店</span>
                     <span class="space"></span>
                     <span class="select-store-btn" (click)="onSelectStoreBtnClick(storeAlert)">{{isEdit ? '新增门店' : '选择门店'}}</span>
                 </nz-form-control>

@@ -1,11 +1,69 @@
 <div class="ad-page-header content__title">
-    <nz-breadcrumb class="ant-breadcrumb ng-star-inserted">
-        <nz-breadcrumb-item class="ng-star-inserted">管理</nz-breadcrumb-item>
-        <nz-breadcrumb-item class="ng-star-inserted">门店</nz-breadcrumb-item>
-        <nz-breadcrumb-item class="ng-star-inserted">微信小程序线上店铺</nz-breadcrumb-item>
-    </nz-breadcrumb>
+  <nz-breadcrumb class="ant-breadcrumb ng-star-inserted">
+    <nz-breadcrumb-item class="ng-star-inserted">管理</nz-breadcrumb-item>
+    <nz-breadcrumb-item class="ng-star-inserted">门店</nz-breadcrumb-item>
+    <nz-breadcrumb-item class="ng-star-inserted">微信小程序线上店铺</nz-breadcrumb-item>
+  </nz-breadcrumb>
 </div>
 <nz-card [nzBordered]="false">
+  <form nz-form [formGroup]="form" (ngSubmit)="submit()">
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7">商家名称</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <!-- <input nz-input formControlName="name" value="'审美'" id="name" placeholder="请输入商家名称"> -->
+        <span>审美</span>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7" nzFor="storeName">门店名称</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <input nz-input formControlName="storeName" id="storeName" placeholder="请输入门店名称">
+        <!-- <nz-form-explain *ngIf="form.get('title').dirty && form.get('title').errors">请输入门店名称</nz-form-explain> -->
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7" nzFor="address">门店地址</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <nz-cascader [nzOptions]="nzOptions" formControlName="address" id="address" (ngModelChange)="onChanges($event)">
+        </nz-cascader>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7" nzFor="Alladdress">详细地址</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <input nz-input formControlName="Alladdress" id="Alladdress" placeholder="请输入详细地址">
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7">门店电话</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <input nz-input placeholder="请输入详细地址">
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7">营业时间</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <input nz-input placeholder="请输入详细地址">
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7">门店图片</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <!--<juniu-upload-img [image]="pictureDetails" [uploadNum]="5" [syncAlipay]="syncAlipay" [bizType]="'shop'" [isClear]="isClear"-->
+          <!--(img)="getPictureDetails($event)"></juniu-upload-img>-->
+        <div style="font-size:14px;line-height:16px;color:#b7b7b7;">
+          门店图片展示在小程序首页的Banner位，您可以将门店内活动海报、门头照、内景照等宣传照片在此上传。 推荐尺寸4:3，大小请勿超过1M，以免影响加载速度。最多上传5张门店图片。
+        </div>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7">展示商品</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <nz-switch nzCheckedChildren="开" nzUnCheckedChildren="关"></nz-switch>
+        <span>
+          已展示{{productIdsCount}}个商品
+          <span class="setClick" (click)="shezhi(modalContent1,'对应商品')">点击设置></span>
+        </span>
     <form nz-form [formGroup]="form" (ngSubmit)="submit()">
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7">商家名称</nz-form-label>
@@ -64,175 +122,174 @@
                     已展示{{productIdsCount}}个商品
                     <span class="setClick" (click)="shezhi(modalContent1,'对应商品')">点击设置></span>
                 </span>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7">展示技师</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <nz-switch nzCheckedChildren="开" nzUnCheckedChildren="关"></nz-switch>
+        <span>
+          已展示{{staffIdsCount}}个技师
+          <span class="setClick" (click)="shezhi(modalContent2,'对应技师')">点击设置></span>
+        </span>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7">展示卡级</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <nz-switch nzCheckedChildren="开" nzUnCheckedChildren="关"></nz-switch>
+        <span>
+          已展示{{cardConfigRuleCount}}个卡级
+          <span class="setClick" (click)="shezhi(modalContent3,'对应卡')">点击设置></span>
+        </span>
+      </nz-form-control>
+    </nz-form-item>
 
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7">展示技师</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <nz-switch nzCheckedChildren="开" nzUnCheckedChildren="关"></nz-switch>
-                <span>
-                    已展示{{staffIdsCount}}个技师
-                    <span class="setClick" (click)="shezhi(modalContent2,'对应技师')">点击设置></span>
-                </span>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7">展示卡级</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <nz-switch nzCheckedChildren="开" nzUnCheckedChildren="关"></nz-switch>
-                <span>
-                    已展示{{cardConfigRuleCount}}个卡级
-                    <span class="setClick" (click)="shezhi(modalContent3,'对应卡')">点击设置></span>
-                </span>
-            </nz-form-control>
-        </nz-form-item>
-
-        <nz-form-item>
-            <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
-                <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">提交</button>
-            </nz-form-control>
-        </nz-form-item>
-    </form>
+    <nz-form-item>
+      <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
+        <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">提交</button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
 </nz-card>
 
 <ng-template #modalContent1>
-    <div class="alert-order-msg1 stores">
-        <ul class="right-block fl store_lists">
-            <li class="list">
-                <p class="head_store">全部商品</p>
-                <div class="show_all_stores">
-                    <div class="city-list" *ngFor="let products of allproducks; let cityIndex=index">
-                        <div class="select_all_btn">
-                            <input class="select_all_input" type="checkbox" [checked]="products.change" (click)="onSelectAllInputClick(cityIndex, products.change,allproducks,'productList')"
-                            />
-                            <span class="city">{{products.categoryName}}</span>
-                        </div>
-                        <ul class="shop_names">
-                            <li *ngFor="let product of products.productList; let storeIndex=index">
-                                <input type="checkbox" [checked]="product.change" (click)="onSelectInputClick(cityIndex, storeIndex,allproducks,'productList')"
-                                />
-                                <span class="city">{{product.productName}}</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </li>
-            <li class="list">
-                <p class="head_store">已选商品</p>
-                <div class="selected_stores">
-                    <div class="city-list bbn" *ngFor="let products of allproducks">
-                        <div *ngIf="products.checked">
-                            <div class="select_all_btn">
-                                <span class="city">{{products.categoryName}}</span>
-                            </div>
-                            <ul class="shop_names">
-                                <li *ngFor="let product of products.productList">
-                                    <span *ngIf="product.change">{{product.productName}}</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </li>
-        </ul>
-    </div>
+  <div class="alert-order-msg1 stores">
+    <ul class="right-block fl store_lists">
+      <li class="list">
+        <p class="head_store">全部商品</p>
+        <div class="show_all_stores">
+          <div class="city-list" *ngFor="let products of allproducks; let cityIndex=index">
+            <div class="select_all_btn">
+              <input class="select_all_input" type="checkbox" [checked]="products.change" (click)="onSelectAllInputClick(cityIndex, products.change,allproducks,'productList')"
+              />
+              <span class="city">{{products.categoryName}}</span>
+            </div>
+            <ul class="shop_names">
+              <li *ngFor="let product of products.productList; let storeIndex=index">
+                <input type="checkbox" [checked]="product.change" (click)="onSelectInputClick(cityIndex, storeIndex,allproducks,'productList')"
+                />
+                <span class="city">{{product.productName}}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </li>
+      <li class="list">
+        <p class="head_store">已选商品</p>
+        <div class="selected_stores">
+          <div class="city-list bbn" *ngFor="let products of allproducks">
+            <div *ngIf="products.checked">
+              <div class="select_all_btn">
+                <span class="city">{{products.categoryName}}</span>
+              </div>
+              <ul class="shop_names">
+                <li *ngFor="let product of products.productList">
+                  <span *ngIf="product.change">{{product.productName}}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
 </ng-template>
 <ng-template #modalContent2>
-    <div class="alert-order-msg1 stores">
-        <!--关闭按钮-->
-        <ul class="right-block fl store_lists">
-            <li class="list">
-                <p class="head_store">全部技师</p>
-                <div class="show_all_stores">
-                    <div class="city-list" *ngFor="let city of objArr; let cityIndex=index">
-                        <!--城市-->
-                        <div class="select_all_btn">
-                            <input class="select_all_input" type="checkbox" [checked]="city.change" (click)="onSelectAllInputClick(cityIndex, city.change,objArr,'staffs')"
-                            />
-                            <span class="city">{{city.roleName}}</span>
-                        </div>
-                        <!--门店-->
-                        <ul class="shop_names">
-                            <li *ngFor="let store of city.staffs; let storeIndex=index">
-                                <input type="checkbox" [checked]="store.change" (click)="onSelectInputClick(cityIndex, storeIndex,objArr,'staffs')" />
-                                <span>{{store.staffName}}</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </li>
-            <li class="list">
-                <p class="head_store">已选技师</p>
-                <div class="selected_stores">
-                    <div class="city-list bbn" *ngFor="let city of objArr">
-                        <div *ngIf="city.checked == true">
-                            <!--城市-->
-                            <div class="select_all_btn">
-                                <span class="city">{{city.roleName}}</span>
-                            </div>
-                            <!--门店-->
-                            <ul class="shop_names">
-                                <li *ngFor="let store of city.staffs">
-                                    <span *ngIf="store.change == true">{{store.staffName}}</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </li>
-        </ul>
-    </div>
+  <div class="alert-order-msg1 stores">
+    <!--关闭按钮-->
+    <ul class="right-block fl store_lists">
+      <li class="list">
+        <p class="head_store">全部技师</p>
+        <div class="show_all_stores">
+          <div class="city-list" *ngFor="let city of objArr; let cityIndex=index">
+            <!--城市-->
+            <div class="select_all_btn">
+              <input class="select_all_input" type="checkbox" [checked]="city.change" (click)="onSelectAllInputClick(cityIndex, city.change,objArr,'staffs')"
+              />
+              <span class="city">{{city.roleName}}</span>
+            </div>
+            <!--门店-->
+            <ul class="shop_names">
+              <li *ngFor="let store of city.staffs; let storeIndex=index">
+                <input type="checkbox" [checked]="store.change" (click)="onSelectInputClick(cityIndex, storeIndex,objArr,'staffs')" />
+                <span>{{store.staffName}}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </li>
+      <li class="list">
+        <p class="head_store">已选技师</p>
+        <div class="selected_stores">
+          <div class="city-list bbn" *ngFor="let city of objArr">
+            <div *ngIf="city.checked == true">
+              <!--城市-->
+              <div class="select_all_btn">
+                <span class="city">{{city.roleName}}</span>
+              </div>
+              <!--门店-->
+              <ul class="shop_names">
+                <li *ngFor="let store of city.staffs">
+                  <span *ngIf="store.change == true">{{store.staffName}}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
 </ng-template>
 <ng-template #modalContent3>
-    <div class="alert-order-msg1 stores">
-        <!--关闭按钮-->
-        <ul class="right-block fl store_lists">
-            <li class="list">
-                <p class="head_store">全部卡</p>
-                <div class="show_all_stores">
-                    <div class="city-list" *ngFor="let cards of allcards; let cityIndex=index">
-                        <!--城市-->
-                        <div class="select_all_btn">
-                            <input class="select_all_input" type="checkbox" [checked]="cards.change" (click)="onSelectAllInputClick(cityIndex, cards.change,allcards,'rules')"
-                            />
-                            <span class="city">{{cards.cardConfigName}}</span>
-                        </div>
-                        <!--门店-->
-                        <ul class="shop_names">
-                            <li *ngFor="let card of cards.rules; let storeIndex=index">
-                                <input type="checkbox" [checked]="card.change" (click)="onSelectInputClick(cityIndex, storeIndex,allcards,'rules')" />
-                                <span *ngIf="cards.type === 'STORED'">储值卡金额{{card.balance/100}}元,售价{{card.price/100}}元,有效期{{card.validate}}天</span>
-                                <span *ngIf="cards.type === 'METERING'">使用次数{{card.balance}}次,售价{{card.price/100}}元,有效期{{card.validate}}天</span>
-                                <span *ngIf="cards.type === 'REBATE'">折扣卡卡金额{{card.balance/100}}元,折扣{{card.rebate}}折</span>
-                                <span *ngIf="cards.type === 'TIMES'">售价{{card.price/100}}元,有效期{{card.validate}}天</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </li>
-            <li class="list">
-                <p class="head_store">已选卡</p>
-                <div class="selected_stores">
-                    <div class="city-list bbn" *ngFor="let cards of allcards">
-                        <div *ngIf="cards.checked == true">
-                            <!--城市-->
-                            <div class="select_all_btn">
-                                <span class="city">{{cards.cardConfigName}}</span>
-                            </div>
-                            <!--门店-->
-                            <ul class="shop_names">
-                                <li *ngFor="let card of cards.rules">
-                                    <span *ngIf="card.change == true&&cards.type === 'STORED'">储值卡金额{{card.balance/100}}元,售价{{card.price/100}}元,有效期{{card.validate}}天</span>
-                                    <span *ngIf="card.change == true&&cards.type === 'METERING'">使用次数{{card.balance}}次,售价{{card.price/100}}元,有效期{{card.validate}}天</span>
-                                    <span *ngIf="card.change == true&&cards.type === 'REBATE'">折扣卡卡金额{{card.balance/100}}元,折扣{{card.rebate}}折</span>
-                                    <span *ngIf="card.change == true&&cards.type === 'TIMES'">售价{{card.price/100}}元,有效期{{card.validate}}天</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </li>
-        </ul>
-    </div>
+  <div class="alert-order-msg1 stores">
+    <!--关闭按钮-->
+    <ul class="right-block fl store_lists">
+      <li class="list">
+        <p class="head_store">全部卡</p>
+        <div class="show_all_stores">
+          <div class="city-list" *ngFor="let cards of allcards; let cityIndex=index">
+            <!--城市-->
+            <div class="select_all_btn">
+              <input class="select_all_input" type="checkbox" [checked]="cards.change" (click)="onSelectAllInputClick(cityIndex, cards.change,allcards,'rules')"
+              />
+              <span class="city">{{cards.cardConfigName}}</span>
+            </div>
+            <!--门店-->
+            <ul class="shop_names">
+              <li *ngFor="let card of cards.rules; let storeIndex=index">
+                <input type="checkbox" [checked]="card.change" (click)="onSelectInputClick(cityIndex, storeIndex,allcards,'rules')" />
+                <span *ngIf="cards.type === 'STORED'">储值卡金额{{card.balance/100}}元,售价{{card.price/100}}元,有效期{{card.validate}}天</span>
+                <span *ngIf="cards.type === 'METERING'">使用次数{{card.balance}}次,售价{{card.price/100}}元,有效期{{card.validate}}天</span>
+                <span *ngIf="cards.type === 'REBATE'">折扣卡卡金额{{card.balance/100}}元,折扣{{card.rebate}}折</span>
+                <span *ngIf="cards.type === 'TIMES'">售价{{card.price/100}}元,有效期{{card.validate}}天</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </li>
+      <li class="list">
+        <p class="head_store">已选卡</p>
+        <div class="selected_stores">
+          <div class="city-list bbn" *ngFor="let cards of allcards">
+            <div *ngIf="cards.checked == true">
+              <!--城市-->
+              <div class="select_all_btn">
+                <span class="city">{{cards.cardConfigName}}</span>
+              </div>
+              <!--门店-->
+              <ul class="shop_names">
+                <li *ngFor="let card of cards.rules">
+                  <span *ngIf="card.change == true&&cards.type === 'STORED'">储值卡金额{{card.balance/100}}元,售价{{card.price/100}}元,有效期{{card.validate}}天</span>
+                  <span *ngIf="card.change == true&&cards.type === 'METERING'">使用次数{{card.balance}}次,售价{{card.price/100}}元,有效期{{card.validate}}天</span>
+                  <span *ngIf="card.change == true&&cards.type === 'REBATE'">折扣卡卡金额{{card.balance/100}}元,折扣{{card.rebate}}折</span>
+                  <span *ngIf="card.change == true&&cards.type === 'TIMES'">售价{{card.price/100}}元,有效期{{card.validate}}天</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
 </ng-template>

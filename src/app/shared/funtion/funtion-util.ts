@@ -1,11 +1,15 @@
 import { URLSearchParams } from '@angular/http';
 import { NzModalService } from 'ng-zorro-antd';
+import { LocalStorageService } from '@shared/service/localstorage-service';
+import { USER_INFO } from '@shared/define/juniu-define';
 // import { USER_INFO } from '../define/juniu-define';
 declare var swal: any;
 declare var layer: any;
 
 export class FunctionUtil {
-  constructor(private modalService: NzModalService) { }
+  stores = this.localStorageService.getLocalstorage(USER_INFO) ? JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)).stores : '';
+  constructor(private localStorageService: LocalStorageService, private modalService: NzModalService) { }
+
   //将门店列表数据格式转换成按照城市分类
   static getCityList(storeList: any, id: any) {
     let cityAllCodeArr = [];
@@ -42,87 +46,125 @@ export class FunctionUtil {
   }
 
   //将门店列表数据格式转换成按照城市分类 storeId
-    static getCityListStore(storeList: any) {
-      let cityAllCodeArr = [];
-      for (let i = 0; i < storeList.length; i++) {
-          cityAllCodeArr.push(storeList[i].cityId + '-' + storeList[i].cityName)
+  static getCityListStore(storeList: any) {
+    let cityAllCodeArr = [];
+    for (let i = 0; i < storeList.length; i++) {
+      cityAllCodeArr.push(storeList[i].cityId + '-' + storeList[i].cityName)
+    }
+    let cityCodeArr = FunctionUtil.getNoRepeat(cityAllCodeArr);
+    let cityArr = [];
+    for (let i = 0; i < cityCodeArr.length; i++) {
+      cityArr.push({
+        cityCode: cityCodeArr[i].split('-')[0],
+        cityName: cityCodeArr[i].split('-')[1],
+        change: true,
+        checked: true, //控制已选择门店显示不显示城市， 如果该城市下有选择了门店则为true， 否则false
+        stores: [{}]
+      });
+      cityArr[i].stores.shift()
+    }
+    for (let i = 0; i < cityArr.length; i++) {
+      for (let j = 0; j < storeList.length; j++) {
+        if (storeList[j].cityId == cityArr[i].cityCode) {
+          cityArr[i].stores.push({
+            storeId: storeList[j].storeId,
+            storeName: storeList[j].storeName,
+            change: true
+          })
+        }
       }
-      let cityCodeArr = FunctionUtil.getNoRepeat(cityAllCodeArr);
-      let cityArr = [];
-      for (let i = 0; i < cityCodeArr.length; i++) {
-          cityArr.push({
-              cityCode: cityCodeArr[i].split('-')[0],
-              cityName: cityCodeArr[i].split('-')[1],
-              change: true,
-              checked: true, //控制已选择门店显示不显示城市， 如果该城市下有选择了门店则为true， 否则false
-              stores: [{}]
-          });
-          cityArr[i].stores.shift()
-      }
-      for (let i = 0; i < cityArr.length; i++) {
-          for (let j = 0; j < storeList.length; j++) {
-              if (storeList[j].cityId == cityArr[i].cityCode) {
-                  cityArr[i].stores.push({
-                      storeId: storeList[j].storeId,
-                      storeName: storeList[j].storeName,
-                      change: true
-                  })
-              }
-          }
-      }
-      return cityArr
+    }
+    return cityArr
   }
 
-    //将门店列表数据格式转换成按照城市分类
-    getCityList(storeList: any) {
-        let cityAllCodeArr = [];
-        for (let i = 0; i < storeList.length; i++) {
-            cityAllCodeArr.push(storeList[i].cityId + '-' + storeList[i].cityName);
+  //转换后台数据(选择员工，门店，商品，服务项目等组件)
+  static getDataChange(staffListInfor: any, selectedStaffIds: any) {
+    staffListInfor.forEach(function (city: any) {
+      city.change = false;
+      city.checked = false;
+      city.staffs.forEach(function (staff: any) {
+        staff.change = false;
+      });
+    });
+    /*初始化选中*/
+    selectedStaffIds.forEach(function (staffId: any) {
+      staffListInfor.forEach(function (city: any, j: number) {
+        city.staffs.forEach(function (staff: any, k: number) {
+          if (staffId === staff.staffId) {
+            staff.change = true;
+          }
+        });
+      });
+    });
+    /*判断城市是否全选*/
+    staffListInfor.forEach(function (city: any, i: number) {
+      let storesChangeArr = [''];
+      city.staffs.forEach(function (store: any, j: number) {
+        if (store.change === true) {
+          storesChangeArr.push(store.change);
         }
-        let cityCodeArr = FunctionUtil.getNoRepeat(cityAllCodeArr);
-        let cityArr = [];
-        for (let i = 0; i < cityCodeArr.length; i++) {
-            cityArr.push({
-                cityCode: cityCodeArr[i].split('-')[0],
-                cityName: cityCodeArr[i].split('-')[1],
-                change: true,
-                checked: true, //控制已选择门店显示不显示城市， 如果该城市下有选择了门店则为true， 否则false
-                stores: [{}]
-            });
-            cityArr[i].stores.shift();
-        }
-        for (let i = 0; i < cityArr.length; i++) {
-            for (let j = 0; j < storeList.length; j++) {
-                if (JSON.stringify(storeList[j].cityId) === cityArr[i].cityCode || storeList[j].cityId === cityArr[i].cityCode) {
-                    cityArr[i].stores.push({
-                        shopId: storeList[j].shopId,
-                        shopName: storeList[j].shopName,
-                        change: true
-                    });
-                }
-            }
-        }
-        return cityArr;
-    }
+      });
+      if (storesChangeArr.length - 1 === city.staffs.length) {
+        city.change = true;
+        city.checked = true;
+      }
+      if (storesChangeArr.length > 1) {
+        city.checked = true;
+      }
+    });
+    return staffListInfor;
+  }
 
-    //最简单的身份证校验
-    static isCardNo(card) {
-        // 身份证号码为15位或者18位，15位时全为数字，18位前17位为数字，最后一位是校验位，可能为数字或字符X
-        var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
-        if (reg.test(card) === false) {
-            return false;
-        }
+  //将门店列表数据格式转换成按照城市分类
+  getCityList(storeList: any) {
+    let cityAllCodeArr = [];
+    for (let i = 0; i < storeList.length; i++) {
+      cityAllCodeArr.push(storeList[i].cityId + '-' + storeList[i].cityName);
     }
+    let cityCodeArr = FunctionUtil.getNoRepeat(cityAllCodeArr);
+    let cityArr = [];
+    for (let i = 0; i < cityCodeArr.length; i++) {
+      cityArr.push({
+        cityCode: cityCodeArr[i].split('-')[0],
+        cityName: cityCodeArr[i].split('-')[1],
+        change: true,
+        checked: true, //控制已选择门店显示不显示城市， 如果该城市下有选择了门店则为true， 否则false
+        stores: [{}]
+      });
+      cityArr[i].stores.shift();
+    }
+    for (let i = 0; i < cityArr.length; i++) {
+      for (let j = 0; j < storeList.length; j++) {
+        if (JSON.stringify(storeList[j].cityId) === cityArr[i].cityCode || storeList[j].cityId === cityArr[i].cityCode) {
+          cityArr[i].stores.push({
+            shopId: storeList[j].shopId,
+            shopName: storeList[j].shopName,
+            change: true
+          });
+        }
+      }
+    }
+    return cityArr;
+  }
 
-    static unique(arr){
+  //最简单的身份证校验
+  static isCardNo(card) {
+    // 身份证号码为15位或者18位，15位时全为数字，18位前17位为数字，最后一位是校验位，可能为数字或字符X
+    var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+    if (reg.test(card) === false) {
+      return false;
+    }
+  }
+
+  static unique(arr) {
     var res = [];
-    for(var i=0; i<arr.length; i++){
-     if(res.indexOf(arr[i]) == -1){
-      res.push(arr[i]);
-     }
+    for (var i = 0; i < arr.length; i++) {
+      if (res.indexOf(arr[i]) == -1) {
+        res.push(arr[i]);
+      }
     }
     return res;
-   }
+  }
   //将日期时间戳转换成日期格式
   static changeDate(date: Date) {
     let year = date.getFullYear();
@@ -131,12 +173,12 @@ export class FunctionUtil {
     return year + '-' + (month.toString().length > 1 ? month : ('0' + month)) + '-' + (day.toString().length > 1 ? day : ('0' + day));
   }
 
-    static changeDate2(date: Date) {
-        let year = date.getFullYear();
-        let month = date.getMonth() + 1;
-        let day = date.getDate();
-        return year + '.' + (month.toString().length > 1 ? month : ('0' + month)) + '.' + (day.toString().length > 1 ? day : ('0' + day));
-    }
+  static changeDate2(date: Date) {
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    return year + '.' + (month.toString().length > 1 ? month : ('0' + month)) + '.' + (day.toString().length > 1 ? day : ('0' + day));
+  }
 
   //正则匹配正整数
   static integerCheckReg(name: any) {
