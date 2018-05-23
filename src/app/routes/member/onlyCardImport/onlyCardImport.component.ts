@@ -44,20 +44,18 @@ export class OnlyCardImportComponent {
     status: any = 0;
     pageIndex: any = 1;
     columns: SimpleTableColumn[] = [
-        { title: '活动名称', index: 'no' },
-        { title: '带动营业额(元)', index: 'description' },
-        { title: '发券数量(张)', index: 'callNo' },
-        { title: '核销数量(张)', index: 'status' },
-        { title: '核销率', index: 'updatedAt' },
-        { title: '活动时间', index: 'updatedAt' },
-        {
-            title: '操作', buttons: [
-                { text: '查看详情', click: (item: any) => this.msg.success(`配置${item.no}`) },
-            ]
-            
-        }
+        { title: '导入时间', index: 'birthday' },
+        { title: '会员姓名', index: 'name' },
+        { title: '手机号', index: 'phone' },
+        { title: '卡类型', index: 'typeName' },
+        { title: '卡名称', index: 'cardName' },
+        { title: '所属门店', index: 'storeName' },
+        { title: '余额(元或次)', index: 'balance' },
+        { title: '有效期截止', index: 'validity' }
+
     ];
     showStoredCardRule: boolean = false;//是否显示储值卡规则
+    Total: any = 1;
     constructor(
         public msg: NzMessageService,
         private modalSrv: NzModalService,
@@ -223,7 +221,12 @@ export class OnlyCardImportComponent {
     }
     console2(e: any) {
         this.status = e.index;
-        console.log(this.status)
+        let type = ''
+        if (this.status === 1) type = 'STORED';
+        if (this.status === 2) type = 'METERING';
+        if (this.status === 3) type = 'TIMES';
+        if (this.status === 4) type = 'REBATE';
+        this.improtCardRecord(type);
     }
     // 用门店进行筛选
     selectStore(event: any, type: string) {
@@ -266,20 +269,41 @@ export class OnlyCardImportComponent {
             error => FunctionUtil.errorAlter(error)
         )
     }
-
-    improtCardRecord() {
+    getData(index: any) {
+        this.pageIndex = index;
+        this.improtCardRecord();
+    }
+    improtCardRecord(type?: any) {
         let self = this;
         let data = {
             storeId: this.storeId,
             merchantId: this.merchantId,
             pageIndex: this.pageIndex,
-            pageSize: 10
+            pageSize: 10,
+            type: type
         }
+        if (!data.type) delete data.type;
         self.cardList = [];
         this.memberService.improtCardRecord(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    console.log(res.data);
+                    res.data.content.forEach(function (i: any) {
+                        if (i.type === 'STORED') {
+                            i.typeName = '储值卡'
+                            i.balance = i.balance / 100
+                        }
+                        if (i.type === 'METERING')
+                            i.typeName = '计次卡'
+                        if (i.type === 'TIMES')
+                            i.typeName = '期限卡'
+                        if (i.type === 'REBATE') {
+                            i.typeName = '折扣卡'
+                            i.balance = i.balance / 100
+                        }
+
+                    })
+                    this.data2 = res.data.content;
+                    this.Total = res.data.totalElements;
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -292,7 +316,6 @@ export class OnlyCardImportComponent {
     }
     reset() {
         this.cardType = '';
-        this.storeId = '';
         this.balance = '';
         this.cardConfigId = '';
         this.cardConfigRuleId = '';
@@ -325,6 +348,7 @@ export class OnlyCardImportComponent {
                     this.modalSrv.success({
                         nzContent: '导入成功'
                     });
+                    this.improtCardRecord();
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
