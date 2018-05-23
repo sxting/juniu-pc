@@ -5,6 +5,7 @@ import {NzModalService} from "ng-zorro-antd";
 import {STORES_INFO} from "@shared/define/juniu-define";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {UploadService} from "@shared/upload-img";
+import {SetingsService} from "../../shared/setings.service";
 
 @Component({
   selector: 'app-pay-download',
@@ -28,6 +29,7 @@ export class PayDownloadComponent implements OnInit {
         private modalSrv: NzModalService,
         private fb: FormBuilder,
         private uploadService: UploadService,
+        private setingsService: SetingsService,
     ) { }
 
     ngOnInit() {
@@ -63,6 +65,29 @@ export class PayDownloadComponent implements OnInit {
             let width = 78, height = 58;
             this.imagePath = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.imageId}/resize_${width}_${height}/mode_fill`;
         });
+    }
+
+    saveQrClick() {
+        this.downloadQr();
+    }
+
+    downloadQr() {
+        let data = {
+            storeId: this.storeId,
+            logo: this.imageId
+        };
+        this.setingsService.downloadQr(data).subscribe(
+            (res: any) => {
+                if(res.success) {
+
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            }
+        )
     }
 
 }

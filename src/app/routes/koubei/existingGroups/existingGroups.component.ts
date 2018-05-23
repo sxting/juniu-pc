@@ -24,8 +24,6 @@ export class ExistingGroupsComponent implements OnInit {
   endTime: any;
   pageIndex: any = 1;
   pageSize: any = 10;
-  _startTime: any;
-  _endTime: any;
   countTotal: any = 1;
   resArr: any = [];
   status: any = 'STARTED';
@@ -47,31 +45,6 @@ export class ExistingGroupsComponent implements OnInit {
   ngOnInit() {
     this.listHttp();
   }
-  _disabledStartDate1 = (endValue) => {
-    if (!endValue || !this._endTime) {
-      return false;
-    } else {
-      return endValue.getTime() >= this._endTime.getTime()
-    }
-  };
-
-  _disabledEndDate2 = (endValue) => {
-    if (!endValue || !this._startTime) {
-      return false;
-    } else {
-      return endValue.getTime() <= this._startTime.getTime()
-    }
-  };
-  _startValueChange(e: any) {
-    this._startTime = e;
-    this.startTime = this.formatDateTime(e, 'start');
-    this.listHttp();
-  }
-  _endValueChange(e: any) {
-    this._endTime = e;
-    this.endTime = this.formatDateTime(e, 'end');
-    this.listHttp();
-  }
   onStatusClick(statusFlag: any) {
     this.statusFlag = statusFlag;
     if (statusFlag === 0) {
@@ -88,6 +61,10 @@ export class ExistingGroupsComponent implements OnInit {
   paginate(e: any) {
     this.pageIndex = e;
     this.listHttp();
+  }
+  onChange(result: Date): void {
+    this.startTime = this.formatDateTime(result[0], 'start');
+    this.endTime = this.formatDateTime(result[1], 'end');
   }
   listHttp() {
     let data = {

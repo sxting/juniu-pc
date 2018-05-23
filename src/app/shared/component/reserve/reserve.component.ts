@@ -98,6 +98,8 @@ export class ReserveComponent implements OnInit, AfterViewInit, AfterViewChecked
 
   selectedOption;
 
+    dateFormat: any = 'yyyy-MM-dd';
+
     ngOnInit() {
         this.titleService.setTitle('预约');
         this.todayDay = this.changeDate(new Date());

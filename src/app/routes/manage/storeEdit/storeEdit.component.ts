@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ManageService } from '../shared/manage.service';
+import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 declare var AMap;
 declare var AMapUI
 @Component({
@@ -11,164 +13,103 @@ declare var AMapUI
 })
 export class StoreEditComponent implements OnInit {
     values: any[] = null;
-    data = [];
+    data: any = [];
     form: FormGroup;
     submitting = false;
-    nzOptions = [{
-        value: 'zhejiang',
-        label: 'Zhejiang',
-        children: [{
-            value: 'hangzhou',
-            label: 'Hangzhou',
-            children: [{
-                value: 'xihu',
-                label: 'West Lake',
-                isLeaf: true
-            }]
-        }, {
-            value: 'ningbo',
-            label: 'Ningbo',
-            isLeaf: true
-        }]
-    }, {
-        value: 'jiangsu',
-        label: 'Jiangsu',
-        disabled: true,
-        children: [{
-            value: 'nanjing',
-            label: 'Nanjing',
-            children: [{
-                value: 'zhonghuamen',
-                label: 'Zhong Hua Men',
-                isLeaf: true
-            }]
-        }]
-    }];
+    nzOptions = [];
     cityArr = [];
+    adressCode: any;
+    location: any;
+    storeId: any;
     constructor(private fb: FormBuilder,
         private manageService: ManageService,
         private modalSrv: NzModalService,
+        private route: ActivatedRoute,
+        private router: Router,
         private msg: NzMessageService) {
 
         this.form = this.fb.group({
             storeName: [null, []],
             address: [null, []],
-            Alladdress: [null, []],
+            Alladdress: [[], []],
         });
     }
+    get storeName() { return this.form.controls.storeName; }
+    get address() { return this.form.controls.address; }
+    get Alladdress() { return this.form.controls.Alladdress; }
     ngOnInit() {
+        this.getLocationHttp();
+        this.mapFun();
+        this.storeId = this.route.snapshot.params['storeId'];
+    }
+    submit() {
+        if (!this.form.controls.storeName.value) {
+            this.errAlert('请填写分店名称');
+        } else if (!this.adressCode && !(this.data ? this.data.provinceCode : false)) {
+            this.errAlert('请选择门店地址');
+        }
+        let data = {
+            address: this.location ? this.location.name : this.data.address,
+            branchName: this.form.controls.storeName.value ? this.form.controls.storeName.value : this.data.branchName,
+            cityCode: this.adressCode ? this.adressCode[1] : this.data.cityCode,
+            districtCode: this.adressCode ? this.adressCode[2] : this.data.districtCode,
+            latitude: this.location ? this.location.location.lat : this.data.latitude,
+            longitude: this.location ? this.location.location.lng : this.data.longitude,
+            provinceCode: this.adressCode ? this.adressCode[0] : this.data.provinceCode,
+            timestamp: new Date().getTime(),
+            storeId: this.storeId
+        }
+        if (!this.storeId) delete data.storeId
+        if (this.storeId) this.modifyInfoFun(data)
+        else this.storeCreateHttp(data)
+    }
+    onChanges(values: any): void {
+        this.adressCode = values;
+
+        console.log(values);
+    }
+    mapFun() {
+        let that = this;
         var windowsArr = [];
         var marker = [];
-        this.getLocationHttp();
-        // var map = new AMap.Map("mapContainer", {
-        //     resizeEnable: true,
-        //     center: [116.397428, 39.90923],//地图中心点
-        //     zoom: 13,//地图显示的缩放级别
-        //     keyboardEnable: false
-        // });
-        // AMap.plugin(['AMap.Autocomplete', 'AMap.PlaceSearch'], function () {
-        //     var autoOptions = {
-        //         city: "北京", //城市，默认全国
-        //         input: "keyword"//使用联想输入的input的id
-        //     };
-        //     var autocomplete = new AMap.Autocomplete(autoOptions);
-        //     var placeSearch = new AMap.PlaceSearch({
-        //         city: '北京',
-        //         map: map
-        //     })
-        //     AMap.event.addListener(autocomplete, "select", function (e) {
-        //         //TODO 针对选中的poi实现自己的功能
-        //         placeSearch.setCity(e.poi.adcode);
-        //         placeSearch.search(e.poi.name)
-        //         console.log(e);
-        //     });
-        // });
         var map = new AMap.Map('container', {
             zoom: 10
         });
-
         AMapUI.loadUI(['misc/PoiPicker', 'misc/PositionPicker'], function (PoiPicker, PositionPicker) {
-
             var poiPicker = new PoiPicker({
-                //city:'北京',
                 input: 'pickerInput'
             });
-
             //初始化poiPicker
-            poiPickerReady(poiPicker);
+            that.poiPickerReady(map, poiPicker);
         });
-
-        function poiPickerReady(poiPicker) {
-
-            poiPicker = poiPicker;
-
-            var marker = new AMap.Marker();
-
-            var infoWindow = new AMap.InfoWindow({
-                offset: new AMap.Pixel(0, -20)
-            });
-
-            //选取了某个POI
-            poiPicker.on('poiPicked', function (poiResult) {
-
-                var source = poiResult.source,
-                    poi = poiResult.item,
-                    info = {
-                        source: source,
-                        id: poi.id,
-                        name: poi.name,
-                        location: poi.location.toString(),
-                        address: poi.address
-                    };
-
-                marker.setMap(map);
-                infoWindow.setMap(map);
-
-                marker.setPosition(poi.location);
-                infoWindow.setPosition(poi.location);
-
-                infoWindow.setContent('POI信息: <pre>' + JSON.stringify(info, null, 2) + '</pre>');
-                infoWindow.open(map, marker.getPosition());
-
-                //map.setCenter(marker.getPosition());
-            });
-
-            poiPicker.onCityReady(function () {
-                // poiPicker.suggest('美食');
-            });
-        }
-
-
         AMapUI.loadUI(['misc/PositionPicker'], function (PositionPicker) {
 
         });
     }
-    submit() {
-        console.log(this.form.controls);
-        let data = {
-            address: "aaaa",
-            branchName: "aaa",
-            cityCode: 11111,
-            districtCode: 2222,
-            latitude: 3333,
-            longitude: 4444,
-            provinceCode: 55555,
-            timestamp: 0
-        }
-        console.log(data);
-        // this.storeCreateHttp(data)
-    }
-    onChanges(values: any): void {
-        console.log(values);
-    }
     storeCreateHttp(data: any) {
         let self = this;
-
-
-        this.manageService.creatStaff(data).subscribe(
+        this.manageService.storeCreate(data).subscribe(
             (res: any) => {
                 if (res.success) {
-
+                    this.router.navigate(['/manage/storeList/storeEdit']);
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            (error) => {
+                this.msg.warning(error)
+            }
+        );
+    }
+    modifyInfoFun(data: any) {
+        let self = this;
+        this.manageService.modifyInfo(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.router.navigate(['/manage/storeList']);
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -188,7 +129,9 @@ export class StoreEditComponent implements OnInit {
                 if (res.success) {
                     self.forEachFun(res.data.items);
                     this.cityArr = res.data.items;
-                    console.log(this.cityArr);
+                    if (self.route.snapshot.params['storeId']) {
+                        self.getStoreInfo(this.route.snapshot.params['storeId']);
+                    }
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -201,25 +144,128 @@ export class StoreEditComponent implements OnInit {
             }
         );
     }
-    forEachFun(arr) {
+    getStoreInfo(e) {
+        let self = this;
+        let data = {
+            storeId: e
+        }
+        this.manageService.storeInfo(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    let adress = []
+                    this.cityArr.forEach(function (i: any) {
+                        if (res.data.provinceCode === i.code) {
+                            adress.push(i.name)
+                            if (i.hasSubset) {
+                                i.subset.forEach(function (n: any) {
+                                    if (res.data.cityCode === n.code) {
+                                        adress.push(n.name)
+                                        if (n.hasSubset) {
+                                            n.subset.forEach(function (m: any) {
+                                                if (res.data.districtCode === m.code) {
+                                                    adress.push(m.name)
+                                                }
+                                            })
+                                        }
+                                    }
+                                })
+                            }
+                        }
+
+                    })
+                    document.getElementById('pickerInput')['value'] = res.data.address;
+                    self.form = this.fb.group({
+                        storeName: [res.data.branchName, []],
+                        address: [adress, []],
+                        Alladdress: [null, []],
+                    });
+                    this.data = {
+                        address: res.data.address,
+                        branchName: res.data.branchName,
+                        cityCode: res.data.cityCode,
+                        districtCode: res.data.districtCode,
+                        latitude: res.data.latitude,
+                        longitude: res.data.longitude,
+                        provinceCode: res.data.provinceCode,
+                        timestamp: new Date().getTime()
+                    }
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            (error) => {
+                this.msg.warning(error)
+            }
+        );
+    }
+
+    poiPickerReady(map: any, poiPicker: any) {
+        let that = this;
+        poiPicker = poiPicker;
+
+        var marker = new AMap.Marker();
+
+        var infoWindow = new AMap.InfoWindow({
+            offset: new AMap.Pixel(0, -20)
+        });
+
+        //选取了某个POI
+        poiPicker.on('poiPicked', function (poiResult) {
+
+            var source = poiResult.source,
+                poi = poiResult.item,
+                info = {
+                    '地名': poi.name,
+                    '地址': poi.address
+                };
+            that.location = poi;
+            marker.setMap(map);
+            infoWindow.setMap(map);
+
+            marker.setPosition(poi.location);
+            infoWindow.setPosition(poi.location);
+
+            infoWindow.setContent('地址: <pre>' + JSON.stringify(info, null, 2) + '</pre>');
+            infoWindow.open(map, marker.getPosition());
+
+            //map.setCenter(marker.getPosition());
+        });
+
+        poiPicker.onCityReady(function () {
+            // poiPicker.suggest('美食');
+        });
+
+
+
+    }
+    forEachFun(arr: any, arr2?: any) {
         let that = this;
         arr.forEach(function (i: any) {
-            i.value = i.name;
-            i.lable = i.code;
-            that.forEachFun2(i)
+            i.value = i.code;
+            i.label = i.name;
+            that.forEachFun2(i);
         })
     }
-    forEachFun2(arr) {
+    forEachFun2(arr: any) {
         let that = this;
         if (arr.hasSubset) {
             arr.subset.forEach(function (n: any) {
-                n.value = n.name;
-                n.lable = n.code;
+                n.value = n.code;
+                n.label = n.name;
                 that.forEachFun2(n);
             })
             arr.children = arr.subset;
         } else {
             arr.isLeaf = true;
         }
+    }
+    errAlert(err) {
+        this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: err
+        });
     }
 }

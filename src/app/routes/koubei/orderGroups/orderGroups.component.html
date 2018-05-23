@@ -21,10 +21,7 @@
 
                 <li class="fl">
                     <span class="mr10 fl title" style="margin-right:15px">{{timeText}}时间</span>
-                    <!-- <nz-datepicker style="width: 138px;" (ngModelChange)="_startTime=$event;_startValueChange($event)" [ngModel]="_startTime"
-                        [nzDisabledDate]="_disabledStartDate1" [nzFormat]="'YYYY-MM-DD'" [nzPlaceHolder]="'开始时间'"></nz-datepicker>
-                    <nz-datepicker style="width: 138px;" (ngModelChange)="_endTime=$event;_endValueChange($event)" [ngModel]="_endTime" [nzDisabledDate]="_disabledEndDate2"
-                        [nzFormat]="'YYYY-MM-DD'" [nzPlaceHolder]="'截止时间'"></nz-datepicker> -->
+                    <nz-range-picker [(ngModel)]="dateRange" (ngModelChange)="onChange($event)" nzShowTime></nz-range-picker>
                 </li>
 
                 <div class="fr" style="position:relative;margin-top:10px;clear: both;float: left;">
@@ -83,6 +80,7 @@
                         [nzDisabledDate]="_disabledStartDate" [nzFormat]="'YYYY-MM-DD'" [nzPlaceHolder]="'开始时间'"></nz-datepicker>
                     <nz-datepicker style="width: 138px;" (ngModelChange)="_endTime1=$event;_endValueChange1($event)" [ngModel]="_endTime1" [nzDisabledDate]="_disabledEndDate"
                         [nzFormat]="'YYYY-MM-DD'" [nzPlaceHolder]="'截止时间'"></nz-datepicker> -->
+                        <nz-range-picker [(ngModel)]="dateRange2" (ngModelChange)="onChange2($event)" nzShowTime></nz-range-picker>
                 </li>
                 <li class="fl">
                     <span>选择门店</span>

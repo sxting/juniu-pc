@@ -158,6 +158,16 @@ export class SetingsService {
             });
     }
 
+    //付款码下载  store/download/qr.do
+    downloadQr(Params: any) {
+        let apiUrl = this.api5 + '/store/download/qr.do';
+        return this.http.get(apiUrl, Params)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+
 
     /*支付通道end*/
 

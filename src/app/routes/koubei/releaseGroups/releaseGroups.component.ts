@@ -103,6 +103,7 @@ export class ReleaseGroupsComponent implements OnInit {
             timeLimit: [null, [Validators.pattern(/^[1-9]\d*$/), Validators.max(24), Validators.min(1)]],
             originalPrice: [null, [Validators.required, Validators.pattern(/^[1-9]\d*$/), Validators.max(99999999), Validators.min(1)]],
             presentPrice: [null, [Validators.required, Validators.pattern(/^[1-9]\d*$/), Validators.max(99999999), Validators.min(1)]],
+            time: [null, [Validators.required]],
             mock: [false]
 
         });
@@ -182,17 +183,8 @@ export class ReleaseGroupsComponent implements OnInit {
             if (data.peopleNumber > data.inventory) {
                 this.errorAlter('参团人数不能大于库存量');
             }
-            else if (this._startTime ? this._startTime.getTime() <= new Date().getTime() && this.statusFlag === '2' : false) {
-                this.errorAlter('开始活动时间不能早于当前');
-            }
             else if (data.originalPrice < data.presentPrice) {
                 this.errorAlter('拼团价不能大于原价');
-            } else if (!data.startTime) {
-                this.errorAlter('请填写开始活动时间');
-            } else if (!data.endTime) {
-                this.errorAlter('请填写活动截止时间');
-            } else if (!data.validateEndTime) {
-                this.errorAlter('请填写核销截止时间');
             } else if (!data.shopIds) {
                 this.errorAlter('请选择门店');
             } else {

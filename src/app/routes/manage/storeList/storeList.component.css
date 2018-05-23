@@ -18,3 +18,13 @@
 .button{
     cursor: pointer;
 }
+.iconfont{
+    font-size: 40px;
+    cursor: pointer;
+}
+.weixin{
+    color: #04c104;
+}
+.zhifubao{
+    color: #0090e4;
+}
