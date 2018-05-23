@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { _HttpClient } from '@delon/theme';
+import { _HttpClient, TitleService } from '@delon/theme';
 import { ManageService} from "../shared/manage.service";
 import { LocalStorageService} from "../../../shared/service/localstorage-service";
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
@@ -30,6 +30,7 @@ export class WechatNotificationsComponent implements OnInit {
         private fb: FormBuilder,
         private manageService: ManageService,
         private modalSrv: NzModalService,
+        private titleSrv: TitleService,
         private localStorageService: LocalStorageService,
         private router: Router,
         private route: ActivatedRoute,
@@ -40,7 +41,7 @@ export class WechatNotificationsComponent implements OnInit {
         let self = this;
         this.staffId = this.route.snapshot.params['staffId'];//员工ID
         this.faceQRcode(this.staffId);//微信二维码
-
+        this.titleSrv.setTitle('微信推送');
         this.formData = {
             reportType: [self.reportTypes[0].value, [Validators.required]],
             receiveType: [self.storeNotice[0].value, [Validators.required]]
@@ -60,7 +61,7 @@ export class WechatNotificationsComponent implements OnInit {
                 if (res.success) {
                     this.loading = false;
                     self.qrcodeImages = res.data;
-                    self.wechatPushConfigCheck(self.staffId);
+                    self.wechatPushConfigCheck(self.staffId);//查询微信推送设置
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',

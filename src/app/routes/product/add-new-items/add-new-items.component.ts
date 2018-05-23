@@ -365,7 +365,7 @@ export class AddNewItemsComponent implements OnInit {
                     this.imagePath = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.picId}/resize_${102}_${102}/mode_fill`;
                     this.form = this.fb.group(self.formData);
                     this.selectStoresIds = res.data.storeIds;
-                    let StoresIds = res.data.storeIds? res.data.storeIds.split(',') : '';
+                    let StoresIds = res.data.storeIds? res.data.storeIds.split(',') : [];
                     this.getDataChange(this.cityStoreList, StoresIds);//转换后台拿过来的数据
                 } else {
                     this.modalSrv.error({

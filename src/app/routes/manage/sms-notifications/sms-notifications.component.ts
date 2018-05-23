@@ -69,7 +69,7 @@ export class SmsNotificationsComponent implements OnInit {
                     let receiveType = res.data.pushTypeList[0] === 'RESERVE_ONESELF'? self.storeNotice[0].value : self.storeNotice[1].value;
 
                     self.formData = {
-                        phone: [ res.data.phone, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
+                        phone: [ res.data.contactPhone, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
                         receiveType: [ receiveType, [Validators.required]]
                     };
                     this.form = self.fb.group(self.formData);
@@ -97,9 +97,12 @@ export class SmsNotificationsComponent implements OnInit {
         this.submitting = true;
 
         let params = {
-            phone: this.form.controls.phone.value,
+            contactPhone: this.form.controls.phone.value,
             pushTypeList: [ this.form.controls.receiveType.value ],
             staffId: this.staffId,
+            roleName: this.roleName,
+            staffName: this.staffName,
+            pushChannel: 'SMS'
         };
         this.manageService.setPushSmsHttps(params).subscribe(
             (res: any) => {

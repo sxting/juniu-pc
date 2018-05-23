@@ -43,18 +43,16 @@ export class StaffListComponent implements OnInit {
         if (this.localStorageService.getLocalstorage(STORES_INFO) && JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
             let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
                 JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
+            let list = {
+              storeId: '',
+              storeName: '全部门店'
+            };
+            storeList.splice(0, 0, list);//给数组第一位插入值
             this.storeList = storeList;
+            this.storeId = '';
         }
 
-        //let USER_INFO = this.localStorageService.getLocalstorage(USER_INFO) ? JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)) : [];
-        //
-        //if (USER_INFO&&USER_INFO.staffType === 'MERCHANT') {
-        //    this.staffListHttp();
-        //} else {
-        //    this.storeId = this.storeList[0].storeId;
-            this.staffListHttp();//员工列表请求数据
-        //}
-
+        this.staffListHttp();//员工列表请求数据
     }
 
     /*************************  页面基础操作开始  ********************************/
@@ -155,17 +153,32 @@ export class StaffListComponent implements OnInit {
                     this.loading = false;
                     // hasWechat: boolean = false;//是否有微信推送
                     // hasSms: boolean = false;//是否有短信推送
-                    res.data.items.forEach(function (item: any) {
-                        if(item.pushChannel.length != 0){
-                            for(let i = 0; i < item.pushChannel.length; i++){
-                                item.hasSms = item.pushChannel[i] === 'SMS'? true : false;
-                                item.hasWechat = item.pushChannel[i] === 'WECHAT_PUB'? true : false;
-                            }
+                  console.log(this.storeList);
+                  let storeList = this.storeList;
+                  if(res.data.items.length > 0){
+                      res.data.items.forEach(function (item: any) {
+                        let storeName = '';
+                        if(item.pushChannel.length > 0){
+                          for(let i = 0; i < item.pushChannel.length; i++){
+                            item.hasSms = item.pushChannel[i] === 'SMS'? true : false;
+                            item.hasWechat = item.pushChannel[i] === 'WECHAT_PUB'? true : false;
+                          }
                         }else {
-                            item.hasSms = false;
-                            item.hasWechat = false;
+                          item.hasSms = false;
+                          item.hasWechat = false;
                         }
-                    });
+                        if(item.belongType === 'STORE'){
+                          for(let j = 0;j < storeList.length; j++){
+                            if(item.storeId === storeList[j].storeId){
+                              storeName = storeList[j].storeName;
+                            }
+                          }
+                        }else {
+                          storeName = '总部';
+                        }
+                        item.storeName = storeName;
+                      });
+                    }
                     that.staffListInfos = res.data.items;
                     console.log(that.staffListInfos);
                     that.countTotal = res.data.page.countTotal;

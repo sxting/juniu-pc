@@ -18,21 +18,20 @@ export class RevenueReportComponent implements OnInit {
     storeId: string = '';//选中的门店ID
     loading = false;
     merchantId: string = '1502087435083367097829';
-    yyyymm: Date;//日期时间
+    yyyymm: any;//
+    date: string = '';//time
+    _disabledStartDate: any;
     pageNo: any = 1;//页码
     pageSize: any = '10';//一页展示多少数据
     totalElements: any = 0;//商品总数
-
     theadName: any = ['时间', '类型', '项目名称', '金额'];//表头
     reportOrderList: any[] = [];
-
     kaikaPer:any;
     kaikaPerNum: any;
     chongzhiPer:any;
     chongzhiPerNum: any;
     sankePer:any;
     sankePerNum: any;
-
     todayIncomeItem: any;
     yesterdayCompare: any;
 
@@ -49,8 +48,7 @@ export class RevenueReportComponent implements OnInit {
      **/
     batchQuery = {
         merchantId: this.merchantId,
-        //date: FunctionUtil.changeDate(this.yyyymm),
-        date: '2018-04-16',
+        date: this.date,
         storeId: this.storeId,
         pageNo: this.pageNo,
         pageSize: 10,
@@ -61,14 +59,43 @@ export class RevenueReportComponent implements OnInit {
         if (this.localStorageService.getLocalstorage(STORES_INFO) && JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
             let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
                 JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
+            let list = {
+              storeId: '',
+              storeName: '全部门店'
+            };
+            storeList.splice(0, 0, list);//给数组第一位插入值
             this.storeList = storeList;
-            this.storeId = this.storeList[0].storeId;
+            this.storeId = '';
         }
 
-        //获取到营收列表
+        let year = new Date().getFullYear();        //获取当前年份(2位)
+        let month = new Date().getMonth()+1;       //获取当前月份(0-11,0代表1月)
+        let changemonth = month < 10 ? '0' + month : '' + month;
+        let day = new Date().getDate();        //获取当前日(1-31)
+        this.yyyymm = new Date(year+'-'+changemonth+'-'+day);
+        this.date = year+'-'+changemonth+'-'+day;
+      console.log(this.yyyymm);
+      //获取到营收列表
         this.batchQuery.storeId = this.storeId;
+        this.batchQuery.date = this.date;
         this.getCurrentIncomeHttp(this.batchQuery);
     }
+
+  //选择日期
+  reportDateAlert(e: any) {
+    this.yyyymm = e;
+    let year = this.yyyymm.getFullYear();        //获取当前年份(2位)
+    let month = this.yyyymm.getMonth()+1;       //获取当前月份(0-11,0代表1月)
+    let changemonth = month < 10 ? '0' + month : '' + month;
+    let day = this.yyyymm.getDate();        //获取当前日(1-31)
+    let changeday = day < 10 ? '0' + day : '' + day;
+    this.date = year+'-'+changemonth+'-'+changeday;
+
+    this.batchQuery.date = this.date;
+
+    //请求员工提成信息
+    this.getCurrentIncomeHttp(this.batchQuery);
+  }
 
     //获取商品报表信息
     getCurrentIncomeHttp(data: any) {
@@ -78,7 +105,6 @@ export class RevenueReportComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     that.loading = false;
-
                     res.data.reportOrderList.forEach((element: any, index: number) => {
                         if (element.bizType === 'OPENCARD') {
                             element.bizTypeName = '开卡';
@@ -101,11 +127,9 @@ export class RevenueReportComponent implements OnInit {
                             }
                         })
                     });
-
                     bizTypeListArr.forEach(function (i: any) {
                         allNum += i.value;
                     });
-
                     bizTypeListArr.forEach(function (item: any) {
                         if (item.name === 'OPENCARD') {
                             let num = item.value;
@@ -154,6 +178,4 @@ export class RevenueReportComponent implements OnInit {
         this.batchQuery.pageNo = this.pageNo;
         this.getCurrentIncomeHttp(this.batchQuery);
     }
-
-
 }

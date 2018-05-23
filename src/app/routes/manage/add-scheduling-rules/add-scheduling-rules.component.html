@@ -24,30 +24,29 @@
     <nz-form-item>
         <nz-form-label nzXs="24" nzSm="7" nzRequired>上班时间</nz-form-label>
         <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-            <div class="work-plan-box">
-                <div class="work-plan-item" *ngFor="let time of timesArr; let i=index">
-                    <ul>
-                        <li *ngFor="let week of time.week; let j=index">
-                            <input (change)="weekChange(i, j)" type="checkbox" [checked]="week.checked"><span> {{week.name}}</span>
-                        </li>
-                    </ul>
-                    <div class="time-box">
-                        <div class="dis-inb">
-                            <!--<nz-time-picker [(ngModel)]="time.startTime" nzFormat="HH:mm"></nz-time-picker>-->
-                            <!--<nz-timepicker [(ngModel)]="time.startTime" [nzFormat]="'HH:mm'"></nz-timepicker>-->
-                            <input class="time" type="text" [(ngModel)]="time.startTime">
-                        </div>
-                        <span style="padding:0 15px 0 30px">至</span>
-                        <div class="dis-inb">
-                            <input class="time" type="text" [(ngModel)]="time.endTime">
-                        </div>
-                        <span class="add-btn" (click)="onAddTimeClick()">添加</span>
-                        <span class="add-btn" *ngIf="i > 0" (click)="onDeleteTimeClick(i)">删除</span>
-                    </div>
-                    <span class="line-span"></span>
-                </div>
-            </div>
-            <p class="coupon-input-tip">最多设置5组</p>
+          <div class="work-plan-box">
+              <div class="work-plan-item" *ngFor="let time of timesArr; let i=index">
+                  <ul>
+                      <li *ngFor="let week of time.week; let j=index">
+                          <input (change)="weekChange(i, j)" type="checkbox" [checked]="week.checked"><span> {{week.name}}</span>
+                      </li>
+                  </ul>
+                  <div class="time-box">
+                      <div class="dis-inb">
+                        <nz-time-picker [(ngModel)]="time.startTime" nzFormat="HH:mm"></nz-time-picker>
+                      </div>
+                      <span style="padding:0 15px 0 30px">至</span>
+                      <div class="dis-inb">
+                        <nz-time-picker [(ngModel)]="time.endTime" nzFormat="HH:mm"></nz-time-picker>
+                      </div>
+                      <span class="add-btn" (click)="onAddTimeClick()">添加</span>
+                      <span class="add-btn" *ngIf="i > 0" (click)="onDeleteTimeClick(i)">删除</span>
+                  </div>
+                  <span class="line-span"></span>
+              </div>
+          </div>
+          <p class="coupon-input-tip">最多设置5组</p>
+          <nz-form-explain style="color: #f5222d" *ngIf="timeSelectBoolean">请选择员工排班时间</nz-form-explain>
         </nz-form-control>
     </nz-form-item>
     <nz-form-item (click)="submit()">
