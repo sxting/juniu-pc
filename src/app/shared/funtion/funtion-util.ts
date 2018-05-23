@@ -73,6 +73,44 @@ export class FunctionUtil {
       return cityArr
   }
 
+  //转换后台数据(选择员工，门店，商品，服务项目等组件)
+  static getDataChange(staffListInfor: any, selectedStaffIds: any){
+    staffListInfor.forEach(function (city: any) {
+      city.change = false;
+      city.checked = false;
+      city.staffs.forEach(function (staff: any) {
+        staff.change = false;
+      });
+    });
+    /*初始化选中*/
+    selectedStaffIds.forEach(function (staffId: any) {
+      staffListInfor.forEach(function (city: any, j: number) {
+        city.staffs.forEach(function (staff: any, k: number) {
+          if (staffId === staff.staffId) {
+            staff.change = true;
+          }
+        });
+      });
+    });
+    /*判断城市是否全选*/
+    staffListInfor.forEach(function (city: any, i: number) {
+      let storesChangeArr = [''];
+      city.staffs.forEach(function (store: any, j: number) {
+        if (store.change === true) {
+          storesChangeArr.push(store.change);
+        }
+      });
+      if (storesChangeArr.length - 1 === city.staffs.length) {
+        city.change = true;
+        city.checked = true;
+      }
+      if (storesChangeArr.length > 1) {
+        city.checked = true;
+      }
+    });
+    return staffListInfor;
+  }
+
     //将门店列表数据格式转换成按照城市分类
     getCityList(storeList: any) {
         let cityAllCodeArr = [];

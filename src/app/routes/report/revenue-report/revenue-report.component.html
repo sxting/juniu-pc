@@ -7,9 +7,9 @@
                 <nz-form-item>
                     <nz-form-label nzFor="status">选择门店</nz-form-label>
                     <nz-form-control>
-                        <nz-select [(ngModel)]="storeId" (ngModelChange)="selectStore()" name="storeList" id="storeList" [nzPlaceHolder]="'请选择一个门店'" [nzShowSearch]="true">
-                            <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.storeName" [nzValue]="i.storeId"></nz-option>
-                        </nz-select>
+                      <nz-select [(ngModel)]="storeId" (ngModelChange)="selectStore()" name="storeList" id="storeList" [nzPlaceHolder]="'请选择一个门店'" [nzShowSearch]="true">
+                        <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.storeName" [nzValue]="i.storeId"></nz-option>
+                      </nz-select>
                     </nz-form-control>
                 </nz-form-item>
             </nz-col>
@@ -17,7 +17,8 @@
                 <nz-form-item>
                     <nz-form-label nzFor="updatedAt">选择日期</nz-form-label>
                     <nz-form-control>
-                        <input nz-input [(ngModel)]="yyyymm" name="yyyymm" placeholder="请选择日期" id="yyyymm">
+                      <nz-date-picker style="width:200px;" (ngModelChange)="reportDateAlert($event)" [ngModel]="yyyymm"
+                                     [nzDisabledDate]="_disabledStartDate" [nzFormat]="'YYYY-MM-DD'"></nz-date-picker>
                     </nz-form-control>
                 </nz-form-item>
             </nz-col>
@@ -111,3 +112,7 @@
         <nz-pagination class="nzPagination" style="float: right;padding: 20px 0" [nzTotal]="totalElements" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
     </div>
 </nz-card>
+
+
+
+

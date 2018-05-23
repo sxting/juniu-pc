@@ -12,7 +12,7 @@
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="staffName">员工姓名</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input maxlength="10" nz-input formControlName="staffName" id="staffName" placeholder="员工姓名会展示在各种员工报表和顾客预约页面，请仔细填写">
+                <input maxlength="10" nz-input formControlName="staffName" autocomplete="off" id="staffName" placeholder="员工姓名会展示在各种员工报表和顾客预约页面，请仔细填写">
                 <nz-form-explain class="errorTips" *ngIf="form.get('staffName').dirty && form.get('staffName').errors">请输入员工姓名</nz-form-explain>
             </nz-form-control>
         </nz-form-item>

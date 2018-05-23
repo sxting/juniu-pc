@@ -29,7 +29,6 @@ export class AddNewStaffComponent implements OnInit {
     staffId: string = '';//员工id
     passwordPre: string = '';//上次的密码
     belongList: any[] = [{name: '门店', value: 'STORE'},{name: '总部', value: 'MERCHANT'}];//员工归属
-    belongType: string = '';//员工归属
     ifShow: boolean = true;//是否显示选择门店
 
     //上传图片的时候
@@ -53,12 +52,7 @@ export class AddNewStaffComponent implements OnInit {
     get password() { return this.form.controls['password']; }
 
     ngOnInit() {
-
         let self = this;
-        this.belongType = this.belongList[0].value;
-        // 员工角色请求
-        this.staffRolesHttp();
-
         //门店列表
         if (this.localStorageService.getLocalstorage(STORES_INFO) && JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
             let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
@@ -67,18 +61,17 @@ export class AddNewStaffComponent implements OnInit {
             this.storeId = this.storeList[0].storeId;
         }
         this.staffId = this.route.snapshot.params['staffId'] ? this.route.snapshot.params['staffId'] : FunctionUtil.getUrlString('staffId');
-
         if(this.staffId){
-            this.titleSrv.setTitle('编辑员工');
-            this.staffInforDetail();//查看员工详情
+          this.titleSrv.setTitle('编辑员工');
         }else {
-            this.titleSrv.setTitle('新增员工');
+          this.titleSrv.setTitle('新增员工');
         }
+       this.staffRolesHttp();// 员工角色请求
         self.formData = {
             staffName: [null, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
             phone: [null, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
             password: [null, [Validators.required, Validators.pattern(`^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,16}$`)]],
-            belongType: ['STORE', [Validators.required]],//门店员工职位
+            belongType: [ this.belongList[0].value, [Validators.required]],//门店员工职位
             storeId: [self.storeList[0].storeId, [Validators.required]],
             roleId: [null, [Validators.required]],
         };
@@ -88,9 +81,25 @@ export class AddNewStaffComponent implements OnInit {
 
     //切换员工员工归属属性
     onChangesBelongs(values: any): void {
-        console.log(values);
-        this.RolesListInfor = values === 'STORE'? this.storeRoles : this.merchantRoles;
-        this.ifShow = values === 'STORE'? true : false;
+      let self = this;
+      console.log(values);
+      this.RolesListInfor = values === 'STORE'? this.storeRoles : this.merchantRoles;
+      this.ifShow = values === 'STORE'? true : false;
+      let staffName = this.form.controls.staffName.value;
+      let phone = this.form.controls.phone.value;
+      let password = this.form.controls.password.value;
+      let storeId = this.form.controls.storeId.value;
+      let roleId = this.RolesListInfor[0]? this.RolesListInfor[0].roleId : '';
+
+      this.formData = {
+        staffName: [ staffName, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
+        phone: [ phone, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
+        password: [ password, [Validators.required, Validators.pattern(`^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,16}$`)]],
+        belongType: [ values, [Validators.required]],//门店员工职位
+        storeId: [ storeId, [Validators.required]],
+        roleId: [ roleId, [Validators.required]]
+      };
+      this.form = this.fb.group(self.formData);
     }
 
     //上传图片接口
@@ -113,14 +122,13 @@ export class AddNewStaffComponent implements OnInit {
     staffRolesHttp() {
         let self = this;
         this.loading = true;
-        this.manageService.roles().subscribe(
+        this.manageService.rolesSelect().subscribe(
             (res: any) => {
                 if (res.success) {
                     this.loading = false;
                     self.merchantRoles = res.data.merchantRoles;
                     self.storeRoles = res.data.storeRoles;
-
-                    if(self.belongType === 'STORE'){
+                    if(self.form.controls.belongType.value === 'STORE'){
                         self.RolesListInfor = res.data.storeRoles;
                         self.ifShow = true;
                     }else {
@@ -128,17 +136,19 @@ export class AddNewStaffComponent implements OnInit {
                         self.RolesListInfor = res.data.merchantRoles;
                     }
                     let roleId = self.RolesListInfor[0]? self.RolesListInfor[0].roleId : '';
+
                     self.formData = {
-                        staffName: [null, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
-                        phone: [null, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
-                        password: [null, [Validators.required, ]],
-                        portrait: [null, [ ]],//员工图像
-                        belongType: ['STORE', [Validators.required]],//门店员工职位
-                        storeId: [self.storeList[0].storeId, [Validators.required]],
-                        roleId: [roleId, [Validators.required]],
+                      staffName: [null, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
+                      phone: [null, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
+                      password: [null, [Validators.required, Validators.pattern(`^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,16}$`)]],
+                      belongType: [ this.belongList[0].value, [Validators.required]],//门店员工职位
+                      storeId: [self.storeList[0].storeId, [Validators.required]],
+                      roleId: [ roleId, [Validators.required]]
                     };
                     self.form = self.fb.group(self.formData);
-
+                    if(this.staffId){
+                      this.staffInforDetail();//编辑查看员工详情
+                    }
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -163,23 +173,26 @@ export class AddNewStaffComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     this.loading = false;
-                    console.log(res.data);
-                    let roleId = res.data.belongType === 'STORE'? res.data.storeRoleMapper[0].roleId : res.data.roleId;
                     self.picId = res.data.portrait.imageId;//员工图像
                     self.imagePath = res.data.portrait.imageUrl;//员工图像地址
                     self.passwordPre = res.data.password;//拿到上次的密码
-                    let storeId = res.data.storeRoleMapper[0]? res.data.storeRoleMapper[0].storeId : '';
-
+                    if(res.data.belongType === 'STORE'){
+                      self.RolesListInfor = self.storeRoles;
+                      self.ifShow = true;
+                    }else {
+                      self.ifShow = false;
+                      self.RolesListInfor = self.merchantRoles;
+                    }
+                    let storeId = res.data.storeId === ''&& res.data.belongType === 'MERCHANT'? self.storeList[0].storeId : res.data.storeId;
                     self.formData = {
                         staffName: [ res.data.staffName, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
                         phone: [ res.data.contactPhone, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
-                        password: [ res.data.password, [Validators.required, ]],
+                        password: [ res.data.password, [Validators.required, Validators.pattern(`^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,16}$`)]],
                         belongType: [ res.data.belongType, [Validators.required]],//门店员工职位
                         storeId: [ storeId, [Validators.required]],
-                        roleId: [ roleId, [Validators.required]],
+                        roleId: [ res.data.roleId, [Validators.required]],
                     };
                     self.form = self.fb.group(self.formData);
-
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -200,8 +213,8 @@ export class AddNewStaffComponent implements OnInit {
             this.form.controls[ i ].markAsDirty();
             this.form.controls[ i ].updateValueAndValidity();
         }
-        if (this.form.invalid) return;
-        this.submitting = true;
+      if (this.form.invalid) return;
+      this.submitting = true;
         let storeId = this.form.controls.belongType.value === 'STORE'? this.form.controls.storeId.value : '';
         let password = this.passwordPre === this.form.controls.password.value? '' : this.form.controls.password.value;
         let params = {
@@ -212,12 +225,7 @@ export class AddNewStaffComponent implements OnInit {
             roleId: this.form.controls.roleId.value,
             portrait: this.picId,
             staffId: this.staffId,
-            storeRoleMapper: [
-                {
-                    roleId: this.form.controls.roleId.value,
-                    storeId: storeId
-                }
-            ]
+            storeId:storeId,
         };
         if(this.staffId){//修改
             this.editStaff(params);
@@ -231,9 +239,9 @@ export class AddNewStaffComponent implements OnInit {
         let self = this;
         this.manageService.creatStaff(params).subscribe(
             (res: any) => {
-                if (res.success) {
+              self.submitting = false;
+              if (res.success) {
                     setTimeout(() => {
-                        self.submitting = false;
                         self.msg.success(`员工创建成功`);
                         self.router.navigate(['/manage/staff/list']);
                     }, 1000);
@@ -255,9 +263,9 @@ export class AddNewStaffComponent implements OnInit {
         let self = this;
         this.manageService.staffedit(params).subscribe(
             (res: any) => {
-                if (res.success) {
+              self.submitting = false;
+              if (res.success) {
                     setTimeout(() => {
-                        self.submitting = false;
                         self.msg.success(`改修员工信息成功`);
                         self.router.navigate(['/manage/staff/list']);
                     }, 1000);

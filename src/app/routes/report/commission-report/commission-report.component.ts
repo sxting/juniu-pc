@@ -4,6 +4,7 @@ import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ReportService } from "../shared/report.service";
 import { LocalStorageService } from "../../../shared/service/localstorage-service";
 import { FunctionUtil } from "../../../shared/funtion/funtion-util";
+import { STORES_INFO } from '@shared/define/juniu-define';
 
 @Component({
   selector: 'app-commission-report',
@@ -24,7 +25,8 @@ export class CommissionReportComponent implements OnInit {
 
     storeId: string = '';//门店
     storeList: any[] = [];
-    date: any = '2018-04-09';
+    date: any;//time
+    staffingDate: Date;//选择的时间
     merchantId: string = '';//商家ID
 
     avgRate: any;
@@ -62,23 +64,31 @@ export class CommissionReportComponent implements OnInit {
 
     ngOnInit() {
 
-        this.data = [{x:'04.01',y:'1'},{x:'04.01',y:'0.5'},{x:'04.01',y:'1.7'}];
-        // 门店
-        this.storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) ?
-            JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) : [];
+      //门店列表
+      if (this.localStorageService.getLocalstorage(STORES_INFO) && JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
+        let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
+          JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
+          let list = {
+            storeId: '',
+            storeName: '全部门店'
+          };
+        storeList.splice(0, 0, list);//给数组第一位插入值
+        this.storeList = storeList;
+        this.storeId = '';
+      }
 
-        //let year = new Date().getFullYear();        //获取当前年份(2位)
-        //let month = new Date().getMonth()+1;       //获取当前月份(0-11,0代表1月)
-        //let changemonth = month < 10 ? '0' + month : '' + month;
-        //let day = new Date().getDate();        //获取当前日(1-31)
-        //this.staffingDate = new Date(year+'-'+changemonth+'-'+day);
-        //this.date = year+'-'+changemonth+'-'+day;
+      let year = new Date().getFullYear();        //获取当前年份(2位)
+      let month = new Date().getMonth()+1;       //获取当前月份(0-11,0代表1月)
+      let changemonth = month < 10 ? '0' + month : '' + month;
+      let day = new Date().getDate();        //获取当前日(1-31)
+      this.staffingDate = new Date(year+'-'+changemonth+'-'+day);
+      this.date = year+'-'+changemonth+'-'+day;
 
-        this.batchQuery.date = this.date;
-        //请求员工提成信息
-        this.getStaffingdeDuctionUp(this.batchQuery);
+      this.batchQuery.date = this.date;
+      //请求员工提成信息
+      this.getStaffingdeDuctionUp(this.batchQuery);
 
-    }
+  }
 
     //员工提成的图表echart信息
     getStaffingdeDuctionUp(batchQuery:any){

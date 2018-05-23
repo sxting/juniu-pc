@@ -11,12 +11,11 @@ import { _HttpClient } from '@delon/theme';
 export class ManageService {
   constructor(private http: _HttpClient) { }
 
-  apiStaff = 'http://192.168.0.109:8080//merchant';
+  apiStaff = Config.API1 + 'account';
   api1 = Config.API + 'finance';
 
   //轮牌===员工列表（只有员工姓名和id）
   getStaffListByStoreId(storeId: string) {
-    // GET /staff/reserveStaffList.json
     let apiUrl = Config.API + 'account/staff/reserveStaffList.json';
     let req = FunctionUtil.obectToURLSearchParams({ storeId: storeId });
     return this.http.get(apiUrl, { storeId: storeId }).map((response: Response) => response).catch(error => {
@@ -385,7 +384,6 @@ export class ManageService {
   }
   // 检查是否设置摄像头
   checkCamera(data: any) {
-    // https://api.juniuo.com/merchant/faceCameraStatus.json?storeId=1505101455051293415528
     let apiUrl = 'https://api.juniuo.com/merchant/faceCameraStatus.json';
     let params = FunctionUtil.obectToURLSearchParams(data);
     return this.http.get(apiUrl, data)
@@ -395,24 +393,30 @@ export class ManageService {
       });
   }
 
-  //----------------------------------------员工Http请求----------------------------------------//
+  //新增门店
+  storeCreate(data: any) {
+    // let apiUrl = Config.API + '/staff/set/push/wechat/pub/config.json';
+    let apiUrl = this.apiStaff + '/store/create.json';
 
-  //修改员工(修改)
-  staffedit(data: any) {
-    // let apiUrl = Config.API + '/account/staff/edit.json';
-    let apiUrl = this.apiStaff + '/staff/modify.json';
     return this.http.post(apiUrl, data)
       .map((response: Response) => response)
       .catch(error => {
         return Observable.throw(error);
       });
   }
+  //门店字典 /dic/get/location.json
+  getLocation() {
+    let apiUrl = Config.API1 + 'account/dic/get/location.json';
+    return this.http.get(apiUrl).map((response: Response) => response).catch(error => {
+      return Observable.throw(error);
+    });
+  }
+
+  //----------------------------------------员工Http请求----------------------------------------//
 
   //员工列表
   staffList(data: any) {
-    // let apiUrl = Config.API + '/staff/batch/query.json';
-    let apiUrl = this.apiStaff + '/staff/batch/query.json';
-
+    let apiUrl = this.apiStaff + '/merchant/staff/batch.json';
     return this.http.get(apiUrl, data)
       .map((response: Response) => response)
       .catch(error => {
@@ -422,8 +426,7 @@ export class ManageService {
 
   //创建员工
   creatStaff(data: any) {
-    // let apiUrl = Config.API + '/staff/batch/query.json';
-    let apiUrl = this.apiStaff + '/staff/create.json';
+    let apiUrl = this.apiStaff + '/merchant/staff/create.json';
     return this.http.post(apiUrl, data)
       .map((response: Response) => response)
       .catch(error => {
@@ -431,10 +434,20 @@ export class ManageService {
       });
   }
 
+  //修改员工(修改)
+  staffedit(data: any) {
+    let apiUrl = this.apiStaff + '/merchant/staff/modify.json';
+    return this.http.post(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+
   //删除员工
   staffremove(data: any) {
-    // let apiUrl = Config.API + '/staff/delete.json';
-    let apiUrl = this.apiStaff + '/staff/delete.json';
+    let apiUrl = this.apiStaff + '/merchant/staff/delete.json';
 
     return this.http.post(apiUrl, data)
       .map((response: Response) => response)
@@ -444,10 +457,8 @@ export class ManageService {
   }
 
   //员工角色请求
-  roles() {
-    // let apiUrl = Config.API + '/role/select.json';
-    let apiUrl = this.apiStaff + '/role/select.json';
-
+  rolesSelect() {
+    let apiUrl = this.apiStaff + '/merchant/role/select.json';
     return this.http.get(apiUrl)
       .map((response: Response) => response)
       .catch(error => {
@@ -456,9 +467,7 @@ export class ManageService {
   }
   //员工详情
   staffdetail(data: any) {
-    // let apiUrl = Config.API + '/staff/query/detail.json';
-    let apiUrl = this.apiStaff + '/staff/query/detail.json';
-
+    let apiUrl = this.apiStaff + '/merchant/staff/detail.json';
     return this.http.get(apiUrl, data)
       .map((response: Response) => response)
       .catch(error => {
@@ -468,9 +477,7 @@ export class ManageService {
 
   //查询短信推送配置
   smsPushConfig(data: any) {
-    // let apiUrl = Config.API + '/staff/query/push/sms/config.json';
-    let apiUrl = this.apiStaff + '/staff/query/push/sms/config.json';
-
+    let apiUrl = this.apiStaff + '/merchant/staff/sms/config/query.json';
     return this.http.get(apiUrl, data)
       .map((response: Response) => response)
       .catch(error => {
@@ -480,9 +487,7 @@ export class ManageService {
 
   //查询微信公众号推送配置
   wechatPushConfig(data: any) {
-    // let apiUrl = Config.API + '/staff/query/push/wechat/pub/config.json';
-    let apiUrl = this.apiStaff + '/staff/query/push/wechat/pub/config.json';
-
+    let apiUrl = this.apiStaff + '/merchant/staff/wechat/config/query.json';
     return this.http.get(apiUrl, data)
       .map((response: Response) => response)
       .catch(error => {
@@ -492,9 +497,7 @@ export class ManageService {
 
   //设置短信推送配置
   setPushSmsHttps(data: any) {
-    // let apiUrl = Config.API + '/staff/set/push/sms/config.json';
-    let apiUrl = this.apiStaff + '/staff/set/push/sms/config.json';
-
+    let apiUrl = this.apiStaff + '/merchant/staff/sms/config/set.json';
     return this.http.post(apiUrl, data)
       .map((response: Response) => response)
       .catch(error => {
@@ -504,9 +507,7 @@ export class ManageService {
 
   //设置微信公众号推送配置
   setPushWechat(data: any) {
-    // let apiUrl = Config.API + '/staff/set/push/wechat/pub/config.json';
-    let apiUrl = this.apiStaff + '/staff/set/push/wechat/pub/config.json';
-
+    let apiUrl = this.apiStaff + '/merchant/staff/set/push/wechat/pub/config.json';
     return this.http.post(apiUrl, data)
       .map((response: Response) => response)
       .catch(error => {
@@ -518,6 +519,26 @@ export class ManageService {
   deductRulepage(data: any) {
     let apiUrl = Config.API + '/finance/deductRule/page.json';
     return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  //新增员工提成规则
+  addNewStaffingRules(data: any) {
+    let apiUrl = Config.API + 'finance/deductRule/add.json';
+    return this.http.post(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  //修改员工提成规则
+  editStaffingRules(data: any){
+    let apiUrl = Config.API + 'finance/deductRule/update.json';
+    return this.http.post(apiUrl, data)
       .map((response: Response) => response)
       .catch(error => {
         return Observable.throw(error);
@@ -544,7 +565,6 @@ export class ManageService {
       });
   }
   getAllbuySearch1(storeId: string) {
-    // GET /staff/reserveStaffList.json
     let apiUrl = Config.API + '/product/product/buySearch.json';
     let req = FunctionUtil.obectToURLSearchParams({ storeId: storeId });
     return this.http.get(apiUrl, { storeId: storeId }).map((response: Response) => response).catch(error => {
@@ -553,8 +573,7 @@ export class ManageService {
   }
   //获取员工的列表
   selectStaffList(data: any) {
-    // let apiUrl = Config.API + '/merchant/staff/select.json';
-    let apiUrl = 'http://192.168.0.159:8080/merchant/staff/select.json';
+    let apiUrl = Config.API + '/staff/select.json';
     return this.http.get(apiUrl, data)
       .map((response: Response) => response)
       .catch(error => {
@@ -562,22 +581,54 @@ export class ManageService {
       });
   }
 
-  //新增门店
-  storeCreate(data: any) {
-    // let apiUrl = Config.API + '/staff/set/push/wechat/pub/config.json';
-    let apiUrl = this.apiStaff + '/store/create.json';
+  //员工排班列表
+  schedulingListInfor(data: any) {
+    let apiUrl = Config.API + 'reserve/scheduling/config/page.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
 
+  //新增员工排班
+  addStaffSchedulingInfor(data: any) {
+    let apiUrl = Config.API + 'reserve/scheduling/config/save.json';
     return this.http.post(apiUrl, data)
       .map((response: Response) => response)
       .catch(error => {
         return Observable.throw(error);
       });
   }
-  //门店字典 /dic/get/location.json
-  getLocation() {
-    let apiUrl = Config.API1 + 'account/dic/get/location.json';
-    return this.http.get(apiUrl).map((response: Response) => response).catch(error => {
-      return Observable.throw(error);
-    });
+
+  //删除排班
+  deletechedulingInfor(data: any) {
+    let apiUrl = Config.API + 'reserve/scheduling/config/del.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
   }
+
+  //查看单个排班规则
+  checkSechedulingDetail(data: any) {
+    let apiUrl = Config.API + 'reserve/scheduling/config.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  //修改排班信息
+  updateSechedulingInfor(data: any) {
+    let apiUrl = Config.API + 'reserve//scheduling/config/update.json';
+    return this.http.post(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
 }

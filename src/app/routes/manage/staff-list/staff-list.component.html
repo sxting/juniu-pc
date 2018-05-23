@@ -40,8 +40,8 @@
             <tr nz-tbody-tr *ngFor="let item of staffListInfos;let j = index">
                 <td>{{item.staffId}}</td>
                 <td>{{item.staffName}}</td>
-                <td>{{item.storeRoleMapper[0].roleName}}</td>
-                <td>{{item.storeRoleMapper[0].branchName}}</td>
+                <td>{{item.roleName}}</td>
+                <td>{{item.storeName}}</td>
                 <td>{{item.contactPhone}}</td>
                 <td class="push-notification-operation">
                    <p *ngIf="item.belongType === 'STORE'">
