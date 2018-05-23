@@ -106,7 +106,7 @@ export class UserRegisterComponent implements OnDestroy {
         // mock http
         this.loading = true;
         this.registrySystem();
-        // this.router.navigate(['/passport/register-result']);
+
 
     }
 
@@ -129,6 +129,7 @@ export class UserRegisterComponent implements OnDestroy {
             (res: any) => {
                 if (res.success) {
                     this.loading = false;
+                    this.router.navigate(['/passport/register-result']);
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -151,7 +152,9 @@ export class UserRegisterComponent implements OnDestroy {
         this.memberService.getValidCode(data).subscribe(
             (res: any) => {
                 if (res.success) {
-
+                    this.modalSrv.success({
+                        nzContent: '发送成功'
+                    });
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
