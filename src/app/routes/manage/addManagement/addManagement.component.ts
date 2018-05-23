@@ -61,7 +61,6 @@ export class AddManagementComponent implements OnInit {
     get managementStatus() { return this.form.controls.managementStatus; }
     submit() {
         let that = this;
-        console.log(this.form.controls.nodes.value);
         this.belongType = this.form.controls.managementStatus.value;
         this.roleName = this.form.controls.managementName.value;
         this.moduleIds = [];

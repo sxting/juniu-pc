@@ -377,4 +377,27 @@ export class MemberService {
                 return Observable.throw(error);
             });
     }
+
+
+    //注册 
+    registrySystem(data: any) {
+        let apiUrl = Config.API1 + 'account/registry/system.json';
+        let params = FunctionUtil.obectToURLSearchParams(data);
+        return this.http.post(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    /**
+ * 获取手机二维码
+ */
+    getValidCode(data) {
+        // 类型 REGISTER或者VALID
+        let apiUrl = Config.API1 + '/common/validCode/getValidCode.json';
+        return this.http.get(apiUrl,data).map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
 }

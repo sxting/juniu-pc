@@ -2,6 +2,8 @@ import { Component, HostBinding, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { SettingsService, TitleService } from '@delon/theme';
 import { filter } from 'rxjs/operators';
+import { Inject } from '@angular/core';
+import { DA_SERVICE_TOKEN, TokenService } from '@delon/auth';
 
 @Component({
   selector: 'app-root',
@@ -25,11 +27,19 @@ export class AppComponent implements OnInit {
     private settings: SettingsService,
     private router: Router,
     private titleSrv: TitleService,
-  ) {}
+    @Inject(DA_SERVICE_TOKEN) private tokenService: TokenService
+  ) { }
 
   ngOnInit() {
     this.router.events
       .pipe(filter(evt => evt instanceof NavigationEnd))
       .subscribe(() => this.titleSrv.setTitle());
+    this.tokenService.set({
+      token: '8264d55d54aaf2492db097d1790f6503',
+      email: `cipchk@qq.com`,
+      id: 10000,
+      time: +new Date
+    });
   }
+
 }
