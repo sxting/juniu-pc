@@ -38,7 +38,7 @@ export class AppComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    var token = this.tokenService.get().token;;
+    var token = this.tokenService.get().token;
     var that = this;
     this.router.events
       .filter(event => event instanceof NavigationEnd)
