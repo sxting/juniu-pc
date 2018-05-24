@@ -280,9 +280,9 @@ export class OnlyCardImportComponent {
             merchantId: this.merchantId,
             pageIndex: this.pageIndex,
             pageSize: 10,
-            type: type
+            cardType: type
         }
-        if (!data.type) delete data.type;
+        if (!data.cardType) delete data.cardType;
         self.cardList = [];
         this.memberService.improtCardRecord(data).subscribe(
             (res: any) => {

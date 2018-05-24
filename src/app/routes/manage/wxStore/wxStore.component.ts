@@ -68,9 +68,9 @@ export class WxStoreComponent implements OnInit {
 
     }
     ngOnInit(): void {
-        // this.getAllbuySearchs();
+        this.getAllbuySearchs();
         // this.getStaffList();
-        // this.getAllCardsList();
+        this.getAllCardsList();
         this.storeId = this.route.snapshot.params['storeId'];
         this.getLocationHttp();
     }
@@ -178,7 +178,7 @@ export class WxStoreComponent implements OnInit {
     }
     // 获取全部商品
     getAllbuySearchs() {
-        this.manageService.getAllbuySearch(this.storeId).subscribe(
+        this.manageService.getAllbuySearch1(this.storeId).subscribe(
             (res: any) => {
                 if (res.success) {
                     let allproducks = res.data;

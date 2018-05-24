@@ -7,6 +7,7 @@ import { SocialService, SocialOpenType, TokenService, DA_SERVICE_TOKEN } from '@
 import { ReuseTabService } from '@delon/abc';
 import { environment } from '@env/environment';
 import { MemberService } from '../../member/shared/member.service';
+import { LocalStorageService } from '@shared/service/localstorage-service';
 
 @Component({
     selector: 'passport-login',
@@ -27,6 +28,7 @@ export class UserLoginComponent implements OnDestroy {
         public msg: NzMessageService,
         private modalSrv: NzModalService,
         private settingsService: SettingsService,
+        private localStorageService: LocalStorageService,
         private memberService: MemberService,
         private socialService: SocialService,
         @Optional() @Inject(ReuseTabService) private reuseTabService: ReuseTabService,
@@ -103,7 +105,7 @@ export class UserLoginComponent implements OnDestroy {
             // 清空路由复用信息
             this.reuseTabService.clear();
             this.tokenService.set({
-                token: '80c22a3aaff8d50197c45d97b6a80695',
+                token: '8c10399162be597e06764a0783fc1933',
                 email: `cipchk@qq.com`,
                 id: 10000,
                 time: +new Date
