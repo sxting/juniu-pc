@@ -96,7 +96,7 @@ export class FunctionUtil {
         });
       });
     });
-    /*判断城市是否全选*/
+    /*判断是否全选*/
     staffListInfor.forEach(function (city: any, i: number) {
       let storesChangeArr = [''];
       city.staffs.forEach(function (store: any, j: number) {
@@ -145,6 +145,17 @@ export class FunctionUtil {
       }
     }
     return cityArr;
+  }
+
+  //将日期时间戳转换成日期格式
+  static changeDateToSeconds(date: Date) {
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let seconds = date.getSeconds();
+    return year + '-' + (month.toString().length > 1 ? month : ('0' + month)) + '-' + (day.toString().length > 1 ? day : ('0' + day)) + ' ' + (hours.toString().length > 1 ? hours : ('0' + hours)) + ':' + (minutes.toString().length > 1 ? minutes : ('0' + minutes)) + ':' + (seconds.toString().length > 1 ? seconds : ('0' + seconds));
   }
 
   //最简单的身份证校验

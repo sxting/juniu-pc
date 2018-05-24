@@ -1,12 +1,12 @@
 <page-header [title]="'口碑订单'"></page-header>
 <nz-card [nzBordered]="false">
-    <form nz-form [nzLayout]="'inline'" (ngSubmit)="getData()" class="search__form">
+    <div nz-form [nzLayout]="'inline'" class="search__form">
         <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
             <nz-col nzMd="8" nzSm="24">
                 <nz-form-item>
                     <nz-form-label nzFor="productId">{{timeText}}时间</nz-form-label>
-                    <nz-form-control>
-                        <input nz-input  [(ngModel)]="productId" name="productId" placeholder="请选择开始时间" id="productId">
+                    <nz-form-control class="box-time-pick">
+                      <nz-range-picker [(ngModel)]="dateRange" (ngModelChange)="onDateChange($event)" nzShowTime></nz-range-picker>
                     </nz-form-control>
                 </nz-form-item>
             </nz-col>
@@ -14,32 +14,32 @@
                 <nz-form-item>
                     <nz-form-label nzFor="storeId">选择门店</nz-form-label>
                     <nz-form-control>
-                        <nz-select [(ngModel)]="storeId" name="storeId" id="storeId" [nzPlaceHolder]="'请选择一个门店'" [nzShowSearch]="true">
-                            <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.storeName" [nzValue]="i.storeId"></nz-option>
-                        </nz-select>
+                      <nz-select  style="width: 200px;" [(ngModel)]="storeId" (ngModelChange)="selectStore()" name="storeList" id="storeList" [nzPlaceHolder]="'请选择一个门店'" [nzShowSearch]="true">
+                        <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.storeName" [nzValue]="i.storeId"></nz-option>
+                      </nz-select>
                     </nz-form-control>
                 </nz-form-item>
             </nz-col>
-            <nz-col nzMd="8" nzSm="24" *ngIf="expandForm&&switchOrderListBtns">
+            <nz-col nzMd="8" nzSm="24" *ngIf="expandForm && switchOrderListBtns">
                 <nz-form-item>
-                    <nz-form-label nzFor="productName">搜 索</nz-form-label>
+                    <nz-form-label nzFor="orderNo">搜 索</nz-form-label>
                     <nz-form-control>
-                        <input nz-input [(ngModel)]="productName" name="productName" placeholder="请输入订单号" id="productName">
+                        <input nz-input [(ngModel)]="orderNo" name="orderNo" placeholder="请输入订单号" id="orderNo">
                     </nz-form-control>
                 </nz-form-item>
             </nz-col>
-            <nz-col [nzSpan]="expandForm ? 24 : 8" [class.text-right]="expandForm" *ngIf="switchOrderListBtns">
+            <nz-col [nzSpan]="expandForm ? 24 : 8" [class.text-right]="expandForm" *ngIf="switchOrderListBtns" (click)="getData()">
                 <button nz-button type="submit" [nzType]="'primary'" [nzLoading]="loading">查询</button>
                 <a (click)="expandForm=!expandForm">
                     {{expandForm ? '收起' : '展开'}}
                     <i class="anticon" [class.anticon-down]="!expandForm" [class.anticon-up]="expandForm"></i>
                 </a>
             </nz-col>
-            <nz-col [nzSpan]="8" *ngIf="switchHexiaoListBtns">
+            <nz-col [nzSpan]="8" *ngIf="switchHexiaoListBtns" (click)="getData()">
                 <button nz-button type="submit" [nzType]="'primary'" [nzLoading]="loading">查询</button>
             </nz-col>
         </nz-row>
-    </form>
+    </div>
 </nz-card>
 
 <!--订单列表-->

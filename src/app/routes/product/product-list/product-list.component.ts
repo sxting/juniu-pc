@@ -154,7 +154,6 @@ export class ProductListComponent implements OnInit {
         this.productService.getProductListInfor(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    console.log(res);
                     that.loading = false;
                     that.productListInfor = res.data.content;
                     that.totalElements = res.data.totalElements;
@@ -182,6 +181,4 @@ export class ProductListComponent implements OnInit {
         this.batchQuery.pageNo = this.pageNo;
         this.getProductListHttp(this.batchQuery);
     }
-
-
 }

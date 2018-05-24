@@ -1,13 +1,13 @@
-<div class="ad-page-header" style="margin: 0 -24px; border-bottom:none !important;">
+<div class="content__title ad-ph">
     <nz-breadcrumb>
         <nz-breadcrumb-item>主页</nz-breadcrumb-item>
         <nz-breadcrumb-item>口碑</nz-breadcrumb-item>
         <nz-breadcrumb-item>口碑商品</nz-breadcrumb-item>
         <nz-breadcrumb-item>新增商品</nz-breadcrumb-item>
     </nz-breadcrumb>
-    <page-header [title]="'新增口碑商品'"></page-header>
+    <h1 class="title ng-star-inserted">新增口碑商品</h1>
 </div>
-<form nz-form [formGroup]="form" (ngSubmit)="submit()">
+<form nz-form [formGroup]="form">
     <!--基本信息-->
     <nz-card [nzBordered]="false" class="sales-card">
         <h2><span class="line"></span>基本信息</h2>
@@ -53,7 +53,8 @@
                 <div class="pics_box clearfix">
                     <div class="img-box">
                         <img class="upload-img" src="./assets/img/upload.png">
-                        <input formControlName="picId" type="file" accept="image" (change)="uploadImage($event,'cover',0)">
+                        <input type="file" accept="image" (change)="uploadImage($event,'cover',0)">
+                        <input formControlName="picId" style="visibility: hidden"/>
                         <img class="image" [src]="imagePath" *ngIf="imagePath">
                     </div>
                 </div>
@@ -193,22 +194,14 @@
                     <span class="text-thing" style="color: #999999;font-size: 12px;">输入范围7-360天</span>
                 </div>
                 <div class="clearfix" *ngIf="form.value.validityPeriodType == 'FIXED'">
-                    <p class="fl">
-                        <input nz-input style="width: 160px"  type="text" formControlName="startDate" placeholder="请选择开始时间">
-                    </p>
-                    <span class="fl" style="margin: 0 14px">至</span>
-                    <p class="fl">
-                        <input nz-input style="width: 160px"  type="text" formControlName="endDate" placeholder="请选择结束时间">
-                    </p>
+                  <nz-range-picker formControlName="dateRange" nzShowTime></nz-range-picker>
                 </div>
-
                 <ng-container *ngIf="form.value.validityPeriodType == 'RELATIVE'&& expiryDay.dirty || expiryDay.touched">
                     <nz-form-explain class="errorTips" *ngIf="expiryDay.errors?.required">请填写使用有效期。</nz-form-explain>
                     <nz-form-explain class="errorTips" *ngIf="expiryDay.errors?.pattern">使用有效期只能是正整数</nz-form-explain>
                     <nz-form-explain class="errorTips" *ngIf="expiryDay.errors?.min">使用有效期最少7天</nz-form-explain>
                     <nz-form-explain class="errorTips" *ngIf="expiryDay.errors?.max">使用有效期最多360天</nz-form-explain>
                 </ng-container>
-
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
@@ -219,52 +212,54 @@
             </nz-form-control>
         </nz-form-item>
     </nz-card>
-    <!--上下架状态-->
-    <nz-card [nzBordered]="false" class="sales-card">
-        <h2><span class="line"></span>上下架状态</h2>
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="stock">上下架状态</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <nz-radio-group formControlName="status">
-                    <label nz-radio *ngFor="let status of ItemsStatus" [nzValue]="status.value">{{status.name}}</label>
-                </nz-radio-group>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzFor="putawayDate">上架时间</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input nz-input maxlength="8" formControlName="putawayDate" id="putawayDate" placeholder="请选择上架时间">
-                <nz-form-explain class="tips-text">上架时间一旦生效,不能修改。</nz-form-explain>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzFor="soldOutDate">定时下架</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input nz-input maxlength="8" formControlName="soldOutDate" id="soldOutDate" placeholder="请选择上架时间">
-                <nz-form-explain class="tips-text">默认无自动下架时间，可不填。</nz-form-explain>
-            </nz-form-control>
-        </nz-form-item>
-    </nz-card>
-    <!--门店-->
-    <nz-card [nzBordered]="false" class="sales-card">
-        <h2><span class="line"></span>使用门店</h2>
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="storesChangeNum">选择口碑门店</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <div class="right-block fl">
-                    <span>{{storesChangeNum}} 家门店</span>
-                    <span class="space"></span>
-                    <span class="select-store-btn" (click)="onSelectStoreBtnClick(alertStore)">选择门店</span>
-                </div>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
-                <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">提交</button>
-            </nz-form-control>
-        </nz-form-item>
-    </nz-card>
 </form>
+<!--上下架状态-->
+<nz-card [nzBordered]="false" class="sales-card">
+    <h2><span class="line"></span>上下架状态</h2>
+    <nz-form-item>
+        <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="status">上下架状态</nz-form-label>
+        <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+            <nz-radio-group [(ngModel)]="status">
+                <label nz-radio *ngFor="let status of ItemsStatus" [nzValue]="status.value">{{status.name}}</label>
+            </nz-radio-group>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzXs="24" nzSm="7" nzFor="putawayDate">上架时间</nz-form-label>
+        <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+          <nz-date-picker [nzDisabledDate]="disabledStartDate" [nzDisabled]="disabled" nzShowTime nzFormat="yyyy-MM-dd HH:mm:ss"
+                          [(ngModel)]="putawayDate" nzPlaceholder="请选择上架时间" (ngModelChange)="onStartChange($event)" ></nz-date-picker>
+            <nz-form-explain class="tips-text">上架时间一旦生效,不能修改。</nz-form-explain>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzXs="24" nzSm="7" nzFor="soldOutDate">定时下架</nz-form-label>
+        <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+          <nz-date-picker [nzDisabledDate]="disabledEndDate" nzShowTime nzFormat="yyyy-MM-dd HH:mm:ss"
+                          [(ngModel)]="soldOutDate" nzPlaceholder="请选择上架时间" (nzOnOpenChange)="handleEndOpenChange($event)"></nz-date-picker>
+            <nz-form-explain class="tips-text">默认无自动下架时间，可不填。</nz-form-explain>
+        </nz-form-control>
+    </nz-form-item>
+</nz-card>
+<!--门店-->
+<nz-card [nzBordered]="false" class="sales-card">
+    <h2><span class="line"></span>使用门店</h2>
+    <nz-form-item>
+        <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="storesChangeNum">选择口碑门店</nz-form-label>
+        <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+            <div class="right-block fl">
+                <span>{{storesChangeNum}} 家门店</span>
+                <span class="space"></span>
+                <span class="select-store-btn" (click)="onSelectStoreBtnClick(alertStore)">选择门店</span>
+            </div>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item (click)="submit()">
+        <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
+            <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">提交</button>
+        </nz-form-control>
+    </nz-form-item>
+</nz-card>
 
 <!--选择门店弹框-->
 <ng-template #alertStore>
