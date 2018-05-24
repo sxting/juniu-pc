@@ -38,29 +38,20 @@ export class AppComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.router.events
-    //   .pipe(filter(evt => evt instanceof NavigationEnd))
-    //   .subscribe(() => this.titleSrv.setTitle());
-    var token = this.localStorageService.getLocalstorage(APP_TOKEN);
+    var token = this.tokenService.get().token;;
     var that = this;
-    this.tokenService.set({
-      token: '8c10399162be597e06764a0783fc1933',
-      email: `cipchk@qq.com`,
-      id: 10000,
-      time: +new Date
-    });
-    // this.router.events
-    //   .filter(event => event instanceof NavigationEnd)
-    //   .map(() => this.activatedRoute)
-    //   .map(route => {
-    //     while (route.firstChild) route = route.firstChild;
-    // if (!token) that.router.navigate(['/passport/login']);
-    // else that.router.navigate(['/']);
-    //     return route;
-    //   })
-    //   .filter(route => route.outlet === 'primary')
-    //   .mergeMap(route => route.data)
-    //   .subscribe((event) => '');
+    this.router.events
+      .filter(event => event instanceof NavigationEnd)
+      .map(() => this.activatedRoute)
+      .map(route => {
+        while (route.firstChild) route = route.firstChild;
+        if (!token) that.router.navigate(['/passport/login']);
+        return route;
+      })
+      .filter(route => route.outlet === 'primary')
+      .mergeMap(route => route.data)
+      .pipe(filter(evt => evt instanceof NavigationEnd))
+      .subscribe(() => this.titleSrv.setTitle())
   }
 }
 
