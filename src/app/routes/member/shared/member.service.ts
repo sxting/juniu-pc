@@ -395,7 +395,7 @@ export class MemberService {
     getValidCode(data) {
         // 类型 REGISTER或者VALID
         let apiUrl = Config.API1 + '/common/validCode/getValidCode.json';
-        return this.http.get(apiUrl,data).map((response: Response) => response)
+        return this.http.get(apiUrl, data).map((response: Response) => response)
             .catch(error => {
                 return Observable.throw(error);
             });
@@ -404,7 +404,25 @@ export class MemberService {
     improtCardRecord(data) {
         // 类型 REGISTER或者VALID
         let apiUrl = Config.API + '/member/improtCardRecord.json';
-        return this.http.get(apiUrl,data).map((response: Response) => response)
+        return this.http.get(apiUrl, data).map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    //账号密码登录
+    loginName(data: any) {
+        let apiUrl = Config.API1 + 'account/login/login/name.json';
+        return this.http.post(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    // 手机号登录
+    loginPhone(data: any) {
+        let apiUrl = Config.API1 + 'account/login/phone.json';
+        return this.http.post(apiUrl, data)
+            .map((response: Response) => response)
             .catch(error => {
                 return Observable.throw(error);
             });

@@ -6,12 +6,14 @@ import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { SocialService, SocialOpenType, TokenService, DA_SERVICE_TOKEN } from '@delon/auth';
 import { ReuseTabService } from '@delon/abc';
 import { environment } from '@env/environment';
+import { MemberService } from '../../member/shared/member.service';
+import { LocalStorageService } from '@shared/service/localstorage-service';
 
 @Component({
     selector: 'passport-login',
     templateUrl: './login.component.html',
-    styleUrls: [ './login.component.less' ],
-    providers: [ SocialService ]
+    styleUrls: ['./login.component.less'],
+    providers: [SocialService]
 })
 export class UserLoginComponent implements OnDestroy {
 
@@ -26,6 +28,8 @@ export class UserLoginComponent implements OnDestroy {
         public msg: NzMessageService,
         private modalSrv: NzModalService,
         private settingsService: SettingsService,
+        private localStorageService: LocalStorageService,
+        private memberService: MemberService,
         private socialService: SocialService,
         @Optional() @Inject(ReuseTabService) private reuseTabService: ReuseTabService,
         @Inject(DA_SERVICE_TOKEN) private tokenService: TokenService) {
@@ -76,6 +80,7 @@ export class UserLoginComponent implements OnDestroy {
             this.password.markAsDirty();
             this.password.updateValueAndValidity();
             if (this.userName.invalid || this.password.invalid) return;
+
         } else {
             this.mobile.markAsDirty();
             this.mobile.updateValueAndValidity();
@@ -90,15 +95,17 @@ export class UserLoginComponent implements OnDestroy {
             if (this.type === 0) {
                 if (this.userName.value !== 'admin' || this.password.value !== '888888') {
                     this.error = `账户或密码错误`;
+                    // else this.loginName(this.form.value.userName, this.form.value.password);
                     return;
                 }
+            } else {
+                // else this.loginName(this.form.value.mobile, this.form.value.captcha);
             }
 
             // 清空路由复用信息
             this.reuseTabService.clear();
             this.tokenService.set({
-                token: '1234556',
-                name: this.userName.value,
+                token: '8c10399162be597e06764a0783fc1933',
                 email: `cipchk@qq.com`,
                 id: 10000,
                 time: +new Date
@@ -107,45 +114,52 @@ export class UserLoginComponent implements OnDestroy {
         }, 1000);
     }
 
-    // region: social
-
-    open(type: string, openType: SocialOpenType = 'href') {
-        let url = ``;
-        let callback = ``;
-        if (environment.production)
-            callback = 'https://cipchk.github.io/ng-alain/callback/' + type;
-        else
-            callback = 'http://localhost:4200/callback/' + type;
-        switch (type) {
-            case 'auth0':
-                url = `//cipchk.auth0.com/login?client=8gcNydIDzGBYxzqV0Vm1CX_RXH-wsWo5&redirect_uri=${decodeURIComponent(callback)}`;
-                break;
-            case 'github':
-                url = `//github.com/login/oauth/authorize?client_id=9d6baae4b04a23fcafa2&response_type=code&redirect_uri=${decodeURIComponent(callback)}`;
-                break;
-            case 'weibo':
-                url = `https://api.weibo.com/oauth2/authorize?client_id=1239507802&response_type=code&redirect_uri=${decodeURIComponent(callback)}`;
-                break;
-        }
-        if (openType === 'window') {
-            this.socialService.login(url, '/', {
-                type: 'window'
-            }).subscribe((res: any) => {
-                if (res) {
-                    this.settingsService.setUser(res);
-                    this.router.navigateByUrl('/');
-                }
-            });
-        } else {
-            this.socialService.login(url, '/', {
-                type: 'href'
-            });
-        }
-    }
-
     // endregion
-
+    loginName(loginName, password) {
+        let data = {
+            loginName: loginName,
+            password: password
+        };
+        this.memberService.loginName(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    console.log(res.data);
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => this.errorAlter(error)
+        )
+    }
+    loginPhone(loginName, validCode) {
+        let data = {
+            loginName: loginName,
+            validCode: validCode
+        };
+        this.memberService.loginPhone(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    console.log(res.data);
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => this.errorAlter(error)
+        )
+    }
     ngOnDestroy(): void {
         if (this.interval$) clearInterval(this.interval$);
+    }
+    errorAlter(err) {
+        this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: err
+        });
     }
 }
