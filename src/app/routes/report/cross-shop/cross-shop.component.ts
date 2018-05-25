@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ReportService } from "../shared/report.service";
-import { LocalStorageService } from "../../../shared/service/localstorage-service";
-import { FunctionUtil } from "../../../shared/funtion/funtion-util";
+import { STORES_INFO } from '@shared/define/juniu-define';
+import { LocalStorageService } from '@shared/service/localstorage-service';
+import { FunctionUtil } from '@shared/funtion/funtion-util';
 
 @Component({
   selector: 'app-cross-shop',
@@ -28,20 +29,25 @@ export class CrossShopComponent implements OnInit {
     ];
 
     loading = false;
-    pageIndex: number = 1;//第几页吗
+    pageNo: number = 1;//第几页吗
     pageSize: number = 10;//一页显示多少数据
     totalElements: any = 0;//商品总数
     settlementInfor: any = [];//跨点结算信息列表
 
     //弹框信息
     alertTableTitle: any[] = ['消费日期','会员姓名','所持会员卡','消费类型','订单金额','实付金额'];
-    typeOfConsumption: any[] = [{ name: '全部类型', value: ''},{ name: '本店会员他店消费', value: 'OURSHOP'},{ name: '他店会员本店消费', value: 'OTHERSHOP'}];//消费类型
+    typeOfConsumption: any[] = [{ name: '全部类型', value: 'ALL'},{ name: '本店会员他店消费', value: 'OTHERSHOP'},{ name: '他店会员本店消费', value: 'OWNSHOP'}];//消费类型
     settlementDetailList: any;
     countPage: any = 0;//弹框商品总数
-    pageNo: number = 1;//弹框第几页吗
+    pageIndex: number = 1;//弹框第几页吗
+    storeList: any = [];//门店列表
     storeId: string;
     merchantId: string;
     consumeType: string;//消费类型
+
+    dateRange: Date = null;
+    startTime: string = '';//转换字符串的时间
+    endTime: string = '';//转换字符串的时间
 
     constructor(
         private http: _HttpClient,
@@ -51,52 +57,89 @@ export class CrossShopComponent implements OnInit {
         private localStorageService: LocalStorageService
     ) { }
 
+    //列表页面
+    batchQuery = {
+      merchantId: this.merchantId,
+      start: this.startTime,
+      end: this.endTime,
+      pageIndex: this.pageNo,
+      pageSize: this.pageSize,
+      storeId: this.storeId
+    };
 
-
-
+    //弹框
+    batchQueryAlert = {
+      merchantId: this.merchantId,
+      pageIndex: this.pageIndex,
+      pageSize: this.pageSize,
+      consumeType: this.consumeType,
+      storeId: this.storeId
+    };
 
     ngOnInit() {
+
+        //门店列表
+        if (this.localStorageService.getLocalstorage(STORES_INFO) && JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
+          let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
+            JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
+          let list = {
+            storeId: '',
+            storeName: '全部门店'
+          };
+          storeList.splice(0, 0, list);//给数组第一位插入值
+          this.storeList = storeList;
+          this.storeId = '';
+        }
 
         let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
             JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
         this.storeId = UserInfo.staffType === 'MERCHANT'? '' : UserInfo.stores[0].storeId;
         this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
+        this.consumeType = this.typeOfConsumption[0].value;//消费类型
 
-        let batchQuery = {
-            merchantId: this.merchantId,
-            start: '2015-10-02 00:00:00',
-            end: '2018-10-02 00:00:00',
-            pageIndex: this.pageIndex,
-            pageSize: this.pageSize,
-            storeId: this.storeId
-        };
-        this.crossShopListHttp(batchQuery);//跨店结算列表
+        this.batchQuery.merchantId = this.merchantId;
+        this.crossShopListHttp(this.batchQuery);//跨店结算列表
     }
 
     //点击查看详情
     checkDetailInfor(tpl: any,id: string) {
         let self = this;
-        console.log(id);
         this.modalSrv.create({
             nzTitle: '结算详情',
             nzContent: tpl,
             nzWidth: '800px',
             nzFooter: null,
         });
-        let data = {
-            merchantId: this.merchantId,
-            storeId: this.storeId,
-            consumeType: this.consumeType
-        };
-        this.crossShopInforDetailHttp(data);
+        this.batchQueryAlert.consumeType = this.consumeType;
+        this.batchQueryAlert.storeId = this.storeId;
+        this.crossShopInforDetailHttp(this.batchQueryAlert);
     }
 
-    paginateAlert(){
 
+    //列表分页
+    paginate(event: any) {
+      this.pageNo = event;
+      this.batchQuery.pageIndex = this.pageNo;
+      this.crossShopListHttp(this.batchQuery);
     }
 
-    paginate(){
+    //弹框分页
+    paginateAlert(event: any) {
+      this.pageIndex = event;
+      this.batchQueryAlert.pageIndex = this.pageIndex;
+      this.crossShopInforDetailHttp(this.batchQueryAlert);
+    }
 
+    //选择日期
+    onDateChange(date: Date): void {
+      this.dateRange = date;
+      this.startTime = FunctionUtil.changeDateToSeconds(this.dateRange[0]);
+      this.endTime = FunctionUtil.changeDateToSeconds(this.dateRange[1]);
+      if(this.startTime && this.endTime){//选择以后调取接口
+        this.batchQuery.start = this.startTime;
+        this.batchQuery.end = this.endTime;
+        this.crossShopListHttp(this.batchQuery);//跨店结算列表
+      }
     }
 
     //跨店结算列表
@@ -107,7 +150,7 @@ export class CrossShopComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     that.loading = false;
-                    console.log(res.data);
+                    that.settlementInfor = res.data.list;
                     that.totalElements = res.data.pageInfo.countTotal;
                 } else {
                     this.modalSrv.error({
@@ -130,11 +173,7 @@ export class CrossShopComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     that.loading = false;
-
-                    // settlementDetailList: any;
-                    // countPage: any = 0;//弹框商品总数
-                    // pageNo: number = 1;//弹框第几页吗
-
+                    that.settlementDetailList = res.data.list;
                     that.countPage = res.data.pageInfo.countTotal;
                 } else {
                     this.modalSrv.error({
@@ -149,6 +188,18 @@ export class CrossShopComponent implements OnInit {
         );
     }
 
+    //选择消费类型
+    selectConsumeType(){
+      this.batchQueryAlert.consumeType = this.consumeType;
+      this.batchQueryAlert.pageIndex = 1;
+      this.crossShopInforDetailHttp(this.batchQueryAlert);
+    }
 
+    //选择门店
+    selectStore() {
+      this.batchQueryAlert.storeId = this.storeId;
+      this.batchQueryAlert.pageIndex = 1;
+      this.crossShopInforDetailHttp(this.batchQueryAlert);
+    }
 
 }

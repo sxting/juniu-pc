@@ -41,9 +41,15 @@ export class CustomerReportComponent implements OnInit {
         private localStorageService: LocalStorageService
     ) { }
 
+    batchQuery = {
+      merchantId: this.merchantId,
+      date: this.date,
+      storeId: this.storeId,
+      pageNo: this.pageNo,
+      pageSize: this.pageSize,
+    };
 
     ngOnInit() {
-
         let userInfo;
         if (this.localStorageService.getLocalstorage('User-Info')) {
             userInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info'));
@@ -51,11 +57,18 @@ export class CustomerReportComponent implements OnInit {
         if (userInfo) {
             this.merchantId = userInfo.merchantId;
         }
+
         //门店列表
         if (this.localStorageService.getLocalstorage(STORES_INFO) && JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
-            let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-                JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-            this.storeList = storeList;
+          let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
+            JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
+          let list = {
+            storeId: '',
+            storeName: '全部门店'
+          };
+          storeList.splice(0, 0, list);//给数组第一位插入值
+          this.storeList = storeList;
+          this.storeId = '';
         }
 
         let year = new Date().getFullYear();        //获取当前年份(2位)
@@ -69,14 +82,6 @@ export class CustomerReportComponent implements OnInit {
         //获取列表信息
         this.getDayCustomerHttp(this.batchQuery);
     }
-
-    batchQuery = {
-        merchantId: this.merchantId,
-        date: this.date,
-        storeId: this.storeId,
-        pageNo: this.pageNo,
-        pageSize: this.pageSize,
-    };
 
     //选择日期
     reportDateAlert(e: any) {
@@ -128,11 +133,17 @@ export class CustomerReportComponent implements OnInit {
                     let dateArr = [];
                     let valueArr = [];
                     res.data.lastMonthVos.forEach(function (item: any) {
-                        dateArr.push(item.name);
+                        dateArr.push(item.name.replace(/-/g, ".").substring(5));
                         valueArr.push(item.value)
                     });
-                    that.getLeftChart(dateArr, valueArr);
-                    that.getRightChart(res.data.currentCount-res.data.currentFitCount, res.data.currentFitCount);
+                  let myChartLeft = echarts.init(document.getElementById('chart-left'));
+                  let myChartRight = echarts.init(document.getElementById('chart-right'));
+                  that.getLeftChart(myChartLeft, dateArr, valueArr);
+
+                  console.log(res.data.currentCount - res.data.currentFitCount);
+                  console.log(res.data.currentFitCount);
+
+                  that.getRightChart(myChartRight, res.data.currentCount-res.data.currentFitCount, res.data.currentFitCount);
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -147,33 +158,51 @@ export class CustomerReportComponent implements OnInit {
     }
 
     /*===echart图标信息====*/
-    getLeftChart(date: any, value: any) {
-        let option = {
-            xAxis: {
-                type: 'category',
-                boundaryGap: false,
-                data: date,
-                show: false,
-            },
-            yAxis: {
-                type: 'value',
-                show: false,
-            },
-            series: [{
-                data: value,
-                type: 'line',
-                areaStyle: { normal: {} },
-                color: ['#8d65db'],
-                smooth: true,
-                showSymbol: false,
-            }]
-        };
+    getLeftChart(myChart: any, xData: any,yData: any){
+    var colors = ['#58C7DF', '#000', '#675bba'];
+    let option = {
+      color: colors,
+      tooltip: {
+        trigger: 'none',
+        axisPointer: {
+          type: 'cross'
+        }
+      },
+      grid: {
+        left: '2%',
+        right: '2%',
+        bottom: '6%',
+        top: '2%',
+        containLabel: true
+      },
+      xAxis: [
+        {
+          show: false,
+          type: 'category',
+          data: xData
+        }
+      ],
+      yAxis: [
+        {
+          show: false,
+          type: 'value'
+        }
+      ],
+      series: [
+        {
+          name: '',
+          type: 'line',
+          smooth: true,
+          data: yData,
+          itemStyle: { normal: { areaStyle: { type: 'default' } } },
+          color: ['#52a1f8']
+        }
+      ]
+    };
+    myChart.setOption(option);
+  }
 
-        let myChart = echarts.init(document.getElementById('chart-left'));
-        myChart.setOption(option);
-    }
-
-    getRightChart(v1: any, v2: any) {
+    getRightChart(myChart: any, v1: any, v2: any) {
         let option = {
             series: [
                 {
@@ -202,10 +231,7 @@ export class CustomerReportComponent implements OnInit {
                 }
             ]
         };
-
-        let myChart = echarts.init(document.getElementById('chart-right'));
         myChart.setOption(option)
-
     }
 
     // 切换分页码

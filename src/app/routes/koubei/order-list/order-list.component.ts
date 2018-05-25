@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Router, ActivatedRoute } from '@angular/router';
-import { LocalStorageService } from "../../../shared/service/localstorage-service";
 import { KoubeiService } from "../shared/koubei.service";
-import { STORES_INFO ,REFRESH} from "../../../shared/define/juniu-define";
-import { FunctionUtil } from "../../../shared/funtion/funtion-util";
+import { LocalStorageService } from '@shared/service/localstorage-service';
+import { FunctionUtil } from '@shared/funtion/funtion-util';
+import { APP_TOKEN } from '@shared/define/juniu-define';
+import { Config } from '@shared/config/env.config';
 
 @Component({
   selector: 'app-order-list',
@@ -21,14 +22,13 @@ export class OrderListComponent implements OnInit {
     timeText: string = '下单';
     switchOrderListBtns: boolean = true;
     switchHexiaoListBtns: boolean = false;
+    expandForm = false;//展开
 
     orderListInfor: any;//订单列表
     vouchersListInfor: any;//核销列表
     storeList: any;//门店列表
 
     countTotal: any = 1;//总共多少条数据
-    startDate: any = '';
-    endDate: any = '';
     storeId: string = '';
     productId: string = '';
     orderNo: string = '';
@@ -47,6 +47,9 @@ export class OrderListComponent implements OnInit {
     voucherNum: string;//商品数量
     showTips: boolean = false;//核销判断
 
+    dateRange: Date = null;
+    startTime: string = '';//转换字符串的时间
+    endTime: string = '';//转换字符串的时间
 
     constructor(
         private http: _HttpClient,
@@ -58,10 +61,8 @@ export class OrderListComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-
         //获取订单列表信息
         this.productOrderListInfor();
-
     }
 
     // 订单筛选
@@ -72,20 +73,22 @@ export class OrderListComponent implements OnInit {
 
     // 查看核销对账
     checkingKoubeiProductList() {
-        this.pageIndex = 0;
-        this.switchHexiaoListBtns = true;
-        this.switchOrderListBtns = false;
-        this.timeText = '核销';
-        this.productVouchersListInfor();//核销对账列表
+      this.clear();//清除
+      this.pageIndex = 1;
+      this.switchHexiaoListBtns = true;
+      this.switchOrderListBtns = false;
+      this.timeText = '核销';
+      this.productVouchersListInfor();//核销对账列表
     }
 
     // 返回
     comeBack() {
-        this.pageIndex = 0;
-        this.switchHexiaoListBtns = false;
-        this.switchOrderListBtns = true;
-        this.timeText = '下单';
-        this.productOrderListInfor();//订单列表
+      this.clear();//清除
+      this.pageIndex = 1;
+      this.switchHexiaoListBtns = false;
+      this.switchOrderListBtns = true;
+      this.timeText = '下单';
+      this.productOrderListInfor();//订单列表
     }
 
     // 查看每个的订单详情
@@ -113,15 +116,35 @@ export class OrderListComponent implements OnInit {
         }
     }
 
-    /*************************  Http请求开始  ********************************/
+    //选择日期
+    onDateChange(date: Date): void {
+      this.dateRange = date;
+      this.startTime = FunctionUtil.changeDateToSeconds(this.dateRange[0]);
+      this.endTime = FunctionUtil.changeDateToSeconds(this.dateRange[1]);
+    }
 
+    //选择门店
+    selectStore(){
+      console.log(this.storeId);
+    }
+
+    // 条件查询
+    getData(){
+      if(this.switchOrderListBtns){//查看订单页面
+        this.productOrderListInfor();
+      }else if(this.switchHexiaoListBtns){//查看核销页面
+        this.productVouchersListInfor();
+      }
+    }
+
+    /****************  Http请求开始  *******************/
 
     //口碑订单列表
     productOrderListInfor(){
         let self = this;
         let data = {
-            startDate: this.startDate,
-            endDate: this.endDate,
+            startDate: this.startTime,
+            endDate: this.endTime,
             storeId: this.storeId,
             productId: this.productId,
             orderNo: this.orderNo,
@@ -135,6 +158,13 @@ export class OrderListComponent implements OnInit {
                 if (res.success) {
                     this.loading = false;
                     self.storeList = res.data.stores;
+                    let list = {
+                      storeId: '',
+                      storeName: '全部门店'
+                    };
+                    self.storeList.splice(0, 0, list);//给数组第一位插入值
+                    let storeId = this.storeId;
+                    this.storeId = storeId;
                     self.countTotal = res.data.pageInfo.countTotal;
 
                     res.data.orders.forEach((element: any, index: number, array: any) => {
@@ -165,8 +195,8 @@ export class OrderListComponent implements OnInit {
     productVouchersListInfor(){
         let self = this;
         let Params = {
-            startDate: this.startDate,
-            endDate: this.endDate,
+            startDate: this.startTime,
+            endDate: this.endTime,
             storeId: this.storeId,
             productId: this.productId,
             orderNo: this.orderNo,
@@ -180,8 +210,14 @@ export class OrderListComponent implements OnInit {
                     this.loading = false;
                     self.vouchersListInfor = res.data.vouchers;
                     self.storeList = res.data.stores;
+                    let list = {
+                      storeId: '',
+                      storeName: '全部门店'
+                    };
+                    self.storeList.splice(0, 0, list);//给数组第一位插入值
+                    let storeId = this.storeId;
+                    this.storeId = storeId;
                     self.countTotal = res.data.pageInfo.countTotal;
-
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -244,10 +280,33 @@ export class OrderListComponent implements OnInit {
         )
     }
 
+    //清除
     clear(){
         this.orderNo = '';
-        this.endDate = '';
-        this.startDate = '';
+        this.storeId = '';
+        this.startTime = '';
+        this.endTime = '';
+        this.dateRange = null;
     }
+
+    // 导出Excel
+    exportExcel() {
+      console.log(this.countTotal);
+      if(this.dateRange === null){
+        this.msg.warning('请先选择核销时间范围!!');
+        return;
+      }else if(Number(this.countTotal) >= 1000){
+        this.msg.warning('导出的数据量不能超过1000条，请重新选择时间段!!');
+        return;
+      }else{
+        let startDate = FunctionUtil.changeDateToSeconds(this.dateRange[0]);
+        let endDate = FunctionUtil.changeDateToSeconds(this.dateRange[1]);
+        let storeId = this.storeId;
+        let productId = this.productId;
+        let apiUrl = Config.API + 'order/koubei/voucherDownload.excel';
+        let token = this.localStorageService.getLocalstorage(APP_TOKEN);
+        window.location.href = apiUrl + "?token=" + token + "&startDate=" + startDate + "&endDate=" + endDate + "&storeId=" + storeId + "&productId=" + productId;
+      }
+   }
 
 }
