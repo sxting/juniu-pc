@@ -1,23 +1,96 @@
-.storeMain{
-    background: #fff;
-    width: 100%;
-    padding: 20px;
+.main_wrap {
+    font-family: PingFangSC-Regular;
+    position: absolute;
+    top: 56px;
+    right: 0;
+    bottom: 0;
+    left: 260px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    z-index: 1;
 }
-.nzPaginationBox{
-    margin: 20px;
-    overflow: hidden;
+
+.print-title {
+    height: 40px;
 }
-.nzPagination{
-    float: right;
+
+.print-title span {
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    line-height: 40px;
+    color: #1A1A1A;
 }
-.buttonBox{
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 30px;
+
+.print-title span:last-of-type {
+    color: #ff6600;
 }
-.button{
+
+.content_juniu {
+    background-color: #fff;
+    padding: 30px 20px;
+}
+
+.content_juniu .add-print-btn {
+    display: inline-block;
+    background-color: #ff6600;
+    border-radius: 4px;
+    width: 100px;
+    height: 30px;
+    font-family: 'PingFangSC-Regular';
+    font-size: 14px;
+    color: #fff;
+    line-height: 30px;
+    text-align: center;
     cursor: pointer;
+    -webkit-font-smoothing: antialiased;
+    font-weight: bolder;
 }
+
+.print-produce {
+    font-size: 13px;
+    padding-left: 10px;
+    color: #666;
+}
+
+.content-title {
+    font-family: PingFangSC-Medium;
+    font-size: 16px;
+    color: #333;
+    height: 58px;
+    line-height: 58px;
+}
+
+.content-title .left-line {
+    display: inline-block;
+    width: 4px;
+    height: 16px;
+    background-color: #FF6600;
+    margin-right: 10px;
+    -webkit-transform: translateY(2px);
+    transform: translateY(2px);
+}
+
+th {
+    text-align: center !important;
+}
+
+.tbody {
+    text-align: center !important;
+}
+
+.content_juniu tr td:last-child span {
+    cursor: pointer;
+    padding: 0 8px;
+    color: #ff6600;
+}
+
+
+/*弹框*/
+.print-tip-p {
+    margin-bottom: 25px;
+    margin-top: -10px
+}
+
 .print-tip {
     font-size: 13px;
     color: #999;
@@ -58,35 +131,32 @@
     background-color: #fff;
     outline: none;
 }
-.print-tip {
-    font-size: 13px;
-    color: #999;
-    padding-left: 10px;
-}
 
-.print-tip a {
-    color: #108ee2;
-}
 .print-input-tip {
     padding-left: 100px;
     padding-top: 4px;
     font-size: 12px;
     color: #999;
 }
-.content-title {
-    font-family: PingFangSC-Medium;
-    font-size: 16px;
-    color: #333;
-    height: 58px;
-    line-height: 58px;
+
+.alert-btn-box {
+    margin: 5px auto;
+    display: flex;
+    justify-content: center;
 }
 
-.content-title .left-line {
-    display: inline-block;
-    width: 4px;
-    height: 16px;
-    background-color: #FF6600;
-    margin-right: 10px;
-    -webkit-transform: translateY(2px);
-    transform: translateY(2px);
+.alert-btn-box button {
+    width: 110px;
+    height: 34px;
+    line-height: 34px;
+    text-align: center;
+    margin: 0 20px;
+    border-radius: 4px;
+    font-size: 14px;
+    background: #ff6600;
+    color: #fff;
+}
+
+.alert-cancel {
+    background-color: #cccccc;
 }

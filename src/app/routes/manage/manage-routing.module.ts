@@ -20,6 +20,7 @@ import { StaffCommissionListComponent } from "./staff-commission-list/staff-comm
 import { RuleSettingComponent } from "./rule-setting/rule-setting.component";
 import { WxStoreComponent } from './wxStore/wxStore.component';
 import { MatchingkoubeiComponent } from './matchingkoubei/matchingkoubei.component';
+import { KoubeiGLComponent } from './koubeiGL/koubeiGL.component';
 
 
 const routes: Routes = [
@@ -40,7 +41,9 @@ const routes: Routes = [
     { path: 'staff/commission/list', component: StaffCommissionListComponent },
     { path: 'rule/setting', component: RuleSettingComponent },
     { path: 'storeList/wxStore', component: WxStoreComponent },  
-    { path: 'storeList/matchingkoubei', component: MatchingkoubeiComponent }      
+    { path: 'storeList/matchingkoubei', component: MatchingkoubeiComponent },
+    { path: 'storeList/matchingkoubei/KoubeiGL', component: KoubeiGLComponent },      
+          
 ];
 
 @NgModule({

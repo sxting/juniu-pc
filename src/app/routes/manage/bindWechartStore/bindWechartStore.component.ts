@@ -50,34 +50,34 @@ export class BindWechartStoreComponent {
     matching(tpl: TemplateRef<{}>) {
         var self = this;
 
-        self.router.navigate(['/manage/storeList/wxStore', { storeId: self.storeId }]);
+        // self.router.navigate(['/manage/storeList/wxStore', { storeId: self.storeId }]);
 
-        //     let userinfo = this.localStorageService.getLocalstorage(USER_INFO) ?
-        //         JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)) : '';
-        //     this.srcUrl = '//w.juniuo.com/auth/platform/wxcfc323d79f4a89bf/wxapp_' + userinfo.merchantId + '/jump.htm';
-        //     this.trustedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.srcUrl);
+        let userinfo = this.localStorageService.getLocalstorage(USER_INFO) ?
+            JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)) : '';
+        this.srcUrl = '//w.juniuo.com/auth/platform/wxcfc323d79f4a89bf/wxapp_' + userinfo.merchantId + '/jump.htm';
+        this.trustedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.srcUrl);
 
-        //     const modal = this.modalSrv.create({
-        //         nzTitle: '关联小程序',
-        //         nzContent: tpl,
-        //         nzWidth: '80%',
-        //         nzFooter: null
-        //     });
-        //     if (this.srcUrl) {
-        //         let that = this;
-        //         //监听消息反馈
-        //         window.addEventListener('message', function (e) {
-        //             if (typeof (e.data.success) !== 'undefined') {
-        //                 if (e.data.success === true) {
-        //                     self.errorAlter('授权成功');
-        //                     modal.destroy()
-        //                 } else {
-        //                     self.errorAlter('授权失败');
-        //                     modal.destroy()
-        //                 }
-        //             }
-        //         }, false);
-        //     }
+        const modal = this.modalSrv.create({
+            nzTitle: '关联小程序',
+            nzContent: tpl,
+            nzWidth: '80%',
+            nzFooter: null
+        });
+        if (this.srcUrl) {
+            let that = this;
+            //监听消息反馈
+            window.addEventListener('message', function (e) {
+                if (typeof (e.data.success) !== 'undefined') {
+                    if (e.data.success === true) {
+                        self.errorAlter('授权成功');
+                        modal.destroy()
+                    } else {
+                        self.errorAlter('授权失败');
+                        modal.destroy()
+                    }
+                }
+            }, false);
+        }
 
     }
     errorAlter(err: any) {

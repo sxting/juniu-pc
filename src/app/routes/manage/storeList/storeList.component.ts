@@ -33,19 +33,12 @@ export class StoreListComponent {
     bianji(e: any) {
         this.router.navigate(['/manage/storeList/storeEdit', { storeId: e }]);
     }
-    fufei() {
-
-    }
-    shanchu() {
-
+    fufei(type: any, e: any) {
+        this.router.navigate(['/setings/software/buy', { storeId: e, type: type }]);
     }
     getData(e: any) {
         this.pageNo = e;
         this.storeListHttp();
-    }
-    gotoEdit() {
-        // this.router.navigateByUrl('/manage/shoplist/storeEdit');
-        // this.router.navigate(['/manage/shoplist/storeEdit']);
     }
 
     storeListHttp() {
@@ -80,22 +73,47 @@ export class StoreListComponent {
             }
         );
     }
+    //删除门店
+    storeDeleteHttp(storeId) {
+        let data = {
+            storeId: storeId,
+            timestamp: new Date().getTime()
+        }
+        let that = this;
+        this.manageService.storeDelete(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.modalSrv.success({
+                        nzContent: '删除成功'
+                    });
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => {
+                this.errorAlert(error);
+            }
+        );
+    }
     errorAlert(err: any) {
         this.modalSrv.error({
             nzTitle: '温馨提示',
             nzContent: err
         });
     }
-    storeTypeFun(type: any, boolean: any, e: any) {
+    storeTypeFun(type: any, boolean: any, e: any, branchName: any) {
         if (boolean && type === 'weixin') {
             this.router.navigate(['/manage/storeList/wxStore', { storeId: e }]);
         } else if (!boolean && type === 'weixin') {
             this.router.navigate(['/manage/bindWechartStore', { storeId: e }]);
         }
         if (boolean && type === 'zhifubao') {
-            this.router.navigate(['/manage/storeList/matchingkoubei', { storeId: e }]);
+            this.router.navigate(['/manage/koubeiStore', { storeId: e }]);
         } else if (!boolean && type === 'zhifubao') {
-            this.router.navigate(['/manage/bindKoubeiStore', { storeId: e }]);
+            this.router.navigate(['/manage/bindKoubeiStore', { storeId: e, branchName: branchName }]);
         }
     }
 }

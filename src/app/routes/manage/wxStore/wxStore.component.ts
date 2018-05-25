@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { STORES_INFO } from '@shared/define/juniu-define';
 import { ActivatedRoute } from '@angular/router';
+import { Validators } from '@angular/forms';
 
 @Component({
     selector: 'app-wxStore',
@@ -35,7 +36,7 @@ export class WxStoreComponent implements OnInit {
     expandDefault = false;
     nodes: any = [];
     eventCheckedKeys: any = [];
-
+    pictureDetails: any = [];
 
     staffIds: any = '';
     staffIdsCount: any = 0;
@@ -48,6 +49,10 @@ export class WxStoreComponent implements OnInit {
     objArrLoc: any = '';
     allcardsLoc: any = '';
     cityArr: any;
+    switch1: boolean = false;
+    switch2: boolean = false;
+    switch3: boolean = false;
+    switch4: boolean = true;
     constructor(
         private localStorageService: LocalStorageService,
         public msg: NzMessageService,
@@ -62,11 +67,19 @@ export class WxStoreComponent implements OnInit {
             storeName: [null, []],
             address: [null, []],
             Alladdress: [null, []],
-            phone: [null, []],
-            time: [null, []],
+            phone: [null, [Validators.required]],
+            startTime: [null, [Validators.required]],
+            endTime: [null, [Validators.required]],
         });
 
     }
+    get storeName() { return this.form.controls.storeName; }
+    get address() { return this.form.controls.address; }
+    get Alladdress() { return this.form.controls.Alladdress; }
+    get phone() { return this.form.controls.phone; }
+    get startTime() { return this.form.controls.startTime; }
+    get endTime() { return this.form.controls.endTime; }
+
     ngOnInit(): void {
         this.getAllbuySearchs();
         // this.getStaffList();
@@ -98,6 +111,12 @@ export class WxStoreComponent implements OnInit {
                 this.errorAlert(error);
             }
         );
+    }
+    switchFun(e) {
+        if (e === 1) this.switch1 = !this.switch1;
+        if (e === 2) this.switch2 = !this.switch2;
+        if (e === 3) this.switch3 = !this.switch3;
+        if (e === 4) this.switch4 = !this.switch4;
     }
     //编辑checked
     funcChecked(lists: any, thisList: any, child: any, count: any, id: any) {
@@ -175,6 +194,7 @@ export class WxStoreComponent implements OnInit {
         let that = this;
         // this.shopEdit.pictureDetails = [];
         this.showPics = event;
+
     }
     // 获取全部商品
     getAllbuySearchs() {
@@ -190,7 +210,6 @@ export class WxStoreComponent implements OnInit {
                         });
                     });
                     this.allproducks = allproducks;
-                    console.log(this.allproducks);
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -305,6 +324,7 @@ export class WxStoreComponent implements OnInit {
         this.objArrLoc = staffId;
         that.staffIds = staffId;
         that.staffIdsCount = staffIdsCount;
+
     }
     cardSubmit() {
         let that = this;
@@ -326,6 +346,7 @@ export class WxStoreComponent implements OnInit {
         this.allcardsLoc = cardConfigRuleIds;
         that.cardConfigRuleIds = cardConfigRuleIds;
         that.cardConfigRuleCount = cardConfigRuleCount;
+        this.updateByIsWxShowHttp(this.storeId, cardConfigRuleIds);
     }
     produckSubmit() {
         let that = this;
@@ -347,6 +368,7 @@ export class WxStoreComponent implements OnInit {
         this.allproducksLoc = productId;
         that.productIds = productId;
         this.productIdsCount = productCount;
+        this.updateByIsWxShowHttp(this.storeId, productId);
     }
     /*全选或者取消全选*/
     onSelectAllInputClick(cityIndex: number, change: boolean, all: any, children: any) {
@@ -429,13 +451,28 @@ export class WxStoreComponent implements OnInit {
                         }
 
                     })
+                    let time = res.data.businessHours ? res.data.businessHours.split('-') : '';
+                    let start, end;
+                    if (time) {
+                        start = new Date('2018-12-12 ' + time[0]);
+                        end = new Date('2018-12-12 ' + time[1]);
+                    }
+                    this.pictureDetails = res.data.bannerColl;
                     self.form = this.fb.group({
                         storeName: [res.data.branchName, []],
                         address: [adress, []],
                         Alladdress: [res.data.address, []],
-                        phone: [res.data.contactPhone, []],
-                        time: [res.data.businessHours, []],
+                        phone: [res.data.contactPhone, [Validators.required]],
+                        // time: [res.data.businessHours, []],
+                        startTime: [start ? start : null, [Validators.required]],
+                        endTime: [end ? end : null, [Validators.required]],
                     });
+                    res.data.displayColl.forEach(function (i: any) {
+                        if (i === 'PRODUCT') self.switch1 = true;
+                        if (i === 'CRAFTSMAN') self.switch2 = true;
+                        if (i === 'MEMBER_CARD') self.switch3 = true;
+                        if (i === 'STORE') self.switch4 = true;
+                    })
                     this.data = {
                         address: res.data.address,
                         branchName: res.data.branchName,
@@ -500,5 +537,130 @@ export class WxStoreComponent implements OnInit {
         } else {
             arr.isLeaf = true;
         }
+    }
+    submit() {
+        for (const i in this.form.controls) {
+            this.form.controls[i].markAsDirty();
+            this.form.controls[i].updateValueAndValidity();
+        }
+        if (this.phone.invalid || this.endTime.invalid || this.startTime.invalid) return;
+        else {
+            let displayColl = [];
+            let bannerColl = [];
+
+            if (this.switch1) displayColl.push('PRODUCT');
+            if (this.switch2) displayColl.push('CRAFTSMAN');
+            if (this.switch3) displayColl.push('MEMBER_CARD');
+            if (this.switch4) displayColl.push('STORE');
+            let startTime = this.form.value.startTime.getMinutes();
+            let endTime = this.form.value.endTime.getMinutes();
+
+            let businessHours = this.form.value.startTime.getHours() + ':' + (Number(startTime) < 10 ? '0' + startTime : startTime) + '-' + this.form.value.endTime.getHours() + ':' + (Number(endTime) < 10 ? '0' + endTime : endTime);
+            this.showPics.forEach(function (i: any) {
+                if (i.imageId) {
+                    bannerColl.push(i.imageId)
+                }
+            })
+            let data = {
+                address: this.data.address,
+                branchName: this.data.branchName,
+                cityCode: this.data.cityCode,
+                districtCode: this.data.districtCode,
+                latitude: this.data.latitude,
+                longitude: this.data.longitude,
+                provinceCode: this.data.provinceCode,
+                contactPhone: this.form.value.phone,
+                displayColl: displayColl,
+                bannerColl: bannerColl,
+                businessHours: businessHours,
+                storeId: this.storeId,
+                timestamp: new Date().getTime()
+            }
+            this.modifyDetail(data);
+        }
+    }
+    //接口描述:更新会员卡的是否展示
+    updateByIsWxShowHttp(storeId, productIds) {
+        let data = {
+            storeId: storeId,
+            ruleIds: productIds
+        }
+        this.manageService.updateByIsWxShow(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            (error) => {
+                this.msg.warning(error)
+            }
+        );
+    }
+    //接口描述:更新商品是否在微信小程序端展示
+    updateProductIsWxShowHttp(storeId, productIds) {
+        let data = {
+            storeId: storeId,
+            productIds: productIds
+        }
+        this.manageService.updateProductIsWxShow(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            (error) => {
+                this.msg.warning(error)
+            }
+        );
+    }
+    // 修改门店详情（微信门店）
+    modifyDetail(data: any) {
+        this.submitting = true;
+        this.manageService.modifyDetail(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.submitting = false;
+                    this.router.navigate(['/manage/storeList']);
+                } else {
+                    this.submitting = false;
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            (error) => {
+                this.msg.warning(error)
+            }
+        );
+    }
+    timeFun(s) {
+        var t;
+        if (s > -1) {
+            var hour = Math.floor(s / 3600);
+            var min = Math.floor(s / 60) % 60;
+            var sec = s % 60;
+            if (hour < 10) {
+                t = '0' + hour + ":";
+            } else {
+                t = hour + ":";
+            }
+
+            if (min < 10) { t += "0"; }
+            t += min + ":";
+            if (sec < 10) { t += "0"; }
+            t += sec.toFixed(2);
+        }
+        return t;
     }
 }

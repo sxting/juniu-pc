@@ -88,11 +88,14 @@ export class StoreEditComponent implements OnInit {
     }
     storeCreateHttp(data: any) {
         let self = this;
+        this.submitting = true;
         this.manageService.storeCreate(data).subscribe(
             (res: any) => {
                 if (res.success) {
+                    this.submitting = false;
                     this.router.navigate(['/manage/storeList/storeEdit']);
                 } else {
+                    this.submitting = false;
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
                         nzContent: res.errorInfo

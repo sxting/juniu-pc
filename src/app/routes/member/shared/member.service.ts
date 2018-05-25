@@ -427,4 +427,13 @@ export class MemberService {
                 return Observable.throw(error);
             });
     }
+    //koubei登陆 
+    koubeiLogin() {
+        let apiUrl = Config.API1 + 'merchant/init.json';
+        return this.http.get(apiUrl)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
 }

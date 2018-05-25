@@ -70,6 +70,7 @@ export class ReleaseGroupsComponent implements OnInit {
     phone: any = '16619811357';
     oldcode: any = '';
     newcode: any = '';
+    submitting: any = false;
     get pinTuanName() { return this.form.controls.pinTuanName; }
     get inventory() { return this.form.controls.inventory; }
     get peopleNumber() { return this.form.controls.peopleNumber; }
@@ -188,11 +189,14 @@ export class ReleaseGroupsComponent implements OnInit {
             } else if (!data.shopIds) {
                 this.errorAlter('请选择门店');
             } else {
+                this.submitting = true;
                 this.koubeiService.groupsRelease(data, this.statusFlag).subscribe(
                     (res: any) => {
                         if (res.success) {
                             this.router.navigate(['/koubei/groups/existingGroups']);
+                            this.submitting = false;
                         } else {
+                            this.submitting = false;
                             this.modalSrv.error({
                                 nzTitle: '温馨提示',
                                 nzContent: res.errorInfo
