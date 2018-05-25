@@ -44,7 +44,7 @@ export class OnlyCardImportComponent {
     status: any = 0;
     pageIndex: any = 1;
     columns: SimpleTableColumn[] = [
-        { title: '导入时间', index: 'birthday' },
+        { title: '导入时间', index: 'juniuoModel.dateCreated' },
         { title: '会员姓名', index: 'name' },
         { title: '手机号', index: 'phone' },
         { title: '卡类型', index: 'typeName' },
