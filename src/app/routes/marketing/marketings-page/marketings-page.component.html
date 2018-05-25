@@ -44,17 +44,17 @@
         </nz-form-item>
 
         <nz-form-item *ngIf="paramsId == '03' || paramsId == '04'">
-            <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="activity_name">活动开关</nz-form-label>
+            <nz-form-label nzXs="24" nzSm="5" nzRequired>活动开关</nz-form-label>
             <nz-form-control nzXs="24" nzSm="15" nzMd="15">
                 <nz-switch formControlName="activity_on_off"></nz-switch>
                 <span>系统自动给过生日的会员发送短信和优惠券</span>
             </nz-form-control>
         </nz-form-item>
 
-        <nz-form-item *ngIf="paramsId == '03' || paramsId == '04' || paramsId == '11'">
+        <nz-form-item *ngIf="paramsId == '03'">
             <nz-form-label nzXs="24" nzSm="5" nzRequired>发送时间</nz-form-label>
             <nz-form-control nzXs="24" nzSm="15" nzMd="15">
-                <div class="no-wrap" *ngIf="paramsId == '03'">
+                <div class="no-wrap">
                     <input type="radio" name="sendTime" [checked]="sendTimeToday" (click)="onSendTimeClick(true)">当天发送
                     <input type="radio" name="sendTime" [checked]="!sendTimeToday" (click)="onSendTimeClick(false)">提前
                     <div class="dis-inb"><input class="width-auto" nz-input formControlName="send_time_day" placeholder="请输入天数"> 天发送</div>
@@ -63,18 +63,23 @@
                         <nz-form-explain class="error-color" style="margin-left: 120px;" *ngIf="send_time_day.errors?.pattern">提前发送天数只能是正整数</nz-form-explain>
                     </ng-container>
                 </div>
-                <div class="no-wrap" *ngIf="paramsId == '04' || paramsId == '11'">
-                    <nz-date-picker [nzFormat]="'yyyy-MM-dd'" formControlName="send_time"></nz-date-picker>
-                    <nz-form-explain class="error-color" *ngIf="send_time.dirty && send_time.errors">请选择发送时间</nz-form-explain>
-                    <!--<span class="jn-color">法定节假日</span>-->
-                </div>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item [class.dis-none]="paramsId == '03'">
+            <nz-form-label nzXs="24" nzSm="5" nzRequired>发送时间</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="15" nzMd="15">
+                <nz-date-picker [nzDisabled]="marketingStatus === 'RUNING' || marketingStatus === 'STOP'" [nzFormat]="'yyyy-MM-dd'" formControlName="sms_send_date" [nzDisabledDate]="disabledDate"></nz-date-picker>
+                <nz-time-picker [nzDisabled]="marketingStatus === 'RUNING' || marketingStatus === 'STOP'" [class.dis-none]="paramsId == '04' || paramsId == '11'" [nzFormat]="'HH:00'" style="margin-left: 10px" formControlName="sms_send_time" [nzAllowEmpty]="false"></nz-time-picker>
+                <!--<span class="jn-color" *ngIf="paramsId == '04' || paramsId == '11'">法定节假日</span>-->
+                <nz-form-explain class="error-color" *ngIf="(sms_send_time.errors || sms_send_date.errors) && sms_send_time.dirty">请选择发送时间</nz-form-explain>
             </nz-form-control>
         </nz-form-item>
 
         <nz-form-item [class.dis-none]="paramsId == '03' || paramsId == '04' || paramsId == '11'">
             <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="activity_name">活动日期</nz-form-label>
             <nz-form-control nzXs="24" nzSm="15" nzMd="15">
-                <nz-range-picker [nzFormat]="'yyyy-MM-dd'" formControlName="active_date"></nz-range-picker>
+                <nz-range-picker [nzDisabled]="marketingStatus === 'RUNING' || marketingStatus === 'STOP'" [nzFormat]="'yyyy-MM-dd'" formControlName="active_date" [nzDisabledDate]="disabledDate"></nz-range-picker>
             </nz-form-control>
         </nz-form-item>
 
@@ -128,14 +133,6 @@
             </nz-form-control>
         </nz-form-item>
 
-        <nz-form-item [class.dis-none]="paramsId >= '11'">
-            <nz-form-label nzXs="24" nzSm="5">短信发送时间</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="15" nzMd="15">
-                <nz-date-picker [nzFormat]="'yyyy-MM-dd'" formControlName="sms_send_date"></nz-date-picker>
-                <nz-time-picker [nzFormat]="'HH:00'" style="margin-left: 10px" formControlName="sms_send_time"></nz-time-picker>
-            </nz-form-control>
-        </nz-form-item>
-
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="activity_name">发送优惠券</nz-form-label>
             <nz-form-control nzXs="24" nzSm="15" nzMd="15">
@@ -158,7 +155,7 @@
                         <p>不可用时间：
                             <span *ngIf="!coupon.disabledWeekDate">无限制</span>
                             <span *ngIf="coupon.disabledWeekDate">
-                                {{coupon.disabledWeekDate}}至{{coupon.disabledWeekDate}}（{{coupon.disabledTimeStart}}-{{coupon.disabledTimeEnd}}）
+                                {{selectedWeek1}}至{{selectedWeek2}}（{{unUseStartTime}}-{{unUseEndTime}}）
                             </span>
                         </p>
                     </div>
@@ -168,7 +165,7 @@
 
         <nz-form-item>
             <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 5 }">
-                <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">提交</button>
+                <button nz-button nzType="primary" type="submit" [nzLoading]="submitting" [disabled]="marketingStatus === 'RUNING' || marketingStatus === 'STOP'">提交</button>
             </nz-form-control>
         </nz-form-item>
     </form>
@@ -293,9 +290,12 @@
                             <nz-select style="width: 80px;" formControlName="selected_week1" (ngModelChange)="onSelectWeek1Change($event)">
                                 <nz-option *ngFor="let item of initWeekData1" [nzLabel]="item.name" [nzValue]="item"></nz-option>
                             </nz-select> 至
-                            <nz-select style="width: 80px;" formControlName="selected_week2" (ngModelChange)="onSelectWeek2Change($event)">
+                            <nz-select style="width: 80px; margin-right: 10px" formControlName="selected_week2" (ngModelChange)="onSelectWeek2Change($event)">
                                 <nz-option *ngFor="let item of initWeekData2" [nzLabel]="item.name" [nzValue]="item"></nz-option>
                             </nz-select>
+                            <nz-time-picker [nzFormat]="'HH:mm'" formControlName="un_use_start_time" [nzAllowEmpty]="false" (ngModelChange)="onCouponTime1Change($event)"></nz-time-picker>
+                            至
+                            <nz-time-picker [nzFormat]="'HH:mm'" formControlName="un_use_end_time" [nzAllowEmpty]="false" (ngModelChange)="onCouponTime2Change($event)"></nz-time-picker>
                         </div>
                     </nz-form-control>
                 </nz-form-item>
@@ -333,7 +333,7 @@
                     <p *ngIf="paramsId == '07'">{{selectedGiftProduct}}</p>
                     <p>不可用时间：
                         <span *ngIf="!unUseTime">无限制</span>
-                        <span *ngIf="unUseTime">{{selectedWeek1}}至{{selectedWeek2}}（18:00-21:00）</span>
+                        <span *ngIf="unUseTime">{{selectedWeek1}}至{{selectedWeek2}}（{{unUseStartTime}}-{{unUseEndTime}}）</span>
                     </p>
                 </div>
             </div>
@@ -413,7 +413,7 @@
                 <p>不可用时间：
                     <span *ngIf="!item.disabledWeekDate">无限制</span>
                     <span *ngIf="item.disabledWeekDate">
-                        {{item.disabledWeekDate}}至{{item.disabledWeekDate}}（{{item.disabledTimeStart}}-{{item.disabledTimeEnd}}）
+                        {{item.selectedWeek1}}至{{item.selectedWeek2}}（{{item.unUseStartTime}}-{{item.unUseEndTime}}）
                     </span>
                 </p>
             </div>

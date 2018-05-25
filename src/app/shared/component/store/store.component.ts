@@ -118,10 +118,16 @@ export class StoreComponent implements OnInit {
         };
         this.marketingService.getCalculateMemberNum(data).subscribe(
             (res: any) => {
-              this.calculateMemberNum.emit({calculateMemberNum: res.count});
-              this.needSendKey.emit({needSendKey: res.needSendKey});
-            },
-            error => FunctionUtil.errorAlter(error)
+              if(res.success) {
+                this.calculateMemberNum.emit({calculateMemberNum: res.data.count});
+                this.needSendKey.emit({needSendKey: res.data.needSendKey});
+              } else {
+                this.modalSrv.error({
+                  nzTitle: '温馨提示',
+                  nzContent: res.errorInfo
+                });
+              }
+            }
         )
       }
 
@@ -229,10 +235,16 @@ export class StoreComponent implements OnInit {
       };
       this.marketingService.getCalculateMemberNum(data).subscribe(
           (res: any) => {
-            this.calculateMemberNum.emit({calculateMemberNum: res.count});
-            this.needSendKey.emit({needSendKey: res.needSendKey});
-          },
-          error => FunctionUtil.errorAlter(error)
+            if(res.success) {
+              this.calculateMemberNum.emit({calculateMemberNum: res.data.count});
+              this.needSendKey.emit({needSendKey: res.data.needSendKey});
+            } else {
+              this.modalSrv.error({
+                nzTitle: '温馨提示',
+                nzContent: res.errorInfo
+              });
+            }
+          }
       )
     }
     this.selectStoresIds.emit({selectStoresIds: selectStoresIds});
