@@ -418,6 +418,15 @@ export class MemberService {
                 return Observable.throw(error);
             });
     }
+    //重置密码
+    resetPassword(data: any) {
+        let apiUrl = Config.API1 + 'account/registry/reset/password.json';
+        return this.http.get(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
     // 手机号登录
     loginPhone(data: any) {
         let apiUrl = Config.API1 + 'account/login/phone.json';

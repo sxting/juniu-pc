@@ -11,12 +11,14 @@ import { Exception403Component } from './exception/403.component';
 import { Exception404Component } from './exception/404.component';
 import { Exception500Component } from './exception/500.component';
 import { MemberService } from './member/shared/member.service';
+import { UserResetPasswordComponent } from './passport/resetPassword/resetPassword.component';
 
 const COMPONENTS = [
   // passport pages
   UserLoginComponent,
   UserRegisterComponent,
   UserRegisterResultComponent,
+  UserResetPasswordComponent,
   // single pages
   Exception403Component,
   Exception404Component,

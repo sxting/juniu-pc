@@ -98,12 +98,17 @@ export class UserLoginComponent implements OnDestroy, OnInit {
         )
     }
     getCaptcha() {
-        this.count = 59;
-        this.interval$ = setInterval(() => {
-            this.count -= 1;
-            if (this.count <= 0)
-                clearInterval(this.interval$);
-        }, 1000);
+        if (this.form.value.mobile) {
+            this.count = 59;
+            this.interval$ = setInterval(() => {
+                this.count -= 1;
+                if (this.count <= 0)
+                    clearInterval(this.interval$);
+            }, 1000);
+            this.getValidCode(this.form.value.mobile, 'VALID')
+        } else {
+            this.errorAlter('请先输入手机号')
+        }
     }
 
     // endregion
@@ -188,6 +193,30 @@ export class UserLoginComponent implements OnDestroy, OnInit {
             },
             error => this.errorAlter(error)
         )
+    }
+    getValidCode(phone, bizType) {
+        let that = this;
+        let data = {
+            phone: phone,
+            bizType: bizType
+        };
+        this.memberService.getValidCode(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.modalSrv.success({
+                        nzContent: '发送成功'
+                    });
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => {
+                this.errorAlter(error);
+            }
+        );
     }
     ngOnDestroy(): void {
         if (this.interval$) clearInterval(this.interval$);
