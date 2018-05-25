@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Router, ActivatedRoute } from '@angular/router';
-import { LocalStorageService } from "../../../shared/service/localstorage-service";
 import { KoubeiService } from "../shared/koubei.service";
-import { STORES_INFO ,REFRESH} from "../../../shared/define/juniu-define";
-import { FunctionUtil } from "../../../shared/funtion/funtion-util";
 import { DomSanitizer } from '@angular/platform-browser';
+import { LocalStorageService } from '@shared/service/localstorage-service';
+import { REFRESH, STORES_INFO } from '@shared/define/juniu-define';
+import { FunctionUtil } from '@shared/funtion/funtion-util';
 declare var QRCode: any;
+declare var GoEasy: any;
+
 
 @Component({
   selector: 'app-koubei-product-list',
@@ -18,33 +20,31 @@ declare var QRCode: any;
 export class KoubeiProductListComponent implements OnInit {
 
     loading = false;//加载loading
-
     putaway: string = '1';//上下架状态
     pageNo: number = 1;//页码
     pageSize: string = '10';//一页展示的数据
     totalElements: any = 0;//总商品数
     theadName: any = ['序号', '商品分类', '商品名称', '商品ID', '原价', '现价', '状态', '操作'];//表头
     koubeiProductListInfor: any = [];//口碑商品列表信息
+    isVisible = false;//是否显示弹框
 
+  //门店
     storeList: any[] = [];//门店列表
     expandForm = false;
     storeId: string = '';//门店
     productName: string = '';//商品名称
     productId: string = '';//商品ID
-
-
     activeIndex: number = 0;//显示二维码
     srcUrl: any;//ifream地址
     trustedUrl: any;//口碑客地址
     koubeikeifShow: boolean = false;
 
-
     //刷新商品按钮
     alipayPid: string;
     ifAlipayPidShow: boolean = false;
-
     merchantLogin: boolean = false;//商家登录
     providerLogin: boolean = false;//服务商登录
+
 
     constructor(
         private http: _HttpClient,
@@ -56,9 +56,7 @@ export class KoubeiProductListComponent implements OnInit {
         private msg: NzMessageService
     ) { }
 
-    /**
-     * 请求口碑商品列表的请求体
-     */
+    /*** 请求口碑商品列表的请求体*/
     batchQuery = {
         storeId: this.storeId,
         productName: this.productName,
@@ -68,15 +66,19 @@ export class KoubeiProductListComponent implements OnInit {
         pageSize: this.pageSize
     };
 
-
     ngOnInit() {
         let self = this;
-
         //门店列表
         if (this.localStorageService.getLocalstorage(STORES_INFO) && JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
             let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
                 JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
+            let list = {
+              storeId: '',
+              storeName: '全部门店'
+            };
+            storeList.splice(0, 0, list);//给数组第一位插入值
             this.storeList = storeList;
+            this.storeId = '';
         }
 
         let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
@@ -87,13 +89,13 @@ export class KoubeiProductListComponent implements OnInit {
 
         let Refresh = this.localStorageService.getLocalstorage('Refresh') ?  this.localStorageService.getLocalstorage('Refresh') : '';
 
-        // if(this.alipayPid&&Refresh == ''){
-        //     this.refreshProductList();
-        //     this.localStorageService.setLocalstorage(REFRESH, true);
-        // }else {
-            // 请求口碑商品列表
-            this.getKoubeiProductListInfor(this.batchQuery);
-        // }
+        if(this.alipayPid&&Refresh == ''){
+          this.refreshProductList();
+          this.localStorageService.setLocalstorage(REFRESH, true);
+        }else {
+          // 请求口碑商品列表
+          this.getKoubeiProductListInfor(this.batchQuery);
+        }
 
         //检查商家登陆还是服务商登陆
         if(UserInfo.alipayOperatorType){
@@ -107,20 +109,21 @@ export class KoubeiProductListComponent implements OnInit {
         }else {//如果是空串的话默认为服务商登陆
             this.providerLogin = true;
         }
+
+        // this.isVisible = true;//关联口碑账号
+        let Pid = 'BINDING_ALIPAY_' + this.alipayPid;
+        var goEasy = new GoEasy({
+          appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
+        });
+        goEasy.subscribe({
+          channel: Pid,
+          onMessage: function (message) {
+            console.log(message);
+          }
+        });
     }
 
     /**************************页面基础操作开始*********************************/
-
-    //关联口碑账号
-    associatedAccountClick(tpl: any){
-        console.log(tpl);
-        let self = this;
-        this.modalSrv.create({
-            nzTitle: '关联口碑账号',
-            nzWidth: '800px',
-            nzContent:  tpl
-        });
-    }
 
     //删除下架商品
     delete(id: any){
@@ -169,7 +172,6 @@ export class KoubeiProductListComponent implements OnInit {
             nzWidth: '800px',
             nzFooter: null,
         });
-
         if(this.merchantLogin){//商家登录
             console.log("商家登录");
             this.srcUrl = "https://koubeike.alipay.com/main.htm#/promote/config/baobei?itemId=" + itemId;
@@ -249,7 +251,7 @@ export class KoubeiProductListComponent implements OnInit {
         this.getKoubeiProductListInfor(this.batchQuery);
     }
 
-    /**************************条件筛选开始*********************************/
+    /********************* 条件筛选开始 *********************/
 
     //调取上架与未上架的商品
     onStatusClick() {
@@ -286,8 +288,7 @@ export class KoubeiProductListComponent implements OnInit {
         }
     }
 
-
-    /*************************  Http请求开始  ********************************/
+    /*********************  Http请求开始  *********************/
 
     // 获取口碑商品信息列表
     getKoubeiProductListInfor(batchQuery: any) {
@@ -297,7 +298,6 @@ export class KoubeiProductListComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     this.loading = false;
-
                     self.koubeiProductListInfor = res.data.content? res.data.content : [];
                     self.totalElements = res.data.totalElements? res.data.totalElements : 0;
 

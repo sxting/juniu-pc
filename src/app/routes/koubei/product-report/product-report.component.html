@@ -1,13 +1,13 @@
 
 <page-header [title]="'商品报表'"></page-header>
 <nz-card [nzBordered]="false">
-    <form nz-form [nzLayout]="'inline'" (ngSubmit)="getData()" class="search__form">
+    <div nz-form [nzLayout]="'inline'" class="search__form">
         <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
             <nz-col nzMd="8" nzSm="24">
                 <nz-form-item>
                     <nz-form-label nzFor="productName">选择日期</nz-form-label>
                     <nz-form-control>
-                        <input nz-input [(ngModel)]="productName" name="productName" placeholder="请输入商品名称" id="productName">
+                      <nz-range-picker [(ngModel)]="dateRange" nzFormat="yyyy-MM-dd" nzShowTime></nz-range-picker>
                     </nz-form-control>
                 </nz-form-item>
             </nz-col>
@@ -15,17 +15,17 @@
                 <nz-form-item>
                     <nz-form-label nzFor="storeList">商品</nz-form-label>
                     <nz-form-control>
-                        <nz-select [(ngModel)]="productId" name="status" id="status" [nzPlaceHolder]="'全部门店'" [nzShowSearch]="true">
+                        <nz-select style="width: 200px" [(ngModel)]="productId" name="status" id="status" [nzPlaceHolder]="'全部门店'" [nzShowSearch]="true">
                             <nz-option *ngFor="let i of productListInfor; let idx = index" [nzLabel]="i.productName" [nzValue]="i.productId"></nz-option>
                         </nz-select>
                     </nz-form-control>
                 </nz-form-item>
             </nz-col>
-            <nz-col>
+            <nz-col (click)="getData()">
                 <button nz-button type="submit" [nzType]="'primary'" [nzLoading]="loading">查询</button>
             </nz-col>
         </nz-row>
-    </form>
+    </div>
     <div class="content-report">
         <ul class="month-reports">
             <li>

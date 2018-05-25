@@ -6,7 +6,7 @@
   </nz-breadcrumb>
 </div>
 <nz-card [nzBordered]="false">
-  <form nz-form [formGroup]="form" (ngSubmit)="submit()">
+  <form nz-form [formGroup]="form">
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7">商家名称</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
@@ -38,12 +38,15 @@
       <nz-form-label nzXs="24" nzFor="phone" nzSm="7">门店电话</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
         <input nz-input formControlName="phone" id="phone" placeholder="请输入门店电话">
+        <nz-form-explain style="color:red;" *ngIf="phone.dirty && phone.errors">请输入门店电话</nz-form-explain>
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
-      <nz-form-label nzXs="24" nzFor="time" nzSm="7">营业时间</nz-form-label>
+      <nz-form-label nzXs="24" nzSm="7">营业时间</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <input nz-input formControlName="time" id="time" placeholder="请输入营业时间">
+        <nz-time-picker formControlName="startTime" nzFormat="HH:mm"></nz-time-picker>至
+        <nz-time-picker formControlName="endTime" nzFormat="HH:mm"></nz-time-picker>
+        <nz-form-explain style="color:red;" *ngIf="startTime.dirty && startTime.errors&&endTime.dirty && endTime.errors">请输入营业时间</nz-form-explain>
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
@@ -56,43 +59,49 @@
         </div>
       </nz-form-control>
     </nz-form-item>
-    <nz-form-item>
-      <nz-form-label nzXs="24" nzSm="7">展示商品</nz-form-label>
-      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <nz-switch nzCheckedChildren="开" nzUnCheckedChildren="关"></nz-switch>
-        <span>
-          已展示{{productIdsCount}}个商品
-          <span class="setClick" (click)="shezhi(modalContent1,'对应商品')">点击设置></span>
-        </span>
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-      <nz-form-label nzXs="24" nzSm="7">展示技师</nz-form-label>
-      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <nz-switch nzCheckedChildren="开" nzUnCheckedChildren="关"></nz-switch>
-        <span>
-          已展示{{staffIdsCount}}个技师
-          <span class="setClick" (click)="shezhi(modalContent2,'对应技师')">点击设置></span>
-        </span>
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-      <nz-form-label nzXs="24" nzSm="7">展示卡级</nz-form-label>
-      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <nz-switch nzCheckedChildren="开" nzUnCheckedChildren="关"></nz-switch>
-        <span>
-          已展示{{cardConfigRuleCount}}个卡级
-          <span class="setClick" (click)="shezhi(modalContent3,'对应卡')">点击设置></span>
-        </span>
-      </nz-form-control>
-    </nz-form-item>
 
-    <nz-form-item>
-      <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
-        <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">提交</button>
-      </nz-form-control>
-    </nz-form-item>
   </form>
+  <nz-form-item>
+    <nz-form-label nzXs="24" nzSm="7">展示商品</nz-form-label>
+    <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+      <nz-switch nzCheckedChildren="开" [ngModel]="switch1" (ngModelChange)="switchFun(1)" nzUnCheckedChildren="关"></nz-switch>
+      <span>
+        已展示{{productIdsCount}}个商品
+        <span class="setClick" (click)="shezhi(modalContent1,'对应商品')" *ngIf="switch1">点击设置></span>
+      </span>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label nzXs="24" nzSm="7">展示技师</nz-form-label>
+    <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+      <nz-switch nzCheckedChildren="开" [ngModel]="switch2" (ngModelChange)="switchFun(2)" nzUnCheckedChildren="关"></nz-switch>
+      <span>
+        已展示{{staffIdsCount}}个技师
+        <span class="setClick" (click)="shezhi(modalContent2,'对应技师')" *ngIf="switch2">点击设置></span>
+      </span>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label nzXs="24" nzSm="7">展示卡级</nz-form-label>
+    <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+      <nz-switch nzCheckedChildren="开" [ngModel]="switch3" (ngModelChange)="switchFun(3)" nzUnCheckedChildren="关"></nz-switch>
+      <span>
+        已展示{{cardConfigRuleCount}}个卡级
+        <span class="setClick" (click)="shezhi(modalContent3,'对应卡')" *ngIf="switch3">点击设置></span>
+      </span>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label nzXs="24" nzSm="7">展示门店</nz-form-label>
+    <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+      <nz-switch nzCheckedChildren="开" [ngModel]="switch4" (ngModelChange)="switchFun(4)" nzUnCheckedChildren="关"></nz-switch>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
+      <button nz-button nzType="primary" type="submit" (click)="submit()" [nzLoading]="submitting">提交</button>
+    </nz-form-control>
+  </nz-form-item>
 </nz-card>
 
 <ng-template #modalContent1>

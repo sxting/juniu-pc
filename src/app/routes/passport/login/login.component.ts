@@ -1,19 +1,23 @@
 import { SettingsService } from '@delon/theme';
-import { Component, OnDestroy, Inject, Optional } from '@angular/core';
+import { Component, OnDestroy, Inject, Optional, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { SocialService, SocialOpenType, TokenService, DA_SERVICE_TOKEN } from '@delon/auth';
 import { ReuseTabService } from '@delon/abc';
 import { environment } from '@env/environment';
+import { MemberService } from '../../member/shared/member.service';
+import { LocalStorageService } from '@shared/service/localstorage-service';
+import { FunctionUtil } from '@shared/funtion/funtion-util';
+import { APP_TOKEN, STORES_INFO, ALIPAY_SHOPS, USER_INFO, MODULES } from '@shared/define/juniu-define';
 
 @Component({
     selector: 'passport-login',
     templateUrl: './login.component.html',
-    styleUrls: [ './login.component.less' ],
-    providers: [ SocialService ]
+    styleUrls: ['./login.component.less'],
+    providers: [SocialService]
 })
-export class UserLoginComponent implements OnDestroy {
+export class UserLoginComponent implements OnDestroy, OnInit {
 
     form: FormGroup;
     error = '';
@@ -26,6 +30,8 @@ export class UserLoginComponent implements OnDestroy {
         public msg: NzMessageService,
         private modalSrv: NzModalService,
         private settingsService: SettingsService,
+        private localStorageService: LocalStorageService,
+        private memberService: MemberService,
         private socialService: SocialService,
         @Optional() @Inject(ReuseTabService) private reuseTabService: ReuseTabService,
         @Inject(DA_SERVICE_TOKEN) private tokenService: TokenService) {
@@ -38,7 +44,14 @@ export class UserLoginComponent implements OnDestroy {
         });
         modalSrv.closeAll();
     }
-
+    ngOnInit(): void {
+        let sign = FunctionUtil.getUrlStringBySearch('sign') ? FunctionUtil.getUrlStringBySearch('sign') : FunctionUtil.getUrlString('sign');
+        let url = FunctionUtil.getUrlStringBySearch('url') ? FunctionUtil.getUrlStringBySearch('url') : FunctionUtil.getUrlString('url');
+        if (sign) {
+            this.localStorageService.setLocalstorage(APP_TOKEN, sign);
+            this.koubeiLogin(url)
+        }
+    }
     // region: fields
 
     get userName() { return this.form.controls.userName; }
@@ -56,14 +69,46 @@ export class UserLoginComponent implements OnDestroy {
 
     count = 0;
     interval$: any;
-
+    // 口碑登陆
+    koubeiLogin(url: any) {
+        this.memberService.koubeiLogin().subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.localStorageService.setLocalstorage(STORES_INFO, JSON.stringify(res.data.stores));
+                    this.localStorageService.setLocalstorage(ALIPAY_SHOPS, JSON.stringify(res.data[ALIPAY_SHOPS]));
+                    this.localStorageService.setLocalstorage(USER_INFO, JSON.stringify(res.data));
+                    this.localStorageService.setLocalstorage(MODULES, JSON.stringify(res.data[MODULES]));
+                    if (url === 'koubeiproduct') {
+                        this.router.navigate(['/koubei/product/list']);
+                    } else if (url === 'marketing') {
+                        this.router.navigate(['/koubei/coupon/index']);
+                    } else if (url === 'craftsman') {
+                        this.router.navigate(['/koubei/craftsman/manage']);
+                    } else if (res.stores.length > 0) {
+                        this.router.navigateByUrl('/manage/storeList/matchingkoubei');
+                    }
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => this.errorAlter(error)
+        )
+    }
     getCaptcha() {
-        this.count = 59;
-        this.interval$ = setInterval(() => {
-            this.count -= 1;
-            if (this.count <= 0)
-                clearInterval(this.interval$);
-        }, 1000);
+        if (this.form.value.mobile) {
+            this.count = 59;
+            this.interval$ = setInterval(() => {
+                this.count -= 1;
+                if (this.count <= 0)
+                    clearInterval(this.interval$);
+            }, 1000);
+            this.getValidCode(this.form.value.mobile, 'VALID')
+        } else {
+            this.errorAlter('请先输入手机号')
+        }
     }
 
     // endregion
@@ -76,6 +121,7 @@ export class UserLoginComponent implements OnDestroy {
             this.password.markAsDirty();
             this.password.updateValueAndValidity();
             if (this.userName.invalid || this.password.invalid) return;
+
         } else {
             this.mobile.markAsDirty();
             this.mobile.updateValueAndValidity();
@@ -90,15 +136,17 @@ export class UserLoginComponent implements OnDestroy {
             if (this.type === 0) {
                 if (this.userName.value !== 'admin' || this.password.value !== '888888') {
                     this.error = `账户或密码错误`;
+                    // else this.loginName(this.form.value.userName, this.form.value.password);
                     return;
                 }
+            } else {
+                // else this.loginName(this.form.value.mobile, this.form.value.captcha);
             }
 
             // 清空路由复用信息
             this.reuseTabService.clear();
             this.tokenService.set({
-                token: '1234556',
-                name: this.userName.value,
+                token: '4a29242a60df84676c9409ac6175b03d',
                 email: `cipchk@qq.com`,
                 id: 10000,
                 time: +new Date
@@ -107,45 +155,76 @@ export class UserLoginComponent implements OnDestroy {
         }, 1000);
     }
 
-    // region: social
-
-    open(type: string, openType: SocialOpenType = 'href') {
-        let url = ``;
-        let callback = ``;
-        if (environment.production)
-            callback = 'https://cipchk.github.io/ng-alain/callback/' + type;
-        else
-            callback = 'http://localhost:4200/callback/' + type;
-        switch (type) {
-            case 'auth0':
-                url = `//cipchk.auth0.com/login?client=8gcNydIDzGBYxzqV0Vm1CX_RXH-wsWo5&redirect_uri=${decodeURIComponent(callback)}`;
-                break;
-            case 'github':
-                url = `//github.com/login/oauth/authorize?client_id=9d6baae4b04a23fcafa2&response_type=code&redirect_uri=${decodeURIComponent(callback)}`;
-                break;
-            case 'weibo':
-                url = `https://api.weibo.com/oauth2/authorize?client_id=1239507802&response_type=code&redirect_uri=${decodeURIComponent(callback)}`;
-                break;
-        }
-        if (openType === 'window') {
-            this.socialService.login(url, '/', {
-                type: 'window'
-            }).subscribe((res: any) => {
-                if (res) {
-                    this.settingsService.setUser(res);
-                    this.router.navigateByUrl('/');
-                }
-            });
-        } else {
-            this.socialService.login(url, '/', {
-                type: 'href'
-            });
-        }
-    }
-
     // endregion
-
+    loginName(loginName, password) {
+        let data = {
+            loginName: loginName,
+            password: password
+        };
+        this.memberService.loginName(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.localStorageService.setLocalstorage(USER_INFO, JSON.stringify(res.data));
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => this.errorAlter(error)
+        )
+    }
+    loginPhone(loginName, validCode) {
+        let data = {
+            loginName: loginName,
+            validCode: validCode
+        };
+        this.memberService.loginPhone(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.localStorageService.setLocalstorage(USER_INFO, JSON.stringify(res.data));
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => this.errorAlter(error)
+        )
+    }
+    getValidCode(phone, bizType) {
+        let that = this;
+        let data = {
+            phone: phone,
+            bizType: bizType
+        };
+        this.memberService.getValidCode(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.modalSrv.success({
+                        nzContent: '发送成功'
+                    });
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => {
+                this.errorAlter(error);
+            }
+        );
+    }
     ngOnDestroy(): void {
         if (this.interval$) clearInterval(this.interval$);
+    }
+    errorAlter(err) {
+        this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: err
+        });
     }
 }

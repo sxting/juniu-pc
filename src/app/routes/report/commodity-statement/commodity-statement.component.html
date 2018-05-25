@@ -7,7 +7,7 @@
         <nz-form-item>
           <nz-form-label nzFor="status">选择门店</nz-form-label>
           <nz-form-control>
-            <nz-select [(ngModel)]="storeId" (ngModelChange)="selectStore()" name="storeList" id="storeList" [nzPlaceHolder]="'全部门店'" [nzShowSearch]="true">
+            <nz-select  style="width: 200px;" [(ngModel)]="storeId" (ngModelChange)="selectStore()" name="storeList" id="storeList" [nzPlaceHolder]="'全部门店'" [nzShowSearch]="true">
               <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.storeName" [nzValue]="i.storeId"></nz-option>
             </nz-select>
           </nz-form-control>
@@ -15,7 +15,7 @@
       </nz-col>
       <nz-col nzMd="8" nzSm="24">
         <nz-form-item>
-          <nz-form-label nzFor="updatedAt">选择日期</nz-form-label>
+          <nz-form-label nzFor="yyyymmDate">选择日期</nz-form-label>
           <nz-form-control>
             <nz-date-picker (ngModelChange)="reportDateAlert($event)" [nzFormat]="'YYYY-MM-DD'" [(ngModel)]="yyyymmDate" [nzAllowClear]="false"></nz-date-picker>
           </nz-form-control>

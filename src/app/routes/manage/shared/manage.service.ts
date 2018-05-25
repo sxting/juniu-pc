@@ -546,9 +546,19 @@ export class ManageService {
   }
 
   //修改员工提成规则
-  editStaffingRules(data: any){
+  editStaffingRules(data: any) {
     let apiUrl = Config.API + 'finance/deductRule/update.json';
     return this.http.post(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  //删除提成
+  deleteStaffingInfor(data: any) {
+    let apiUrl = Config.API + 'finance/deductRule/del.json';
+    return this.http.get(apiUrl, data)
       .map((response: Response) => response)
       .catch(error => {
         return Observable.throw(error);
@@ -583,7 +593,7 @@ export class ManageService {
   }
   //获取员工的列表
   selectStaffList(data: any) {
-    let apiUrl = Config.API + '/staff/select.json';
+    let apiUrl = Config.API1 + 'account/merchant/staff/select.json';
     return this.http.get(apiUrl, data)
       .map((response: Response) => response)
       .catch(error => {
@@ -592,24 +602,24 @@ export class ManageService {
   }
 
   //员工排班列表
-    schedulingListInfor(data: any) {
-      let apiUrl = Config.API + 'reserve/scheduling/config/page.json';
-      return this.http.get(apiUrl, data)
-        .map((response: Response) => response)
-        .catch(error => {
-          return Observable.throw(error);
-        });
-    }
+  schedulingListInfor(data: any) {
+    let apiUrl = Config.API + 'reserve/scheduling/config/page.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
 
-    //新增员工排班
-    addStaffSchedulingInfor(data: any) {
-      let apiUrl = Config.API + 'reserve/scheduling/config/save.json';
-      return this.http.post(apiUrl, data)
-        .map((response: Response) => response)
-        .catch(error => {
-          return Observable.throw(error);
-        });
-    }
+  //新增员工排班
+  addStaffSchedulingInfor(data: any) {
+    let apiUrl = Config.API + 'reserve/scheduling/config/save.json';
+    return this.http.post(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
 
   //删除排班
   deletechedulingInfor(data: any) {
@@ -705,4 +715,43 @@ export class ManageService {
       return Observable.throw(error);
     });
   }
+  //接口描述:更新会员卡的是否展示
+  updateByIsWxShow(data) {
+    let apiUrl = Config.API + 'member/config/updateByIsWxShow.json';
+    return this.http.get(apiUrl, data).map((response: Response) => response).catch(error => {
+      return Observable.throw(error);
+    });
+  }
+  //接口描述:更新商品是否在微信小程序端展示
+  updateProductIsWxShow(data) {
+    let apiUrl = Config.API + 'product/app/updateProductIsWxShow.json';
+    return this.http.get(apiUrl, data).map((response: Response) => response).catch(error => {
+      return Observable.throw(error);
+    });
+  }
+  // 修改门店详情（微信门店）
+  modifyDetail(data) {
+    let apiUrl = Config.API1 + 'account/merchant/store/modify/detail.json';
+    return this.http.post(apiUrl, data).map((response: Response) => response).catch(error => {
+      return Observable.throw(error);
+    });
+  }
+  //删除门店
+  storeDelete(data) {
+    let apiUrl = Config.API1 + 'account/merchant/store/delete.json';
+    return this.http.post(apiUrl, data).map((response: Response) => response).catch(error => {
+      return Observable.throw(error);
+    });
+  }
+  /**口碑匹配 */
+  matchKoubeiShop(data) {
+    // GET /store/bind.json
+    let apiUrl = Config.API + 'account/store/bind.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+  
 }

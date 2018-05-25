@@ -22,7 +22,7 @@ import { environment } from '@env/environment';
  */
 @Injectable()
 export class DefaultInterceptor implements HttpInterceptor {
-  constructor(private injector: Injector) {}
+  constructor(private injector: Injector, private router: Router) { }
 
   get msg(): NzMessageService {
     return this.injector.get(NzMessageService);
@@ -38,6 +38,9 @@ export class DefaultInterceptor implements HttpInterceptor {
     // 可能会因为 `throw` 导出无法执行 `_HttpClient` 的 `end()` 操作
     this.injector.get(_HttpClient).end();
     // 业务处理：一些通用操作
+    if (event['body']['errorCode'] === 'invalid-guest' || event['body']['errorInfo'] === '未检查到登录状态，请先登录后再进行操作') {
+      this.goTo('/passport/login');
+    }
     switch (event.status) {
       case 200:
         // 业务层级错误处理，以下是假定restful有一套统一输出格式（指不管成功与否都有相应的数据格式）情况下进行处理
@@ -85,11 +88,11 @@ export class DefaultInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler,
   ): Observable<
-    | HttpSentEvent
-    | HttpHeaderResponse
-    | HttpProgressEvent
-    | HttpResponse<any>
-    | HttpUserEvent<any>
+  | HttpSentEvent
+  | HttpHeaderResponse
+  | HttpProgressEvent
+  | HttpResponse<any>
+  | HttpUserEvent<any>
   > {
     // 统一加上服务端前缀
     let url = req.url;

@@ -6,6 +6,7 @@ import { LocalStorageService } from "../../../shared/service/localstorage-servic
 import { STORES_INFO } from "../../../shared/define/juniu-define";
 import { ManageService } from "../shared/manage.service";
 import { FunctionUtil } from "../../../shared/funtion/funtion-util";
+import NP from 'number-precision'
 
 @Component({
   selector: 'app-staff-commission-list',
@@ -78,7 +79,7 @@ export class StaffCommissionListComponent implements OnInit {
             nzOkText: '确定',
             nzCancelText: '取消',
             nzOnOk: function () {
-                console.log(self.deductRuleId);
+                self.deleteStaffingInfor();//删除员工提成
             }
         });
     }
@@ -99,7 +100,7 @@ export class StaffCommissionListComponent implements OnInit {
                 if (res.success) {
                     this.loading = false;
                     res.data.content.forEach((element: any, index: number) => {
-                        element.rulesDetail = '非指定' + element.assignRate * 100 + '%,' + ' ' + '指定' + element.normalRate * 100 + '%,' + ' ' + '提成' + Number(element.deductMoney)/100 + '元';
+                        element.rulesDetail = '非指定' +  NP.round(element.assignRate * 100,2) + '%,' + ' ' + '指定' + NP.round(element.normalRate * 100,2) + '%,' + ' ' + '提成' + Number(element.deductMoney)/100 + '元';
                         element.productNumber = Number(element.productCount)+ Number(element.cardConfigRuleCount);
                     });
                     this.commissionListInfor = res.data.content;
@@ -118,4 +119,30 @@ export class StaffCommissionListComponent implements OnInit {
         );
     }
 
+    //员工提成删除请求
+    deleteStaffingInfor() {
+      let that = this;
+      this.loading = true;
+      let batchQuery =  {
+        deductRuleId: that.deductRuleId,
+        storeId: that.storeId,
+      };
+      this.manageService.deleteStaffingInfor(batchQuery).subscribe(
+        (res: any) => {
+          if (res.success) {
+            this.loading = false;
+            that.msg.success(`删除成功`);
+            that.rulePageListHttp();//获取员工列表
+          } else {
+            this.modalSrv.error({
+              nzTitle: '温馨提示',
+              nzContent: res.errorInfo
+            });
+          }
+        },
+        error => {
+          FunctionUtil.errorAlter(error);
+        }
+      );
+    }
 }

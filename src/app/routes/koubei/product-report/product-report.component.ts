@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Router, ActivatedRoute } from '@angular/router';
-import { LocalStorageService } from "../../../shared/service/localstorage-service";
 import { KoubeiService } from "../shared/koubei.service";
-import { STORES_INFO ,REFRESH, APP_TOKEN} from "../../../shared/define/juniu-define";
-import { FunctionUtil } from "../../../shared/funtion/funtion-util";
-import { Config } from "../../../shared/config/env.config";
+import { LocalStorageService } from '@shared/service/localstorage-service';
+import { APP_TOKEN } from '@shared/define/juniu-define';
+import { FunctionUtil } from '@shared/funtion/funtion-util';
+import { Config } from '@shared/config/env.config';
 
 @Component({
   selector: 'app-product-report',
@@ -17,8 +17,9 @@ export class ProductReportComponent implements OnInit {
 
     loading = false;//加载loading
     theadName: any[] = ['购买时间	', '商品名称', '购买门店', '商品金额', '操作'];
-    startDate: any = '2018-04-04';
-    endDate:any = '2018-04-19';
+    dateRange: any;
+    startDate: string = '';
+    endDate: string = '';
 
     productListInfor: any[] = [];//全部商品信息
     productReportformInfor: any;//商品报表信息
@@ -43,10 +44,7 @@ export class ProductReportComponent implements OnInit {
     transNo: any;//交易号
     voucherNum: string;//商品数量
     showTips: boolean = false;//核销判断
-
     arrFunctionBtns: any = [{name:'已购买',type:'PAY'},{name:'已核销',type:'SETTLE'},{name:'已退款',type:'REFUND'}];
-
-
 
 
     constructor(
@@ -71,6 +69,14 @@ export class ProductReportComponent implements OnInit {
 
 
     ngOnInit() {
+        let startDate = new Date(new Date().getTime() - 7*24*60*60*1000); //提前一周 ==开始时间
+        let endDate = new Date(new Date().getTime()); //今日 ==结束时
+        this.dateRange = [ startDate,endDate ];
+        this.startDate  = FunctionUtil.changeDate(startDate);
+        this.endDate = FunctionUtil.changeDate(endDate);
+
+        this.batchQuery.endDate = this.endDate;
+        this.batchQuery.startDate = this.startDate;
         //获取报表商品
         this.reportProductItems(this.batchQuery);
     }
@@ -112,13 +118,15 @@ export class ProductReportComponent implements OnInit {
         this.koubeiProductOrderDetail(params);
     }
 
+    //条件查询
     getData(){
-        console.log(this.productId);
+        this.startDate  = FunctionUtil.changeDate(this.dateRange[0]);
+        this.endDate = FunctionUtil.changeDate(this.dateRange[1]);
         this.batchQuery.itemId = this.productId;
         this.batchQuery.startDate = this.startDate;
         this.batchQuery.endDate = this.endDate;
-        //获取报表商品
-        this.reportProductItems(this.batchQuery);
+        //口碑订单报表三种状态数量金额统计
+        this.reportStatisticsInfor(this.batchQuery);
     }
 
     // 切换分页码
@@ -141,10 +149,6 @@ export class ProductReportComponent implements OnInit {
                     this.loading = false;
                     self.productListInfor = res.data;
                     self.productId = self.productListInfor[0]?self.productListInfor[0].productId:'';//拿到商品的itemId
-
-                    //口碑订单报表三种状态数量金额统计
-                    self.batchQuery.itemId = self.productId;
-                    self.reportStatisticsInfor(self.batchQuery);
 
                 } else {
                     this.modalSrv.error({

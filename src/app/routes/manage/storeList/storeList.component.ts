@@ -16,6 +16,7 @@ export class StoreListComponent {
     Total: any = 0;
     storeInfos: any = [];
     pageNo: any = 1;
+    branchName: any;
     constructor(
         public msg: NzMessageService,
         private modalSrv: NzModalService,
@@ -26,34 +27,27 @@ export class StoreListComponent {
         this.storeListHttp();
     }
     search() {
-        if (this.storeName) {
-            console.log(this.storeName)
-        }
+        this.storeListHttp();
     }
     bianji(e: any) {
         this.router.navigate(['/manage/storeList/storeEdit', { storeId: e }]);
     }
-    fufei() {
-
-    }
-    shanchu() {
-
+    fufei(type: any, e: any) {
+        this.router.navigate(['/setings/software/buy', { storeId: e, type: type }]);
     }
     getData(e: any) {
         this.pageNo = e;
         this.storeListHttp();
-    }
-    gotoEdit() {
-        // this.router.navigateByUrl('/manage/shoplist/storeEdit');
-        // this.router.navigate(['/manage/shoplist/storeEdit']);
     }
 
     storeListHttp() {
         let data = {
             pageNo: this.pageNo,
             pageSize: 10,
-            timestamp: new Date().getTime()
+            timestamp: new Date().getTime(),
+            branchName: this.branchName
         }
+        if (!data.branchName) delete data.branchName;
         let that = this;
         this.manageService.storeBatch(data).subscribe(
             (res: any) => {
@@ -80,22 +74,57 @@ export class StoreListComponent {
             }
         );
     }
+    //删除门店
+    storeDeleteHttp(storeId) {
+        let data = {
+            storeId: storeId,
+            timestamp: new Date().getTime()
+        }
+        let that = this;
+        this.modalSrv.confirm({
+            nzTitle: '温馨提示',
+            nzContent: '您是否确定删除该门店',
+            nzOkText: '确定',
+            nzCancelText: '取消',
+            nzOnOk: () => {
+                that.manageService.storeDelete(data).subscribe(
+                    (res: any) => {
+                        if (res.success) {
+                            that.storeListHttp();
+                            that.modalSrv.success({
+                                nzContent: '删除成功'
+                            });
+                        } else {
+                            that.modalSrv.error({
+                                nzTitle: '温馨提示',
+                                nzContent: res.errorInfo
+                            });
+                        }
+                    },
+                    error => {
+                        that.errorAlert(error);
+                    }
+                );
+            }
+        })
+
+    }
     errorAlert(err: any) {
         this.modalSrv.error({
             nzTitle: '温馨提示',
             nzContent: err
         });
     }
-    storeTypeFun(type: any, boolean: any, e: any) {
+    storeTypeFun(type: any, boolean: any, e: any, branchName: any) {
         if (boolean && type === 'weixin') {
             this.router.navigate(['/manage/storeList/wxStore', { storeId: e }]);
         } else if (!boolean && type === 'weixin') {
             this.router.navigate(['/manage/bindWechartStore', { storeId: e }]);
         }
         if (boolean && type === 'zhifubao') {
-            this.router.navigate(['/manage/storeList/matchingkoubei', { storeId: e }]);
+            this.router.navigate(['/manage/koubeiStore', { storeId: e }]);
         } else if (!boolean && type === 'zhifubao') {
-            this.router.navigate(['/manage/bindKoubeiStore', { storeId: e }]);
+            this.router.navigate(['/manage/bindKoubeiStore', { storeId: e, branchName: branchName }]);
         }
     }
 }

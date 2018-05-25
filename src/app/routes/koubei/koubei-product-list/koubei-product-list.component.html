@@ -101,7 +101,6 @@
         <nz-pagination class="nzPagination" style="float: right;padding: 20px 0" [nzTotal]="totalElements" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
     </div>
 </nz-card>
-<span (click)="associatedAccountClick(associatedAccount)">点击啊关联账号</span>
 <!--口碑客设置弹框-->
 <ng-template #koubeike>
     <div class="reserve-record-alert">
@@ -110,32 +109,32 @@
 </ng-template>
 
 <!--关联口碑账号-->
-<ng-template #associatedAccount>
-    <div class="associatedAccount">
-        <p>系统检测到您尚未关联口碑账号，暂时无法使用此功能。</p>
-        <p>如果您尚未注册口碑账号，您可以 <a class="" href="javascript:;">点此注册</a></p>
-        <p>如果您已注册口碑账号，您可以使用口碑商家总账号支付宝扫描下方二维码，进行授权关联。</p>
-    </div>
-    <div class="associatedAccount-steps">
-        <nz-card [nzBordered]="false">
-            <nz-steps>
-                <nz-step nzTitle="步骤一"></nz-step>
-                <nz-step nzTitle="步骤二"></nz-step>
-                <nz-step nzTitle="步骤三"></nz-step>
-            </nz-steps>
-            <div class="clearfix steps">
-                <p class="fl">
-                    <span>打开支付宝App</span>
-                    <span>登录口碑商家总账号</span>
-                </p>
-                <p class="fl">扫描下方二维码</p>
-                <p class="fl">点击“确认授权”按钮</p>
-            </div>
-            <div class="steps-images">
-                <img src="../../../../assets/img/pay.png" />
-                <img src="../../../../assets/img/sure.png" />
-                <img src="../../../../assets/img/sure.png" />
-            </div>
-        </nz-card>
-    </div>
-</ng-template>
+<nz-modal [(nzVisible)]="isVisible" nzWidth ="800" [nzFooter]="null"  nzTitle="关联口碑账号" nzOkText="确定" nzCancelText="取消">
+  <div class="associatedAccount">
+    <p>系统检测到您尚未关联口碑账号，暂时无法使用此功能。</p>
+    <p>如果您尚未注册口碑账号，您可以 <a class="" href="javascript:;">点此注册</a></p>
+    <p>如果您已注册口碑账号，您可以使用口碑商家总账号支付宝扫描下方二维码，进行授权关联。</p>
+  </div>
+  <div class="associatedAccount-steps">
+    <nz-card [nzBordered]="false">
+      <nz-steps>
+        <nz-step nzTitle="步骤一"></nz-step>
+        <nz-step nzTitle="步骤二"></nz-step>
+        <nz-step nzTitle="步骤三"></nz-step>
+      </nz-steps>
+      <div class="clearfix steps">
+        <p class="fl">
+          <span>打开支付宝App</span>
+          <span>登录口碑商家总账号</span>
+        </p>
+        <p class="fl">扫描下方二维码</p>
+        <p class="fl">点击“确认授权”按钮</p>
+      </div>
+      <div class="steps-images">
+        <img src="../../../../assets/img/pay.png" />
+        <img src="../../../../assets/img/sure.png" />
+        <img src="../../../../assets/img/sure.png" />
+      </div>
+    </nz-card>
+  </div>
+</nz-modal>

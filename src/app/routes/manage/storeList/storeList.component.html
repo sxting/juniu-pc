@@ -4,7 +4,7 @@
     <button class="buttons" nz-button [routerLink]="['/manage/storeList/storeEdit']" (click)="gotoEdit()">新增门店</button>
     <div width="300px;">
       <nz-input-group nzSuffixIcon="anticon anticon-search" (click)="search()">
-        <input [(ngModel)]="storeName" type="text" nz-input placeholder="请输入门店名称搜索">
+        <input [(ngModel)]="branchName" type="text" nz-input placeholder="请输入门店名称搜索">
       </nz-input-group>
     </div>
 
@@ -26,7 +26,7 @@
         <td>{{item.branchName}}</td>
         <td>
           <span class="iconfont icon-weixin4 {{item.platformListInfo.WECHAT?'weixin':''}}" (click)="storeTypeFun('weixin',item.platformListInfo.WECHAT,item.storeId)"></span>
-          <span class="iconfont icon-zhifubao1 {{item.platformListInfo.ALIPAY?'zhifubao':''}}" (click)="storeTypeFun('zhifubao',item.platformListInfo.WECHAT,item.storeId)"></span>
+          <span class="iconfont icon-zhifubao1 {{item.platformListInfo.ALIPAY?'zhifubao':''}}" (click)="storeTypeFun('zhifubao',item.platformListInfo.ALIPAY,item.storeId,item.branchName)"></span>
         </td>
         <td>{{item.systemVersion}}</td>
         <td>
@@ -35,10 +35,10 @@
             <td>
               <span class="button" (click)="bianji(item.storeId)">编辑</span>
               <nz-divider nzType="vertical"></nz-divider>
-              <span class="button" *ngIf="item.validityPeriodDays?item.validityPeriodDays>0:true" (click)="fufei()">升级</span>
-              <span class="button" *ngIf="item.validityPeriodDays?item.validityPeriodDays>0:false" (click)="fufei()">续费</span>
+              <span class="button" *ngIf="item.validityPeriodDays?item.validityPeriodDays>0:true" (click)="fufei('shengji',item.storeId)">升级</span>
+              <span class="button" *ngIf="item.validityPeriodDays?item.validityPeriodDays>0:false" (click)="fufei('xufei',item.storeId)">续费</span>
               <nz-divider nzType="vertical"></nz-divider>
-              <span class="button" (click)="shanchu()">删除</span>
+              <span class="button" (click)="storeDeleteHttp(item.storeId)">删除</span>
             </td>
 
       </tr>

@@ -1,15 +1,15 @@
 <page-header [title]="'跨店结算'"></page-header>
 <nz-card [nzBordered]="false">
-    <form nz-form [nzLayout]="'inline'" class="search__form">
+    <div nz-form [nzLayout]="'inline'" class="search__form">
         <nz-col nzMd="8" nzSm="24">
-            <nz-form-item>
+            <nz-form-item class="box-time-pick">
                 <nz-form-label nzFor="yyyymm">选择日期</nz-form-label>
                 <nz-form-control>
-                    <input nz-input [(ngModel)]="yyyymm" name="yyyymm" placeholder="请选择日期" id="yyyymm">
+                  <nz-range-picker [(ngModel)]="dateRange" (ngModelChange)="onDateChange($event)" nzShowTime></nz-range-picker>
                 </nz-form-control>
             </nz-form-item>
         </nz-col>
-    </form>
+    </div>
 </nz-card>
 <!--图表-->
 <nz-card [nzBordered]="false">
@@ -28,21 +28,13 @@
         </tr>
         </thead>
         <tbody nz-tbody class="ui-grid-tbody">
-            <tr nz-tbody-tr>
-                <td nz-td>1</td>
-                <td nz-td>1</td>
-                <td nz-td>1</td>
-                <td nz-td>1</td>
-                <td nz-td>1</td>
-                <td nz-td (click)="checkDetailInfor(checkDetail,'368789')">查看</td>
-            </tr>
             <tr nz-tbody-tr *ngFor="let item of settlementInfor;let i = index">
                 <td nz-td>{{i+1}}</td>
-                <td nz-td>{{item.staffName}}</td>
-                <td nz-td>{{item.serviceCount}}</td>
-                <td nz-td>{{item.assignRateStaffing}}</td>
-                <td nz-td>{{item.serviceCount}}</td>
-                <td nz-td (click)="checkDetailInfor(checkDetail, item.serviceIds)" style="color: #1890ff;cursor: pointer">查看</td>
+                <td nz-td>{{item.storeName}}</td>
+                <td nz-td>{{item.payMoney/100}}</td>
+                <td nz-td>{{item.receiveMoney/100}}</td>
+                <td nz-td>{{item.clearMoney/100}}</td>
+                <td nz-td style="color:#ff6600" (click)="checkDetailInfor(checkDetail, item.storeId)" style="color: #1890ff;cursor: pointer">查看</td>
             </tr>
         </tbody>
     </nz-table>
@@ -56,20 +48,20 @@
         <form nz-form [nzLayout]="'inline'" class="search__form mb24">
             <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
                 <nz-col nzMd="8" nzSm="24">
-                    <nz-form-item>
-                        <nz-form-label nzFor="status">门店</nz-form-label>
-                        <nz-form-control>
-                            <nz-select [(ngModel)]="storeId" name="storeList" id="storeList" [nzPlaceHolder]="'全部门店'" [nzShowSearch]="true">
-                                <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.storeName" [nzValue]="idx"></nz-option>
-                            </nz-select>
-                        </nz-form-control>
-                    </nz-form-item>
+                  <nz-form-item>
+                    <nz-form-label nzFor="status">门店</nz-form-label>
+                    <nz-form-control>
+                      <nz-select  style="width: 200px;" [(ngModel)]="storeId" (ngModelChange)="selectStore()" name="storeList" id="storeList" [nzPlaceHolder]="'请选择一个门店'" [nzShowSearch]="true">
+                        <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.storeName" [nzValue]="i.storeId"></nz-option>
+                      </nz-select>
+                    </nz-form-control>
+                  </nz-form-item>
                 </nz-col>
                 <nz-col nzMd="8" nzSm="24">
                     <nz-form-item>
                         <nz-form-label nzFor="status">消费类型</nz-form-label>
                         <nz-form-control>
-                            <nz-select [(ngModel)]="consumeType" name="typeOfConsumption" id="typeOfConsumption" [nzPlaceHolder]="'全部类型'" [nzShowSearch]="true">
+                            <nz-select [(ngModel)]="consumeType" name="typeOfConsumption" id="typeOfConsumption" (ngModelChange)="selectConsumeType()" [nzPlaceHolder]="'全部类型'" [nzShowSearch]="true">
                                 <nz-option *ngFor="let item of typeOfConsumption; let idx = index" [nzLabel]="item.name" [nzValue]="item.value"></nz-option>
                             </nz-select>
                         </nz-form-control>
@@ -79,19 +71,19 @@
         </form>
         <nz-table #nzTable [nzData]="settlementDetailList" [nzShowPagination]="false">
             <thead>
-            <tr>
-                <th *ngFor="let item of alertTableTitle"><span>{{item}}</span></th>
-            </tr>
+              <tr>
+                  <th *ngFor="let item of alertTableTitle"><span>{{item}}</span></th>
+              </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let data of settlementDetailList;let ind = index">
-                <td>{{data.staffName || '---'}}</td>
-                <td>{{data.phone || '---'}}</td>
-                <td>{{data.date}} {{data.time}}</td>
-                <td>{{data.productName || '---'}}</td>
-                <td>{{data.peopleNumber || '---'}}<span *ngIf="data.peopleNumber">人</span></td>
-                <td class="record-candle-btn">{{data.price/100}}</td>
-            </tr>
+              <tr *ngFor="let data of settlementDetailList;let ind = index">
+                  <td>{{data.date}}</td>
+                  <td>{{data.customerName}}</td>
+                  <td>{{data.cardName}}</td>
+                  <td>{{data.consumeType}}</td>
+                  <td>{{data.originMoney/100}}</td>
+                  <td class="record-candle-btn">{{data.money/100}}</td>
+              </tr>
             </tbody>
         </nz-table>
         <div class="nzPaginationBox">
