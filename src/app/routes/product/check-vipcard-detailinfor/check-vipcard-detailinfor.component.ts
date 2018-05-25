@@ -48,15 +48,17 @@ export class CheckVipcardDetailinforComponent implements OnInit {
     isShare: any;
     isWxShow: any;
     backgroundId: any;//卡面图片
-    storeId: string = '1517309742135115450914';
-    merchantId: string = '1517309600312201040575';
+    storeId: string = '';
+    merchantId: string = '';
     price: number = 0;//售价
     rebate: number = 0;//折扣卡的折扣
     balance: number = 0;//储值卡内充值金额
     ifShow: boolean = true;//是否显示填选信息
     ifShowErrorTips: boolean = true;//是否显示错误信息
+    pc: any;
 
-    constructor(
+
+  constructor(
         private http: _HttpClient,
         private modalSrv: NzModalService,
         private fb: FormBuilder,
@@ -200,7 +202,9 @@ export class CheckVipcardDetailinforComponent implements OnInit {
             this.getAllbuySearchs(data);//获取所有的商品
         }
         if(type === 'CUSTOMIZE'){
-            this.modalSrv.create({
+          console.log(self.productIds);
+
+          this.modalSrv.create({
                 nzTitle: '选择'+ text,
                 nzContent: tpl,
                 nzWidth: '800px',
@@ -214,7 +218,6 @@ export class CheckVipcardDetailinforComponent implements OnInit {
         }else {
             let dataInfor = this.getOthersData(self.productListInfor).split('-');
             self.productIds = dataInfor[0];
-            console.log(self.productIds);
             this.ifHttps = type;
         }
     }
@@ -335,45 +338,6 @@ export class CheckVipcardDetailinforComponent implements OnInit {
         return objArrIds;
     }
 
-    //转换后台数据
-    getDataChange(staffListInfor: any, selectedStaffIds: any){
-        staffListInfor.forEach(function (city: any) {
-            city.change = false;
-            city.checked = false;
-            city.staffs.forEach(function (staff: any) {
-                staff.change = false;
-            });
-        });
-        /*初始化选中*/
-        selectedStaffIds.forEach(function (staffId: any) {
-            staffListInfor.forEach(function (city: any, j: number) {
-                city.staffs.forEach(function (staff: any, k: number) {
-                    if (staffId === staff.staffId) {
-                        staff.change = true;
-                    }
-                });
-            });
-        });
-        /*判断城市是否全选*/
-        staffListInfor.forEach(function (city: any, i: number) {
-            let storesChangeArr = [''];
-            city.staffs.forEach(function (store: any, j: number) {
-                if (store.change === true) {
-                    storesChangeArr.push(store.change);
-                }
-            });
-            if (storesChangeArr.length - 1 === city.staffs.length) {
-                city.change = true;
-                city.checked = true;
-            }
-            if (storesChangeArr.length > 1) {
-                city.checked = true;
-            }
-        });
-        return staffListInfor;
-    }
-
-
     /****************************************  Http请求处理  *********************************/
 
     // 获取全部商品
@@ -454,16 +418,13 @@ export class CheckVipcardDetailinforComponent implements OnInit {
 
                     /******* 匹配选中的门店 *********/
                     let applyStoreIds = res.data.rules[0].applyStoreIds? res.data.rules[0].applyStoreIds.split(',') : [];
-                    this.getDataChange(this.cityStoreList, applyStoreIds);//转换后台拿过来的数据
+                    FunctionUtil.getDataChange(this.cityStoreList, applyStoreIds);//转换后台拿过来的数据
 
                     /******* 匹配选中的商品 *********/
                     let applyProductIds = res.data.rules[0].applyProductIds? res.data.rules[0].applyProductIds.split(',') : [];
                     console.log(applyProductIds);
+                    FunctionUtil.getDataChange(this.productListInfor, applyProductIds);//转换后台拿过来的数据
                     console.log(this.productListInfor);
-                    this.getDataChange(this.productListInfor, applyProductIds);//转换后台拿过来的数据
-
-                    console.log(this.productListInfor);
-
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -476,7 +437,6 @@ export class CheckVipcardDetailinforComponent implements OnInit {
             }
         );
     }
-
 
     submit() {
         console.log(this.form.controls);

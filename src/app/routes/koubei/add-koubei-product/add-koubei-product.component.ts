@@ -27,6 +27,11 @@ export class AddKoubeiProductComponent implements OnInit {
     num: number = 0;
     ifcopy: boolean = false;//查看是否是复制进来的
     koubeiProductId: string = '';//商品编辑(商品ID)
+    isVisible = false;//是否显示弹框
+    srcUrl: any;//ifream地址
+    trustedUrl: any;//口碑客地址
+    merchantLogin: boolean = false;//商家登录
+    providerLogin: boolean = false;//服务商登录
 
     alipayItemId: string;//口碑商品ID
     ItemsStatus: any = [{ name: '上架', value: '1'}, { name: '下架', value: '0'},];//上下架状态
@@ -57,7 +62,6 @@ export class AddKoubeiProductComponent implements OnInit {
     selectStoresIds: any = ''; //选中的门店
     storesChangeNum: any; //选中门店的个数
     allShopsNumber: number;//所有的门店数量
-
     ifShowPriceContrast: boolean = true;//价格对比
 
     get currentPrice() { return this.form.controls['currentPrice']; }
@@ -84,7 +88,9 @@ export class AddKoubeiProductComponent implements OnInit {
 
         let self = this;
         this.titleSrv.setTitle('新增商品');
-        //门店
+        this.status = self.ItemsStatus[0].value;
+
+      //门店
         let storeList = JSON.parse(this.localStorageService.getLocalstorage('alipayShops')) ?
             JSON.parse(this.localStorageService.getLocalstorage('alipayShops')) : [];
         if (storeList) {
@@ -141,6 +147,20 @@ export class AddKoubeiProductComponent implements OnInit {
         this.cityStoreList = this.getCityList(storeList);//将门店列表数据格式转换成按照城市分类
         this.changeAllData();//获取到所有的门店ID及其num
 
+        let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ? JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+        //检查商家登陆还是服务商登陆
+        if(UserInfo.alipayOperatorType){
+          if(UserInfo.alipayOperatorType == 'MERCHANT'||UserInfo.alipayOperatorType == 'MER_STAFF'){//商家
+            this.merchantLogin = true;
+            this.providerLogin = false;
+          }else{//服务商
+            this.merchantLogin = false;
+            this.providerLogin = true;
+          }
+        }else {//如果是空串的话默认为服务商登陆
+          this.providerLogin = true;
+        }
+
         if (this.localStorageService.getLocalstorage(KOUBEI_ITEM_CATEGORYS)) {
             this.koubeiItemCategorys = JSON.parse(this.localStorageService.getLocalstorage(KOUBEI_ITEM_CATEGORYS));
         }
@@ -158,7 +178,6 @@ export class AddKoubeiProductComponent implements OnInit {
             };
             this.checkProductDetailInfor(batchQuery);
         }
-        this.status = self.ItemsStatus[0].value;
         this.formData = {
             productName: [ null, [ Validators.required ,Validators.max(40)] ],
             originalPrice: [null, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{2})?$`), Validators.max(1000 * 5)])],
@@ -264,7 +283,6 @@ export class AddKoubeiProductComponent implements OnInit {
 
     //获取到门店ID
     getSelectStoresIds(event){
-        console.log(event);
         if(event){
             this.selectStoresIds = event.staffIds;
         }
@@ -296,6 +314,12 @@ export class AddKoubeiProductComponent implements OnInit {
     }
     onEndChange(date: Date): void {
       this.soldOutDate = date;
+    }
+
+    //口碑客弹框确认
+    handleOk(){
+      this.isVisible = false;
+      this.router.navigate(['/koubei/product/list']);
     }
 
     /*********************数据处理开始**************************/
@@ -667,17 +691,21 @@ export class AddKoubeiProductComponent implements OnInit {
                         setTimeout(() => {
                             self.submitting = false;
                             self.msg.success(`提交成功`);
-                            self.modalSrv.warning({
+                            if(self.koubeiProductId){
+                              self.router.navigate(['/koubei/product/list']);
+                            }else{
+                              let itemId = res.data;
+                              self.modalSrv.warning({
                                 nzTitle: '商品创建成功',
                                 nzContent: '想帮商家极速获客？马上设置口碑客分佣推广！',
                                 nzOkText: '去设置',
                                 nzMaskClosable: false,
                                 nzOnOk: function () {
-
+                                  self.extension(itemId);
                                 }
-                            });
+                              });
+                            }
                         }, 1000);
-
                     } else {
                         this.modalSrv.error({
                             nzTitle: '温馨提示',
@@ -686,7 +714,7 @@ export class AddKoubeiProductComponent implements OnInit {
                     }
                 },
                 error => {
-                    self.msg.success(error);
+                    this.msg.warning(error);
                 }
             );
         }
@@ -822,9 +850,7 @@ export class AddKoubeiProductComponent implements OnInit {
         return false;
     }
 
-    /**
-     * 校验购买须知及其详细内容
-     **/
+    /*** 校验购买须知及其详细内容**/
     checkoutTaoCanData(obj: any) {
         let flag = true;
         var pattern = /^[0-9]\d*$/;
@@ -885,5 +911,52 @@ export class AddKoubeiProductComponent implements OnInit {
         }
         return flag;
     }
+
+    //口碑客推广
+    extension(itemId:string){
+      let self = this;
+      if(this.merchantLogin){//商家登录
+        console.log("商家登录");
+        this.srcUrl = "https://koubeike.alipay.com/main.htm#/promote/config/baobei?itemId=" + itemId;
+        this.trustedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.srcUrl);
+      }
+      if(this.providerLogin){
+        console.log("服务商登录");
+        this.srcUrl = "https://koubeike.alipay.com/mg/mainForIFrame.htm#/promoters/delegate/baobei?bizId=" + itemId;
+        this.trustedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.srcUrl);
+      }
+      if(this.srcUrl) {
+        this.isVisible = true;
+        //监听消息反馈
+        window.addEventListener('message',function(event) {
+          var kbkRe = JSON.parse(event.data);
+          if (kbkRe.action === 'checkItem') {
+            if (kbkRe.resultStatus === 'failed') {
+              // 宝贝校验失败
+              self.isVisible = false;
+              self.msg.warning(kbkRe.resultMsg);
+            }
+          }
+          if (kbkRe.action === 'configCommission') {
+            if (kbkRe.resultStatus === 'succeed') {
+              // 签约成功
+              self.isVisible = false;
+              self.msg.warning('设置成功');
+            } else if (kbkRe.resultStatus === 'failed') {
+              // 签约失败
+              self.isVisible = false;
+              self.msg.warning(kbkRe.resultMsg);  // 失败具体信息
+            } else if (kbkRe.resultStatus === 'canceled') {
+              // 用户取消
+              self.isVisible = false;
+            } else {
+              // 异常情况
+              self.isVisible = false;
+              self.msg.warning(kbkRe.resultMsg || '请求出错');
+            }
+          }
+        },false);
+      }
+  }
 
 }

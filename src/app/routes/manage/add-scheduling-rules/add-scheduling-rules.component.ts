@@ -70,7 +70,6 @@ constructor(
     //排班
     if(this.schedulingConfigId){
       this.titleSrv.setTitle('编辑排班');
-      this.checkSechedulingDetail();//查看排班规则详情
     }else{
       this.titleSrv.setTitle('新增排班');
     }
@@ -78,7 +77,6 @@ constructor(
         ruleName: [null, [ Validators.required ]],
     });
     this.getStaffList();//员工的列表
-
   }
 
   //选择星期几，改变对应的checked
@@ -129,17 +127,11 @@ constructor(
 
   //排班选中的ID
   getSelectStaffIds(event: any){
-      console.log(event);
-      if(event){
-          this.selectStaffIds = event.staffIds;
-      }
+      if(event){ this.selectStaffIds = event.staffIds; }
   }
   //排班选中的数量
   getSelectStaffNumber(event: any){
-      console.log(event);
-      if(event){
-          this.selectStaffNumber = event.selectStaffNum;
-      }
+      if(event){ this.selectStaffNumber = event.selectStaffNum; }
   }
 
   //拿到项目对应的数量/总数/ID
@@ -169,39 +161,12 @@ constructor(
       let data = {
           storeId: this.storeId
       };
-    // this.manageService.selectStaffList(data).subscribe(
-    //     (res: any) => {
-    //         if (res.success) {
+    this.manageService.selectStaffList(data).subscribe(
+        (res: any) => {
+            if (res.success) {
                 this.loading = false;
                 let objArrIds: any = [];            //定义一个空数组
-                let resdata = [
-                    {
-                        "staffId":"1526375335852118541946",
-                        "staffName":"测试员工新增功能",
-                        "roleId":"3",
-                        "roleName":"测试门店职位1"
-                    },
-                    {
-                        "staffId":"1526375335852118541948",
-                        "staffName":"测试员hha",
-                        "roleId":"2",
-                        "roleName":"测试991"
-                    },
-                    {
-                      "staffId":"1526375335852118541940",
-                      "staffName":"测试员工新增功能",
-                      "roleId":"1",
-                      "roleName":"测试门店"
-                    },
-                    {
-                      "staffId":"1526375335852118541945",
-                      "staffName":"测试员",
-                      "roleId":"3",
-                      "roleName":"测试门店职位1"
-                    }
-                  ];
-                  // res.data.items.
-                  resdata.forEach(function (list: any) {
+                res.data.items.forEach(function (list: any) {
                       let category = {
                           change: true,
                           checked: true,
@@ -213,8 +178,7 @@ constructor(
                   objArrIds = FunctionUtil.getNoRepeat(objArrIds);//数组取重
                   objArrIds.forEach(function (item: any) {
                       let staffs = [];
-                      // res.data.items.
-                      resdata.forEach(function (list: any) {
+                      res.data.items.forEach(function (list: any) {
                           if( item.roleId === list.roleId){
                               let staffsList = {
                                   change: true,
@@ -231,17 +195,20 @@ constructor(
                   this.selectStaffIds = dataInfores[0];
                   this.selectStaffNumber = parseInt(dataInfores[1]);
                   this.allStaffNumber = parseInt(dataInfores[2]);
-      //         } else {
-      //             this.modalSrv.error({
-      //                 nzTitle: '温馨提示',
-      //                 nzContent: res.errorInfo
-      //             });
-      //         }
-      //     },
-      //     error => {
-      //         this.msg.warning(error);
-      //     }
-      // );
+                  if(this.schedulingConfigId){
+                    this.checkSechedulingDetail();//查看排班规则详情
+                  }
+            } else {
+                  this.modalSrv.error({
+                      nzTitle: '温馨提示',
+                      nzContent: res.errorInfo
+                  });
+              }
+          },
+          error => {
+              this.msg.warning(error);
+          }
+      );
   }
 
   /***提交******/
