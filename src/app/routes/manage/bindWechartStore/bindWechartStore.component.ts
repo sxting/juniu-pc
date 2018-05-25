@@ -70,6 +70,7 @@ export class BindWechartStoreComponent {
                 if (typeof (e.data.success) !== 'undefined') {
                     if (e.data.success === true) {
                         self.errorAlter('授权成功');
+                        self.router.navigate(['/manage/storeList/wxStore', { storeId: self.storeId }]);
                         modal.destroy()
                     } else {
                         self.errorAlter('授权失败');

@@ -81,23 +81,33 @@ export class StoreListComponent {
             timestamp: new Date().getTime()
         }
         let that = this;
-        this.manageService.storeDelete(data).subscribe(
-            (res: any) => {
-                if (res.success) {
-                    this.modalSrv.success({
-                        nzContent: '删除成功'
-                    });
-                } else {
-                    this.modalSrv.error({
-                        nzTitle: '温馨提示',
-                        nzContent: res.errorInfo
-                    });
-                }
-            },
-            error => {
-                this.errorAlert(error);
+        this.modalSrv.confirm({
+            nzTitle: '温馨提示',
+            nzContent: '您是否确定删除该门店',
+            nzOkText: '确定',
+            nzCancelText: '取消',
+            nzOnOk: () => {
+                that.manageService.storeDelete(data).subscribe(
+                    (res: any) => {
+                        if (res.success) {
+                            that.storeListHttp();
+                            that.modalSrv.success({
+                                nzContent: '删除成功'
+                            });
+                        } else {
+                            that.modalSrv.error({
+                                nzTitle: '温馨提示',
+                                nzContent: res.errorInfo
+                            });
+                        }
+                    },
+                    error => {
+                        that.errorAlert(error);
+                    }
+                );
             }
-        );
+        })
+
     }
     errorAlert(err: any) {
         this.modalSrv.error({

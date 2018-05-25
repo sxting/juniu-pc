@@ -1,7 +1,7 @@
 <h3>注册</h3>
 <form nz-form [formGroup]="form" (ngSubmit)="submit()" role="form">
     <nz-alert *ngIf="error" [nzType]="'error'" [nzMessage]="error" [nzShowIcon]="true" class="mb-lg"></nz-alert>
-    <nz-form-item>
+    <nz-form-item *ngIf="!alipayPid">
         <nz-form-control>
             <nz-input-group nzSize="large" nzAddonBeforeIcon="anticon anticon-user">
                 <input nz-input formControlName="mail" placeholder="商家名称">
