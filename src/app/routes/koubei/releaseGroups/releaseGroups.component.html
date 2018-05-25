@@ -477,7 +477,7 @@
             <nz-col [nzSpan]="7"> </nz-col>
 
             <nz-col [nzSpan]="12">
-                <button class="buttons" nz-button nzType="primary" type="submit">保存并发布</button>
+                <button class="buttons" nz-button nzType="primary" [nzLoading]="submitting" type="submit">保存并发布</button>
                 <button class="buttons" nz-button (click)="return()">返回</button>
             </nz-col>
 

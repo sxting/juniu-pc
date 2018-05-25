@@ -12,6 +12,7 @@ import { UserRegisterResultComponent } from './passport/register-result/register
 import { Exception403Component } from './exception/403.component';
 import { Exception404Component } from './exception/404.component';
 import { Exception500Component } from './exception/500.component';
+import { UserResetPasswordComponent } from './passport/resetPassword/resetPassword.component';
 
 const routes: Routes = [
   {
@@ -54,6 +55,11 @@ const routes: Routes = [
         component: UserRegisterResultComponent,
         data: { title: '注册结果', titleI18n: 'pro-register-result' },
       },
+      {
+        path: 'resetPassword',
+        component: UserResetPasswordComponent,
+        data: { title: '忘记密码', titleI18n: 'pro-reset-password' },
+      }
     ],
   },
   { path: '403', component: Exception403Component },
@@ -66,4 +72,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, { useHash: environment.useHash })],
   exports: [RouterModule],
 })
-export class RouteRoutingModule {}
+export class RouteRoutingModule { }

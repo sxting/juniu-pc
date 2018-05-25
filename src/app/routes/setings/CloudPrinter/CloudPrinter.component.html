@@ -1,100 +1,106 @@
-<div class="ad-page-header" style="margin: 0 -24px; border-bottom:none !important;">
-    <page-header [title]="'云打印机'">
-        实现系统打印小票功能。云打印机具有免安装、即插即用的优点，只要联网就可以使用。可以打印日常收银小票和口碑核销小票。 了解打印机详情，请点击
-        <a target="_blank" href="https://www.yilianyun.net/k4.html">https://www.yilianyun.net/k4.html</a>
-    </page-header>
-</div>
-<div class="storeMain">
-    <div class="buttonBox">
-        <button class="buttons" nz-button (click)="onAddPrintClick(modalContent)">新增打印机</button>
+<page-header></page-header>
+<div class="content_juniu">
+    <div>
+        <span class="add-print-btn" (click)="onAddPrintClick('', printBox)">新增打印机</span>
+        <span class="print-produce">口碑打印机可以在核销时打印商品核销小票。购买打印机请戳 <a href="https://www.10ss.net/k4.html" target="_blank">https://www.10ss.net/k4.html</a></span>
     </div>
-    <nz-table #basicTable [nzShowPagination]="false" [nzData]="printList">
+    <div class="content-title"><span class="left-line"></span>现有打印机</div>
+
+    <nz-table #nzTable [nzData]="printList" [nzPageSize]="10" [nzShowPagination]="false">
         <thead>
-            <tr>
-                <th>终端编号</th>
-                <th>终端名称</th>
-                <th>终端秘钥</th>
-                <th>所属门店</th>
-                <th>操作</th>
-            </tr>
+        <tr>
+            <th *ngFor="let item of theadName"><span>{{item}}</span></th>
+        </tr>
         </thead>
-        <tbody>
-            <tr *ngFor="let print of printList; let i = index">
-                <td>{{print.yunDeviceId}}</td>
-                <td>{{print.deviceName}}</td>
-                <td>{{print.yunDeviceKey}}</td>
-                <td>
-                    <span *ngFor="let store of stores">
-                        <span *ngIf="print.storeId === store.storeId">{{store.storeName}}</span>
-                    </span>
-                </td>
-                <td>
-                    <span class="button" (click)="onAddPrintClick(modalContent,print.printerDeviceId)">编辑</span>
-                    <nz-divider nzType="vertical"></nz-divider>
-                    <span class="button" (click)="onDeleteBtnClick(print.printerDeviceId)">删除</span>
-                </td>
-            </tr>
+        <tbody class="tbody">
+        <tr *ngFor="let print of printList; let i = index">
+            <td>{{print.yunDeviceId}}</td>
+            <td>{{print.deviceName}}</td>
+            <td>{{print.yunDeviceKey}}</td>
+            <td><span *ngFor="let store of stores"><span *ngIf="print.storeId === store.storeId">{{store.storeName}}</span></span></td>
+            <td><span (click)="onAddPrintClick(print.printerDeviceId, printBox)">编辑</span> | <span (click)="onDeleteBtnClick(print.printerDeviceId)">删除</span></td>
+        </tr>
         </tbody>
     </nz-table>
-    <!-- <div class="nzPaginationBox">
-        <nz-pagination class="nzPagination" [nzTotal]="Total" [nzPageSize]="10" (nzPageIndexChange)="getData($event)"></nz-pagination>
-    </div> -->
 </div>
 
-<ng-template #modalContent>
-    <ul class="alert-order-msg">
-        <div class="content-title">
-            <span class="left-line"></span>
-            <span>新增打印机</span>
-            <span class="print-tip">您
-                <a target="_blank" href="https://www.10ss.net/k4.html">购买打印机</a>并
-                <a target="_blank" href="https://yilianyun.10ss.net/user/signup">创建易联云账号</a>之后，可以
-                <a target="_blank" href="https://yilianyun.10ss.net/user/login">登录易联云后台</a>获取打印机信息</span>
-        </div>
-        <li>
-            <span>用户名</span>
-            <input [(ngModel)]="yunUsername" placeholder="请输入用户名">
-            <p class="print-input-tip">您可以登录易联云后台，点击左上角“系统集成”获取此信息</p>
-        </li>
-        <li>
-            <span>用户ID</span>
-            <input [(ngModel)]="yunUserId" placeholder="请输入用户ID">
-        </li>
-        <li>
-            <span>API秘钥</span>
-            <input [(ngModel)]="yunApiKey" placeholder="请输入API秘钥">
-        </li>
+<!--新增、编辑 打印机弹框-->
+<ng-template #printBox>
+    <p class="print-tip-p">
+        <span class="print-tip">您<a target="_blank" href="https://www.10ss.net/k4.html">购买打印机</a>并<a target="_blank" href="https://yilianyun.10ss.net/user/signup">创建易联云账号</a>之后，可以<a target="_blank" href="https://yilianyun.10ss.net/user/login">登录易联云后台</a>获取打印机信息</span>
+    </p>
+    <form nz-form [formGroup]="form" (ngSubmit)="submit()">
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="yun_username">用户名</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="17" nzMd="17">
+                <input nz-input formControlName="yun_username" placeholder="请输入用户名">
+                <nz-form-explain class="error-color" *ngIf="yun_username.dirty && yun_username.errors">用户名不能为空</nz-form-explain>
+                <nz-form-explain style="color: rgba(0, 0, 0, 0.65);">您可以登录易联云后台，点击左上角“系统集成”获取此信息</nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
 
-        <li>
-            <span>终端名称</span>
-            <input [(ngModel)]="deviceName" placeholder="请输入终端名称">
-            <p class="print-input-tip">您可以在易联云后台-打印终端-控制台中获取此信息</p>
-        </li>
-        <li>
-            <span>终端编号</span>
-            <input [(ngModel)]="yunDeviceId" placeholder="请输入终端编号">
-        </li>
-        <li>
-            <span>终端密钥</span>
-            <input [(ngModel)]="yunDeviceKey" placeholder="请输入终端秘钥">
-        </li>
-        <li>
-            <span>SIM卡号</span>
-            <input [(ngModel)]="yunDeviceSimNo" placeholder="请输入SIM卡号，Wi-Fi版本可不填">
-        </li>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="yun_user_id">用户ID</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="17" nzMd="17">
+                <input nz-input formControlName="yun_user_id" placeholder="请输入用户ID">
+                <nz-form-explain class="error-color" *ngIf="yun_user_id.dirty && yun_user_id.errors">用户ID不能为空</nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
 
-        <li>
-            <span>选择门店</span>
-            <!--<select (change)="onStoresChange($event)">-->
-            <!--<option [value]="''">请选择一个门店</option>-->
-            <!--<option *ngFor="let store of stores" [selected]="store.storeId == storeId" [value]="store.storeId">{{store.storeName}}</option>-->
-            <!--</select>-->
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="yun_api_key">API秘钥</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="17" nzMd="17">
+                <input nz-input formControlName="yun_api_key" placeholder="请输入API秘钥">
+                <nz-form-explain class="error-color" *ngIf="yun_api_key.dirty && yun_api_key.errors">API密钥不能为空</nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
 
-            <nz-select style="width: 300px;" [(ngModel)]="selectedOption" (ngModelChange)="onStoresChange($event)" [nzShowSearch]="true">
-                <nz-option [nzLabel]="'请选择一个门店'" [nzValue]="''"></nz-option>
-                <nz-option *ngFor="let store of stores" [nzLabel]="store.storeName" [nzValue]="store.storeId"></nz-option>
-            </nz-select>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="device_name">终端名称</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="17" nzMd="17">
+                <input nz-input formControlName="device_name" placeholder="请输入终端名称">
+                <nz-form-explain class="error-color" *ngIf="device_name.dirty && device_name.errors">终端名称不能为空</nz-form-explain>
+                <nz-form-explain style="color: rgba(0, 0, 0, 0.65);">您可以在易联云后台-打印终端-控制台中获取此信息</nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
 
-        </li>
-    </ul>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="yun_device_id">终端编号</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="17" nzMd="17">
+                <input nz-input formControlName="yun_device_id" placeholder="请输入终端编号">
+                <nz-form-explain class="error-color" *ngIf="yun_device_id.dirty && yun_device_id.errors">终端编号不能为空</nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="yun_device_key">终端密钥</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="17" nzMd="17">
+                <input nz-input formControlName="yun_device_key" placeholder="请输入终端秘钥">
+                <nz-form-explain class="error-color" *ngIf="yun_device_key.dirty && yun_device_key.errors">终端秘钥不能为空</nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="5" nzFor="yun_device_sim_no">SIM卡号</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="17" nzMd="17">
+                <input nz-input formControlName="yun_device_sim_no" placeholder="请输入SIM卡号，Wi-Fi版本可不填">
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="selected_store">选择门店</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="17" nzMd="17">
+                <nz-select formControlName="selected_store" nzPlaceHolder="请选择一个门店" [nzShowSearch]="true">
+                    <nz-option *ngFor="let store of stores" [nzLabel]="store.storeName" [nzValue]="store.storeId"></nz-option>
+                </nz-select>
+                <nz-form-explain class="error-color" *ngIf="selected_store.dirty && selected_store.errors">请选择门店</nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 5 }">
+                <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">提交</button>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
 </ng-template>

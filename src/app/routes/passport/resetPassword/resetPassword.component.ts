@@ -1,12 +1,13 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService, NzModalService } from 'ng-zorro-antd';
+import { MemberService } from '../../member/shared/member.service';
 
 @Component({
     selector: 'reset-password',
     templateUrl: './resetPassword.component.html',
-    styleUrls: [ './resetPassword.component.less' ]
+    styleUrls: ['./resetPassword.component.less']
 })
 export class UserResetPasswordComponent implements OnDestroy {
 
@@ -23,11 +24,12 @@ export class UserResetPasswordComponent implements OnDestroy {
         pool: 'exception'
     };
 
-    constructor(fb: FormBuilder, private router: Router, public msg: NzMessageService) {
+    constructor(fb: FormBuilder, private router: Router, private modalSrv: NzModalService,
+        private memberService: MemberService, public msg: NzMessageService) {
         this.form = fb.group({
             password: [null, [Validators.required, Validators.minLength(6), UserResetPasswordComponent.checkPassword.bind(this)]],
             confirm: [null, [Validators.required, Validators.minLength(6), UserResetPasswordComponent.passwordEquar]],
-            mobilePrefix: [ '+86' ],
+            mobilePrefix: ['+86'],
             mobile: [null, [Validators.required, Validators.pattern(/^1\d{10}$/)]],
             captcha: [null, [Validators.required]]
         });
@@ -70,14 +72,42 @@ export class UserResetPasswordComponent implements OnDestroy {
     interval$: any;
 
     getCaptcha() {
-        this.count = 59;
-        this.interval$ = setInterval(() => {
-            this.count -= 1;
-            if (this.count <= 0)
-                clearInterval(this.interval$);
-        }, 1000);
+        if (this.form.value.mobile) {
+            this.count = 59;
+            this.interval$ = setInterval(() => {
+                this.count -= 1;
+                if (this.count <= 0)
+                    clearInterval(this.interval$);
+            }, 1000);
+            this.getValidCode(this.form.value.mobile, 'VALID')
+        } else {
+            this.errorAlter('请先输入手机号')
+        }
     }
-
+    getValidCode(phone, bizType) {
+        let that = this;
+        let data = {
+            phone: phone,
+            bizType: bizType
+        };
+        this.memberService.getValidCode(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.modalSrv.success({
+                        nzContent: '发送成功'
+                    });
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => {
+                this.errorAlter(error);
+            }
+        );
+    }
     // endregion
 
     submit() {
@@ -89,13 +119,43 @@ export class UserResetPasswordComponent implements OnDestroy {
         if (this.form.invalid) return;
         // mock http
         this.loading = true;
+        let data = {
+            phone: this.form.value.mobile,
+            password: this.form.value.password,
+            confirmPassword: this.form.value.confirm,
+            validCode: this.form.value.captcha
+        };
         setTimeout(() => {
-            this.loading = false;
-            this.router.navigate(['/passport/register-result']);
         }, 1000);
     }
+    // 重置密码
+    resetPasswordHttp(data) {
+        let that = this;
+        this.memberService.resetPassword(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.router.navigate(['/passport/login']);
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+                this.loading = false;
 
+            },
+            error => {
+                this.errorAlter(error);
+            }
+        );
+    }
     ngOnDestroy(): void {
         if (this.interval$) clearInterval(this.interval$);
+    }
+    errorAlter(err) {
+        this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: err
+        });
     }
 }

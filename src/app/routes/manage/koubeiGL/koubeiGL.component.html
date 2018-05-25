@@ -1,0 +1,22 @@
+<div class="content__title ad-ph" style="padding-bottom: 20px;">
+    <nz-breadcrumb>
+        <nz-breadcrumb>
+            <nz-breadcrumb-item>管理</nz-breadcrumb-item>
+            <nz-breadcrumb-item>门店</nz-breadcrumb-item>
+            <nz-breadcrumb-item>关联口碑门店</nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </nz-breadcrumb>
+    <p>您选择的线下门店是：{{branchName}}</p>
+    <p>请选择一个口碑门店与其进行关联，关联后，您的门店和口碑平台打通，可以实现门店信息同步修改、预约同步、收银打通等。</p>
+    <div>
+        <nz-select style="width: 386px;margin-top:40px;" [(ngModel)]="selectedOption" (ngModelChange)="selectStoreInfo($event)" [nzPlaceHolder]="'请选择一个门店'"
+            [nzShowSearch]="true">
+            <nz-option *ngFor="let item of alipayShop" [nzLabel]="item.shopName" [nzValue]="item.shopId">
+            </nz-option>
+        </nz-select>
+    </div>
+    <div style="margin-top:20px;">
+        <button class="buttons" style="margin-right:20px;" nz-button (click)="baocun()" [nzLoading]="submitting" nzType="primary" type="submit">保存</button>
+        <button class="buttons" nz-button (click)="quxiao()">取消</button>
+    </div>
+</div>

@@ -21,6 +21,7 @@ import { RuleSettingComponent } from './rule-setting/rule-setting.component';
 import { ManageService } from './shared/manage.service';
 import { WxStoreComponent } from './wxStore/wxStore.component';
 import { MatchingkoubeiComponent } from './matchingkoubei/matchingkoubei.component';
+import { KoubeiGLComponent } from './koubeiGL/koubeiGL.component';
 
 
 
@@ -44,7 +45,8 @@ import { MatchingkoubeiComponent } from './matchingkoubei/matchingkoubei.compone
         StaffCommissionListComponent,
         WxStoreComponent,
         MatchingkoubeiComponent,
-        RuleSettingComponent
+        RuleSettingComponent,
+        KoubeiGLComponent
     ],
     providers: []
 })

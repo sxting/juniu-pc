@@ -1,8 +1,12 @@
+
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
-import { NzModalService } from 'ng-zorro-antd';
+import { LocalStorageService } from "@shared/service/localstorage-service";
+import { NzModalService, NzMessageService } from "ng-zorro-antd";
+import { FunctionUtil } from "@shared/funtion/funtion-util";
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { KoubeiService } from '../../koubei/shared/koubei.service';
 import { SetingsService } from '../shared/setings.service';
-import { LocalStorageService } from '@shared/service/localstorage-service';
 
 @Component({
     selector: 'app-CloudPrinter',
@@ -10,11 +14,13 @@ import { LocalStorageService } from '@shared/service/localstorage-service';
     styleUrls: ['./CloudPrinter.component.less']
 })
 export class CloudPrinterComponent implements OnInit {
+
+    form: FormGroup;
+    submitting: boolean = false;
+
     theadName: any[] = ['终端编号', '终端名称', '终端秘钥', '所属门店', '操作'];
     stores: any[] = [];
     storeId: string = '';
-    selectedOption: string = '';
-    showPrintAlertBox: boolean = false;
 
     deviceName: any; //终端名称
     yunApiKey: any; //API秘钥
@@ -27,10 +33,12 @@ export class CloudPrinterComponent implements OnInit {
     printerDeviceId: any;
 
     printList: any[] = [];
+
     constructor(
-        private http: _HttpClient,
-        private setingsService: SetingsService,
         private localStorageService: LocalStorageService,
+        private fb: FormBuilder,
+        private msg: NzMessageService,
+        private setingsService: SetingsService,
         private modalSrv: NzModalService
     ) { }
 
@@ -41,24 +49,20 @@ export class CloudPrinterComponent implements OnInit {
                 JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) : [];
             this.stores = storeList;
         }
-        this.getPrintList()
-    }
-    getData(e: any) {
 
+        this.getPrintList();
+        this.formInit();
     }
-    addPromter(tpl: TemplateRef<{}>) {
 
-    }
     // 点击新增、编辑打印机
-    onAddPrintClick(tpl: TemplateRef<{}>, id?: any) {
+    onAddPrintClick(id: any, tpl: TemplateRef<{}>) {
         this.modalSrv.create({
-            // nzTitle: '新增打印机',
+            nzTitle: '基本资料',
             nzContent: tpl,
             nzWidth: '600px',
-            nzOnOk: () => {
-                this.onPrintBtnClick();
-            }
+            nzFooter: null
         });
+
         if (id) { //编辑
             this.printerDeviceId = id;
             this.getPrintDetail();
@@ -73,54 +77,78 @@ export class CloudPrinterComponent implements OnInit {
             this.yunDeviceSimNo = '';
             this.yunUserId = '';
             this.yunUsername = '';
+            this.formInit();
         }
+    }
+
+    get yun_username() { return this.form.controls['yun_username']; }
+    get yun_user_id() { return this.form.controls['yun_user_id']; }
+    get yun_api_key() { return this.form.controls['yun_user_id']; }
+    get device_name() { return this.form.controls['yun_user_id']; }
+    get yun_device_id() { return this.form.controls['yun_user_id']; }
+    get yun_device_key() { return this.form.controls['yun_user_id']; }
+    get selected_store() { return this.form.controls['selected_store']; }
+
+    formInit() {
+        if (this.printerDeviceId) {
+            this.form = this.fb.group({
+                yun_username: [this.yunUsername, Validators.required],
+                yun_user_id: [this.yunUserId, Validators.required],
+                yun_api_key: [this.yunApiKey, Validators.required],
+                device_name: [this.deviceName, Validators.required],
+                yun_device_id: [this.yunDeviceId, Validators.required],
+                yun_device_key: [this.yunDeviceKey, Validators.required],
+                yun_device_sim_no: [this.yunDeviceSimNo, []],
+                selected_store: [this.storeId, Validators.required],
+            });
+        }
+        else {
+            this.form = this.fb.group({
+                yun_username: ['', Validators.required],
+                yun_user_id: ['', Validators.required],
+                yun_api_key: ['', Validators.required],
+                device_name: ['', Validators.required],
+                yun_device_id: ['', Validators.required],
+                yun_device_key: ['', Validators.required],
+                yun_device_sim_no: ['', []],
+                selected_store: ['', Validators.required],
+            });
+        }
+    }
+
+    submit() {
+        for (const i in this.form.controls) {
+            this.form.controls[i].markAsDirty();
+            this.form.controls[i].updateValueAndValidity();
+        }
+        if (this.form.invalid) return;
+        this.submitting = true;
+
+        this.storeId = this.form.value.selected_store;
+        this.deviceName = this.form.value.device_name;
+        this.yunApiKey = this.form.value.yun_api_key;
+        this.yunDeviceId = this.form.value.yun_device_id;
+        this.yunDeviceKey = this.form.value.yun_device_key;
+        this.yunDeviceSimNo = this.form.value.yun_device_sim_no;
+        this.yunUserId = this.form.value.yun_user_id;
+        this.yunUsername = this.form.value.yun_username;
+
+        this.editPrint();
     }
 
     //点击删除打印机
     onDeleteBtnClick(id: any) {
         this.printerDeviceId = id;
         let self = this;
-        // swal({
-        //     title: '确认删除该打印机?',
-        //     type: 'warning',
-        //     showCancelButton: true,
-        //     confirmButtonColor: '#3085d6',
-        //     cancelButtonColor: '#d33',
-        //     confirmButtonText: '确认!',
-        //     cancelButtonText: '取消!'
-        // }).then(function () {
-        //     self.deletePrint();
-        // }, function () { });
+        this.modalSrv.confirm({
+            nzTitle: '温馨提示',
+            nzContent: '确认删除该打印机',
+            nzOnOk: () => {
+                self.deletePrint();
+            },
+            nzOnCancel: () => { }
+        });
     }
-
-    //点击选择门店
-    onStoresChange(e: any) {
-        // this.storeId = e.target.value;
-
-        this.storeId = this.selectedOption;
-    }
-
-    // 点击新增、编辑打印机的保存按钮
-    onPrintBtnClick() {
-        if (!this.yunUsername) {
-            this.errorAlter('用户名不能为空');
-        } else if (!this.yunUserId) {
-            this.errorAlter('用户名ID不能为空');
-        } else if (!this.yunApiKey) {
-            this.errorAlter('API密钥不能为空');
-        } else if (!this.deviceName) {
-            this.errorAlter('终端名称不能为空');
-        } else if (!this.yunDeviceId) {
-            this.errorAlter('终端编号不能为空');
-        } else if (!this.yunDeviceKey) {
-            this.errorAlter('终端密钥不能为空');
-        } else if (!this.storeId) {
-            this.errorAlter('请选择门店');
-        } else {
-            this.editPrint();
-        }
-    }
-
 
     /*======我是分界线=====*/
 
@@ -137,7 +165,12 @@ export class CloudPrinterComponent implements OnInit {
                     });
                 }
             },
-            error => this.errorAlter(error)
+            error => {
+                this.modalSrv.error({
+                    nzTitle: '温馨提示',
+                    nzContent: error
+                });
+            }
         )
     }
 
@@ -157,7 +190,7 @@ export class CloudPrinterComponent implements OnInit {
                     this.yunDeviceSimNo = res.data.yunDeviceSimNo;
                     this.yunUserId = res.data.yunUserId;
                     this.yunUsername = res.data.yunUsername;
-                    this.selectedOption = this.storeId;
+                    this.formInit();
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -165,7 +198,12 @@ export class CloudPrinterComponent implements OnInit {
                     });
                 }
             },
-            error => this.errorAlter(error)
+            error => {
+                this.modalSrv.error({
+                    nzTitle: '温馨提示',
+                    nzContent: error
+                });
+            }
         )
     }
 
@@ -188,7 +226,10 @@ export class CloudPrinterComponent implements OnInit {
         }
         this.setingsService.editPrint(data).subscribe(
             (res: any) => {
+                this.submitting = false;
                 if (res.success) {
+                    this.msg.success('保存成功');
+                    this.modalSrv.closeAll();
                     this.getPrintList();
                 } else {
                     this.modalSrv.error({
@@ -197,7 +238,12 @@ export class CloudPrinterComponent implements OnInit {
                     });
                 }
             },
-            error => this.errorAlter(error)
+            error => {
+                this.modalSrv.error({
+                    nzTitle: '温馨提示',
+                    nzContent: error
+                });
+            }
         )
     }
 
@@ -217,13 +263,13 @@ export class CloudPrinterComponent implements OnInit {
                     });
                 }
             },
-            error => this.errorAlter(error)
+            error => {
+                this.modalSrv.error({
+                    nzTitle: '温馨提示',
+                    nzContent: error
+                });
+            }
         )
     }
-    errorAlter(err: any) {
-        this.modalSrv.error({
-            nzTitle: '温馨提示',
-            nzContent: err
-        });
-    }
+
 }

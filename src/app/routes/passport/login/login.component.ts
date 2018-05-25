@@ -1,5 +1,5 @@
 import { SettingsService } from '@delon/theme';
-import { Component, OnDestroy, Inject, Optional } from '@angular/core';
+import { Component, OnDestroy, Inject, Optional, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
@@ -8,6 +8,8 @@ import { ReuseTabService } from '@delon/abc';
 import { environment } from '@env/environment';
 import { MemberService } from '../../member/shared/member.service';
 import { LocalStorageService } from '@shared/service/localstorage-service';
+import { FunctionUtil } from '@shared/funtion/funtion-util';
+import { APP_TOKEN, STORES_INFO, ALIPAY_SHOPS, USER_INFO, MODULES } from '@shared/define/juniu-define';
 
 @Component({
     selector: 'passport-login',
@@ -15,7 +17,7 @@ import { LocalStorageService } from '@shared/service/localstorage-service';
     styleUrls: ['./login.component.less'],
     providers: [SocialService]
 })
-export class UserLoginComponent implements OnDestroy {
+export class UserLoginComponent implements OnDestroy, OnInit {
 
     form: FormGroup;
     error = '';
@@ -42,7 +44,14 @@ export class UserLoginComponent implements OnDestroy {
         });
         modalSrv.closeAll();
     }
-
+    ngOnInit(): void {
+        let sign = FunctionUtil.getUrlStringBySearch('sign') ? FunctionUtil.getUrlStringBySearch('sign') : FunctionUtil.getUrlString('sign');
+        let url = FunctionUtil.getUrlStringBySearch('url') ? FunctionUtil.getUrlStringBySearch('url') : FunctionUtil.getUrlString('url');
+        if (sign) {
+            this.localStorageService.setLocalstorage(APP_TOKEN, sign);
+            this.koubeiLogin(url)
+        }
+    }
     // region: fields
 
     get userName() { return this.form.controls.userName; }
@@ -60,14 +69,46 @@ export class UserLoginComponent implements OnDestroy {
 
     count = 0;
     interval$: any;
-
+    // 口碑登陆
+    koubeiLogin(url: any) {
+        this.memberService.koubeiLogin().subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.localStorageService.setLocalstorage(STORES_INFO, JSON.stringify(res.data.stores));
+                    this.localStorageService.setLocalstorage(ALIPAY_SHOPS, JSON.stringify(res.data[ALIPAY_SHOPS]));
+                    this.localStorageService.setLocalstorage(USER_INFO, JSON.stringify(res.data));
+                    this.localStorageService.setLocalstorage(MODULES, JSON.stringify(res.data[MODULES]));
+                    if (url === 'koubeiproduct') {
+                        this.router.navigate(['/koubei/product/list']);
+                    } else if (url === 'marketing') {
+                        this.router.navigate(['/koubei/coupon/index']);
+                    } else if (url === 'craftsman') {
+                        this.router.navigate(['/koubei/craftsman/manage']);
+                    } else if (res.stores.length > 0) {
+                        this.router.navigateByUrl('/manage/storeList/matchingkoubei');
+                    }
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => this.errorAlter(error)
+        )
+    }
     getCaptcha() {
-        this.count = 59;
-        this.interval$ = setInterval(() => {
-            this.count -= 1;
-            if (this.count <= 0)
-                clearInterval(this.interval$);
-        }, 1000);
+        if (this.form.value.mobile) {
+            this.count = 59;
+            this.interval$ = setInterval(() => {
+                this.count -= 1;
+                if (this.count <= 0)
+                    clearInterval(this.interval$);
+            }, 1000);
+            this.getValidCode(this.form.value.mobile, 'VALID')
+        } else {
+            this.errorAlter('请先输入手机号')
+        }
     }
 
     // endregion
@@ -123,7 +164,7 @@ export class UserLoginComponent implements OnDestroy {
         this.memberService.loginName(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    console.log(res.data);
+                    this.localStorageService.setLocalstorage(USER_INFO, JSON.stringify(res.data));
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -142,7 +183,7 @@ export class UserLoginComponent implements OnDestroy {
         this.memberService.loginPhone(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    console.log(res.data);
+                    this.localStorageService.setLocalstorage(USER_INFO, JSON.stringify(res.data));
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -152,6 +193,30 @@ export class UserLoginComponent implements OnDestroy {
             },
             error => this.errorAlter(error)
         )
+    }
+    getValidCode(phone, bizType) {
+        let that = this;
+        let data = {
+            phone: phone,
+            bizType: bizType
+        };
+        this.memberService.getValidCode(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.modalSrv.success({
+                        nzContent: '发送成功'
+                    });
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => {
+                this.errorAlter(error);
+            }
+        );
     }
     ngOnDestroy(): void {
         if (this.interval$) clearInterval(this.interval$);
