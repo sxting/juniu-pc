@@ -23,15 +23,9 @@ export class WechartMarketingListComponent implements OnInit {
     ];
     options1: any = [
         { value: 'ALL', label: '全部' },
-        { label: '持卡会员唤醒', value: '01' },
-        { label: '潜在会员转化', value: '02' },
-        { label: '会员生日礼', value: '03' },
-        { label: '会员节日礼', value: '04' },
-        { label: '新品促销', value: '05' },
-        { label: '指定项目促销', value: '06' },
-        { label: '二次到店送礼', value: '07' },
-        { label: '二次到店打折', value: '08' },
-        { label: '二次到店满减', value: '09' },
+        { label: '节日主题活动', value: 'WECHAT_FESTIVAL_GIFT' },
+        { label: '新品促销', value: 'WECHAT_NEW_PROMOTION' },
+        { label: '指定项目促销', value: 'WECHAT_PRODUCT_PROMOTION' },
     ];
     storeOptions: any;
     statusFlag: number = 0;
@@ -144,13 +138,14 @@ export class WechartMarketingListComponent implements OnInit {
         this.queryReq = {
             pageNo: this.pageIndex,
             pageSize: 10,
-            marketingType: this.marketingType,
+            scene: this.marketingType,
+            marketingType: 'WECHAT',
             couponType: this.couponType,
             storeId: this.storeId,
             markingStatus: this.markingStatus
         };
         if (!this.marketingType) {
-            delete this.queryReq.marketingType;
+            delete this.queryReq.scene;
         }
         if (!this.couponType) {
             delete this.queryReq.couponType;
@@ -210,16 +205,26 @@ export class WechartMarketingListComponent implements OnInit {
             }
         );
     }
-    activtyRouter(type: any, marketingStatus: any, marketingId: any) {
-        if (type === 'MEMBER') {
-            this.router.navigate(['/marketing/activities/list/member', { marketingId: marketingId, marketingStatus: marketingStatus }]);
+    activtyRouter(scene: any, marketingStatus: any, marketingId: any) {
+        let list = [
+            { id: '11', name: '节日主题活动', img: './assets/img/wechat_marketing_1.png', desc: '在小程序中创建节日主题活动，吸引线上用户到店消费。' },
+            { id: '12', name: '新品促销', img: './assets/img/sms_marketing_5.png', desc: '在小程序上展示新品优惠，唤起顾客到店消费。' },
+            { id: '13', name: '指定项目促销', img: './assets/img/sms_marketing_6.png', desc: '在小程序上展示指定项目优惠，唤起顾客到店消费。' }
+        ];
+        let id: any = '', name: any = '', desc: any = '';
 
-        } else if (type === 'SECOND') {
-            this.router.navigate(['/marketing/activities/list/secondary', { marketingId: marketingId, marketingStatus: marketingStatus }]);
-
-        } else if (type === 'WECHAT') {
-            this.router.navigate(['/marketing/activities/list/wechat/coupon', { marketingId: marketingId, marketingStatus: marketingStatus }]);
+        switch (scene) {
+            case 'WECHAT_FESTIVAL_GIFT':
+                id = list[0].id;name = list[0].name;desc = list[0].desc;
+                break;
+            case 'WECHAT_NEW_PROMOTION':
+                id = list[1].id;name = list[1].name;desc = list[1].desc;
+                break;
+            case 'WECHAT_PRODUCT_PROMOTION':
+                id = list[2].id;name = list[2].name;desc = list[2].desc;
         }
+
+        this.router.navigate(['/marketing/page', { marketingId: marketingId, marketingStatus: marketingStatus, id: id, name: encodeURIComponent(name), desc: encodeURIComponent(desc)}]);
     }
 
 }

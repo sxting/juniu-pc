@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import {_HttpClient, TitleService} from '@delon/theme';
 import { TransferCanMove, TransferItem, NzMessageService, NzModalService} from 'ng-zorro-antd';
 import { Router, ActivatedRoute } from '@angular/router';
-import { STORES_INFO ,USER_INFO } from "../../../shared/define/juniu-define";
-import { LocalStorageService } from "../../../shared/service/localstorage-service";
+// import { STORES_INFO ,USER_INFO } from "../../../shared/define/juniu-define";
+// import { LocalStorageService } from "../../../shared/service/localstorage-service";
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { FunctionUtil } from "../../../shared/funtion/funtion-util";
+// import { FunctionUtil } from "../../../shared/funtion/funtion-util";
 import { ManageService } from "../shared/manage.service";
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
-import { delay } from 'rxjs/operators';
+import { LocalStorageService } from '@shared/service/localstorage-service';
+import { FunctionUtil } from '@shared/funtion/funtion-util';
+
 
 @Component({
   selector: 'app-rule-setting',
@@ -36,23 +36,30 @@ export class RuleSettingComponent implements OnInit {
   allStaffNumber: any = 0;//所有员工的数量
   selectStaffNumber: any = 0;//选择员工的总数量
   selectStaffIds: any = '';
-  ifShowStaffTips: boolean = false;//选择员工的错误提示
+  ifShowErrorStaffTips: boolean = false;//选择员工的错误提示
 
   //商品
   productListInfor: any;//商品的信息
   allProductNumber: number = 0;//所有商品的数量
   selectProductNumber: number = 0;//选择的商品数量
   productIds: string = '';
+  ifShowErrorTipsProduct: boolean = false;
+
   //会员卡
   cardListInfor: any;//所有会员卡信息
   allCardNumber: number = 0;//所有会员卡的数量
   selectCardNumber: number = 0;//选择的会员卡数量
   cardConfigRuleIds: string = '';//选中的会员卡规则ID
+  ifShowErrorTipsCard: boolean = false;
+
   //服务项目
   seviceItemsListInfor: any;//所有服务项目的信息
   seviceItemsNumber: number = 0;//所有服务项目数量
   selectSeviceItemsNumber: number = 0;//选择的服务项目数量
   seviceItemsIds: string = '';
+  ifShowErrorTipsSevice: boolean = false;
+
+
   ifShowErrorRateTips: boolean = false;//按比例提成率不可为空
   ifShowErrorMoneyips: boolean = false;//提成金额不可为空
 
@@ -80,7 +87,6 @@ export class RuleSettingComponent implements OnInit {
       this.deductRuleId = this.route.snapshot.params['deductRuleId'];//提成规则ID
       if(this.deductRuleId){
           this.titleSrv.setTitle('编辑提成规则');
-          // this.staffInforDetail();//查看员工详情
       }else {
           this.titleSrv.setTitle('提成规则设置');
       }
@@ -172,8 +178,6 @@ export class RuleSettingComponent implements OnInit {
 
   //提成的发生改变的时候
   changeTypesData(type: string){
-      console.log(type);
-      console.log(this.form.controls.assignRate.value);
       if(type === 'RATE'){
           this.ifShowErrorRateTips = this.form.controls.assignRate.value == null|| this.form.controls.normalRate.value == null? true : false;
       }else {
@@ -282,10 +286,10 @@ export class RuleSettingComponent implements OnInit {
                 this.form = self.fb.group(self.formData);
 
                 /******* 服务项目 *********/
-                // let itemSeviceRuleIds = res.data.cardConfigRuleIds.split(',');
-                // self.selectCardNumber = itemSeviceRuleIds.length;
-                // self.cardConfigRuleIds = res.data.cardConfigRuleIds;
-                // FunctionUtil.getDataChange(this.seviceItemsListInfor, itemSeviceRuleIds);//转换后台拿过来的数据
+                let itemSeviceRuleIds = res.data.serviceItemIds.split(',');
+                self.selectSeviceItemsNumber = itemSeviceRuleIds.length;
+                self.seviceItemsIds = res.data.serviceItemIds;
+                FunctionUtil.getDataChange(this.seviceItemsListInfor, itemSeviceRuleIds);//转换后台拿过来的数据
 
                 /******* 卡规则 *********/
                 let cardConfigRuleIds = res.data.cardConfigRuleIds.split(',');
@@ -338,79 +342,53 @@ export class RuleSettingComponent implements OnInit {
     let data = {
       storeId: this.storeId
     };
-    // this.manageService.selectStaffList(data).subscribe(
-    //     (res: any) => {
-    //         if (res.success) {
-    this.loading = false;
-    let objArrIds: any = [];            //定义一个空数组
-    let resdata = [
-      {
-        "staffId":"1526375335852118541946",
-        "staffName":"测试员工新增功能",
-        "roleId":"3",
-        "roleName":"测试门店职位1"
-      },
-      {
-        "staffId":"1526375335852118541948",
-        "staffName":"测试员hha",
-        "roleId":"2",
-        "roleName":"测试991"
-      },
-      {
-        "staffId":"1526375335852118541940",
-        "staffName":"测试员工新增功能",
-        "roleId":"1",
-        "roleName":"测试门店"
-      },
-      {
-        "staffId":"1526375335852118541945",
-        "staffName":"测试员",
-        "roleId":"3",
-        "roleName":"测试门店职位1"
-      }
-    ];
-    resdata.forEach(function (list: any) {
-      let category = {
-        change: true,
-        checked: true,
-        roleName: list.roleName,
-        roleId: list.roleId,
-      };
-      objArrIds.push(category);
-    });
-    objArrIds = FunctionUtil.getNoRepeat(objArrIds);//数组取重
-    objArrIds.forEach(function (item: any) {
-      let staffs = [];
-      resdata.forEach(function (list: any) {
-        if( item.roleId === list.roleId){
-          let staffsList = {
-            change: true,
-            staffId: list.staffId,
-            staffName: list.staffName
-          };
-          staffs.push(staffsList);
+    this.manageService.selectStaffList(data).subscribe(
+        (res: any) => {
+            if (res.success) {
+                this.loading = false;
+                let objArrIds: any = [];            //定义一个空数组
+                res.data.items.forEach(function (list: any) {
+                let category = {
+                  change: true,
+                  checked: true,
+                  roleName: list.roleName,
+                  roleId: list.roleId,
+                };
+                objArrIds.push(category);
+              });
+              objArrIds = FunctionUtil.getNoRepeat(objArrIds);//数组取重
+              objArrIds.forEach(function (item: any) {
+                let staffs = [];
+                res.data.items.forEach(function (list: any) {
+                  if( item.roleId === list.roleId){
+                    let staffsList = {
+                      change: true,
+                      staffId: list.staffId,
+                      staffName: list.staffName
+                    };
+                    staffs.push(staffsList);
+                  }
+                });
+                item.staffs = staffs;
+              });
+              this.staffListInfor = objArrIds;
+              let dataInfores = this.getOthersData(this.staffListInfor).split('-');
+              this.selectStaffIds = dataInfores[0];
+              this.selectStaffNumber = parseInt(dataInfores[1]);
+              this.allStaffNumber = parseInt(dataInfores[2]);
+              this.getAllCardsList();//获取会员卡列表信息
+            } else {
+                this.modalSrv.error({
+                    nzTitle: '温馨提示',
+                    nzContent: res.errorInfo
+                });
+            }
+        },
+        error => {
+            this.msg.warning(error);
         }
-      });
-      item.staffs = staffs;
-    });
-    this.staffListInfor = objArrIds;
-    let dataInfores = this.getOthersData(this.staffListInfor).split('-');
-    this.selectStaffIds = dataInfores[0];
-    this.selectStaffNumber = parseInt(dataInfores[1]);
-    this.allStaffNumber = parseInt(dataInfores[2]);
-    this.getAllCardsList();//获取会员卡列表信息
-    //         } else {
-    //             this.modalSrv.error({
-    //                 nzTitle: '温馨提示',
-    //                 nzContent: res.errorInfo
-    //             });
-    //         }
-    //     },
-    //     error => {
-    //         this.msg.warning(error);
-    //     }
-    // );
-}
+    );
+  }
 
   // 获取全部商品
   getAllbuySearchs(type: string) {
@@ -551,12 +529,12 @@ export class RuleSettingComponent implements OnInit {
     );
   }
 
-
   submit() {
-      for (const i in this.form.controls) {
-          this.form.controls[ i ].markAsDirty();
-          this.form.controls[ i ].updateValueAndValidity();
-      }
+      let self = this;
+      this.ifShowErrorStaffTips = this.selectStaffNumber === 0? true : false;//是否选择员工
+      this.ifShowErrorTipsProduct = this.selectProductNumber === 0? true : false;//是否选择商品
+      this.ifShowErrorTipsCard = this.selectCardNumber === 0? true : false;//是否选择会员卡
+      this.ifShowErrorTipsSevice = this.selectSeviceItemsNumber === 0? true : false;//是否选择服务项目
       let dataInfor = {
         ruleName: this.form.controls.ruleName.value,
         assignRate: parseFloat(this.form.controls.assignRate.value)/100,
@@ -564,6 +542,7 @@ export class RuleSettingComponent implements OnInit {
         productIds: this.productIds,
         staffIds: this.selectStaffIds,
         storeId: this.storeId,
+        serviceItemIds: this.seviceItemsIds,
         type: this.form.controls.type.value,
         cardConfigRuleIds: this.cardConfigRuleIds,
         deductMoney: parseFloat(this.form.controls.deductMoney.value)*100,
@@ -572,12 +551,20 @@ export class RuleSettingComponent implements OnInit {
         productCount: this.selectProductNumber,
         staffCount: this.selectStaffNumber
       };
+
+      for (const i in this.form.controls) {
+        this.form.controls[ i ].markAsDirty();
+        this.form.controls[ i ].updateValueAndValidity();
+      }
       if (this.form.invalid) return;
       this.submitting = true;
-      if(this.deductRuleId){//编辑修改
-        this.editStaffingRules(dataInfor);
-      }else{//修增
-        this.addNewStaffingRules(dataInfor);
+      if(this.ifShowErrorStaffTips && this.ifShowErrorTipsProduct && this.ifShowErrorTipsCard && this.ifShowErrorTipsSevice){
+        if(this.deductRuleId){//编辑修改
+          this.editStaffingRules(dataInfor);
+        }else{//修增
+          this.addNewStaffingRules(dataInfor);
+        }
       }
   }
 }
+

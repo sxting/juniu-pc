@@ -555,6 +555,16 @@ export class ManageService {
       });
   }
 
+  //删除提成
+  deleteStaffingInfor(data: any) {
+    let apiUrl = Config.API + 'finance/deductRule/del.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
   //接口描述:查询规则
   deductRuleInfo(data: any) {
     let apiUrl = Config.API + '/finance/deductRule/info.json';
@@ -583,7 +593,7 @@ export class ManageService {
   }
   //获取员工的列表
   selectStaffList(data: any) {
-    let apiUrl = Config.API + '/staff/select.json';
+    let apiUrl = Config.API1 + 'account/merchant/staff/select.json';
     return this.http.get(apiUrl, data)
       .map((response: Response) => response)
       .catch(error => {

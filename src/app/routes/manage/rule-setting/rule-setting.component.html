@@ -48,6 +48,7 @@
                     <span class="space"></span>
                     <span class="select-store-btn" (click)="onSelectStaffBtn(alertCard,'会员卡')">选择会员卡</span>
                 </div>
+                <nz-form-explain class="errorTips"  *ngIf="selectCardNumber === 0 && ifShowErrorTipsCard">请选择会员卡</nz-form-explain>
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
@@ -58,6 +59,7 @@
                     <span class="space"></span>
                     <span class="select-store-btn" (click)="onSelectStaffBtn(alertSeviceItems, '服务项目')">选择服务项目</span>
                 </div>
+              <nz-form-explain  class="errorTips"  *ngIf="selectSeviceItemsNumber === 0 && ifShowErrorTipsSevice">请选择项服务项目</nz-form-explain>
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
@@ -68,6 +70,7 @@
                     <span class="space"></span>
                     <span class="select-store-btn" (click)="onSelectStaffBtn(alertProduct, '实体商品')">选择实体商品</span>
                 </div>
+                <nz-form-explain  class="errorTips" *ngIf="selectProductNumber === 0 && ifShowErrorTipsProduct">请选择实体商品</nz-form-explain>
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
@@ -78,6 +81,7 @@
                     <span class="space"></span>
                     <span class="select-store-btn" (click)="onSelectStaffBtn(alertStaff, '员工')">选择员工</span>
                 </div>
+                <nz-form-explain class="errorTips" *ngIf="selectStaffNumber === 0 && ifShowErrorStaffTips">请选择员工</nz-form-explain>
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>

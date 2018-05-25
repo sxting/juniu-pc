@@ -267,3 +267,9 @@
                          (selectStaffNum)="getSelectStoresNumber($event)"></app-select-transfer>
 </ng-template>
 
+<!-- 口碑客 -->
+<nz-modal [(nzVisible)]="isVisible" nzWidth ="800"  nzTitle="关联口碑账号" nzOkText="确定" (nzOnOk)="handleOk()">
+  <div class="reserve-record-alert" style="height: 400px;">
+    <iframe class="all-iframe" id="koubeikeFrame" [src]="trustedUrl" frameborder="0" scrolling="auto" height="100%" width="100%"></iframe>
+  </div>
+</nz-modal>
