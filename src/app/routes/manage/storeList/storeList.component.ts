@@ -16,6 +16,7 @@ export class StoreListComponent {
     Total: any = 0;
     storeInfos: any = [];
     pageNo: any = 1;
+    branchName: any;
     constructor(
         public msg: NzMessageService,
         private modalSrv: NzModalService,
@@ -26,9 +27,7 @@ export class StoreListComponent {
         this.storeListHttp();
     }
     search() {
-        if (this.storeName) {
-            console.log(this.storeName)
-        }
+        this.storeListHttp();
     }
     bianji(e: any) {
         this.router.navigate(['/manage/storeList/storeEdit', { storeId: e }]);
@@ -45,8 +44,10 @@ export class StoreListComponent {
         let data = {
             pageNo: this.pageNo,
             pageSize: 10,
-            timestamp: new Date().getTime()
+            timestamp: new Date().getTime(),
+            branchName: this.branchName
         }
+        if (!data.branchName) delete data.branchName;
         let that = this;
         this.manageService.storeBatch(data).subscribe(
             (res: any) => {

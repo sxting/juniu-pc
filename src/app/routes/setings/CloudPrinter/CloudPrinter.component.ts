@@ -6,6 +6,7 @@ import { NzModalService, NzMessageService } from "ng-zorro-antd";
 import { FunctionUtil } from "@shared/funtion/funtion-util";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { KoubeiService } from '../../koubei/shared/koubei.service';
+import { SetingsService } from '../shared/setings.service';
 
 @Component({
     selector: 'app-CloudPrinter',
@@ -34,10 +35,10 @@ export class CloudPrinterComponent implements OnInit {
     printList: any[] = [];
 
     constructor(
-        private koubeiService: KoubeiService,
         private localStorageService: LocalStorageService,
         private fb: FormBuilder,
         private msg: NzMessageService,
+        private setingsService: SetingsService,
         private modalSrv: NzModalService
     ) { }
 
@@ -153,7 +154,7 @@ export class CloudPrinterComponent implements OnInit {
 
     //获取打印机列表
     getPrintList() {
-        this.koubeiService.getPrintList().subscribe(
+        this.setingsService.getPrintList().subscribe(
             (res: any) => {
                 if (res.success) {
                     this.printList = res.data;
@@ -178,7 +179,7 @@ export class CloudPrinterComponent implements OnInit {
         let data = {
             printerDeviceId: this.printerDeviceId
         };
-        this.koubeiService.getPrintDetail(data).subscribe(
+        this.setingsService.getPrintDetail(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     this.storeId = res.data.storeId;
@@ -223,7 +224,7 @@ export class CloudPrinterComponent implements OnInit {
         if (!this.printerDeviceId) {
             delete data.printerDeviceId
         }
-        this.koubeiService.editPrint(data).subscribe(
+        this.setingsService.editPrint(data).subscribe(
             (res: any) => {
                 this.submitting = false;
                 if (res.success) {
@@ -251,7 +252,7 @@ export class CloudPrinterComponent implements OnInit {
         let data = {
             printerDeviceId: this.printerDeviceId
         };
-        this.koubeiService.deletePrint(data).subscribe(
+        this.setingsService.deletePrint(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     this.getPrintList();

@@ -141,7 +141,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
             // 清空路由复用信息
             this.reuseTabService.clear();
             this.tokenService.set({
-                token: '8c10399162be597e06764a0783fc1933',
+                token: '69f8a8523c60bb7f4061efc623f251bc',
                 email: `cipchk@qq.com`,
                 id: 10000,
                 time: +new Date
@@ -159,7 +159,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
         this.memberService.loginName(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    console.log(res.data);
+                    this.localStorageService.setLocalstorage(USER_INFO, JSON.stringify(res.data));
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -178,7 +178,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
         this.memberService.loginPhone(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    console.log(res.data);
+                    this.localStorageService.setLocalstorage(USER_INFO, JSON.stringify(res.data));
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',

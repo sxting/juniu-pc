@@ -40,18 +40,18 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     var token = this.tokenService.get().token;
     var that = this;
-    this.router.events
-      .filter(event => event instanceof NavigationEnd)
-      .map(() => this.activatedRoute)
-      .map(route => {
-        while (route.firstChild) route = route.firstChild;
-        if (!token) that.router.navigate(['/passport/login']);
-        return route;
-      })
-      .filter(route => route.outlet === 'primary')
-      .mergeMap(route => route.data)
-      .pipe(filter(evt => evt instanceof NavigationEnd))
-      .subscribe(() => this.titleSrv.setTitle())
+    // this.router.events
+    //   .filter(event => event instanceof NavigationEnd)
+    //   .map(() => this.activatedRoute)
+    //   .map(route => {
+    //     while (route.firstChild) route = route.firstChild;
+    //     if (!token) that.router.navigate(['/passport/login']);
+    //     return route;
+    //   })
+    //   .filter(route => route.outlet === 'primary')
+    //   .mergeMap(route => route.data)
+    //   .pipe(filter(evt => evt instanceof NavigationEnd))
+    //   .subscribe(() => this.titleSrv.setTitle())
   }
 }
 
