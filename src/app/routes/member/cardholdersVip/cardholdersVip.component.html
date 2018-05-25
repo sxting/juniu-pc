@@ -22,17 +22,17 @@
             </nz-col>
             <nz-col nzMd="8" nzSm="24" *ngIf="expandForm">
                 <nz-form-item>
-                    <nz-form-label nzFor="dateStart">会员创建日期</nz-form-label>
+                    <nz-form-label nzFor="dateRange1">会员创建日期</nz-form-label>
                     <nz-form-control>
-                        <input nz-input [(ngModel)]="q.dateStart" name="dateStart" placeholder="请输入会员姓名或手机号" id="dateStart">
+                        <nz-range-picker [(ngModel)]="q.dateRange1" name="dateRange1" id="dateRange1"></nz-range-picker>
                     </nz-form-control>
                 </nz-form-item>
             </nz-col>
             <nz-col nzMd="8" nzSm="24" *ngIf="expandForm">
                 <nz-form-item>
-                    <nz-form-label nzFor="dateEnd">最近一次消费日期</nz-form-label>
+                    <nz-form-label nzFor="dateRange2">最近一次消费日期</nz-form-label>
                     <nz-form-control>
-                        <input nz-input [(ngModel)]="q.dateEnd" name="dateEnd" placeholder="请输入会员姓名或手机号" id="dateEnd">
+                        <nz-range-picker [(ngModel)]="q.dateRange2" name="dateRange2" id="dateRange2"></nz-range-picker>
                     </nz-form-control>
                 </nz-form-item>
             </nz-col>
@@ -40,7 +40,9 @@
                 <nz-form-item>
                     <nz-form-label nzFor="money">累计消费金额(元)</nz-form-label>
                     <nz-form-control>
-                        <input nz-input [(ngModel)]="q.money" name="money" placeholder="请输入会员姓名或手机号" id="money">
+                        <nz-select [(ngModel)]="q.money" name="money" id="money" [nzPlaceHolder]="'请选择'" [nzShowSearch]="true">
+                            <nz-option *ngFor="let i of moneyArr; let idx = index" [nzLabel]="i.money" [nzValue]="i.from"></nz-option>
+                        </nz-select>
                     </nz-form-control>
                 </nz-form-item>
             </nz-col>

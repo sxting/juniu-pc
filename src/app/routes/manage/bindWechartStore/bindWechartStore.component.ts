@@ -81,6 +81,9 @@ export class BindWechartStoreComponent {
         }
 
     }
+    gotoWeChat(){
+        window.open('https://mp.weixin.qq.com/')
+    }
     errorAlter(err: any) {
         this.modalSrv.error({
             nzTitle: '温馨提示',

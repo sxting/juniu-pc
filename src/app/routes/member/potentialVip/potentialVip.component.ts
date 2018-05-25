@@ -8,6 +8,7 @@ import { STORES_INFO, USER_INFO, FACE_OBJ } from './../../../shared/define/juniu
 import { tap, map } from 'rxjs/operators';
 import { MemberService } from '../shared/member.service';
 import { Config } from '@shared/config/env.config';
+import { LocalStorageService } from '@shared/service/localstorage-service';
 declare var GoEasy: any;
 
 @Component({
@@ -21,7 +22,9 @@ export class PotentialVipComponent {
         dateStart: '',
         dateEnd: '',
         status: null,
-        money: null
+        money: null,
+        dateRange1: null,
+        dateRange2: null,
     };
     phone: any;
     storeId: any;
@@ -29,11 +32,21 @@ export class PotentialVipComponent {
     data2: any[] = [];
     loading = false;
     status = [
-        { index: 0, text: '男', value: false, type: 'default', checked: false },
-        { index: 1, text: '女', value: false, type: 'processing', checked: false },
+        { index: 1, text: '男', value: false, type: 'default', checked: false },
+        { index: 0, text: '女', value: false, type: 'processing', checked: false },
+        { index: 2, text: '不详', value: false, type: 'processing', checked: false },
     ];
     @ViewChild('st') st: SimpleTableComponent;
-
+    moneyArr: any = [
+        { money: '0-100', from: [0, 100] },
+        { money: '100-300', from: [100, 300] },
+        { money: '300-500', from: [300, 500] },
+        { money: '500-1000', from: [500, 1000] },
+        { money: '1000-3000', from: [1000, 3000] },
+        { money: '3000-5000', from: [3000, 5000] },
+        { money: '5000-10000', from: [5000, 10000] },
+        { money: '10000-99999999', from: [10000, 99999] }
+    ]
     selectedRows: SimpleTableData[] = [];
     description = '';
     totalCallNo = 0;
@@ -42,7 +55,7 @@ export class PotentialVipComponent {
     Total2: any;
     pageIndex: any = 1;
     pageIndex2: any = 1;
-
+    StoresInfo: any = this.localStorageService.getLocalstorage(STORES_INFO) ? JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
     gender: any;
     customer_phone: any;
     customer_name: any;
@@ -59,6 +72,7 @@ export class PotentialVipComponent {
         private modalService: NzModalService,
         public msg: NzMessageService,
         private modalSrv: NzModalService,
+        private localStorageService: LocalStorageService,
         private memberService: MemberService) {
         let that = this;
         this.customerlistHttp();
@@ -103,9 +117,18 @@ export class PotentialVipComponent {
             customerType: 'FIT',
             phone: this.q.phone,
             gender: this.q.status,
+            start: this.q.dateRange1 ? this.formatDateTime(this.q.dateRange1[0], 'start') : '',
+            end: this.q.dateRange1 ? this.formatDateTime(this.q.dateRange1[1], 'end') : '',
+            lastConsumeStart: this.q.dateRange2 ? this.formatDateTime(this.q.dateRange2[0], 'start') : '',
+            lastConsumeEnd: this.q.dateRange2 ? this.formatDateTime(this.q.dateRange2[1], 'end') : '',
+            consumeMoneyFrom: this.q.money ? this.q.money[0] : '',
+            consumeMoneyTo: this.q.money ? this.q.money[1] : ''
         }
         if (!this.q.phone) delete data.phone;
         if (!this.q.status && this.q.status !== 0) delete data.gender;
+        if (!this.q.dateRange1) { delete data.start; delete data.end }
+        if (!this.q.dateRange2) { delete data.lastConsumeStart; delete data.lastConsumeEnd }
+        if (!this.q.money) { delete data.consumeMoneyFrom; delete data.consumeMoneyTo };
         this.loading = true;
         let that = this;
         this.memberService.customerlist(data).subscribe(
@@ -114,8 +137,10 @@ export class PotentialVipComponent {
                     res.data.pageInfos.forEach(element => {
                         if (element.gender === 1) {
                             element.genderName = "男";
-                        } else {
+                        } else if (element.gender === 0) {
                             element.genderName = "女";
+                        } else if (element.gender === 2) {
+                            element.genderName = "不详";
                         }
                         if (element.customerSource === 'JUNIU') {
                             element.customerSourceName = '桔牛'
@@ -287,7 +312,7 @@ export class PotentialVipComponent {
             gender: that.gender,
             phone: that.customer_phone,
             customerName: that.customer_name,
-            birthday: that.formatDateTime(that._date),
+            birthday: that.formatDateTime(that._date,'start'),
             faceId: this.faceId,
             faceImg: this.faceImgId,
             storeId: this.storeId
@@ -325,13 +350,11 @@ export class PotentialVipComponent {
             }
         });
     }
-    formatDateTime(date: any) {
-        var y = date.getFullYear();
-        var m = date.getMonth() + 1;
-        m = m < 10 ? '0' + m : m;
-        var d = date.getDate();
-        d = d < 10 ? ('0' + d) : d;
-        return y + '-' + m + '-' + d;
+    formatDateTime(date: any, type: any) {
+        let year = date.getFullYear();
+        let month = date.getMonth() + 1;
+        let day = date.getDate();
+        return year + '-' + (month.toString().length > 1 ? month : ('0' + month)) + '-' + (day.toString().length > 1 ? day : ('0' + day)) + (type === 'start' ? ' 00:00:00' : ' 23:59:59');
     }
     faceImg(item: any) {
         this.faceImgId = item.faceImgId ? item.faceImgId : item.picId;
