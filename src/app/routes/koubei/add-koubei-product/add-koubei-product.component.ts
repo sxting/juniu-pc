@@ -243,9 +243,7 @@ export class AddKoubeiProductComponent implements OnInit {
 
     //选择有效期
     selectExpiryDay(){
-      console.log(0);
       // expiryDayInfor: any = [{type:'RELATIVE',name:'购买后一段时间'},{type:'FIXED',name:'指定时间'}];//使用有效期
-
       console.log(this.form.controls.validityPeriodType.value);
     }
 
@@ -562,6 +560,32 @@ export class AddKoubeiProductComponent implements OnInit {
                 let width = 104, height = 104;
                 if(type === 'cover') {//商品首图
                     this.picId = result.pictureId;
+                    let productName = this.form.controls.productName.value;
+                    let originalPrice = this.form.controls.originalPrice.value;
+                    let currentPrice = this.form.controls.currentPrice.value;
+                    let categoryName = this.form.controls.categoryName.value;
+                    let stock = this.form.controls.stock.value;
+                    let expiryDay = this.form.controls.expiryDay.value;
+                    let validityPeriodType = this.form.controls.validityPeriodType.value;
+                    let dateRange = this.form.controls.dateRange.value;
+                    let weight = this.form.controls.weight.value;
+                    let storesChangeNum = this.form.controls.storesChangeNum.value;
+                    let verifyEnableTimes = this.form.controls.verifyEnableTimes.value;
+                    this.form = this.fb.group({
+                      productName: [ productName, [ Validators.required ,Validators.max(40)] ],
+                      originalPrice: [ originalPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{2})?$`), Validators.max(1000 * 5)])],
+                      currentPrice: [ currentPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{2})?$`), Validators.max(1000 * 5)])],
+                      categoryName:[ categoryName, [  ] ],
+                      stock: [ stock, [ Validators.required, Validators.pattern(`[0-9]+`)] ],
+                      expiryDay:[ expiryDay, Validators.compose([ Validators.required, Validators.pattern(`[0-9]+`), Validators.min(7), Validators.max(36 * 10) ])],
+                      picId: [ this.picId, [ Validators.required ] ],
+                      verifyFrequency: [ type, [ Validators.required ] ],//核销类型
+                      verifyEnableTimes:[ verifyEnableTimes, Validators.compose([ Validators.required, Validators.pattern(`[0-9]+`), Validators.min(2), Validators.max(5 * 10) ])],//多次核销的次数
+                      validityPeriodType:[ validityPeriodType, [ Validators.required ] ],//核销类型
+                      dateRange:[ dateRange, [  ] ],
+                      weight: [ weight, [  ] ],
+                      storesChangeNum: [ storesChangeNum, [ Validators.required ] ]
+                    });
                     this.imagePath = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.picId}/resize_${width}_${height}/mode_fill`;
                 } else if(type === 'tbaoImg') {//淘宝首图
                     this.tbCover = result.pictureId;
@@ -678,16 +702,13 @@ export class AddKoubeiProductComponent implements OnInit {
                     this.loading = false;
                     let categorysName = res.data.categoryName && res.data.categoryName != "" && res.data.categoryName !== null ? res.data.categoryName.split('－') : [];
                     let expiryDay = res.data.validityPeriodType == 'FIXED'? 360 : res.data.expiryDay;
-
-                    let validityPeriodType = res.data.validityPeriodType == ""||res.data.validityPeriodType == null? 'RELATIVE' : res.data.validityPeriodType;
-
+                    let validityPeriodType = res.data.validityPeriodType;
                     this.status = res.data.putaway === 1? self.ItemsStatus[0].value : self.ItemsStatus[1].value;
                     let startDate = res.data.validityPeriodRangeFrom ? res.data.validityPeriodRangeFrom : '';
                     let endDate = res.data.validityPeriodRangeTo ? res.data.validityPeriodRangeTo : '';
                     let dateRange = [ new Date(startDate), new Date(endDate)];
                     let originalPrice = parseFloat(res.data.originalPrice) / 100 + '';
                     let currentPrice = parseFloat(res.data.currentPrice) / 100 + '';
-                    let weight = res.data.weight + '';
                     self.categoryId = res.data.categoryId && res.data.categoryId !== null? res.data.categoryId : '';
 
                     //商品首图
@@ -713,7 +734,6 @@ export class AddKoubeiProductComponent implements OnInit {
                         }
                         this.imageArray = imageArray;
                     }
-
                     let descriptions: any = [];
                     let buyerNotes: any = [];
                     let transforBuyerNotes: any = [];
@@ -758,9 +778,9 @@ export class AddKoubeiProductComponent implements OnInit {
                       stock: [ res.data.stock, [ Validators.required, Validators.pattern(`[0-9]+`)] ],
                       expiryDay:[ expiryDay, Validators.compose([ Validators.required, Validators.pattern(`[0-9]+`), Validators.min(7), Validators.max(36 * 10) ])],
                       picId: [ res.data.picId, [ Validators.required ] ],
-                      verifyFrequency: [ self.validityPeriodArr[0].type, [ Validators.required ] ],//核销类型
+                      verifyFrequency: [ res.data.verifyFrequency, [ Validators.required ] ],//核销类型
                       verifyEnableTimes:[ res.data.verifyEnableTimes, Validators.compose([ Validators.required, Validators.pattern(`[0-9]+`), Validators.min(2), Validators.max(5 * 10) ])],//多次核销的次数
-                      validityPeriodType:[ self.expiryDayInfor[0].type, [ Validators.required ] ],//核销类型
+                      validityPeriodType:[ validityPeriodType, [ Validators.required ] ],//核销类型
                       dateRange:[ dateRange, [  ] ],
                       weight: [ res.data.weight, [  ] ],
                       storesChangeNum: [ res.data.storeIds.split(',').length, [ Validators.required ] ]

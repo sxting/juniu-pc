@@ -14,7 +14,7 @@
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="productName">商品名称</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input nz-input formControlName="productName" id="productName" placeholder="请输入商品名称，限1-40个字">
+                <input nz-input formControlName="productName" id="productName" autocomplete="off" placeholder="请输入商品名称，限1-40个字">
                 <nz-form-explain class="errorTips" *ngIf="form.get('productName').dirty && form.get('productName').errors">商品名称不能为空</nz-form-explain>
                 <nz-form-explain class="tips-text">请勿输入“储值卡、会员卡、VIP卡、打折卡、年卡、美容卡、健身卡”等敏感词。</nz-form-explain>
             </nz-form-control>
