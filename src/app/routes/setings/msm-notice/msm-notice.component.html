@@ -7,14 +7,29 @@
 
         <div nz-col nzXs="24" nzSm="24" nzLg="6" nzLg="6" class="mb-lg">
             <div class="title">可用短信数量
-                <div class="buttons">充值</div>
+                <div class="buttons" (click)="msmAlert(modalContent2)">充值</div>
             </div>
             <nz-card [nzBordered]="false" [nzBodyStyle]="{'overflow': 'hidden','display': 'flex','justify-content': 'center'}">
-                <water-wave [title]="'剩余(条)'" [percent]="34" [height]="165"></water-wave>
+                <water-wave [title]="'剩余(条)'" [percent]="surplusNumber" [height]="165"></water-wave>
             </nz-card>
         </div>
         <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="18" style="background:#fff;">
-            <div class="title">短信使用数量统计</div>
+            <div class="title">短信使用数量统计
+                <div style="float:right;display:flex;">
+                    <nz-tabset class="msmTab" (nzSelectChange)="console2($event)">
+                        <nz-tab nzTitle="今日">
+                        </nz-tab>
+                        <nz-tab nzTitle="本周">
+                        </nz-tab>
+                        <nz-tab nzTitle="本月">
+                        </nz-tab>
+                        <nz-tab nzTitle="全年">
+                        </nz-tab>
+                    </nz-tabset>
+                    <nz-range-picker [(ngModel)]="dateRange" (ngModelChange)="rangePicker($event)" nzDropdownClassName="right320" style="width:200px;"
+                        name="dateRange" id="dateRange"></nz-range-picker>
+                </div>
+            </div>
             <div class="lineBox">
                 <div id="top_chart"></div>
             </div>
@@ -28,7 +43,7 @@
         <nz-card nzTitle="会员消费通知" [nzBordered]="false">
             <div>
                 开卡通知
-                <nz-switch [ngModel]="false">
+                <nz-switch [ngModel]="openCard" (ngModelChange)="configFun('NOTICE_OPENCARD')">
                     <span checked>开</span>
                     <span unchecked>关</span>
                 </nz-switch>
@@ -40,7 +55,7 @@
             <div>
                 <div>
                     充值通知
-                    <nz-switch [ngModel]="false">
+                    <nz-switch [ngModel]="recharge" (ngModelChange)="configFun('NOTICE_RECHARGE')">
                         <span checked>开</span>
                         <span unchecked>关</span>
                     </nz-switch>
@@ -53,7 +68,7 @@
             <div>
                 <div>
                     扣卡通知
-                    <nz-switch [ngModel]="false">
+                    <nz-switch [ngModel]="consume" (ngModelChange)="configFun('NOTICE_CONSUME')">
                         <span checked>开</span>
                         <span unchecked>关</span>
                     </nz-switch>
@@ -70,7 +85,7 @@
             <div>
                 <div>
                     门店有新预约
-                    <nz-switch [ngModel]="false">
+                    <nz-switch [ngModel]="reserveRemind" (ngModelChange)="configFun('RESERVE_TO_MERCHANT')">
                         <span checked>开</span>
                         <span unchecked>关</span>
                     </nz-switch>
@@ -83,7 +98,7 @@
             <div>
                 <div>
                     预约成功提醒
-                    <nz-switch [ngModel]="false">
+                    <nz-switch [ngModel]="reserveSuccess" (ngModelChange)="configFun('RESERVE_SUCCESS_CUSTOMER')">
                         <span checked>开</span>
                         <span unchecked>关</span>
                     </nz-switch>
@@ -96,7 +111,7 @@
             <div>
                 <div>
                     预约被拒绝提醒
-                    <nz-switch [ngModel]="false">
+                    <nz-switch [ngModel]="reserveRefuse" (ngModelChange)="configFun('RESERVE_RSFUSE_CUSTOMER')">
                         <span checked>开</span>
                         <span unchecked>关</span>
                     </nz-switch>
@@ -137,3 +152,14 @@
         </nz-card>
     </div> -->
 </div>
+
+
+<ng-template #modalContent2>
+    <div *ngFor="let item of dataNote">
+        <nz-radio-group [(ngModel)]="radioValue">
+            <label nz-radio [nzValue]="{packageId:item.packageId,price:item.packagePrice}">
+                <span>{{item.packageName}}</span>
+            </label>
+        </nz-radio-group>
+    </div>
+</ng-template>

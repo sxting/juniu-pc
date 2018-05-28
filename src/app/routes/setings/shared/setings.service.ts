@@ -238,4 +238,45 @@ export class SetingsService {
                 return Observable.throw(error);
             });
     }
+    //短信统计
+    smsStatistics(data) {
+        let apiUrl = Config.API1 + '/account/merchant/sms/statistics.json';
+        return this.http.get(apiUrl, data).map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    //配置查询
+    configQuery() {
+        let apiUrl = Config.API1 + '/account/merchant/sms/config/query.json';
+        return this.http.get(apiUrl).map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    //操作日志
+    operationLog(data: any) {
+        let apiUrl = Config.API1 + '/account/merchant/operation/log/batch.json';
+        return this.http.get(apiUrl, data).map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    //配置设置
+    configSet(data) {
+        let apiUrl = Config.API1 + '/account/merchant/sms/config/set.json';
+        return this.http.get(apiUrl,data).map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    //短信包列表
+    smsBatch() {
+        let apiUrl = Config.API1 + 'account/merchant/sms/batch.json';
+        return this.http.get(apiUrl)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
 }

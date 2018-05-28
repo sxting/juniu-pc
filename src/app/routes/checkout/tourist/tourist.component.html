@@ -33,7 +33,9 @@
                                 查询会员
                             </button>
                         </ng-template>
-                        <!-- <div class="vipArrBox"></div> -->
+                        <!-- <div class="vipArrBox">
+
+                        </div> -->
                     </div>
                     <div class="shouyinBottom">
                         <h3 class="flex-1 text-lg borderLeft">选择商品
@@ -206,7 +208,8 @@
                                     <div nz-col style="text-align:left;" nzSpan="6">是否抹零</div>
                                     <div nz-col nzSpan="18">
                                         <nz-switch style="float:left;" (ngModelChange)="moling()" [ngModel]="isVerb" nzCheckedChildren="是" nzUnCheckedChildren="否"></nz-switch>
-                                        <span style="float:right;">收款： <input type="text" style="width:100px;" [(ngModel)]="inputValue" nz-input > </span>
+                                        <span style="float:right;">收款：
+                                            <input type="text" style="width:100px;" [(ngModel)]="inputValue" nz-input> </span>
                                     </div>
                                 </div>
                             </nz-form-item>
