@@ -66,6 +66,7 @@ export interface CreateOrder {
   wipeDecimal?: boolean;
   faceId?: string;
   customerId?: string;
+  settleCardDTOList?: any;
 }
 
 export interface OpenCardOrder {

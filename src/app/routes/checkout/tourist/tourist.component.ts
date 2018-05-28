@@ -178,7 +178,7 @@ export class TouristComponent implements OnInit {
         that.xfList.forEach(function (i: any) {
             i.staffGroupData = that.staffGroupData;
         })
-        
+
         that.totolMoneyFun();
     }
     selectStoreInfo(event: any) {
@@ -502,9 +502,9 @@ export class TouristComponent implements OnInit {
     }
     //结算fun
     jiesuanFun() {
-        
+
         let that = this;
-        
+
         let create = <CreateOrder>{};
         create.customerName = this.memberInfo.customerName;
         create.phone = this.phone;
@@ -593,6 +593,30 @@ export class TouristComponent implements OnInit {
                 configArray.push(orderItem);
             })
             create.orderItem = configArray;
+            create.settleCardDTOList = [];
+
+            if (that.vipCardList && that.vipCardList.length > 0) {
+                that.vipCardList.forEach(function (i: any) {
+                    let data = {
+                        productIdList: [],
+                        cardId: i.card.cardId,
+                        amount: 0,
+                        type: i.card.type
+                    }
+
+                    if (i.checked) create.settleCardDTOList.push(data)
+                })
+                create.settleCardDTOList.forEach(function (i: any) {
+                    that.xfList.forEach(function (n: any) {
+                        if (n.vipCard&&i.cardId === n.vipCard.card.cardId) {
+                            i.productIdList.push(n.productId)
+                            if (i.type === 'TIMES') i.amount = 0;
+                            else if (i.type === 'METERING') i.amount += n.num;
+                            else i.amount += NP.times(n.num, n.totoleMoney);
+                        }
+                    })
+                })
+            }
         }
         if (!that.changeType) {
             create.money = that.isVerb2 ? that.isVerbVipCardmoney * 100 : that.vipCardmoney * 100;
@@ -607,11 +631,11 @@ export class TouristComponent implements OnInit {
         create.faceId = this.selectFaceId;
         create.customerId = this.memberInfo.customerId;
         console.log(create);
-        if (this.xyVip) {
-            that.rechargeAndOrderPayFun(create)
-        } else {
-            that.createOrderFun(create);
-        }
+        // if (this.xyVip) {
+        //     that.rechargeAndOrderPayFun(create)
+        // } else {
+        //     that.createOrderFun(create);
+        // }
     }
     createOrderFun(create: any) {
         this.checkoutService.createOrder(create).subscribe(
@@ -720,10 +744,21 @@ export class TouristComponent implements OnInit {
     ticketListArrFun() {
         let GIFTArr = [], MONEYArr = [], DISCOUNTArr = [], giftMost, that = this, ticket1, ticket2, ticket3;
         this.ticket;
+
         this.ticketList.forEach(function (i: any) {
-            if (i.couponDefType === 'GIFT') GIFTArr.push(i);
-            if (i.couponDefType === 'MONEY') MONEYArr.push(i);
-            if (i.couponDefType === 'DISCOUNT') DISCOUNTArr.push(i);
+            let ids = '', arr;
+            //优惠卷限制商品处理
+            if ((i.consumeLimitProductIds && !i.couponDefProductId) || (!i.consumeLimitProductIds && i.couponDefProductId) || (i.consumeLimitProductIds && i.couponDefProductId)) {
+                ids = i.consumeLimitProductIds + ',' + i.couponDefProductId + ',' + that.productIds;
+                arr = ids.split(',');
+            }
+            //优惠卷满额可用限制
+
+            if (((!i.consumeLimitProductIds && !i.couponDefProductId) || that.mm(arr)) && (i.useLimitMoney === -1 || i.useLimitMoney < that.inputValue)) {
+                if (i.couponDefType === 'GIFT') GIFTArr.push(i);
+                if (i.couponDefType === 'MONEY') MONEYArr.push(i);
+                if (i.couponDefType === 'DISCOUNT') DISCOUNTArr.push(i);
+            }
         })
         if (GIFTArr.length > 0) ticket1 = that.youhuiFun('GIFT', GIFTArr);
 
@@ -734,6 +769,10 @@ export class TouristComponent implements OnInit {
         if (ticket1) this.ticket = ticket1;
         else if (ticket2) this.ticket = ticket2;
         else if (ticket3) this.ticket = ticket3;
+    }
+    // 验证重复元素，有重复返回true；否则返回false
+    mm(arr: any) {
+        return /(\x0f[^\x0f]+)\x0f[\s\S]*\1/.test("\x0f" + arr.join("\x0f\x0f") + "\x0f");
     }
     //计算礼品卷最优礼品；
     youhuiFun(type: any, arr: any) {
