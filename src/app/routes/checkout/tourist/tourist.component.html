@@ -33,6 +33,7 @@
                                 查询会员
                             </button>
                         </ng-template>
+                        <!-- <div class="vipArrBox"></div> -->
                     </div>
                     <div class="shouyinBottom">
                         <h3 class="flex-1 text-lg borderLeft">选择商品
@@ -182,8 +183,8 @@
                                 <div class="lineHeight50 formItemBorder kouka">
                                     <div nz-col style="text-align:left;" nzSpan="6">扣卡</div>
                                     <div nz-col nzSpan="18">
-                                        <div nz-col nzSpan="18" class="yhjBox kouka2">
-                                            <label nz-checkbox *ngFor="let item of vipCardList" [(ngModel)]="item.checked">
+                                        <div nz-col nzSpan="16" class="yhjBox kouka2">
+                                            <label nz-checkbox *ngFor="let item of vipCardList" (ngModelChange)="cardChangeFun(item.card.cardConfigRuleId)" [(ngModel)]="item.checked">
                                                 <span>
                                                     <span>
                                                         <span class="iconfont icon-card"></span>
@@ -192,11 +193,11 @@
                                                     <br />
                                                     <span class="ziti" *ngIf="item.applyProductType === 'SERVICEITEMS'">限全部服务项目可用</span>
                                                     <span class="ziti" *ngIf="item.applyProductType === 'ALL'">限全部商品可用</span>
-                                                    <span class="ziti" *ngIf="item.applyProductType === 'CUSTOMIZE'">限0001商品名称使用名称使用使用…</span>
+                                                    <span class="ziti" *ngIf="item.applyProductType === 'CUSTOMIZE'">限{{item.getApplyProductNames}}使用</span>
                                                 </span>
                                             </label>
                                         </div>
-                                        <div style="text-align:right;" nz-col nzSpan="6" *ngIf="vipShowMoney">-{{vipShowMoney/100}}元</div>
+                                        <div style="text-align:right;" nz-col nzSpan="8" *ngIf="vipShowMoney">-{{vipShowMoney/100}}元</div>
                                     </div>
                                 </div>
                             </nz-form-item>
@@ -205,7 +206,7 @@
                                     <div nz-col style="text-align:left;" nzSpan="6">是否抹零</div>
                                     <div nz-col nzSpan="18">
                                         <nz-switch style="float:left;" (ngModelChange)="moling()" [ngModel]="isVerb" nzCheckedChildren="是" nzUnCheckedChildren="否"></nz-switch>
-                                        <span style="float:right;">收款：{{isVerb?isVerbMoney:totolMoney}}元</span>
+                                        <span style="float:right;">收款： <input type="text" style="width:100px;" [(ngModel)]="inputValue" nz-input > </span>
                                     </div>
                                 </div>
                             </nz-form-item>

@@ -730,7 +730,7 @@ export class MarketingsPageComponent implements OnInit {
             (res: any) => {
                 this.submitting = false;
                 if(res.success) {
-                    if(this.paramsId < 10) {
+                    if(Number(this.paramsId)) {
                         this.router.navigate(['/marketing/sms/list', {}]);
                     } else {
                         this.router.navigate(['/marketing/wechart/list', {}]);
@@ -751,7 +751,7 @@ export class MarketingsPageComponent implements OnInit {
             (res: any) => {
                 this.submitting = false;
                 if(res.success) {
-                    if(this.paramsId < 10) {
+                    if(Number(this.paramsId)) {
                         this.router.navigate(['/marketing/sms/list', {}]);
                     } else {
                         this.router.navigate(['/marketing/wechart/list', {}]);
@@ -772,7 +772,7 @@ export class MarketingsPageComponent implements OnInit {
             (res: any) => {
                 this.submitting = false;
                 if(res.success) {
-                    if(this.paramsId < 10) {
+                    if(Number(this.paramsId) < 10) {
                         this.router.navigate(['/marketing/sms/list', {}]);
                     } else {
                         this.router.navigate(['/marketing/wechart/list', {}]);
@@ -817,7 +817,7 @@ export class MarketingsPageComponent implements OnInit {
                 this.submitting = false;
                 if(res.success) {
                     this.msg.success(`保存成功`);
-                    if(this.paramsId < 10) {
+                    if(Number(this.paramsId)) {
                         this.router.navigate(['/marketing/sms/list', {}]);
                     } else {
                         this.router.navigate(['/marketing/wechart/list', {}]);
@@ -839,7 +839,7 @@ export class MarketingsPageComponent implements OnInit {
                 this.submitting = false;
                 if(res.success) {
                     this.msg.success(`保存成功`);
-                    if(this.paramsId < 10) {
+                    if(Number(this.paramsId)) {
                         this.router.navigate(['/marketing/sms/list', {}]);
                     } else {
                         this.router.navigate(['/marketing/wechart/list', {}]);
@@ -861,7 +861,7 @@ export class MarketingsPageComponent implements OnInit {
                 this.submitting = false;
                 if(res.success) {
                     this.msg.success(`保存成功`);
-                    if(this.paramsId < 10) {
+                    if(Number(this.paramsId)) {
                         this.router.navigate(['/marketing/sms/list', {}]);
                     } else {
                         this.router.navigate(['/marketing/wechart/list', {}]);
