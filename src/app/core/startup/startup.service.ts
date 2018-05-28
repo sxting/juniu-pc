@@ -12,6 +12,7 @@ import {
 import { ACLService } from '@delon/acl';
 import { TranslateService } from '@ngx-translate/core';
 import { I18NService } from '../i18n/i18n.service';
+import { Config } from '@shared/config/env.config';
 
 /**
  * 用于应用启动时
@@ -28,7 +29,7 @@ export class StartupService {
     private titleService: TitleService,
     private httpClient: HttpClient,
     private injector: Injector,
-  ) {}
+  ) { }
 
   load(): Promise<any> {
     // only works with promises
@@ -36,6 +37,7 @@ export class StartupService {
     return new Promise((resolve, reject) => {
       zip(
         this.httpClient.get(`assets/tmp/i18n/${this.i18n.defaultLang}.json`),
+        // this.httpClient.get(Config.API1 + 'account/merchant/module/package/batch.json'),
         this.httpClient.get('assets/tmp/app-data.json'),
       )
         .pipe(
@@ -44,15 +46,24 @@ export class StartupService {
             resolve(null);
             return [langData, appData];
           }),
-        )
+      )
         .subscribe(
           ([langData, appData]) => {
             // setting language data
             this.translate.setTranslation(this.i18n.defaultLang, langData);
             this.translate.setDefaultLang(this.i18n.defaultLang);
-
             // application data
             const res: any = appData;
+            // data.data.menu = [{
+            //   text: "主导航",
+            //   i18n: "main_navigation",
+            //   group: true,
+            //   hideInBreadcrumb: true,
+            //   children: []
+            // }]
+            // data.data.menu[0].children = data.data.items;
+            // console.log(data);
+            // console.log(res);
             // 应用信息：包括站点名、描述、年份
             this.settingService.setApp(res.app);
             // 用户信息：包括姓名、头像、邮箱地址
@@ -64,11 +75,19 @@ export class StartupService {
             // 设置页面标题的后缀
             this.titleService.suffix = res.app.name;
           },
-          () => {},
+          () => { },
           () => {
             resolve(null);
           },
-        );
+      );
     });
+  }
+  forEachFun(arr) {
+    arr.forEach(function (i: any) {
+      i.text = i.packageName;
+      i.icon = '';
+      i.link = '';
+      i.children = i.packageName;
+    })
   }
 }

@@ -180,11 +180,11 @@ export class MsmNoticeComponent implements OnInit {
             nzContent: err
         });
     }
-    formatDateTime(date: any, type: any) {
+    formatDateTime(date: any) {
         let year = date.getFullYear();
         let month = date.getMonth() + 1;
         let day = date.getDate();
-        return year + '-' + (month.toString().length > 1 ? month : ('0' + month)) + '-' + (day.toString().length > 1 ? day : ('0' + day)) + (type === 'start' ? ' 00:00:00' : ' 23:59:59');
+        return year + '-' + (month.toString().length > 1 ? month : ('0' + month)) + '-' + (day.toString().length > 1 ? day : ('0' + day));
     }
 
     //获得本周的开端日期 
@@ -230,17 +230,14 @@ export class MsmNoticeComponent implements OnInit {
         var yearEndDate = nowYear + '-12-31';
         this.dateType = e.type;
         if (e.index === 0) {
-            this.startDay = this.formatDateTime(new Date(), 'start');
-            this.endDay = this.formatDateTime(new Date(), 'end');
+            this.startDay = this.formatDateTime(weekStartDate);
+            this.endDay = this.formatDateTime(weekEndDate);
         } else if (e.index === 1) {
-            this.startDay = this.formatDateTime(weekStartDate, 'start');
-            this.endDay = this.formatDateTime(weekEndDate, 'end');
+            this.startDay = this.formatDateTime(monthStartDate);
+            this.endDay = this.formatDateTime(monthEndDate);
         } else if (e.index === 2) {
-            this.startDay = this.formatDateTime(monthStartDate, 'start');
-            this.endDay = this.formatDateTime(monthEndDate, 'end');
-        } else if (e.index === 3) {
-            this.startDay = yearStartDate + ' 00:00:00';
-            this.endDay = yearEndDate + ' 23:59:59';
+            this.startDay = yearStartDate;
+            this.endDay = yearEndDate;
         }
         this.startDate = new Date(this.startDay);
         this.endDate = new Date(this.endDay);
@@ -252,8 +249,8 @@ export class MsmNoticeComponent implements OnInit {
     }
     rangePicker(e: any) {
         if (e) {
-            this.startDay = this.formatDateTime(e[0], 'start');
-            this.endDay = this.formatDateTime(e[1], 'end');
+            this.startDay = this.formatDateTime(e[0]);
+            this.endDay = this.formatDateTime(e[1]);
         }
         this.smsStatisticsHttp();
     }
