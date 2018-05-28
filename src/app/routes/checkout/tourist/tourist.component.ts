@@ -51,6 +51,7 @@ export class TouristComponent implements OnInit {
     productIds: any = '';
     ticketCheck: any = true;
     staffGroupData: any = [];
+    radioValue: any;
     cardTabs = [
         {
             type: "储值卡",
@@ -107,6 +108,7 @@ export class TouristComponent implements OnInit {
     cardChangeBoolean = false;//选择会员卡开关
     shopsearch: any;
     inputValue: any = 0;
+    vipDataBoolean: boolean = false;
     constructor(
         public msg: NzMessageService,
         private localStorageService: LocalStorageService,
@@ -173,6 +175,10 @@ export class TouristComponent implements OnInit {
             that.allproducks[index1].productList[index2].open = true;
             that.xfList.push(this.allproducks[index1].productList[index2]);
         }
+        that.xfList.forEach(function (i: any) {
+            i.staffGroupData = that.staffGroupData;
+        })
+        
         that.totolMoneyFun();
     }
     selectStoreInfo(event: any) {
@@ -360,6 +366,7 @@ export class TouristComponent implements OnInit {
     jiesuan(tpl: TemplateRef<{}>) {
         let money = this.changeType ? (this.inputValue) : (this.isVerb2 ? this.isVerbVipCardmoney : this.vipCardmoney);
         let that = this;
+        console.log(that.xfList);
         this.cardChangeBoolean = false;
         if (this.vipMoney < 0) {
             this.vipMoneyChajiaFun(money, tpl);
@@ -495,7 +502,9 @@ export class TouristComponent implements OnInit {
     }
     //结算fun
     jiesuanFun() {
+        
         let that = this;
+        
         let create = <CreateOrder>{};
         create.customerName = this.memberInfo.customerName;
         create.phone = this.phone;
@@ -673,34 +682,13 @@ export class TouristComponent implements OnInit {
         this.cardChangeBoolean = false;
         if (this.vipsearch && (this.vipsearch.length === 0 || this.vipsearch.length >= 11 || event)) {
             this.checkoutService
-                .findMemberCard(this.vipsearch, this.storeId)
+                .findMemberCards(this.vipsearch, this.storeId)
                 .subscribe(
                     (res: any) => {
                         if (res.success) {
                             self.vipData = res.data;
-                            self.yjcardList = res.data.cardApplies;
-                            if (res.data.customer) {
-                                self.memberInfo = {
-                                    customerName: res.data.customer.customerName,
-                                    gender: res.data.customer.gender,
-                                    phone: res.data.customer.phone,
-                                    birthday: res.data.customer.birthday,
-                                    remarks: res.data.customer.remarks,
-                                    customerId: res.data.customer.customerId,
-                                    allPay: res.data.allPay,
-                                    payDate: res.data.payDate,
-                                    selectFaceId: self.selectFaceId,
-                                };
-                                self.phone = res.data.customer.phone;
-                                // 获取会员相关的优惠券
-                                self.getMemberTicket(res.data.customer.customerId);
-                                // 检查该会员是否被绑定过人脸
-                                // if (this.selectFaceId) {
-                                //     this.checkFaceIsBandFun(res.data);
-                                // }
-                            } else {
-                                self.memberInfo = {};
-                            }
+                            if (self.vipData && self.vipData.length > 0) self.vipDataBoolean = true;
+
 
                         } else {
                             self.errorAlter(res.errorInfo)
@@ -1126,5 +1114,26 @@ export class TouristComponent implements OnInit {
         }
 
     }
-
+    vipDataRadio(e: any, ind?: any) {
+        let self = this;
+        self.yjcardList = this.vipData[this.radioValue].cardApplies;
+        if (this.vipData[this.radioValue].customer) {
+            self.memberInfo = {
+                customerName: this.vipData[this.radioValue].customer.customerName,
+                gender: this.vipData[this.radioValue].customer.gender,
+                phone: this.vipData[this.radioValue].customer.phone,
+                birthday: this.vipData[this.radioValue].customer.birthday,
+                remarks: this.vipData[this.radioValue].customer.remarks,
+                customerId: this.vipData[this.radioValue].customer.customerId,
+                allPay: this.vipData[this.radioValue].allPay,
+                payDate: this.vipData[this.radioValue].payDate,
+                selectFaceId: self.selectFaceId,
+            };
+            self.phone = this.vipData[this.radioValue].customer.phone;
+            self.getMemberTicket(this.vipData[this.radioValue].customer.customerId);
+        } else {
+            self.memberInfo = {};
+        }
+        this.vipDataBoolean = false;
+    }
 }

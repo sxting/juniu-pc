@@ -61,7 +61,7 @@ export class MsmNoticeComponent implements OnInit {
     reserveRefuse: boolean = false;
     dateRange: any;
     dataNote: any;
-    radioValue:any;
+    radioValue: any;
     constructor(
         private setingsService: SetingsService,
         private modalSrv: NzModalService,
@@ -260,18 +260,35 @@ export class MsmNoticeComponent implements OnInit {
 
     msmAlert(tpl: TemplateRef<{}>) {
         let that = this;
+        let packageId = this.radioValue;
         this.modalSrv.create({
             nzTitle: '请选择一个短信包',
             nzContent: tpl,
             nzWidth: '800px',
             nzOnOk: () => {
-                console.log(that.radioValue())
+                that.smsRechargeHttp(packageId);
             }
         });
     }
     smsListHttp() {
         let that = this;
         this.setingsService.smsBatch().subscribe(
+            (res: any) => {
+                if (res) {
+                    that.dataNote = res.data.items;
+                }
+            },
+            error => {
+                this.errorAlter(error);
+            }
+        );
+    }
+    smsRechargeHttp(packageId: any) {
+        let that = this;
+        let data = {
+            packageId: packageId
+        }
+        this.setingsService.smsRecharge(data).subscribe(
             (res: any) => {
                 if (res) {
                     that.dataNote = res.data.items;

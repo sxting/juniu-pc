@@ -157,7 +157,7 @@
 <ng-template #modalContent2>
     <div *ngFor="let item of dataNote">
         <nz-radio-group [(ngModel)]="radioValue">
-            <label nz-radio [nzValue]="{packageId:item.packageId,price:item.packagePrice}">
+            <label nz-radio [nzValue]="item.packageId">
                 <span>{{item.packageName}}</span>
             </label>
         </nz-radio-group>

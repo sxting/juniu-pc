@@ -279,4 +279,12 @@ export class SetingsService {
                 return Observable.throw(error);
             });
     }
+    //短信充值
+    smsRecharge(data) {
+        let apiUrl = Config.API1 + '/account/merchant/sms/recharge.json';
+        return this.http.get(apiUrl,data).map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
 }
