@@ -5,7 +5,7 @@ import {LocalStorageService} from "@shared/service/localstorage-service";
 import {STORES_INFO, USER_INFO} from "@shared/define/juniu-define";
 import {SoftTransferService} from "./soft-transfer.service";
 import {SetingsService} from "../shared/setings.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'soft-buy-step1',
@@ -16,6 +16,7 @@ export class SoftBuyStep1Component implements OnInit {
 
   constructor(public item: SoftTransferService,
               private route: ActivatedRoute,
+              private router: Router,
               private setingsService: SetingsService,
               private modalSrv: NzModalService,
               private localStorageService: LocalStorageService,) {
@@ -46,6 +47,10 @@ export class SoftBuyStep1Component implements OnInit {
     this.storeId = this.route.snapshot.params['storeId'] ? this.route.snapshot.params['storeId'] : this.storeId;
 
     this.getPackageBatchList();
+  }
+
+  goBuyRecord() {
+    this.router.navigateByUrl('/setings/software/buy/record');
   }
 
   onItemHover(item: any) {

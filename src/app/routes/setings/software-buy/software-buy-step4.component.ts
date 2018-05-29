@@ -5,6 +5,8 @@ import {LocalStorageService} from "@shared/service/localstorage-service";
 import {STORES_INFO} from "@shared/define/juniu-define";
 import {SoftTransferService} from "./soft-transfer.service";
 import {SetingsService} from "../shared/setings.service";
+import {Router} from "@angular/router";
+declare var _MEIQIA: any;
 
 @Component({
   selector: 'soft-buy-step4',
@@ -17,21 +19,19 @@ export class SoftBuyStep4Component implements OnInit {
     public item: SoftTransferService,
     private setingsService: SetingsService,
     private modalSrv: NzModalService,
-    private localStorageService: LocalStorageService,
+    private router: Router,
   ) {}
 
   ngOnInit() {
 
   }
 
-  //上一步
-  prev() {
-    --this.item.step;
+  callOurs() {
+    _MEIQIA('showPanel');
   }
 
   _submitForm() {
-    // this.item = Object.assign(this.item);
-    ++this.item.step;
+    this.router.navigate(['/manage/storeList', {}])
   }
 }
 
