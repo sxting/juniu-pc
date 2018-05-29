@@ -343,6 +343,12 @@
               "i18n": "koubei-print",
               "link": "/koubei/print",
               "reuse": false
+            },
+            {
+              "text": "短信通知",
+              "i18n": "koubei-msm",
+              "link": "/koubei/koubeiMsmNotice",
+              "reuse": false
             }
           ]
         },

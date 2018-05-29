@@ -146,7 +146,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
             // 清空路由复用信息
             this.reuseTabService.clear();
             this.tokenService.set({
-                token: 'bbc6ab24838075000566fb7a658b0fc2',
+                token: 'a89d3cf6f9d017b2f59d284517093638',
                 email: `cipchk@qq.com`,
                 id: 10000,
                 time: +new Date

@@ -18,7 +18,7 @@ declare var swal: any;
 export class TouristComponent implements OnInit {
     storeId: any;
     changeType: boolean = true;//收银开卡切换
-    vipsearch: string = '15555555555';//vip搜索框
+    vipsearch: string = '13333333333';//vip搜索框
     renlian: boolean = true;//人脸识别
     isVerb: boolean = false;//是否抹零
     isVerb2: boolean = false;
@@ -51,6 +51,7 @@ export class TouristComponent implements OnInit {
     productIds: any = '';
     ticketCheck: any = true;
     staffGroupData: any = [];
+    radioValue: any;
     cardTabs = [
         {
             type: "储值卡",
@@ -104,6 +105,10 @@ export class TouristComponent implements OnInit {
     vipMoneyName: any = '';
     index: any = 0;
     vipShowMoney: any = 0;
+    cardChangeBoolean = false;//选择会员卡开关
+    shopsearch: any;
+    inputValue: any = 0;
+    vipDataBoolean: boolean = false;
     constructor(
         public msg: NzMessageService,
         private localStorageService: LocalStorageService,
@@ -151,12 +156,13 @@ export class TouristComponent implements OnInit {
     }
     //商品搜索框
     shopSearch() {
-        console.log(this.vipsearch);
+        this.getAllbuySearchs();
     }
     //选择商品
     checkShop(index1: any, index2: any) {
         let that = this;
         that.ticketCheck = true;
+        this.cardChangeBoolean = false;
         this.allproducks[index1].productList[index2].click = !this.allproducks[index1].productList[index2].click;
         this.allproducks[index1].productList[index2].num = !this.allproducks[index1].productList[index2].click ? 1 : this.allproducks[index1].productList[index2].num;
         that.xfList.forEach(function (i: any, n: any) {
@@ -169,6 +175,10 @@ export class TouristComponent implements OnInit {
             that.allproducks[index1].productList[index2].open = true;
             that.xfList.push(this.allproducks[index1].productList[index2]);
         }
+        that.xfList.forEach(function (i: any) {
+            i.staffGroupData = that.staffGroupData;
+        })
+
         that.totolMoneyFun();
     }
     selectStoreInfo(event: any) {
@@ -198,54 +208,31 @@ export class TouristComponent implements OnInit {
     //     vipMoney += i.vipMoney;
     totolMoneyFun() {
         let that = this;
+        this.vipCardList = [];
         if (that.changeType) {
             that.ticketListTime();
             that.totolMoney = 0;
-            let ticketM = 0, vipMoney = 0;
-            that.vipMoney = 0;
-            this.vipCardSearchFun();
+            let ticketM = 0;
+            if (!this.cardChangeBoolean) this.vipCardSearchFun();
+            //每个卡的余额
             this.vipCardListfun();
+            //标注每个卡对应的总计减免
+            this.vipMoneyFun()
+            this.balanceFun();
             if (that.xfList) {
                 that.xfList.forEach(function (i: any) {
-                    if (that.vipCardList && i.vipCard) {
-                        that.vipCardList.forEach(function (k: any) {
-                            if (k.card.cardId === i.vipCard.card.cardId && k.checked) {
-                                if (i.vipCard.card.type === "TIMES") {
-                                    i.vipMoney = i.currentPrice;
-                                } else if (i.vipCard.card.type === "METERING") {
-                                    i.vipMoney = i.currentPrice;
-                                } else if (i.vipCard.card.type === "REBATE") {
-                                    i.vipMoney = NP.times(i.currentPrice, NP.divide(i.vipCard.card.rebate, 10));
-                                    k.card.balance2 -= i.vipMoney;
-                                    if (k.card.balance2 < 0) {
-                                        that.vipMoney = k.card.balance2;
-                                        that.vipMoneyName += (k.card.cardName + (that.vipMoneyName ? ',' : ''))
-                                    }
-                                } else if (i.vipCard.card.type === "STORED") {
-                                    i.vipMoney = i.currentPrice;
-                                    k.card.balance2 -= i.vipMoney;
-                                    if (k.card.balance2 < 0) {
-                                        that.vipMoney = k.card.balance2;
-                                        that.vipMoneyName = k.card.cardName;
-                                    }
-                                }
-                            }
-                            vipMoney += i.vipMoney;
-                        })
-                    }
                     i.totoleMoney = NP.round(NP.times(NP.divide(i.currentPrice, 100), i.num, NP.divide(i.discount, 100)), 2);
                     that.totolMoney = NP.round(NP.plus(that.totolMoney, NP.times(NP.divide(i.currentPrice, 100), i.num, NP.divide(i.discount, 100))), 2);
                     that.isVerbMoney = Math.floor(that.totolMoney);
                 })
             }
-            that.vipShowMoney = vipMoney + that.vipMoney;
-
             that.productIdsFun(that.xfList);
             ticketM = that.ticketCheck ? (that.ticket && that.xfList.length > 0 ? that.ticket.ticketMoney : 0) : 0;
-            that.totolMoney = NP.minus(that.totolMoney, ticketM, that.vipShowMoney)
-            that.isVerbMoney = NP.minus(that.isVerbMoney, ticketM, that.vipShowMoney)
+            that.totolMoney = NP.minus(that.totolMoney, ticketM, that.vipShowMoney / 100)
+            that.isVerbMoney = NP.minus(that.isVerbMoney, ticketM, that.vipShowMoney / 100)
             that.totolMoney = that.totolMoney < 0 ? 0 : that.totolMoney;
             that.isVerbMoney = that.isVerbMoney < 0 ? 0 : that.isVerbMoney;
+            that.inputValue = that.isVerb ? that.isVerbMoney : that.totolMoney;
         } else {
             if (that.xfCardList) {
                 this.vipCardmoney = that.xfCardList.rules[that.xfCardList.ruleIndex].price / 100;
@@ -261,6 +248,59 @@ export class TouristComponent implements OnInit {
             })
         }
     }
+
+    //标注每个卡对应的总计减免
+    vipMoneyFun() {
+        let that = this;
+        if (that.xfList) {
+            that.xfList.forEach(function (i: any) {
+                if (that.vipCardList && i.vipCard) {
+                    that.vipCardList.forEach(function (k: any) {
+                        if (k.card.cardId === i.vipCard.card.cardId && k.checked) {
+                            if (i.vipCard.card.type === "TIMES") { i.vipMoney = NP.times(i.currentPrice, i.num) }
+                            else if (i.vipCard.card.type === "METERING") { i.vipMoney = NP.times(i.currentPrice, i.num) }
+                            else if (i.vipCard.card.type === "REBATE") { i.vipMoney = NP.times(i.currentPrice, NP.divide(i.vipCard.card.rebate, 10), i.num); }
+                            else if (i.vipCard.card.type === "STORED") { i.vipMoney = NP.times(i.currentPrice, i.num) }
+                        } else if (k.card.cardId === i.vipCard.card.cardId && !k.checked) {
+                            i.vipMoney = 0;
+                        }
+                    })
+                }
+            })
+        }
+    }
+    // 余额检查
+    balanceFun() {
+        let that = this, vipMoney = 0;
+        this.vipMoney = 0;
+        this.vipMoneyName = '';
+        if (that.vipCardList && that.xfList) {
+            if (that.vipCardList.length > 0 && that.xfList.length > 0) {
+                that.vipCardList.forEach(function (i: any) {
+                    that.xfList.forEach(function (n: any) {
+                        if (n.vipCard && i.card.cardId === n.vipCard.card.cardId && i.card.cardId !== 'TIMES') {
+                            i.card.balance2 -= n.vipMoney
+                            vipMoney += n.vipMoney;
+                        }
+                    })
+                    if (i.card.balance2 < 0 && i.card.type !== "TIMES" && i.card.type !== "METERING") {
+                        that.vipMoney += i.card.balance2;
+                        that.vipMoneyName += i.card.cardName + ' ';
+                    }
+                })
+            }
+        }
+        this.vipShowMoney = vipMoney;
+    }
+    cardChangeFun(e) {
+        this.cardChangeBoolean = true;
+        this.vipCardList.forEach(function (i: any) {
+            if (i.card.cardConfigRuleId === e) {
+                i.checked = !i.checked;
+            }
+        })
+        this.totolMoneyFun();
+    }
     ngticketChange() {
         let that = this;
         that.ticketCheck = !that.ticketCheck;
@@ -270,6 +310,7 @@ export class TouristComponent implements OnInit {
     xfCloseShop(index: any) {
         this.xfList[index].num = 0;
         this.xfList.splice(index, 1);
+        this.cardChangeBoolean = false;
         this.totolMoneyFun();
     }
 
@@ -297,31 +338,38 @@ export class TouristComponent implements OnInit {
         this.isVerb = !this.isVerb;
         this.isVerbMoney = Math.floor(this.totolMoney);
     }
+    //补差价操作
+    vipMoneyChajiaFun(money: any, tpl: any) {
+        let that = this;
+        this.modalSrv.confirm({
+            nzTitle: '温馨提示',
+            nzContent: '会员卡' + that.vipMoneyName + '余额不足' + that.vipMoney / 100,
+            nzOkText: '前往充值',
+            nzCancelText: '现金补差价',
+            nzOnOk: () => {
+                that.change(1);
+                that.index = 1;
+                that.vipXqFun();
+            },
+            nzOnCancel: () => {
+                that.modalSrv.create({
+                    nzTitle: `收款金额：${money}元,并补现金差价${that.vipMoney / 100 * -1}`,
+                    nzContent: tpl,
+                    nzWidth: '520px',
+                    nzFooter: null,
+                    nzOkText: null
+                });
+            }
+        })
+    }
     //结算
     jiesuan(tpl: TemplateRef<{}>) {
-        let money = this.changeType ? (this.isVerb ? this.isVerbMoney : this.totolMoney) : (this.isVerb2 ? this.isVerbVipCardmoney : this.vipCardmoney);
+        let money = this.changeType ? (this.inputValue) : (this.isVerb2 ? this.isVerbVipCardmoney : this.vipCardmoney);
         let that = this;
+        console.log(that.xfList);
+        this.cardChangeBoolean = false;
         if (this.vipMoney < 0) {
-            this.modalSrv.confirm({
-                nzTitle: '温馨提示',
-                nzContent: '会员卡' + this.vipMoneyName + '余额不足' + this.vipMoney / 100,
-                nzOkText: '前往充值',
-                nzCancelText: '现金补差价',
-                nzOnOk: () => {
-                    that.change(1);
-                    that.index = 1;
-                    that.vipXqFun();
-                },
-                nzOnCancel: () => {
-                    that.modalSrv.create({
-                        nzTitle: `收款金额：${money}元,并补现金差价${this.vipMoney / 100 * -1}`,
-                        nzContent: tpl,
-                        nzWidth: '520px',
-                        nzFooter: null,
-                        nzOkText: null
-                    });
-                }
-            })
+            this.vipMoneyChajiaFun(money, tpl);
         } else {
             this.modalSrv.create({
                 nzTitle: `收款金额：${money}元`,
@@ -411,6 +459,7 @@ export class TouristComponent implements OnInit {
         this.ticket;
         this.xfList = [];
         this.vipCardList = [];
+        this.cardChangeBoolean = false;
         that.allproducks.forEach(function (i: any) {
             i.productList.forEach(function (n: any) {
                 n.click = false;
@@ -453,7 +502,9 @@ export class TouristComponent implements OnInit {
     }
     //结算fun
     jiesuanFun() {
+
         let that = this;
+
         let create = <CreateOrder>{};
         create.customerName = this.memberInfo.customerName;
         create.phone = this.phone;
@@ -542,6 +593,30 @@ export class TouristComponent implements OnInit {
                 configArray.push(orderItem);
             })
             create.orderItem = configArray;
+            create.settleCardDTOList = [];
+
+            if (that.vipCardList && that.vipCardList.length > 0) {
+                that.vipCardList.forEach(function (i: any) {
+                    let data = {
+                        productIdList: [],
+                        cardId: i.card.cardId,
+                        amount: 0,
+                        type: i.card.type
+                    }
+
+                    if (i.checked) create.settleCardDTOList.push(data)
+                })
+                create.settleCardDTOList.forEach(function (i: any) {
+                    that.xfList.forEach(function (n: any) {
+                        if (n.vipCard&&i.cardId === n.vipCard.card.cardId) {
+                            i.productIdList.push(n.productId)
+                            if (i.type === 'TIMES') i.amount = 0;
+                            else if (i.type === 'METERING') i.amount += n.num;
+                            else i.amount += NP.times(n.num, n.totoleMoney);
+                        }
+                    })
+                })
+            }
         }
         if (!that.changeType) {
             create.money = that.isVerb2 ? that.isVerbVipCardmoney * 100 : that.vipCardmoney * 100;
@@ -577,7 +652,12 @@ export class TouristComponent implements OnInit {
     /*========我是分界线========*/
     // 获取全部商品
     getAllbuySearchs() {
-        this.manageService.getAllbuySearch1(this.storeId).subscribe(
+        let data = {
+            storeId: this.storeId,
+            key: this.shopsearch
+        }
+        if (!data.key) delete data.key;
+        this.manageService.getAllbuySearch1(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     let allproducks = res.data;
@@ -623,37 +703,16 @@ export class TouristComponent implements OnInit {
         this.phone = this.vipsearch;
         this.yjcardList = [];
         let self = this;
-
+        this.cardChangeBoolean = false;
         if (this.vipsearch && (this.vipsearch.length === 0 || this.vipsearch.length >= 11 || event)) {
             this.checkoutService
-                .findMemberCard(this.vipsearch, this.storeId)
+                .findMemberCards(this.vipsearch, this.storeId)
                 .subscribe(
                     (res: any) => {
                         if (res.success) {
                             self.vipData = res.data;
-                            self.yjcardList = res.data.cardApplies;
-                            if (res.data.customer) {
-                                self.memberInfo = {
-                                    customerName: res.data.customer.customerName,
-                                    gender: res.data.customer.gender,
-                                    phone: res.data.customer.phone,
-                                    birthday: res.data.customer.birthday,
-                                    remarks: res.data.customer.remarks,
-                                    customerId: res.data.customer.customerId,
-                                    allPay: res.data.allPay,
-                                    payDate: res.data.payDate,
-                                    selectFaceId: self.selectFaceId,
-                                };
-                                self.phone = res.data.customer.phone;
-                                // 获取会员相关的优惠券
-                                self.getMemberTicket(res.data.customer.customerId);
-                                // 检查该会员是否被绑定过人脸
-                                // if (this.selectFaceId) {
-                                //     this.checkFaceIsBandFun(res.data);
-                                // }
-                            } else {
-                                self.memberInfo = {};
-                            }
+                            if (self.vipData && self.vipData.length > 0) self.vipDataBoolean = true;
+
 
                         } else {
                             self.errorAlter(res.errorInfo)
@@ -685,10 +744,21 @@ export class TouristComponent implements OnInit {
     ticketListArrFun() {
         let GIFTArr = [], MONEYArr = [], DISCOUNTArr = [], giftMost, that = this, ticket1, ticket2, ticket3;
         this.ticket;
+
         this.ticketList.forEach(function (i: any) {
-            if (i.couponDefType === 'GIFT') GIFTArr.push(i);
-            if (i.couponDefType === 'MONEY') MONEYArr.push(i);
-            if (i.couponDefType === 'DISCOUNT') DISCOUNTArr.push(i);
+            let ids = '', arr;
+            //优惠卷限制商品处理
+            if ((i.consumeLimitProductIds && !i.couponDefProductId) || (!i.consumeLimitProductIds && i.couponDefProductId) || (i.consumeLimitProductIds && i.couponDefProductId)) {
+                ids = i.consumeLimitProductIds + ',' + i.couponDefProductId + ',' + that.productIds;
+                arr = ids.split(',');
+            }
+            //优惠卷满额可用限制
+
+            if (((!i.consumeLimitProductIds && !i.couponDefProductId) || that.mm(arr)) && (i.useLimitMoney === -1 || i.useLimitMoney < that.inputValue)) {
+                if (i.couponDefType === 'GIFT') GIFTArr.push(i);
+                if (i.couponDefType === 'MONEY') MONEYArr.push(i);
+                if (i.couponDefType === 'DISCOUNT') DISCOUNTArr.push(i);
+            }
         })
         if (GIFTArr.length > 0) ticket1 = that.youhuiFun('GIFT', GIFTArr);
 
@@ -699,6 +769,10 @@ export class TouristComponent implements OnInit {
         if (ticket1) this.ticket = ticket1;
         else if (ticket2) this.ticket = ticket2;
         else if (ticket3) this.ticket = ticket3;
+    }
+    // 验证重复元素，有重复返回true；否则返回false
+    mm(arr: any) {
+        return /(\x0f[^\x0f]+)\x0f[\s\S]*\1/.test("\x0f" + arr.join("\x0f\x0f") + "\x0f");
     }
     //计算礼品卷最优礼品；
     youhuiFun(type: any, arr: any) {
@@ -1036,10 +1110,9 @@ export class TouristComponent implements OnInit {
     //匹配会员卡
     vipCardSearchFun() {
         let that = this;
-        this.produckIdFun();
         if (that.xfList && that.yjcardList) {
             if (that.xfList.length > 0 && that.yjcardList.length > 0) {
-                //每个商品对应的会员卡
+                //每个商品对应的会员卡,都存在商品的卡列表里
                 that.xfList.forEach(function (i: any) {
                     let vipCardList = []
                     that.yjcardList.forEach(function (n: any) {
@@ -1051,52 +1124,55 @@ export class TouristComponent implements OnInit {
                         }
                     })
                 })
+                //筛选会员卡 期限卡>计次卡>折扣卡>储值卡
                 var itemList = [];
                 that.xfList.forEach(function (i: any) {
                     if (i.vipCardList) {
                         for (let n = 0; n < i.vipCardList.length; n++) {
                             if (i.vipCardList[n].card.type === 'TIMES') i.vipCard = i.vipCardList[n];
-                            if (i.vipCardList[n].card.type === 'METERING' && (i.vipCard ? i.vipCard.type !== 'TIMES' : true)) i.vipCard = i.vipCardList[n];
-                            if (i.vipCardList[n].card.type === 'REBATE' && (i.vipCard ? (i.vipCard.type !== 'TIMES' && i.vipCard.type !== 'METERING') : true)) i.vipCard = i.vipCardList[n];
-                            if (i.vipCardList[n].card.type === 'STORED' && (i.vipCard ? (i.vipCard.type !== 'TIMES' && i.vipCard.type !== 'METERING' && i.vipCard.type !== 'REBATE') : true)) i.vipCard = i.vipCardList[n];
+                            if (i.vipCardList[n].card.type === 'METERING' && (i.vipCard ? i.vipCard.type === 'TIMES' : true)) i.vipCard = i.vipCardList[n];
+                            if (i.vipCardList[n].card.type === 'REBATE' && (i.vipCard ? (i.vipCard.type === 'TIMES' && i.vipCard.type === 'METERING') : true)) i.vipCard = i.vipCardList[n];
+                            if (i.vipCardList[n].card.type === 'STORED' && (i.vipCard ? (i.vipCard.type === 'TIMES' && i.vipCard.type === 'METERING' && i.vipCard.type === 'REBATE') : true)) i.vipCard = i.vipCardList[n];
                         }
                     }
+                    //把每个商品筛选出来的最优会员卡汇集到一个数组里
                     if (i.vipCard) {
                         itemList.push(i.vipCard)
                     }
                 })
+                //会员卡数组去重
                 var unique = {};
                 itemList.forEach(function (gpa) { unique[JSON.stringify(gpa)] = gpa });
                 itemList = Object.keys(unique).map(function (u) { return JSON.parse(u) });
                 itemList.forEach(function (i: any) {
                     i.checked = true;
                 })
+                //最终所有选取的商品所对应的会员卡
                 this.vipCardList = itemList;
-                console.log(this.vipCardList);
             }
         }
 
     }
-    //所有produckId
-    produckIdFun() {
-        let allproduckIds = '', allServiceIds = '', allProDuckName = '', that = this;
-        if (that.yjcardList && that.allproducks) {
-            if (that.yjcardList.length > 0 && that.allproducks.length > 0) {
-
-                that.allproducks.forEach(function (i: any) {
-                    i.productList.forEach(function (n: any) {
-                        allproduckIds += (n.productId + ',');
-                        if (n.categoryType === 'SERVICEITEMS') allServiceIds += (n.productId + ',');
-                    })
-                })
-                that.yjcardList.forEach(function (i: any) {
-                    if (i.applyProductType === 'ALL') i.applyProductIds = allproduckIds;
-                    else if (i.applyProductType === 'SERVICEITEMS') i.applyProductIds = allServiceIds;
-                    else if (i.applyProductType === 'CUSTOMIZE') i.applyProductNames = allServiceIds;
-                })
-            }
+    vipDataRadio(e: any, ind?: any) {
+        let self = this;
+        self.yjcardList = this.vipData[this.radioValue].cardApplies;
+        if (this.vipData[this.radioValue].customer) {
+            self.memberInfo = {
+                customerName: this.vipData[this.radioValue].customer.customerName,
+                gender: this.vipData[this.radioValue].customer.gender,
+                phone: this.vipData[this.radioValue].customer.phone,
+                birthday: this.vipData[this.radioValue].customer.birthday,
+                remarks: this.vipData[this.radioValue].customer.remarks,
+                customerId: this.vipData[this.radioValue].customer.customerId,
+                allPay: this.vipData[this.radioValue].allPay,
+                payDate: this.vipData[this.radioValue].payDate,
+                selectFaceId: self.selectFaceId,
+            };
+            self.phone = this.vipData[this.radioValue].customer.phone;
+            self.getMemberTicket(this.vipData[this.radioValue].customer.customerId);
+        } else {
+            self.memberInfo = {};
         }
-
+        this.vipDataBoolean = false;
     }
-
 }

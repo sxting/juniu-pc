@@ -584,10 +584,9 @@ export class ManageService {
         return Observable.throw(error);
       });
   }
-  getAllbuySearch1(storeId: string) {
+  getAllbuySearch1(data: any) {
     let apiUrl = Config.API + '/product/product/buySearch.json';
-    let req = FunctionUtil.obectToURLSearchParams({ storeId: storeId });
-    return this.http.get(apiUrl, { storeId: storeId }).map((response: Response) => response).catch(error => {
+    return this.http.get(apiUrl, data).map((response: Response) => response).catch(error => {
       return Observable.throw(error);
     });
   }
@@ -753,5 +752,22 @@ export class ManageService {
         return Observable.throw(error);
       });
   }
-  
+  //权限控制  菜单路由
+  menuRoute(data) {
+    // GET /store/bind.json
+    let apiUrl = Config.API1 + 'account/merchant/module/menu/route.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+  packageBatch() {
+    let apiUrl = Config.API1 + 'account/merchant/module/package/batch.json';
+    return this.http.get(apiUrl)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
 }

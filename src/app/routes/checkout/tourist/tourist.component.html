@@ -33,6 +33,11 @@
                                 查询会员
                             </button>
                         </ng-template>
+                        <div class="vipArrBox" *ngIf="vipDataBoolean">
+                            <nz-radio-group [(ngModel)]="radioValue" style="display: block;" (ngModelChange)="vipDataRadio($event)">
+                                <label nz-radio *ngFor="let item of vipData;let ind = index;" (click)="vipDataRadio($event,ind)" nzValue="{{ind}}">姓名：{{item.customer.customerName}} 电话：{{item.customer.phone}}</label>
+                            </nz-radio-group>
+                        </div>
                     </div>
                     <div class="shouyinBottom">
                         <h3 class="flex-1 text-lg borderLeft">选择商品
@@ -97,8 +102,8 @@
                                                 <div nz-col nzSpan="12" class="textAline">技 师</div>
 
                                                 <div nz-col nzSpan="12" class="colorRed">
-                                                    <nz-select style="width: 90px;" [(ngModel)]="selectedValue" nzAllowClear nzPlaceHolder="选择员工">
-                                                        <nz-option *ngFor="let item of staffGroupData" nzValue="{{item.staffId}}" nzLabel="{{item.staffName}}"></nz-option>
+                                                    <nz-select style="width: 90px;" [(ngModel)]="item.staff" nzAllowClear nzPlaceHolder="选择员工">
+                                                        <nz-option *ngFor="let staff of item.staffGroupData" nzValue="{{staff.staffId}}" nzLabel="{{staff.staffName}}"></nz-option>
                                                     </nz-select>
                                                 </div>
                                             </div>
@@ -114,8 +119,8 @@
                                                 <div nz-col nzSpan="12" class="textAline">小 工</div>
                                                 <div nz-col nzSpan="12" class="colorRed">
                                                     <div nz-col nzSpan="12" class="colorRed">
-                                                        <nz-select style="width: 90px;" [(ngModel)]="selectedValue" nzAllowClear nzPlaceHolder="选择员工">
-                                                            <nz-option *ngFor="let item of staffGroupData" nzValue="{{item.staffId}}" nzLabel="{{item.staffName}}"></nz-option>
+                                                        <nz-select style="width: 90px;" [(ngModel)]="item.xiaogong" nzAllowClear nzPlaceHolder="选择员工">
+                                                            <nz-option *ngFor="let xiaogong of item.staffGroupData" nzValue="{{xiaogong.staffId}}" nzLabel="{{xiaogong.staffName}}"></nz-option>
                                                         </nz-select>
                                                     </div>
                                                 </div>
@@ -182,8 +187,8 @@
                                 <div class="lineHeight50 formItemBorder kouka">
                                     <div nz-col style="text-align:left;" nzSpan="6">扣卡</div>
                                     <div nz-col nzSpan="18">
-                                        <div nz-col nzSpan="18" class="yhjBox kouka2">
-                                            <label nz-checkbox *ngFor="let item of vipCardList" [(ngModel)]="item.checked">
+                                        <div nz-col nzSpan="16" class="yhjBox kouka2">
+                                            <label nz-checkbox *ngFor="let item of vipCardList" (ngModelChange)="cardChangeFun(item.card.cardConfigRuleId)" [(ngModel)]="item.checked">
                                                 <span>
                                                     <span>
                                                         <span class="iconfont icon-card"></span>
@@ -192,11 +197,11 @@
                                                     <br />
                                                     <span class="ziti" *ngIf="item.applyProductType === 'SERVICEITEMS'">限全部服务项目可用</span>
                                                     <span class="ziti" *ngIf="item.applyProductType === 'ALL'">限全部商品可用</span>
-                                                    <span class="ziti" *ngIf="item.applyProductType === 'CUSTOMIZE'">限0001商品名称使用名称使用使用…</span>
+                                                    <span class="ziti" *ngIf="item.applyProductType === 'CUSTOMIZE'">限{{item.getApplyProductNames}}使用</span>
                                                 </span>
                                             </label>
                                         </div>
-                                        <div style="text-align:right;" nz-col nzSpan="6" *ngIf="vipShowMoney">-{{vipShowMoney/100}}元</div>
+                                        <div style="text-align:right;" nz-col nzSpan="8" *ngIf="vipShowMoney">-{{vipShowMoney/100}}元</div>
                                     </div>
                                 </div>
                             </nz-form-item>
@@ -205,7 +210,8 @@
                                     <div nz-col style="text-align:left;" nzSpan="6">是否抹零</div>
                                     <div nz-col nzSpan="18">
                                         <nz-switch style="float:left;" (ngModelChange)="moling()" [ngModel]="isVerb" nzCheckedChildren="是" nzUnCheckedChildren="否"></nz-switch>
-                                        <span style="float:right;">收款：{{isVerb?isVerbMoney:totolMoney}}元</span>
+                                        <span style="float:right;">收款：
+                                            <input type="text" style="width:100px;" [(ngModel)]="inputValue" nz-input> </span>
                                     </div>
                                 </div>
                             </nz-form-item>
@@ -244,6 +250,11 @@
                                 查询会员
                             </button>
                         </ng-template>
+                        <div class="vipArrBox" *ngIf="vipDataBoolean">
+                            <nz-radio-group [(ngModel)]="radioValue" style="display: block;" (ngModelChange)="vipDataRadio($event)">
+                                <label nz-radio *ngFor="let item of vipData;let ind = index;" (click)="vipDataRadio($event,ind)" nzValue="{{ind}}">姓名：{{item.customer.customerName}} 电话：{{item.customer.phone}}</label>
+                            </nz-radio-group>
+                        </div>
                         <div class="kaitongVIP iconfont icon-iconfonticon02" (click)="kaitongVipFun(kaitongVip)">开通新会员</div>
                     </div>
                     <div class="shouyinBottom">

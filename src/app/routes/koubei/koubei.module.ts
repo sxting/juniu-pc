@@ -20,13 +20,17 @@ import { KoubeiService } from './shared/koubei.service';
 import { AddKoubeiProductComponent } from './add-koubei-product/add-koubei-product.component';
 import { OrderVerificationComponent } from './order-verification/order-verification.component';
 import { NoteNumKoubeiComponent } from './noteNumKoubei/noteNumKoubei.component';
+import { KoubeiMsmNoticeComponent } from './koubei-msm-notice/koubei-msm-notice.component';
+import { MsmNoticeComponent } from '../setings/msm-notice/msm-notice.component';
+import { SetingsModule } from '../setings/setings.module';
 
 const COMPONENT_NOROUNT = [];
 
 @NgModule({
   imports: [
     SharedModule,
-    KoubeiRoutingModule
+    KoubeiRoutingModule,
+    SetingsModule
   ],
   declarations: [
       ...COMPONENT_NOROUNT,
@@ -47,7 +51,8 @@ const COMPONENT_NOROUNT = [];
       KoubeiPrintComponent,
       AddKoubeiProductComponent,
       OrderVerificationComponent,
-      NoteNumKoubeiComponent
+      NoteNumKoubeiComponent,
+      KoubeiMsmNoticeComponent,
   ],
   providers: [KoubeiService],
   entryComponents: COMPONENT_NOROUNT

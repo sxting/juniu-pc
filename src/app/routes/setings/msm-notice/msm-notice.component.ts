@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
+import { SetingsService } from '../shared/setings.service';
+import { NzModalService } from 'ng-zorro-antd';
+import { TemplateRef } from '@angular/core';
 declare var DataSet;
 declare var echarts;
 
@@ -43,29 +46,55 @@ export class MsmNoticeComponent implements OnInit {
         { "x": 1523382274964, "y1": 90, "y2": 43 },
         { "x": 1523384074964, "y1": 25, "y2": 29 }
     ];
+    dateUnit: any;
+    startDay: any;
+    endDay: any;
+    surplusNumber: number = 0;
+    startDate: any;
+    endDate: any;
+    dateType: any;
+    openCard: boolean = false;
+    recharge: boolean = false;
+    consume: boolean = false;
+    reserveRemind: boolean = false;
+    reserveSuccess: boolean = false;
+    reserveRefuse: boolean = false;
+    dateRange: any;
+    dataNote: any;
+    radioValue: any;
     constructor(
+        private setingsService: SetingsService,
+        private modalSrv: NzModalService,
         private http: _HttpClient
     ) { }
 
     ngOnInit() {
-        this.openCardEchart();
+        this.smsStatisticsHttp();
+        this.configQueryHttp();
+        this.smsListHttp();
     }
     //开卡类型分布
-    openCardEchart() {
-
+    openCardEchart(data) {
+        let data1 = [], data2 = [];
+        if (data && data.length > 0) {
+            data.forEach(function (i: any) {
+                data1.push(i.date);
+                data2.push(i.usedNumber);
+            })
+        }
         let that = this;
         let option = {
             xAxis: {
                 type: 'category',
                 boundaryGap: false,
-                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                data: data1
             },
             yAxis: {
                 type: 'value'
             },
             series: [{
                 smooth: true,
-                data: [820, 932, 901, 934, 1290, 1330, 1320],
+                data: data2,
                 type: 'line',
                 areaStyle: {
                     normal: {
@@ -83,5 +112,188 @@ export class MsmNoticeComponent implements OnInit {
 
         let myChart = echarts.init(document.getElementById('top_chart'));
         myChart.setOption(option);
+    }
+    smsStatisticsHttp() {
+        let data = {
+            startTime: this.startDay,
+            endTime: this.endDay,
+            timestamp: new Date().getTime()
+        }
+        if (!data.startTime && !data.endTime) { delete data.startTime; delete data.endTime }
+        this.setingsService.smsStatistics(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.openCardEchart(res.data.items);
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    })
+                }
+            }, error => this.errorAlter(error)
+        );
+    }
+    configQueryHttp() {
+        this.setingsService.configQuery().subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.surplusNumber = res.data.surplusNumber || 0;
+                    if (res.data.configList) {
+                        if (res.data.configList.indexOf('NOTICE_OPENCARD') > -1) this.openCard = true;
+                        if (res.data.configList.indexOf('NOTICE_RECHARGE') > -1) this.recharge = true;
+                        if (res.data.configList.indexOf('NOTICE_CONSUME') > -1) this.consume = true;
+                        if (res.data.configList.indexOf('RESERVE_TO_MERCHANT') > -1) this.reserveRemind = true;
+                        if (res.data.configList.indexOf('RESERVE_SUCCESS_CUSTOMER') > -1) this.reserveSuccess = true;
+                        if (res.data.configList.indexOf('RESERVE_RSFUSE_CUSTOMER') > -1) this.reserveRefuse = true;
+                    }
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    })
+                }
+            }, error => this.errorAlter(error)
+        );
+    }
+    configFun(type: any) {
+        let data = {
+            bizType: type
+        }
+        this.setingsService.configSet(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.modalSrv.success({
+                        nzContent: '更改成功'
+                    })
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    })
+                }
+            }, error => this.errorAlter(error)
+        );
+    }
+    errorAlter(err: any) {
+        this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: err
+        });
+    }
+    formatDateTime(date: any) {
+        let year = date.getFullYear();
+        let month = date.getMonth() + 1;
+        let day = date.getDate();
+        return year + '-' + (month.toString().length > 1 ? month : ('0' + month)) + '-' + (day.toString().length > 1 ? day : ('0' + day));
+    }
+
+    //获得本周的开端日期 
+    getWeekStartDate(nowYear, nowMonth, nowDay, nowDayOfWeek) {
+        var weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek + 1);
+        return weekStartDate;
+    }
+
+    //获得本周的停止日期 
+    getWeekEndDate(nowYear, nowMonth, nowDay, nowDayOfWeek) {
+        var weekEndDate = new Date(nowYear, nowMonth, nowDay + (7 - nowDayOfWeek));
+        return weekEndDate;
+    }
+
+    //获得本月的开端日期 
+    getMonthStartDate(nowYear, nowMonth, nowDay, nowDayOfWeek) {
+        var monthStartDate = new Date(nowYear, nowMonth, 1);
+        return monthStartDate;
+    }
+    getMonthDays(myMonth, nowYear) {
+        var monthStartDate = new Date(nowYear, myMonth, 1);
+        var monthEndDate = new Date(nowYear, myMonth + 1, 1);
+        var days = (monthEndDate.getTime() - monthStartDate.getTime()) / (1000 * 60 * 60 * 24);
+        return days;
+    }
+    //获得本月的停止日期 
+    getMonthEndDate(nowYear, nowMonth, nowDay, nowDayOfWeek) {
+        var monthEndDate = new Date(nowYear, nowMonth, this.getMonthDays(nowMonth, nowYear));
+        return monthEndDate;
+    }
+    console2(e: any) {
+        var now = new Date(); //当前日期 
+        var nowDayOfWeek = now.getDay(); //今天本周的第几天 
+        var nowDay = now.getDate(); //当前日 
+        var nowMonth = now.getMonth(); //当前月 
+        var nowYear = now.getFullYear(); //当前年 
+        nowYear += (nowYear < 2000) ? 1900 : 0; // 
+        var weekStartDate = this.getWeekStartDate(nowYear, nowMonth, nowDay, nowDayOfWeek);
+        var weekEndDate = this.getWeekEndDate(nowYear, nowMonth, nowDay, nowDayOfWeek);
+        var monthStartDate = this.getMonthStartDate(nowYear, nowMonth, nowDay, nowDayOfWeek);
+        var monthEndDate = this.getMonthEndDate(nowYear, nowMonth, nowDay, nowDayOfWeek);
+        var yearStartDate = nowYear + '-01-01';
+        var yearEndDate = nowYear + '-12-31';
+        this.dateType = e.type;
+        if (e.index === 0) {
+            this.startDay = this.formatDateTime(weekStartDate);
+            this.endDay = this.formatDateTime(weekEndDate);
+        } else if (e.index === 1) {
+            this.startDay = this.formatDateTime(monthStartDate);
+            this.endDay = this.formatDateTime(monthEndDate);
+        } else if (e.index === 2) {
+            this.startDay = yearStartDate;
+            this.endDay = yearEndDate;
+        }
+        this.startDate = new Date(this.startDay);
+        this.endDate = new Date(this.endDay);
+        let date = [];
+        date.push(this.startDate);
+        date.push(this.endDate);
+        this.dateRange = date;
+        this.smsStatisticsHttp();
+    }
+    rangePicker(e: any) {
+        if (e) {
+            this.startDay = this.formatDateTime(e[0]);
+            this.endDay = this.formatDateTime(e[1]);
+        }
+        this.smsStatisticsHttp();
+    }
+
+    msmAlert(tpl: TemplateRef<{}>) {
+        let that = this;
+        let packageId = this.radioValue;
+        this.modalSrv.create({
+            nzTitle: '请选择一个短信包',
+            nzContent: tpl,
+            nzWidth: '800px',
+            nzOnOk: () => {
+                that.smsRechargeHttp(packageId);
+            }
+        });
+    }
+    smsListHttp() {
+        let that = this;
+        this.setingsService.smsBatch().subscribe(
+            (res: any) => {
+                if (res) {
+                    that.dataNote = res.data.items;
+                }
+            },
+            error => {
+                this.errorAlter(error);
+            }
+        );
+    }
+    smsRechargeHttp(packageId: any) {
+        let that = this;
+        let data = {
+            packageId: packageId
+        }
+        this.setingsService.smsRecharge(data).subscribe(
+            (res: any) => {
+                if (res) {
+                    that.dataNote = res.data.items;
+                }
+            },
+            error => {
+                this.errorAlter(error);
+            }
+        );
     }
 }

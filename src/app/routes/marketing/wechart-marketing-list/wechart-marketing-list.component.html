@@ -49,13 +49,15 @@
                 <tbody>
                 <tr *ngFor="let item of data;let ind = index;">
                     <td>{{ind+1}}</td>
-                    <td>{{item.marketingType==='MEMBER'?'会员营销':item.marketingType==='SECOND'?'二次营销':'微信领劵'}}</td>
+                    <td>
+                        {{item.scene==='WECHAT_FESTIVAL_GIFT'?'节日主题活动':item.scene==='WECHAT_NEW_PROMOTION'?'新品促销':'指定项目促销'}}
+                    </td>
                     <td>{{item.couponDef.couponDefType==='MONEY'?'代金券':item.couponDef.couponDefType==='DISCOUNT'?'折扣券':'礼品券'}}</td>
                     <td>{{item.marketingName}}</td>
                     <td>{{item.marketingStatus==='RUNING'?'进行中':item.marketingStatus==='INIT'?'未开始':'已结束'}}</td>
                     <td>{{item.marketingStartTime}}--{{item.marketingEndTime}}</td>
                     <td>
-                        <span (click)="activtyRouter(item.marketingType,item.marketingStatus,item.marketingId)">查询详情</span>
+                        <span (click)="activtyRouter(item.scene,item.marketingStatus,item.marketingId)">查询详情</span>
                         <span style="margin-left:20px;" *ngIf="item.marketingStatus==='INIT'||item.marketingStatus==='RUNING'" (click)="effectStopHttp(item.marketingId)">停止</span>
                     </td>
                 </tr>

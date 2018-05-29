@@ -4,7 +4,12 @@ import {Injectable} from '@angular/core';
 export class SoftTransferService {
 
 
-    step: 0 | 1 | 2  = 0;
+  step: 0 | 1 | 2 | 3 = 0;
+  package: any;
+  storeArr: any;
+  totalPrice: any = 0;
+
+  storeId: any = '';
 
     again() {
         this.step = 0;

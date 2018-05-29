@@ -1,6 +1,6 @@
 import {Component, OnInit, TemplateRef} from '@angular/core';
 import { _HttpClient } from '@delon/theme';
-import { ActivatedRoute } from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { NzMessageService, NzModalService } from "ng-zorro-antd";
 import {Title} from "@angular/platform-browser";
@@ -10,6 +10,7 @@ import {USER_INFO, STORES_INFO} from "@shared/define/juniu-define";
 import {FunctionUtil} from "@shared/funtion/funtion-util";
 import * as addDays from 'date-fns/add_days';
 import * as getISOWeek from 'date-fns/get_iso_week';
+import * as differenceInDays from 'date-fns/difference_in_days';
 
 @Component({
   selector: 'app-marketings-page',
@@ -69,6 +70,8 @@ export class MarketingsPageComponent implements OnInit {
     ];
     selectedWeek1: any = this.initWeekData1[0].name;
     selectedWeek2: any = this.initWeekData2[0].name;
+    unUseStartTime: any = new Date().getHours() + ':' + new Date().getMinutes();
+    unUseEndTime: any = new Date().getHours() + ':' + new Date().getMinutes();
     giftProductList: any = []; //礼品列表
     selectedGiftProduct: any = '赠送礼品名称';
 
@@ -101,10 +104,17 @@ export class MarketingsPageComponent implements OnInit {
     needSendKey: any = '';
     memberType: any = 'ALL';
 
+    disabledDate = (current: Date): boolean => {
+        return differenceInDays(current, new Date(new Date().getTime() + 24*60*60*1000)) < 0;
+    };
+
+    //编辑
     marketingId: any = '';
+    marketingStatus: any = '';
 
     constructor(
         private route: ActivatedRoute,
+        private router: Router,
         private fb: FormBuilder,
         private msg: NzMessageService,
         private titleService: Title,
@@ -159,8 +169,12 @@ export class MarketingsPageComponent implements OnInit {
             this.limitLastTime = false;
         }
 
-        this.formInit();
-        this.getGiftList();
+        if(this.marketingId) {
+            this.getThreeCoupons();
+            this.editFormInit();
+        } else {
+            this.formInit();
+        }
     }
 
     //活动对象
@@ -195,6 +209,7 @@ export class MarketingsPageComponent implements OnInit {
 
     //点击创建优惠券按钮
     onCreateCouponClick(tpl: TemplateRef<{}>) {
+        this.getGiftList();
         this.modalSrv.create({
             nzTitle: '优惠券设置',
             nzContent: tpl,
@@ -223,6 +238,13 @@ export class MarketingsPageComponent implements OnInit {
     onCouponItemClick(item: any) {
         this.coupon = item;
         this.couponId = item.couponDefId;
+        let disabledWeekDateArr = item.disabledWeekDate.split(',');
+        this.selectedWeek1 = this.weekText(disabledWeekDateArr[0]);
+        this.selectedWeek2 = this.weekText(disabledWeekDateArr[disabledWeekDateArr.length-1]);
+        this.unUseStartTime = (new Date(item.validDateStart).getHours().toString().length < 2 ? ('0'+ new Date(item.validDateStart).getHours()) : new Date(item.validDateStart).getHours()) + ':' +
+        (new Date(item.validDateStart).getMinutes().toString().length < 2 ? ('0' + new Date(item.validDateStart).getMinutes()) : new Date(item.validDateStart).getMinutes());
+        this.unUseEndTime = (new Date(item.validDateEnd).getHours().toString().length < 2 ? ('0'+ new Date(item.validDateEnd).getHours()) : new Date(item.validDateEnd).getHours()) + ':' +
+        (new Date(item.validDateEnd).getMinutes().toString().length < 2 ? ('0' + new Date(item.validDateEnd).getMinutes()) : new Date(item.validDateEnd).getMinutes());
         this.modalSrv.closeAll();
     }
 
@@ -341,6 +363,15 @@ export class MarketingsPageComponent implements OnInit {
         this.selectedWeek2 = e.name;
     }
 
+    onCouponTime1Change(e: any) {
+      this.unUseStartTime = (e.getHours().toString().length < 2 ? ('0'+ e.getHours()) : e.getHours()) + ':' +
+        (e.getMinutes().toString().length < 2 ? ('0' + e.getMinutes()) : e.getMinutes());
+    }
+    onCouponTime2Change(e: any) {
+        this.unUseEndTime = (e.getHours().toString().length < 2 ? ('0'+ e.getHours()) : e.getHours()) + ':' +
+          (e.getMinutes().toString().length < 2 ? ('0' + e.getMinutes()) : e.getMinutes());
+    }
+
     //优惠券设置保存
     submitCouponCreate() {
         for (const i in this.form2.controls) {
@@ -377,7 +408,36 @@ export class MarketingsPageComponent implements OnInit {
         if(this.paramsId == '05' || this.paramsId == '12') {
             data.single = 1;
         }
-        // console.log(JSON.stringify(data));
+        if(this.unUseTime) {
+            let disabledWeekDateArr = [];
+            let week1 = this.form2.value.selected_week1.value;
+            let week2 = this.form2.value.selected_week2.value;
+            let week = week1, week_2 = 1;
+            if(week1 < week2) {
+                for(let i=0; i<=week2-week1; i++) {
+                    disabledWeekDateArr.push(week);
+                    week++
+                }
+            }
+            if(week1 > week2) {
+                for(let i=0; i<=7-week1; i++) {
+                    disabledWeekDateArr.push(week);
+                    week++
+                }
+                for(let i=0; i<week2; i++) {
+                    disabledWeekDateArr.push(week_2);
+                    week_2++
+                }
+            }
+            let time1 = new Date(this.form2.value.un_use_start_time);
+            let time2 = new Date(this.form2.value.un_use_end_time);
+            data.disabledWeekDate = disabledWeekDateArr.join(',');
+            data.disabledTimeStartStr = '2000-01-01 ' + time1.getHours() + ':' + time1.getMinutes() + ':00';
+            data.disabledTimeEndStr =  '2000-01-01 ' + time2.getHours() + ':' + time2.getMinutes() + ':00';
+            // console.log(new Date(data.disabledTimeEndStr));
+        }
+
+        console.log(JSON.stringify(data));
         this.saveCouponDef(data);
     }
 
@@ -403,19 +463,11 @@ export class MarketingsPageComponent implements OnInit {
             });
             return;
         }
-        if (this.form.value.sms_content && !this.form.value.sms_send_date) {
-            this.modalSrv.error({
-                nzTitle: '温馨提示',
-                nzContent: '请选择短信发送时间'
-            });
-            return;
-        }
         this.submitting = true;
 
         let data: any;
-
         let sendTime: any = '';
-        if(this.form.value.sms_send_date) {
+        if(this.form.value.sms_send_date && this.form.value.sms_send_time) {
             sendTime = FunctionUtil.changeDate(this.form.value.sms_send_date) + ' ' + (this.form.value.sms_send_time.getHours()) + ':00:00';
             if(new Date(FunctionUtil.changeDate(this.form.value.sms_send_date) + ' 00:00:00').getTime() < new Date((FunctionUtil.changeDate(this.nowTime) + ' 00:00:00')).getTime()) {
                 sendTime = FunctionUtil.changeDate(this.nowTime) + ' ' + (new Date().getHours()+1) + ':00:00';
@@ -425,9 +477,21 @@ export class MarketingsPageComponent implements OnInit {
         }
 
         if(this.paramsId == '11') {
-            // 微信营销
+            // 微信营销 节日主题活动
+            data = {
+                marketingType: 'WECHAT', //
+                marketingName: this.form.value.activity_name, //活动名称 *
+                applyStoreIds: this.selectStoresIds, //门店id *
+                applyStoreNames: this.selectStoresNames, //门店名称 *
+                festival: FunctionUtil.changeDate(this.form.value.sms_send_date), //发送时间 * sendTime: "2018-05-22"
+                pullLimitType: 'UNLIMIT', //领券限制类型 UNLIMIT("无限制"),TOTAL("总数量"),目前均是无限制
+                couponDefId: this.couponId,
+                marketingId: this.marketingId,
+                lastConsume: -1, //最后一次消费时间 *
+                marketingStatus: 'RUNING', // INIT(\"未开始\"),RUNING(\"进行中\"),STOP(\"已经结束\")
+            };
         }
-        else if(this.paramsId > '11') {
+        else if(this.paramsId == '12' || this.paramsId == '13') {
             // 微信营销
             data = {
                 marketingType: 'WECHAT', //
@@ -437,6 +501,7 @@ export class MarketingsPageComponent implements OnInit {
                 applyStoreNames: this.selectStoresNames, //门店名称 *
                 marketingStartTime: FunctionUtil.changeDate(this.form.value.active_date[0]) + ' 00:00:00', //活动开始时间
                 marketingEndTime:  FunctionUtil.changeDate(this.form.value.active_date[1]) + ' 23:59:59', //活动结束时间
+                sendTime: sendTime, //发送时间 * sendTime: "2018-05-22 15:00:00"
                 pullLimitType: 'UNLIMIT', //领券限制类型 UNLIMIT("无限制"),TOTAL("总数量"),目前均是无限制
                 couponDefId: this.couponId,
                 marketingId: this.marketingId,
@@ -453,42 +518,285 @@ export class MarketingsPageComponent implements OnInit {
                 sendCouponCount: 1, //发送优惠券数量 *
                 marketingStartTime: FunctionUtil.changeDate(this.form.value.active_date[0]) + ' 00:00:00', //活动开始时间
                 marketingEndTime: FunctionUtil.changeDate(this.form.value.active_date[1]) + ' 23:59:59', //活动结束时间
-                isSendSms: this.form.value.sms_content ? 1 : 0, //是否发送短信 *
-                sendSmsContent: this.form.value.sms_content, //短信内容 *
+                isSendSms: this.smsInputValue ? 1 : 0, //是否发送短信 *
+                sendSmsContent: this.smsInputValue, //短信内容 *
+                sendTime: sendTime, //发送时间 * sendTime: "2018-05-22 15:00:00"
                 pullLimitType: 'UNLIMIT', //领券限制类型 UNLIMIT("无限制"),TOTAL("总数量"),目前均是无限制
                 couponDefId: this.couponId,
                 marketingId: this.marketingId,
             };
-        } else {
-            //会员营销
-            if(this.paramsId == '03' || this.paramsId == '04') {
+        } else if(this.paramsId == '03') {
+            //会员生日礼
+            data = {
+                marketingType: 'MEMBER', //活动类型
+                marketingName: this.form.value.activity_name, //活动名称 *
+                // applyMemberType: this.memberType, //会员类型 * ALL全部会员;CARD 持卡会员;CUSTOMER 潜在会员
+                aheadDays: this.sendTimeToday ? 0 : this.form.value.send_time_day,
+                applyStoreIds: this.selectStoresIds, //门店id *
+                applyStoreNames: this.selectStoresNames, //门店名称 *
+                marketingStatus: this.form.value.activity_on_off ? 'RUNING' : 'INIT', //
+                // lastConsume: this.form.value.activity_obj_days ? this.form.value.activity_obj_days : -1, //最后一次消费时间 *
+                isSendSms: this.smsInputValue ? 1 : 0, //是否发送短信 * 0 1
+                sendSmsContent: this.smsInputValue, //短信内容 *
+                // sendTime: sendTime, //发送时间 * sendTime: "2018-05-22 15:00:00"
+                needSendKey: this.needSendKey, //
+                pullLimitType: 'UNLIMIT', //领取限制
+                couponDefId: this.couponId,
+                marketingId: this.marketingId,
+            };
 
+        } else if(this.paramsId == '04') {
+            //会员节日礼
+            data = {
+                marketingType: 'MEMBER', //活动类型
+                marketingName: this.form.value.activity_name, //活动名称 *
+                applyMemberType: this.memberType, //会员类型 * ALL全部会员;CARD 持卡会员;CUSTOMER 潜在会员
+                applyStoreIds: this.selectStoresIds, //门店id *
+                applyStoreNames: this.selectStoresNames, //门店名称 *
+                lastConsume: -1, //最后一次消费时间 *
+                isSendSms: this.smsInputValue ? 1 : 0, //是否发送短信 * 0 1
+                sendSmsContent: this.smsInputValue, //短信内容 *
+                festival: FunctionUtil.changeDate(this.form.value.sms_send_date), //发送时间 * sendTime: "2018-05-22 15:00:00"
+                marketingStatus: this.form.value.activity_on_off ? 'RUNING' : 'INIT', // INIT(\"未开始\"),RUNING(\"进行中\"),STOP(\"已经结束\")
+                pullLimitType: 'UNLIMIT', //领取限制
+                couponDefId: this.couponId,
+                marketingId: this.marketingId,
+            };
+        } else {
+            //普通会员营销
+            data = {
+                marketingType: 'MEMBER', //活动类型
+                marketingName: this.form.value.activity_name, //活动名称 *
+                applyMemberType: this.memberType, //会员类型 * ALL全部会员;CARD 持卡会员;CUSTOMER 潜在会员
+                applyStoreIds: this.selectStoresIds, //门店id *
+                applyStoreNames: this.selectStoresNames, //门店名称 *
+                lastConsume: this.form.value.activity_obj_days ? this.form.value.activity_obj_days : -1, //最后一次消费时间 *
+                isSendSms: this.smsInputValue ? 1 : 0, //是否发送短信 * 0 1
+                sendSmsContent: this.smsInputValue, //短信内容 *
+                sendTime: sendTime, //发送时间 * sendTime: "2018-05-22 15:00:00"
+                marketingStartTime: FunctionUtil.changeDate(this.form.value.active_date[0]) + ' 00:00:00', //活动开始时间
+                marketingEndTime: FunctionUtil.changeDate(this.form.value.active_date[1]) + ' 23:59:59', //活动结束时间
+                needSendKey: this.needSendKey, //
+                pullLimitType: 'UNLIMIT', //领取限制
+                couponDefId: this.couponId,
+                marketingId: this.marketingId,
+            };
+        }
+
+        switch(this.paramsId) {
+            case '01':
+                data.scene = 'AWAKENING';
+                break;
+            case '02':
+                data.scene = 'TRANSFORMATION';
+                break;
+            case '03':
+                data.scene = 'BIRTHDAY_GIFT';
+                break;
+            case '04':
+                data.scene = 'FESTIVAL_GIFT';
+                break;
+            case '05':
+                data.scene = 'NEW_PROMOTION';
+                break;
+            case '06':
+                data.scene = 'PRODUCT_PROMOTION';
+                break;
+            case '07':
+                data.scene = 'SECONDARY_GIFT';
+                break;
+            case '08':
+                data.scene = 'SECONDARY_DISCOUNT';
+                break;
+            case '09':
+                data.scene = 'SECONDARY_REDUCE';
+                break;
+            case '11':
+                data.scene = 'WECHAT_FESTIVAL_GIFT';
+                break;
+            case '12':
+                data.scene = 'WECHAT_NEW_PROMOTION';
+                break;
+            case '13':
+                data.scene = 'WECHAT_PRODUCT_PROMOTION';
+        }
+
+        if(this.marketingId) {
+            if(this.paramsId == '03') {
+                this.updateGiftFirthday(data);
+            } else if(this.paramsId == '04' || this.paramsId == '11') {
+                this.updateGiftFestival(data);
             } else {
-                data = {
-                    marketingType: 'MEMBER', //活动类型
-                    marketingName: this.form.value.activity_name, //活动名称 *
-                    applyMemberType: this.memberType, //会员类型 * ALL全部会员;CARD 持卡会员;CUSTOMER 潜在会员
-                    applyStoreIds: this.selectStoresIds, //门店id *
-                    applyStoreNames: this.selectStoresNames, //门店名称 *
-                    lastConsume: this.form.value.activity_obj_days ? this.form.value.activity_obj_days : -1, //最后一次消费时间 *
-                    isSendSms: this.form.value.sms_content ? 1 : 0, //是否发送短信 * 0 1
-                    sendSmsContent: this.form.value.sms_content, //短信内容 *
-                    sendTime: sendTime, //发送时间 * sendTime: "2018-05-22 15:00:00"
-                    marketingStartTime: FunctionUtil.changeDate(this.form.value.active_date[0]) + ' 00:00:00', //活动开始时间
-                    marketingEndTime: FunctionUtil.changeDate(this.form.value.active_date[1]) + ' 23:59:59', //活动结束时间
-                    needSendKey: this.needSendKey, //
-                    pullLimitType: 'UNLIMIT', //领取限制
-                    couponDefId: this.couponId,
-                    marketingId: this.marketingId,
-                };
+                this.editThreeCoupons(data);
+            }
+        } else {
+            if(this.paramsId == '03') {
+                this.createGiftFirthday(data);
+            } else if(this.paramsId == '04' || this.paramsId == '11') {
+                this.createGiftFestival(data);
+            } else {
+                this.createMarketing(data);
             }
         }
 
-        this.createMarketing(data);
     }
 
     /*============分界线============*/
 
+    /*编辑start*/
+    //获取活动信息
+    getThreeCoupons() {
+        let data = {
+            marketingId: this.marketingId
+        };
+        this.marketingService.getThreeCoupons(data).subscribe(
+            (res: any) => {
+                if(res.success) {
+                    let data = res.data;
+                    this.marketingStatus = data.marketingStatus;
+                    this.smsInputValue = data.sendSmsContent;
+                    this.sendTimeToday = data.aheadDays == 0;
+                    this.memberType = data.applyMemberType;
+                    this.selectStoresIds = data.applyStoreIds;
+                    this.selectStoresNames = data.applyStoreNames;
+                    this.coupon = data.couponDef;
+                    this.couponId = data.couponDefId;
+                    let validEndDate = FunctionUtil.getAfterSomeDay(FunctionUtil.changeDate(new Date()), this.coupon.validDateCount);
+                    this.coupon.validEndDate = validEndDate.year + '.' + validEndDate.date.replace('-', '.');
+                    let disabledWeekDateArr = data.couponDef.disabledWeekDate.split(',');
+                    this.selectedWeek1 = this.weekText(disabledWeekDateArr[0]);
+                    this.selectedWeek2 = this.weekText(disabledWeekDateArr[disabledWeekDateArr.length-1]);
+                    this.unUseStartTime = (new Date(data.couponDef.validDateStart).getHours().toString().length < 2 ? ('0'+ new Date(data.couponDef.validDateStart).getHours()) : new Date(data.couponDef.validDateStart).getHours()) + ':' +
+                      (new Date(data.couponDef.validDateStart).getMinutes().toString().length < 2 ? ('0' + new Date(data.couponDef.validDateStart).getMinutes()) : new Date(data.couponDef.validDateStart).getMinutes());
+                    this.unUseEndTime = (new Date(data.couponDef.validDateEnd).getHours().toString().length < 2 ? ('0'+ new Date(data.couponDef.validDateEnd).getHours()) : new Date(data.couponDef.validDateEnd).getHours()) + ':' +
+                      (new Date(data.couponDef.validDateEnd).getMinutes().toString().length < 2 ? ('0' + new Date(data.couponDef.validDateEnd).getMinutes()) : new Date(data.couponDef.validDateEnd).getMinutes());
+
+                    this.form = this.fb.group({
+                        activity_obj_days: [{value: data.lastConsume, disabled: !(data.marketingStatus === 'INIT')}, this.paramsId=='01'||this.paramsId=='02'?[Validators.compose([Validators.required, Validators.pattern(`[0-9]+`)])]:[]],
+                        activity_name: [{value: data.marketingName, disabled: !(data.marketingStatus === 'INIT')}, Validators.required],
+                        activity_on_off: [{value: data.marketingStatus === 'RUNING', disabled: !(data.marketingStatus === 'INIT')}, []],
+                        send_time_day: [{value: data.aheadDays, disabled: !(data.marketingStatus === 'INIT')}, []],
+                        send_menkan: [{value: data.sendLimitMoney/100, disabled: !(data.marketingStatus === 'INIT')}, this.paramsId=='07' || this.paramsId=='08' || this.paramsId == '09' ? [Validators.compose([Validators.required, Validators.pattern(`[0-9]+`)])]:[] ],
+                        sms_content: [{value: data.sendSmsContent, disabled: !(data.marketingStatus === 'INIT')}, []],
+                        active_date: [{value: data.marketingStartTime&&data.marketingEndTime ? [new Date(data.marketingStartTime), new Date(data.marketingEndTime)] : null, disabled: !(data.marketingStatus === 'INIT')}, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' ? [] : [Validators.required]],
+                        sms_send_date: [{value: this.paramsId == '04' || this.paramsId == '11'?new Date(data.festival+ ' 00:00:00'):new Date(data.sendTime), disabled: !(data.marketingStatus === 'INIT')}, this.paramsId == '03' ? [] : [Validators.required]],
+                        sms_send_time: [{value: data.sendTime ? new Date(data.sendTime) : new Date(), disabled: !(data.marketingStatus === 'INIT')}, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' ? [] : [Validators.required]],
+                    });
+
+                    /*门店选择*/
+                    let self =this;
+                    let choiseStoreIdList = data.applyStoreIds.split(',');
+                    this.storesChangeNum = choiseStoreIdList.length;
+                    this.selectStoresIds = choiseStoreIdList.join(',');
+                    this.cityStoreList.forEach(function (city: any) {
+                        city.change = false;
+                        city.checked = false;
+                        city.stores.forEach(function (store: any) {
+                            store.change = false;
+                        });
+                    });
+                    /*初始化选中的门店*/
+                    choiseStoreIdList.forEach(function (storeId: any, i: number) {
+                        self.cityStoreList.forEach(function (city: any, j: number) {
+                            city.stores.forEach(function (store: any, k: number) {
+                                if (storeId === store.storeId) {
+                                    store.change = true;
+                                }
+                            });
+                        });
+                    });
+                    /*判断城市是否全选*/
+                    self.cityStoreList.forEach(function (city: any, i: number) {
+                        let storesChangeArr = [''];
+                        city.stores.forEach(function (store: any, j: number) {
+                            if (store.change === true) {
+                                storesChangeArr.push(store.change);
+                            }
+                        });
+                        if (storesChangeArr.length - 1 === city.stores.length) {
+                            city.change = true;
+                            city.checked = true;
+                        }
+                        if (storesChangeArr.length > 1) {
+                            city.checked = true;
+                        }
+                    });
+
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    })
+                }
+            }
+        )
+    }
+
+    //编辑一般会员营销
+    editThreeCoupons(data: any) {
+        this.marketingService.editThreeCoupons(data).subscribe(
+            (res: any) => {
+                this.submitting = false;
+                if(res.success) {
+                    if(Number(this.paramsId) < 10) {
+                        this.router.navigate(['/marketing/sms/list', {}]);
+                    } else {
+                        this.router.navigate(['/marketing/wechart/list', {}]);
+                    }
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    })
+                }
+            }
+        )
+    }
+
+    //编辑会员节日礼
+    updateGiftFestival(data: any) {
+        this.marketingService.updateGiftFestival(data).subscribe(
+            (res: any) => {
+                this.submitting = false;
+                if(res.success) {
+                    if(this.paramsId) {
+                        this.router.navigate(['/marketing/sms/list', {}]);
+                    } else {
+                        this.router.navigate(['/marketing/wechart/list', {}]);
+                    }
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    })
+                }
+            }
+        )
+    }
+
+    //编辑会员生日礼
+    updateGiftFirthday(data: any) {
+        this.marketingService.updateGiftFirthday(data).subscribe(
+            (res: any) => {
+                this.submitting = false;
+                if(res.success) {
+                    if(Number(this.paramsId) < 10) {
+                        this.router.navigate(['/marketing/sms/list', {}]);
+                    } else {
+                        this.router.navigate(['/marketing/wechart/list', {}]);
+                    }
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    })
+                }
+            }
+        )
+    }
+    /*编辑end*/
+
+    //获取会员数量
     getCalculateMemberNum() {
         let data = {
             memberType: this.memberType,
@@ -510,13 +818,62 @@ export class MarketingsPageComponent implements OnInit {
         )
     }
 
-    //创建活动
+    //创建一般会员营销
     createMarketing(data: any) {
         this.marketingService.createMarketing(data).subscribe(
             (res: any) => {
+                this.submitting = false;
                 if(res.success) {
-                    this.submitting = false;
                     this.msg.success(`保存成功`);
+                    if(Number(this.paramsId) < 10) {
+                        this.router.navigate(['/marketing/sms/list', {}]);
+                    } else {
+                        this.router.navigate(['/marketing/wechart/list', {}]);
+                    }
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            }
+        )
+    }
+
+    //创建会员节日礼
+    createGiftFestival(data: any) {
+        this.marketingService.createGiftFestival(data).subscribe(
+            (res: any) => {
+                this.submitting = false;
+                if(res.success) {
+                    this.msg.success(`保存成功`);
+                    if(Number(this.paramsId) < 10) {
+                        this.router.navigate(['/marketing/sms/list', {}]);
+                    } else {
+                        this.router.navigate(['/marketing/wechart/list', {}]);
+                    }
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            }
+        )
+    }
+
+    //创建会员生日礼
+    createGiftFirthday(data: any) {
+        this.marketingService.createGiftFirthday(data).subscribe(
+            (res: any) => {
+                this.submitting = false;
+                if(res.success) {
+                    this.msg.success(`保存成功`);
+                    if(Number(this.paramsId) < 10) {
+                        this.router.navigate(['/marketing/sms/list', {}]);
+                    } else {
+                        this.router.navigate(['/marketing/wechart/list', {}]);
+                    }
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -563,6 +920,7 @@ export class MarketingsPageComponent implements OnInit {
         if(this.paramsId == '05' || this.paramsId == '12') {
             data.single = 1;
         }
+        let self =this;
         this.marketingService.getCouponDefList(data).subscribe(
             (res: any) => {
                 if(res.success) {
@@ -570,6 +928,14 @@ export class MarketingsPageComponent implements OnInit {
                     this.couponList.forEach(function (item: any) {
                         let validEndDate = FunctionUtil.getAfterSomeDay(FunctionUtil.changeDate(new Date()), item.validDateCount);
                         item.validEndDate = validEndDate.year + '.' + validEndDate.date.replace('-', '.');
+
+                        let disabledWeekDateArr = item.disabledWeekDate.split(',');
+                        item.selectedWeek1 = self.weekText(disabledWeekDateArr[0]);
+                        item.selectedWeek2 = self.weekText(disabledWeekDateArr[disabledWeekDateArr.length-1]);
+                        item.unUseStartTime = (new Date(item.validDateStart).getHours().toString().length < 2 ? ('0'+ new Date(item.validDateStart).getHours()) : new Date(item.validDateStart).getHours()) + ':' +
+                          (new Date(item.validDateStart).getMinutes().toString().length < 2 ? ('0' + new Date(item.validDateStart).getMinutes()) : new Date(item.validDateStart).getMinutes());
+                        item.unUseEndTime = (new Date(item.validDateEnd).getHours().toString().length < 2 ? ('0'+ new Date(item.validDateEnd).getHours()) : new Date(item.validDateEnd).getHours()) + ':' +
+                          (new Date(item.validDateEnd).getMinutes().toString().length < 2 ? ('0' + new Date(item.validDateEnd).getMinutes()) : new Date(item.validDateEnd).getMinutes());
                     });
                 } else {
                     this.modalSrv.error({
@@ -664,6 +1030,35 @@ export class MarketingsPageComponent implements OnInit {
         this.productIdsCount = productCount;
     }
 
+    //传入 1、2、3等数字 转换成周一周二周三等文字
+    weekText(str: any) {
+        let name: any;
+        switch (str) {
+            case '1':
+                name = '周一';
+                break;
+            case '2':
+                name = '周二';
+                break;
+            case '3':
+                name = '周三';
+                break;
+            case '4':
+                name = '周四';
+                break;
+            case '5':
+                name = '周五';
+                break;
+            case '6':
+                name = '周六';
+                break;
+            case '7':
+                name = '周日';
+                break;
+        }
+        return name;
+    }
+
     get activity_obj_days() { return this.form.controls['activity_obj_days']; } //未到店消费的持卡会员
     get coupon_face_money() { return this.form2.controls['coupon_face_money']; } //优惠券面额
     get coupon_use_validity() { return this.form2.controls['coupon_use_validity']; } //优惠券使用有效期
@@ -674,7 +1069,11 @@ export class MarketingsPageComponent implements OnInit {
     get gift_product_name() { return this.form2.controls['gift_product_name']; }
     get selected_product() { return this.form2.controls['selected_product']; }
     get active_date() { return this.form.controls['active_date']; }
-    get send_time() { return this.form.controls['send_time']; }
+    // get send_time() { return this.form.controls['send_time']; }
+    get sms_send_time() { return this.form.controls['sms_send_time']; }
+    get sms_send_date() { return this.form.controls['sms_send_date']; }
+    get un_use_start_time() { return this.form2.controls['un_use_start_time']; }
+    get un_use_end_time() { return this.form2.controls['un_use_end_time']; }
 
     //表单初始化
     formInit() {
@@ -686,9 +1085,8 @@ export class MarketingsPageComponent implements OnInit {
             send_menkan: [null, this.paramsId=='07' || this.paramsId=='08' || this.paramsId == '09' ? [Validators.compose([Validators.required, Validators.pattern(`[0-9]+`)])]:[] ],
             sms_content: ['', []],
             active_date: [null, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' ? [] : [Validators.required]],
-            sms_send_date: [null, []],
-            sms_send_time: [null, []],
-            send_time: [null, this.paramsId == '04' || this.paramsId == '11' ? [Validators.required] : []]
+            sms_send_date: [null, this.paramsId == '03' ? [] : [Validators.required]],
+            sms_send_time: [null, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' ? [] : [Validators.required]],
         });
 
         this.form2 = this.fb.group({
@@ -700,7 +1098,37 @@ export class MarketingsPageComponent implements OnInit {
             gift_product_name: [[], this.paramsId == '07' ? [Validators.required] : []],
             coupon_zhekou: [null, this.paramsId=='08'? [Validators.compose([Validators.required, Validators.pattern(`^(?=[0-9]\.[1-9]|[1-9]\.\d).{3}$|^([0-9])$`)])] : []],
             coupon_note: [null, []],
-            selected_product: [null, this.paramsId == '05' || this.paramsId == '12' ? [Validators.required] : []]
+            selected_product: [null, this.paramsId == '05' || this.paramsId == '12' ? [Validators.required] : []],
+            un_use_start_time: [new Date(), Validators.required],
+            un_use_end_time: [new Date(), Validators.required],
+        });
+    }
+    editFormInit() {
+        this.form = this.fb.group({
+            activity_obj_days: [null, this.paramsId=='01'||this.paramsId=='02'?[Validators.compose([Validators.required, Validators.pattern(`[0-9]+`)])]:[]],
+            activity_name: [null, Validators.required],
+            activity_on_off: [true, []],
+            send_time_day: [null, []],
+            send_menkan: [null, this.paramsId=='07' || this.paramsId=='08' || this.paramsId == '09' ? [Validators.compose([Validators.required, Validators.pattern(`[0-9]+`)])]:[] ],
+            sms_content: ['', []],
+            active_date: [null, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' ? [] : [Validators.required]],
+            sms_send_date: [null, this.paramsId == '03' ? [] : [Validators.required]],
+            sms_send_time: [null, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' ? [] : [Validators.required]],
+            // send_time: [null, this.paramsId == '04' || this.paramsId == '11' ? [Validators.required] : []]
+        });
+
+        this.form2 = this.fb.group({
+            coupon_face_money: [null, this.paramsId=='07' || this.paramsId=='08' ? [] : [Validators.compose([Validators.required, Validators.pattern(`[0-9]+`)])]],
+            use_menkan_money: [1, [Validators.compose([Validators.required, Validators.pattern(`[0-9]+`)])]],
+            coupon_use_validity: [30, [Validators.compose([Validators.required, Validators.pattern(`[0-9]+`)])]],
+            selected_week1: [this.initWeekData1[0], []],
+            selected_week2: [this.initWeekData2[0], []],
+            gift_product_name: [[], this.paramsId == '07' ? [Validators.required] : []],
+            coupon_zhekou: [null, this.paramsId=='08'? [Validators.compose([Validators.required, Validators.pattern(`^(?=[0-9]\.[1-9]|[1-9]\.\d).{3}$|^([0-9])$`)])] : []],
+            coupon_note: [null, []],
+            selected_product: [null, this.paramsId == '05' || this.paramsId == '12' ? [Validators.required] : []],
+            un_use_start_time: [new Date(), Validators.required],
+            un_use_end_time: [new Date(), Validators.required],
         });
     }
     getFormInitData() {
@@ -712,9 +1140,8 @@ export class MarketingsPageComponent implements OnInit {
             send_menkan: [this.form.value.send_menkan, this.paramsId=='07' || this.paramsId=='08' || this.paramsId == '09' ? [Validators.compose([Validators.required, Validators.pattern(`[0-9]+`)])]:[] ],
             sms_content: [this.form.value.sms_content, []],
             active_date: [this.form.value.active_date, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' ? [] : [Validators.required]],
-            sms_send_date: [this.form.value.sms_send_date, []],
-            sms_send_time: [this.form.value.sms_send_time, []],
-            send_time: [this.form.value.send_time, this.paramsId == '04' || this.paramsId == '11' ? [Validators.required] : []],
+            sms_send_date: [this.form.value.sms_send_date, this.paramsId == '03' ? [] : [Validators.required]],
+            sms_send_time: [this.form.value.sms_send_time, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' ? [] : [Validators.required]],
         };
     }
     getForm2InitData() {
@@ -727,7 +1154,9 @@ export class MarketingsPageComponent implements OnInit {
             gift_product_name: [this.form2.value.gift_product_name, this.paramsId == '07' ? [Validators.required] : []],
             coupon_zhekou: [this.form2.value.coupon_zhekou, this.paramsId=='08'? [Validators.compose([Validators.required, Validators.pattern(`^(?=[0-9]\.[1-9]|[1-9]\.\d).{3}$|^([0-9])$`)])] : []],
             coupon_note: [this.form2.value.coupon_note, []],
-            selected_product: [null, this.paramsId == '05' || this.paramsId == '12' ? [Validators.required] : []]
+            selected_product: [null, this.paramsId == '05' || this.paramsId == '12' ? [Validators.required] : []],
+            un_use_start_time: [this.form2.value.un_use_start_time, Validators.required],
+            un_use_end_time: [this.form2.value.un_use_end_time, Validators.required],
         };
     }
 

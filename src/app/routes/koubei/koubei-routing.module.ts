@@ -18,6 +18,7 @@ import { KoubeiPrintComponent } from "./koubei-print/koubei-print.component";
 import { AddKoubeiProductComponent } from "./add-koubei-product/add-koubei-product.component";
 import { OrderVerificationComponent } from './order-verification/order-verification.component';
 import { NoteNumKoubeiComponent } from './noteNumKoubei/noteNumKoubei.component';
+import { KoubeiMsmNoticeComponent } from './koubei-msm-notice/koubei-msm-notice.component';
 
 
 const routes: Routes = [
@@ -38,7 +39,8 @@ const routes: Routes = [
     { path: 'print', component: KoubeiPrintComponent },
     { path: 'add/product', component: AddKoubeiProductComponent },
     { path: 'order-verification', component: OrderVerificationComponent },
-    { path: 'noteNumKoubei', component: NoteNumKoubeiComponent }
+    { path: 'noteNumKoubei', component: NoteNumKoubeiComponent },
+    { path: 'koubeiMsmNotice', component: KoubeiMsmNoticeComponent }    
 ];
 
 @NgModule({

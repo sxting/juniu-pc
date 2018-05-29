@@ -57,7 +57,7 @@ export class MarketingService {
 
     //创建营销活动
     createMarketing(Params: any) {
-        let apiUrl = Config.API + this.member + '/marketing/save.json';
+        let apiUrl = Config.API + this.member + '/marketing/member/save.json';
         return this.http.post(apiUrl, Params)
             .map((response: Response) => response)
             .catch(error => {
@@ -68,6 +68,46 @@ export class MarketingService {
     //编辑 会员营销、二次营销、微信营销
     editThreeCoupons(Params: any) {
         let apiUrl = Config.API + this.member + '/marketing/update.json';
+        return this.http.post(apiUrl, Params)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+
+    //创建会员节日礼
+    createGiftFestival(Params: any) {
+        let apiUrl = Config.API + this.member + '/marketing/gift/festival.json';
+        return this.http.post(apiUrl, Params)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+
+    //创建会员生日礼
+    createGiftFirthday(Params: any) {
+        let apiUrl = Config.API + this.member + '/marketing/gift/birthday.json';
+        return this.http.post(apiUrl, Params)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+
+    //编辑会员节日礼
+    updateGiftFestival(Params: any) {
+        let apiUrl = Config.API + this.member + '/marketing/gift/festival/update.json';
+        return this.http.post(apiUrl, Params)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+
+    //编辑会员生日礼
+    updateGiftFirthday(Params: any) {
+        let apiUrl = Config.API + this.member + '/marketing/gift/birthday/update.json';
         return this.http.post(apiUrl, Params)
             .map((response: Response) => response)
             .catch(error => {
