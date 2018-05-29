@@ -1,4 +1,37 @@
 <div class="step4">
   <p>恭喜您，支付成功！</p>
-  <p>您现在可以立即使用系统全部功能。如需更多线下培训等系统支持，请联系我们</p>
+  <p>您现在可以立即使用系统全部功能。如需更多线下培训等系统支持，请<span (click)="callOurs()">联系我们</span></p>
+  <p>如需发票，请填写如下信息</p>
+
+  <div class="form-box">
+    <nz-form-item class="form-item">
+      <nz-form-label class="lh-62" nzSpan="5">公司名称</nz-form-label>
+      <nz-form-control nzSpan="16">
+        <input nz-input placeholder="请输入公司名称">
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item class="form-item">
+      <nz-form-label class="lh-62" nzSpan="5">纳税人识别号</nz-form-label>
+      <nz-form-control nzSpan="16">
+        <input nz-input placeholder="请输入正确的纳税人识别号">
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item class="form-item">
+      <nz-form-label class="lh-62" nzSpan="5">发票邮寄地址</nz-form-label>
+      <nz-form-control nzSpan="16">
+        <input nz-input placeholder="请输入发票邮寄地址">
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item class="form-item">
+      <nz-form-label class="lh-62" nzSpan="5">联系人手机号</nz-form-label>
+      <nz-form-control nzSpan="16">
+        <input nz-input placeholder="请输入联系人手机号">
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control [nzSpan]="16" [nzOffset]="5">
+        <button nz-button [nzType]="'primary'" (click)="_submitForm()">完成</button>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
 </div>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import { SetingsService } from '../shared/setings.service';
-import { NzModalService } from 'ng-zorro-antd';
+import { NzModalService, NzMessageService } from 'ng-zorro-antd';
 import { TemplateRef } from '@angular/core';
 declare var DataSet;
 declare var echarts;
@@ -62,8 +62,15 @@ export class MsmNoticeComponent implements OnInit {
     dateRange: any;
     dataNote: any;
     radioValue: any;
+    temBoolean = false;
+
+
+    result: any;
+    payType: any = '';
+    codeImgUrl: any = '';
     constructor(
         private setingsService: SetingsService,
+        public msg: NzMessageService,
         private modalSrv: NzModalService,
         private http: _HttpClient
     ) { }
@@ -72,6 +79,12 @@ export class MsmNoticeComponent implements OnInit {
         this.smsStatisticsHttp();
         this.configQueryHttp();
         this.smsListHttp();
+    }
+    onPayWayClick(type: any) {
+        if (!this.payType) {
+            this.payType = type;
+            this.getPayUrl();
+        }
     }
     //开卡类型分布
     openCardEchart(data) {
@@ -257,15 +270,19 @@ export class MsmNoticeComponent implements OnInit {
 
     msmAlert(tpl: TemplateRef<{}>) {
         let that = this;
-        let packageId = this.radioValue;
         this.modalSrv.create({
             nzTitle: '请选择一个短信包',
             nzContent: tpl,
             nzWidth: '800px',
             nzOnOk: () => {
-                that.smsRechargeHttp(packageId);
+            },
+            nzOnCancel: () => {
+                that.temBoolean = false;
             }
         });
+    }
+    radioFun() {
+        this.temBoolean = true;
     }
     smsListHttp() {
         let that = this;
@@ -288,12 +305,87 @@ export class MsmNoticeComponent implements OnInit {
         this.setingsService.smsRecharge(data).subscribe(
             (res: any) => {
                 if (res) {
-                    that.dataNote = res.data.items;
                 }
             },
             error => {
                 this.errorAlter(error);
             }
         );
+    }
+    getPackagePreorder() {
+        let storeIds = [];
+        let packageId = this.radioValue;
+        let data = {
+            packageId: packageId,
+            storeIds: storeIds
+        };
+        this.setingsService.getPackagePreorder(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.result = res.data;
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            }
+        )
+    }
+
+    //获取支付二维码
+    getPayUrl() {
+        let data = {
+            amount: this.result.orderAmount, //价格
+            body: this.result.packageName, //版本名称
+            orderNo: this.result.orderNo, //订单号
+            payType: this.payType, //支付方式
+        };
+        this.setingsService.getPayUrl(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.codeImgUrl = res.data.codeImgUrl;
+                    let self = this, time = 0;
+                    let timer = setInterval(function () {
+                        time += 3000;
+                        if (time >= 6000) {
+                            self.modalSrv.error({
+                                nzTitle: '温馨提示',
+                                nzContent: '支付超时'
+                            });
+                            clearInterval(timer);
+                        }
+                        self.getPayUrlQuery();
+                    }, 3000)
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            }
+        )
+    }
+
+    //查询支付结果
+    getPayUrlQuery() {
+        let data = {
+            orderId: this.result.orderNo,
+        };
+        this.setingsService.getPayUrlQuery(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    //描述:查询支付二维码 订单的支付状态tradeState: SUCCESS—支付成功 REFUND—转入退款 NOTPAY—未支付 CLOSED—已关闭 REVERSE—已冲正 REVOK—已撤销
+                    if (res.data.tradeState === 'SUCCESS') {
+                        this.msg.success('支付成功');
+                    }
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            }
+        )
     }
 }

@@ -1,5 +1,5 @@
 <div class="step1">
-  <div class="buy-record">购买记录</div>
+  <div class="buy-record" (click)="goBuyRecord()">购买记录</div>
   <ul>
     <li class="item-box" *ngFor="let package of dataList" [class.hover]="hoverId === package.packageId"
         (mouseenter)="onItemHover(package)" (mouseleave)="onItemLeave()"

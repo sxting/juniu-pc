@@ -10,6 +10,7 @@ import { CloudPrinterComponent } from './CloudPrinter/CloudPrinter.component';
 import { PayDownloadComponent } from "./pay-way/pay-download/pay-download.component";
 import {PayRecordComponent} from "./pay-way/pay-record/pay-record.component";
 import { VedioComponent } from './vedio/vedio.component';
+import {SoftwareBuyRecordComponent} from "./software-buy-record/software-buy-record.component";
 
 const routes: Routes = [
   { path: 'administration', component: AdministrationComponent },
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'pay/download', component: PayDownloadComponent },
   { path: 'pay/record', component: PayRecordComponent },
   { path: 'software/buy', component: SoftwareBuyComponent },
+  { path: 'software/buy/record', component: SoftwareBuyRecordComponent },
   { path: 'hardware/vedio', component: VedioComponent },
   { path: 'hardware/install/CloudPrinter', component: CloudPrinterComponent }
 ];
