@@ -26,9 +26,9 @@ export class PayDownloadComponent implements OnInit {
   imagePath: any = '';
   uploadImageResult: any = '';
   imageId: any = '';
-  colorArr: any = ['#00ff00', '#0000CD', '#FFA500'];
-  color: string = '';
-  myColor: string = '';
+  colorArr: any = ['00ff00', '0000CD', 'FFA500'];
+  myColor: string = 'ffffff';
+  color: string = this.myColor;
 
   constructor(private localStorageService: LocalStorageService,
               private modalSrv: NzModalService,
@@ -52,14 +52,16 @@ export class PayDownloadComponent implements OnInit {
   }
 
   colorChange() {
-    if(this.color) {
+    if(this.color.length === 6) {
       this.downloadQronline();
     }
   }
 
   changeMyColor() {
-    this.color = '#' + this.myColor;
-    this.downloadQronline();
+    this.color = this.myColor;
+    if(this.myColor.length === 6) {
+      this.downloadQronline();
+    }
   }
 
   /** 上传图片 */
