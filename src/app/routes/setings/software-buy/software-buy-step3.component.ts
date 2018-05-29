@@ -1,7 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
 
-import {NzModalService} from "ng-zorro-antd";
+import {NzModalService, NzMessageService} from "ng-zorro-antd";
 import {LocalStorageService} from "@shared/service/localstorage-service";
 import {STORES_INFO} from "@shared/define/juniu-define";
 import {SoftTransferService} from "./soft-transfer.service";
@@ -17,12 +17,25 @@ export class SoftBuyStep3Component implements OnInit {
     constructor(
         public item: SoftTransferService,
         private setingsService: SetingsService,
+        public msg: NzMessageService,
         private modalSrv: NzModalService,
         private localStorageService: LocalStorageService,
     ) {}
 
-    ngOnInit() {
+  result: any;
+  payType: any = '';
+  codeImgUrl: any = '';
 
+    ngOnInit() {
+      console.dir(this.item);
+      this.getPackagePreorder()
+    }
+
+    onPayWayClick(type: any) {
+      if(!this.payType) {
+        this.payType = type;
+        this.getPayUrl();
+      }
     }
 
     //上一步
@@ -34,6 +47,88 @@ export class SoftBuyStep3Component implements OnInit {
         // this.item = Object.assign(this.item);
         ++this.item.step;
     }
+
+  /**=====我是分界线=====**/
+  getPackagePreorder() {
+    let storeIds = [];
+    this.item.storeArr.forEach(function (item: any) {
+      storeIds.push(item.storeId)
+    });
+
+    let data = {
+      packageId: this.item.package.packageId,
+      storeIds: storeIds
+    };
+    this.setingsService.getPackagePreorder(data).subscribe(
+      (res: any) => {
+        if(res.success) {
+          this.result = res.data;
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      }
+    )
+  }
+
+  //获取支付二维码
+  getPayUrl() {
+    let data = {
+      amount: this.result.orderAmount, //价格
+      body: this.result.packageName, //版本名称
+      orderNo: this.result.orderNo, //订单号
+      payType: this.payType, //支付方式
+    };
+    this.setingsService.getPayUrl(data).subscribe(
+      (res: any) => {
+        if(res.success) {
+          this.codeImgUrl = res.data.codeImgUrl;
+          let self = this, time = 0;
+          let timer = setInterval(function () {
+            time += 3000;
+            if(time >= 6000) {
+              self.modalSrv.error({
+                nzTitle: '温馨提示',
+                nzContent: '支付超时'
+              });
+              clearInterval(timer);
+            }
+            self.getPayUrlQuery();
+          }, 3000)
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      }
+    )
+  }
+
+  //查询支付结果
+  getPayUrlQuery() {
+    let data = {
+      orderId: this.result.orderNo,
+    };
+    this.setingsService.getPayUrlQuery(data).subscribe(
+      (res: any) => {
+        if(res.success) {
+          //描述:查询支付二维码 订单的支付状态tradeState: SUCCESS—支付成功 REFUND—转入退款 NOTPAY—未支付 CLOSED—已关闭 REVERSE—已冲正 REVOK—已撤销
+          if(res.data.tradeState === 'SUCCESS') {
+            this.msg.success('支付成功');
+            ++this.item.step
+          }
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      }
+    )
+  }
 }
 
 

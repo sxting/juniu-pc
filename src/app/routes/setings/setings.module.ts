@@ -18,10 +18,11 @@ import { PayWayStep4Component } from "./pay-way/pay-way/pay-way-step4.component"
 import { PayWayStep5Component } from "./pay-way/pay-way/pay-way-step5.component";
 import {TransferService} from "./pay-way/pay-way/transfer.service";
 import { VedioComponent } from './vedio/vedio.component';
-import {SoftTransferService} from "./software-buy/soft-transfer.service";
-import {SoftBuyStep1Component} from "./software-buy/software-buy-step1.component";
-import {SoftBuyStep2Component} from "./software-buy/software-buy-step2.component";
-import {SoftBuyStep3Component} from "./software-buy/software-buy-step3.component";
+import { SoftTransferService } from "./software-buy/soft-transfer.service";
+import { SoftBuyStep1Component } from "./software-buy/software-buy-step1.component";
+import { SoftBuyStep2Component } from "./software-buy/software-buy-step2.component";
+import { SoftBuyStep3Component } from "./software-buy/software-buy-step3.component";
+import { SoftBuyStep4Component } from "./software-buy/software-buy-step4.component";
 
 const COMPONENT_NOROUNT = [
     PayWayStep1Component,
@@ -32,6 +33,7 @@ const COMPONENT_NOROUNT = [
     SoftBuyStep1Component,
     SoftBuyStep2Component,
     SoftBuyStep3Component,
+    SoftBuyStep4Component
 ];
 
 @NgModule({
