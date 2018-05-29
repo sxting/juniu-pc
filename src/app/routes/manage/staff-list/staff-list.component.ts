@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import { ManageService} from "../shared/manage.service";
-import { LocalStorageService} from "../../../shared/service/localstorage-service";
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FunctionUtil } from "../../../shared/funtion/funtion-util";
-import { STORES_INFO ,USER_INFO } from "../../../shared/define/juniu-define";
+import { LocalStorageService } from '@shared/service/localstorage-service';
+import { FunctionUtil } from '@shared/funtion/funtion-util';
 
 @Component({
   selector: 'app-staff-list',
@@ -14,7 +13,6 @@ import { STORES_INFO ,USER_INFO } from "../../../shared/define/juniu-define";
 })
 export class StaffListComponent implements OnInit {
 
-
     loading: boolean = false;//loading加载
     submitting: boolean = false;
     TheadName: any = ['员工编号', '员工姓名', '员工职位	', '所属门店', '手机号', '推送通知', '操作'];//表头
@@ -22,11 +20,12 @@ export class StaffListComponent implements OnInit {
     pageIndex: number = 1;//第几页吗
     pageSize: number = 10;//一页显示多少数据
     staffName: string = '';
-
     staffListInfos: any;//员工列表
     storeList: any[] = [];//门店列表
     storeId: string = '';//门店
-
+    moduleId: any;
+    ifStoresAll: boolean = true;//是否有全部门店
+    ifStoresAuth: boolean = false;//是否授权
 
     constructor(
         private http: _HttpClient,
@@ -38,25 +37,20 @@ export class StaffListComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-
-        //门店列表
-        if (this.localStorageService.getLocalstorage(STORES_INFO) && JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
-            let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-                JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-            let list = {
-              storeId: '',
-              storeName: '全部门店'
-            };
-            storeList.splice(0, 0, list);//给数组第一位插入值
-            this.storeList = storeList;
-            this.storeId = '';
-        }
-
-        this.staffListHttp();//员工列表请求数据
+      this.moduleId = 1;
+      this.staffListHttp();//员工列表请求数据
     }
 
     /*************************  页面基础操作开始  ********************************/
 
+    //门店id
+    getStoreId(event: any){
+      this.storeId = event.storeId? event.storeId : '';
+    }
+    //返回门店数据
+    storeListPush(event: any){
+      this.storeList = event.storeList? event.storeList : [];
+    }
     //删除员工
     deleteStaffInfor(id: string){
         let self = this;
@@ -153,9 +147,8 @@ export class StaffListComponent implements OnInit {
                     this.loading = false;
                     // hasWechat: boolean = false;//是否有微信推送
                     // hasSms: boolean = false;//是否有短信推送
-                  console.log(this.storeList);
-                  let storeList = this.storeList;
-                  if(res.data.items.length > 0){
+                    let storeList = this.storeList;
+                    if(res.data.items.length > 0){
                       res.data.items.forEach(function (item: any) {
                         let storeName = '';
                         if(item.pushChannel.length > 0){

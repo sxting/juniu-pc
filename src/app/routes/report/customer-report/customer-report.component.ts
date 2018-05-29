@@ -3,9 +3,9 @@ import { _HttpClient } from '@delon/theme';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ReportService } from "../shared/report.service";
-import { FunctionUtil } from "../../../shared/funtion/funtion-util";
-import { LocalStorageService } from "../../../shared/service/localstorage-service";
 import { STORES_INFO } from "../../../shared/define/juniu-define";
+import { LocalStorageService } from '@shared/service/localstorage-service';
+import { FunctionUtil } from '@shared/funtion/funtion-util';
 declare var echarts: any;
 
 @Component({
@@ -31,6 +31,9 @@ export class CustomerReportComponent implements OnInit {
     monthReportListInfor: any[] = [];//月报的信息列表
     currentCount: any = ''; //当日客流量
     memberPer: any = '';//会员占比
+    moduleId: any;
+    ifStoresAll: boolean = true;//是否有全部门店
+    ifStoresAuth: boolean = false;//是否授权
 
     constructor(
         private http: _HttpClient,
@@ -50,25 +53,14 @@ export class CustomerReportComponent implements OnInit {
     };
 
     ngOnInit() {
+
+        this.moduleId = 1;
         let userInfo;
         if (this.localStorageService.getLocalstorage('User-Info')) {
             userInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info'));
         }
         if (userInfo) {
             this.merchantId = userInfo.merchantId;
-        }
-
-        //门店列表
-        if (this.localStorageService.getLocalstorage(STORES_INFO) && JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
-          let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-            JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-          let list = {
-            storeId: '',
-            storeName: '全部门店'
-          };
-          storeList.splice(0, 0, list);//给数组第一位插入值
-          this.storeList = storeList;
-          this.storeId = '';
         }
 
         let year = new Date().getFullYear();        //获取当前年份(2位)
@@ -78,9 +70,21 @@ export class CustomerReportComponent implements OnInit {
 
         this.yyyymmDate = new Date(year+'-'+changemonth+'-'+day);
         this.date = year+'-'+changemonth+'-'+day;
-        this.batchQuery.date = this.date;
-        //获取列表信息
-        this.getDayCustomerHttp(this.batchQuery);
+
+    }
+
+    //门店id
+    getStoreId(event: any){
+      this.storeId = event.storeId? event.storeId : '';
+      this.batchQuery.date = this.date;
+      this.batchQuery.storeId = this.storeId;
+      //请求员工提成信息
+      this.getDayCustomerHttp(this.batchQuery);
+    }
+
+    //返回门店数据
+    storeListPush(event: any){
+      this.storeList = event.storeList? event.storeList : [];
     }
 
     //选择日期
@@ -95,12 +99,6 @@ export class CustomerReportComponent implements OnInit {
       this.batchQuery.date = this.date;
       //获取商品报表信息
       this.getDayCustomerHttp(this.batchQuery);
-    }
-
-    //选择门店
-    selectStore() {
-      this.batchQuery.storeId = this.storeId;
-      this.getDayCustomerHttp(this.batchQuery)
     }
 
     //获取客流信息列表

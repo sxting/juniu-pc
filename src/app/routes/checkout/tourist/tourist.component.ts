@@ -177,6 +177,7 @@ export class TouristComponent implements OnInit {
         }
         that.xfList.forEach(function (i: any) {
             i.staffGroupData = that.staffGroupData;
+            i.assign = 0;
         })
 
         that.totolMoneyFun();
@@ -485,13 +486,14 @@ export class TouristComponent implements OnInit {
         console.log(this.selectedValue1)
     }
     /**扫码支付提交订单 */
-    goToSubmitOrder(type?: any) {
+    goToSubmitOrder(click?: any, type?: any) {
         let self = this;
-        this.jiesuanFun();
-        if (this.authCode.length >= 18) {
-
-
+        if (this.authCode.length >= 17) {
+            this.jiesuanFun();
         }
+        // else if (click) {
+        //     this.jiesuanFun(type);
+        // }
 
     }
     info(type: any) {
@@ -501,10 +503,9 @@ export class TouristComponent implements OnInit {
         });
     }
     //结算fun
-    jiesuanFun() {
-
+    jiesuanFun(type?: any) {
         let that = this;
-
+        console.log(this.authCode)
         let create = <CreateOrder>{};
         create.customerName = this.memberInfo.customerName;
         create.phone = this.phone;
@@ -523,25 +524,26 @@ export class TouristComponent implements OnInit {
             else create.bizType = 'FIT';
         }
 
-        create.recordType = 'RECORD';
-        if (
-            Number(codeTyeNum) === 10 ||
-            Number(codeTyeNum) === 11 ||
-            Number(codeTyeNum) === 12 ||
-            Number(codeTyeNum) === 13 ||
-            Number(codeTyeNum) === 14 ||
-            Number(codeTyeNum) === 15
-        ) {
-            create.payType = 'WECHATPAY';
+        create.recordType = create.authCode ? 'COLLECT_MONEY' : 'RECORD';
+        if (type) {
+            create.payType = type;
         } else {
-            create.payType = 'CASH';
+            if (
+                Number(codeTyeNum) === 10 ||
+                Number(codeTyeNum) === 11 ||
+                Number(codeTyeNum) === 12 ||
+                Number(codeTyeNum) === 13 ||
+                Number(codeTyeNum) === 14 ||
+                Number(codeTyeNum) === 15
+            ) {
+                create.payType = 'WECHATPAY';
+            }
         }
+
         if (this.memberInfo.cardNum) {
             create.cardNum = this.memberInfo.cardNum;
         }
         create.birthday = this.memberInfo.birthday;
-
-
         let selectProduct = [];
         selectProduct.forEach((item: OrderItem, index: number) => {
             if (item.productId === '') {
@@ -588,7 +590,12 @@ export class TouristComponent implements OnInit {
                     price: i.price,
                     productName: i.productName,
                     rebate: i.discount,  //折扣
-                    storeId: that.storeId
+                    storeId: that.storeId,
+                    staffId: i.staff,
+                    assign: i.assign ? 1 : 0,
+                    // staffName: "肖光华",
+                    // staff2Name: '',
+                    staff2Id: i.xiaogong
                 }
                 configArray.push(orderItem);
             })
@@ -603,12 +610,11 @@ export class TouristComponent implements OnInit {
                         amount: 0,
                         type: i.card.type
                     }
-
                     if (i.checked) create.settleCardDTOList.push(data)
                 })
                 create.settleCardDTOList.forEach(function (i: any) {
                     that.xfList.forEach(function (n: any) {
-                        if (n.vipCard&&i.cardId === n.vipCard.card.cardId) {
+                        if (n.vipCard && i.cardId === n.vipCard.card.cardId) {
                             i.productIdList.push(n.productId)
                             if (i.type === 'TIMES') i.amount = 0;
                             else if (i.type === 'METERING') i.amount += n.num;
@@ -618,6 +624,7 @@ export class TouristComponent implements OnInit {
                 })
             }
         }
+        if (create.settleCardDTOList && create.settleCardDTOList.length > 0) create.recordType = 'BUCKLECARD';
         if (!that.changeType) {
             create.money = that.isVerb2 ? that.isVerbVipCardmoney * 100 : that.vipCardmoney * 100;
             create.originMoney = create.money;
@@ -628,7 +635,7 @@ export class TouristComponent implements OnInit {
 
         create.storeId = this.storeId;
         create.wipeDecimal = that.changeType ? that.isVerb : that.isVerb2;
-        create.faceId = this.selectFaceId;
+        // create.faceId = this.selectFaceId;
         create.customerId = this.memberInfo.customerId;
         console.log(create);
         if (this.xyVip) {
@@ -640,8 +647,12 @@ export class TouristComponent implements OnInit {
     createOrderFun(create: any) {
         this.checkoutService.createOrder(create).subscribe(
             (res: any) => {
-                if (res.sucsses) {
-                    console.log(res.data);
+                if (res.success) {
+                    this.modalSrv.closeAll()
+                    this.modalSrv.success({
+                        nzContent: '收款成功'
+                    })
+                    this.vipXqFun();
                 } else {
                     this.errorAlter(res.errorInfo)
                 }

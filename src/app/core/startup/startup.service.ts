@@ -37,7 +37,6 @@ export class StartupService {
     return new Promise((resolve, reject) => {
       zip(
         this.httpClient.get(`assets/tmp/i18n/${this.i18n.defaultLang}.json`),
-        // this.httpClient.get(Config.API1 + 'account/merchant/module/package/batch.json'),
         this.httpClient.get('assets/tmp/app-data.json'),
       )
         .pipe(
@@ -54,14 +53,43 @@ export class StartupService {
             this.translate.setDefaultLang(this.i18n.defaultLang);
             // application data
             const res: any = appData;
-            // data.data.menu = [{
-            //   text: "主导航",
-            //   i18n: "main_navigation",
-            //   group: true,
-            //   hideInBreadcrumb: true,
-            //   children: []
-            // }]
-            // data.data.menu[0].children = data.data.items;
+            let menuList = [
+              {
+                hasSubset: false,
+                icon: "icon-gailan",
+                menuId: "1",
+                menuName: "概览",
+                subset: []
+              },
+              {
+                hasSubset: false,
+                icon: "icon-shouyin",
+                menuId: "2",
+                menuName: "收银",
+                subset: [
+                  {
+                    hasSubset: false,
+                    icon: "icon-shouyin",
+                    menuId: "2",
+                    menuName: "收银2",
+                    subset: []
+                  }
+                ]
+              }
+            ]
+            this.forEachFun(menuList);
+            let menu = [{
+              text: "主导航",
+              i18n: "main_navigation",
+              group: true,
+              hideInBreadcrumb: true,
+              children: []
+            }]
+            menu[0].children = menuList;
+            menu[0].children.forEach(function (i: any, m: any) {
+              i.index = m;
+            })
+            console.log(menu);
             // console.log(data);
             // console.log(res);
             // 应用信息：包括站点名、描述、年份
@@ -83,11 +111,13 @@ export class StartupService {
     });
   }
   forEachFun(arr) {
-    arr.forEach(function (i: any) {
-      i.text = i.packageName;
-      i.icon = '';
-      i.link = '';
-      i.children = i.packageName;
+    let that = this;
+    arr.forEach(function (i: any, m: any) {
+      i.reuse = false;
+      i.children = i.subset;
+      if (i.hasSubset) {
+        that.forEachFun(i.subset);
+      }
     })
   }
 }

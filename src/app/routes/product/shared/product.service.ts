@@ -3,10 +3,10 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import { Config } from '../../../shared/config/env.config';
-import { FunctionUtil } from '../../../shared/funtion/funtion-util';
 import { NzModalService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
+import { Config } from '@shared/config/env.config';
+import { FunctionUtil } from '@shared/funtion/funtion-util';
 
 
 @Injectable()

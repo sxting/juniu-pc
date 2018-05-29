@@ -3,8 +3,8 @@ import { _HttpClient } from '@delon/theme';
 import { ProductService } from "../shared/product.service";
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FunctionUtil } from "../../../shared/funtion/funtion-util";
 import { LocalStorageService} from "@shared/service/localstorage-service";
+import { FunctionUtil } from '@shared/funtion/funtion-util';
 
 @Component({
   selector: 'app-product-list',
@@ -78,7 +78,6 @@ export class ProductListComponent implements OnInit {
                 nzOkText: '确定',
                 nzCancelText: '取消',
                 nzOnOk: function () {
-                    console.log(0);
                     self.offlineOperation(Params);//要下架
                 }
             });
@@ -118,7 +117,7 @@ export class ProductListComponent implements OnInit {
                 }
             },
             error => {
-                FunctionUtil.errorAlter(error);
+                this.msg.warning(error);
             }
         );
     }
@@ -142,7 +141,7 @@ export class ProductListComponent implements OnInit {
                 }
             },
             error => {
-                FunctionUtil.errorAlter(error);
+                this.msg.warning(error);
             }
         );
     }
