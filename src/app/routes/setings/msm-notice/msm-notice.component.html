@@ -7,7 +7,7 @@
 
         <div nz-col nzXs="24" nzSm="24" nzLg="6" nzLg="6" class="mb-lg">
             <div class="title">可用短信数量
-                <div class="buttons" (click)="msmAlert(modalContent2)">充值</div>
+                <div class="buttons" (click)="msmAlert(modalContent3)">充值</div>
             </div>
             <nz-card [nzBordered]="false" [nzBodyStyle]="{'overflow': 'hidden','display': 'flex','justify-content': 'center'}">
                 <water-wave [title]="'剩余(条)'" [percent]="surplusNumber" [height]="165"></water-wave>
@@ -152,12 +152,23 @@
 </div>
 
 
-<ng-template #modalContent2>
-    <div *ngFor="let item of dataNote">
+<ng-template #modalContent3>
+    <div *ngIf="temBoolean">
         <nz-radio-group [(ngModel)]="radioValue">
-            <label nz-radio [nzValue]="item.packageId">
+            <label (click)="radioFun()" *ngFor="let item of dataNote" nz-radio [nzValue]="item.packageId">
                 <span>{{item.packageName}}</span>
             </label>
         </nz-radio-group>
+    </div>
+    <div *ngIf="!temBoolean">
+        <div class="pay-way-btn-box">
+            <button nz-button [nzType]="payType === 'ALIPAY' ? 'primary' : ''" [disabled]="payType === 'WECHAT'" (click)="onPayWayClick('ALIPAY')">支付宝付款</button>
+            <button nz-button [nzType]="payType === 'WECHAT' ? 'primary' : ''" [disabled]="payType === 'ALIPAY'" (click)="onPayWayClick('WECHAT')">微信付款</button>
+        </div>
+
+        <div class="qr-code-box" *ngIf="payType">
+            <p>扫描下方二维码付款</p>
+            <img [src]="codeImgUrl" alt="">
+        </div>
     </div>
 </ng-template>

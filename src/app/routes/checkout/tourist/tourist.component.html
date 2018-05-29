@@ -110,7 +110,7 @@
                                             <div nz-col nzSpan="10">
                                                 <div nz-col nzSpan="16" class="textAline">设为指定技师</div>
                                                 <div nz-col nzSpan="6">
-                                                    <input type="checkbox">
+                                                    <input type="checkbox" [(ngModel)]="item.assign">
                                                 </div>
                                             </div>
                                         </div>
@@ -514,19 +514,19 @@
         </nz-tab>
         <nz-tab nzTitle="记录收款">
             <div class="iconBox">
-                <div class="wbox" (click)="goToSubmitOrder('微信')">
+                <div class="wbox" (click)="goToSubmitOrder(true,'WECHATPAY')">
                     <div class="iconfont icon-w"></div>
                     <div class="zi">微信</div>
                 </div>
-                <div class="zbox" (click)="goToSubmitOrder('支付宝')">
+                <div class="zbox" (click)="goToSubmitOrder(true,'ALIPAY')">
                     <div class="iconfont icon-z"></div>
                     <div class="zi">支付宝</div>
                 </div>
-                <div class="xbox" (click)="goToSubmitOrder('现金')">
+                <div class="xbox" (click)="goToSubmitOrder(true,'CASH')">
                     <div class="iconfont icon-x"></div>
                     <div class="zi">现金</div>
                 </div>
-                <div class="ybox" (click)="goToSubmitOrder('银行卡')">
+                <div class="ybox" (click)="goToSubmitOrder(true,'CARD')">
                     <div class="iconfont icon-y"></div>
                     <div class="zi">银行卡</div>
                 </div>
