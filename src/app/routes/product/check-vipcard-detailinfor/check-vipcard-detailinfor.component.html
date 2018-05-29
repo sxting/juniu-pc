@@ -1,8 +1,8 @@
 <page-header [title]="'查看会员卡详情'">
     会员卡创建后，一些参数可以修改，比如卡名称、卡面图片、适用商品和门店；而卡类型、售价等参数不可修改。
 </page-header>
-<nz-card [nzBordered]="false">
-    <form nz-form [formGroup]="form" (ngSubmit)="submit()">
+<nz-card [nzBordered]="false" style="margin-bottom: 0!important;">
+    <form nz-form [formGroup]="form">
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7">卡类型</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10"><nz-form-text>{{cardTypeName}}</nz-form-text></nz-form-control>
@@ -19,25 +19,27 @@
             <nz-form-control nzXs="24" nzSm="12" nzMd="10"><nz-form-text>{{price}}元</nz-form-text></nz-form-control>
         </nz-form-item>
         <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7">卡面图片</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <nz-form-text style="color: #1890ff;cursor: pointer">点击修改图片</nz-form-text>
-                <!--修改卡面背景-->
-                <div class="right right-2">
-                    <div id="clipArea"></div>
-                    <div class="img-top">
-                        <div class="logo">logo</div>
-                        <div class="wenzi">
-                            <div class="wenzi-top">商家名称</div>
-                            <div class="wenzi-bottom">会员卡名称</div>
-                        </div>
-                        <div class="erweima icon-erweima iconfont"></div>
-                    </div>
-                    <div class="img-bottom">
-                        <div class="img-tel">会员手机号</div>
-                    </div>
+          <nz-form-label nzXs="24" nzSm="7">卡面图片</nz-form-label>
+          <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+            <nz-form-text style="color: #1890ff;cursor: pointer" (click)="changeCardBg(alertImages)">
+              <span class="btn-img">点击修改图片</span>
+            </nz-form-text>
+            <!-- 原图片 -->
+            <div class="presentImg right-2">
+              <img src="{{backGroundImg}}"  style="width: 250px;height: 150px;"/>
+              <div class="img-top">
+                <div class="logo">logo</div>
+                <div class="wenzi">
+                  <div class="wenzi-top">商家名称</div>
+                  <div class="wenzi-bottom">会员卡名称</div>
                 </div>
-            </nz-form-control>
+                <div class="erweima icon-erweima iconfont"></div>
+              </div>
+              <div class="img-bottom">
+                <div class="img-tel">会员手机号</div>
+              </div>
+            </div>
+          </nz-form-control>
         </nz-form-item>
         <!--期限卡-->
         <nz-form-item *ngIf="cardType === 'TIMES'">
@@ -60,7 +62,7 @@
             <nz-form-control nzXs="24" nzSm="12" nzMd="10"><nz-form-text>{{rebate}}折</nz-form-text></nz-form-control>
         </nz-form-item>
         <nz-form-item *ngIf="ifShow">
-            <nz-form-label nzXs="24" nzSm="7" nzFor="validateType">使用有效期{{ifShowErrorTips}}</nz-form-label>
+            <nz-form-label nzXs="24" nzSm="7" nzFor="validateType">使用有效期</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
                 <nz-radio-group formControlName="validateType">
                     <label nz-radio *ngFor="let list of validateType" [nzValue]="list.type" (click)="changeData()">
@@ -103,10 +105,10 @@
                 </nz-radio-group>
             </nz-form-control>
         </nz-form-item>
-        <nz-form-item>
-            <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
-                <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">保存</button>
-            </nz-form-control>
+        <nz-form-item (click)="submit()">
+          <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
+            <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">保存</button>
+          </nz-form-control>
         </nz-form-item>
     </form>
 </nz-card>
@@ -120,3 +122,32 @@
 <ng-template #alertProduct>
     <app-select-transfer [cityStoreList]="productListInfor" [allStaffNum]="allProductNumber" (staffIds)="getProductIds($event)"></app-select-transfer>
 </ng-template>
+
+<!--选择图片的弹框-->
+<nz-modal [(nzVisible)]="isVisible" nzWidth ="500" [nzFooter]="null"  nzTitle="选择卡面图片" nzOkText="确定" nzCancelText="取消">
+  <!--修改卡面背景-->
+  <nz-form-text class="btn-photo-clip">
+    <span class="btn-img">点击重新上传卡面图</span>
+    <input type="file" id="file" accept="image" />
+  </nz-form-text>
+  <div class="clip-img-box">
+    <div id="clipArea"></div>
+    <div class="img-top">
+      <div class="logo">logo</div>
+      <div class="wenzi">
+        <div class="wenzi-top">商家名称</div>
+        <div class="wenzi-bottom">会员卡名称</div>
+      </div>
+      <div class="erweima icon-erweima iconfont"></div>
+    </div>
+    <div class="img-bottom">
+      <div class="img-tel">会员手机号</div>
+    </div>
+  </div>
+  <p class="btn-box clearfix">
+    <button class="ant-btn ng-star-inserted ant-btn-primary" type="primary" id="clipBtn">
+      <span>确定</span>
+    </button>
+  </p>
+</nz-modal>
+

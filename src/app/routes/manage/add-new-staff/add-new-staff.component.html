@@ -1,101 +1,102 @@
 <div class="ad-page-header" style="margin: 0 -24px; border-bottom:none !important;">
-    <nz-breadcrumb>
-        <nz-breadcrumb-item>主页</nz-breadcrumb-item>
-        <nz-breadcrumb-item>管理</nz-breadcrumb-item>
-        <nz-breadcrumb-item>员工</nz-breadcrumb-item>
-        <nz-breadcrumb-item>新增员工</nz-breadcrumb-item>
-    </nz-breadcrumb>
-    <page-header [title]="'新增员工'">在系统中创建一个新员工，分配系统账号。</page-header>
+  <nz-breadcrumb>
+    <nz-breadcrumb-item>主页</nz-breadcrumb-item>
+    <nz-breadcrumb-item>管理</nz-breadcrumb-item>
+    <nz-breadcrumb-item>员工</nz-breadcrumb-item>
+    <nz-breadcrumb-item>新增员工</nz-breadcrumb-item>
+  </nz-breadcrumb>
+  <page-header [title]="'新增员工'">在系统中创建一个新员工，分配系统账号。</page-header>
 </div>
 <nz-card [nzBordered]="false">
-    <form nz-form [formGroup]="form" (ngSubmit)="submit()">
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="staffName">员工姓名</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input maxlength="10" nz-input formControlName="staffName" autocomplete="off" id="staffName" placeholder="员工姓名会展示在各种员工报表和顾客预约页面，请仔细填写">
-                <nz-form-explain class="errorTips" *ngIf="form.get('staffName').dirty && form.get('staffName').errors">请输入员工姓名</nz-form-explain>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="phone">手机号</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input nz-input formControlName="phone"  autocomplete="off" id="phone" placeholder="接收各种短信通知，并作为员工登录帐号登录桔牛后台">
-                <ng-container *ngIf="phone.dirty || phone.touched">
-                    <nz-form-explain class="errorTips" *ngIf="phone.errors?.required">请输入手机号</nz-form-explain>
-                    <nz-form-explain class="errorTips" *ngIf="phone.errors?.pattern">手机号码有误,请重新输入</nz-form-explain>
-                </ng-container>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="password">登录密码</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input type="password" nz-input  autocomplete="off" formControlName="password" id="password" placeholder="员工可以用手机号和密码登录桔牛后台">
-                <ng-container *ngIf="password.dirty || password.touched">
-                    <nz-form-explain class="errorTips" *ngIf="password.errors?.required">请设置登录密码</nz-form-explain>
-                    <nz-form-explain class="errorTips" *ngIf="password.errors?.pattern">登录密码必须为6-16位大小写字母和数字组成</nz-form-explain>
-                </ng-container>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzRequired>
-                员工归属
-                <em>
-                    <nz-tooltip nzTitle="门店职位只能看见自己门店的信息，总部职位可以看到所有门店的信息">
-                        <i nz-tooltip class="anticon anticon-info-circle-o"></i>
-                    </nz-tooltip>
-                </em>
-            </nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <nz-select formControlName="belongType" name="belongList" id="belongList" [nzShowSearch]="true"  (ngModelChange)="onChangesBelongs($event)" >
-                    <nz-option *ngFor="let i of belongList; let idx = index" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
-                </nz-select>
-            </nz-form-control>
-        </nz-form-item>
+  <form nz-form [formGroup]="form" (ngSubmit)="submit()">
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="staffName">员工姓名</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <input maxlength="10" nz-input formControlName="staffName" autocomplete="off" id="staffName" placeholder="员工姓名会展示在各种员工报表和顾客预约页面，请仔细填写">
+        <nz-form-explain class="errorTips" *ngIf="form.get('staffName').dirty && form.get('staffName').errors">请输入员工姓名</nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="phone">手机号</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <input nz-input formControlName="phone"  autocomplete="off" id="phone" placeholder="接收各种短信通知，并作为员工登录帐号登录桔牛后台">
+        <ng-container *ngIf="phone.dirty || phone.touched">
+          <nz-form-explain class="errorTips" *ngIf="phone.errors?.required">请输入手机号</nz-form-explain>
+          <nz-form-explain class="errorTips" *ngIf="phone.errors?.pattern">手机号码有误,请重新输入</nz-form-explain>
+        </ng-container>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="password">登录密码</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <input type="password" nz-input  autocomplete="off" formControlName="password" id="password" placeholder="员工可以用手机号和密码登录桔牛后台">
+        <ng-container *ngIf="password.dirty || password.touched">
+          <nz-form-explain class="errorTips" *ngIf="password.errors?.required">请设置登录密码</nz-form-explain>
+          <nz-form-explain class="errorTips" *ngIf="password.errors?.pattern">登录密码必须为6-16位大小写字母和数字组成</nz-form-explain>
+        </ng-container>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7" nzRequired>
+        员工归属
+        <em>
+          <nz-tooltip nzTitle="门店职位只能看见自己门店的信息，总部职位可以看到所有门店的信息">
+            <i nz-tooltip class="anticon anticon-info-circle-o"></i>
+          </nz-tooltip>
+        </em>
+      </nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <nz-select formControlName="belongType" name="belongList" id="belongList" [nzShowSearch]="true"  (ngModelChange)="onChangesBelongs($event)" >
+          <nz-option *ngFor="let i of belongList; let idx = index" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
 
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzFor="card_img">员工头像</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <div class="pics_box clearfix">
-                    <div class="img-box">
-                        <img class="upload-img" src="./assets/img/upload.png">
-                        <input type="file" accept="image" (change)="uploadImage($event)">
-                        <img class="image" [src]="imagePath" *ngIf="imagePath">
-                    </div>
-                </div>
-                <nz-form-explain style="margin-top: 10px">员工头像展示在顾客预约、轮牌等功能模块，请上传高清大头照或半身照；推荐上传正方形图片，文件最好小于1M。</nz-form-explain>
-            </nz-form-control>
-        </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7" nzFor="card_img">员工头像</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <div class="pics_box clearfix">
+          <div class="img-box">
+            <img class="upload-img" src="./assets/img/upload.png">
+            <input type="file" accept="image" (change)="uploadImage($event)">
+            <img class="image" [src]="imagePath" *ngIf="imagePath">
+            <i *ngIf="imagePath" class="iconfont icon-deleternormal" (click)="deleteImage()"></i>
+          </div>
+        </div>
+        <nz-form-explain style="margin-top: 10px">员工头像展示在顾客预约、轮牌等功能模块，请上传高清大头照或半身照；推荐上传正方形图片，文件最好小于1M。</nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
 
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzRequired>
-                职位
-                <em>
-                    <nz-tooltip nzTitle="职位分为总部职位和门店职位，不同职位所拥有的系统权限不同，由超级管理员定义">
-                        <i nz-tooltip class="anticon anticon-info-circle-o"></i>
-                    </nz-tooltip>
-                </em>
-            </nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <nz-select formControlName="roleId" name="roleId" id="roleId"  [nzShowSearch]="true">
-                    <nz-option *ngFor="let i of RolesListInfor; let idx = index" [nzLabel]="i.roleName" [nzValue]="i.roleId"></nz-option>
-                </nz-select>
-                <nz-form-explain class="errorTips" *ngIf="form.get('roleId').dirty && form.get('roleId').errors">请选择员工职位</nz-form-explain>
-            </nz-form-control>
-        </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7" nzRequired>
+        职位
+        <em>
+          <nz-tooltip nzTitle="职位分为总部职位和门店职位，不同职位所拥有的系统权限不同，由超级管理员定义">
+            <i nz-tooltip class="anticon anticon-info-circle-o"></i>
+          </nz-tooltip>
+        </em>
+      </nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <nz-select formControlName="roleId" name="roleId" id="roleId"  [nzShowSearch]="true">
+          <nz-option *ngFor="let i of RolesListInfor; let idx = index" [nzLabel]="i.roleName" [nzValue]="i.roleId"></nz-option>
+        </nz-select>
+        <nz-form-explain class="errorTips" *ngIf="form.get('roleId').dirty && form.get('roleId').errors">请选择员工职位</nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
 
-        <nz-form-item *ngIf="ifShow">
-            <nz-form-label nzXs="24" nzSm="7" nzRequired>所属门店</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <nz-select formControlName="storeId" name="storeList" id="storeList" [nzPlaceHolder]="'请选择员工所属门店'" [nzShowSearch]="true">
-                    <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.storeName" [nzValue]="i.storeId"></nz-option>
-                </nz-select>
-            </nz-form-control>
-        </nz-form-item>
+    <nz-form-item *ngIf="ifShow">
+      <nz-form-label nzXs="24" nzSm="7" nzRequired>所属门店</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <nz-select formControlName="storeId" name="storeList" id="storeList" [nzPlaceHolder]="'请选择员工所属门店'" [nzShowSearch]="true">
+          <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.storeName" [nzValue]="i.storeId"></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
 
-        <nz-form-item>
-            <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
-                <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">保存</button>
-            </nz-form-control>
-        </nz-form-item>
-    </form>
+    <nz-form-item>
+      <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
+        <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">保存</button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
 </nz-card>

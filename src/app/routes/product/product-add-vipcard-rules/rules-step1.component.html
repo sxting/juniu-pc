@@ -19,13 +19,15 @@
     <nz-form-item>
         <nz-form-label nzSpan="5" nzFor="card_img">卡面图片(选填)</nz-form-label>
         <nz-form-control nzSpan="19">
-            <div class="pics_box clearfix">
-                <div class="img-box">
-                    <img class="upload-img" src="./assets/img/upload.png">
-                    <input type="file" accept="image" (change)="uploadImage($event)">
-                    <img class="image" [src]="imagePath" *ngIf="imagePath">
-                </div>
+          <div class="pics_box clearfix">
+            <div class="img-box">
+              <img class="upload-img" src="./assets/img/upload.png">
+              <input type="file" accept="image" (change)="uploadImage($event)">
+              <input formControlName="picId" style="visibility: hidden"/>
+              <img class="image" [src]="imagePath" *ngIf="imagePath">
+              <i *ngIf="imagePath" class="iconfont icon-deleternormal" (click)="deleteImage()"></i>
             </div>
+          </div>
         </nz-form-control>
     </nz-form-item>
     <nz-form-item>

@@ -432,5 +432,15 @@ export class KoubeiService {
                 return Observable.throw(error);
             });
     }
+  //base64转图片
+  uploadImageWithBase64(data: any,bizType: string,syncAlipay: string) {
+    let apiUrl = Config.API + `upload/uploadImageWithBase64.json?syncAlipay=${syncAlipay}&bizType=${bizType}`;
+    let param = FunctionUtil.obectToURLSearchParams(data);
+    return this.http.post(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
 
 }

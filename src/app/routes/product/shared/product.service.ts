@@ -145,4 +145,15 @@ export class ProductService {
                 return Observable.throw(error);
             });
     }
+
+    //base64转图片
+    uploadImageWithBase64(data: any) {
+      let apiUrl = Config.API + 'upload/uploadImageWithBase64.json';
+      return this.http.post(apiUrl, data)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
+
 }
