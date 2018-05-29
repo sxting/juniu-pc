@@ -54,7 +54,14 @@ export class CheckoutService {
             return Observable.throw(error);
         });
     }
-
+    findMemberCards(search: string, storeId?: string) {
+        let apiUrl = Config.API + 'member/card/searchs.json';
+        let req = FunctionUtil.obectToURLSearchParams({ search: search, storeId: storeId });
+        let data1 = { search: search, storeId: storeId }
+        return this.http.get(apiUrl, data1).map((response: Response) => response).catch(error => {
+            return Observable.throw(error);
+        });
+    }
     /**退款 */
     backOrder(orderId: string) {
         let apiUrl = Config.API + 'order/back.json';

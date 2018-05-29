@@ -16,7 +16,7 @@ import { PayWayStep2Component } from "./pay-way/pay-way/pay-way-step2.component"
 import { PayWayStep3Component } from "./pay-way/pay-way/pay-way-step3.component";
 import { PayWayStep4Component } from "./pay-way/pay-way/pay-way-step4.component";
 import { PayWayStep5Component } from "./pay-way/pay-way/pay-way-step5.component";
-import {TransferService} from "./pay-way/pay-way/transfer.service";
+import { TransferService } from "./pay-way/pay-way/transfer.service";
 import { VedioComponent } from './vedio/vedio.component';
 import { SoftTransferService } from "./software-buy/soft-transfer.service";
 import { SoftBuyStep1Component } from "./software-buy/software-buy-step1.component";
@@ -54,6 +54,7 @@ const COMPONENT_NOROUNT = [
     PayRecordComponent,
     VedioComponent
   ],
+  exports: [MsmNoticeComponent],
   providers: [SetingsService, TransferService, SoftTransferService],
   entryComponents: COMPONENT_NOROUNT
 })
