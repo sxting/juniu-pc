@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ReportService } from "../shared/report.service";
-import { LocalStorageService } from "../../../shared/service/localstorage-service";
-import { FunctionUtil } from "../../../shared/funtion/funtion-util";
 import { STORES_INFO } from '@shared/define/juniu-define';
+import { LocalStorageService } from '@shared/service/localstorage-service';
+import { FunctionUtil } from '@shared/funtion/funtion-util';
 
 @Component({
   selector: 'app-commission-report',
@@ -33,6 +33,10 @@ export class CommissionReportComponent implements OnInit {
     dataDeductionData: any[] = [];//提成总金额
     dataAssignData: any[] = [];//人均指定率
 
+    moduleId: any;
+    ifStoresAll: boolean = true;//是否有全部门店
+    ifStoresAuth: boolean = false;//是否授权
+
     /**
      * 请求列表的请求体
      */
@@ -51,7 +55,6 @@ export class CommissionReportComponent implements OnInit {
         sortField: this.sortField
     };
 
-
     constructor(
         private http: _HttpClient,
         private modalSrv: NzModalService,
@@ -61,19 +64,7 @@ export class CommissionReportComponent implements OnInit {
 
     ngOnInit() {
 
-      //门店列表
-      if (this.localStorageService.getLocalstorage(STORES_INFO) && JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
-        let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-          JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-          let list = {
-            storeId: '',
-            storeName: '全部门店'
-          };
-        storeList.splice(0, 0, list);//给数组第一位插入值
-        this.storeList = storeList;
-        this.storeId = '';
-      }
-
+      this.moduleId = 1;
       let year = new Date().getFullYear();        //获取当前年份(2位)
       let month = new Date().getMonth()+1;       //获取当前月份(0-11,0代表1月)
       let changemonth = month < 10 ? '0' + month : '' + month;
@@ -81,27 +72,38 @@ export class CommissionReportComponent implements OnInit {
 
       this.staffingDate = new Date(year+'-'+changemonth+'-'+day);
       this.date = year+'-'+changemonth+'-'+day;
+    }
+
+    //门店id
+    getStoreId(event: any){
+      this.storeId = event.storeId? event.storeId : '';
+      this.batchQuery.date = this.date;
+      this.batchQuery.storeId = this.storeId;
+      //请求员工提成信息
+      this.getStaffingdeDuctionUp(this.batchQuery);
+    }
+
+    //返回门店数据
+    storeListPush(event: any){
+      this.storeList = event.storeList? event.storeList : [];
+    }
+
+    //选择日期
+    reportDateAlert(e: any) {
+      this.staffingDate = e;
+      let year = this.staffingDate.getFullYear();        //获取当前年份(2位)
+      let month = this.staffingDate.getMonth()+1;       //获取当前月份(0-11,0代表1月)
+      let changemonth = month < 10 ? '0' + month : '' + month;
+      let day = this.staffingDate.getDate();        //获取当前日(1-31)
+      let changeday = day < 10 ? '0' + day : '' + day;
+      this.date = year+'-'+changemonth+'-'+changeday;
       this.batchQuery.date = this.date;
       //请求员工提成信息
       this.getStaffingdeDuctionUp(this.batchQuery);
+    }
 
-  }
-  //选择日期
-  reportDateAlert(e: any) {
-    this.staffingDate = e;
-    let year = this.staffingDate.getFullYear();        //获取当前年份(2位)
-    let month = this.staffingDate.getMonth()+1;       //获取当前月份(0-11,0代表1月)
-    let changemonth = month < 10 ? '0' + month : '' + month;
-    let day = this.staffingDate.getDate();        //获取当前日(1-31)
-    let changeday = day < 10 ? '0' + day : '' + day;
-    this.date = year+'-'+changemonth+'-'+changeday;
-    this.batchQuery.date = this.date;
-    //请求员工提成信息
-    this.getStaffingdeDuctionUp(this.batchQuery);
-  }
-
-  //员工提成的图表echart信息
-  getStaffingdeDuctionUp(batchQuery:any){
+    //员工提成的图表echart信息
+    getStaffingdeDuctionUp(batchQuery:any){
       let self = this;
       self.loading = true;
       this.reportService.getStaffingdeDuctionUp(batchQuery).subscribe(

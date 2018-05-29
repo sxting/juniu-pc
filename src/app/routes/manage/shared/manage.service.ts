@@ -405,9 +405,7 @@ export class ManageService {
 
   //新增门店
   storeCreate(data: any) {
-    // let apiUrl = Config.API + '/staff/set/push/wechat/pub/config.json';
-    let apiUrl = this.apiStaff + '/store/create.json';
-
+    let apiUrl = this.apiStaff + '/merchant/store/create.json';
     return this.http.post(apiUrl, data)
       .map((response: Response) => response)
       .catch(error => {

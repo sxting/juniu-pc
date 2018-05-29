@@ -1,174 +1,174 @@
 <page-header></page-header>
 <div class="mainBox">
-    <p>短信通知可以让您和您的会员通过桔牛系统的短信通道无缝沟通。</p>
-    <p>不管是会员的开卡、扣卡、充值；顾客的预约通知；以及各种形式的短信营销活动，桔牛都可以帮您精准触达您的顾客。</p>
-    <div nz-row [nzGutter]="24" class="pt-lg">
+  <p>短信通知可以让您和您的会员通过桔牛系统的短信通道无缝沟通。</p>
+  <p>不管是会员的开卡、扣卡、充值；顾客的预约通知；以及各种形式的短信营销活动，桔牛都可以帮您精准触达您的顾客。</p>
+  <div nz-row [nzGutter]="24" class="pt-lg">
 
 
-        <div nz-col nzXs="24" nzSm="24" nzLg="6" nzLg="6" class="mb-lg">
-            <div class="title">可用短信数量
-                <div class="buttons" (click)="msmAlert(modalContent3)">充值</div>
-            </div>
-            <nz-card [nzBordered]="false" [nzBodyStyle]="{'overflow': 'hidden','display': 'flex','justify-content': 'center'}">
-                <water-wave [title]="'剩余(条)'" [percent]="surplusNumber" [height]="165"></water-wave>
-            </nz-card>
-        </div>
-        <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="18" style="background:#fff;">
-            <div class="title">短信使用数量统计
-                <div style="float:right;display:flex;">
-                    <nz-tabset class="msmTab" (nzSelectChange)="console2($event)">
-                        <nz-tab nzTitle="本周">
-                        </nz-tab>
-                        <nz-tab nzTitle="本月">
-                        </nz-tab>
-                        <nz-tab nzTitle="全年">
-                        </nz-tab>
-                    </nz-tabset>
-                    <nz-range-picker [(ngModel)]="dateRange" (ngModelChange)="rangePicker($event)" nzDropdownClassName="right320" style="width:200px;"
-                        name="dateRange" id="dateRange"></nz-range-picker>
-                </div>
-            </div>
-            <div class="lineBox">
-                <div id="top_chart"></div>
-            </div>
-        </div>
+    <div nz-col nzXs="24" nzSm="24" nzLg="6" nzLg="6" class="mb-lg">
+      <div class="title">可用短信数量
+        <div class="buttons" (click)="msmAlert(modalContent3)">充值</div>
+      </div>
+      <nz-card [nzBordered]="false" [nzBodyStyle]="{'overflow': 'hidden','display': 'flex','justify-content': 'center'}">
+        <water-wave [title]="'剩余(条)'" [percent]="surplusNumber" [height]="165"></water-wave>
+      </nz-card>
     </div>
+    <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="18" style="background:#fff;">
+      <div class="title">短信使用数量统计
+        <div style="float:right;display:flex;">
+          <nz-tabset class="msmTab" (nzSelectChange)="console2($event)">
+            <nz-tab nzTitle="本周">
+            </nz-tab>
+            <nz-tab nzTitle="本月">
+            </nz-tab>
+            <nz-tab nzTitle="全年">
+            </nz-tab>
+          </nz-tabset>
+          <nz-range-picker [(ngModel)]="dateRange" (ngModelChange)="rangePicker($event)" nzDropdownClassName="right320" style="width:200px;"
+            name="dateRange" id="dateRange"></nz-range-picker>
+        </div>
+      </div>
+      <div class="lineBox">
+        <div id="top_chart"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 
 <div nz-row [nzGutter]="24" class="pt-lg">
-    <div nz-col nzXs="24" nzSm="24" nzLg="24" nzLg="12" class="mb-lg">
-        <nz-card nzTitle="会员消费通知" [nzBordered]="false">
-            <div>
-                开卡通知
-                <nz-switch [ngModel]="openCard" (ngModelChange)="configFun('NOTICE_OPENCARD')">
-                    <span checked>开</span>
-                    <span unchecked>关</span>
-                </nz-switch>
-                <div class="shadowBox">
-                    <div class="icon-up iconfont"></div>
-                    <p>尊敬的XX会员，您已办理XX会员卡一张，卡内余额XX元，XX店感谢您的惠顾。</p>
-                </div>
-            </div>
-            <div>
-                <div>
-                    充值通知
-                    <nz-switch [ngModel]="recharge" (ngModelChange)="configFun('NOTICE_RECHARGE')">
-                        <span checked>开</span>
-                        <span unchecked>关</span>
-                    </nz-switch>
-                    <div class="shadowBox">
-                        <div class="icon-up iconfont"></div>
-                        <p>尊敬的XX会员，您已为XX会员卡充值XX元，卡内余额XX元，XX店感谢您的惠顾。</p>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <div>
-                    扣卡通知
-                    <nz-switch [ngModel]="consume" (ngModelChange)="configFun('NOTICE_CONSUME')">
-                        <span checked>开</span>
-                        <span unchecked>关</span>
-                    </nz-switch>
-                    <div class="shadowBox">
-                        <div class="icon-up iconfont"></div>
-                        <p>尊敬的XX会员，您的XX会员卡本次消费XX元，卡内余额XX元，XX店感谢您的惠顾。</p>
-                    </div>
-                </div>
-            </div>
-        </nz-card>
-    </div>
-    <div nz-col nzXs="24" nzSm="24" nzLg="24" nzLg="12">
-        <nz-card nzTitle="顾客预约通知" [nzBordered]="false">
-            <div>
-                <div>
-                    门店有新预约
-                    <nz-switch [ngModel]="reserveRemind" (ngModelChange)="configFun('RESERVE_TO_MERCHANT')">
-                        <span checked>开</span>
-                        <span unchecked>关</span>
-                    </nz-switch>
-                    <div class="shadowBox">
-                        <div class="icon-up iconfont iconLeft"></div>
-                        <p>您有新预约！XX时间XX顾客预约到店消费XX项目，请及时处理预约。</p>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <div>
-                    预约成功提醒
-                    <nz-switch [ngModel]="reserveSuccess" (ngModelChange)="configFun('RESERVE_SUCCESS_CUSTOMER')">
-                        <span checked>开</span>
-                        <span unchecked>关</span>
-                    </nz-switch>
-                    <div class="shadowBox">
-                        <div class="icon-up iconfont iconLeft"></div>
-                        <p>尊敬的XX顾客您好，您预约的XX店已经接受您的预约，请于XX时间准时到店，谢谢。</p>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <div>
-                    预约被拒绝提醒
-                    <nz-switch [ngModel]="reserveRefuse" (ngModelChange)="configFun('RESERVE_RSFUSE_CUSTOMER')">
-                        <span checked>开</span>
-                        <span unchecked>关</span>
-                    </nz-switch>
-                    <div class="shadowBox">
-                        <div class="icon-up iconfont iconLeft"></div>
-                        <p>尊敬的XX顾客您好，由于时间原因，您预约的XX店在XX时间无法接受您的预约，敬请谅解.</p>
-                    </div>
-                </div>
-            </div>
-        </nz-card>
-    </div>
-    <!-- <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8" style="background:#fff;">
-        <nz-card nzTitle="营销短信通知" [nzBordered]="false">
-            <div>
-                <p>开卡通知
-                    <nz-switch [ngModel]="false">
-                        <span checked>开</span>
-                        <span unchecked>关</span>
-                    </nz-switch>
-                </p>
-            </div>
-            <div>
-                <p>充值通知
-                    <nz-switch [ngModel]="false">
-                        <span checked>开</span>
-                        <span unchecked>关</span>
-                    </nz-switch>
-                </p>
-            </div>
-            <div>
-                <p>扣卡通知
-                    <nz-switch [ngModel]="false">
-                        <span checked>开</span>
-                        <span unchecked>关</span>
-                    </nz-switch>
-                </p>
-            </div>
-        </nz-card>
-    </div> -->
+  <div nz-col nzXs="24" nzSm="24" nzLg="24" nzLg="12" class="mb-lg">
+    <nz-card nzTitle="会员消费通知" [nzBordered]="false">
+      <div>
+        开卡通知
+        <nz-switch [ngModel]="openCard" (ngModelChange)="configFun('NOTICE_OPENCARD')">
+          <span checked>开</span>
+          <span unchecked>关</span>
+        </nz-switch>
+        <div class="shadowBox">
+          <div class="icon-up iconfont"></div>
+          <p>尊敬的XX会员，您已办理XX会员卡一张，卡内余额XX元，XX店感谢您的惠顾。</p>
+        </div>
+      </div>
+      <div>
+        <div>
+          充值通知
+          <nz-switch [ngModel]="recharge" (ngModelChange)="configFun('NOTICE_RECHARGE')">
+            <span checked>开</span>
+            <span unchecked>关</span>
+          </nz-switch>
+          <div class="shadowBox">
+            <div class="icon-up iconfont"></div>
+            <p>尊敬的XX会员，您已为XX会员卡充值XX元，卡内余额XX元，XX店感谢您的惠顾。</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div>
+          扣卡通知
+          <nz-switch [ngModel]="consume" (ngModelChange)="configFun('NOTICE_CONSUME')">
+            <span checked>开</span>
+            <span unchecked>关</span>
+          </nz-switch>
+          <div class="shadowBox">
+            <div class="icon-up iconfont"></div>
+            <p>尊敬的XX会员，您的XX会员卡本次消费XX元，卡内余额XX元，XX店感谢您的惠顾。</p>
+          </div>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+  <div nz-col nzXs="24" nzSm="24" nzLg="24" nzLg="12">
+    <nz-card nzTitle="顾客预约通知" [nzBordered]="false">
+      <div>
+        <div>
+          门店有新预约
+          <nz-switch [ngModel]="reserveRemind" (ngModelChange)="configFun('RESERVE_TO_MERCHANT')">
+            <span checked>开</span>
+            <span unchecked>关</span>
+          </nz-switch>
+          <div class="shadowBox">
+            <div class="icon-up iconfont iconLeft"></div>
+            <p>您有新预约！XX时间XX顾客预约到店消费XX项目，请及时处理预约。</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div>
+          预约成功提醒
+          <nz-switch [ngModel]="reserveSuccess" (ngModelChange)="configFun('RESERVE_SUCCESS_CUSTOMER')">
+            <span checked>开</span>
+            <span unchecked>关</span>
+          </nz-switch>
+          <div class="shadowBox">
+            <div class="icon-up iconfont iconLeft"></div>
+            <p>尊敬的XX顾客您好，您预约的XX店已经接受您的预约，请于XX时间准时到店，谢谢。</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div>
+          预约被拒绝提醒
+          <nz-switch [ngModel]="reserveRefuse" (ngModelChange)="configFun('RESERVE_RSFUSE_CUSTOMER')">
+            <span checked>开</span>
+            <span unchecked>关</span>
+          </nz-switch>
+          <div class="shadowBox">
+            <div class="icon-up iconfont iconLeft"></div>
+            <p>尊敬的XX顾客您好，由于时间原因，您预约的XX店在XX时间无法接受您的预约，敬请谅解.</p>
+          </div>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+  <!-- <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8" style="background:#fff;">
+    <nz-card nzTitle="营销短信通知" [nzBordered]="false">
+      <div>
+        <p>开卡通知
+          <nz-switch [ngModel]="false">
+            <span checked>开</span>
+            <span unchecked>关</span>
+          </nz-switch>
+        </p>
+      </div>
+      <div>
+        <p>充值通知
+          <nz-switch [ngModel]="false">
+            <span checked>开</span>
+            <span unchecked>关</span>
+          </nz-switch>
+        </p>
+      </div>
+      <div>
+        <p>扣卡通知
+          <nz-switch [ngModel]="false">
+            <span checked>开</span>
+            <span unchecked>关</span>
+          </nz-switch>
+        </p>
+      </div>
+    </nz-card>
+  </div> -->
 </div>
 
 
 <ng-template #modalContent3>
-    <div *ngIf="temBoolean">
-        <nz-radio-group [(ngModel)]="radioValue">
-            <label (click)="radioFun()" *ngFor="let item of dataNote" nz-radio [nzValue]="item.packageId">
-                <span>{{item.packageName}}</span>
-            </label>
-        </nz-radio-group>
+  <div *ngIf="temBoolean">
+    <nz-radio-group [(ngModel)]="radioValue">
+      <label (click)="radioFun()" *ngFor="let item of dataNote" nz-radio [nzValue]="item.packageId">
+        <span>{{item.packageName}}</span>
+      </label>
+    </nz-radio-group>
+  </div>
+  <div *ngIf="!temBoolean">
+    <div class="pay-way-btn-box">
+      <button nz-button [nzType]="payType === 'ALIPAY' ? 'primary' : ''" [disabled]="payType === 'WECHAT'" (click)="onPayWayClick('ALIPAY')">支付宝付款</button>
+      <button nz-button [nzType]="payType === 'WECHAT' ? 'primary' : ''" [disabled]="payType === 'ALIPAY'" (click)="onPayWayClick('WECHAT')">微信付款</button>
     </div>
-    <div *ngIf="!temBoolean">
-        <div class="pay-way-btn-box">
-            <button nz-button [nzType]="payType === 'ALIPAY' ? 'primary' : ''" [disabled]="payType === 'WECHAT'" (click)="onPayWayClick('ALIPAY')">支付宝付款</button>
-            <button nz-button [nzType]="payType === 'WECHAT' ? 'primary' : ''" [disabled]="payType === 'ALIPAY'" (click)="onPayWayClick('WECHAT')">微信付款</button>
-        </div>
 
-        <div class="qr-code-box" *ngIf="payType">
-            <p>扫描下方二维码付款</p>
-            <img [src]="codeImgUrl" alt="">
-        </div>
+    <div class="qr-code-box" *ngIf="payType">
+      <p>扫描下方二维码付款</p>
+      <img [src]="codeImgUrl" alt="">
     </div>
+  </div>
 </ng-template>

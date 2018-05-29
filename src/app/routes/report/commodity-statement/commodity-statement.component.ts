@@ -24,6 +24,9 @@ export class CommodityStatementComponent implements OnInit {
     countListTotal: any = 0;
     date: any;//time
     yyyymmDate: Date;//选择的时间
+    moduleId: any;
+    ifStoresAll: boolean = true;//是否有全部门店
+    ifStoresAuth: boolean = false;//是否授权
 
     constructor(
         private http: _HttpClient,
@@ -40,18 +43,8 @@ export class CommodityStatementComponent implements OnInit {
     };
 
     ngOnInit() {
-      //门店列表
-      if (this.localStorageService.getLocalstorage(STORES_INFO) && JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
-        let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-          JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-        let list = {
-          storeId: '',
-          storeName: '全部门店'
-        };
-        storeList.splice(0, 0, list);//给数组第一位插入值
-        this.storeList = storeList;
-        this.storeId = '';
-      }
+
+      this.moduleId = 1;
       let year = new Date().getFullYear();        //获取当前年份(2位)
       let month = new Date().getMonth()+1;       //获取当前月份(0-11,0代表1月)
       let changemonth = month < 10 ? '0' + month : '' + month;
@@ -59,9 +52,21 @@ export class CommodityStatementComponent implements OnInit {
 
       this.yyyymmDate = new Date(year+'-'+changemonth+'-'+day);
       this.date = year+'-'+changemonth+'-'+day;
+
+    }
+
+    //门店id
+    getStoreId(event: any){
+      this.storeId = event.storeId? event.storeId : '';
       this.batchQuery.date = this.date;
-      //获取商品报表信息
-      this.getDayCustomerHttp(this.batchQuery)
+      this.batchQuery.storeId = this.storeId;
+      //请求员工提成信息
+      this.getDayCustomerHttp(this.batchQuery);
+    }
+
+    //返回门店数据
+    storeListPush(event: any){
+      this.storeList = event.storeList? event.storeList : [];
     }
 
     //选择日期
@@ -119,13 +124,6 @@ export class CommodityStatementComponent implements OnInit {
                 FunctionUtil.errorAlter(error);
             }
         );
-    }
-
-    //选择门店
-    selectStore() {
-        this.batchQuery.storeId = this.storeId;
-        console.log(this.storeId);
-        this.getDayCustomerHttp(this.batchQuery);
     }
 
 }
