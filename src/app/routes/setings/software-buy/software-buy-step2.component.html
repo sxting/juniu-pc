@@ -1,6 +1,24 @@
 <div class="step2">
-    <div class="title">您选择了：桔牛系统·专业版；售价：1680元/年/店</div>
-    <div class="table-box">
+    <div class="title">
+      您选择了：桔牛系统·{{item.package.packageName}}；售价：
+      <span *ngIf="!item.package.price">免费</span>
+      <span *ngIf="item.package.price">{{item.package.price}}元 /
+        {{item.package.timeUnit === 'DAY' ? '天' : item.package.timeUnit === 'MONTH' ? '月' : item.package.timeUnit === 'QUARTER' ? '季' : '年'}}
+        / 店</span>
+    </div>
+  <div class="my-md">
+    <nz-alert [nzType]="'info'" [nzShowIcon]="true" [nzMessage]="message">
+      <ng-template #message>
+        已选择 <strong class="text-primary">{{selectedRows.length}}</strong> 项&nbsp;&nbsp; 总价：<strong>{{totalCallNo}}</strong> 元
+      </ng-template>
+    </nz-alert>
+  </div>
+
+  <simple-table #st [columns]="columns" [data]="dataList" [loading]="loading" (checkboxChange)="checkboxChange($event)">
+    <ng-template st-row="status" let-i></ng-template>
+  </simple-table>
+
+    <div class="table-box" *ngIf="">
         <table>
             <tr>
                 <td>

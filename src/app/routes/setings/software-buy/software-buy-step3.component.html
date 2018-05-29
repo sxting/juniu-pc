@@ -1,0 +1,14 @@
+<div class="step3">
+  <div>您选择了：{{item.storeArr.length}}家门店，需付款：{{item.totalPrice}}元</div>
+  <div class="pay-way-btn-box">
+    <button nz-button [nzType]="payType === 'ALIPAY' ? 'primary' : ''" [disabled]="payType === 'WECHAT'" (click)="onPayWayClick('ALIPAY')">支付宝付款</button>
+    <button nz-button [nzType]="payType === 'WECHAT' ? 'primary' : ''" [disabled]="payType === 'ALIPAY'" (click)="onPayWayClick('WECHAT')">微信付款</button>
+  </div>
+  <div class="qr-code-box" *ngIf="payType">
+    <p>扫描下方二维码付款</p>
+    <img [src]="codeImgUrl" alt="">
+  </div>
+  <div class="btn-box">
+    <button nz-button (click)="prev()">返回上一步</button>
+  </div>
+</div>

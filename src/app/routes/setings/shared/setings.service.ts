@@ -16,6 +16,60 @@ export class SetingsService {
     api3 = Config.API + 'account'; //员工
     api4 = Config.API + 'printer'; //打印机
     api5 = Config.API + 'finance'; //银行
+    api6 = Config.API1 + 'account/merchant/module'; //模块控制 软件购买
+
+    /*软件购买 start*/
+  //模块批量查询  /merchant/module/package/batch.json
+  getPackageBatchList(Params: any) {
+    let apiUrl = this.api6 + '/package/batch.json';
+    return this.http.get(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  //购买模块包门店选择列表 /merchant/module/package/stores.json
+  getPackageStores(Params: any) {
+    let apiUrl = this.api6 + '/package/stores.json';
+    return this.http.get(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  //模块包预支付订单 /merchant/module/package/preorder.json
+  getPackagePreorder(Params: any) {
+    let apiUrl = this.api6 + '/package/preorder.json';
+    return this.http.post(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  //获取支付二维码  pay/url.json
+  getPayUrl(Params: any) {
+    let apiUrl = this.api5 + '/pay/url.json';
+    return this.http.post(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  //查询支付结果  pay/url/query.json
+  getPayUrlQuery(Params: any) {
+    let apiUrl = this.api5 + '/pay/url/query.json';
+    return this.http.get(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+    /*软件购买 end*/
 
     /*支付通道start*/
 

@@ -22,16 +22,18 @@ import { SoftTransferService } from "./software-buy/soft-transfer.service";
 import { SoftBuyStep1Component } from "./software-buy/software-buy-step1.component";
 import { SoftBuyStep2Component } from "./software-buy/software-buy-step2.component";
 import { SoftBuyStep3Component } from "./software-buy/software-buy-step3.component";
+import { SoftBuyStep4Component } from "./software-buy/software-buy-step4.component";
 
 const COMPONENT_NOROUNT = [
-  PayWayStep1Component,
-  PayWayStep2Component,
-  PayWayStep3Component,
-  PayWayStep4Component,
-  PayWayStep5Component,
-  SoftBuyStep1Component,
-  SoftBuyStep2Component,
-  SoftBuyStep3Component,
+    PayWayStep1Component,
+    PayWayStep2Component,
+    PayWayStep3Component,
+    PayWayStep4Component,
+    PayWayStep5Component,
+    SoftBuyStep1Component,
+    SoftBuyStep2Component,
+    SoftBuyStep3Component,
+    SoftBuyStep4Component
 ];
 
 @NgModule({

@@ -241,6 +241,10 @@ export class MarketingsPageComponent implements OnInit {
         let disabledWeekDateArr = item.disabledWeekDate.split(',');
         this.selectedWeek1 = this.weekText(disabledWeekDateArr[0]);
         this.selectedWeek2 = this.weekText(disabledWeekDateArr[disabledWeekDateArr.length-1]);
+        this.unUseStartTime = (new Date(item.validDateStart).getHours().toString().length < 2 ? ('0'+ new Date(item.validDateStart).getHours()) : new Date(item.validDateStart).getHours()) + ':' +
+        (new Date(item.validDateStart).getMinutes().toString().length < 2 ? ('0' + new Date(item.validDateStart).getMinutes()) : new Date(item.validDateStart).getMinutes());
+        this.unUseEndTime = (new Date(item.validDateEnd).getHours().toString().length < 2 ? ('0'+ new Date(item.validDateEnd).getHours()) : new Date(item.validDateEnd).getHours()) + ':' +
+        (new Date(item.validDateEnd).getMinutes().toString().length < 2 ? ('0' + new Date(item.validDateEnd).getMinutes()) : new Date(item.validDateEnd).getMinutes());
         this.modalSrv.closeAll();
     }
 
@@ -360,10 +364,12 @@ export class MarketingsPageComponent implements OnInit {
     }
 
     onCouponTime1Change(e: any) {
-      this.unUseStartTime = e.getHours() + ':' + e.getMinutes();
+      this.unUseStartTime = (e.getHours().toString().length < 2 ? ('0'+ e.getHours()) : e.getHours()) + ':' +
+        (e.getMinutes().toString().length < 2 ? ('0' + e.getMinutes()) : e.getMinutes());
     }
     onCouponTime2Change(e: any) {
-        this.unUseEndTime = e.getHours() + ':' + e.getMinutes();
+        this.unUseEndTime = (e.getHours().toString().length < 2 ? ('0'+ e.getHours()) : e.getHours()) + ':' +
+          (e.getMinutes().toString().length < 2 ? ('0' + e.getMinutes()) : e.getMinutes());
     }
 
     //优惠券设置保存
@@ -660,8 +666,10 @@ export class MarketingsPageComponent implements OnInit {
                     let disabledWeekDateArr = data.couponDef.disabledWeekDate.split(',');
                     this.selectedWeek1 = this.weekText(disabledWeekDateArr[0]);
                     this.selectedWeek2 = this.weekText(disabledWeekDateArr[disabledWeekDateArr.length-1]);
-                    this.unUseStartTime = new Date(data.couponDef.disabledTimeStartStr).getHours() + ':' + new Date(data.couponDef.disabledTimeStartStr).getMinutes();
-                    this.unUseEndTime = new Date(data.couponDef.disabledTimeEndStr).getHours() + ':' + new Date(data.couponDef.disabledTimeEndStr).getMinutes();
+                    this.unUseStartTime = (new Date(data.couponDef.validDateStart).getHours().toString().length < 2 ? ('0'+ new Date(data.couponDef.validDateStart).getHours()) : new Date(data.couponDef.validDateStart).getHours()) + ':' +
+                      (new Date(data.couponDef.validDateStart).getMinutes().toString().length < 2 ? ('0' + new Date(data.couponDef.validDateStart).getMinutes()) : new Date(data.couponDef.validDateStart).getMinutes());
+                    this.unUseEndTime = (new Date(data.couponDef.validDateEnd).getHours().toString().length < 2 ? ('0'+ new Date(data.couponDef.validDateEnd).getHours()) : new Date(data.couponDef.validDateEnd).getHours()) + ':' +
+                      (new Date(data.couponDef.validDateEnd).getMinutes().toString().length < 2 ? ('0' + new Date(data.couponDef.validDateEnd).getMinutes()) : new Date(data.couponDef.validDateEnd).getMinutes());
 
                     this.form = this.fb.group({
                         activity_obj_days: [{value: data.lastConsume, disabled: !(data.marketingStatus === 'INIT')}, this.paramsId=='01'||this.paramsId=='02'?[Validators.compose([Validators.required, Validators.pattern(`[0-9]+`)])]:[]],
@@ -730,7 +738,7 @@ export class MarketingsPageComponent implements OnInit {
             (res: any) => {
                 this.submitting = false;
                 if(res.success) {
-                    if(Number(this.paramsId)) {
+                    if(Number(this.paramsId) < 10) {
                         this.router.navigate(['/marketing/sms/list', {}]);
                     } else {
                         this.router.navigate(['/marketing/wechart/list', {}]);
@@ -751,7 +759,7 @@ export class MarketingsPageComponent implements OnInit {
             (res: any) => {
                 this.submitting = false;
                 if(res.success) {
-                    if(Number(this.paramsId)) {
+                    if(this.paramsId) {
                         this.router.navigate(['/marketing/sms/list', {}]);
                     } else {
                         this.router.navigate(['/marketing/wechart/list', {}]);
@@ -817,7 +825,7 @@ export class MarketingsPageComponent implements OnInit {
                 this.submitting = false;
                 if(res.success) {
                     this.msg.success(`保存成功`);
-                    if(Number(this.paramsId)) {
+                    if(Number(this.paramsId) < 10) {
                         this.router.navigate(['/marketing/sms/list', {}]);
                     } else {
                         this.router.navigate(['/marketing/wechart/list', {}]);
@@ -839,7 +847,7 @@ export class MarketingsPageComponent implements OnInit {
                 this.submitting = false;
                 if(res.success) {
                     this.msg.success(`保存成功`);
-                    if(Number(this.paramsId)) {
+                    if(Number(this.paramsId) < 10) {
                         this.router.navigate(['/marketing/sms/list', {}]);
                     } else {
                         this.router.navigate(['/marketing/wechart/list', {}]);
@@ -861,7 +869,7 @@ export class MarketingsPageComponent implements OnInit {
                 this.submitting = false;
                 if(res.success) {
                     this.msg.success(`保存成功`);
-                    if(Number(this.paramsId)) {
+                    if(Number(this.paramsId) < 10) {
                         this.router.navigate(['/marketing/sms/list', {}]);
                     } else {
                         this.router.navigate(['/marketing/wechart/list', {}]);
@@ -924,8 +932,10 @@ export class MarketingsPageComponent implements OnInit {
                         let disabledWeekDateArr = item.disabledWeekDate.split(',');
                         item.selectedWeek1 = self.weekText(disabledWeekDateArr[0]);
                         item.selectedWeek2 = self.weekText(disabledWeekDateArr[disabledWeekDateArr.length-1]);
-                        item.unUseStartTime = new Date(item.disabledTimeStartStr).getHours() + ':' + new Date(item.disabledTimeStartStr).getMinutes();
-                        item.unUseEndTime = new Date(item.disabledTimeEndStr).getHours() + ':' + new Date(item.disabledTimeEndStr).getMinutes();
+                        item.unUseStartTime = (new Date(item.validDateStart).getHours().toString().length < 2 ? ('0'+ new Date(item.validDateStart).getHours()) : new Date(item.validDateStart).getHours()) + ':' +
+                          (new Date(item.validDateStart).getMinutes().toString().length < 2 ? ('0' + new Date(item.validDateStart).getMinutes()) : new Date(item.validDateStart).getMinutes());
+                        item.unUseEndTime = (new Date(item.validDateEnd).getHours().toString().length < 2 ? ('0'+ new Date(item.validDateEnd).getHours()) : new Date(item.validDateEnd).getHours()) + ':' +
+                          (new Date(item.validDateEnd).getMinutes().toString().length < 2 ? ('0' + new Date(item.validDateEnd).getMinutes()) : new Date(item.validDateEnd).getMinutes());
                     });
                 } else {
                     this.modalSrv.error({
