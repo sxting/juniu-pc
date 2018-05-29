@@ -40,7 +40,7 @@
         <input nz-input formControlName="currentPrice" id="currentPrice" placeholder="请输入商品价格">
         <ng-container *ngIf="currentPrice.dirty || currentPrice.touched">
           <nz-form-explain class="errorTips" *ngIf="currentPrice.errors?.required">商品售价不可为空</nz-form-explain>
-          <nz-form-explain class="errorTips" *ngIf="currentPrice.errors?.pattern">商品售价只能是有两位小数的数字(例如: 9.90)</nz-form-explain>
+          <nz-form-explain class="errorTips" *ngIf="currentPrice.errors?.pattern">商品售价只能是整数或者带有两位小数的数字</nz-form-explain>
         </ng-container>
       </nz-form-control>
     </nz-form-item>

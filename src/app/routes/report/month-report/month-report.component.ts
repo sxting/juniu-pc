@@ -37,6 +37,10 @@ export class MonthReportComponent implements OnInit {
     xData: any[] = [];//echarts图表X轴
     yData: any[] = [];//echarts图表Y轴
 
+    moduleId: any;
+    ifStoresAll: boolean = true;//是否有全部门店
+    ifStoresAuth: boolean = false;//是否授权
+
 
     constructor(
         private http: _HttpClient,
@@ -58,6 +62,7 @@ export class MonthReportComponent implements OnInit {
 
     ngOnInit() {
 
+        this.moduleId = 1;
         let userInfo;
         if (this.localStorageService.getLocalstorage('User-Info')) {
           userInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info'));
@@ -65,29 +70,26 @@ export class MonthReportComponent implements OnInit {
         if (userInfo) {
           this.merchantId = userInfo.merchantId;
         }
-        //门店列表
-        if (this.localStorageService.getLocalstorage(STORES_INFO) && JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
-          let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-            JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-          let list = {
-            storeId: '',
-            storeName: '全部门店'
-          };
-          storeList.splice(0, 0, list);//给数组第一位插入值
-          this.storeList = storeList;
-          this.storeId = '';
-        }
-
         let year = new Date().getFullYear();        //获取当前年份(2位)
         let month = new Date().getMonth()+1;       //获取当前月份(0-11,0代表1月)
         let changemonth = month < 10 ? '0' + month : '' + month;
         this.reportDateChange = year+'-'+changemonth;
-
         this.reportDate = new Date(this.reportDateChange);
-        this.batchQuery.yyyymm = this.reportDateChange;
-        this.batchQuery.storeId = this.storeId;
-        //获取页面信息
-        this.getMonthreportInfor(this.batchQuery);
+
+    }
+
+    //门店id
+    getStoreId(event: any){
+      this.storeId = event.storeId? event.storeId : '';
+      this.batchQuery.yyyymm = this.reportDateChange;
+      //获取页面信息
+      this.batchQuery.storeId = this.storeId;
+      this.getMonthreportInfor(this.batchQuery);
+    }
+
+    //返回门店数据
+    storeListPush(event: any){
+      this.storeList = event.storeList? event.storeList : [];
     }
 
     //echarts数据
@@ -213,12 +215,6 @@ export class MonthReportComponent implements OnInit {
                 FunctionUtil.errorAlter(error);
             }
         )
-    }
-
-    //选择门店
-    selectStore() {
-        this.batchQuery.storeId = this.storeId;
-        this.getMonthreportInfor(this.batchQuery);
     }
 
     //选择日期

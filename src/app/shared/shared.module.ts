@@ -27,9 +27,11 @@ import { StoreComponent } from "@shared/component/store/store.component";
 import { OrderService } from "@shared/component/reserve/shared/order.service";
 import { ManageService} from "../routes/manage/shared/manage.service";
 import { MarketingService} from "../routes/marketing/shared/marketing.service";
-import { UploadService } from './upload-img/shared/upload.service';
 import { ImageShowPipe } from '@shared/pipe/image.pipe';
 import { UploadImageComponent } from '@shared/upload-img/upload-img.component';
+import { StoresInforService } from '@shared/stores-infor/shared/stores-infor.service';
+import { UploadService } from '@shared/upload-img';
+import { StoresInforComponent } from '@shared/stores-infor/stores-infor.component';
 
 const THIRDMODULES = [
   NgZorroAntdModule,
@@ -44,6 +46,7 @@ const JUNIUMODULES = [
   SidebarNav2Component,
   SelectTransferComponent,
   UploadImageComponent,
+  StoresInforComponent,
   StoreComponent
 ];
 // endregion
@@ -92,6 +95,6 @@ const DIRECTIVES = [];
     ...JUNIUMODULES,
     ImageShowPipe
   ],
-  providers: [UploadService, ManageService, OrderService, MarketingService],
+  providers: [UploadService, ManageService, OrderService, MarketingService,StoresInforService],
 })
 export class SharedModule {}

@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Router, ActivatedRoute } from '@angular/router';
-import { LocalStorageService } from "../../../shared/service/localstorage-service";
-import { STORES_INFO } from "../../../shared/define/juniu-define";
-import { ManageService } from "../shared/manage.service";
-import { FunctionUtil } from "../../../shared/funtion/funtion-util";
+import { LocalStorageService } from '@shared/service/localstorage-service';
+import { ManageService } from '../shared/manage.service';
 import NP from 'number-precision'
+import { FunctionUtil } from '@shared/funtion/funtion-util';
+
 
 @Component({
   selector: 'app-staff-commission-list',
@@ -17,14 +17,17 @@ export class StaffCommissionListComponent implements OnInit {
 
     theadName: any = ['编号', '提成规则名称', '规则详情', '包含商品数', '包含员工数', '操作'];
     commissionListInfor: any = [];//员工提成列表信息
-    storeList: any;//门店列表
-    storeId: string = '';//选中门店的ID
     merchantId: string;//查看登录状态
     deductRuleId: string = '';//规则ID
     pageNo: any = 1;//页码
     pageSize: any = '10';//一页展示多少数据
     totalElements: any = 0;//商品总数
     loading = false;//加载loading
+    storeList: any;//门店列表
+    storeId: string = '';//选中门店的ID
+    moduleId: any;
+    ifStoresAll: boolean = false;//是否有全部门店
+    ifStoresAuth: boolean = false;//是否授权
 
     constructor(
         private http: _HttpClient,
@@ -37,25 +40,23 @@ export class StaffCommissionListComponent implements OnInit {
 
     ngOnInit() {
 
+        this.moduleId = 1;
         let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
             JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
         this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
-        //门店列表
-        if (this.localStorageService.getLocalstorage(STORES_INFO) && JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
-            let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-                JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-            this.storeList = storeList;
-            this.storeId = this.storeList[0].storeId;
-        }
+
         //请求员工列表数据
         this.rulePageListHttp();
     }
 
-
-    //员工提成的选择门店
-    selectStore(){
-        console.log(this.storeId);
-        this.rulePageListHttp();//请求员工列表数据
+    //门店id
+    getStoreId(event: any){
+      this.storeId = event.storeId? event.storeId : '';
+      this.rulePageListHttp();//请求员工列表数据
+    }
+    //返回门店数据
+    storeListPush(event: any){
+      this.storeList = event.storeList? event.storeList : [];
     }
 
     //新增提成规则
