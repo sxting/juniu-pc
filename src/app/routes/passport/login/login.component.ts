@@ -78,6 +78,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
                     this.localStorageService.setLocalstorage(ALIPAY_SHOPS, JSON.stringify(res.data[ALIPAY_SHOPS]));
                     this.localStorageService.setLocalstorage(USER_INFO, JSON.stringify(res.data));
                     this.localStorageService.setLocalstorage(MODULES, JSON.stringify(res.data[MODULES]));
+                    this.tokenSetFun(res.data.token);
                     if (url === 'koubeiproduct') {
                         this.router.navigate(['/koubei/product/list']);
                     } else if (url === 'marketing') {
@@ -131,28 +132,12 @@ export class UserLoginComponent implements OnDestroy, OnInit {
         }
         // mock http
         this.loading = true;
-        setTimeout(() => {
-            this.loading = false;
-            if (this.type === 0) {
-                if (this.userName.value !== 'admin' || this.password.value !== '888888') {
-                    this.error = `账户或密码错误`;
-                    // else this.loginName(this.form.value.userName, this.form.value.password);
-                    return;
-                }
-            } else {
-                // else this.loginName(this.form.value.mobile, this.form.value.captcha);
-            }
-
-            // 清空路由复用信息
-            this.reuseTabService.clear();
-            this.tokenService.set({
-                token: 'e491b6f4f568a26f3844deb1f5ee8656',
-                email: `cipchk@qq.com`,
-                id: 10000,
-                time: +new Date
-            });
-            this.router.navigate(['/']);
-        }, 1000);
+        if (this.type === 0) {
+            this.loginName(this.form.value.userName, this.form.value.password);
+        } else {
+            this.loginPhone(this.form.value.mobile, this.form.value.captcha);
+        }
+        this.tokenSetFun('e491b6f4f568a26f3844deb1f5ee8656');
     }
 
     // endregion
@@ -165,12 +150,14 @@ export class UserLoginComponent implements OnDestroy, OnInit {
             (res: any) => {
                 if (res.success) {
                     this.localStorageService.setLocalstorage(USER_INFO, JSON.stringify(res.data));
+                    this.tokenSetFun(res.data.token);
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
                         nzContent: res.errorInfo
                     });
                 }
+                this.loading = false;
             },
             error => this.errorAlter(error)
         )
@@ -184,15 +171,28 @@ export class UserLoginComponent implements OnDestroy, OnInit {
             (res: any) => {
                 if (res.success) {
                     this.localStorageService.setLocalstorage(USER_INFO, JSON.stringify(res.data));
+                    this.tokenSetFun(res.data.token);
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
                         nzContent: res.errorInfo
                     });
                 }
+                this.loading = false;
             },
             error => this.errorAlter(error)
         )
+    }
+    tokenSetFun(token: any) {
+        // 清空路由复用信息
+        this.reuseTabService.clear();
+        this.tokenService.set({
+            token: token,
+            email: `cipchk@qq.com`,
+            id: 10000,
+            time: +new Date
+        });
+        this.router.navigate(['/']);
     }
     getValidCode(phone, bizType) {
         let that = this;
