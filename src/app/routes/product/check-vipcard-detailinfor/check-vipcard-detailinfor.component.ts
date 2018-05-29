@@ -3,10 +3,11 @@ import { _HttpClient , TitleService} from '@delon/theme';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NzMessageService, NzModalService} from 'ng-zorro-antd';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FunctionUtil } from "../../../shared/funtion/funtion-util";
-import { ProductService } from "../shared/product.service";
-import { LocalStorageService } from "../../../shared/service/localstorage-service";
-import { CITYLIST } from "../../../shared/define/juniu-define";
+import { LocalStorageService } from '@shared/service/localstorage-service';
+import { FunctionUtil } from '@shared/funtion/funtion-util';
+import { ProductService } from '../shared/product.service';
+import { CITYLIST } from '@shared/define/juniu-define';
+declare var PhotoClip: any;
 
 @Component({
   selector: 'app-check-vipcard-detailinfor',
@@ -23,7 +24,6 @@ export class CheckVipcardDetailinforComponent implements OnInit {
     configId: string;//ID
     cardTypeName: string;//卡类型名称
     validate: any;//使用天数
-
     isPinCardArr: any[] = [{ name: '不可销卡(默认)', ifPin: '1'}, { name: '按照无折扣进行销卡', ifPin: '0' }];//是否可销卡
     validateType: any[] = [{ name: '永久有效(默认)', type: 'FOREVER'}, { name: '自开卡之日起', type: 'days' }];//使用有效期
     productTypesArr: any = [{ name: '全部服务项目(默认)', value: 'SERVICEITEMS'}, { name: '全部项目和商品', value: 'ALL'},{name: '自定义', value: 'CUSTOMIZE'}];
@@ -47,7 +47,7 @@ export class CheckVipcardDetailinforComponent implements OnInit {
     isRecharge: any;
     isShare: any;
     isWxShow: any;
-    backgroundId: any;//卡面图片
+    backgroundId: any;//卡面背景id
     storeId: string = '';
     merchantId: string = '';
     price: number = 0;//售价
@@ -55,10 +55,12 @@ export class CheckVipcardDetailinforComponent implements OnInit {
     balance: number = 0;//储值卡内充值金额
     ifShow: boolean = true;//是否显示填选信息
     ifShowErrorTips: boolean = true;//是否显示错误信息
-    pc: any;
 
+    isVisible: boolean = false;//是否重新选择图片
+    CardBackGround: any;
+    backGroundImg: string = '';//卡面背景图地址
 
-  constructor(
+    constructor(
         private http: _HttpClient,
         private modalSrv: NzModalService,
         private fb: FormBuilder,
@@ -202,8 +204,6 @@ export class CheckVipcardDetailinforComponent implements OnInit {
             this.getAllbuySearchs(data);//获取所有的商品
         }
         if(type === 'CUSTOMIZE'){
-          console.log(self.productIds);
-
           this.modalSrv.create({
                 nzTitle: '选择'+ text,
                 nzContent: tpl,
@@ -249,6 +249,39 @@ export class CheckVipcardDetailinforComponent implements OnInit {
     checkData(){
         var reg = /^[1-9]\d*$/;
         this.ifShowErrorTips = !reg.test(this.form.controls.effectivityDays.value)? false : true ; //判断是否是正整数
+    }
+
+    //修改卡面图片
+    changeCardBg(tpl: any){
+      let self = this;
+      self.isVisible = true;
+      setTimeout(function () {
+        self.CardBackGround = new PhotoClip('#clipArea', {
+          size: [250, 150],
+          outputSize: 640,
+          file: '#file',
+          view: '#view',
+          ok: '#clipBtn',
+          img: '',
+          loadStart: function () {
+            console.log('开始读取照片');
+          },
+          loadComplete: function () {
+            console.log('照片读取完成');
+          },
+          done: function (dataURL) {
+            if (!dataURL) {
+              self.msg.warning('请上传图片');
+            } else {
+              self.uploadImageWithBase64Http(dataURL);
+            }
+          },
+          fail: function (msg) {
+            self.msg.warning(msg);
+            console.log(msg)
+          }
+        });
+      },200);
     }
 
     /****************************************  数据处理  *********************************/
@@ -340,6 +373,30 @@ export class CheckVipcardDetailinforComponent implements OnInit {
 
     /****************************************  Http请求处理  *********************************/
 
+    //上传图片
+    uploadImageWithBase64Http(base64Image) {
+      let data = {
+        base64Image: base64Image
+      };
+      this.productService.uploadImageWithBase64(data).subscribe(
+        (res: any) => {
+            this.loading = false;
+            if (res.success) {
+                this.isVisible = false;
+                this.backgroundId = res.data.pictureId;
+                this.backGroundImg = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.backgroundId}/resize_${250}_${150}/mode_fill`;
+            } else {
+                this.modalSrv.error({
+                    nzTitle: '温馨提示',
+                    nzContent: res.errorInfo
+                });
+            }
+        },
+        error => {
+            this.msg.warning(error);
+        })
+    }
+
     // 获取全部商品
     getAllbuySearchs(data: any) {
         this.productService.getAllbuySearch(data).subscribe(
@@ -389,6 +446,8 @@ export class CheckVipcardDetailinforComponent implements OnInit {
                     this.validate = res.data.rules[0].validate;
                     this.rebate = res.data.rules[0].rebate;
                     this.balance = res.data.rules[0].balance;//储值卡和计次卡
+                    this.backgroundId = res.data.background;
+                    this.backGroundImg = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.backgroundId}/resize_${250}_${150}/mode_fill`;
 
                     let isPinCard = res.data.rules[0].isPinCard === 1? self.isPinCardArr[0].ifPin : self.isPinCardArr[1].ifPin;
                     let validateType = res.data.rules[0].validateType === 'FOREVER'? self.validateType[0].type : self.validateType[1].type;
@@ -422,7 +481,6 @@ export class CheckVipcardDetailinforComponent implements OnInit {
 
                     /******* 匹配选中的商品 *********/
                     let applyProductIds = res.data.rules[0].applyProductIds? res.data.rules[0].applyProductIds.split(',') : [];
-                    console.log(applyProductIds);
                     FunctionUtil.getDataChange(this.productListInfor, applyProductIds);//转换后台拿过来的数据
                     console.log(this.productListInfor);
                 } else {
@@ -438,62 +496,61 @@ export class CheckVipcardDetailinforComponent implements OnInit {
         );
     }
 
-    submit() {
-        console.log(this.form.controls);
-        let self = this;
-        for (const i in this.form.controls) {
-            this.form.controls[ i ].markAsDirty();
-            this.form.controls[ i ].updateValueAndValidity();
-        }
-        if (this.form.invalid) return;
-        else{
-            this.submitting = true;
-            let list = {
-                applyProductIds: this.productIds,
-                applyProductType: this.form.controls.productTypes.value,
-                applyStoreIds: this.selectStoresIds,
-                applyStoreType: this.form.controls.storeType.value,
-                balance: self.balance,
-                cardConfigName: this.form.controls.cardConfigName.value,
-                isPinCard: this.form.controls.isPinCard.value,
-                isWxShow: this.isWxShow,
-                merchantId: this.merchantId,
-                price: parseFloat(this.price + '')*100,//售价
-                rebate: self.cardType === 'REBATE'? parseFloat(self.rebate + '') : 0,
-                validate: this.form.controls.validateType.value === 'FOREVER'? 99999999 : this.form.controls.effectivityDays.value,
-                validateType: this.form.controls.validateType.value
-            };
-            let params = {
-                cardConfigId: this.configId,
-                background: this.backgroundId,
-                isRecharge: this.isRecharge,
-                isShare: this.isShare,
-                isOnlineSale: this.isOnlineSale,
-                cardConfigName: this.form.controls.cardConfigName.value,
-                storeId: this.storeId,
-                type: self.cardType,
-                rules: [list],
-            };
-            console.log(params);
-            this.productService.saveAddVipInfor(params).subscribe(
-                (res: any) => {
-                    if (res.success) {
-                        setTimeout(() => {
-                            self.submitting = false;
-                        }, 1000);
-                        this.router.navigate(['/product/vip/list']);
-                    } else {
-                        this.modalSrv.error({
-                            nzTitle: '温馨提示',
-                            nzContent: res.errorInfo
-                        });
-                    }
-                },
-                (error) => {
-                    this.msg.warning(error)
-                }
-            );
-        }
-
+    submit(){
+      let self = this;
+      for (const i in this.form.controls) {
+        this.form.controls[ i ].markAsDirty();
+        this.form.controls[ i ].updateValueAndValidity();
+      }
+      if (this.form.invalid) return;
+      else{
+        this.submitting = true;
+        let list = {
+          applyProductIds: this.backgroundId,
+          applyProductType: this.form.controls.productTypes.value,
+          applyStoreIds: this.selectStoresIds,
+          applyStoreType: this.form.controls.storeType.value,
+          balance: self.balance,
+          cardConfigName: this.form.controls.cardConfigName.value,
+          isPinCard: this.form.controls.isPinCard.value,
+          isWxShow: this.isWxShow,
+          merchantId: this.merchantId,
+          price: parseFloat(this.price + '')*100,//售价
+          rebate: self.cardType === 'REBATE'? parseFloat(self.rebate + '') : 0,
+          validate: this.form.controls.validateType.value === 'FOREVER'? 99999999 : this.form.controls.effectivityDays.value,
+          validateType: this.form.controls.validateType.value
+        };
+        let params = {
+          cardConfigId: this.configId,
+          background: this.backgroundId,
+          isRecharge: this.isRecharge,
+          isShare: this.isShare,
+          isOnlineSale: this.isOnlineSale,
+          cardConfigName: this.form.controls.cardConfigName.value,
+          storeId: this.storeId,
+          type: self.cardType,
+          rules: [list],
+        };
+        console.log(params);
+        this.productService.saveAddVipInfor(params).subscribe(
+          (res: any) => {
+            if (res.success) {
+              setTimeout(() => {
+                self.submitting = false;
+              }, 1000);
+              this.router.navigate(['/product/vip/list']);
+            } else {
+              this.modalSrv.error({
+                nzTitle: '温馨提示',
+                nzContent: res.errorInfo
+              });
+            }
+          },
+          (error) => {
+            this.msg.warning(error)
+          }
+        );
+      }
     }
+
 }

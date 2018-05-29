@@ -44,7 +44,7 @@ export class RulesStep1Component implements OnInit {
     uploadImage(event: any) {
         let self = this;
         event = event ? event : window.event;
-        let  cardType = this.form.controls.cardType.value;
+        let cardType = this.form.controls.cardType.value;
         let cardConfigName = this.form.controls.cardConfigName.value;
         this.loading = true;
         var file = event.srcElement ? event.srcElement.files : event.target.files; if (file) {
@@ -63,6 +63,15 @@ export class RulesStep1Component implements OnInit {
             });
         }
     }
+
+  /**
+   * 删除图片
+   * @param index
+   */
+  deleteImage() {
+    this.picId = '';
+    this.imagePath = '';
+  }
 
     _submitForm() {
         for (const i in this.form.controls) {

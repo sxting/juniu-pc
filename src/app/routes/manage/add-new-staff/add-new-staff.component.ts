@@ -116,6 +116,15 @@ export class AddNewStaffComponent implements OnInit {
         }
     }
 
+    /**
+     * 删除图片
+     * @param index
+     */
+    deleteImage() {
+      this.picId = '';
+      this.imagePath = '';
+    }
+
     /*************************  Http请求开始  ********************************/
 
     //员工role请求

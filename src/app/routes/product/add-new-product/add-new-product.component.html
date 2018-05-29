@@ -1,116 +1,117 @@
 <page-header [title]="'新增实体商品'">
-    实体商品为店内售卖的实物商品，比如“洗发水、精油”等。
+  实体商品为店内售卖的实物商品，比如“洗发水、精油”等。
 </page-header>
 <nz-card [nzBordered]="false">
-    <form nz-form [formGroup]="form" (ngSubmit)="submit()">
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="categoryId">商品分类</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <nz-select formControlName="categoryInfor" [nzPlaceHolder]="'请选择商品分类'" [nzShowSearch]="true">
-                    <nz-option *ngFor="let i of categoryList" [nzLabel]="i.categoryName" [nzValue]="i.categoryId +','+ i.categoryName"></nz-option>
-                </nz-select>
-                <nz-form-explain class="errorTips" *ngIf="(categoryInfor.dirty || categoryInfor.touched) && categoryInfor.errors?.required">请选择商品分类</nz-form-explain>
-                <span class="add-categoryName-btn" (click)="addNewProductTypes(category)">新增分类</span>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="productName">商品名称</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input nz-input formControlName="productName" id="productName" placeholder="请输入商品名称">
-                <nz-form-explain class="errorTips"  *ngIf="form.get('productName').dirty && form.get('productName').errors">商品名称不可为空</nz-form-explain>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzFor="productNo">
-                商品编号
-                <em>
-                    <nz-tooltip nzTitle="商品编号展示在收银页面，方便收银操作时快速选择服务项目">
-                        <i nz-tooltip class="anticon anticon-info-circle-o"></i>
-                    </nz-tooltip>
-                </em>
-            </nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input maxlength="10" nz-input formControlName="productNo" id="productNo" placeholder="请输入1-10位商品编号">
-                <nz-form-explain class="errorTips"  *ngIf="form.get('productNo').dirty && form.get('productNo').errors">商品编号只能为数字</nz-form-explain>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="currentPrice">售价(元)</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input nz-input formControlName="currentPrice" id="currentPrice" placeholder="请输入商品价格">
-                <ng-container *ngIf="currentPrice.dirty || currentPrice.touched">
-                    <nz-form-explain class="errorTips" *ngIf="currentPrice.errors?.required">商品售价不可为空</nz-form-explain>
-                    <nz-form-explain class="errorTips" *ngIf="currentPrice.errors?.pattern">商品售价只能是有两位小数的数字(例如: 9.90)</nz-form-explain>
-                </ng-container>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="stock">库存</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input nz-input formControlName="stock" id="stock" placeholder="请输入商品库存">
-                <ng-container *ngIf="stock.dirty || stock.touched">
-                    <nz-form-explain class="errorTips" *ngIf="stock.errors?.required">商品库存不可为空</nz-form-explain>
-                    <nz-form-explain class="errorTips" *ngIf="stock.errors?.pattern">商品库存只能是正整数</nz-form-explain>
-                </ng-container>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzFor="card_img">商品图片(选填)</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <div class="pics_box clearfix">
-                    <div class="img-box">
-                        <img class="upload-img" src="./assets/img/upload.png">
-                        <input type="file" accept="image" (change)="uploadImage($event)">
-                        <img class="image" [src]="imagePath" *ngIf="imagePath">
-                    </div>
-                </div>
-                <nz-form-explain style="margin-top: 10px">商品图片用于在线购买的展示</nz-form-explain>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item style="margin-bottom: 10px!important;">
-            <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="storeType">售卖门店</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <nz-radio-group formControlName="storeType">
-                    <label nz-radio *ngFor="let item of storeStatus"  [nzValue]="item.value" (click)="onSelectAlertBtn(alertStore, '门店', item.value)">{{item.name}}</label>
-                </nz-radio-group>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="stock">上下架状态</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <nz-radio-group formControlName="status">
-                    <label nz-radio *ngFor="let status of ItemsStatus" [nzValue]="status.value">{{status.name}}</label>
-                </nz-radio-group>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
-                <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">保存</button>
-            </nz-form-control>
-        </nz-form-item>
-    </form>
+  <form nz-form [formGroup]="form" (ngSubmit)="submit()">
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="categoryId">商品分类</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <nz-select formControlName="categoryInfor" [nzPlaceHolder]="'请选择商品分类'" [nzShowSearch]="true">
+          <nz-option *ngFor="let i of categoryList" [nzLabel]="i.categoryName" [nzValue]="i.categoryId +','+ i.categoryName"></nz-option>
+        </nz-select>
+        <nz-form-explain class="errorTips" *ngIf="(categoryInfor.dirty || categoryInfor.touched) && categoryInfor.errors?.required">请选择商品分类</nz-form-explain>
+        <span class="add-categoryName-btn" (click)="addNewProductTypes(category)">新增分类</span>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="productName">商品名称</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <input nz-input formControlName="productName" id="productName" placeholder="请输入商品名称">
+        <nz-form-explain class="errorTips"  *ngIf="form.get('productName').dirty && form.get('productName').errors">商品名称不可为空</nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7" nzFor="productNo">
+        商品编号
+        <em>
+          <nz-tooltip nzTitle="商品编号展示在收银页面，方便收银操作时快速选择服务项目">
+            <i nz-tooltip class="anticon anticon-info-circle-o"></i>
+          </nz-tooltip>
+        </em>
+      </nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <input maxlength="10" nz-input formControlName="productNo" id="productNo" placeholder="请输入1-10位商品编号">
+        <nz-form-explain class="errorTips"  *ngIf="form.get('productNo').dirty && form.get('productNo').errors">商品编号只能为数字</nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="currentPrice">售价(元)</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <input nz-input formControlName="currentPrice" id="currentPrice" placeholder="请输入商品价格">
+        <ng-container *ngIf="currentPrice.dirty || currentPrice.touched">
+          <nz-form-explain class="errorTips" *ngIf="currentPrice.errors?.required">商品售价不可为空</nz-form-explain>
+          <nz-form-explain class="errorTips" *ngIf="currentPrice.errors?.pattern">商品售价只能是有两位小数的数字(例如: 9.90)</nz-form-explain>
+        </ng-container>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="stock">库存</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <input nz-input formControlName="stock" id="stock" placeholder="请输入商品库存">
+        <ng-container *ngIf="stock.dirty || stock.touched">
+          <nz-form-explain class="errorTips" *ngIf="stock.errors?.required">商品库存不可为空</nz-form-explain>
+          <nz-form-explain class="errorTips" *ngIf="stock.errors?.pattern">商品库存只能是正整数</nz-form-explain>
+        </ng-container>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7" nzFor="card_img">商品图片(选填)</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <div class="pics_box clearfix">
+          <div class="img-box">
+            <img class="upload-img" src="./assets/img/upload.png">
+            <input type="file" accept="image" (change)="uploadImage($event)">
+            <img class="image" [src]="imagePath" *ngIf="imagePath">
+            <i *ngIf="imagePath" class="iconfont icon-deleternormal" (click)="deleteImage()"></i>
+          </div>
+        </div>
+        <nz-form-explain style="margin-top: 10px">商品图片用于在线购买的展示</nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item style="margin-bottom: 10px!important;">
+      <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="storeType">售卖门店</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <nz-radio-group formControlName="storeType">
+          <label nz-radio *ngFor="let item of storeStatus"  [nzValue]="item.value" (click)="onSelectAlertBtn(alertStore, '门店', item.value)">{{item.name}}</label>
+        </nz-radio-group>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="stock">上下架状态</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <nz-radio-group formControlName="status">
+          <label nz-radio *ngFor="let status of ItemsStatus" [nzValue]="status.value">{{status.name}}</label>
+        </nz-radio-group>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
+        <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">保存</button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
 </nz-card>
 
 <!--商品分类弹框-->
 <ng-template #category>
-    <div class="reserve-record-alert">
-        <ul class="add_content">
-            <li class="clearfix" *ngFor="let list of addNewCommodityType;let types = index">
-                <span>{{types+1}}</span>
-                <input nz-input class="" type="text" placeholder="请输入分类名称" maxlength="20" [value]="list.categoryName" (change)="addDescriptions($event.target.value, types)" />
-                <span class="add_btns" (click)="deleteCategoryClick(types,list.categoryId)">删除</span>
-            </li>
-            <li class="btns-add-new">
-                <p class="add-btns-bottom" (click)="addNewProductTypesClick()">
-                    <span style="font-size: 18px">+</span>
-                    <span> 添加</span>
-                </p>
-            </li>
-        </ul>
-    </div>
+  <div class="reserve-record-alert">
+    <ul class="add_content">
+      <li class="clearfix" *ngFor="let list of addNewCommodityType;let types = index">
+        <span>{{types+1}}</span>
+        <input nz-input class="" type="text" placeholder="请输入分类名称" maxlength="20" [value]="list.categoryName" (change)="addDescriptions($event.target.value, types)" />
+        <span class="add_btns" (click)="deleteCategoryClick(types,list.categoryId)">删除</span>
+      </li>
+      <li class="btns-add-new">
+        <p class="add-btns-bottom" (click)="addNewProductTypesClick()">
+          <span style="font-size: 18px">+</span>
+          <span> 添加</span>
+        </p>
+      </li>
+    </ul>
+  </div>
 </ng-template>
 
 <!--选择弹框-->
 <ng-template #alertStore>
-    <app-select-transfer [cityStoreList]="cityStoreList" [allStaffNum]="allStoresNum" (staffIds)="getSelectStoresIds($event)"></app-select-transfer>
+  <app-select-transfer [cityStoreList]="cityStoreList" [allStaffNum]="allStoresNum" (staffIds)="getSelectStoresIds($event)"></app-select-transfer>
 </ng-template>

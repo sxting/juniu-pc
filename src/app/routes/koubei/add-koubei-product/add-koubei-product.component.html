@@ -56,6 +56,7 @@
                         <input type="file" accept="image" (change)="uploadImage($event,'cover',0)">
                         <input formControlName="picId" style="visibility: hidden"/>
                         <img class="image" [src]="imagePath" *ngIf="imagePath">
+                        <i *ngIf="imagePath" class="iconfont icon-deleternormal" (click)="deleteImage(0,'cover')"></i>
                     </div>
                 </div>
                 <nz-form-explain class="errorTips"  *ngIf="form.get('picId').dirty && form.get('picId').errors">请上传商品首图</nz-form-explain>
@@ -67,9 +68,9 @@
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
                 <ul class="pics_box clearfix">
                     <li class="img-box">
-                        <img class="upload-img" src="./assets/img/upload.png">
-                        <input type="file" accept="image" (change)="uploadImage($event,'tbaoImg',0)">
+                        <img class="upload-img" src="./assets/img/upload.png" (click)="uploadTmallHomePic()">
                         <img class="image" [src]="imagePathTb" *ngIf="imagePathTb">
+                        <i *ngIf="imagePathTb" class="iconfont icon-deleternormal" (click)="deleteImage(0,'tmall')"></i>
                     </li>
                 </ul>
                 <nz-form-explain class="tips-text">该图片将在淘抢购、聚划算、大牌抢购等渠道展示,图片不能大于5M,图片格式:bmp,png,jprg,gif.建议尺寸:1500px*1500px,即1:1比例。</nz-form-explain>
@@ -84,7 +85,7 @@
                         <img class="upload-img" src="./assets/img/upload.png">
                         <input type="file" accept="image" (change)="uploadImage($event,'images',i)">
                         <img class="image" src="{{image.src}}" *ngIf="image.src">
-                        <i *ngIf="image.showDelete" class="iconfont icon-shanchuicon" (click)="deleteImage(i)"></i>
+                        <i *ngIf="image.showDelete" class="iconfont icon-deleternormal" (click)="deleteImage(i,'images')"></i>
                     </li>
                 </ul>
                 <nz-form-explain class="tips-text">上传1-5张图片，图片不能大于5M，建议宽高比4:3。</nz-form-explain>
@@ -183,7 +184,7 @@
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzFor="expiryDay">使用有效期</nz-form-label>
+            <nz-form-label nzXs="24" nzSm="7" nzFor="validityPeriodType">使用有效期</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
                 <nz-select style="width: 160px" formControlName="validityPeriodType" (ngModelChange)="selectExpiryDay()" [nzAllowClear]="false">
                     <nz-option *ngFor="let option of expiryDayInfor" [nzLabel]="option.name" [nzValue]="option.type"></nz-option>
@@ -194,7 +195,7 @@
                     <span class="text-thing" style="color: #999999;font-size: 12px;">输入范围7-360天</span>
                 </div>
                 <div class="clearfix" *ngIf="form.value.validityPeriodType == 'FIXED'">
-                  <nz-range-picker formControlName="dateRange" nzShowTime></nz-range-picker>
+                    <nz-range-picker formControlName="dateRange" nzShowTime></nz-range-picker>
                 </div>
                 <ng-container *ngIf="form.value.validityPeriodType == 'RELATIVE'&& expiryDay.dirty || expiryDay.touched">
                     <nz-form-explain class="errorTips" *ngIf="expiryDay.errors?.required">请填写使用有效期。</nz-form-explain>
@@ -272,4 +273,22 @@
   <div class="reserve-record-alert" style="height: 400px;">
     <iframe class="all-iframe" id="koubeikeFrame" [src]="trustedUrl" frameborder="0" scrolling="auto" height="100%" width="100%"></iframe>
   </div>
+</nz-modal>
+
+
+<!--选择入淘首图的弹框-->
+<nz-modal [(nzVisible)]="isVisibleImg" nzWidth ="500" [nzFooter]="null"  nzTitle="选择入淘首图" nzOkText="确定">
+  <!--修改卡面背景-->
+  <nz-form-text class="btn-photo-clip">
+    <span class="btn-img">点击上传入淘首图</span>
+    <input type="file" id="file" accept="image" />
+  </nz-form-text>
+  <div class="clip-img-box">
+    <div id="clipArea"></div>
+  </div>
+  <p class="btn-box clearfix">
+    <button class="ant-btn ng-star-inserted ant-btn-primary" type="primary" id="clipBtn">
+      <span>确定</span>
+    </button>
+  </p>
 </nz-modal>

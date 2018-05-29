@@ -24,6 +24,8 @@ export class PayDownloadComponent implements OnInit {
     imagePath: any = '';
     uploadImageResult: any = '';
     imageId: any = '';
+    colorArr: any = ['green', 'blue', '#ff6600'];
+    color: string = '';
 
     constructor(
         private localStorageService: LocalStorageService,
@@ -54,6 +56,10 @@ export class PayDownloadComponent implements OnInit {
         this.storeId = this.selectedOption;
     }
 
+  colorChange() {
+
+  }
+
     /** 上传图片 */
     uploadImage(event: any) {
         event = event ? event : window.event;
@@ -69,7 +75,7 @@ export class PayDownloadComponent implements OnInit {
     }
 
     saveQrClick() {
-        window.open(`${Config.API}finance/store/download/qr.do?storeId=${this.storeId}&logo=${this.imageId}`);
+        window.open(`${Config.API}finance/store/download/qr.do?storeId=${this.storeId}&logo=${this.imageId}&color=${this.color}`);
     }
 
 }

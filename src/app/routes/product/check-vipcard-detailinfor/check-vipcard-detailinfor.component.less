@@ -12,9 +12,22 @@
 .right-2 {
     width: 300px;
     height: 180px;
-    padding: 10px;
     position: relative;
-    padding-left: 20px;
+}
+.clip-img-box{
+  position: relative;
+  width: 100%;
+  height: 180px;
+}
+.clip-img-box .img-top,.clip-img-box .img-bottom{
+  left: 100px;
+}
+.btn-photo-clip{
+  color: #1890ff;
+  cursor: pointer;
+  position: relative;
+  height: 30px;
+  line-height: 30px;
 }
 .img-top,
 .img-bottom {
@@ -23,17 +36,32 @@
 }
 .img-top {
     height: 60px;
-    top: 25px;
-    left: 45px;
+    top: 15px;
+    left: 25px;
     background: rgba(0, 0, 0, 0.1);
+    z-index: 2;
 }
 .img-bottom {
     height: 45px;
     background: rgba(0, 0, 0, 0.1);
-    bottom: 25px;
-    left: 45px;
+    bottom: 15px;
+    left: 25px;
+    z-index: 2;
 }
-
+#file{
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.photoClipBox{
+  width: 100%;
+  background: #fff;
+}
+.btn-box{
+  width: 100%;
+  height: 40px;
+}
 .logo,
 .wenzi,
 .erweima {
@@ -79,4 +107,30 @@
 }
 .errorTips{
     color: red;
+}
+.CardBackGround{
+  width: 250px;
+  height: 150px;
+  position: absolute;
+  top: 15px;
+  left: 25px;
+}
+.ant-card-body{
+  padding: 24px 24px 0 24px!important;
+}
+#clipBtn{
+  margin-top: 20px;
+  float: right;
+}
+.presentImg{
+  width: 250px;
+  height: 150px;
+}
+.presentImg .img-top{
+  top: 0;
+  left: 0;
+}
+.presentImg .img-bottom{
+  bottom: 0;
+  left: 0;
 }

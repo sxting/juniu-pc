@@ -13,13 +13,13 @@
             <nz-form-item>
                 <nz-form-label nzXs="24" nzSm="7" nzRequired>背景颜色</nz-form-label>
                 <nz-form-control>
-                    <nz-radio-group>
-                        <label nz-radio [nzValue]="1">绿色</label>
-                        <label nz-radio [nzValue]="2">蓝色</label>
-                        <label nz-radio [nzValue]="3">橙色</label>
-                        <label nz-radio [nzValue]="4">
-                            自定义# <input nz-input placeholder="请输入色值" style="width: 100px;">
-                        </label>
+                    <nz-radio-group [(ngModel)]="color" (ngModelChange)="colorChange()">
+                        <label nz-radio [nzValue]="colorArr[0]">绿色</label>
+                        <label nz-radio [nzValue]="colorArr[1]">蓝色</label>
+                        <label nz-radio [nzValue]="colorArr[2]">橙色</label>
+                        <!--<label nz-radio [nzValue]="4">-->
+                            <!--自定义# <input nz-input placeholder="请输入色值" style="width: 100px;">-->
+                        <!--</label>-->
                     </nz-radio-group>
                 </nz-form-control>
             </nz-form-item>

@@ -341,8 +341,17 @@ export class AddNewProductComponent implements OnInit {
             });
         }
     }
+    /**
+     * 删除图片
+     * @param index
+     */
+    deleteImage() {
+      this.picId = '';
+      this.imagePath = '';
+    }
 
-    //获取商品详情信息
+
+  //获取商品详情信息
     getProductDetailInfor(){
         let self = this;
         let params = {
