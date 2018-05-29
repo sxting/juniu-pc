@@ -631,11 +631,11 @@ export class TouristComponent implements OnInit {
         create.faceId = this.selectFaceId;
         create.customerId = this.memberInfo.customerId;
         console.log(create);
-        // if (this.xyVip) {
-        //     that.rechargeAndOrderPayFun(create)
-        // } else {
-        //     that.createOrderFun(create);
-        // }
+        if (this.xyVip) {
+            that.rechargeAndOrderPayFun(create)
+        } else {
+            that.createOrderFun(create);
+        }
     }
     createOrderFun(create: any) {
         this.checkoutService.createOrder(create).subscribe(
