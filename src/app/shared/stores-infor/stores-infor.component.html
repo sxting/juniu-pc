@@ -1,7 +1,7 @@
 
   <nz-form-item>
-    <nz-form-label nzFor="storeId">选择门店</nz-form-label>
-    <nz-form-control>
+    <nz-form-label nzXs="{{nzXs}}" nzSm="{{nzSm}}" nzFor="storeId" [nzRequired]="nzRequired">选择门店</nz-form-label>
+    <nz-form-control nzXs="{{nzXs}}" nzSm="{{nzSm}}">
       <nz-select [(ngModel)]="storeId" name="storeId" id="storeId" (ngModelChange)="selectStore()" [nzPlaceHolder]="'请选择一个门店'" [nzShowSearch]="true">
         <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.branchName" [nzValue]="i.storeId" [nzDisabled]="i.nzDisabled"></nz-option>
       </nz-select>

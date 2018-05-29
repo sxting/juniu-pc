@@ -15,6 +15,9 @@ import {Config} from "@shared/config/env.config";
 })
 export class PayDownloadComponent implements OnInit {
 
+  nzXs: any = 24;
+  nzSm: any = 7;
+
   storeName: string = '';
   storeId: any = '';
   stores: any = [];
@@ -46,10 +49,15 @@ export class PayDownloadComponent implements OnInit {
     this.downloadQronline();
   }
 
-  onStoresChange() {
-    this.storeId = this.selectedOption;
+  onStoresChange(e) {
+    this.storeId = e.storeId;
     this.downloadQronline();
   }
+
+  // onStoresChange() {
+  //   this.storeId = this.selectedOption;
+  //   this.downloadQronline();
+  // }
 
   colorChange() {
     if(this.color.length === 6) {
@@ -86,5 +94,4 @@ export class PayDownloadComponent implements OnInit {
   downloadQronline() {
     this.imgPath = `${Config.API}finance/store/download/qronline.do?storeId=${this.storeId}&logoId=${this.imageId}&color=${this.color}`;
   }
-
 }
