@@ -17,14 +17,14 @@
                         <label nz-radio [nzValue]="colorArr[0]">绿色</label>
                         <label nz-radio [nzValue]="colorArr[1]">蓝色</label>
                         <label nz-radio [nzValue]="colorArr[2]">橙色</label>
-                        <!--<label nz-radio [nzValue]="4">-->
-                            <!--自定义# <input nz-input placeholder="请输入色值" style="width: 100px;">-->
-                        <!--</label>-->
+                        <label nz-radio [nzValue]="">
+                            自定义# <input nz-input placeholder="请输入色值" style="width: 100px;" [(ngModel)]="myColor" (blur)="changeMyColor()">
+                        </label>
                     </nz-radio-group>
                 </nz-form-control>
             </nz-form-item>
             <nz-form-item>
-                <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="public">商家Logo</nz-form-label>
+                <nz-form-label nzXs="24" nzSm="7" nzRequired>商家Logo</nz-form-label>
                 <nz-form-control>
                     <div class="form-img-box">
                         <img class="image" [src]="imagePath">
@@ -36,7 +36,9 @@
         <!--</form>-->
     </div>
     <div class="fl pay-right-box">
-        <div class="pay-img-box"></div>
+        <div class="pay-img-box">
+          <img src="{{imgPath}}" alt="">
+        </div>
         <button nz-button nzType="primary" (click)="saveQrClick()">保存二维码</button>
     </div>
 </nz-card>

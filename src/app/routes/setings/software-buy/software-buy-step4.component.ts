@@ -30,7 +30,21 @@ export class SoftBuyStep4Component implements OnInit {
     _MEIQIA('showPanel');
   }
 
+  company: any = '';
+  dutyParagraph: any = '';
+  address: any = '';
+  contactPhone: any = '';
+
   _submitForm() {
+    let data = {
+      company: this.company,
+      dutyParagraph: this.dutyParagraph,
+      address: this.address,
+      contactPhone: this.contactPhone
+    };
+    this.setingsService.packageInvoice(data).subscribe(
+      (res: any) => {}
+    );
     this.router.navigate(['/manage/storeList', {}])
   }
 }
