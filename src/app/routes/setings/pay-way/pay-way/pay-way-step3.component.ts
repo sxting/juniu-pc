@@ -47,7 +47,7 @@ export class PayWayStep3Component implements OnInit {
         this.getProvinceList();
     }
 
-    get kaihu_name() { return this.form.controls['kaihu_name']; }
+    // get kaihu_name() { return this.form.controls['kaihu_name']; }
     get kaihuren() { return this.form.controls['kaihuren']; }
     get kaihur_shenfz() { return this.form.controls['kaihur_shenfz']; }
     get kaihur_tel() { return this.form.controls['kaihur_tel']; }
@@ -96,7 +96,7 @@ export class PayWayStep3Component implements OnInit {
         } else {
             if(this.item.type === 'qiye') {
                 this.form = this.fb.group({
-                    kaihu_name: ['', [Validators.required]],
+                    // kaihu_name: ['', [Validators.required]],
                     kaihuren: ['', [Validators.required]],
                     kaihur_shenfz: ['', [Validators.required, Validators.pattern(/^\d{15}$|^\d{18}$|^\d{17}(\d|X|x)$/)]],
                     kaihur_tel: ['', [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
@@ -107,7 +107,7 @@ export class PayWayStep3Component implements OnInit {
                 });
             } else {
                 this.form = this.fb.group({
-                    kaihu_name: ['', [Validators.required]],
+                    // kaihu_name: ['', [Validators.required]],
                     kaihuren: ['', [Validators.required]],
                     kaihur_shenfz: ['', [Validators.required, Validators.pattern(/^\d{15}$|^\d{18}$|^\d{17}(\d|X|x)$/)]],
                     kaihur_tel: ['', [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],

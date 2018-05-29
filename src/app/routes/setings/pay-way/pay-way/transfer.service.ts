@@ -12,7 +12,7 @@ export class TransferService {
     //审核状态
     status: string = '3'; //审核中0   审核通过1   审核未通过2   3未申请
 
-    itemData: any = {};
+    itemData: any;
 
     again() {
         this.type = 'qiye';
