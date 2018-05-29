@@ -121,6 +121,7 @@ export class KoubeiProductListComponent implements OnInit {
             console.log(message);
           }
         });
+
     }
 
     /**************************页面基础操作开始*********************************/

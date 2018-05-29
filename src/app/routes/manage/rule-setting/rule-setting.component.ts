@@ -2,14 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import {_HttpClient, TitleService} from '@delon/theme';
 import { TransferCanMove, TransferItem, NzMessageService, NzModalService} from 'ng-zorro-antd';
 import { Router, ActivatedRoute } from '@angular/router';
-// import { STORES_INFO ,USER_INFO } from "../../../shared/define/juniu-define";
-// import { LocalStorageService } from "../../../shared/service/localstorage-service";
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-// import { FunctionUtil } from "../../../shared/funtion/funtion-util";
 import { ManageService } from "../shared/manage.service";
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
-
 
 @Component({
   selector: 'app-rule-setting',
@@ -29,7 +25,6 @@ export class RuleSettingComponent implements OnInit {
   storeId: string = '';//门店ID
   merchantId: string;//商家id
   deductRuleId: string = '';//编辑的商品rulesId
-
 
   //员工
   staffListInfor: any;//员工的信息
@@ -125,6 +120,7 @@ export class RuleSettingComponent implements OnInit {
           this.selectStaffIds = event.staffIds;
       }
   }
+
   //员工选中的数量
   getSelectStaffNum(event: any){
       if(event){
@@ -138,6 +134,7 @@ export class RuleSettingComponent implements OnInit {
           this.productIds = event.staffIds;
       }
   }
+
   //商品选中的数量
   getSelectProductNumber(event: any){
       console.log(event);
@@ -153,6 +150,7 @@ export class RuleSettingComponent implements OnInit {
           this.cardConfigRuleIds = event.staffIds;
       }
   }
+
   //会员卡选中的数量
   getSelectCardNumber(event: any){
       console.log(event);
@@ -168,6 +166,7 @@ export class RuleSettingComponent implements OnInit {
           this.seviceItemsIds = event.staffIds;
       }
   }
+
   //服务项目选中的数量
   getSelectSeviceItemsNumber(event: any){
       console.log(event);
