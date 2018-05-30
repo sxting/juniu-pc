@@ -30,6 +30,7 @@ export class AddNewStaffComponent implements OnInit {
     passwordPre: string = '';//上次的密码
     belongList: any[] = [{name: '门店', value: 'STORE'},{name: '总部', value: 'MERCHANT'}];//员工归属
     ifShow: boolean = true;//是否显示选择门店
+    timestamp: any = new Date().getTime();//当前时间的时间戳
 
     //上传图片的时候
     imagePath: string = '';
@@ -61,6 +62,7 @@ export class AddNewStaffComponent implements OnInit {
             this.storeId = this.storeList[0].storeId;
         }
         this.staffId = this.route.snapshot.params['staffId'] ? this.route.snapshot.params['staffId'] : FunctionUtil.getUrlString('staffId');
+
         if(this.staffId){
           this.titleSrv.setTitle('编辑员工');
         }else {
@@ -131,7 +133,10 @@ export class AddNewStaffComponent implements OnInit {
     staffRolesHttp() {
         let self = this;
         this.loading = true;
-        this.manageService.rolesSelect().subscribe(
+        let data = {
+          timestamp: this.timestamp
+        };
+        this.manageService.rolesSelect(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     this.loading = false;
@@ -176,7 +181,8 @@ export class AddNewStaffComponent implements OnInit {
         let self = this;
         this.loading = true;
         let data = {
-            staffId: this.staffId
+            staffId: this.staffId,
+            timestamp: this.timestamp
         };
         this.manageService.staffdetail(data).subscribe(
             (res: any) => {
@@ -235,6 +241,7 @@ export class AddNewStaffComponent implements OnInit {
             portrait: this.picId,
             staffId: this.staffId,
             storeId:storeId,
+            timestamp: this.timestamp
         };
         if(this.staffId){//修改
             this.editStaff(params);

@@ -89,6 +89,8 @@
                         <nz-option *ngFor="let item of StoresInfo" [nzLabel]="item.storeName" [nzValue]="item.storeId">
                         </nz-option>
                     </nz-select> -->
+                    <!-- <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth" (storeListPush)="storeListPush($event)"
+      (storeIdOutput)="getStoreId($event)"></jn-stores-infor> -->
                     <nz-select style="width: 386px;margin-right:50px;" [(ngModel)]="selectedStore" (ngModelChange)="selectStore()" [nzPlaceHolder]="'请选择一个门店'"
                         [nzShowSearch]="true">
                         <nz-option *ngFor="let list of storeList;let j = index" [nzLabel]="list.shopName" [nzValue]="list.shopId">

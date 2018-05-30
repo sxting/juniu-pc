@@ -14,6 +14,8 @@
             <nz-option *ngFor="let item of alipayShop" [nzLabel]="item.shopName" [nzValue]="item.shopId">
             </nz-option>
         </nz-select>
+        <!-- <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth" (storeListPush)="storeListPush($event)"
+      (storeIdOutput)="getStoreId($event)"></jn-stores-infor> -->
     </div>
     <div style="margin-top:20px;">
         <button class="buttons" style="margin-right:20px;" nz-button (click)="baocun()" [nzLoading]="submitting" nzType="primary" type="submit">保存</button>

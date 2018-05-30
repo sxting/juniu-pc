@@ -26,6 +26,8 @@ export class StaffListComponent implements OnInit {
     moduleId: any;
     ifStoresAll: boolean = true;//是否有全部门店
     ifStoresAuth: boolean = false;//是否授权
+    timestamp: any = new Date().getTime();//当前时间的时间戳
+
 
     constructor(
         private http: _HttpClient,
@@ -38,14 +40,15 @@ export class StaffListComponent implements OnInit {
 
     ngOnInit() {
       this.moduleId = 1;
-      this.staffListHttp();//员工列表请求数据
     }
 
     /*************************  页面基础操作开始  ********************************/
 
     //门店id
     getStoreId(event: any){
+      console.log(event);
       this.storeId = event.storeId? event.storeId : '';
+      this.staffListHttp();//员工列表请求数据
     }
     //返回门店数据
     storeListPush(event: any){
@@ -140,6 +143,7 @@ export class StaffListComponent implements OnInit {
             pageSize: that.pageSize,
             storeId: that.storeId,
             staffName: that.staffName,
+            timestamp: that.timestamp
         };
         this.manageService.staffList(batchQuery).subscribe(
             (res: any) => {

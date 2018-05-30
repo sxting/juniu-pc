@@ -57,6 +57,8 @@
         <div>
             <div class="addStaffBox-main-left icon-asterisks-1-copy iconfont">门店</div>
             <div class="addStaffBox-main-right">
+                <!-- <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth" (storeListPush)="storeListPush($event)"
+      (storeIdOutput)="getStoreId($event)"></jn-stores-infor> -->
                 <nz-select [(ngModel)]="selectedOption" style="width:240px;" (ngModelChange)="selectStoreInfo($event)" [nzPlaceHolder]="'请选择一个门店'"
                     [nzShowSearch]="true">
                     <nz-option [nzLabel]="'请选择一个门店'" [nzValue]="'ALL'">

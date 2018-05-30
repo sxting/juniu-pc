@@ -23,9 +23,28 @@
         },
         {
           "text": "收银",
-          "link": "/checkout/tourist",
           "icon": "icon-shouyin",
-          "children": [],
+          "children": [
+            {
+              "text": "收银",
+              "link": "/checkout/tourist",
+              "icon": "icon-shouyin",
+              "children": [],
+              "reuse": false
+            },
+            {
+              "text": "口碑核销",
+              "link": "/checkout/koubei",
+              "children": [],
+              "reuse": false
+            },
+            {
+              "text": "美团验券",
+              "link": "/checkout/meituan",
+              "children": [],
+              "reuse": false
+            }
+          ],
           "reuse": false
         },
         {
@@ -256,7 +275,6 @@
             },
             {
               "text": "口碑优惠券",
-              "i18n": "koubei-coupon",
               "children": [
                 {
                   "text": "发布优惠券",

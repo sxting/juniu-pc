@@ -71,52 +71,55 @@ export class CheckVipcardDetailinforComponent implements OnInit {
         private productService: ProductService,
         private localStorageService: LocalStorageService
     ) { }
+
     get effectivityDays() { return this.form.controls['effectivityDays']; }
 
     ngOnInit() {
 
         let self = this;
         this.titleSrv.setTitle('编辑会员卡');
-        let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) ?
-            JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) : [];
+        let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Down')) ?
+          JSON.parse(this.localStorageService.getLocalstorage('Stores-Down')) : [];
 
         if (storeList) {
-            CITYLIST.forEach(function (i: any) {
-                storeList.forEach((ele: any, index: number, arr: any) => {
-                    if (i.i == ele.cityId) {
-                        ele.cityName = i.n;
-                    }
-                })
+          CITYLIST.forEach(function (i: any) {
+            storeList.forEach((ele: any, index: number, arr: any) => {
+              if (i.i == ele.cityCode) {
+                ele.cityName = i.n;
+              }
             })
+          })
         }
+
         let cityNameSpaceArr = [{
-            cityName: '',
-            cityId: '',
+          cityName: '',
+          cityId: '',
         }];
         cityNameSpaceArr.shift();
+
         for (let i = 0; i < storeList.length; i++) {
-            if (storeList[i].cityId == '' || storeList[i].cityId == null) {
-                storeList[i].cityName = '其他';
-            } else if (storeList[i].cityId != '' && storeList[i].cityName == '') {
-                cityNameSpaceArr.push({
-                    cityName: '',
-                    cityId: storeList[i].cityId,
-                });
-            }
+          if (storeList[i].cityCode == '' || storeList[i].cityCode == null) {
+            storeList[i].cityName = '其他';
+          } else if (storeList[i].cityCode != '' && storeList[i].cityName == '') {
+            cityNameSpaceArr.push({
+              cityName: '',
+              cityId: storeList[i].cityCode,
+            });
+          }
         }
         for (let i = 0; i < cityNameSpaceArr.length; i++) {
-            for (let j = 0; j < storeList.length; j++) {
-                if (cityNameSpaceArr[i].cityId == storeList[j].cityId && storeList[j].cityName != '') {
-                    cityNameSpaceArr[i].cityName = storeList[j].cityName;
-                }
+          for (let j = 0; j < storeList.length; j++) {
+            if (cityNameSpaceArr[i].cityId == storeList[j].cityCode && storeList[j].cityName != '') {
+              cityNameSpaceArr[i].cityName = storeList[j].cityName;
             }
+          }
         }
         for (let i = 0; i < cityNameSpaceArr.length; i++) {
-            for (let j = 0; j < storeList.length; j++) {
-                if (cityNameSpaceArr[i].cityId == storeList[j].cityId && storeList[j].cityName == '') {
-                    storeList[j].cityName = cityNameSpaceArr[i].cityName
-                }
+          for (let j = 0; j < storeList.length; j++) {
+            if (cityNameSpaceArr[i].cityId == storeList[j].cityCode && storeList[j].cityName == '') {
+              storeList[j].cityName = cityNameSpaceArr[i].cityName
             }
+          }
         }
         this.cityStoreList = FunctionUtil.getCityListStore(storeList);
         this.changeAllData();//获取到所有的门店ID及其num

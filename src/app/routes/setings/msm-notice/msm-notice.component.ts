@@ -147,7 +147,10 @@ export class MsmNoticeComponent implements OnInit {
         );
     }
     configQueryHttp() {
-        this.setingsService.configQuery().subscribe(
+        let data = {
+            timestamp: new Date().getTime()
+        }
+        this.setingsService.configQuery(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     this.surplusNumber = res.data.surplusNumber || 0;
@@ -289,7 +292,7 @@ export class MsmNoticeComponent implements OnInit {
         this.setingsService.smsBatch().subscribe(
             (res: any) => {
                 if (res) {
-                    that.dataNote = res.data.items;
+                    that.dataNote = res.data;
                 }
             },
             error => {
@@ -312,36 +315,16 @@ export class MsmNoticeComponent implements OnInit {
             }
         );
     }
-    getPackagePreorder() {
-        let storeIds = [];
-        let packageId = this.radioValue;
-        let data = {
-            packageId: packageId,
-            storeIds: storeIds
-        };
-        this.setingsService.getPackagePreorder(data).subscribe(
-            (res: any) => {
-                if (res.success) {
-                    this.result = res.data;
-                } else {
-                    this.modalSrv.error({
-                        nzTitle: '温馨提示',
-                        nzContent: res.errorInfo
-                    });
-                }
-            }
-        )
-    }
+
 
     //获取支付二维码
     getPayUrl() {
         let data = {
-            amount: this.result.orderAmount, //价格
-            body: this.result.packageName, //版本名称
-            orderNo: this.result.orderNo, //订单号
-            payType: this.payType, //支付方式
+            smsPackageId: this.radioValue,
+            type: this.payType, //支付方式
+            timestamp: new Date().getTime()
         };
-        this.setingsService.getPayUrl(data).subscribe(
+        this.setingsService.buySmsPackage(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     this.codeImgUrl = res.data.codeImgUrl;

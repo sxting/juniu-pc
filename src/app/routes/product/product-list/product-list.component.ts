@@ -5,6 +5,7 @@ import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LocalStorageService} from "@shared/service/localstorage-service";
 import { FunctionUtil } from '@shared/funtion/funtion-util';
+import { STORES_DOWN } from '@shared/define/juniu-define';
 
 @Component({
   selector: 'app-product-list',
@@ -31,6 +32,8 @@ export class ProductListComponent implements OnInit {
     loading = false;//加载loading
     statusFlag: number = 1;//根据商品状态,切换并调取商品信息 商品状态 (0: 下架、1: 上架)
     productListInfor: any[] =[];
+    moduleId: any;
+    timestamp: any = new Date().getTime();//当前时间的时间戳
 
     constructor(
         private http: _HttpClient,
@@ -52,10 +55,12 @@ export class ProductListComponent implements OnInit {
     };
 
     ngOnInit() {
+        this.moduleId = 1;
         let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
             JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
         this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
 
+        this.getStoresInfor();//查看门店
         this.batchQuery.merchantId = this.merchantId;
         this.batchQuery.storeId = this.storeId;
         //获取线下商品列表
@@ -179,5 +184,78 @@ export class ProductListComponent implements OnInit {
         this.pageNo = event;
         this.batchQuery.pageNo = this.pageNo;
         this.getProductListHttp(this.batchQuery);
+    }
+
+    //门店初始化
+    getStoresInfor() {
+      let self = this;
+      let data = {
+        moduleId: this.moduleId,
+        timestamp: this.timestamp
+      };
+      this.productService.selectStores(data).subscribe(
+        (res: any) => {
+          if (res.success) {
+            let storeList = res.data.items;
+            console.log(storeList);
+            storeList = [
+              {
+                "storeId":"1526906091646178161905",
+                "branchName":"第二家店",
+                "alipayShopId":"",
+                "hasAuth":true,
+                "provinceCode":"110000",
+                "cityCode":"110100",
+                "districtCode":"110101"
+              },
+              {
+                "storeId":"1527578259824513245040",
+                "branchName":"审美造型立水桥店",
+                "alipayShopId":"",
+                "hasAuth":true,
+                "provinceCode":"110000",
+                "cityCode":"110100",
+                "districtCode":"110101"
+              },
+              {
+                "storeId":"15275782968554172013",
+                "branchName":"审美造型",
+                "alipayShopId":"",
+                "hasAuth":true,
+                "provinceCode":"110000",
+                "cityCode":"110100",
+                "districtCode":"110102"
+              },
+              {
+                "storeId":"1527579658261104107730",
+                "branchName":"上海迪士尼分店",
+                "alipayShopId":"",
+                "hasAuth":true,
+                "provinceCode":"120000",
+                "cityCode":"120100",
+                "districtCode":"120101"
+              },
+              {
+                "storeId":"1527579681050416575349",
+                "branchName":"天津狗不理包子店",
+                "alipayShopId":"",
+                "hasAuth":true,
+                "provinceCode":"120000",
+                "cityCode":"120100",
+                "districtCode":"120101"
+              }
+            ];
+            this.localStorageService.setLocalstorage(STORES_DOWN, JSON.stringify(storeList));
+          } else {
+            this.modalSrv.error({
+              nzTitle: '温馨提示',
+              nzContent: res.errorInfo
+            });
+          }
+        },
+        error => {
+          this.msg.warning(error);
+        }
+      );
     }
 }
