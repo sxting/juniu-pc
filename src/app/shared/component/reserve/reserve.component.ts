@@ -104,25 +104,26 @@ export class ReserveComponent implements OnInit, AfterViewInit, AfterViewChecked
         this.titleService.setTitle('预约');
         this.todayDay = this.changeDate(new Date());
 
-        if (this.localStorageService.getLocalstorage(STORES_INFO) &&
-            JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
-            let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-                JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-
-            this.storeId = storeList[0].storeId;
-            this.storeName = storeList[0].storeName;
-            this.stores = storeList;
-            this.selectedOption = this.stores[0].storeId;
-        }
-
-        this.getReservationsNewReserveCount();
+        // if (this.localStorageService.getLocalstorage(STORES_INFO) &&
+        //     JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
+        //     let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
+        //         JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
+        //
+        //     this.storeId = storeList[0].storeId;
+        //     this.storeName = storeList[0].storeName;
+        //     this.stores = storeList;
+        //     this.selectedOption = this.stores[0].storeId;
+        // }
+        //
+        // this.getReservationsNewReserveCount();
     }
 
     ngAfterViewInit() {
         let getReserveConfigParams = {
             storeId: this.storeId
         };
-        this.getReserveConfig(getReserveConfigParams);
+      console.log(this.storeId);
+      this.getReserveConfig(getReserveConfigParams);
     }
 
     ngAfterViewChecked() {
@@ -153,17 +154,18 @@ export class ReserveComponent implements OnInit, AfterViewInit, AfterViewChecked
 
     //选择门店
     onStoresChange(e: any) {
-        this.showTable = false;
+      console.log(e);
+      this.showTable = false;
         this.timeArr = {
             time: [],
             timeShow: []
         };
-        // this.storeId = e.target.value;
-        this.storeId = this.selectedOption;
+        this.storeId = e.storeId;
         let getReserveConfigParams = {
             storeId: this.storeId
         };
         this.getReserveConfig(getReserveConfigParams);
+        this.getReservationsNewReserveCount();
     }
 
     //点击预约记录

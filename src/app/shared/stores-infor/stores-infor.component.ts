@@ -21,6 +21,8 @@ export class StoresInforComponent implements OnInit {
     storeList: any = [];
     storeId: string = '';
     timestamp: any = new Date().getTime();//当前时间的时间戳
+    storeName: string = '';
+    store: any;
 
     @Input()
     nzXs: any = '';
@@ -52,11 +54,13 @@ export class StoresInforComponent implements OnInit {
 
     //选择门店
     selectStore(){
-      console.log(this.storeId);
-      this.storeIdOutput.emit({storeId: this.storeId});
+      console.log(this.store);
+      this.storeId = this.store.storeId;
+      this.storeName = this.store.branchName;
+      this.storeIdOutput.emit({storeId: this.storeId, storeName: this.storeName});
     }
 
-    //选择门店
+    //门店初始化
     getStoresInfor() {
       let self = this;
       let data = {
@@ -67,6 +71,53 @@ export class StoresInforComponent implements OnInit {
         (res: any) => {
           if (res.success) {
             let storeList = res.data.items;
+            storeList = [
+              {
+                "storeId":"1526906091646178161905",
+                "branchName":"第二家店",
+                "alipayShopId":"",
+                "hasAuth":true,
+                "provinceCode":"110000",
+                "cityCode":"110100",
+                "districtCode":"110101"
+              },
+              {
+                "storeId":"1527578259824513245040",
+                "branchName":"审美造型立水桥店",
+                "alipayShopId":"",
+                "hasAuth":true,
+                "provinceCode":"110000",
+                "cityCode":"110100",
+                "districtCode":"110101"
+              },
+              {
+                "storeId":"15275782968554172013",
+                "branchName":"审美造型",
+                "alipayShopId":"",
+                "hasAuth":true,
+                "provinceCode":"110000",
+                "cityCode":"110100",
+                "districtCode":"110102"
+              },
+              {
+                "storeId":"1527579658261104107730",
+                "branchName":"上海迪士尼分店",
+                "alipayShopId":"",
+                "hasAuth":true,
+                "provinceCode":"120000",
+                "cityCode":"120100",
+                "districtCode":"120101"
+              },
+              {
+                "storeId":"1527579681050416575349",
+                "branchName":"天津狗不理包子店",
+                "alipayShopId":"",
+                "hasAuth":true,
+                "provinceCode":"120000",
+                "cityCode":"120100",
+                "districtCode":"120101"
+              }
+            ];
             //是否禁用
             if(self.ifStoresAuth){//需要授权
               storeList.forEach(function (item: any) {
@@ -88,9 +139,11 @@ export class StoresInforComponent implements OnInit {
             }else{
               this.storeList = storeList;
               this.storeId = this.storeList[0].storeId;
+              this.storeName = this.storeList[0].branchName;
             }
+            this.store = this.storeList[0];
             this.storeListPush.emit({storeList: self.storeList});
-            this.storeIdOutput.emit({storeId: self.storeId});
+            this.storeIdOutput.emit({storeId: self.storeId, storeName: this.storeName });
           } else {
             this.modalSrv.error({
               nzTitle: '温馨提示',

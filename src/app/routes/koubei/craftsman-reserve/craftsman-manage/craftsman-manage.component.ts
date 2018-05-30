@@ -90,30 +90,35 @@ export class CraftsmanManageComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        if (this.localStorageService.getLocalstorage('Stores-Info') &&
-            JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')).length > 0) {
-            let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) ?
-                JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) : [];
+        // if (this.localStorageService.getLocalstorage('Stores-Info') &&
+        //     JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')).length > 0) {
+        //     let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) ?
+        //         JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) : [];
+        //
+        //     let self =this;
+        //     this.stores = [];
+        //     storeList.forEach(function (item: any) {
+        //         if(item.alipayShopId) {
+        //             self.stores.push(item)
+        //         }
+        //     });
+        //     self.storeId = self.stores[0] ? self.stores[0].storeId : '';
+        //     self.selectedOption = self.storeId;
+        // }
 
-            let self =this;
-            this.stores = [];
-            storeList.forEach(function (item: any) {
-                if(item.alipayShopId) {
-                    self.stores.push(item)
-                }
-            });
-            self.storeId = self.stores[0].storeId;
-            self.selectedOption = self.storeId;
-        }
-
-        this.getCraftsmanList();
-        this.formInit();
+        // this.getCraftsmanList();
+        // this.formInit();
     }
 
     //选择门店
     onStoresChange(e: any) {
-        this.storeId = this.selectedOption;
+        // this.storeId = this.selectedOption;
+      this.storeId = e.storeId;
         this.getCraftsmanList()
+    }
+
+    storeListPush(e: any) {
+      console.log(e);
     }
 
     //预约记录分页
