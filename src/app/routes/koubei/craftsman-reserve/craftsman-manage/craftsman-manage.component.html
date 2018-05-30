@@ -5,7 +5,7 @@
         <span (click)="onEditClick('', alertEditBox)">新增手艺人</span>
     </div>
     <div class="content-title"><span></span>现有手艺人</div>
-  <jn-stores-infor [nzXs]="24" [nzSm]="2" [moduleId]="1" [ifStoresAll]="false"
+  <jn-stores-infor [moduleId]="1" [ifStoresAll]="false"
                    (storeIdOutput)="onStoresChange($event)" (storeListPush)="storeListPush($event)"></jn-stores-infor>
 
   <!--<div class="select-store-box">-->

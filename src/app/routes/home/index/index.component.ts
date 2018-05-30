@@ -6,6 +6,8 @@ import {Router} from "@angular/router";
 import {HomeService} from "../shared/home.service";
 import {LocalStorageService} from "@shared/service/localstorage-service";
 import {STORES_INFO, USER_INFO} from "@shared/define/juniu-define";
+import {FunctionUtil} from "@shared/funtion/funtion-util";
+import {StoresInforService} from "@shared/stores-infor/shared/stores-infor.service";
 declare var echarts: any;
 
 @Component({
@@ -117,15 +119,29 @@ export class IndexComponent implements OnInit {
         private homeService: HomeService,
         private localStorageService: LocalStorageService,
         private modalSrv: NzModalService,
+        private storesInforService: StoresInforService
     ) {
     }
 
     ngOnInit() {
-        if(JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['staffType'] == 'STORE') {
-            let store: any = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-                JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-            this.storeId = store[0].storeId ? store[0].storeId : '';
-        }
+      if (JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['staffType'] == 'STORE') {
+        let data = {
+          moduleId: 1
+        };
+        this.storesInforService.selectStores(data).subscribe(
+          (res: any) => {
+            if (res.success) {
+              let store = res.data.items;
+              this.storeId = store[0] ? store[0].storeId : '';
+            } else {
+              this.modalSrv.error({
+                nzTitle: '温馨提示',
+                nzContent: res.errorInfo
+              });
+            }
+          }
+        );
+      }
         this.merchantId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['merchantId'];
 
         this.getIncome();
