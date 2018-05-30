@@ -93,6 +93,8 @@
                 <nz-select formControlName="selected_store" nzPlaceHolder="请选择一个门店" [nzShowSearch]="true">
                     <nz-option *ngFor="let store of stores" [nzLabel]="store.storeName" [nzValue]="store.storeId"></nz-option>
                 </nz-select>
+                <!-- <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth" (storeListPush)="storeListPush($event)"
+      (storeIdOutput)="getStoreId($event)"></jn-stores-infor> -->
                 <nz-form-explain class="error-color" *ngIf="selected_store.dirty && selected_store.errors">请选择门店</nz-form-explain>
             </nz-form-control>
         </nz-form-item>

@@ -6,6 +6,8 @@
                 <nz-select style="min-width: 200px;" [(ngModel)]="selectedOption" (ngModelChange)="selectStoreInfo($event)" [nzShowSearch]="true">
                     <nz-option *ngFor="let store of StoresInfo" [nzLabel]="store.shopName" [nzValue]="store.shopId"></nz-option>
                   </nz-select>
+                  <!-- <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth" (storeListPush)="storeListPush($event)"
+      (storeIdOutput)="getStoreId($event)"></jn-stores-infor> -->
             </div>
             <div class="sm-button {{checkoutShow?'sm-button2':''}} " (click)="scanPay()">扫描顾客核销码</div>
             <div class="gai"></div>
