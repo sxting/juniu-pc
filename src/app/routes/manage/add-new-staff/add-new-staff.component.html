@@ -89,7 +89,7 @@
       <nz-form-label nzXs="24" nzSm="7" nzRequired>所属门店</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
         <nz-select formControlName="storeId" name="storeList" id="storeList" [nzPlaceHolder]="'请选择员工所属门店'" [nzShowSearch]="true">
-          <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.storeName" [nzValue]="i.storeId"></nz-option>
+          <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.branchName" [nzValue]="i.storeId"></nz-option>
         </nz-select>
       </nz-form-control>
     </nz-form-item>

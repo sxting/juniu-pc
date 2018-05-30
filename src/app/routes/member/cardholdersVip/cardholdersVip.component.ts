@@ -208,11 +208,11 @@ export class CardholdersVipComponent {
             }
         )
     }
-    getData(e:any) {
+    getData(e?:any) {
         console.log(this.q);
         this.customerlistHttp();
     }
-    getData2(index: any) {
+    getData2(index?: any) {
         this.pageIndex = index;
         this.ordersHttp(this.phone, this.storeId);
     }

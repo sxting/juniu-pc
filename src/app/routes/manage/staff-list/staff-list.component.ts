@@ -5,6 +5,7 @@ import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
+import { STORES_STAFF } from '@shared/define/juniu-define';
 
 @Component({
   selector: 'app-staff-list',
@@ -28,7 +29,6 @@ export class StaffListComponent implements OnInit {
     ifStoresAuth: boolean = false;//是否授权
     timestamp: any = new Date().getTime();//当前时间的时间戳
 
-
     constructor(
         private http: _HttpClient,
         private manageService: ManageService,
@@ -50,10 +50,14 @@ export class StaffListComponent implements OnInit {
       this.storeId = event.storeId? event.storeId : '';
       this.staffListHttp();//员工列表请求数据
     }
+
     //返回门店数据
     storeListPush(event: any){
       this.storeList = event.storeList? event.storeList : [];
+      console.log(this.storeList);
+      this.localStorageService.setLocalstorage(STORES_STAFF, JSON.stringify(this.storeList));
     }
+
     //删除员工
     deleteStaffInfor(id: string){
         let self = this;
