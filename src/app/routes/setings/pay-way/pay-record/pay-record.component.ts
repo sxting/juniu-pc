@@ -35,12 +35,16 @@ export class PayRecordComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        let store: any = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-            JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-        this.storeId = store[0].storeId ? store[0].storeId : '';
-        this.getPayWayStatus();
+        // let store: any = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
+        //     JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
+        // this.storeId = store[0].storeId ? store[0].storeId : '';
         this.getPayWayIndexList();
     }
+
+  onStoresChange(e: any) {
+      this.storeId = e.storeId;
+    this.getPayWayStatus();
+  }
 
     goPayWay() {
         this.router.navigate(['/setings/pay/way', {status: this.status}])
