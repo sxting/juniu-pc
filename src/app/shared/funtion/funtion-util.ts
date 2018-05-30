@@ -278,7 +278,16 @@ export class FunctionUtil {
     arr = Object.keys(unique).map(function (u) { return JSON.parse(u); });
     return arr;
   }
-
+  static obectToSetTime(object?: any) {
+    if (object) {
+      object.timestamp = new Date().getTime()
+    } else {
+      object = {
+        timestamp: new Date().getTime()
+      }
+    }
+    return object;
+  }
 
   static obectToURLSearchParams(object: any): URLSearchParams {
     let params = new URLSearchParams();
