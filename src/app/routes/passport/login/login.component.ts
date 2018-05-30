@@ -189,6 +189,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
             id: 10000,
             time: +new Date
         });
+        location.reload();
         this.router.navigate(['/']);
     }
     getValidCode(phone, bizType) {
