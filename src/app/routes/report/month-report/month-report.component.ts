@@ -63,6 +63,7 @@ export class MonthReportComponent implements OnInit {
     ngOnInit() {
 
         this.moduleId = 1;
+
         let userInfo;
         if (this.localStorageService.getLocalstorage('User-Info')) {
           userInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info'));

@@ -23,8 +23,13 @@ export class StoresInforComponent implements OnInit {
 
     @Input()
     nzXs: any = '';
+
     @Input()
-    nzSm: any = '';
+    nzSm1: any = '';
+
+    @Input()
+    nzSm2: any = '';
+
     @Input()
     nzRequired: boolean = false;
 
@@ -32,14 +37,13 @@ export class StoresInforComponent implements OnInit {
     public ifStoresAll: boolean = true;
 
     @Input()
-    public ifStoresAuth: boolean = true;//是否需要授权
+    public ifStoresAuth: boolean = false;//是否需要授权
 
     @Output()
     public storeIdOutput = new EventEmitter(); //选中门店的id
 
     @Output()
     public storeListPush = new EventEmitter(); //所有门店信息
-
 
     ngOnInit() {
       this.getStoresInfor();//门店选择

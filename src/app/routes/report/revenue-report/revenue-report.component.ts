@@ -34,6 +34,10 @@ export class RevenueReportComponent implements OnInit {
     todayIncomeItem: any;
     yesterdayCompare: any;
 
+    moduleId: any;
+    ifStoresAll: boolean = true;//是否有全部门店
+    ifStoresAuth: boolean = false;//是否授权
+
 
     constructor(
         private http: _HttpClient,
@@ -54,46 +58,46 @@ export class RevenueReportComponent implements OnInit {
     };
 
     ngOnInit() {
-        //门店列表
-        if (this.localStorageService.getLocalstorage(STORES_INFO) && JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
-            let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-                JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-            let list = {
-              storeId: '',
-              storeName: '全部门店'
-            };
-            storeList.splice(0, 0, list);//给数组第一位插入值
-            this.storeList = storeList;
-            this.storeId = '';
-        }
 
+        this.moduleId = 1;
         let year = new Date().getFullYear();        //获取当前年份(2位)
         let month = new Date().getMonth()+1;       //获取当前月份(0-11,0代表1月)
         let changemonth = month < 10 ? '0' + month : '' + month;
         let day = new Date().getDate();        //获取当前日(1-31)
         this.yyyymm = new Date(year+'-'+changemonth+'-'+day);
         this.date = year+'-'+changemonth+'-'+day;
-        //获取到营收列表
-        this.batchQuery.storeId = this.storeId;
-        this.batchQuery.date = this.date;
-        this.getCurrentIncomeHttp(this.batchQuery);
+
     }
 
-  //选择日期
-  reportDateAlert(e: any) {
-    this.yyyymm = e;
-    let year = this.yyyymm.getFullYear();        //获取当前年份(2位)
-    let month = this.yyyymm.getMonth()+1;       //获取当前月份(0-11,0代表1月)
-    let changemonth = month < 10 ? '0' + month : '' + month;
-    let day = this.yyyymm.getDate();        //获取当前日(1-31)
-    let changeday = day < 10 ? '0' + day : '' + day;
-    this.date = year+'-'+changemonth+'-'+changeday;
+    //门店id
+    getStoreId(event: any){
+      this.storeId = event.storeId? event.storeId : '';
+      //获取到营收列表
+      this.batchQuery.storeId = this.storeId;
+      this.batchQuery.date = this.date;
+      this.getCurrentIncomeHttp(this.batchQuery);
+    }
 
-    this.batchQuery.date = this.date;
-    this.batchQuery.pageNo = 1;
-    //请求员工提成信息
-    this.getCurrentIncomeHttp(this.batchQuery);
-  }
+    //返回门店数据
+    storeListPush(event: any){
+      this.storeList = event.storeList? event.storeList : [];
+    }
+
+    //选择日期
+    reportDateAlert(e: any) {
+      this.yyyymm = e;
+      let year = this.yyyymm.getFullYear();        //获取当前年份(2位)
+      let month = this.yyyymm.getMonth()+1;       //获取当前月份(0-11,0代表1月)
+      let changemonth = month < 10 ? '0' + month : '' + month;
+      let day = this.yyyymm.getDate();        //获取当前日(1-31)
+      let changeday = day < 10 ? '0' + day : '' + day;
+      this.date = year+'-'+changemonth+'-'+changeday;
+
+      this.batchQuery.date = this.date;
+      this.batchQuery.pageNo = 1;
+      //请求员工提成信息
+      this.getCurrentIncomeHttp(this.batchQuery);
+    }
 
     //获取商品报表信息
     getCurrentIncomeHttp(data: any) {

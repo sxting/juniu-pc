@@ -4,10 +4,10 @@
   <div nz-form [nzLayout]="'inline'" class="search__form">
     <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
       <nz-col nzMd="8" nzSm="24">
-        <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth"
+        <jn-stores-infor  [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth"
                          (storeListPush)="storeListPush($event)" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
       </nz-col>
-      <nz-col nzMd="8" nzSm="24">
+      <nz-col nzMd="8" nzSm="24" class="fr">
         <nz-form-item>
           <nz-form-label nzFor="yyyymmDate">选择日期</nz-form-label>
           <nz-form-control>
