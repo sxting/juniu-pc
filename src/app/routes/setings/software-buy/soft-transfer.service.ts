@@ -9,6 +9,8 @@ export class SoftTransferService {
   storeArr: any;
   totalPrice: any = 0;
 
+  orderNo: any ='';
+
   storeId: any = '';
 
     again() {
