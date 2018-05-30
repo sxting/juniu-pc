@@ -69,18 +69,19 @@ export class SetComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        if (this.localStorageService.getLocalstorage('Stores-Info') &&
-            JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')).length > 0) {
-            let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) ?
-                JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) : [];
-            this.stores = storeList;
-        }
+        // if (this.localStorageService.getLocalstorage('Stores-Info') &&
+        //     JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')).length > 0) {
+        //     let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) ?
+        //         JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) : [];
+        //     this.stores = storeList;
+        // }
     }
 
     //选择门店
     onStoresChange(e: any) {
         // this.storeId = e.target.value;
-        this.storeId = this.selectedOption;
+        this.storeId = e.storeId;
+        this.storeName = e.storeName;
         if (this.storeId === '') {
             this.initData();
             this.modalSrv.error({

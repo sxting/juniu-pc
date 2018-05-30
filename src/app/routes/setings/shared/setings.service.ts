@@ -23,6 +23,7 @@ export class SetingsService {
   //购买记录  /merchant/module/purchase/record.json
   getPurchaseRecord(Params: any) {
     let apiUrl = this.api6 + '/purchase/record.json';
+    Params.timestamp = new Date().getTime();
     return this.http.get(apiUrl, Params)
       .map((response: Response) => response)
       .catch(error => {
@@ -33,6 +34,7 @@ export class SetingsService {
   //  申请发票 /merchant/module/package/invoice.json
   packageInvoice(Params: any) {
     let apiUrl = this.api6 + '/package/invoice.json';
+    Params.timestamp = new Date().getTime();
     return this.http.get(apiUrl, Params)
       .map((response: Response) => response)
       .catch(error => {
@@ -43,6 +45,7 @@ export class SetingsService {
   //模块批量查询  /merchant/module/package/batch.json
   getPackageBatchList(Params: any) {
     let apiUrl = this.api6 + '/package/batch.json';
+    Params.timestamp = new Date().getTime();
     return this.http.get(apiUrl, Params)
       .map((response: Response) => response)
       .catch(error => {
@@ -53,6 +56,7 @@ export class SetingsService {
   //购买模块包门店选择列表 /merchant/module/package/stores.json
   getPackageStores(Params: any) {
     let apiUrl = this.api6 + '/package/stores.json';
+    Params.timestamp = new Date().getTime();
     return this.http.get(apiUrl, Params)
       .map((response: Response) => response)
       .catch(error => {
@@ -63,6 +67,7 @@ export class SetingsService {
   //模块包预支付订单 /merchant/module/package/preorder.json
   getPackagePreorder(Params: any) {
     let apiUrl = this.api6 + '/package/preorder.json';
+    Params.timestamp = new Date().getTime();
     return this.http.post(apiUrl, Params)
       .map((response: Response) => response)
       .catch(error => {
