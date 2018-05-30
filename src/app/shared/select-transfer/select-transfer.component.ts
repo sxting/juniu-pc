@@ -20,6 +20,9 @@ export class SelectTransferComponent implements OnInit {
     public cityStoreList: any[] = []; // 数据格式转换过的门店列表
 
     @Input()
+    public allName: string; // 标题
+
+    @Input()
     public ifSelectAll: boolean = true;
 
     @Input()
@@ -49,7 +52,6 @@ export class SelectTransferComponent implements OnInit {
             this.selectNum = length;
             this.staffIds.emit({staffIds: staffIds.substring(1)});
             this.selectStaffNum.emit({selectStaffNum: length});
-
             console.log(this.selectNum);
         }
         console.log(this.selectNum);

@@ -84,6 +84,12 @@ export class StaffCommissionListComponent implements OnInit {
         });
     }
 
+    // 切换分页码
+    paginate(event: any) {
+      this.pageNo = event;
+      this.rulePageListHttp();//员工列表请求数据
+    }
+
     /*************************  Http请求开始  ********************************/
 
     //员工列表请求
