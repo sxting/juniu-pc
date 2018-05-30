@@ -3,11 +3,11 @@ import { _HttpClient, TitleService } from '@delon/theme';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Router, ActivatedRoute } from '@angular/router';
-import { UploadService } from "../../../shared/upload-img/shared/upload.service";
-import { CITYLIST} from "../../../shared/define/juniu-define";
-import { FunctionUtil} from "../../../shared/funtion/funtion-util";
-import { ProductService} from "../shared/product.service";
-import { LocalStorageService } from "../../../shared/service/localstorage-service";
+import { UploadService } from '@shared/upload-img';
+import { ProductService } from '../shared/product.service';
+import { LocalStorageService } from '@shared/service/localstorage-service';
+import { FunctionUtil } from '@shared/funtion/funtion-util';
+import { CITYLIST } from '@shared/define/juniu-define';
 
 @Component({
   selector: 'app-add-new-items',
@@ -62,6 +62,7 @@ export class AddNewItemsComponent implements OnInit {
 
         let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) ?
             JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) : [];
+
         if (storeList) {
             CITYLIST.forEach(function (i: any) {
                 storeList.forEach((ele: any, index: number, arr: any) => {
@@ -168,7 +169,6 @@ export class AddNewItemsComponent implements OnInit {
             nzWidth: '600px',
             nzOkText: '保存',
             nzOnOk: function () {
-                console.log(0);
                 self.saveCategoryData();//保存商品分类信息
             }
         });

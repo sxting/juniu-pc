@@ -3,8 +3,8 @@ import { _HttpClient, TitleService } from '@delon/theme';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ProductService } from "../shared/product.service";
 import { Router, ActivatedRoute } from '@angular/router';
-import { FunctionUtil} from "../../../shared/funtion/funtion-util";
 import { LocalStorageService} from "@shared/service/localstorage-service";
+import { FunctionUtil } from '@shared/funtion/funtion-util';
 
 
 @Component({
@@ -48,8 +48,8 @@ export class ServiceItemsListComponent implements OnInit {
      * 服务请求体
      **/
     batchQuery = {
+      pageSize: this.pageSize,
         pageNo: this.pageNo,
-        pageSize: this.pageSize,
         putaway: this.putaway,
         categoryType: 'SERVICEITEMS',
         storeId: this.storeId,

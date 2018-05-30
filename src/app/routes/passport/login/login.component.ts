@@ -137,7 +137,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
         } else {
             this.loginPhone(this.form.value.mobile, this.form.value.captcha);
         }
-        this.tokenSetFun('a89d3cf6f9d017b2f59d284517093638');
+        this.tokenSetFun('4420b0ef2c53987d1cdc06d2c10f15a0');
     }
 
     // endregion

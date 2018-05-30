@@ -20,6 +20,7 @@ export class StoresInforComponent implements OnInit {
 
     storeList: any = [];
     storeId: string = '';
+    timestamp: any = new Date().getTime();//当前时间的时间戳
 
     @Input()
     nzXs: any = '';
@@ -59,7 +60,8 @@ export class StoresInforComponent implements OnInit {
     getStoresInfor() {
       let self = this;
       let data = {
-        moduleId: this.moduleId
+        moduleId: this.moduleId,
+        timestamp: this.timestamp
       };
       this.storesInforService.selectStores(data).subscribe(
         (res: any) => {
