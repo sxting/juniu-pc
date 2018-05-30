@@ -22,6 +22,7 @@ export class MarketingsPageComponent implements OnInit {
     isEdit: boolean = false;
 
     paramsId: string = '';
+    paramsIdNumber: number;
     pageHeader1: string = '';
     pageHeader2: string = '';
     pageDesc: string = '';
@@ -126,6 +127,7 @@ export class MarketingsPageComponent implements OnInit {
     ngOnInit() {
         this.titleService.setTitle(decodeURIComponent(this.route.snapshot.params['name']));
         this.paramsId = this.route.snapshot.params['id'];
+        this.paramsIdNumber = parseInt(this.paramsId);
         this.marketingId = this.route.snapshot.params['marketingId'] ? this.route.snapshot.params['marketingId'] : '';
 
         if(this.paramsId.indexOf('0') >= 0) {
