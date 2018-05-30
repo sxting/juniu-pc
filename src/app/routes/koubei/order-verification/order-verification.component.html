@@ -3,7 +3,7 @@
         <nz-tab nzTitle="扫码核销">
             <div class="member-top-middle">
                 <span *ngIf="checkoutShow">选择门店</span>
-                <nz-select style="min-width: 200px;" [(ngModel)]="selectedOption" (ngModelChange)="selectStoreInfo($event)" [nzShowSearch]="true">
+                <nz-select style="min-width: 200px;"  (ngModelChange)="selectStoreInfo($event)" [nzShowSearch]="true">
                     <nz-option *ngFor="let store of StoresInfo" [nzLabel]="store.shopName" [nzValue]="store.shopId"></nz-option>
                   </nz-select>
                   <!-- <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth" (storeListPush)="storeListPush($event)"

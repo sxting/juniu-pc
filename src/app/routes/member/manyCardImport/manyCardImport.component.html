@@ -28,7 +28,7 @@
 
     <div style="margin-top:50px;">
         <h3 class="flex-1 text-lg borderLeft">导入记录</h3>
-        <simple-table #st [columns]="columns" [data]="data" (checkboxChange)="checkboxChange($event)" (filterChange)="customerlistHttp()">
+        <simple-table #st [columns]="columns" [data]="data" >
             <ng-template>
                 <ng-template st-row="status" let-i>
                     <nz-badge [nzStatus]="i.statusType" [nzText]="i.statusText"></nz-badge>
