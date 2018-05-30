@@ -144,16 +144,16 @@ export class IndexComponent implements OnInit {
       }
         this.merchantId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['merchantId'];
 
-        this.getIncome();
-        this.getTransationCount();
-        this.getNewCustomerInfo();
-        this.getOpenCardData();
-        this.getCardGroupType();
-        this.getNewReserveCount();
-        this.getMessageCount();
-        this.weekTurnover();
+        // this.getIncome();
+        // this.getTransationCount();
+        // this.getNewCustomerInfo();
+        // this.getOpenCardData();
+        // this.getCardGroupType();
+        // this.getNewReserveCount();
+        // this.getMessageCount();
+        // this.weekTurnover();
 
-        this.getSevenDayFlowEchart();
+        // this.getSevenDayFlowEchart();
     }
 
     onFunctionItemClick(item: any) {

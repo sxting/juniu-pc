@@ -18,12 +18,12 @@ export class SidebarComponent {
   ) { }
   click(item: any) {
     if (item.children.length == 0) {
-      // this.menuRouteHttp(item.menuId);
+      this.menuRouteHttp(item.menuId);
     }
   }
 
   menuRouteHttp(menuId: any) {
-    this.manageService.roleremove({ menuId: menuId }).subscribe(
+    this.manageService.menuRoute({ menuId: menuId ,timestamp:new Date().getTime()}).subscribe(
       (res: any) => {
         if (res.success) {
           this.router.navigate([res.data.eventRoute, { storeId: '' }]);

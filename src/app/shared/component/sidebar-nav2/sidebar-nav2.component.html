@@ -1,4 +1,4 @@
-<ul class="nav">
+<ul class="nav" *ngIf="false">
     <ng-container *ngFor="let group of list">
         <ng-template [ngIf]="group._hidden !== true">
             <li class="nav-group-title">
@@ -77,7 +77,7 @@
 
 
 
-<ul *ngIf="false" class="nav">
+<ul  class="nav">
     <ng-container *ngFor="let group of list">
         <ng-template [ngIf]="group._hidden !== true">
             <li class="nav-group-title">

@@ -38,15 +38,16 @@ export class AppComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
     var token = this.tokenService.get().token;
+    if (token === -1) that.router.navigate(['/passport/login']);
+    if (!token) this.tokenService.set({ token: '-1' });
     var that = this;
     // this.router.events
     //   .filter(event => event instanceof NavigationEnd)
     //   .map(() => this.activatedRoute)
     //   .map(route => {
     //     while (route.firstChild) route = route.firstChild;
-    //     if (!token) that.router.navigate(['/passport/login']);
+    //     if (!token) 
     //     return route;
     //   })
     //   .filter(route => route.outlet === 'primary')
