@@ -359,4 +359,5 @@ export class OnlyCardImportComponent {
             error => FunctionUtil.errorAlter(error)
         )
     }
+  
 }

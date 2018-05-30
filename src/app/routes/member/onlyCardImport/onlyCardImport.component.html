@@ -39,7 +39,7 @@
             </nz-tab>
         </nz-tabset>
         <div style="margin-top:30px;"></div>
-        <simple-table #st [columns]="columns" [data]="data2" style="min-height:600px;" [loading]="loading" (checkboxChange)="checkboxChange($event)" (filterChange)="customerlistHttp()">
+        <simple-table #st [columns]="columns" [data]="data2" style="min-height:600px;"   >
             <ng-template>
                 <ng-template st-row="status" let-i>
                     <nz-badge [nzStatus]="i.statusType" [nzText]="i.statusText"></nz-badge>
@@ -59,7 +59,7 @@
             <div class="addStaffBox-main-right">
                 <!-- <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth" (storeListPush)="storeListPush($event)"
       (storeIdOutput)="getStoreId($event)"></jn-stores-infor> -->
-                <nz-select [(ngModel)]="selectedOption" style="width:240px;" (ngModelChange)="selectStoreInfo($event)" [nzPlaceHolder]="'请选择一个门店'"
+                <nz-select style="width:240px;" (ngModelChange)="selectStoreInfo($event)" [nzPlaceHolder]="'请选择一个门店'"
                     [nzShowSearch]="true">
                     <nz-option [nzLabel]="'请选择一个门店'" [nzValue]="'ALL'">
                     </nz-option>
