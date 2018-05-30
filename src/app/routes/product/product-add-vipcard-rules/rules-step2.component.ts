@@ -88,7 +88,8 @@ export class RulesStep2Component implements OnInit {
                 this.times = this.form.controls.amount.value + '天卡';
             }
         }else if(this.cardType === 'REBATE'){//折扣卡
-            this.ifShow = parseFloat(this.form.controls.amount.value) < 0.1 || parseFloat(this.form.controls.amount.value) > 9.9? false : true;
+          console.log(this.ifShow);
+          this.ifShow = parseFloat(this.form.controls.amount.value) < 0.1 || parseFloat(this.form.controls.amount.value) > 9.9? false : true;
         }else {//计次卡
             let check = reg.test(this.form.controls.amount.value);
             this.ifShow = check?  true : false;//判断是否是正整数
