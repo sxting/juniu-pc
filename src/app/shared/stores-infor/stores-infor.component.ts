@@ -37,6 +37,12 @@ export class StoresInforComponent implements OnInit {
     nzRequired: boolean = false;
 
     @Input()
+    labelText: string = '选择门店';
+
+    @Input()
+    alipayShop: boolean = false;
+
+    @Input()
     public ifStoresAll: boolean = true;
 
     @Input()
@@ -75,7 +81,7 @@ export class StoresInforComponent implements OnInit {
               {
                 "storeId":"1526906091646178161905",
                 "branchName":"第二家店",
-                "alipayShopId":"",
+                "alipayShopId":"2",
                 "hasAuth":true,
                 "provinceCode":"110000",
                 "cityCode":"110100",
@@ -118,6 +124,15 @@ export class StoresInforComponent implements OnInit {
                 "districtCode":"120101"
               }
             ];
+            let stores = [];
+            if(this.alipayShop) {
+              storeList.forEach(function (item: any) {
+                if(item.alipayShopId) {
+                  stores.push(item)
+                }
+              });
+              storeList = stores;
+            }
             //是否禁用
             if(self.ifStoresAuth){//需要授权
               storeList.forEach(function (item: any) {

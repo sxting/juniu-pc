@@ -90,24 +90,24 @@ export class CraftsmanManageComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        // if (this.localStorageService.getLocalstorage('Stores-Info') &&
-        //     JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')).length > 0) {
-        //     let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) ?
-        //         JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) : [];
-        //
-        //     let self =this;
-        //     this.stores = [];
-        //     storeList.forEach(function (item: any) {
-        //         if(item.alipayShopId) {
-        //             self.stores.push(item)
-        //         }
-        //     });
-        //     self.storeId = self.stores[0] ? self.stores[0].storeId : '';
-        //     self.selectedOption = self.storeId;
-        // }
+        if (this.localStorageService.getLocalstorage('Stores-Info') &&
+            JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')).length > 0) {
+            let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) ?
+                JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) : [];
+
+            let self =this;
+            this.stores = [];
+            storeList.forEach(function (item: any) {
+                if(item.alipayShopId) {
+                    self.stores.push(item)
+                }
+            });
+            self.storeId = self.stores[0] ? self.stores[0].storeId : '';
+            self.selectedOption = self.storeId;
+        }
 
         // this.getCraftsmanList();
-        // this.formInit();
+        this.formInit();
     }
 
     //选择门店
@@ -253,7 +253,7 @@ export class CraftsmanManageComponent implements OnInit {
 
     //编辑手艺人选择门店
     onStaffStoresChange(e: any) {
-        this.staffStoreId = e.target.value;
+        this.staffStoreId = e.storeId;
     }
 
     //点击排班
