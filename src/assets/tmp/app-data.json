@@ -11,7 +11,6 @@
   "menu": [
     {
       "text": "主导航",
-      "i18n": "main_navigation",
       "group": true,
       "hideInBreadcrumb": true,
       "children": [
@@ -36,93 +35,78 @@
             {
               "text": "预约",
               "link": "/reserve/index",
-              "i18n": "reserve",
               "reuse": false
             },
             {
               "text": "预约设置",
               "link": "/reserve/set",
-              "i18n": "reserve-set",
               "reuse": false
             },
             {
               "text": "预约记录导出",
               "link": "/reserve/record",
-              "i18n": "reserve-record",
               "reuse": false
             },
             {
               "text": "员工休假",
               "link": "/reserve/leave",
-              "i18n": "craftsman-leave",
               "reuse": false
             }
           ]
         },
         {
           "text": "轮牌",
-          "i18n": "lunpai",
           "icon": "icon-lunpai",
           "children": [
             {
               "text": "轮牌",
               "link": "/lunpai/index",
-              "i18n": "lunpai",
               "reuse": false
             },
             {
               "text": "轮牌设置",
               "link": "/lunpai/set",
-              "i18n": "lunpai-set",
               "reuse": false
             }
           ]
         },
         {
           "text": "商品",
-          "i18n": "product",
           "icon": "icon-shangpin",
           "children": [
             {
               "text": "会员卡",
               "link": "/product/vip/list",
-              "i18n": "memberList",
               "reuse": false
             },
             {
               "text": "服务项目",
               "link": "/product/service/items/list",
-              "i18n": "serviceItemsData",
               "reuse": false
             },
             {
               "text": "实体商品",
               "link": "/product/list",
-              "i18n": "productList",
               "reuse": false
             }
           ]
         },
         {
           "text": "会员",
-          "i18n": "member",
           "icon": "icon-huiyuan",
           "children": [
             {
               "text": "会员数据",
               "link": "/member/cardholdersVip",
-              "i18n": "memberData",
               "children": [
                 {
                   "text": "持卡会员",
                   "link": "/member/cardholdersVip",
-                  "i18n": "cardholdersVip",
                   "reuse": false
                 },
                 {
                   "text": "潜在会员",
                   "link": "/member/potentialVip",
-                  "i18n": "potentialVip",
                   "reuse": false
                 }
               ]
@@ -130,36 +114,30 @@
             {
               "text": "会员卡数据",
               "link": "/member/memberCardData",
-              "i18n": "memberCardData",
               "reuse": false
             },
             {
               "text": "会员分析",
               "link": "/member/memberAnalysis",
-              "i18n": "memberAnalysis",
               "reuse": false
             },
             {
               "text": "卡数据移动",
               "link": "/member/cardDataMove",
-              "i18n": "cardDataMove",
               "children": [
                 {
                   "text": "单卡导入",
                   "link": "/member/onlyCardImport",
-                  "i18n": "onlyCardImport",
                   "reuse": false
                 },
                 {
                   "text": "批量导入",
                   "link": "/member/manyCardImport",
-                  "i18n": "manyCardImport",
                   "reuse": false
                 },
                 {
                   "text": "卡数据导出",
                   "link": "/member/cardDataExport",
-                  "i18n": "cardDataExport",
                   "reuse": false
                 }
               ]
@@ -168,30 +146,25 @@
         },
         {
           "text": "营销",
-          "i18n": "marketing",
           "icon": "icon-yingxiao",
           "children": [
             {
               "text": "短信营销",
-              "i18n": "sms-marketing",
               "icon": "icon-grid",
               "children": [
                 {
                   "text": "全部短信营销",
                   "link": "/marketing/sms/index",
-                  "i18n": "all-sms-marketing",
                   "reuse": false
                 },
                 {
                   "text": "现有短信营销",
                   "link": "/marketing/sms/list",
-                  "i18n": "sms-marketing-list",
                   "reuse": false
                 },
                 {
                   "text": "活动效果统计",
                   "link": "/marketing/effect/count",
-                  "i18n": "marketing-effect-count",
                   "reuse": false
                 }
               ]
@@ -204,19 +177,16 @@
                 {
                   "text": "全部微信营销",
                   "link": "/marketing/wechart/index",
-                  "i18n": "all-wechart-marketing",
                   "reuse": false
                 },
                 {
                   "text": "现有微信营销",
                   "link": "/marketing/wechart/list",
-                  "i18n": "wechart-marketing-list",
                   "reuse": false
                 },
                 {
                   "text": "活动效果统计",
                   "link": "/marketing/effect/count",
-                  "i18n": "marketing-effect-count",
                   "reuse": false
                 }
               ]
@@ -225,73 +195,61 @@
         },
         {
           "text": "口碑",
-          "i18n": "koubei",
           "icon": "icon-koubei",
           "children": [
             {
               "text": "口碑商品",
-              "i18n": "koubeiProduct",
               "children": [
                 {
                   "text": "商品列表",
                   "link": "/koubei/product/list",
-                  "i18n": "koubeiProductList",
                   "reuse": false
                 },
                 {
                   "text": "订单列表",
                   "link": "/koubei/order/list",
-                  "i18n": "kouebiOrderList",
                   "reuse": false
                 },
                 {
                   "text": "/商品报表",
                   "link": "/koubei/report/list",
-                  "i18n": "kouebiProductReport",
                   "reuse": false
                 }
               ]
             },
             {
               "text": "口碑核销",
-              "i18n": "order-verification",
               "link": "/koubei/order-verification",
               "children": [],
               "reuse": false
             },
             {
               "text": "短信通知",
-              "i18n": "noteNumKoubei",
               "link": "/koubei/noteNumKoubei",
               "children": [],
               "reuse": false
             },
             {
               "text": "口碑拼团",
-              "i18n": "groups",
               "children": [
                 {
                   "text": "发布拼团",
                   "link": "/koubei/groups/releaseGroups",
-                  "i18n": "releaseGroups",
                   "reuse": false
                 },
                 {
                   "text": "现有拼团",
                   "link": "/koubei/groups/existingGroups",
-                  "i18n": "existingGroups",
                   "reuse": false
                 },
                 {
                   "text": "拼团订单",
                   "link": "/koubei/groups/orderGroups",
-                  "i18n": "orderGroups",
                   "reuse": false
                 },
                 {
                   "text": "活动效果",
                   "link": "/koubei/groups/resultStatistics",
-                  "i18n": "resultStatistics",
                   "reuse": false
                 }
               ]
@@ -303,50 +261,42 @@
                 {
                   "text": "发布优惠券",
                   "link": "/koubei/coupon/index",
-                  "i18n": "fabu-coupon",
                   "reuse": false
                 },
                 {
                   "text": "现有优惠券",
                   "link": "/koubei/coupon/list",
-                  "i18n": "xianyou-coupon",
                   "reuse": false
                 },
                 {
                   "text": "效果统计",
                   "link": "/koubei/coupon/statistics",
-                  "i18n": "xiaoguotongji",
                   "reuse": false
                 }
               ]
             },
             {
               "text": "口碑手艺人预约",
-              "i18n": "koubei-craftsman-reserve",
               "children": [
                 {
                   "text": "手艺人管理",
                   "link": "/koubei/craftsman/manage",
-                  "i18n": "craftsman-manage",
                   "reuse": false
                 },
                 {
                   "text": "预约记录",
                   "link": "/koubei/reserve/record",
-                  "i18n": "koubei-reserve-record",
                   "reuse": false
                 }
               ]
             },
             {
               "text": "打印机",
-              "i18n": "koubei-print",
               "link": "/koubei/print",
               "reuse": false
             },
             {
               "text": "短信通知",
-              "i18n": "koubei-msm",
               "link": "/koubei/koubeiMsmNotice",
               "reuse": false
             }
@@ -354,103 +304,86 @@
         },
         {
           "text": "报表",
-          "i18n": "report",
           "icon": "icon-baobiaobiaoweiguanli",
           "children": [
             {
               "text": "营收报表",
               "link": "/report/revenue/report",
-              "i18n": "revenueReport",
               "reuse": false
             },
             {
               "text": "商品报表",
               "link": "/report/commodity/statement",
-              "i18n": "commodityReport",
               "reuse": false
             },
             {
               "text": "顾客报表",
               "link": "/report/customer/report",
-              "i18n": "customerReport",
               "reuse": false
             },
             {
               "text": "提成报表",
               "link": "/report/commission/report",
-              "i18n": "commissionReport",
               "reuse": false
             },
             {
               "text": "跨店结算",
               "link": "/report/cross/shop/settlement",
-              "i18n": "crossShopSettlement",
               "reuse": false
             },
             {
               "text": "月报表",
               "link": "/report/month/report",
-              "i18n": "monthReport",
               "reuse": false
             }
           ]
         },
         {
           "text": "管理",
-          "i18n": "manage",
           "icon": "icon-guanli",
           "children": [
             {
               "text": "门店",
               "link": "/manage/storeList",
-              "i18n": "storeList",
               "reuse": false
             },
             {
               "text": "员工",
               "link": "/manage/staff/list",
-              "i18n": "staffList",
               "reuse": false
             },
             {
               "text": "职位",
               "link": "/manage/management",
-              "i18n": "management",
               "reuse": false
             },
             {
               "text": "提成",
               "link": "/manage/staff/commission/list",
-              "i18n": "staffCommission",
               "reuse": false
             },
             {
               "text": "排班",
               "link": "/manage/staff/scheduling/list",
-              "i18n": "staffSchedulingList",
               "reuse": false
             }
           ]
         },
         {
           "text": "设置",
-          "i18n": "setings",
           "icon": "icon-shezhi",
           "children": [
             {
               "text": "支付通道",
-              "i18n": "pay-way",
               "children": [
                 {
                   "text": "设置与结算",
                   "link": "/setings/pay/record",
-                  "i18n": "set-and-pay",
                   "reuse": false
                 },
                 {
                   "text": "付款码下载",
                   "link": "/setings/pay/download",
-                  "i18n": "pay-download",
                   "reuse": false
                 }
               ]
@@ -458,31 +391,26 @@
             {
               "text": "短信通知",
               "link": "/setings/msm/notice",
-              "i18n": "msm-notice",
               "reuse": false
             },
             {
               "text": "硬件安装",
               "link": "/setings/hardware/install",
-              "i18n": "hardware-install",
               "reuse": false
             },
             {
               "text": "软件购买",
               "link": "/setings/software/buy",
-              "i18n": "software-buy",
               "reuse": false
             },
             {
               "text": "操作日志",
               "link": "/setings/operation/log",
-              "i18n": "operation-log",
               "reuse": false
             },
             {
               "text": "账号管理",
               "link": "/setings/administration",
-              "i18n": "administration",
               "reuse": false
             }
           ]

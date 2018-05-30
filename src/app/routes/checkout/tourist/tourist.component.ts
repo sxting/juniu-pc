@@ -4,7 +4,7 @@ import { _HttpClient, SettingsService } from '@delon/theme';
 import NP from 'number-precision';
 import { ManageService } from '../../manage/shared/manage.service';
 import { LocalStorageService } from '@shared/service/localstorage-service';
-import { STORES_INFO, USER_INFO } from '@shared/define/juniu-define';
+import { STORES_INFO, USER_INFO, GUADAN } from '@shared/define/juniu-define';
 import { CheckoutService } from '../shared/checkout.service';
 import { MemberService } from '../../member/shared/member.service';
 import { ProductService } from '../../product/shared/product.service';
@@ -109,6 +109,9 @@ export class TouristComponent implements OnInit {
     shopsearch: any;
     inputValue: any = 0;
     vipDataBoolean: boolean = false;
+    guadanList: any;
+    shopyinList: any;
+    pageSize:any =10
     constructor(
         public msg: NzMessageService,
         private localStorageService: LocalStorageService,
@@ -137,7 +140,8 @@ export class TouristComponent implements OnInit {
         }
         that.storeId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)).stores[0].storeId;
         this.changeFun();
-
+        this.guadanList = this.localStorageService.getLocalstorage(GUADAN) ? JSON.parse(this.localStorageService.getLocalstorage(GUADAN)) : [];
+        console.log(this.guadanList)
     }
     //切换数据
     changeFun() {
@@ -1164,7 +1168,7 @@ export class TouristComponent implements OnInit {
         }
 
     }
-    vipDataRadio(e: any, ind?: any) {
+    vipDataRadio(ind?: any) {
         let self = this;
         self.yjcardList = this.vipData[this.radioValue].cardApplies;
         if (this.vipData[this.radioValue].customer) {
@@ -1185,5 +1189,129 @@ export class TouristComponent implements OnInit {
             self.memberInfo = {};
         }
         this.vipDataBoolean = false;
+    }
+    formatDateTime(date) {
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? ('0' + m) : m;
+        var d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        var h = date.getHours();
+        h = h < 10 ? ('0' + h) : h;
+        var minute = date.getMinutes();
+        minute = minute < 10 ? ('0' + minute) : minute;
+        var second = date.getSeconds();
+        second = second < 10 ? ('0' + second) : second;
+        return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+    };
+    guadan() {
+        let that = this;
+        if (this.xfList && this.xfList.length > 0) {
+            let data = {
+                vip: that.memberInfo,
+                xfList: that.xfList,
+                date: that.formatDateTime(new Date()),
+                totoleMoney: that.inputValue
+            }
+            if (this.guadanList && this.guadanList.length > 0) {
+                this.guadanList.push(data);
+                this.localStorageService.setLocalstorage(GUADAN, JSON.stringify(that.guadanList))
+            } else {
+                this.localStorageService.setLocalstorage(GUADAN, JSON.stringify([data]))
+            }
+
+        }
+
+    }
+    guadanJS(index: any) {
+        this.modalSrv.closeAll();
+        this.xfList = this.guadanList[index].xfList;
+        // this.memberInfo = this.shopyinList[index].vip;
+        this.vipsearch = this.guadanList[index].vip.phone;
+        this.searchMemberCard();
+    }
+    guadanSC(index: any) {
+        let that = this;
+        this.guadanList = this.guadanList.splice(index, 1);
+        this.localStorageService.setLocalstorage(GUADAN, JSON.stringify(that.guadanList))
+    }
+    guadanListFun(trl: any) {
+        this.guadanList = this.localStorageService.getLocalstorage(GUADAN) ? JSON.parse(this.localStorageService.getLocalstorage(GUADAN)) : [];
+        this.modalSrv.create({
+            nzTitle: '挂单记录',
+            nzContent: trl,
+            nzWidth: '800px',
+            nzFooter: null,
+            nzOkText: null
+        });
+    }
+    shouyinListFun(trl: any) {
+        this.getOrderHistoryListHttp();
+        this.modalSrv.create({
+            nzTitle: '收银记录',
+            nzContent: trl,
+            nzWidth: '800px',
+            nzFooter: null,
+            nzOkText: null
+        });
+    }
+    getOrderHistoryListHttp(phone?: any) {
+        let self = this;
+        let data = {
+            pageIndex: 1,
+            pageSize: this.pageSize,
+            phone: phone
+        }
+        if (!data.phone) delete data.phone;
+        this.checkoutService
+            .getOrderHistoryList(data)
+            .subscribe(
+                (res: any) => {
+                    if (res.success) {
+                        self.shopyinList = res.data.orders;
+                        console.log(res.data);
+                    } else {
+                        self.errorAlter(res.errorInfo)
+                    }
+
+                },
+                error => self.errorAlter(error)
+            );
+    }
+
+    /**退款 */
+    refund(selectData: any) {
+        let obj = this;
+        this.modalSrv.confirm({
+            nzTitle: '您是否确认退款',
+            nzOnOk() {
+                if (selectData['statusName'] === '已取消') {
+                    this.errorAlter('该订单已取消，不得退款');
+                } else if (selectData['statusName'] === '未付款') {
+                    this.errorAlter('该订单未付款，不得退款');
+                } else if (selectData['statusName'] === '处理中') {
+                    this.errorAlter('该订单处理中，不得退款');
+                } else if (selectData['recordTypeName'] === '开卡') {
+                    this.errorAlter('开卡业务，不得退款');
+                } else {
+                    this.loading();
+                    obj.checkoutService.backOrder(selectData['orderId']).subscribe(
+                        (res: any) => {
+                            if (res) {
+                                if (res.success) {
+                                    this.modalSrv.success({
+                                        nzTitle: '退款成功'
+                                    });
+                                    obj.getOrderHistoryListHttp();
+                                } else {
+                                    this.errorAlter(res.errorInfo)
+                                }
+                            }
+                        },
+                        (error: any) => this.errorAlter(error)
+                    );
+                }
+            }
+        });
     }
 }
