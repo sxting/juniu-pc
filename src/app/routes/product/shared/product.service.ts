@@ -156,4 +156,14 @@ export class ProductService {
         });
     }
 
+    // 选择门店
+    selectStores(data: any){
+      let apiUrl = Config.API1 + 'account/merchant/store/select.json';
+      return this.http.get(apiUrl,  data )
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
+
 }

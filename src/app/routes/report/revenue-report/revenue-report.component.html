@@ -4,16 +4,10 @@
     <div nz-form [nzLayout]="'inline'" class="search__form">
         <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
             <nz-col nzMd="8" nzSm="24">
-                <nz-form-item>
-                    <nz-form-label nzFor="status">选择门店</nz-form-label>
-                    <nz-form-control>
-                      <nz-select  style="width: 200px;" [(ngModel)]="storeId" (ngModelChange)="selectStore()" name="storeList" id="storeList" [nzPlaceHolder]="'请选择一个门店'" [nzShowSearch]="true">
-                        <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.storeName" [nzValue]="i.storeId"></nz-option>
-                      </nz-select>
-                    </nz-form-control>
-                </nz-form-item>
+              <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth"
+                                (storeListPush)="storeListPush($event)" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
             </nz-col>
-            <nz-col nzMd="8" nzSm="24">
+            <nz-col nzMd="8" nzSm="24" class="fr">
                 <nz-form-item>
                     <nz-form-label nzFor="updatedAt">选择日期</nz-form-label>
                     <nz-form-control>
