@@ -26,11 +26,9 @@ export class MarketingEffectCountComponent implements OnInit {
         { value: 'WECHAT', label: '微信领劵' }
     ];
     empty: any = true;
-    storeOptions: any;
     statusFlag: number = 0;
     selectedOption1: any;
     selectedOption2: any;
-    selectedStore: any;
     type: any;
     showCreateOrder: boolean;
     pageIndex: any = 1;
@@ -64,11 +62,8 @@ export class MarketingEffectCountComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.storeOptions = this.USER_INFO.stores ? this.USER_INFO.stores : [];
-        this.storeOptions.unshift({ storeName: '全部', storeId: 'ALL' });
         this.selectedOption1 = this.options1[0];
         this.selectedOption2 = this.options2[0];
-        this.selectedStore = this.storeOptions[0];
         this.cardRepeatconfiglist(this.pageIndex);
     }
 
@@ -94,12 +89,7 @@ export class MarketingEffectCountComponent implements OnInit {
         this.type = type;
     }
     storeChange(e: any) {
-        console.log(e);
-        if (e.storeId === 'ALL') {
-            this.storeId = '';
-        } else {
-            this.storeId = e.storeId;
-        }
+      this.storeId = e.storeId;
         this.cardRepeatconfiglist(this.pageIndex);
     }
     paginate(event: any) {

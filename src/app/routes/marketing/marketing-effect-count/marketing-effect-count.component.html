@@ -19,11 +19,14 @@
                 </nz-select>
             </div>
             <div class="store-box">
-                按门店筛选
-                <nz-select style="width: 200px;" (nzOpenChange)="storeChange(selectedStore)" [(ngModel)]="selectedStore">
-                    <nz-option *ngFor="let option of storeOptions" [nzLabel]="option.storeName" [nzValue]="option">
-                    </nz-option>
-                </nz-select>
+              <jn-stores-infor [moduleId]="1" [labelText]="'按门店筛选'"
+                               (storeIdOutput)="storeChange($event)">
+              </jn-stores-infor>
+                <!--按门店筛选-->
+                <!--<nz-select style="width: 200px;" (nzOpenChange)="storeChange(selectedStore)" [(ngModel)]="selectedStore">-->
+                    <!--<nz-option *ngFor="let option of storeOptions" [nzLabel]="option.storeName" [nzValue]="option">-->
+                    <!--</nz-option>-->
+                <!--</nz-select>-->
             </div>
         </div>
 

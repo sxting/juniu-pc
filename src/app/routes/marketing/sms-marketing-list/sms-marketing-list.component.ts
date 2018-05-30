@@ -126,11 +126,7 @@ export class SmsMarketingListComponent implements OnInit {
 
     //选择门店
     storeChange(e: any) {
-        if (e === 'ALL') {
-            this.storeId = '';
-        } else {
-            this.storeId = e;
-        }
+      this.storeId = e.storeId;
         this.cardRepeatconfiglist();
     }
 

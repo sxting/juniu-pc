@@ -5,7 +5,7 @@
         <span (click)="onEditClick('', alertEditBox)">新增手艺人</span>
     </div>
     <div class="content-title"><span></span>现有手艺人</div>
-  <jn-stores-infor [moduleId]="1" [ifStoresAll]="false"
+  <jn-stores-infor [moduleId]="1" [ifStoresAll]="false" [alipayShop]="true"
                    (storeIdOutput)="onStoresChange($event)" (storeListPush)="storeListPush($event)"></jn-stores-infor>
 
   <!--<div class="select-store-box">-->
@@ -132,13 +132,16 @@
         </nz-form-item>
 
         <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzRequired>所属门店</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="17" nzMd="17">
-                <select class="select" (change)="onStaffStoresChange($event)">
-                    <option [value]="''">请选择手艺人所属门店</option>
-                    <option *ngFor="let store of stores" [selected]="store.storeId == staffStoreId" [value]="store.storeId">{{store.storeName}}</option>
-                </select>
-            </nz-form-control>
+          <jn-stores-infor [moduleId]="1" [ifStoresAll]="false" [alipayShop]="true"
+                           [nzSm1]="7" [nzSm2]="17" [nzRequired]="true"
+                           (storeIdOutput)="onStaffStoresChange($event)"></jn-stores-infor>
+            <!--<nz-form-label nzXs="24" nzSm="7" nzRequired>所属门店</nz-form-label>-->
+            <!--<nz-form-control nzXs="24" nzSm="17" nzMd="17">-->
+                <!--<select class="select" (change)="onStaffStoresChange($event)">-->
+                    <!--<option [value]="''">请选择手艺人所属门店</option>-->
+                    <!--<option *ngFor="let store of stores" [selected]="store.storeId == staffStoreId" [value]="store.storeId">{{store.storeName}}</option>-->
+                <!--</select>-->
+            <!--</nz-form-control>-->
         </nz-form-item>
 
         <nz-form-item>

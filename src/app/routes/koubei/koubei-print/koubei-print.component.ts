@@ -17,7 +17,7 @@ export class KoubeiPrintComponent implements OnInit {
     submitting: boolean = false;
 
     theadName: any[] = ['终端编号', '终端名称', '终端秘钥', '所属门店', '操作'];
-    stores: any[] = [];
+    // stores: any[] = [];
     storeId: string = '';
 
     deviceName: any; //终端名称
@@ -41,12 +41,12 @@ export class KoubeiPrintComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        if (this.localStorageService.getLocalstorage('Stores-Info') &&
-            JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')).length > 0) {
-            let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) ?
-                JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) : [];
-            this.stores = storeList;
-        }
+        // if (this.localStorageService.getLocalstorage('Stores-Info') &&
+        //     JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')).length > 0) {
+        //     let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) ?
+        //         JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) : [];
+        //     this.stores = storeList;
+        // }
 
         this.getPrintList();
         this.formInit();
@@ -66,7 +66,7 @@ export class KoubeiPrintComponent implements OnInit {
             this.getPrintDetail();
         } else { //新增
             //各种都置空
-            this.storeId = '';
+            // this.storeId = '';
             this.printerDeviceId = '';
             this.deviceName = '';
             this.yunApiKey = '';
@@ -78,6 +78,10 @@ export class KoubeiPrintComponent implements OnInit {
             this.formInit();
         }
     }
+
+  onStaffStoresChange(e: any) {
+      this.storeId = e.storeId;
+  }
 
     get yun_username() { return this.form.controls['yun_username']; }
     get yun_user_id() { return this.form.controls['yun_user_id']; }
@@ -97,7 +101,7 @@ export class KoubeiPrintComponent implements OnInit {
                 yun_device_id: [this.yunDeviceId, Validators.required],
                 yun_device_key: [this.yunDeviceKey, Validators.required],
                 yun_device_sim_no: [this.yunDeviceSimNo, []],
-                selected_store: [this.storeId, Validators.required],
+                // selected_store: [this.storeId, Validators.required],
             });
         }
         else {
@@ -109,7 +113,7 @@ export class KoubeiPrintComponent implements OnInit {
                 yun_device_id: ['', Validators.required],
                 yun_device_key: ['', Validators.required],
                 yun_device_sim_no: ['', []],
-                selected_store: ['', Validators.required],
+                // selected_store: ['', Validators.required],
             });
         }
     }
@@ -122,7 +126,7 @@ export class KoubeiPrintComponent implements OnInit {
         if (this.form.invalid) return;
         this.submitting = true;
 
-        this.storeId = this.form.value.selected_store;
+        // this.storeId = this.form.value.selected_store;
         this.deviceName = this.form.value.device_name;
         this.yunApiKey = this.form.value.yun_api_key;
         this.yunDeviceId = this.form.value.yun_device_id;

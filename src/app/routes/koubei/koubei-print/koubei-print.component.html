@@ -87,17 +87,21 @@
             </nz-form-control>
         </nz-form-item>
 
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="selected_store">选择门店</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="17" nzMd="17">
-                <!-- <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth" (storeListPush)="storeListPush($event)"
-      (storeIdOutput)="getStoreId($event)"></jn-stores-infor> -->
-                <nz-select formControlName="selected_store" nzPlaceHolder="请选择一个门店" [nzShowSearch]="true">
-                    <nz-option *ngFor="let store of stores" [nzLabel]="store.storeName" [nzValue]="store.storeId"></nz-option>
-                </nz-select>
-                <nz-form-explain class="error-color" *ngIf="selected_store.dirty && selected_store.errors">请选择门店</nz-form-explain>
-            </nz-form-control>
-        </nz-form-item>
+      <jn-stores-infor [moduleId]="1" [ifStoresAll]="false"
+                       [nzSm1]="5" [nzSm2]="17" [nzRequired]="true"
+                       (storeIdOutput)="onStaffStoresChange($event)"></jn-stores-infor>
+
+        <!--<nz-form-item>-->
+            <!--<nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="selected_store">选择门店</nz-form-label>-->
+            <!--<nz-form-control nzXs="24" nzSm="17" nzMd="17">-->
+                <!--&lt;!&ndash; <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth" (storeListPush)="storeListPush($event)"-->
+      <!--(storeIdOutput)="getStoreId($event)"></jn-stores-infor> &ndash;&gt;-->
+                <!--<nz-select formControlName="selected_store" nzPlaceHolder="请选择一个门店" [nzShowSearch]="true">-->
+                    <!--<nz-option *ngFor="let store of stores" [nzLabel]="store.storeName" [nzValue]="store.storeId"></nz-option>-->
+                <!--</nz-select>-->
+                <!--<nz-form-explain class="error-color" *ngIf="selected_store.dirty && selected_store.errors">请选择门店</nz-form-explain>-->
+            <!--</nz-form-control>-->
+        <!--</nz-form-item>-->
 
         <nz-form-item>
             <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 5 }">
