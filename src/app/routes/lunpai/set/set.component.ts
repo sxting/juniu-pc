@@ -53,24 +53,24 @@ export class SetComponent implements OnInit {
 
     ngOnInit() {
         this.token = this.localStorageService.getLocalstorage(APP_TOKEN);
-        if (this.localStorageService.getLocalstorage(STORES_INFO) &&
-            JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
-            let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-                JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-
-            this.stores = storeList;
-            this.storeId = storeList[0].storeId;
-
-            this.selectedOption = storeList[0].storeId;
-        }
-
-        this.getTurnRuleList();
+        // if (this.localStorageService.getLocalstorage(STORES_INFO) &&
+        //     JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
+        //     let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
+        //         JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
+        //
+        //     this.stores = storeList;
+        //     this.storeId = storeList[0].storeId;
+        //
+        //     this.selectedOption = storeList[0].storeId;
+        // }
+        //
+        // this.getTurnRuleList();
     }
 
     //选择门店
-    onSelectStoreClick(e: any) {
+  onSelectStoreChange(e: any) {
         // this.storeId = e.target.value;
-        this.storeId = this.selectedOption;
+      this.storeId = e.storeId;
 
         this.getTurnRuleList();
     }
