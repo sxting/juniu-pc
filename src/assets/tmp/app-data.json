@@ -230,7 +230,7 @@
                   "reuse": false
                 },
                 {
-                  "text": "/商品报表",
+                  "text": "商品报表",
                   "link": "/koubei/report/list",
                   "reuse": false
                 }
