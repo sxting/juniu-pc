@@ -10,6 +10,7 @@ import { MemberService } from '../../member/shared/member.service';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { APP_TOKEN, STORES_INFO, ALIPAY_SHOPS, USER_INFO, MODULES } from '@shared/define/juniu-define';
+import { StartupService } from '@core/startup/startup.service';
 
 @Component({
     selector: 'passport-login',
@@ -32,6 +33,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
         private settingsService: SettingsService,
         private localStorageService: LocalStorageService,
         private memberService: MemberService,
+        private startupService: StartupService,
         private socialService: SocialService,
         @Optional() @Inject(ReuseTabService) private reuseTabService: ReuseTabService,
         @Inject(DA_SERVICE_TOKEN) private tokenService: TokenService) {
@@ -189,8 +191,8 @@ export class UserLoginComponent implements OnDestroy, OnInit {
             id: 10000,
             time: +new Date
         });
-        location.reload();
         this.router.navigate(['/']);
+        this.startupService.load();
     }
     getValidCode(phone, bizType) {
         let that = this;
