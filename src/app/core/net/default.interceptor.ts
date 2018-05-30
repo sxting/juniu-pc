@@ -13,7 +13,7 @@ import {
 } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { mergeMap, catchError } from 'rxjs/operators';
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
 import { environment } from '@env/environment';
 
@@ -22,7 +22,8 @@ import { environment } from '@env/environment';
  */
 @Injectable()
 export class DefaultInterceptor implements HttpInterceptor {
-  constructor(private injector: Injector, private router: Router) { }
+
+  constructor(private injector: Injector, private modalSrv: NzModalService, private router: Router) { }
 
   get msg(): NzMessageService {
     return this.injector.get(NzMessageService);
@@ -39,6 +40,7 @@ export class DefaultInterceptor implements HttpInterceptor {
     this.injector.get(_HttpClient).end();
     // 业务处理：一些通用操作
     if (event['body']['errorCode'] === 'invalid-guest' || event['body']['errorInfo'] === '未检查到登录状态，请先登录后再进行操作') {
+      this.modalSrv.closeAll()
       this.goTo('/passport/login');
     }
     switch (event.status) {

@@ -34,6 +34,8 @@ export const PLATFORM_JUNIUO_SAAS: string = 'PLATFORM_JUNIUO_SAAS';
 export const FACE_OBJ: string = 'FACE_OBJ';
 export const GANGGAO: number = 0;
 export const ISSHOWLEFT: string = 'ISSHOWLEFT';
+export const GUADAN: any = 'guadan';
+
 
 //  WECHATPAY('微信支付'),
 // ALIPAY('支付宝支付'),
