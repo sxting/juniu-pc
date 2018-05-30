@@ -38,6 +38,7 @@ export const GUADAN: any = 'guadan';
 
 //线下门店
 export const STORES_DOWN: string = 'Stores-Down';
+export const STORES_STAFF: string = 'Stores-Staff';
 
 //  WECHATPAY('微信支付'),
 // ALIPAY('支付宝支付'),

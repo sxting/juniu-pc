@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ManageService } from "../shared/manage.service";
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LocalStorageService} from "@shared/service/localstorage-service";
-import { STORES_INFO} from "@shared/define/juniu-define";
+import { STORES_STAFF } from '@shared/define/juniu-define';
 import { FunctionUtil } from "@shared/funtion/funtion-util";
 import { UploadService } from "@shared/upload-img/shared/upload.service";
 
@@ -55,10 +55,11 @@ export class AddNewStaffComponent implements OnInit {
     ngOnInit() {
         let self = this;
         //门店列表
-        if (this.localStorageService.getLocalstorage(STORES_INFO) && JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
-            let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-                JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-            this.storeList = storeList;
+        if (this.localStorageService.getLocalstorage(STORES_STAFF) && JSON.parse(this.localStorageService.getLocalstorage(STORES_STAFF)).length > 0) {
+            let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_STAFF)) ?
+                JSON.parse(this.localStorageService.getLocalstorage(STORES_STAFF)) : [];
+            let store = storeList.slice(1);
+            this.storeList = store;
             this.storeId = this.storeList[0].storeId;
         }
         this.staffId = this.route.snapshot.params['staffId'] ? this.route.snapshot.params['staffId'] : FunctionUtil.getUrlString('staffId');
