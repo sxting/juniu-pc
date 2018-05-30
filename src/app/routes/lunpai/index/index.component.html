@@ -1,5 +1,9 @@
 <page-header></page-header>
-
+<div *ngIf="">
+  <jn-stores-infor [moduleId]="1" [ifStoresAll]="false"
+                   (storeIdOutput)="onSelectStoreChange($event)">
+  </jn-stores-infor>
+</div>
 <div class="status-box">
     <ul>
         <li>

@@ -5,11 +5,16 @@
     <div class="content-title"><span></span>预约设置</div>
     <ul>
       <li>
-        <span class="set-left">选择门店</span>
-        <nz-select style="width: 200px;" [(ngModel)]="selectedOption" (ngModelChange)="onStoresChange($event)" [nzShowSearch]="true">
-          <nz-option [nzLabel]="'请选择一个门店'" [nzValue]="''"></nz-option>
-          <nz-option *ngFor="let store of stores" [nzLabel]="store.storeName" [nzValue]="store.storeId"></nz-option>
-        </nz-select>
+
+        <jn-stores-infor [moduleId]="1" [ifStoresAll]="false"
+                         (storeIdOutput)="onStoresChange($event)">
+        </jn-stores-infor>
+
+        <!--<span class="set-left">选择门店</span>-->
+        <!--<nz-select style="width: 200px;" [(ngModel)]="selectedOption" (ngModelChange)="onStoresChange($event)" [nzShowSearch]="true">-->
+          <!--<nz-option [nzLabel]="'请选择一个门店'" [nzValue]="''"></nz-option>-->
+          <!--<nz-option *ngFor="let store of stores" [nzLabel]="store.storeName" [nzValue]="store.storeId"></nz-option>-->
+        <!--</nz-select>-->
       </li>
       <li>
         <span class="set-left">营业时间</span>

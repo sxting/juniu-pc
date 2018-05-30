@@ -39,7 +39,6 @@ export class StaffCommissionListComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-
         this.moduleId = 1;
         let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
             JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];

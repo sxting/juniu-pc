@@ -1,14 +1,10 @@
 <div class="content-box">
-  <!--<div class="select-store-box">-->
-    <!--选择门店：-->
-    <!--<nz-select style="width: 200px;" [(ngModel)]="selectedOption" (ngModelChange)="onStoresChange($event)" [nzShowSearch]="true">-->
-      <!--<nz-option *ngFor="let store of stores" [nzLabel]="store.storeName" [nzValue]="store.storeId"></nz-option>-->
-    <!--</nz-select>-->
-  <!--</div>-->
-
-  <jn-stores-infor [moduleId]="1" [ifStoresAll]="false"
-                   (storeIdOutput)="onStoresChange($event)" (storeListPush)="storeListPush($event)">
-  </jn-stores-infor>
+  <div class="select-store-box">
+    选择门店：
+    <nz-select style="width: 200px;" [(ngModel)]="selectedOption" (ngModelChange)="onStoresChange($event)" [nzShowSearch]="true">
+      <nz-option *ngFor="let store of stores" [nzLabel]="store.storeName" [nzValue]="store.storeId"></nz-option>
+    </nz-select>
+  </div>
 
   <div class="clearfix">
 

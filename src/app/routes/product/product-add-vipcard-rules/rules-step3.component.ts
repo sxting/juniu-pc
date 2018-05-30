@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { RulesTransferService } from "./rules-transfer.service";
-import { LocalStorageService } from "../../../shared/service/localstorage-service";
-import { CITYLIST } from "../../../shared/define/juniu-define";
-import { FunctionUtil } from "../../../shared/funtion/funtion-util";
 import { NzMessageService, NzModalService} from 'ng-zorro-antd';
 import { ProductService } from "../shared/product.service";
+import { LocalStorageService } from '@shared/service/localstorage-service';
+import { CITYLIST } from '@shared/define/juniu-define';
+import { FunctionUtil } from '@shared/funtion/funtion-util';
 
 @Component({
   selector: 'app-rules-step3',
@@ -29,8 +29,8 @@ export class RulesStep3Component implements OnInit {
     allProductNumber: number = 0;//所有商品的数量
     selectProductNumber: number = 0;//选择的商品数量
     productIds: string = '';
-    merchantId: string = '1517309600312201040575';
-    storeId: string = '1525940433796116388373';//判断是门店登录还是商家登陆
+    merchantId: string = '';
+    storeId: string = '';//判断是门店登录还是商家登陆
     ifHttps: string = 'SERVICEITEMS';//是否要调取接口
 
     constructor(
@@ -45,46 +45,52 @@ export class RulesStep3Component implements OnInit {
 
     ngOnInit() {
         let self = this;
-        let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) ?
-            JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) : [];
+        let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+          JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+        this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
+
+        let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Down')) ?
+          JSON.parse(this.localStorageService.getLocalstorage('Stores-Down')) : [];
 
         if (storeList) {
-            CITYLIST.forEach(function (i: any) {
-                storeList.forEach((ele: any, index: number, arr: any) => {
-                    if (i.i == ele.cityId) {
-                        ele.cityName = i.n;
-                    }
-                })
+          CITYLIST.forEach(function (i: any) {
+            storeList.forEach((ele: any, index: number, arr: any) => {
+              if (i.i == ele.cityCode) {
+                ele.cityName = i.n;
+              }
             })
+          })
         }
+
         let cityNameSpaceArr = [{
-            cityName: '',
-            cityId: '',
+          cityName: '',
+          cityId: '',
         }];
         cityNameSpaceArr.shift();
+
         for (let i = 0; i < storeList.length; i++) {
-            if (storeList[i].cityId == '' || storeList[i].cityId == null) {
-                storeList[i].cityName = '其他';
-            } else if (storeList[i].cityId != '' && storeList[i].cityName == '') {
-                cityNameSpaceArr.push({
-                    cityName: '',
-                    cityId: storeList[i].cityId,
-                });
-            }
+          if (storeList[i].cityCode == '' || storeList[i].cityCode == null) {
+            storeList[i].cityName = '其他';
+          } else if (storeList[i].cityCode != '' && storeList[i].cityName == '') {
+            cityNameSpaceArr.push({
+              cityName: '',
+              cityId: storeList[i].cityCode,
+            });
+          }
         }
         for (let i = 0; i < cityNameSpaceArr.length; i++) {
-            for (let j = 0; j < storeList.length; j++) {
-                if (cityNameSpaceArr[i].cityId == storeList[j].cityId && storeList[j].cityName != '') {
-                    cityNameSpaceArr[i].cityName = storeList[j].cityName;
-                }
+          for (let j = 0; j < storeList.length; j++) {
+            if (cityNameSpaceArr[i].cityId == storeList[j].cityCode && storeList[j].cityName != '') {
+              cityNameSpaceArr[i].cityName = storeList[j].cityName;
             }
+          }
         }
         for (let i = 0; i < cityNameSpaceArr.length; i++) {
-            for (let j = 0; j < storeList.length; j++) {
-                if (cityNameSpaceArr[i].cityId == storeList[j].cityId && storeList[j].cityName == '') {
-                    storeList[j].cityName = cityNameSpaceArr[i].cityName
-                }
+          for (let j = 0; j < storeList.length; j++) {
+            if (cityNameSpaceArr[i].cityId == storeList[j].cityCode && storeList[j].cityName == '') {
+              storeList[j].cityName = cityNameSpaceArr[i].cityName
             }
+          }
         }
         this.cityStoreList = FunctionUtil.getCityListStore(storeList);
         this.changeAllData();//获取到所有的门店ID及其num
@@ -131,7 +137,6 @@ export class RulesStep3Component implements OnInit {
             storeId: this.storeId,
             categoryType: typeData
         };
-        console.log(this.ifHttps);
         if(this.ifHttps != type){
             this.getAllbuySearchs(data);//获取所有的商品
         }
@@ -144,13 +149,11 @@ export class RulesStep3Component implements OnInit {
                 nzOkText: '保存',
                 nzOnOk: function(){
                     self.ifHttps = 'CUSTOMIZE';
-                    console.log(self.productIds);
                 }
             });
         }else {
             let dataInfor = this.getOthersData(self.productListInfor).split('-');
             self.productIds = dataInfor[0];
-            console.log(self.productIds);
             this.ifHttps = type;
         }
     }

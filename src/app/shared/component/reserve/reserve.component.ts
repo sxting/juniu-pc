@@ -6,6 +6,7 @@ import {FunctionUtil} from "@shared/funtion/funtion-util";
 import {STORES_INFO, ALIPAY_SHOPS} from "@shared/define/juniu-define";
 import {LocalStorageService} from "@shared/service/localstorage-service";
 import {NzModalService} from "ng-zorro-antd";
+import {StoresInforService} from "@shared/stores-infor/shared/stores-infor.service";
 declare var swal: any;
 
 @Component({
@@ -20,6 +21,7 @@ export class ReserveComponent implements OnInit, AfterViewInit, AfterViewChecked
                 private titleService: Title,
                 private orderService: OrderService,
                 private localStorageService: LocalStorageService,
+                private storesInforService: StoresInforService,
                 private modalSrv: NzModalService,) {
     }
 
@@ -98,32 +100,55 @@ export class ReserveComponent implements OnInit, AfterViewInit, AfterViewChecked
 
   selectedOption;
 
-    dateFormat: any = 'yyyy-MM-dd';
+  dateFormat: any = 'yyyy-MM-dd';
 
-    ngOnInit() {
-        this.titleService.setTitle('预约');
-        this.todayDay = this.changeDate(new Date());
+  ngOnInit() {
+    this.titleService.setTitle('预约');
+    this.todayDay = this.changeDate(new Date());
 
-        // if (this.localStorageService.getLocalstorage(STORES_INFO) &&
-        //     JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
-        //     let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-        //         JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-        //
-        //     this.storeId = storeList[0].storeId;
-        //     this.storeName = storeList[0].storeName;
-        //     this.stores = storeList;
-        //     this.selectedOption = this.stores[0].storeId;
-        // }
-        //
-        // this.getReservationsNewReserveCount();
-    }
+    let data = {
+      moduleId: 1,
+      timestamp: new Date().getTime()
+    };
+    this.storesInforService.selectStores(data).subscribe(
+      (res: any) => {
+        if (res.success) {
+          let storeList: any = res.data.items;
+          storeList.forEach(function (item: any) {
+            item.storeName = item.branchName;
+          });
+
+          if(storeList[0]) {
+            this.storeId = storeList[0].storeId;
+            // this.storeId = '1525863865366114794418';
+            this.storeName = storeList[0].storeName;
+            this.stores = storeList;
+            this.selectedOption = this.stores[0].storeId;
+          }
+          this.getReservationsNewReserveCount();
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      }
+    );
+  }
 
     ngAfterViewInit() {
-        let getReserveConfigParams = {
-            storeId: this.storeId
-        };
-      console.log(this.storeId);
-      this.getReserveConfig(getReserveConfigParams);
+        let self = this;
+      let timer = setInterval(function () {
+        console.log(self.storeId);
+        if(self.storeId) {
+          let getReserveConfigParams = {
+            storeId: self.storeId
+          };
+          self.getReserveConfig(getReserveConfigParams);
+          clearInterval(timer)
+        }
+      }, 1000)
+
     }
 
     ngAfterViewChecked() {

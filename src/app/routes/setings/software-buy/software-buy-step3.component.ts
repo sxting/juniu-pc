@@ -122,6 +122,7 @@ export class SoftBuyStep3Component implements OnInit {
           if(res.data.tradeState === 'SUCCESS') {
             clearInterval(this.timer);
             this.msg.success('支付成功');
+            this.item.orderNo = this.result.orderNo;
             ++this.item.step
           }
         } else {

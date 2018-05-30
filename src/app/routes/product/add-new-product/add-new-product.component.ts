@@ -3,11 +3,11 @@ import { _HttpClient , TitleService} from '@delon/theme';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Router, ActivatedRoute } from '@angular/router';
-import { UploadService } from "../../../shared/upload-img/shared/upload.service";
 import { ProductService } from "../shared/product.service";
-import { LocalStorageService} from "../../../shared/service/localstorage-service";
-import { FunctionUtil} from "../../../shared/funtion/funtion-util";
-import { CITYLIST } from "../../../shared/define/juniu-define";
+import { LocalStorageService } from '@shared/service/localstorage-service';
+import { FunctionUtil } from '@shared/funtion/funtion-util';
+import { CITYLIST } from '@shared/define/juniu-define';
+import { UploadService } from '@shared/upload-img';
 
 @Component({
   selector: 'app-add-new-product',
@@ -43,17 +43,14 @@ export class AddNewProductComponent implements OnInit {
     //上传图片的时候
     imagePath: string = '';
     picId: string = '';//商品首图的ID
-
     // 门店相关的
     cityStoreList: any;  // 数据格式转换过的门店列表
     selectStoresIds: any = ''; //选中的门店
     storesChangeNum: any; //选中门店的个数
     allStoresNum: any;//所有门店的数量
-
     get categoryInfor() { return this.form.controls.categoryInfor; }
     get currentPrice() { return this.form.controls['currentPrice']; }
     get stock() { return this.form.controls['stock']; }
-
 
     ngOnInit() {
         let self = this;
@@ -61,42 +58,45 @@ export class AddNewProductComponent implements OnInit {
         this.storeId = this.route.snapshot.params['storeId'] ? this.route.snapshot.params['storeId'] : FunctionUtil.getUrlString('storeId');
         this.productId = this.route.snapshot.params['productId'] ? this.route.snapshot.params['productId'] : FunctionUtil.getUrlString('productId');
 
-        let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) ?
-            JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) : [];
+        let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Down')) ?
+         JSON.parse(this.localStorageService.getLocalstorage('Stores-Down')) : [];
+
         if (storeList) {
             CITYLIST.forEach(function (i: any) {
                 storeList.forEach((ele: any, index: number, arr: any) => {
-                    if (i.i == ele.cityId) {
+                    if (i.i == ele.cityCode) {
                         ele.cityName = i.n;
                     }
                 })
             })
         }
+
         let cityNameSpaceArr = [{
             cityName: '',
             cityId: '',
         }];
         cityNameSpaceArr.shift();
+
         for (let i = 0; i < storeList.length; i++) {
-            if (storeList[i].cityId == '' || storeList[i].cityId == null) {
+            if (storeList[i].cityCode == '' || storeList[i].cityCode == null) {
                 storeList[i].cityName = '其他';
-            } else if (storeList[i].cityId != '' && storeList[i].cityName == '') {
+            } else if (storeList[i].cityCode != '' && storeList[i].cityName == '') {
                 cityNameSpaceArr.push({
                     cityName: '',
-                    cityId: storeList[i].cityId,
+                    cityId: storeList[i].cityCode,
                 });
             }
         }
         for (let i = 0; i < cityNameSpaceArr.length; i++) {
             for (let j = 0; j < storeList.length; j++) {
-                if (cityNameSpaceArr[i].cityId == storeList[j].cityId && storeList[j].cityName != '') {
+                if (cityNameSpaceArr[i].cityId == storeList[j].cityCode && storeList[j].cityName != '') {
                     cityNameSpaceArr[i].cityName = storeList[j].cityName;
                 }
             }
         }
         for (let i = 0; i < cityNameSpaceArr.length; i++) {
             for (let j = 0; j < storeList.length; j++) {
-                if (cityNameSpaceArr[i].cityId == storeList[j].cityId && storeList[j].cityName == '') {
+                if (cityNameSpaceArr[i].cityId == storeList[j].cityCode && storeList[j].cityName == '') {
                     storeList[j].cityName = cityNameSpaceArr[i].cityName
                 }
             }
@@ -351,7 +351,7 @@ export class AddNewProductComponent implements OnInit {
     }
 
 
-  //获取商品详情信息
+    //获取商品详情信息
     getProductDetailInfor(){
         let self = this;
         let params = {

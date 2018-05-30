@@ -57,6 +57,11 @@ export class IndexComponent implements OnInit {
         this.getTurnRuleGroup();
     }
 
+  onSelectStoreChange(e: any) {
+    this.storeId = e.storeId;
+    this.getTurnRuleGroup();
+  }
+
     //点击轮牌等按钮
     onCandleClick(type: string, ruleId: any, imgUrl: any, name: string, tpl: TemplateRef<{}>) {
         this.type = type;

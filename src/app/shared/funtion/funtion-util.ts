@@ -47,9 +47,10 @@ export class FunctionUtil {
 
   //将门店列表数据格式转换成按照城市分类 storeId
   static getCityListStore(storeList: any) {
+    console.log(storeList);
     let cityAllCodeArr = [];
     for (let i = 0; i < storeList.length; i++) {
-      cityAllCodeArr.push(storeList[i].cityId + '-' + storeList[i].cityName)
+      cityAllCodeArr.push(storeList[i].cityCode + '-' + storeList[i].cityName)
     }
     let cityCodeArr = FunctionUtil.getNoRepeat(cityAllCodeArr);
     let cityArr = [];
@@ -65,15 +66,16 @@ export class FunctionUtil {
     }
     for (let i = 0; i < cityArr.length; i++) {
       for (let j = 0; j < storeList.length; j++) {
-        if (storeList[j].cityId == cityArr[i].cityCode) {
+        if (storeList[j].cityCode == cityArr[i].cityCode) {
           cityArr[i].stores.push({
             storeId: storeList[j].storeId,
-            storeName: storeList[j].storeName,
+            storeName: storeList[j].branchName,
             change: true
           })
         }
       }
     }
+    console.log(cityArr);
     return cityArr
   }
 
