@@ -77,6 +77,12 @@ export class StaffSchedulingListComponent implements OnInit {
       this.router.navigate(['/manage/add/scheduling/rules', { storeId: this.storeId, schedulingConfigId: ids}]);
     }
 
+    // 切换分页码
+    paginate(event: any) {
+      this.pageNo = event;
+      this.schedulingList();//员工列表请求数据
+    }
+
     //员工排班列表
     schedulingList(){
       let self = this;
