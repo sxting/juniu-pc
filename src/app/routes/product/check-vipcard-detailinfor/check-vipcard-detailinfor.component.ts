@@ -255,7 +255,7 @@ export class CheckVipcardDetailinforComponent implements OnInit {
     }
 
     //修改卡面图片
-    changeCardBg(tpl: any){
+    changeCardBg(){
       let self = this;
       self.isVisible = true;
       setTimeout(function () {

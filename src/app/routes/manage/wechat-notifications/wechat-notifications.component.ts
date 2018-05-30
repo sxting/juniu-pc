@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { _HttpClient, TitleService } from '@delon/theme';
 import { ManageService} from "../shared/manage.service";
-import { LocalStorageService} from "../../../shared/service/localstorage-service";
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { FunctionUtil } from "../../../shared/funtion/funtion-util";
-import { STORES_INFO ,USER_INFO } from "../../../shared/define/juniu-define";
-
+import { LocalStorageService } from '@shared/service/localstorage-service';
+import { FunctionUtil } from '@shared/funtion/funtion-util';
+// import { STORES_INFO ,USER_INFO } from "../../../shared/define/juniu-define";
 
 @Component({
   selector: 'app-wechat-notifications',
