@@ -82,4 +82,8 @@ export class ManagementComponent {
             nzContent: err
         });
     }
+    getData(e){
+        this.pageNo = e;
+        this.roleBatchFun();
+    }
 }

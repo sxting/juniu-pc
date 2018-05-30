@@ -14,7 +14,8 @@ export class ManyCardImportComponent {
     storeList: any = JSON.parse(localStorage.getItem('Stores-Info')) ? JSON.parse(localStorage.getItem('Stores-Info')) : [];;
     storeId: any;
     email: any;
-    submitting = false;    
+    Total: any = 0
+    submitting = false;
     columns: SimpleTableColumn[] = [
         { title: '导入时间', index: 'no' },
         { title: '导入文件', index: 'description' },
@@ -27,7 +28,7 @@ export class ManyCardImportComponent {
         }
     ];
     constructor(public msg: NzMessageService, private http: _HttpClient) {
-        
+
     }
     selectStoreInfo(e: any) {
         console.log(e);
@@ -40,5 +41,8 @@ export class ManyCardImportComponent {
     change(e: Event) {
         const file = (e.target as HTMLInputElement).files[0];
         console.log(file)
+    }
+    getData(e){
+        console.log(e)
     }
 }

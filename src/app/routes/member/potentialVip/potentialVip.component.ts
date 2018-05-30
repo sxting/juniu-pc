@@ -208,7 +208,7 @@ export class PotentialVipComponent {
             }
         )
     }
-    getData() {
+    getData(e:any) {
         console.log(this.q);
         this.customerlistHttp();
     }

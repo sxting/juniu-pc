@@ -5,7 +5,7 @@
         <div class="">
             <div class="addStaffBox-main-left ">选择门店</div>
             <div class="addStaffBox-main-right">
-                <nz-select [(ngModel)]="selectedOption" style="width:240px;" (ngModelChange)="selectStoreInfo($event)" [nzPlaceHolder]="'请选择一个门店'"
+                <nz-select  style="width:240px;" (ngModelChange)="selectStoreInfo($event)" [nzPlaceHolder]="'请选择一个门店'"
                     [nzShowSearch]="true">
                     <nz-option [nzLabel]="'请选择一个门店'" [nzValue]="'ALL'">
                     </nz-option>
@@ -28,7 +28,7 @@
 
     <div style="margin-top:50px;">
         <h3 class="flex-1 text-lg borderLeft">导入记录</h3>
-        <simple-table #st [columns]="columns" [data]="data" [loading]="loading" (checkboxChange)="checkboxChange($event)" (filterChange)="customerlistHttp()">
+        <simple-table #st [columns]="columns" [data]="data" (checkboxChange)="checkboxChange($event)" (filterChange)="customerlistHttp()">
             <ng-template>
                 <ng-template st-row="status" let-i>
                     <nz-badge [nzStatus]="i.statusType" [nzText]="i.statusText"></nz-badge>
