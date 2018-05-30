@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
+import {SetingsService} from "../shared/setings.service";
+import {NzModalService} from "ng-zorro-antd";
 
 @Component({
   selector: 'app-software-buy-record',
@@ -9,20 +11,44 @@ import { _HttpClient } from '@delon/theme';
 export class SoftwareBuyRecordComponent implements OnInit {
 
   constructor(
-    private http: _HttpClient
+    private setingsService: SetingsService,
+    private modalSrv: NzModalService,
   ) { }
 
-  headData: any = ['购买时间', '购买方式', '系统版本', '门店数', '金额'];
+  headData: any = ['购买时间', '系统版本', '门店数', '金额'];
   dataSet: any[] = [];
   pageIndex: any = 1;
   countTotal: any = 0;
+  pageSize: any = 10;
 
   ngOnInit() {
+    this.getPurchaseRecord();
   }
 
   //分页
   paginate(event: any) {
     this.pageIndex = event;
+    this.getPurchaseRecord();
+  }
+
+  getPurchaseRecord() {
+    let data = {
+      pageNo: this.pageIndex,
+      pageSize: this.pageSize
+    };
+    this.setingsService.getPurchaseRecord(data).subscribe(
+      (res: any) => {
+        if(res.success) {
+          this.dataSet = res.data.items;
+          this.countTotal = res.data.pageInfo.countTotal;
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      }
+    )
   }
 
 }

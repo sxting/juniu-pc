@@ -19,6 +19,27 @@ export class SetingsService {
     api6 = Config.API1 + 'account/merchant/module'; //模块控制 软件购买
 
     /*软件购买 start*/
+
+  //购买记录  /merchant/module/purchase/record.json
+  getPurchaseRecord(Params: any) {
+    let apiUrl = this.api6 + '/purchase/record.json';
+    return this.http.get(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  //  申请发票 /merchant/module/package/invoice.json
+  packageInvoice(Params: any) {
+    let apiUrl = this.api6 + '/package/invoice.json';
+    return this.http.get(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
   //模块批量查询  /merchant/module/package/batch.json
   getPackageBatchList(Params: any) {
     let apiUrl = this.api6 + '/package/batch.json';
@@ -221,6 +242,15 @@ export class SetingsService {
                 return Observable.throw(error);
             });
     }
+
+  downloadQronline(Params: any) {
+    let apiUrl = this.api5 + '/store/download/qronline.do';
+    return this.http.get(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
 
 
     /*支付通道end*/

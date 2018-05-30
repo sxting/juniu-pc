@@ -22,6 +22,13 @@ export class StoresInforComponent implements OnInit {
     storeId: string = '';
 
     @Input()
+    nzXs: any = '';
+    @Input()
+    nzSm: any = '';
+    @Input()
+    nzRequired: boolean = false;
+
+    @Input()
     public ifStoresAll: boolean = true;
 
     @Input()
@@ -35,7 +42,7 @@ export class StoresInforComponent implements OnInit {
 
 
     ngOnInit() {
-        this.getStoresInfor();//门店选择
+      this.getStoresInfor();//门店选择
     }
 
     //选择门店
