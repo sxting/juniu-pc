@@ -1,11 +1,12 @@
-<div class="ad-page-header" style="margin: 0 -24px; border-bottom:none !important;">
+<div class="content__title ad-ph">
   <nz-breadcrumb>
     <nz-breadcrumb-item>主页</nz-breadcrumb-item>
     <nz-breadcrumb-item>管理</nz-breadcrumb-item>
     <nz-breadcrumb-item>员工</nz-breadcrumb-item>
     <nz-breadcrumb-item>新增员工</nz-breadcrumb-item>
   </nz-breadcrumb>
-  <page-header [title]="'新增员工'">在系统中创建一个新员工，分配系统账号。</page-header>
+  <h1 class="title ng-star-inserted">新增员工</h1>
+  <div class="desc">在系统中创建一个新员工，分配系统账号。</div>
 </div>
 <nz-card [nzBordered]="false">
   <form nz-form [formGroup]="form" (ngSubmit)="submit()">

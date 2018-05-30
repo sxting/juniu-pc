@@ -54,6 +54,7 @@ export class RuleSettingComponent implements OnInit {
   seviceItemsIds: string = '';
   ifShowErrorTipsSevice: boolean = false;
 
+  timestamp: any = new Date().getTime();//当前时间的时间戳
 
   ifShowErrorRateTips: boolean = false;//按比例提成率不可为空
   ifShowErrorMoneyips: boolean = false;//提成金额不可为空
@@ -339,6 +340,7 @@ export class RuleSettingComponent implements OnInit {
   /**获取全部员工 */
   getStaffList() {
     let data = {
+      timestamp: this.timestamp,
       storeId: this.storeId
     };
     this.manageService.selectStaffList(data).subscribe(
