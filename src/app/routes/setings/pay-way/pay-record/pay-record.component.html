@@ -1,4 +1,8 @@
 <page-header [title]="'支付通道'">每天支付通道会与您自动结算，并将款项打到您配置的银行账户中。</page-header>
+<div style="opacity: 0; width: 0; height: 0;">
+  <jn-stores-infor [moduleId]="1" [ifStoresAll]="false"
+                   (storeIdOutput)="onStoresChange($event)"></jn-stores-infor>
+</div>
 <div class="container">
     <nz-card class="set-box">
         <img src="/assets/img/wechat_pay.svg" alt="wechat">
