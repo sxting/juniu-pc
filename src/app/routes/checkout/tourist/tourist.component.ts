@@ -111,7 +111,7 @@ export class TouristComponent implements OnInit {
     vipDataBoolean: boolean = false;
     guadanList: any;
     shopyinList: any;
-    pageSize:any =10
+    pageSize: any = 10
     constructor(
         public msg: NzMessageService,
         private localStorageService: LocalStorageService,
@@ -495,10 +495,9 @@ export class TouristComponent implements OnInit {
         if (this.authCode.length >= 17) {
             this.jiesuanFun();
         }
-        // else if (click) {
-        //     this.jiesuanFun(type);
-        // }
-
+    }
+    goToSubmitOrder2(type?: any) {
+        this.jiesuanFun(type);
     }
     info(type: any) {
         this.modalSrv.info({
@@ -529,20 +528,7 @@ export class TouristComponent implements OnInit {
         }
 
         create.recordType = create.authCode ? 'COLLECT_MONEY' : 'RECORD';
-        if (type) {
-            create.payType = type;
-        } else {
-            if (
-                Number(codeTyeNum) === 10 ||
-                Number(codeTyeNum) === 11 ||
-                Number(codeTyeNum) === 12 ||
-                Number(codeTyeNum) === 13 ||
-                Number(codeTyeNum) === 14 ||
-                Number(codeTyeNum) === 15
-            ) {
-                create.payType = 'WECHATPAY';
-            }
-        }
+
 
         if (this.memberInfo.cardNum) {
             create.cardNum = this.memberInfo.cardNum;
@@ -628,7 +614,21 @@ export class TouristComponent implements OnInit {
                 })
             }
         }
-        if (create.settleCardDTOList && create.settleCardDTOList.length > 0) create.recordType = 'BUCKLECARD';
+        if (type) {
+            create.payType = type;
+        } else {
+            if (
+                Number(codeTyeNum) === 10 ||
+                Number(codeTyeNum) === 11 ||
+                Number(codeTyeNum) === 12 ||
+                Number(codeTyeNum) === 13 ||
+                Number(codeTyeNum) === 14 ||
+                Number(codeTyeNum) === 15
+            ) {
+                create.payType = 'WECHATPAY';
+            }
+        }
+        if (create.settleCardDTOList && create.settleCardDTOList.length > 0) { create.recordType = 'BUCKLECARD'; create.payType = 'MEMBERCARD' }
         if (!that.changeType) {
             create.money = that.isVerb2 ? that.isVerbVipCardmoney * 100 : that.vipCardmoney * 100;
             create.originMoney = create.money;
@@ -1250,7 +1250,7 @@ export class TouristComponent implements OnInit {
         this.modalSrv.create({
             nzTitle: '收银记录',
             nzContent: trl,
-            nzWidth: '800px',
+            nzWidth: '80%',
             nzFooter: null,
             nzOkText: null
         });

@@ -3,6 +3,8 @@
     <div class="existing-main">
         <div class="member-top-middle">
             <span>拼团类型</span>
+            <!-- <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth" (storeListPush)="storeListPush($event)"
+      (storeIdOutput)="getStoreId($event)"></jn-stores-infor> -->
             <nz-select style="width: 386px;margin-right:50px;" [(ngModel)]="selectedOption" (ngModelChange)="selectStoreInfo($event)"
                 [nzPlaceHolder]="'全部拼团'" [nzShowSearch]="true">
                 <nz-option [nzLabel]="'全部'" [nzValue]="'all'">

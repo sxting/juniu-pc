@@ -20,75 +20,83 @@ export class SetingsService {
 
     /*软件购买 start*/
 
-  //购买记录  /merchant/module/purchase/record.json
-  getPurchaseRecord(Params: any) {
-    let apiUrl = this.api6 + '/purchase/record.json';
-    return this.http.get(apiUrl, Params)
-      .map((response: Response) => response)
-      .catch(error => {
-        return Observable.throw(error);
-      });
-  }
+    //购买记录  /merchant/module/purchase/record.json
+    getPurchaseRecord(Params: any) {
+        let apiUrl = this.api6 + '/purchase/record.json';
+        return this.http.get(apiUrl, Params)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
 
-  //  申请发票 /merchant/module/package/invoice.json
-  packageInvoice(Params: any) {
-    let apiUrl = this.api6 + '/package/invoice.json';
-    return this.http.get(apiUrl, Params)
-      .map((response: Response) => response)
-      .catch(error => {
-        return Observable.throw(error);
-      });
-  }
+    //  申请发票 /merchant/module/package/invoice.json
+    packageInvoice(Params: any) {
+        let apiUrl = this.api6 + '/package/invoice.json';
+        return this.http.get(apiUrl, Params)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
 
-  //模块批量查询  /merchant/module/package/batch.json
-  getPackageBatchList(Params: any) {
-    let apiUrl = this.api6 + '/package/batch.json';
-    return this.http.get(apiUrl, Params)
-      .map((response: Response) => response)
-      .catch(error => {
-        return Observable.throw(error);
-      });
-  }
+    //模块批量查询  /merchant/module/package/batch.json
+    getPackageBatchList(Params: any) {
+        let apiUrl = this.api6 + '/package/batch.json';
+        return this.http.get(apiUrl, Params)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
 
-  //购买模块包门店选择列表 /merchant/module/package/stores.json
-  getPackageStores(Params: any) {
-    let apiUrl = this.api6 + '/package/stores.json';
-    return this.http.get(apiUrl, Params)
-      .map((response: Response) => response)
-      .catch(error => {
-        return Observable.throw(error);
-      });
-  }
+    //购买模块包门店选择列表 /merchant/module/package/stores.json
+    getPackageStores(Params: any) {
+        let apiUrl = this.api6 + '/package/stores.json';
+        return this.http.get(apiUrl, Params)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
 
-  //模块包预支付订单 /merchant/module/package/preorder.json
-  getPackagePreorder(Params: any) {
-    let apiUrl = this.api6 + '/package/preorder.json';
-    return this.http.post(apiUrl, Params)
-      .map((response: Response) => response)
-      .catch(error => {
-        return Observable.throw(error);
-      });
-  }
+    //模块包预支付订单 /merchant/module/package/preorder.json
+    getPackagePreorder(Params: any) {
+        let apiUrl = this.api6 + '/package/preorder.json';
+        return this.http.post(apiUrl, Params)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    //短信购买  
+    buySmsPackage(Params: any) {
+        let apiUrl = Config.API + 'account/sms/package/buySmsPackage.json';
+        return this.http.get(apiUrl, Params)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    //获取支付二维码  pay/url.json
+    getPayUrl(Params: any) {
+        let apiUrl = this.api5 + '/pay/url.json';
+        return this.http.post(apiUrl, Params)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
 
-  //获取支付二维码  pay/url.json
-  getPayUrl(Params: any) {
-    let apiUrl = this.api5 + '/pay/url.json';
-    return this.http.post(apiUrl, Params)
-      .map((response: Response) => response)
-      .catch(error => {
-        return Observable.throw(error);
-      });
-  }
-
-  //查询支付结果  pay/url/query.json
-  getPayUrlQuery(Params: any) {
-    let apiUrl = this.api5 + '/pay/url/query.json';
-    return this.http.get(apiUrl, Params)
-      .map((response: Response) => response)
-      .catch(error => {
-        return Observable.throw(error);
-      });
-  }
+    //查询支付结果  pay/url/query.json
+    getPayUrlQuery(Params: any) {
+        let apiUrl = this.api5 + '/pay/url/query.json';
+        return this.http.get(apiUrl, Params)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
 
     /*软件购买 end*/
 
@@ -243,14 +251,14 @@ export class SetingsService {
             });
     }
 
-  downloadQronline(Params: any) {
-    let apiUrl = this.api5 + '/store/download/qronline.do';
-    return this.http.get(apiUrl, Params)
-      .map((response: Response) => response)
-      .catch(error => {
-        return Observable.throw(error);
-      });
-  }
+    downloadQronline(Params: any) {
+        let apiUrl = this.api5 + '/store/download/qronline.do';
+        return this.http.get(apiUrl, Params)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
 
 
     /*支付通道end*/
@@ -331,9 +339,9 @@ export class SetingsService {
             });
     }
     //配置查询
-    configQuery() {
+    configQuery(data: any) {
         let apiUrl = Config.API1 + '/account/merchant/sms/config/query.json';
-        return this.http.get(apiUrl).map((response: Response) => response)
+        return this.http.get(apiUrl, data).map((response: Response) => response)
             .catch(error => {
                 return Observable.throw(error);
             });
@@ -349,14 +357,14 @@ export class SetingsService {
     //配置设置
     configSet(data) {
         let apiUrl = Config.API1 + '/account/merchant/sms/config/set.json';
-        return this.http.get(apiUrl,data).map((response: Response) => response)
+        return this.http.get(apiUrl, data).map((response: Response) => response)
             .catch(error => {
                 return Observable.throw(error);
             });
     }
     //短信包列表
     smsBatch() {
-        let apiUrl = Config.API1 + 'account/merchant/sms/batch.json';
+        let apiUrl = Config.API + 'account/sms/package/list.json';
         return this.http.get(apiUrl)
             .map((response: Response) => response)
             .catch(error => {
@@ -366,7 +374,7 @@ export class SetingsService {
     //短信充值
     smsRecharge(data) {
         let apiUrl = Config.API1 + '/account/merchant/sms/recharge.json';
-        return this.http.get(apiUrl,data).map((response: Response) => response)
+        return this.http.get(apiUrl, data).map((response: Response) => response)
             .catch(error => {
                 return Observable.throw(error);
             });

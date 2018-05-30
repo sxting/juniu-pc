@@ -1,0 +1,192 @@
+.page {
+    font-size: 14px;
+    color: #1A1A1A;
+  }
+  .sub-nav {
+    height: 40px;
+    line-height: 40px;
+    /*padding-left: 20px;*/
+  }
+  .content-box {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 40px;
+    overflow: auto;
+    background-color: #fff;
+  }
+  .tab-select-box {
+    height: 50px;
+    line-height: 50px;
+    border-bottom: 1px solid #E5E5E5;
+  }
+  .tab-select-box span {
+    display: inline-block;
+    margin-left: 20px;
+    text-align: center;
+    height: 47px;
+    line-height: 46px;
+    padding: 0 2px;
+    cursor: pointer;
+  }
+  .tab-select-box .tab-text {
+    border-bottom: 3px solid #ff6600;
+    color: #ff6600;
+  }
+  .stores-box {
+    margin: 30px 20px ;
+  }
+  .quan-input-box {
+    margin: 0 20px 20px;
+  }
+  .quan-input-box input {
+    min-width: 200px;
+    height: 28px;
+    line-height: 28px;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    padding-left: 5px;
+  }
+  .saoma-btn {
+    width: 110px;
+    height: 34px;
+    line-height: 34px;
+    text-align: center;
+    color: #FFFFFF;
+    background-color: #ff6600;
+    border-radius: 4px;
+    margin-left: 20px;
+    cursor: pointer;
+  }
+  .saoma-btn span {
+    display: inline-block;
+    width: 100%;
+  }
+  .record-box {
+    margin-left: 20px;
+  }
+  .sub-title {
+    font-family: 'PingFangSC-Medium';
+    font-size: 16px;
+    color: #333333;
+    height: 60px;
+    line-height: 60px;
+    margin-top: 20px;
+  }
+  .sub-title span {
+    display: inline-block;
+    width: 4px;
+    height: 16px;
+    background-color: #FF6600;
+    margin-right: 10px;
+    transform: translateY(2px);
+  }
+  .coupon-box {
+    margin-left: 20px;
+  }
+  .coupon-detail {
+    width: 300px;
+    height: 80px;
+    padding: 10px;
+    border: 2px solid #E5E5E5;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    position: relative;
+    cursor: pointer;
+  }
+  .coupon-selected {
+    border: 2px solid #ff6600;
+  }
+  .coupon-name {
+    font-size: 16px;
+    padding-bottom: 10px;
+  }
+  .price {
+    font-size: 18px;
+  }
+  .icon-yousanjiaogou_ic {
+    font-size: 20px;
+    color: #ff6600;
+    position: absolute;
+    right: 0;
+    top: -5px;
+  }
+  .coupon-btn-box {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-around;
+    width: 300px;
+  }
+  .coupon-btn-box span {
+    width: 80px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .coupon-btn-box span:first-child {
+    color: #FFFFFF;
+    background-color: #ff6600;
+  }
+  .coupon-btn-box span:last-child {
+    color: #A5A5A5;
+    border: 1px solid #E5E5E5;
+  }
+  input[type=number] {
+    width: 60px;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    text-align: center;
+  }
+  
+  .revoke {
+    cursor: pointer;
+  }
+  .has-revoke {
+    color: #cccccc;
+  }
+  .edit-btn {
+    padding: 0 5px;
+    color: #ff6600;
+    cursor: pointer;
+  }
+  
+  /*弹框*/
+  .iframe-alert-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  .iframe-alert {
+    position: absolute;
+    height: 600px;
+    width: 100%;
+    min-width: 1060px;
+    padding: 0 50px;
+    top: 50%;
+    margin-top: -300px;
+  }
+  .iframe-alert-bg iframe {
+    width: 100%;
+    height: 100%;
+    min-width: 960px;
+  }
+  .icon-tubiao06 {
+    position: absolute;
+    font-size: 26px;
+    top: -4px;
+    left: 56px;
+    color: #e5e5e5;
+    cursor: pointer;
+  }
+  .hidden {
+    height: 0;
+    width: 0;
+    opacity: 0;
+  }
+  
