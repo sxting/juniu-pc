@@ -111,7 +111,7 @@ export class TouristComponent implements OnInit {
     vipDataBoolean: boolean = false;
     guadanList: any;
     shopyinList: any;
-    pageSize:any =10
+    pageSize: any = 10
     constructor(
         public msg: NzMessageService,
         private localStorageService: LocalStorageService,
@@ -495,10 +495,9 @@ export class TouristComponent implements OnInit {
         if (this.authCode.length >= 17) {
             this.jiesuanFun();
         }
-        // else if (click) {
-        //     this.jiesuanFun(type);
-        // }
-
+    }
+    goToSubmitOrder2(type?: any) {
+        this.jiesuanFun(type);
     }
     info(type: any) {
         this.modalSrv.info({
