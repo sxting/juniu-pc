@@ -28,6 +28,7 @@ export class SoftwareBuyRecordComponent implements OnInit {
   //分页
   paginate(event: any) {
     this.pageIndex = event;
+    this.getPurchaseRecord();
   }
 
   getPurchaseRecord() {
