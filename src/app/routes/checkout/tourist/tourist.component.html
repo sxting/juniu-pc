@@ -34,8 +34,8 @@
               </button>
             </ng-template>
             <div class="vipArrBox" *ngIf="vipDataBoolean">
-              <nz-radio-group [(ngModel)]="radioValue" style="display: block;" (ngModelChange)="vipDataRadio($event)">
-                <label nz-radio *ngFor="let item of vipData;let ind = index;" (click)="vipDataRadio($event,ind)" nzValue="{{ind}}">姓名：{{item.customer.customerName}} 电话：{{item.customer.phone}}</label>
+              <nz-radio-group [(ngModel)]="radioValue" style="display: block;" (ngModelChange)="vipDataRadio()">
+                <label nz-radio *ngFor="let item of vipData;let ind = index;" (click)="vipDataRadio(ind)" nzValue="{{ind}}">姓名：{{item.customer.customerName}} 电话：{{item.customer.phone}}</label>
               </nz-radio-group>
             </div>
           </div>
@@ -71,7 +71,12 @@
         <div nz-col class="absoluteRight">
           <div class="shouyinRight">
             <div class="xfqingdan">
-              <h3 class="flex-1 text-lg borderLeft">消费清单</h3>
+              <h3 class="flex-1 text-lg borderLeft">消费清单
+                <div style="float: right;">
+                  <button class="buttons" style="margin-right:20px;" nz-button (click)="guadanListFun(guadanAlert)">挂单列表</button>
+                  <button class="buttons" nz-button nzType="primary" type="submit" (click)="shouyinListFun(shouyinAlert)">收银记录</button>
+                </div>
+              </h3>
               <div *ngIf="memberInfo" class="vipBar">
                 <div class="img {{memberInfo?.gender===2?'nv':'nan'}}"></div>
                 <div class="vipBarRight">
@@ -218,7 +223,7 @@
               <nz-form-item class="formItem ">
                 <div class="lineHeight50">
                   <div style="text-align:right;">
-                    <button class="buttons" style="margin-right:20px;" nz-button (click)="return()">挂单</button>
+                    <button class="buttons" style="margin-right:20px;" nz-button (click)="guadan()">挂单</button>
                     <button class="buttons" nz-button nzType="primary" type="submit" (click)="jiesuan(jiesuanAlert)">结算</button>
                   </div>
                 </div>
@@ -584,4 +589,70 @@
       </nz-form-control>
     </div>
   </nz-form-item>
+</ng-template>
+
+
+<ng-template #guadanAlert>
+  <nz-table [nzShowPagination]="false" [nzData]="guadanList">
+    <thead>
+      <tr>
+        <th>挂单时间</th>
+        <th>商品</th>
+        <th>金额</th>
+        <th>顾客类型</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of guadanList;let ind = index;">
+        <td>{{item.date}}</td>
+        <td>
+          <span *ngFor="let i of item.xfList">{{i.productNo}}{{i.productName}}</span>
+        </td>
+        <td>{{item.totoleMoney}}</td>
+        <td>{{item.vip?item.vip.customerName +':'+item.vip.phone:'散客'}}</td>
+        <td>
+          <span class="button" (click)="guadanJS(ind)">结算</span>
+          <nz-divider nzType="vertical"></nz-divider>
+          <span class="button" (click)="guadanSC(ind)">删除</span>
+        </td>
+
+      </tr>
+    </tbody>
+  </nz-table>
+  <!-- <div class="nzPaginationBox">
+    <nz-pagination class="nzPagination" [nzTotal]="guadanList.lenth" [nzPageSize]="10" (nzPageIndexChange)="getData($event)"></nz-pagination>
+  </div> -->
+</ng-template>
+
+<ng-template #shouyinAlert>
+  <nz-table [nzShowPagination]="false" [nzData]="guadanList">
+    <thead>
+      <tr>
+        <th>收银时间</th>
+        <th>流水号</th>
+        <th>类型</th>
+        <th>渠道</th>
+        <th>顾客电话</th>
+        <th>顾客姓名</th>
+        <th>金额</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of shopyinList;let ind = index;">
+        <td>{{item.juniuoModel.dateCreated}}</td>
+        <td>{{item.orderId}}</td>
+        <td>{{item.bizTypeName}}</td>
+        <td>{{item.payTypeName}}</td>
+        <td>{{item.phone}}</td>
+        <td>{{item.customerName}}</td>
+        <td>{{item.paidMoney/100}}</td>
+        <td>
+          <span class="button" (click)="guadanJS(ind)">撤销</span>
+        </td>
+
+      </tr>
+    </tbody>
+  </nz-table>
 </ng-template>
