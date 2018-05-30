@@ -465,9 +465,9 @@ export class ManageService {
   }
 
   //员工角色请求
-  rolesSelect() {
+  rolesSelect(data: any) {
     let apiUrl = this.apiStaff + '/merchant/role/select.json';
-    return this.http.get(apiUrl)
+    return this.http.get(apiUrl,data)
       .map((response: Response) => response)
       .catch(error => {
         return Observable.throw(error);
