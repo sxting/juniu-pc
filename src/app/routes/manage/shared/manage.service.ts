@@ -161,8 +161,8 @@ export class ManageService {
   //职位权限列表 /role/modules.json
   rolemodules() {
     let apiUrl = Config.API + 'account/role/modules.json';
-    // let params = FunctionUtil.obectToURLSearchParams(Params);
-    return this.http.get(apiUrl)
+    let params = FunctionUtil.obectToSetTime();
+    return this.http.get(apiUrl, params)
       .map((response: Response) => response)
       .catch(error => {
         return Observable.throw(error);
@@ -684,7 +684,8 @@ export class ManageService {
   //全部模块
   roleModules() {
     let apiUrl = Config.API1 + 'account/merchant/role/modules.json';
-    return this.http.get(apiUrl).map((response: Response) => response).catch(error => {
+    let params = FunctionUtil.obectToSetTime();
+    return this.http.get(apiUrl, params).map((response: Response) => response).catch(error => {
       return Observable.throw(error);
     });
   }
