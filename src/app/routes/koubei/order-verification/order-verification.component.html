@@ -1,13 +1,11 @@
-<page-header></page-header>
 <g2-card>
     <nz-tabset>
         <nz-tab nzTitle="扫码核销">
             <div class="member-top-middle">
                 <span *ngIf="checkoutShow">选择门店</span>
-                <select *ngIf="checkoutShow" (change)="selectStoreInfo($event.target.value)">
-                    <!-- <option *ngIf="storeShow" [value]="ALL">请选择一个门店</option> -->
-                    <option *ngFor="let item of StoresInfo" [value]="item.shopId">{{item.shopName}}</option>
-                </select>
+                <nz-select style="min-width: 200px;" [(ngModel)]="selectedOption" (ngModelChange)="selectStoreInfo($event)" [nzShowSearch]="true">
+                    <nz-option *ngFor="let store of StoresInfo" [nzLabel]="store.shopName" [nzValue]="store.shopId"></nz-option>
+                  </nz-select>
             </div>
             <div class="sm-button {{checkoutShow?'sm-button2':''}} " (click)="scanPay()">扫描顾客核销码</div>
             <div class="gai"></div>

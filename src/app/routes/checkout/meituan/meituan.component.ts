@@ -11,7 +11,6 @@ import { ProductService } from '../../product/shared/product.service';
 import { CreateOrder, OrderItem } from '../shared/checkout.model';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
-declare var swal: any;
 @Component({
     selector: 'app-meituan',
     templateUrl: './meituan.component.html',
@@ -133,13 +132,10 @@ export class MeituanComponent implements OnInit {
         if (type === 'saoma') { //扫码验券
             this.qrCode = '';
             let self = this;
-            swal({
-                title: '二维码扫描中',
-                showConfirmButton: false,
-                showCancelButton: true,
-                cancelButtonText: '取消',
-                allowOutsideClick: false
-            }).catch(swal.noop);
+            this.modalSrv.info({
+                nzTitle: '扫描条形码中。。。。',
+                nzOkText: '取消',
+            });
             document.getElementById("qrCode").focus()
         }
         else { //输码验券
@@ -169,18 +165,15 @@ export class MeituanComponent implements OnInit {
     onItemCancelClick(id: any) {
         this.consumedId = id;
         let self = this;
-        swal({
-            title: '该团购券已验券成功，是否确认撤销',
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: '确认',
-            cancelButtonText: '取消',
-        }).then(function () {
-            //发送撤销请求
-            self.reverseConsume();
-        }, function () {
-            self.isClick = false;
+        this.modalSrv.confirm({
+            nzTitle: '该团购券已验券成功，是否确认撤销',
+            nzContent: '如需撤销请在10分钟以内到验券记录里进行撤销',
+            nzOnOk: () => {
+                self.reverseConsume();
+            },
+            nzOnCancel: () => {
+                self.isClick = false;
+            }
         });
     }
 
@@ -197,7 +190,6 @@ export class MeituanComponent implements OnInit {
         let data = {
             storeId: this.storeId
         };
-        FunctionUtil.loading();
         this.checkoutService.checkAuth(data).subscribe(
             (res: any) => {
                 if (res.success) {
@@ -240,7 +232,7 @@ export class MeituanComponent implements OnInit {
         // this.qrCode = 'd7Recb5OOcxI%2BuUc3ScnSA%3D%3D@066414';
 
         if (this.qrCode.length >= 37) {
-            swal.closeModal();
+            this.modalSrv.closeAll();
             let data = {
                 storeId: this.storeId,
                 qrCode: this.qrCode
@@ -294,24 +286,20 @@ export class MeituanComponent implements OnInit {
             data.receiptCode = this.qrCode
         }
 
-        FunctionUtil.loading();
         this.checkoutService.receiptConsume(data).subscribe(
             (res: any) => {
                 let self = this;
 
                 if (res.success) {
                     //请求成功
-                    swal({
-                        title: '团购券已核销成功',
-                        text: '如需撤销请在10分钟以内到验券记录里进行撤销',
-                        type: 'warning',
-                        showCancelButton: false,
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: '确认!',
-                    }).then(function () {
-                        self.isClick = false;
-                        //刷新页面
-                        self.getReceiptList();
+                    this.modalSrv.confirm({
+                        nzTitle: '团购券已核销成功',
+                        nzContent: '如需撤销请在10分钟以内到验券记录里进行撤销',
+                        nzOnOk: () => {
+                            self.isClick = false;
+                            //刷新页面
+                            self.getReceiptList();
+                        }
                     });
                 } else {
                     this.errorAlter(res.errorInfo)
@@ -326,17 +314,13 @@ export class MeituanComponent implements OnInit {
         let data = {
             consumedId: this.consumedId
         };
-        FunctionUtil.loading();
         this.checkoutService.reverseConsume(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     //请求成功
                     this.isClick = false;
-                    swal({
-                        title: '撤销成功',
-                        type: 'warning',
-                        showCancelButton: false,
-                        confirmButtonText: '确认!',
+                    this.modalSrv.success({
+                        nzTitle: '撤销成功',
                     });
                     //刷新列表
                     this.getReceiptList();
@@ -351,18 +335,13 @@ export class MeituanComponent implements OnInit {
     //未授权弹框，去授权的弹框
     shouquanAlert() {
         let self = this;
-        swal({
-            title: '您尚未对此门店进行授权，是否确认授权',
-            text: '授权成功后，才可以在该门店进行团购验券',
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: '确认',
-            cancelButtonText: '取消',
-        }).then(function () {
-            //显示美大登录界面
-            self.showAlertBox = true;
-        }, function () { });
+        this.modalSrv.confirm({
+            nzTitle: '您尚未对此门店进行授权，是否确认授权',
+            nzContent: '授权成功后，才可以在该门店进行团购验券',
+            nzOnOk: () => {
+                self.showAlertBox = true;
+            }
+        });
     }
     errorAlter(err) {
         this.modalSrv.error({
