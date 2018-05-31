@@ -33,7 +33,7 @@
         <input type="password" nz-input  autocomplete="off" formControlName="password" id="password" placeholder="员工可以用手机号和密码登录桔牛后台">
         <ng-container *ngIf="password.dirty || password.touched">
           <nz-form-explain class="errorTips" *ngIf="password.errors?.required">请设置登录密码</nz-form-explain>
-          <nz-form-explain class="errorTips" *ngIf="password.errors?.pattern">登录密码必须为6-16位大小写字母和数字组成</nz-form-explain>
+          <!--<nz-form-explain class="errorTips" *ngIf="password.errors?.pattern">登录密码必须为6-16位大小写字母和数字组成</nz-form-explain>-->
         </ng-container>
       </nz-form-control>
     </nz-form-item>

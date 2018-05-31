@@ -11,13 +11,13 @@ import { Config } from "@shared/config/env.config";
 export class HomeService {
     constructor(private http: _HttpClient) { }
 
-    api = Config.API
+    api = Config.API;
     api1 = Config.API + 'finance'; //银行
     api2 = Config.API + 'member'; //会员
     ///currentNewCustomerInfo.json
 
     //今日营收
-    getIncome(Params) {
+    getIncome(Params: any) {
         let apiUrl = this.api1 + '/summary/store/income.json';
         return this.http.get(apiUrl, Params)
             .map((response: Response) => response)
@@ -27,7 +27,7 @@ export class HomeService {
     }
 
     //今日交易
-    getTransationCount(Params) {
+    getTransationCount(Params: any) {
         let apiUrl = this.api1 + '/summary/store/transaction/count.json';
         return this.http.get(apiUrl, Params)
             .map((response: Response) => response)
@@ -37,7 +37,7 @@ export class HomeService {
     }
 
     //今日新增会员  currentNewCustomerInfo.json
-    getNewCustomerInfo(Params) {
+    getNewCustomerInfo(Params: any) {
         let apiUrl = this.api2 + '/currentNewCustomerInfo.json';
         return this.http.get(apiUrl, Params)
             .map((response: Response) => response)
@@ -47,7 +47,7 @@ export class HomeService {
     }
 
     //今日开卡
-    getOpenCardData(Params) {
+    getOpenCardData(Params: any) {
         let apiUrl = this.api2 + '/currentOpenCardData.json';
         return this.http.get(apiUrl, Params)
             .map((response: Response) => response)
@@ -57,7 +57,7 @@ export class HomeService {
     }
 
     //会员持卡分布
-    getCardGroupType(Params) {
+    getCardGroupType(Params: any) {
         let apiUrl = this.api2 + '/cardDistribution.json';
         return this.http.get(apiUrl, Params)
             .map((response: Response) => response)
@@ -67,7 +67,7 @@ export class HomeService {
     }
 
     //新增预约数
-    getNewReserveCount(Params) {
+    getNewReserveCount(Params: any) {
         let apiUrl = this.api + '/reserve/reservations/newReserveCount.json';
         return this.http.get(apiUrl, Params)
             .map((response: Response) => response)
@@ -77,13 +77,23 @@ export class HomeService {
     }
 
     //消息通知 message/count.json
-    getMessageCount(Params) {
+    getMessageCount(Params: any) {
         let apiUrl = this.api1 + '/message/count.json';
         return this.http.get(apiUrl, Params)
             .map((response: Response) => response)
             .catch(error => {
                 return Observable.throw(error);
             });
+    }
+
+    //消息列表 /message/list.json
+    getMessageList(Params: any) {
+      let apiUrl = this.api1 + '/message/list.json';
+      return this.http.get(apiUrl, Params)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
     }
 
     //近七日流水   /weekTurnover.json

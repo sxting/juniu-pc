@@ -86,6 +86,8 @@ export class IndexComponent implements OnInit {
     newReserveCount: any = 0; //新增预约数
     messageCount: any = 0; //系统通知
 
+  guadanCount: any = 0;
+
     constructor(
         private http: _HttpClient,
         public msg: NzMessageService,
@@ -98,6 +100,7 @@ export class IndexComponent implements OnInit {
     }
 
     ngOnInit() {
+      this.guadanCount = this.localStorageService.getLocalstorage('GUADAN');
       this.merchantId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['merchantId'];
       if (JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['staffType'] == 'STORE') {
         let data = {
@@ -396,7 +399,7 @@ export class IndexComponent implements OnInit {
     //系统通知
     getMessageCount() {
         let data = {
-            status: 0
+            status: 0, //status 0 未读， 1 已读；
         };
         this.homeService.getMessageCount(data).subscribe(
             (res: any) => {

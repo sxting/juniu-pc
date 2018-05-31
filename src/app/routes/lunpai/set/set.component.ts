@@ -375,7 +375,7 @@ export class SetComponent implements OnInit {
         this.manageService.getStaffListByStoreId(this.storeId).subscribe(
             (res: any) => {
                if(res.success) {
-                   let arr = res.data.reserveStaffs;
+                   let arr = res.data.items;
                    let objArr: any = []; //定义一个空数组
 
                    arr.forEach(function (i: any) {

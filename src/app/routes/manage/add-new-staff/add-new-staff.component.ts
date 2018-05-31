@@ -98,13 +98,15 @@ export class AddNewStaffComponent implements OnInit {
       this.formData = {
         staffName: [ staffName, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
         phone: [ phone, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
-        password: [ password, [Validators.required, Validators.pattern(`^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,16}$`)]],
+        password: [ password, [Validators.required]],
         belongType: [ values, [Validators.required]],//门店员工职位
         storeId: [ storeId, [Validators.required]],
         roleId: [ roleId, [Validators.required]]
       };
       this.form = this.fb.group(self.formData);
     }
+
+    //, Validators.pattern(`^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,16}$`)
 
     //上传图片接口
     uploadImage(event: any) {
