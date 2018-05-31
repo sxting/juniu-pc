@@ -10,8 +10,7 @@ import { MemberService } from '../shared/member.service';
 })
 export class CardDataExportComponent {
     data = [];
-    storeList: any = JSON.parse(localStorage.getItem('Stores-Info')) ? JSON.parse(localStorage.getItem('Stores-Info')) : [];;
-    storeId: any = this.storeList[0].storeId;
+    storeId: any ;
     email: any;
     submitting = false;
     storeName: string;//选择的门店名称
@@ -29,7 +28,7 @@ export class CardDataExportComponent {
 
     }
     selectStoreInfo(e: any) {
-        this.storeId = e.storeId;
+        this.storeId = e;
     }
     //发送邮件
     sendEmail() {

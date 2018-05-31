@@ -34,14 +34,17 @@ export class OrderVerificationComponent implements OnInit {
     JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)).alipayShops ?
       JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)).alipayShops : [] : [];
   storeId: any = this.StoresInfo[0] ? this.StoresInfo[0].shopId : '';
+  moduleId:any;
   constructor(
     private koubeiService: KoubeiService,
     private localStorageService: LocalStorageService,
+    private route: ActivatedRoute,
     private modalSrv: NzModalService,
     private router: Router
   ) { }
 
   ngOnInit() {
+    this.moduleId = this.route.snapshot.params['menuId'];
     if (this.checkoutShow) {
       this.storeId = this.StoresInfo[0] ? this.StoresInfo[0].shopId : '';
     } else {
