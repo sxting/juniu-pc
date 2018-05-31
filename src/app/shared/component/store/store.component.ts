@@ -4,6 +4,8 @@ import { ALIPAY_SHOPS, CITYLIST, STORES_INFO } from "../../define/juniu-define";
 import { MarketingService } from "../../../routes/marketing/shared/marketing.service";
 import {LocalStorageService} from "@shared/service/localstorage-service";
 import {NzModalService} from "ng-zorro-antd";
+import {StoresInforService} from "@shared/stores-infor/shared/stores-infor.service";
+import {ActivatedRoute} from "@angular/router";
 
 
 @Component({
@@ -17,6 +19,8 @@ export class StoreComponent implements OnInit {
     private localStorageService: LocalStorageService,
     private marketingService: MarketingService,
     private modalSrv: NzModalService,
+    private storesInforService: StoresInforService,
+    private route: ActivatedRoute,
   ) { }
 
   @Input()
@@ -50,39 +54,54 @@ export class StoreComponent implements OnInit {
   ngOnInit() {
 
     if (this.isEdit == false) { //新增
-      if (this.localStorageService.getLocalstorage(STORES_INFO)) {
-        let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-          JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
+      let data = {
+        moduleId: this.route.snapshot.params['menuId'],
+        timestamp: new Date().getTime()
+      };
+      this.storesInforService.selectStores(data).subscribe(
+        (res: any) => {
+          if (res.success) {
+            let storeList: any = res.data.items;
+            storeList.forEach(function (item: any) {
+              item.storeName = item.branchName;
+            });
+            for (let i = 0; i < storeList.length; i++) {
+              if (storeList[i].cityId === '' || storeList[i].cityId === null) {
+                storeList[i].cityName = '其他';
+              } else {
+                storeList[i].cityName = '';
+              }
+            }
+            for (let i = 0; i < storeList.length; i++) {
+              let ids = [];
+              for (let j = 0; j < CITYLIST.length; j++) {
+                if (storeList[i].cityId === CITYLIST[j].i) {
+                  ids.push(CITYLIST[j].i)
+                }
+              }
+              if(ids.length === 0) {
+                storeList[i].cityName = '其他';
+                storeList[i].cityId = null;
+              }
+            }
+            for (let i = 0; i < storeList.length; i++) {
+              for (let j = 0; j < CITYLIST.length; j++) {
+                if (storeList[i].cityId === CITYLIST[j].i) {
+                  storeList[i].cityName = CITYLIST[j].n;
+                }
+              }
+            }
+            this.cityStoreList = FunctionUtil.getCityList(storeList, 'store');
+            this.localStorageService.setLocalstorage('cityStoreListInit', JSON.stringify(this.cityStoreList));
 
-        for (let i = 0; i < storeList.length; i++) {
-          if (storeList[i].cityId === '' || storeList[i].cityId === null) {
-            storeList[i].cityName = '其他';
           } else {
-            storeList[i].cityName = '';
+            this.modalSrv.error({
+              nzTitle: '温馨提示',
+              nzContent: res.errorInfo
+            });
           }
         }
-        for (let i = 0; i < storeList.length; i++) {
-          let ids = [];
-          for (let j = 0; j < CITYLIST.length; j++) {
-            if (storeList[i].cityId === CITYLIST[j].i) {
-              ids.push(CITYLIST[j].i)
-            }
-          }
-          if(ids.length === 0) {
-            storeList[i].cityName = '其他';
-            storeList[i].cityId = null;
-          }
-        }
-        for (let i = 0; i < storeList.length; i++) {
-          for (let j = 0; j < CITYLIST.length; j++) {
-            if (storeList[i].cityId === CITYLIST[j].i) {
-              storeList[i].cityName = CITYLIST[j].n;
-            }
-          }
-        }
-        this.cityStoreList = FunctionUtil.getCityList(storeList, 'store');
-        this.localStorageService.setLocalstorage('cityStoreListInit', JSON.stringify(this.cityStoreList));
-      }
+      );
 
       let selectStoresIds = '';
       for (let i = 0; i < this.cityStoreList.length; i++) {

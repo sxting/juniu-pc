@@ -420,3 +420,9 @@
         </div>
     </div>
 </ng-template>
+
+<div style="opacity: 0; width: 0; height: 0">
+  <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false"
+                   (storeIdOutput)="onSelectStoreChange($event)">
+  </jn-stores-infor>
+</div>
