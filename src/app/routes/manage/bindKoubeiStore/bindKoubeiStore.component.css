@@ -15,22 +15,22 @@
     border: 1px solid #e5e5e5;
 }
 .picBox>div:nth-of-type(1){
-    background-image: url('../../../../assets/img/koubei1.png');
+    background-image: url('../../../../assets/img/wechat2.png');
     background-repeat: no-repeat ;
     background-size: 100%;
 }
 .picBox>div:nth-of-type(2){
-    background-image: url('../../../../assets/img/koubei2.png');
+    background-image: url('../../../../assets/img/wechat1.png');
     background-repeat: no-repeat ;
     background-size: 100%;
 }
 .picBox>div:nth-of-type(3){
-    background-image: url('../../../../assets/img/koubei3.png');
+    background-image: url('../../../../assets/img/wechat3.png');
     background-repeat: no-repeat ;
     background-size: 100%;
 }
 .picBox>div:nth-of-type(4){
-    background-image: url('../../../../assets/img/koubei4.png');
+    background-image: url('../../../../assets/img/wechat4.png');
     background-repeat: no-repeat ;
     background-size: 100%;
 }

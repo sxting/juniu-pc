@@ -99,15 +99,18 @@ export class StoreEditComponent implements OnInit {
         this.manageService.storeCreate(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    this.submitting = false;
+                    this.modalSrv.success({
+                        nzContent: '门店创建成功'
+                    });
                     this.router.navigate(['/manage/storeList']);
                 } else {
-                    this.submitting = false;
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
                         nzContent: res.errorInfo
                     });
                 }
+                this.submitting = false;
+                
             },
             (error) => {
                 this.msg.warning(error)
@@ -119,6 +122,9 @@ export class StoreEditComponent implements OnInit {
         this.manageService.modifyInfo(data).subscribe(
             (res: any) => {
                 if (res.success) {
+                    this.modalSrv.success({
+                        nzContent: '门店修改成功'
+                    });
                     this.router.navigate(['/manage/storeList']);
                 } else {
                     this.modalSrv.error({

@@ -31,6 +31,13 @@ export class ManagementComponent {
             (res: any) => {
                 if (res.success) {
                     this.roleInfos = res.data.items;
+                    this.roleInfos.forEach(function (i: any) {
+                        let arr = [];
+                        i.moduleList.forEach(function (n: any) {
+                            arr.push(n.moduleName)
+                        })
+                        i.moduleList = arr.join(' ');
+                    })
                     this.Total = res.data.page.countTotal;
                 } else {
                     this.modalSrv.error({
@@ -82,7 +89,7 @@ export class ManagementComponent {
             nzContent: err
         });
     }
-    getData(e){
+    getData(e) {
         this.pageNo = e;
         this.roleBatchFun();
     }
