@@ -9,6 +9,7 @@ import { CheckoutService } from '../shared/checkout.service';
 import { MemberService } from '../../member/shared/member.service';
 import { ProductService } from '../../product/shared/product.service';
 import { CreateOrder, OrderItem } from '../shared/checkout.model';
+import { ActivatedRoute } from '@angular/router';
 declare var swal: any;
 @Component({
     selector: 'app-tourist',
@@ -52,6 +53,7 @@ export class TouristComponent implements OnInit {
     ticketCheck: any = true;
     staffGroupData: any = [];
     radioValue: any;
+    moduleId:any;
     cardTabs = [
         {
             type: "储值卡",
@@ -118,6 +120,7 @@ export class TouristComponent implements OnInit {
         public settings: SettingsService,
         private manageService: ManageService,
         private memberService: MemberService,
+        private route: ActivatedRoute,
         private checkoutService: CheckoutService,
         private modalSrv: NzModalService,
         private http: _HttpClient) {
@@ -141,7 +144,7 @@ export class TouristComponent implements OnInit {
         that.storeId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)).stores[0].storeId;
         this.changeFun();
         this.guadanList = this.localStorageService.getLocalstorage(GUADAN) ? JSON.parse(this.localStorageService.getLocalstorage(GUADAN)) : [];
-        console.log(this.guadanList)
+        this.moduleId = this.route.snapshot.params['menuId'];
     }
     //切换数据
     changeFun() {

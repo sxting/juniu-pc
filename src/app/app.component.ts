@@ -9,7 +9,7 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import { LocalStorageService } from '@shared/service/localstorage-service';
-import { APP_TOKEN } from '@shared/define/juniu-define';
+import { APP_TOKEN, STORES_INFO, USER_INFO } from '@shared/define/juniu-define';
 @Component({
   selector: 'app-root',
   template: `<router-outlet></router-outlet>`,
@@ -38,15 +38,19 @@ export class AppComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
     var token = this.tokenService.get().token;
+    var userInfo = this.localStorageService.getLocalstorage(USER_INFO);
+    if (!userInfo) {
+      this.tokenService.set({ token: '-1' });
+      this.router.navigate(['/passport/login']);
+    }
     var that = this;
     // this.router.events
     //   .filter(event => event instanceof NavigationEnd)
     //   .map(() => this.activatedRoute)
     //   .map(route => {
     //     while (route.firstChild) route = route.firstChild;
-    //     if (!token) that.router.navigate(['/passport/login']);
+    //     if (!token) 
     //     return route;
     //   })
     //   .filter(route => route.outlet === 'primary')

@@ -66,7 +66,7 @@ export class DefaultInterceptor implements HttpInterceptor {
         // }
         break;
       case 401: // 未登录状态码
-        this.goTo('/passport/login');
+        // this.goTo('/passport/login');
         break;
       case 403:
       case 404:

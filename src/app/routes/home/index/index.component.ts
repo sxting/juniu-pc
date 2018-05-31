@@ -1,13 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-import {_HttpClient} from '@delon/theme';
-import {NzMessageService, NzModalService} from "ng-zorro-antd";
-import {yuan} from "@delon/util";
-import {Router} from "@angular/router";
-import {HomeService} from "../shared/home.service";
-import {LocalStorageService} from "@shared/service/localstorage-service";
-import {STORES_INFO, USER_INFO} from "@shared/define/juniu-define";
-import {FunctionUtil} from "@shared/funtion/funtion-util";
-import {StoresInforService} from "@shared/stores-infor/shared/stores-infor.service";
+import { Component, OnInit } from '@angular/core';
+import { _HttpClient } from '@delon/theme';
+import { NzMessageService, NzModalService } from "ng-zorro-antd";
+import { yuan } from "@delon/util";
+import { Router } from "@angular/router";
+import { HomeService } from "../shared/home.service";
+import { LocalStorageService } from "@shared/service/localstorage-service";
+import { STORES_INFO, USER_INFO } from "@shared/define/juniu-define";
+import { FunctionUtil } from "@shared/funtion/funtion-util";
+import { StoresInforService } from "@shared/stores-infor/shared/stores-infor.service";
 declare var echarts: any;
 
 @Component({
@@ -26,71 +26,71 @@ export class IndexComponent implements OnInit {
 
     function: any[] = [
         {
-        "id": "1",
-        "title": "快速收银",
-        "logo": "./assets/img/shouyin.png",
-        "href": "/checkout/tourist",
-    },
+            "id": "1",
+            "title": "快速收银",
+            "logo": "./assets/img/shouyin.png",
+            "href": "/checkout/tourist",
+        },
         {
-        "id": "2",
-        "title": "新增预约",
-        "logo": "./assets/img/yuyue.png",
-        "href": "/reserve/index",
-    },
+            "id": "2",
+            "title": "新增预约",
+            "logo": "./assets/img/yuyue.png",
+            "href": "/reserve/index",
+        },
         {
-        "id": "3",
-        "title": "新增会员",
-        "logo": "./assets/img/xinzeng.png",
-        "href": "/checkout/tourist",
-    },
+            "id": "3",
+            "title": "新增会员",
+            "logo": "./assets/img/xinzeng.png",
+            "href": "/checkout/tourist",
+        },
         {
-        "id": "4",
-        "title": "会员开卡",
-        "logo": "./assets/img/kaika.png",
-        "href": "/checkout/tourist",
-    },
+            "id": "4",
+            "title": "会员开卡",
+            "logo": "./assets/img/kaika.png",
+            "href": "/checkout/tourist",
+        },
         {
-        "id": "5",
-        "title": "会员充值",
-        "logo": "./assets/img/chongzhi.png",
-        "href": "/checkout/tourist",
-    },
+            "id": "5",
+            "title": "会员充值",
+            "logo": "./assets/img/chongzhi.png",
+            "href": "/checkout/tourist",
+        },
         {
-        "id": "6",
-        "title": "口碑核销",
-        "logo": "./assets/img/koubei.png",
-        "href": "",
-    },
+            "id": "6",
+            "title": "口碑核销",
+            "logo": "./assets/img/koubei.png",
+            "href": "",
+        },
         {
-        "id": "7",
-        "title": "美大验券",
-        "logo": "./assets/img/disnping.png",
-        "href": "",
-    }
+            "id": "7",
+            "title": "美大验券",
+            "logo": "./assets/img/disnping.png",
+            "href": "",
+        }
     ];
 
     sevenDayFlowData: any = [
-        {"x": 1523349874964, "y1": 68, "y2": 21},
-        {"x": 1523351674964, "y1": 72, "y2": 57},
-        {"x": 1523353474964, "y1": 25, "y2": 83},
-        {"x": 1523355274964, "y1": 33, "y2": 98},
-        {"x": 1523357074964, "y1": 25, "y2": 64},
-        {"x": 1523358874964, "y1": 51, "y2": 13},
-        {"x": 1523360674964, "y1": 12, "y2": 27},
-        {"x": 1523362474964, "y1": 85, "y2": 37},
-        {"x": 1523364274964, "y1": 17, "y2": 20},
-        {"x": 1523366074964, "y1": 49, "y2": 64},
-        {"x": 1523367874964, "y1": 26, "y2": 23},
-        {"x": 1523369674964, "y1": 64, "y2": 68},
-        {"x": 1523371474964, "y1": 64, "y2": 87},
-        {"x": 1523373274964, "y1": 63, "y2": 68},
-        {"x": 1523375074964, "y1": 78, "y2": 35},
-        {"x": 1523376874964, "y1": 89, "y2": 29},
-        {"x": 1523378674964, "y1": 101, "y2": 104},
-        {"x": 1523380474964, "y1": 49, "y2": 89},
-        {"x": 1523382274964, "y1": 90, "y2": 43},
-        {"x": 1523384074964, "y1": 25, "y2": 29}
-        ];
+        { "x": 1523349874964, "y1": 68, "y2": 21 },
+        { "x": 1523351674964, "y1": 72, "y2": 57 },
+        { "x": 1523353474964, "y1": 25, "y2": 83 },
+        { "x": 1523355274964, "y1": 33, "y2": 98 },
+        { "x": 1523357074964, "y1": 25, "y2": 64 },
+        { "x": 1523358874964, "y1": 51, "y2": 13 },
+        { "x": 1523360674964, "y1": 12, "y2": 27 },
+        { "x": 1523362474964, "y1": 85, "y2": 37 },
+        { "x": 1523364274964, "y1": 17, "y2": 20 },
+        { "x": 1523366074964, "y1": 49, "y2": 64 },
+        { "x": 1523367874964, "y1": 26, "y2": 23 },
+        { "x": 1523369674964, "y1": 64, "y2": 68 },
+        { "x": 1523371474964, "y1": 64, "y2": 87 },
+        { "x": 1523373274964, "y1": 63, "y2": 68 },
+        { "x": 1523375074964, "y1": 78, "y2": 35 },
+        { "x": 1523376874964, "y1": 89, "y2": 29 },
+        { "x": 1523378674964, "y1": 101, "y2": 104 },
+        { "x": 1523380474964, "y1": 49, "y2": 89 },
+        { "x": 1523382274964, "y1": 90, "y2": 43 },
+        { "x": 1523384074964, "y1": 25, "y2": 29 }
+    ];
 
     salesPieData: any;
     salesTotal = 0;
@@ -124,24 +124,24 @@ export class IndexComponent implements OnInit {
     }
 
     ngOnInit() {
-      if (JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['staffType'] == 'STORE') {
-        let data = {
-          moduleId: 1
-        };
-        this.storesInforService.selectStores(data).subscribe(
-          (res: any) => {
-            if (res.success) {
-              let store = res.data.items;
-              this.storeId = store[0] ? store[0].storeId : '';
-            } else {
-              this.modalSrv.error({
-                nzTitle: '温馨提示',
-                nzContent: res.errorInfo
-              });
-            }
-          }
-        );
-      }
+        if (JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['staffType'] == 'STORE') {
+            let data = {
+                moduleId: 1
+            };
+            this.storesInforService.selectStores(data).subscribe(
+                (res: any) => {
+                    if (res.success) {
+                        let store = res.data.items;
+                        this.storeId = store[0] ? store[0].storeId : '';
+                    } else {
+                        this.modalSrv.error({
+                            nzTitle: '温馨提示',
+                            nzContent: res.errorInfo
+                        });
+                    }
+                }
+            );
+        }
         this.merchantId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['merchantId'];
 
         this.getIncome();
@@ -157,7 +157,7 @@ export class IndexComponent implements OnInit {
     }
 
     onFunctionItemClick(item: any) {
-        this.router.navigate([item.href, {id: item.id}])
+        this.router.navigate([item.href, { id: item.id }])
     }
 
     handlePieValueFormat(value: any) {
@@ -187,7 +187,7 @@ export class IndexComponent implements OnInit {
             },
             yAxis: {
                 type: 'category',
-                data: ['支付宝','微信','会员卡','第三方支付']
+                data: ['支付宝', '微信', '会员卡', '第三方支付']
             },
             series: [
                 {
@@ -196,7 +196,7 @@ export class IndexComponent implements OnInit {
                     itemStyle: {
                         normal: {
                             color: function (params: any) {
-                                var colorList = ['#e5e5e5', '#4AB84E','#FFD200',  '#FF8600'];
+                                var colorList = ['#e5e5e5', '#4AB84E', '#FFD200', '#FF8600'];
                                 return colorList[params.dataIndex];
                             }
                         }
@@ -290,7 +290,7 @@ export class IndexComponent implements OnInit {
         };
         this.homeService.getIncome(data).subscribe(
             (res: any) => {
-                if(res.success) {
+                if (res.success) {
                     this.IncomeData = res.data;
                 } else {
                     this.modalSrv.error({
@@ -309,7 +309,7 @@ export class IndexComponent implements OnInit {
         };
         this.homeService.getTransationCount(data).subscribe(
             (res: any) => {
-                if(res.success) {
+                if (res.success) {
                     this.transationCount = res.data;
                 } else {
                     this.modalSrv.error({
@@ -329,7 +329,7 @@ export class IndexComponent implements OnInit {
         };
         this.homeService.getNewCustomerInfo(data).subscribe(
             (res: any) => {
-                if(res.success) {
+                if (res.success) {
                     this.newCustomerInfo = res.data;
                 } else {
                     this.modalSrv.error({
@@ -349,7 +349,7 @@ export class IndexComponent implements OnInit {
         };
         this.homeService.getOpenCardData(data).subscribe(
             (res: any) => {
-                if(res.success) {
+                if (res.success) {
                     this.openCardData = res.data;
                 } else {
                     this.modalSrv.error({
@@ -370,7 +370,7 @@ export class IndexComponent implements OnInit {
         };
         this.homeService.getCardGroupType(data).subscribe(
             (res: any) => {
-                if(res.success) {
+                if (res.success) {
                     // this.cardGroupTypeData = res.data;
                     let self = this;
                     this.cardsTotal = res.data.count;
@@ -397,7 +397,7 @@ export class IndexComponent implements OnInit {
         };
         this.homeService.getNewReserveCount(data).subscribe(
             (res: any) => {
-                if(res.success) {
+                if (res.success) {
                     this.newReserveCount = res.data;
                 } else {
                     this.modalSrv.error({
@@ -416,9 +416,9 @@ export class IndexComponent implements OnInit {
         };
         this.homeService.getMessageCount(data).subscribe(
             (res: any) => {
-                if(res.success) {
+                if (res.success) {
                     this.messageCount = res.data.count;
-                } else{
+                } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
                         nzContent: res.errorInfo
@@ -435,7 +435,7 @@ export class IndexComponent implements OnInit {
         };
         this.homeService.weekTurnover(data).subscribe(
             (res: any) => {
-                if(res.success) {
+                if (res.success) {
                     this.weekTurnoverArray = res.data;
                     this.getSevenDayFlowEchart()
                 } else {

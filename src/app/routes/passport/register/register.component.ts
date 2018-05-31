@@ -58,8 +58,6 @@ export class UserRegisterComponent implements OnDestroy, OnInit {
                 contactName: [null, [Validators.required, Validators.maxLength(10)]]
             });
         }
-
-
     }
 
     static checkPassword(control: FormControl) {
@@ -128,11 +126,11 @@ export class UserRegisterComponent implements OnDestroy, OnInit {
             this.form.controls[i].updateValueAndValidity();
         }
         if (this.form.invalid) return;
-        // mock http
-        this.loading = true;
-        this.registrySystem();
-
-
+        else {
+            // mock http
+            this.loading = true;
+            this.registrySystem();
+        }
     }
 
     ngOnDestroy(): void {
@@ -205,6 +203,7 @@ export class UserRegisterComponent implements OnDestroy, OnInit {
         };
         this.memberService.getValidCode(data).subscribe(
             (res: any) => {
+                console.log(res);
                 if (res.success) {
                     this.modalSrv.success({
                         nzContent: '发送成功'
@@ -221,7 +220,7 @@ export class UserRegisterComponent implements OnDestroy, OnInit {
             }
         );
     }
-    loginToken(token:any) {
+    loginToken(token: any) {
         let that = this;
         let data = {
             token: token,

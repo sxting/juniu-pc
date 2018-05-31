@@ -412,7 +412,7 @@ export class MemberService {
     //账号密码登录
     loginName(data: any) {
         let apiUrl = Config.API1 + 'account/login/login/name.json';
-        return this.http.post(apiUrl, data)
+        return this.http.get(apiUrl, data)
             .map((response: Response) => response)
             .catch(error => {
                 return Observable.throw(error);
@@ -430,7 +430,7 @@ export class MemberService {
     // 手机号登录
     loginPhone(data: any) {
         let apiUrl = Config.API1 + 'account/login/phone.json';
-        return this.http.post(apiUrl, data)
+        return this.http.get(apiUrl, data)
             .map((response: Response) => response)
             .catch(error => {
                 return Observable.throw(error);

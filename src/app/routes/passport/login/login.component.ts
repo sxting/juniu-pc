@@ -10,6 +10,7 @@ import { MemberService } from '../../member/shared/member.service';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { APP_TOKEN, STORES_INFO, ALIPAY_SHOPS, USER_INFO, MODULES } from '@shared/define/juniu-define';
+import { StartupService } from '@core/startup/startup.service';
 
 @Component({
     selector: 'passport-login',
@@ -32,6 +33,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
         private settingsService: SettingsService,
         private localStorageService: LocalStorageService,
         private memberService: MemberService,
+        private startupService: StartupService,
         private socialService: SocialService,
         @Optional() @Inject(ReuseTabService) private reuseTabService: ReuseTabService,
         @Inject(DA_SERVICE_TOKEN) private tokenService: TokenService) {
@@ -122,22 +124,19 @@ export class UserLoginComponent implements OnDestroy, OnInit {
             this.password.markAsDirty();
             this.password.updateValueAndValidity();
             if (this.userName.invalid || this.password.invalid) return;
-
+            this.loading = true;
+            this.loginName(this.form.value.userName, this.form.value.password);
         } else {
             this.mobile.markAsDirty();
             this.mobile.updateValueAndValidity();
             this.captcha.markAsDirty();
             this.captcha.updateValueAndValidity();
             if (this.mobile.invalid || this.captcha.invalid) return;
-        }
-        // mock http
-        this.loading = true;
-        if (this.type === 0) {
-            this.loginName(this.form.value.userName, this.form.value.password);
-        } else {
+            this.loading = true;
             this.loginPhone(this.form.value.mobile, this.form.value.captcha);
         }
-        this.tokenSetFun('4420b0ef2c53987d1cdc06d2c10f15a0');
+        // mock http
+
     }
 
     // endregion
@@ -193,6 +192,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
             time: +new Date
         });
         this.router.navigate(['/']);
+        this.startupService.load();
     }
     getValidCode(phone, bizType) {
         let that = this;
