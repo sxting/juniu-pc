@@ -20,7 +20,7 @@ declare var swal: any;
 export class TouristComponent implements OnInit {
     storeId: any;
     changeType: boolean = true;//收银开卡切换
-    vipsearch: string = '13333333333';//vip搜索框
+    vipsearch: string = '15533677252';//vip搜索框
     renlian: boolean = true;//人脸识别
     isVerb: boolean = false;//是否抹零
     isVerb2: boolean = false;
@@ -255,7 +255,7 @@ export class TouristComponent implements OnInit {
                         if (k.card.cardId === i.vipCard.card.cardId && k.checked) {
                             if (i.vipCard.card.type === "TIMES") { i.vipMoney = NP.times(i.currentPrice, i.num) }
                             else if (i.vipCard.card.type === "METERING") { i.vipMoney = NP.times(i.currentPrice, i.num) }
-                            else if (i.vipCard.card.type === "REBATE") { i.vipMoney = NP.times(i.currentPrice, NP.divide(i.vipCard.card.rebate, 10), i.num); }
+                            else if (i.vipCard.card.type === "REBATE") { i.vipMoney = NP.times(i.currentPrice, (1-NP.divide(i.vipCard.card.rebate, 10)), i.num); }
                             else if (i.vipCard.card.type === "STORED") { i.vipMoney = NP.times(i.currentPrice, i.num) }
                         } else if (k.card.cardId === i.vipCard.card.cardId && !k.checked) {
                             i.vipMoney = 0;
