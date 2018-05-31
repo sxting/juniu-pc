@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import { TransferService } from "./transfer.service";
 import { FormBuilder } from "@angular/forms";
-import { Router } from "@angular/router";
+import {Router, ActivatedRoute} from "@angular/router";
 import {SetingsService} from "../../shared/setings.service";
 import {NzModalService} from "ng-zorro-antd";
 import {LocalStorageService} from "@shared/service/localstorage-service";
@@ -16,10 +16,12 @@ import {STORES_INFO} from "@shared/define/juniu-define";
 export class PayWayStep5Component implements OnInit {
 
     data: any = {};
-    storeId: any = '1526019540509121328386';
+    storeId: any = '';
+  moduleId: any = 1;
 
     constructor(
         public item: TransferService,
+        private route: ActivatedRoute,
         private router: Router,
         private setingsService: SetingsService,
         private modalSrv: NzModalService,
@@ -27,11 +29,17 @@ export class PayWayStep5Component implements OnInit {
     ) { }
 
     ngOnInit() {
-        let store: any = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-            JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-        this.storeId = store[0].storeId ? store[0].storeId : '';
-        this.getPayWayStatus();
+      this.moduleId = this.route.snapshot.params['menuId'];
+      // let store: any = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
+        //     JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
+        // this.storeId = store[0].storeId ? store[0].storeId : '';
+        // this.getPayWayStatus();
     }
+
+  onSelectStoreChange(e: any) {
+    this.storeId = e.storeId;
+    this.getPayWayStatus();
+  }
 
     //重新上传
     reUpload() {

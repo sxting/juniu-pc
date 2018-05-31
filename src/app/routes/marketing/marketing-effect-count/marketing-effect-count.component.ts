@@ -4,6 +4,7 @@ import { MarketingService } from "../shared/marketing.service";
 import { LocalStorageService } from "@shared/service/localstorage-service";
 import { USER_INFO } from '@shared/define/juniu-define';
 import { NzModalService } from "ng-zorro-antd";
+import {ActivatedRoute} from "@angular/router";
 declare var echarts: any;
 
 @Component({
@@ -54,17 +55,21 @@ export class MarketingEffectCountComponent implements OnInit {
     fajuantu: any;
     hexiaotu: any;
 
+  moduleId: any = '';
 
     constructor(
-        private marketingService: MarketingService,
+      private route: ActivatedRoute,
+      private marketingService: MarketingService,
         private localStorageService: LocalStorageService,
         private modalSrv: NzModalService
     ) { }
 
     ngOnInit() {
-        this.selectedOption1 = this.options1[0];
+      this.moduleId = this.route.snapshot.params['menuId'];
+
+      this.selectedOption1 = this.options1[0];
         this.selectedOption2 = this.options2[0];
-        this.cardRepeatconfiglist(this.pageIndex);
+        // this.cardRepeatconfiglist(this.pageIndex);
     }
 
     console(selectedOption: any) {

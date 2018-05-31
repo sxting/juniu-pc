@@ -28,6 +28,8 @@ export class CraftsmanLeaveComponent implements OnInit {
     vacationDateArr: any[] = [];
     staffType: string = '';
 
+  moduleId: any = '';
+
     constructor(
         private http: _HttpClient,
         private router: Router,
@@ -40,7 +42,9 @@ export class CraftsmanLeaveComponent implements OnInit {
 
   ifStoresAll: boolean;
     ngOnInit() {
-        let userInfo;
+      this.moduleId = this.route.snapshot.params['menuId'];
+
+      let userInfo;
         if (this.localStorageService.getLocalstorage('User-Info')) {
             userInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info'));
         }

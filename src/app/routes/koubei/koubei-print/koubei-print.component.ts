@@ -5,6 +5,7 @@ import { LocalStorageService } from "@shared/service/localstorage-service";
 import {NzModalService, NzMessageService} from "ng-zorro-antd";
 import { FunctionUtil } from "@shared/funtion/funtion-util";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-koubei-print',
@@ -32,8 +33,11 @@ export class KoubeiPrintComponent implements OnInit {
 
     printList: any[] = [];
 
+  moduleId: any = '';
+
     constructor(
-        private koubeiService: KoubeiService,
+      private route: ActivatedRoute,
+      private koubeiService: KoubeiService,
         private localStorageService: LocalStorageService,
         private fb: FormBuilder,
         private msg: NzMessageService,
@@ -41,7 +45,9 @@ export class KoubeiPrintComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        // if (this.localStorageService.getLocalstorage('Stores-Info') &&
+      this.moduleId = this.route.snapshot.params['menuId'];
+
+      // if (this.localStorageService.getLocalstorage('Stores-Info') &&
         //     JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')).length > 0) {
         //     let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) ?
         //         JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) : [];

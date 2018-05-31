@@ -21,9 +21,6 @@ export class SoftBuyStep2Component implements OnInit {
               private localStorageService: LocalStorageService,) {
   }
 
-  stores: any[] = [];
-  seceltAll: boolean = false; //是否全选
-
   loading = false;
   selectedRows: any = [];
   totalCallNo: any = 0;
@@ -44,10 +41,6 @@ export class SoftBuyStep2Component implements OnInit {
   dataList: any = [];
 
   ngOnInit() {
-    let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) ?
-      JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) : [];
-    this.stores = storeList;
-
     this.getPackageStores();
   }
 
