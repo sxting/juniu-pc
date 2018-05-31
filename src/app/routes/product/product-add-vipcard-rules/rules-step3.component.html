@@ -5,6 +5,9 @@
             <nz-radio-group formControlName="productTypes">
                 <label nz-radio *ngFor="let list of productTypes" [nzValue]="list.value" (click)="onSelectAlertBtnProduct(alertProduct, '适用商品', list.value)">{{list.name}}</label>
             </nz-radio-group>
+            <ng-container>
+              <nz-form-explain class="errorTipsWidth" *ngIf="selectProductNumber === 0 && ifShow">请至少选择一个商品或项目(去创建)</nz-form-explain>
+            </ng-container>
         </nz-form-control>
     </nz-form-item>
     <nz-form-item>
@@ -13,6 +16,9 @@
             <nz-radio-group formControlName="storeType">
                 <label nz-radio *ngFor="let item of storeStatus"  [nzValue]="item.value" (click)="onSelectAlertBtn(alertStore, '门店', item.value)">{{item.name}}</label>
             </nz-radio-group>
+            <ng-container>
+              <nz-form-explain class="errorTipsWidth" *ngIf="storesChangeNum === 0 && ifShow">请至少选择一个门店</nz-form-explain>
+            </ng-container>
         </nz-form-control>
     </nz-form-item>
     <nz-form-item>
@@ -30,10 +36,12 @@
 
 <!--选择门店弹框-->
 <ng-template #alertStore>
-    <app-select-transfer [cityStoreList]="cityStoreList" [allStaffNum]="allStoresNum" (staffIds)="getSelectStoresIds($event)"></app-select-transfer>
+    <app-select-transfer [cityStoreList]="cityStoreList" [allStaffNum]="allStoresNum" (staffIds)="getSelectStoresIds($event)"
+                         (selectStaffNum)="getSelectStoresNumber($event)"></app-select-transfer>
 </ng-template>
 
 <!--选择商品弹框-->
 <ng-template #alertProduct>
-    <app-select-transfer [cityStoreList]="productListInfor" [allStaffNum]="allProductNumber" (staffIds)="getProductIds($event)"></app-select-transfer>
+    <app-select-transfer [cityStoreList]="productListInfor" [allStaffNum]="allProductNumber" (staffIds)="getProductIds($event)"
+                         (selectStaffNum)="getSelectProductNumber($event)"></app-select-transfer>
 </ng-template>

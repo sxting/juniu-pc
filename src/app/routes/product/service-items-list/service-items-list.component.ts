@@ -5,6 +5,7 @@ import { ProductService } from "../shared/product.service";
 import { Router, ActivatedRoute } from '@angular/router';
 import { LocalStorageService} from "@shared/service/localstorage-service";
 import { FunctionUtil } from '@shared/funtion/funtion-util';
+import { STORES_DOWN } from '@shared/define/juniu-define';
 
 
 @Component({
@@ -33,6 +34,7 @@ export class ServiceItemsListComponent implements OnInit {
     merchantId: string = '';
     itemsListInfor: any[] =[];
     moduleId: string;
+    timestamp: any = new Date().getTime();//当前时间的时间戳
 
     constructor(
         private http: _HttpClient,
@@ -61,6 +63,7 @@ export class ServiceItemsListComponent implements OnInit {
     ngOnInit() {
 
         this.moduleId = this.route.snapshot.params['menuId'];
+        this.getStoresInfor();//门店
         let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
             JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
         this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
@@ -186,6 +189,32 @@ export class ServiceItemsListComponent implements OnInit {
     // 切换分页码
     paginate(event: any) {
         this.pageNo = event;
+    }
+
+    //门店初始化
+    getStoresInfor() {
+      let self = this;
+      let data = {
+        moduleId: this.moduleId,
+        timestamp: this.timestamp
+      };
+      this.productService.selectStores(data).subscribe(
+        (res: any) => {
+          if (res.success) {
+            let storeList = res.data.items;
+            console.log(storeList);
+            this.localStorageService.setLocalstorage(STORES_DOWN, JSON.stringify(storeList));
+          } else {
+            this.modalSrv.error({
+              nzTitle: '温馨提示',
+              nzContent: res.errorInfo
+            });
+          }
+        },
+        error => {
+          this.msg.warning(error);
+        }
+      );
     }
 
 }

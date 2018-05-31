@@ -30,7 +30,6 @@ export class AddNewStaffComponent implements OnInit {
     passwordPre: string = '';//上次的密码
     belongList: any[] = [{name: '门店', value: 'STORE'},{name: '总部', value: 'MERCHANT'}];//员工归属
     ifShow: boolean = true;//是否显示选择门店
-    timestamp: any = new Date().getTime();//当前时间的时间戳
 
     //上传图片的时候
     imagePath: string = '';
@@ -73,7 +72,7 @@ export class AddNewStaffComponent implements OnInit {
         self.formData = {
             staffName: [null, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
             phone: [null, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
-            password: [null, [Validators.required, Validators.pattern(`^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,16}$`)]],
+            password: [null, [Validators.required, Validators.pattern(`^(?=.*\\d)(?=.*[a-z]).{6,16}$`)]],
             belongType: [ this.belongList[0].value, [Validators.required]],//门店员工职位
             storeId: [self.storeList[0].storeId, [Validators.required]],
             roleId: [null, [Validators.required]],
@@ -110,7 +109,7 @@ export class AddNewStaffComponent implements OnInit {
         event = event ? event : window.event;
         var file = event.srcElement ? event.srcElement.files : event.target.files; if (file) {
             this.loading = true;
-            this.uploadService.postWithFile(file, 'item', 'T').then((result: any) => {
+            this.uploadService.postWithFile(file, 'item', 'F').then((result: any) => {
                 this.loading = false;
                 let width = 104, height = 104;
                 this.picId = result.pictureId;
@@ -135,7 +134,7 @@ export class AddNewStaffComponent implements OnInit {
         let self = this;
         this.loading = true;
         let data = {
-          timestamp: this.timestamp
+          timestamp: new Date().getTime()
         };
         this.manageService.rolesSelect(data).subscribe(
             (res: any) => {
@@ -183,7 +182,7 @@ export class AddNewStaffComponent implements OnInit {
         this.loading = true;
         let data = {
             staffId: this.staffId,
-            timestamp: this.timestamp
+            timestamp: new Date().getTime()
         };
         this.manageService.staffdetail(data).subscribe(
             (res: any) => {
@@ -242,7 +241,7 @@ export class AddNewStaffComponent implements OnInit {
             portrait: this.picId,
             staffId: this.staffId,
             storeId:storeId,
-            timestamp: this.timestamp
+            timestamp: new Date().getTime()
         };
         if(this.staffId){//修改
             this.editStaff(params);
