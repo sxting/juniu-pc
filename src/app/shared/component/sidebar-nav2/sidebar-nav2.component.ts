@@ -25,7 +25,7 @@ export class SidebarNav2Component implements OnInit, OnDestroy {
     private bodyEl: HTMLBodyElement;
     list: Nav[] = [];
     private change$: Subscription;
-    menuName: any;
+    menuId: any;
     @Input() autoCloseUnderPad = true;
 
     @Output()
@@ -68,7 +68,7 @@ export class SidebarNav2Component implements OnInit, OnDestroy {
         return false;
     }
     onselect(e: any) {
-        this.menuName = e.menuName;
+        this.menuId = e.menuId;
         this.select.emit(e);
     }
     clearFloatingContainer() {
