@@ -113,6 +113,8 @@ export class MarketingsPageComponent implements OnInit {
     marketingId: any = '';
     marketingStatus: any = '';
 
+  moduleId: any = '';
+
     constructor(
         private route: ActivatedRoute,
         private router: Router,
@@ -125,7 +127,9 @@ export class MarketingsPageComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.titleService.setTitle(decodeURIComponent(this.route.snapshot.params['name']));
+      this.moduleId = this.route.snapshot.params['menuId'];
+
+      this.titleService.setTitle(decodeURIComponent(this.route.snapshot.params['name']));
         this.paramsId = this.route.snapshot.params['id'];
         this.paramsIdNumber = parseInt(this.paramsId);
         this.marketingId = this.route.snapshot.params['marketingId'] ? this.route.snapshot.params['marketingId'] : '';
@@ -138,11 +142,11 @@ export class MarketingsPageComponent implements OnInit {
         this.pageHeader2 = decodeURIComponent(this.route.snapshot.params['name']);
         this.pageDesc = decodeURIComponent(this.route.snapshot.params['desc']);
 
-        if(JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['staffType'] == 'STORE') {
-            let store: any = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-                JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-            this.storeId = store[0].storeId ? store[0].storeId : '';
-        }
+        // if(JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['staffType'] == 'STORE') {
+        //     let store: any = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
+        //         JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
+        //     this.storeId = store[0].storeId ? store[0].storeId : '';
+        // }
         this.merchantId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['merchantId'];
 
         if(this.paramsId == '05' || this.paramsId == '06' || this.paramsId == '12' || this.paramsId == '13') {
@@ -172,12 +176,23 @@ export class MarketingsPageComponent implements OnInit {
         }
 
         if(this.marketingId) {
-            this.getThreeCoupons();
+            // this.getThreeCoupons();
             this.editFormInit();
         } else {
             this.formInit();
         }
     }
+
+  onSelectStoreChange(e: any) {
+    if(JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['staffType'] == 'STORE') {
+      let store: any = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
+        JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
+      this.storeId = e.storeId;
+    }
+    if(this.marketingId) {
+      this.getThreeCoupons();
+    }
+  }
 
     //活动对象
     onActivityObjClick(type: string) {

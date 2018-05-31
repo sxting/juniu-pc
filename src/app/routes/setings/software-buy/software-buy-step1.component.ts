@@ -23,6 +23,7 @@ export class SoftBuyStep1Component implements OnInit {
   }
 
   storeId: any = '';
+  moduleId: any = '';
 
   dataList: any = [];
   hoverId: any = '';
@@ -30,24 +31,19 @@ export class SoftBuyStep1Component implements OnInit {
   staffType: any = '';
 
   ngOnInit() {
-    let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-      JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
+    this.moduleId = this.route.snapshot.params['menuId'];
+  }
 
-    let userInfo: any = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)) ?
-      JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)) : [];
-
-    this.staffType = userInfo.staffType;
-
+  onSelectStoreChange(e: any) {
     if(this.staffType === 'MERCHANT') {
 
     } else {
-      this.storeId = storeList[0].storeId;
+      this.storeId = e.storeId;
     }
-
     this.storeId = this.route.snapshot.params['storeId'] ? this.route.snapshot.params['storeId'] : this.storeId;
-
     this.getPackageBatchList();
   }
+
 
   goBuyRecord() {
     this.router.navigateByUrl('/setings/software/buy/record');

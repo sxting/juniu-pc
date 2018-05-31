@@ -63,7 +63,7 @@
 
 <!--图表-->
 <nz-card [nzBordered]="false">
-  <nz-table #basicTable [nzShowPagination]="false" [nzData]="staffingInfor">
+  <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="staffingInfor">
     <thead nz-thead class="ui-grid-thead">
       <tr>
         <th nz-th class="">排名</th>

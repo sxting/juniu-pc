@@ -24,7 +24,7 @@
         </nz-row>
     </form>
 
-    <nz-table #basicTable [nzShowPagination]="false" [nzData]="staffListInfos">
+    <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="staffListInfos">
         <thead nz-thead class="ui-grid-thead">
             <tr>
                 <th nz-th class="" *ngFor="let item of TheadName;let i = index">{{item}}</th>

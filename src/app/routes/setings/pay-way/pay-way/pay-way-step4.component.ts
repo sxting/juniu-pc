@@ -7,6 +7,7 @@ import {NzModalService} from "ng-zorro-antd";
 import {SetingsService} from "../../shared/setings.service";
 import {LocalStorageService} from "@shared/service/localstorage-service";
 import {STORES_INFO} from "@shared/define/juniu-define";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
     selector: 'app-pay-way-step4',
@@ -34,7 +35,8 @@ export class PayWayStep4Component implements OnInit {
 
     bigImgPath: string;
 
-    storeId: any = '1526019540509121328386';
+    storeId: any = '';
+  moduleId: any = 1;
 
     constructor(
         public item: TransferService,
@@ -42,9 +44,11 @@ export class PayWayStep4Component implements OnInit {
         private modalSrv: NzModalService,
         private setingsService: SetingsService,
         private localStorageService: LocalStorageService,
+        private route: ActivatedRoute,
     ) { }
 
     ngOnInit() {
+      this.moduleId = this.route.snapshot.params['menuId'];
         this.form = this.fb.group({
             image_id1: [null, []],
             image_id2: [null, []],
@@ -55,9 +59,9 @@ export class PayWayStep4Component implements OnInit {
             image_id7: [null, []],
         });
 
-        let store: any = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-            JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-        this.storeId = store[0].storeId ? store[0].storeId : '';
+        // let store: any = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
+        //     JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
+        // this.storeId = store[0].storeId ? store[0].storeId : '';
 
         let data = this.item.itemData;
         if(this.item.itemData) {
@@ -84,6 +88,10 @@ export class PayWayStep4Component implements OnInit {
             }
         }
     }
+
+  onSelectStoreChange(e: any) {
+    this.storeId = e.storeId;
+  }
 
     /** 上传图片 */
     uploadImage(event: any, number: number) {

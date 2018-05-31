@@ -5,17 +5,17 @@
         <span (click)="onEditClick('', alertEditBox)">新增手艺人</span>
     </div>
     <div class="content-title"><span></span>现有手艺人</div>
-  <jn-stores-infor [moduleId]="1" [ifStoresAll]="false" [alipayShop]="true"
-                   (storeIdOutput)="onStoresChange($event)" (storeListPush)="storeListPush($event)"></jn-stores-infor>
+  <!--<jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false" [alipayShop]="true"-->
+                   <!--(storeIdOutput)="onStoresChange($event)" (storeListPush)="storeListPush($event)"></jn-stores-infor>-->
 
-  <!--<div class="select-store-box">-->
-        <!--所属门店-->
-        <!--<nz-select style="min-width: 300px;" [(ngModel)]="selectedOption" (ngModelChange)="onStoresChange()" [nzShowSearch]="true">-->
-            <!--<nz-option *ngFor="let store of stores" [nzLabel]="store.storeName" [nzValue]="store.storeId"></nz-option>-->
-        <!--</nz-select>-->
-    <!--</div>-->
+  <div class="select-store-box">
+        所属门店
+        <nz-select style="min-width: 300px;" [(ngModel)]="selectedOption" (ngModelChange)="onStoresChange($event)" [nzShowSearch]="true">
+            <nz-option *ngFor="let store of stores" [nzLabel]="store.storeName" [nzValue]="store.storeId"></nz-option>
+        </nz-select>
+    </div>
 
-    <nz-table #nzTable [nzData]="craftsmanList" [nzShowPagination]="false">
+    <nz-table [nzNoResult]="'没有数据'" #nzTable [nzData]="craftsmanList" [nzShowPagination]="false">
         <thead>
         <tr>
             <th *ngFor="let item of theadName"><span>{{item}}</span></th>
@@ -118,7 +118,8 @@
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7" nzRequired>从业起始年月日</nz-form-label>
             <nz-form-control nzXs="24" nzSm="17" nzMd="17">
-
+              <nz-date-picker [nzFormat]="'yyyy-MM-dd'" formControlName="career_begin"></nz-date-picker>
+              <nz-form-explain class="error-color" *ngIf="career_begin.dirty && career_begin.errors">请选择从业起始年月日</nz-form-explain>
             </nz-form-control>
         </nz-form-item>
 
@@ -132,7 +133,7 @@
         </nz-form-item>
 
         <nz-form-item>
-          <jn-stores-infor [moduleId]="1" [ifStoresAll]="false" [alipayShop]="true"
+          <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false" [alipayShop]="true"
                            [nzSm1]="7" [nzSm2]="17" [nzRequired]="true"
                            (storeIdOutput)="onStaffStoresChange($event)"></jn-stores-infor>
             <!--<nz-form-label nzXs="24" nzSm="7" nzRequired>所属门店</nz-form-label>-->
@@ -152,70 +153,6 @@
     </form>
 </ng-template>
 
-
-<ng-template #alertEditBox2>
-    <ul class="alert-box">
-        <li>
-            <span>姓名：</span>
-            <input *ngIf="!staffId" [(ngModel)]="staffName" type="text" maxlength="5" placeholder="请输入姓名，5个字以内">
-            <span *ngIf="staffId">{{staffName}}</span>
-        </li>
-        <li>
-            <span>手艺人口碑账号：</span>
-            <span *ngIf="!staffId">商家支付宝账号# <input [(ngModel)]="account" style="width: 196px" type="text" placeholder="请输入字母和数字"></span>
-            <span *ngIf="staffId">商家支付宝账号# {{account}}</span>
-            <p class="account-tip">该账号仅用于手艺人登录口碑掌柜app</p>
-        </li>
-        <li>
-            <span>头像：</span>
-            <div class="head-pic">
-                <img class="image" src="{{imagePath}}" [hidden]="!imagePath">
-                <span class="iconfont icon-tianjia"></span>
-                <input type="file" accept="image" (change)="uploadImage($event)">
-            </div>
-        </li>
-        <li>
-            <span>昵称：</span>
-            <input [(ngModel)]="nickName" maxlength="5" placeholder="请输入昵称，5个字以内">
-        </li>
-        <li>
-            <span>职业：</span>
-            <select (change)="onCareerChange($event)">
-                <option [value]="''">请选择一个职业</option>
-                <option *ngFor="let item of careersList" [selected]="item == careers" [value]="item">{{item}}</option>
-            </select>
-        </li>
-        <li>
-            <span>头衔：</span>
-            <input [(ngModel)]="title" maxlength="10" placeholder="手艺人在店内的职务，10个字以内">
-        </li>
-        <li>
-            <span>手机号：</span>
-            <input [(ngModel)]="phone" placeholder="输入手艺人手机号">
-        </li>
-        <li>
-            <span>从业起始年月日：</span>
-            <div class="dis-inb">
-                <!--<nz-datepicker [(ngModel)]="careerBegin" ></nz-datepicker>-->
-            </div>
-        </li>
-        <li>
-            <span>推荐权重：</span>
-            <div style="display: inline-block;vertical-align: text-top;color: #ccc;">
-                <input style="color: #333;" oninput="if(value>99999)value=99999;if(value<0)value='';" [(ngModel)]="weight" placeholder="">
-                <p>请输入整数，0表示不展示，值越大，排序越靠前</p>
-            </div>
-        </li>
-        <li>
-            <span>所属门店：</span>
-            <select (change)="onStaffStoresChange($event)">
-                <option [value]="''">请选择手艺人所属门店</option>
-                <option *ngFor="let store of stores" [selected]="store.storeId == staffStoreId" [value]="store.storeId">{{store.storeName}}</option>
-            </select>
-        </li>
-    </ul>
-</ng-template>
-
 <!--点击排班弹出手艺人排班弹出框-->
 <ng-template #alertScheduleBox>
     <div class="work-plan-box">
@@ -227,15 +164,12 @@
             </ul>
             <div class="time-box">
                 <div class="dis-inb">
-                    <!--<nz-timepicker [(ngModel)]="time.startTime" [nzFormat]="'HH:mm'"></nz-timepicker>-->
-                    <!-- <p-calendar [(ngModel)]="time.startTime" [timeOnly]='true'></p-calendar> -->
+                  <nz-time-picker [nzFormat]="'HH:mm'" [(ngModel)]="time.startTime"></nz-time-picker>
                 </div>
-                <!--<span class="space"></span><span class="space"></span>-->
+                <span class="space"></span><span class="space"></span>
                 <span style="padding:0 15px 0 30px">至</span>
                 <div class="dis-inb">
-
-                    <!--<nz-timepicker [(ngModel)]="time.endTime" [nzFormat]="'HH:mm'"></nz-timepicker>-->
-                    <!-- <p-calendar [(ngModel)]="time.endTime" [timeOnly]='true'></p-calendar> -->
+                  <nz-time-picker  [(ngModel)]="time.endTime" [nzFormat]="'HH:mm'"></nz-time-picker>
                 </div>
                 <span class="add-btn" (click)="onAddTimeClick()">添加</span>
                 <span class="add-btn" *ngIf="i > 0" (click)="onDeleteTimeClick(i)">删除</span>

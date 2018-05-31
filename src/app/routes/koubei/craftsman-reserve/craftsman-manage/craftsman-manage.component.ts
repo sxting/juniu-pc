@@ -9,6 +9,8 @@ import { OrderService } from "@shared/component/reserve/shared/order.service";
 import { IMAGE_BASE_URL } from "@shared/service/constants";
 import {FunctionUtil} from "@shared/funtion/funtion-util";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
+import {ActivatedRoute} from "@angular/router";
+import {StoresInforService} from "@shared/stores-infor/shared/stores-infor.service";
 
 @Component({
   selector: 'app-craftsman-manage',
@@ -79,46 +81,65 @@ export class CraftsmanManageComponent implements OnInit {
 
     showAlertScheduleBox: boolean = false;
 
+  moduleId: any = '';
+
     constructor(
-        private localStorageService: LocalStorageService,
+      private route: ActivatedRoute,
+      private localStorageService: LocalStorageService,
         private uploadService: UploadService,
         private orderService: OrderService,
         private koubeiService: KoubeiService,
         private fb: FormBuilder,
         private msg: NzMessageService,
-        private modalSrv: NzModalService
+        private modalSrv: NzModalService,
+        private storesInforService: StoresInforService
     ) { }
 
     ngOnInit() {
-        if (this.localStorageService.getLocalstorage('Stores-Info') &&
-            JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')).length > 0) {
-            let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) ?
-                JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) : [];
+      this.moduleId = this.route.snapshot.params['menuId'];
+
+      let data = {
+        moduleId: this.moduleId,
+        timestamp: new Date().getTime()
+      };
+
+      this.storesInforService.selectStores(data).subscribe(
+        (res: any) => {
+          if (res.success) {
+            let storeList: any = res.data.items;
+            storeList.forEach(function (item: any) {
+              item.storeName = item.branchName;
+            });
 
             let self =this;
             this.stores = [];
             storeList.forEach(function (item: any) {
-                if(item.alipayShopId) {
-                    self.stores.push(item)
-                }
+              if(item.alipayShopId) {
+                self.stores.push(item)
+              }
             });
             self.storeId = self.stores[0] ? self.stores[0].storeId : '';
             self.selectedOption = self.storeId;
-        }
 
-        // this.getCraftsmanList();
+            this.getCraftsmanList();
+
+          } else {
+            this.modalSrv.error({
+              nzTitle: '温馨提示',
+              nzContent: res.errorInfo
+            });
+          }
+        }
+      );
+
         this.formInit();
     }
 
     //选择门店
     onStoresChange(e: any) {
-        // this.storeId = this.selectedOption;
-      this.storeId = e.storeId;
+        this.storeId = this.selectedOption;
+      // this.storeId = e.storeId;
         this.getCraftsmanList()
-    }
-
-    storeListPush(e: any) {
-      console.log(e);
     }
 
     //预约记录分页
@@ -173,6 +194,7 @@ export class CraftsmanManageComponent implements OnInit {
     get title_form() { return this.form.controls['title_form']; }
     get account_form() { return this.form.controls['account_form']; }
     get image_id() { return this.form.controls['image_id']; }
+    get career_begin() { return this.form.controls['career_begin']; }
 
     formInit() {
         if(this.staffId) {
@@ -183,6 +205,7 @@ export class CraftsmanManageComponent implements OnInit {
                 title_form: [this.title, [Validators.compose([Validators.required])]],
                 phone_form: [this.phone, [Validators.compose([Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)])]],
                 weight_form: [this.weight, [Validators.compose([Validators.required, Validators.max(99999999), Validators.min(0)])]],
+                career_begin: [new Date(this.careerBegin), Validators.required]
             });
         }
         else {
@@ -193,6 +216,7 @@ export class CraftsmanManageComponent implements OnInit {
                 title_form: ['', [Validators.compose([Validators.required])]],
                 phone_form: ['', [Validators.compose([Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)])]],
                 weight_form: ['', [Validators.compose([Validators.required, Validators.max(99999999), Validators.min(0)])]],
+              career_begin: ['', Validators.required]
             });
         }
     }

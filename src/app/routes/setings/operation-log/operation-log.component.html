@@ -44,7 +44,7 @@
     </span>
 </div>
 <div class="tableBox">
-    <nz-table #basicTable [nzShowPagination]="false" [nzData]="data">
+    <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="data">
         <thead>
             <tr>
                 <th>操作时间</th>

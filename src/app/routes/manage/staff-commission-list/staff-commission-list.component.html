@@ -18,7 +18,7 @@
             </nz-row>
         </form>
     </div>
-    <nz-table #basicTable [nzShowPagination]="false" [nzData]="commissionListInfor">
+    <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="commissionListInfor">
         <thead nz-thead class="ui-grid-thead">
         <tr>
             <th nz-th class="" *ngFor="let list of theadName">{{list}}</th>

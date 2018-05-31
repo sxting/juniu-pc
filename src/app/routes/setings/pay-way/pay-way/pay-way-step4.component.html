@@ -80,3 +80,9 @@
 <ng-template #alertBigImg style="padding: 0">
     <img class="big-img" [src]="bigImgPath" alt="">
 </ng-template>
+
+<div style="opacity: 0; width: 0; height: 0">
+  <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false"
+                   (storeIdOutput)="onSelectStoreChange($event)">
+  </jn-stores-infor>
+</div>

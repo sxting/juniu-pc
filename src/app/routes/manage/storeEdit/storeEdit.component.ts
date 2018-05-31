@@ -4,6 +4,8 @@ import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ManageService } from '../shared/manage.service';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
+import { LocalStorageService } from '@shared/service/localstorage-service';
+import { USER_INFO } from '@shared/define/juniu-define';
 declare var AMap;
 declare var AMapUI
 @Component({
@@ -21,10 +23,14 @@ export class StoreEditComponent implements OnInit {
     adressCode: any;
     location: any;
     storeId: any;
+    userInfo = this.localStorageService.getLocalstorage(USER_INFO) ?
+        JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)) : '';
+    merchantName: any;
     constructor(private fb: FormBuilder,
         private manageService: ManageService,
         private modalSrv: NzModalService,
         private route: ActivatedRoute,
+        private localStorageService: LocalStorageService,
         private router: Router,
         private msg: NzMessageService) {
 
@@ -38,9 +44,10 @@ export class StoreEditComponent implements OnInit {
     get address() { return this.form.controls.address; }
     get Alladdress() { return this.form.controls.Alladdress; }
     ngOnInit() {
+        this.storeId = this.route.snapshot.params['storeId'];
+        this.merchantName = this.userInfo.merchantName;
         this.getLocationHttp();
         this.mapFun();
-        this.storeId = this.route.snapshot.params['storeId'];
     }
     submit() {
         if (!this.form.controls.storeName.value) {
@@ -93,7 +100,7 @@ export class StoreEditComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     this.submitting = false;
-                    this.router.navigate(['/manage/storeList/storeEdit']);
+                    this.router.navigate(['/manage/storeList']);
                 } else {
                     this.submitting = false;
                     this.modalSrv.error({
@@ -127,7 +134,10 @@ export class StoreEditComponent implements OnInit {
     }
     getLocationHttp() {
         let self = this;
-        this.manageService.getLocation().subscribe(
+        let data = {
+            timestamp: new Date().getTime(),
+        }
+        this.manageService.getLocation(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     self.forEachFun(res.data.items);
@@ -150,7 +160,8 @@ export class StoreEditComponent implements OnInit {
     getStoreInfo(e) {
         let self = this;
         let data = {
-            storeId: e
+            storeId: e,
+            timestamp: new Date().getTime(),
         }
         this.manageService.storeInfo(data).subscribe(
             (res: any) => {
@@ -230,8 +241,10 @@ export class StoreEditComponent implements OnInit {
 
             marker.setPosition(poi.location);
             infoWindow.setPosition(poi.location);
+            let str = JSON.stringify(info, null, 2)
+            let str1 = str.substr(1, str.length-2 );
 
-            infoWindow.setContent('地址: <pre>' + JSON.stringify(info, null, 2) + '</pre>');
+            infoWindow.setContent('<pre>' + str1 + '</pre>');
             infoWindow.open(map, marker.getPosition());
 
             //map.setCenter(marker.getPosition());

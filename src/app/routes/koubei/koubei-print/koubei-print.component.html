@@ -6,7 +6,7 @@
     </div>
     <div class="content-title"><span class="left-line"></span>现有打印机</div>
 
-    <nz-table #nzTable [nzData]="printList" [nzPageSize]="10" [nzShowPagination]="false">
+    <nz-table [nzNoResult]="'没有数据'" #nzTable [nzData]="printList" [nzPageSize]="10" [nzShowPagination]="false">
         <thead>
         <tr>
             <th *ngFor="let item of theadName"><span>{{item}}</span></th>
@@ -87,7 +87,7 @@
             </nz-form-control>
         </nz-form-item>
 
-      <jn-stores-infor [moduleId]="1" [ifStoresAll]="false"
+      <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false"
                        [nzSm1]="5" [nzSm2]="17" [nzRequired]="true"
                        (storeIdOutput)="onStaffStoresChange($event)"></jn-stores-infor>
 

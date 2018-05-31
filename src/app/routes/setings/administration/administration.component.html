@@ -4,7 +4,7 @@
         <div class="">
             <div class="addStaffBox-main-left ">手机号:</div>
             <div class="addStaffBox-main-right">
-                15811392601
+                {{userInfo.loginName}}
                 <span class="buttons" (click)="phoneCheck(modalContent1)">点击修改</span>
             </div>
         </div>
@@ -18,19 +18,19 @@
         <div>
             <div class="addStaffBox-main-left ">商家名称:</div>
             <div class="addStaffBox-main-right">
-                桔牛
+                {{userInfo.merchantName}}
             </div>
         </div>
         <div>
             <div class="addStaffBox-main-left ">姓名:</div>
             <div class="addStaffBox-main-right">
-                超级管理员
+                {{userInfo.staffName}}
             </div>
         </div>
         <div>
             <div class="addStaffBox-main-left ">职位:</div>
             <div class="addStaffBox-main-right">
-                超级管理员
+                {{userInfo.roleName}}
             </div>
         </div>
     </div>
@@ -40,14 +40,14 @@
         <div class="">
             <div class="addStaffBox-main-left ">支付宝授权状态:</div>
             <div class="addStaffBox-main-right">
-                未授权
-                <span class="buttons" (click)="shouquan(modalContent3)">点击授权</span>
+                {{userInfo.alipayPid?'已授权':'未授权'}}
+                <span class="buttons" *ngIf="!userInfo.alipayPid" (click)="shouquan(modalContent3)">点击授权</span>
             </div>
         </div>
         <div>
             <div class="addStaffBox-main-left ">支付宝授权状态:</div>
-            <div class="addStaffBox-main-right">
-                已授权 PID：2088 0227 3142 5391
+            <div class="addStaffBox-main-right" *ngIf="userInfo.alipayPid">
+                已授权 PID：{{userInfo.alipayPid}}
                 <!-- <span class="buttons" (click)="qxshouquan()">取消授权</span> -->
             </div>
         </div>

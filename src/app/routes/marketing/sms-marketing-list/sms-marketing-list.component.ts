@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalStorageService } from "@shared/service/localstorage-service";
-import { Router } from "@angular/router";
+import {Router, ActivatedRoute} from "@angular/router";
 import { ManageService } from "../../manage/shared/manage.service";
 import { NzModalService } from "ng-zorro-antd";
 import { USER_INFO } from '@shared/define/juniu-define';
@@ -53,8 +53,11 @@ export class SmsMarketingListComponent implements OnInit {
     markingStatus: any = '';
     wxappAuth: any;
 
+  moduleId: any = '';
+
     constructor(
-        private localStorageService: LocalStorageService,
+      private route: ActivatedRoute,
+      private localStorageService: LocalStorageService,
         private router: Router,
         private manageService: ManageService,
         private marketingService: MarketingService,
@@ -62,13 +65,14 @@ export class SmsMarketingListComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.storeOptions = this.USER_INFO.stores ? this.USER_INFO.stores : [];
-        this.storeOptions.unshift({ storeName: '全部', storeId: 'ALL' });
-        let userinfo = this.localStorageService.getLocalstorage(USER_INFO) ?
-            JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)) : '';
+      this.moduleId = this.route.snapshot.params['menuId'];
+      // this.storeOptions = this.USER_INFO.stores ? this.USER_INFO.stores : [];
+      //   this.storeOptions.unshift({ storeName: '全部', storeId: 'ALL' });
+        // let userinfo = this.localStorageService.getLocalstorage(USER_INFO) ?
+        //     JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)) : '';
 
         // this.wxStatusHttp(userinfo.merchantId);
-        this.cardRepeatconfiglist();
+        // this.cardRepeatconfiglist();
     }
 
     //授权状态
@@ -264,7 +268,7 @@ export class SmsMarketingListComponent implements OnInit {
                 id = list[11].id;name = list[11].name;desc = list[11].desc;
         }
 
-        this.router.navigate(['/marketing/page', { marketingId: marketingId, marketingStatus: marketingStatus, id: id, name: encodeURIComponent(name), desc: encodeURIComponent(desc)}]);
+        this.router.navigate(['/marketing/page', { menuId: this.moduleId, marketingId: marketingId, marketingStatus: marketingStatus, id: id, name: encodeURIComponent(name), desc: encodeURIComponent(desc)}]);
     }
 
 }

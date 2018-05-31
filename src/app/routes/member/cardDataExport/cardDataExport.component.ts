@@ -2,6 +2,7 @@ import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Component } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import { MemberService } from '../shared/member.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-cardDataExport',
@@ -10,7 +11,7 @@ import { MemberService } from '../shared/member.service';
 })
 export class CardDataExportComponent {
     data = [];
-    storeId: any ;
+    storeId: any;
     email: any;
     submitting = false;
     storeName: string;//选择的门店名称
@@ -21,12 +22,15 @@ export class CardDataExportComponent {
         mail: this.emailInfor
     };
     selectedOption: any;
+    moduleId: any;
     constructor(public msg: NzMessageService,
         private modalSrv: NzModalService,
         private memberService: MemberService,
+        private route: ActivatedRoute,
         private http: _HttpClient) {
-
+        this.moduleId = this.route.snapshot.params['menuId'];
     }
+
     selectStoreInfo(e: any) {
         this.storeId = e;
     }

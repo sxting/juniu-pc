@@ -24,7 +24,7 @@
             </nz-form-item>
         </standard-form-row>
     </form>
-    <nz-table #basicTable [nzShowPagination]="false" [nzData]="vipItemListInfor">
+    <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="vipItemListInfor">
         <thead nz-thead class="ui-grid-thead">
         <tr>
             <th nz-th class="" *ngFor="let list of theadName">{{list}}</th>

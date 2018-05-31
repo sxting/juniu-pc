@@ -16,7 +16,7 @@
       <nz-form-label nzXs="24" nzSm="7">商家名称</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
         <!-- <input nz-input formControlName="name" value="'审美'" id="name" placeholder="请输入商家名称"> -->
-        <span>审美</span>
+        <span>{{merchantName}}</span>
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
@@ -37,7 +37,7 @@
       <nz-form-label nzXs="24" nzSm="7" nzFor="Alladdress">详细地址</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
         <div id="pickerBox">
-          <input nz-input id="pickerInput"  placeholder="输入关键字选取地点" />
+          <input nz-input id="pickerInput" type="text"  placeholder="输入关键字选取地点" />
           <div id="poiInfo"></div>
         </div>
       </nz-form-control>

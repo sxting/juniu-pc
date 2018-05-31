@@ -111,7 +111,7 @@
         <nz-card [nzBordered]="false" nzTitle="会员持卡分布" [nzBodyStyle]="{'padding.px': 12}" style="min-height: 464px" class="sales-card">
             <g2-pie
                 [hasLegend]="true"
-                subTitle="持卡总数"
+                subTitle="{{ cardsTotal ? '持卡总数' : ''}}"
                 [height]="248"
                 [lineWidth]="4"
                 [total]="cardsTotal"
@@ -126,10 +126,3 @@
     <div class="sub-title"><span>近七日流水走势</span></div>
     <div id="seven_day_flow"></div>
 </div>
-
-<!--<nz-card nzTitle="近七日流水走势" [nzBordered]="false" class="offline-card mt-lg">-->
-    <!--<div class="px-lg">-->
-        <!--<g2-timeline [data]="sevenDayFlowData"-->
-                     <!--[titleMap]="{ y1: '线下购买', y2: '在线支付' }"></g2-timeline>-->
-    <!--</div>-->
-<!--</nz-card>-->

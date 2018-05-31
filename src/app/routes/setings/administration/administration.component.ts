@@ -2,7 +2,7 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import { NzModalService } from 'ng-zorro-antd';
 import { SetingsService } from '../shared/setings.service';
-import { VAILCODE, APP_TOKEN } from '@shared/define/juniu-define';
+import { VAILCODE, APP_TOKEN, USER_INFO } from '@shared/define/juniu-define';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Config } from '@shared/config/env.config';
 import { LocalStorageService } from '@shared/service/localstorage-service';
@@ -22,7 +22,7 @@ export class AdministrationComponent implements OnInit {
     oldcode: any = '';
     newcode: any = '';
     imgUrl: string = Config.API + 'account/manage/aliAuthorizationQRCode.img' +
-    `?token=${this.localStorageService.getLocalstorage(APP_TOKEN)}`;
+        `?token=${this.localStorageService.getLocalstorage(APP_TOKEN)}`;
     //表单
     form: FormGroup;
     form2: FormGroup;
@@ -44,7 +44,9 @@ export class AdministrationComponent implements OnInit {
     sendMegLabel: string = '获取验证码';
     newsendMegLabel: string = '获取验证码';
     passWordsendMegLabel: string = '获取验证码';
-
+    userInfo = this.localStorageService.getLocalstorage(USER_INFO) ?
+        JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)) : '';
+    merchantName: any;
     constructor(
         private setingsService: SetingsService,
         private http: _HttpClient,

@@ -59,6 +59,8 @@ export class SetComponent implements OnInit {
     craftsmanScheduling: any; //点击排班按钮时 获取的某个手艺人排班
     craftsmanProduct: any; //点击可预约商品时， 获取的某个手艺人商品列表
 
+  moduleId: any = '';
+
     constructor(
         private http: _HttpClient,
         private router: Router,
@@ -69,7 +71,8 @@ export class SetComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        // if (this.localStorageService.getLocalstorage('Stores-Info') &&
+      this.moduleId = this.route.snapshot.params['menuId'];
+      // if (this.localStorageService.getLocalstorage('Stores-Info') &&
         //     JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')).length > 0) {
         //     let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) ?
         //         JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) : [];
@@ -82,19 +85,13 @@ export class SetComponent implements OnInit {
         // this.storeId = e.target.value;
         this.storeId = e.storeId;
         this.storeName = e.storeName;
-        if (this.storeId === '') {
-            this.initData();
-            this.modalSrv.error({
-                nzTitle: '温馨提示',
-                nzContent: '请选择门店'
-            });
-        } else {
-            this.initData();
-            let data = {
-                storeId: this.storeId
-            };
-            this.getReserveConfig(data);
-        }
+      this.initData();
+      let data = {
+        storeId: this.storeId
+      };
+      if(this.storeId) {
+        this.getReserveConfig(data);
+      }
     }
 
     //预约方式hover
