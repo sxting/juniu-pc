@@ -59,7 +59,7 @@ export class RevenueReportComponent implements OnInit {
 
     ngOnInit() {
 
-        this.moduleId = 1;
+        this.moduleId = this.route.snapshot.params['moduleId'];
         let year = new Date().getFullYear();        //获取当前年份(2位)
         let month = new Date().getMonth()+1;       //获取当前月份(0-11,0代表1月)
         let changemonth = month < 10 ? '0' + month : '' + month;
