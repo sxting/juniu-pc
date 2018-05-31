@@ -89,7 +89,9 @@ export class SetComponent implements OnInit {
       let data = {
         storeId: this.storeId
       };
-      this.getReserveConfig(data);
+      if(this.storeId) {
+        this.getReserveConfig(data);
+      }
     }
 
     //预约方式hover

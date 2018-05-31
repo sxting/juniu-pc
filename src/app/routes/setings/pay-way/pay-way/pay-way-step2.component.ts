@@ -89,10 +89,10 @@ export class PayWayStep2Component implements OnInit {
                 shanghu_address: [null, Validators.required],
                 detail_address: ['', Validators.required],
                 fuzer: ['', Validators.required],
-                shenfz_number: ['130724199211303124', [Validators.required, Validators.pattern(/^\d{15}$|^\d{18}$|^\d{17}(\d|X|x)$/)]],
-                tel: ['13878782343', [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
-                email: ['www@qq.com', [Validators.required, Validators.pattern(`^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$`)]],
-                service_tel: ['18730225816', [Validators.required, Validators.pattern(/^[1][3,4,5,7,8][0-9]{9}$|^0\d{2,3}-?\d{7,8}$/)]]
+                shenfz_number: ['', [Validators.required, Validators.pattern(/^\d{15}$|^\d{18}$|^\d{17}(\d|X|x)$/)]],
+                tel: ['', [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
+                email: ['', [Validators.required, Validators.pattern(`^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$`)]],
+                service_tel: ['', [Validators.required, Validators.pattern(/^[1][3,4,5,7,8][0-9]{9}$|^0\d{2,3}-?\d{7,8}$/)]]
             });
         }
 
