@@ -60,7 +60,7 @@ export class MeituanComponent implements OnInit {
 
     ngOnInit() {
         let self = this;
-
+        this.moduleId = this.route.snapshot.params['menuId'];
         let userInfo;
         if (this.localStorageService.getLocalstorage('User-Info')) {
             userInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info'));
@@ -94,7 +94,6 @@ export class MeituanComponent implements OnInit {
             this.selectedOption = this.stores[0].storeId;
             this.checkAuth();
         }
-        this.moduleId = this.route.snapshot.params['menuId'];
         this.getReceiptList();
     }
 
