@@ -11,6 +11,7 @@ import { ProductService } from '../../product/shared/product.service';
 import { CreateOrder, OrderItem } from '../shared/checkout.model';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
+import { ActivatedRoute } from '@angular/router';
 @Component({
     selector: 'app-meituan',
     templateUrl: './meituan.component.html',
@@ -25,6 +26,7 @@ export class MeituanComponent implements OnInit {
         private memberService: MemberService,
         private checkoutService: CheckoutService,
         private sanitizer: DomSanitizer,
+        private route: ActivatedRoute,
         private modalSrv: NzModalService,
         private http: _HttpClient) {
 
@@ -51,7 +53,7 @@ export class MeituanComponent implements OnInit {
     pageIndex: any = 1;
     pageSize: any = 10;
     countPage: any = 1;
-
+    moduleId:any;
     isShouQuan: boolean = false; //该门店是否授权
 
     deal: any = []; //团购券套餐
@@ -92,7 +94,7 @@ export class MeituanComponent implements OnInit {
             this.selectedOption = this.stores[0].storeId;
             this.checkAuth();
         }
-
+        this.moduleId = this.route.snapshot.params['menuId'];
         this.getReceiptList();
     }
 
@@ -103,7 +105,8 @@ export class MeituanComponent implements OnInit {
     }
 
     //选择门店
-    onSelectStoreClick() {
+    onSelectStoreClick(e:any) {
+        this.selectedOption = e;
         this.storeId = this.selectedOption;
         this.getReceiptList();
         if (this.storeId) {

@@ -128,23 +128,9 @@ export class TouristComponent implements OnInit {
     }
     ngOnInit() {
         let that = this;
-        let stores = this.localStorageService.getLocalstorage(USER_INFO) ? JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)).stores : '';
-        try {
-            stores.forEach(function (i: any, m: any) {
-                if (!i.alipayShopId) {
-                    stores.splice(m, 1);
-                }
-            })
-            that.storeId = stores ? stores[0].alipayShopId : '';
-            that.selectedOption = stores[0].storeId;
-            that.storeId = stores[0].storeId;
-        } catch (error) {
-
-        }
-        that.storeId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)).stores[0].storeId;
+        this.moduleId = this.route.snapshot.params['menuId'];
         this.changeFun();
         this.guadanList = this.localStorageService.getLocalstorage(GUADAN) ? JSON.parse(this.localStorageService.getLocalstorage(GUADAN)) : [];
-        this.moduleId = this.route.snapshot.params['menuId'];
     }
     //切换数据
     changeFun() {
