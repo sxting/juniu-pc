@@ -540,11 +540,11 @@ export class TouristComponent implements OnInit {
                 orderItem = {
                     cardId: that.xfCardList.cardId,
                     staffId: that.selectedValue1,
-                    typeName: "cardOrderItem",
+                    typeName: "productOrderItem",
                 }
             } else {
                 orderItem = {
-                    typeName: 'cardOrderItem',
+                    typeName: 'productOrderItem',
                     cardConfigId: that.xfCardList.cardConfigId,
                     cardConfigName: that.xfCardList.cardConfigName,
                     cardConfigType: that.xfCardList.type,
