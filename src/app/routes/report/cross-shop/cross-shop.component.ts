@@ -79,7 +79,7 @@ export class CrossShopComponent implements OnInit {
 
     ngOnInit() {
 
-        this.moduleId = this.route.snapshot.params['moduleId'];
+      this.moduleId = this.route.snapshot.params['menuId'];
 
         //门店列表
         if (this.localStorageService.getLocalstorage(STORES_INFO) && JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {

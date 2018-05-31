@@ -31,12 +31,13 @@ export class StaffSchedulingListComponent implements OnInit {
         private modalSrv: NzModalService,
         private localStorageService: LocalStorageService,
         private router: Router,
+        private route: ActivatedRoute,
         private manageService: ManageService,
         private msg: NzMessageService
     ) { }
 
     ngOnInit() {
-      this.moduleId = this.route.snapshot.params['moduleId'];
+      this.moduleId = this.route.snapshot.params['menuId'];
     }
 
     //门店id
@@ -170,5 +171,6 @@ export class StaffSchedulingListComponent implements OnInit {
           FunctionUtil.errorAlter(error);
         });
     }
+
 
 }

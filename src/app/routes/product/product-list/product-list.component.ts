@@ -68,7 +68,6 @@ export class ProductListComponent implements OnInit {
         this.getProductListHttp(this.batchQuery);
     }
 
-
     //操作上下架商品
     operationProduct(productId: string, status: any) {
         let self = this;
@@ -89,7 +88,6 @@ export class ProductListComponent implements OnInit {
             });
         }
     }
-
 
     //调取上架与未上架的商品
     onStatusClick() {

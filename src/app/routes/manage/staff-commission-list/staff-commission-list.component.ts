@@ -35,11 +35,12 @@ export class StaffCommissionListComponent implements OnInit {
         private manageService: ManageService,
         private localStorageService: LocalStorageService,
         private router: Router,
+        private route: ActivatedRoute,
         private msg: NzMessageService
     ) { }
 
     ngOnInit() {
-        this.moduleId = this.route.snapshot.params['moduleId'];
+      this.moduleId = this.route.snapshot.params['menuId'];
         let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
             JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
         this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
