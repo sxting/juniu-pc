@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { MemberService } from '../../member/shared/member.service';
+import { Inject } from '@angular/core';
+import { DA_SERVICE_TOKEN, TokenService } from '@delon/auth';
 
 @Component({
     selector: 'reset-password',
@@ -24,8 +26,9 @@ export class UserResetPasswordComponent implements OnDestroy {
         pool: 'exception'
     };
 
-    constructor(fb: FormBuilder, private router: Router, private modalSrv: NzModalService,
+    constructor(fb: FormBuilder, private router: Router, @Inject(DA_SERVICE_TOKEN) private tokenService: TokenService, private modalSrv: NzModalService,
         private memberService: MemberService, public msg: NzMessageService) {
+        this.tokenService.set({ token: '-1' });
         this.form = fb.group({
             password: [null, [Validators.required, Validators.minLength(6), UserResetPasswordComponent.checkPassword.bind(this)]],
             confirm: [null, [Validators.required, Validators.minLength(6), UserResetPasswordComponent.passwordEquar]],
@@ -118,19 +121,20 @@ export class UserResetPasswordComponent implements OnDestroy {
         }
         if (this.form.invalid) return;
         // mock http
-        this.loading = true;
-        let data = {
-            phone: this.form.value.mobile,
-            password: this.form.value.password,
-            confirmPassword: this.form.value.confirm,
-            validCode: this.form.value.captcha
-        };
-        setTimeout(() => {
-        }, 1000);
+        else {
+            let data = {
+                phone: this.form.value.mobile,
+                password: this.form.value.password,
+                confirmPassword: this.form.value.confirm,
+                validCode: this.form.value.captcha
+            };
+            this.resetPasswordHttp(data)
+        }
     }
     // 重置密码
     resetPasswordHttp(data) {
         let that = this;
+        this.loading = true;
         this.memberService.resetPassword(data).subscribe(
             (res: any) => {
                 if (res.success) {
@@ -142,7 +146,6 @@ export class UserResetPasswordComponent implements OnDestroy {
                     });
                 }
                 this.loading = false;
-
             },
             error => {
                 this.errorAlter(error);
