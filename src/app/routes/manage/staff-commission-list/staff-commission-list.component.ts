@@ -39,7 +39,7 @@ export class StaffCommissionListComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.moduleId = 1;
+        this.moduleId = this.route.snapshot.params['moduleId'];
         let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
             JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
         this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
@@ -53,6 +53,7 @@ export class StaffCommissionListComponent implements OnInit {
       this.storeId = event.storeId? event.storeId : '';
       this.rulePageListHttp();//请求员工列表数据
     }
+
     //返回门店数据
     storeListPush(event: any){
       this.storeList = event.storeList? event.storeList : [];

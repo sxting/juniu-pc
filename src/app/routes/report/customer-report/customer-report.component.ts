@@ -54,7 +54,7 @@ export class CustomerReportComponent implements OnInit {
 
     ngOnInit() {
 
-        this.moduleId = 1;
+        this.moduleId = this.route.snapshot.params['moduleId'];
         let userInfo;
         if (this.localStorageService.getLocalstorage('User-Info')) {
             userInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info'));

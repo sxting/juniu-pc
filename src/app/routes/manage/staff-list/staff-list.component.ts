@@ -39,14 +39,13 @@ export class StaffListComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-      this.moduleId = 1;
+      this.moduleId = this.route.snapshot.params['moduleId'];
     }
 
     /*************************  页面基础操作开始  ********************************/
 
     //门店id
     getStoreId(event: any){
-      console.log(event);
       this.storeId = event.storeId? event.storeId : '';
       this.staffListHttp();//员工列表请求数据
     }
@@ -54,7 +53,6 @@ export class StaffListComponent implements OnInit {
     //返回门店数据
     storeListPush(event: any){
       this.storeList = event.storeList? event.storeList : [];
-      console.log(this.storeList);
       this.localStorageService.setLocalstorage(STORES_STAFF, JSON.stringify(this.storeList));
     }
 

@@ -6,13 +6,7 @@
       <nz-tab nzTitle="消费"></nz-tab>
       <nz-tab nzTitle="售卡/充值"></nz-tab>
     </nz-tabset>
-    <!-- <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth" (storeListPush)="storeListPush($event)"
-      (storeIdOutput)="getStoreId($event)"></jn-stores-infor> -->
-    <nz-select style="width: 386px;" [(ngModel)]="selectedOption" (ngModelChange)="selectStoreInfo($event)" [nzPlaceHolder]="'请选择一个门店'"
-      [nzShowSearch]="true">
-      <nz-option *ngFor="let item of StoresInfo" [nzLabel]="item.storeName" [nzValue]="item.storeId">
-      </nz-option>
-    </nz-select>
+    <jn-stores-infor [moduleId]="moduleId" (storeIdOutput)="selectStoreInfo($event)"></jn-stores-infor>
   </div>
 
   <!-- 消费 -->

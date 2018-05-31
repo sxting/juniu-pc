@@ -3,10 +3,11 @@
         <nz-tab nzTitle="扫码核销">
             <div class="member-top-middle">
                 <span *ngIf="checkoutShow">选择门店</span>
-                <nz-select style="min-width: 200px;"  (ngModelChange)="selectStoreInfo($event)" [nzShowSearch]="true">
+                <!-- <nz-select style="min-width: 200px;"  (ngModelChange)="selectStoreInfo($event)" [nzShowSearch]="true">
                     <nz-option *ngFor="let store of StoresInfo" [nzLabel]="store.shopName" [nzValue]="store.shopId"></nz-option>
-                  </nz-select>
-                  <!-- <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth" (storeListPush)="storeListPush($event)"
+                  </nz-select> -->
+                <jn-stores-infor [moduleId]="moduleId" (storeIdOutput)="selectStoreInfo($event)"></jn-stores-infor>
+                <!-- <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth" (storeListPush)="storeListPush($event)"
       (storeIdOutput)="getStoreId($event)"></jn-stores-infor> -->
             </div>
             <div class="sm-button {{checkoutShow?'sm-button2':''}} " (click)="scanPay()">扫描顾客核销码</div>
@@ -16,10 +17,7 @@
         <nz-tab nzTitle="手动核销">
             <div class="member-top-middle" *ngIf="checkoutShow">
                 <span *ngIf="checkoutShow">选择门店</span>
-                <select *ngIf="checkoutShow" (change)="selectStoreInfo($event.target.value)">
-                    <!-- <option *ngIf="storeShow" [value]="ALL">请选择一个门店</option> -->
-                    <option *ngFor="let item of StoresInfo" [value]="item.shopId">{{item.shopName}}</option>
-                </select>
+                <jn-stores-infor *ngIf="checkoutShow" [moduleId]="moduleId" (storeIdOutput)="selectStoreInfo($event)"></jn-stores-infor>
             </div>
             <div class="member-top-middle">
                 <span style="margin-right:24px;">核销码</span>

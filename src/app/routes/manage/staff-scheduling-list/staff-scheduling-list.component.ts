@@ -36,7 +36,7 @@ export class StaffSchedulingListComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.moduleId = 1;
+      this.moduleId = this.route.snapshot.params['moduleId'];
     }
 
     //门店id

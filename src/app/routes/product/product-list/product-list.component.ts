@@ -55,7 +55,7 @@ export class ProductListComponent implements OnInit {
     };
 
     ngOnInit() {
-        this.moduleId = 1;
+        this.moduleId = this.route.snapshot.params['moduleId'];
         let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
             JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
         this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
@@ -198,53 +198,6 @@ export class ProductListComponent implements OnInit {
           if (res.success) {
             let storeList = res.data.items;
             console.log(storeList);
-            storeList = [
-              {
-                "storeId":"1526906091646178161905",
-                "branchName":"第二家店",
-                "alipayShopId":"",
-                "hasAuth":true,
-                "provinceCode":"110000",
-                "cityCode":"110100",
-                "districtCode":"110101"
-              },
-              {
-                "storeId":"1527578259824513245040",
-                "branchName":"审美造型立水桥店",
-                "alipayShopId":"",
-                "hasAuth":true,
-                "provinceCode":"110000",
-                "cityCode":"110100",
-                "districtCode":"110101"
-              },
-              {
-                "storeId":"15275782968554172013",
-                "branchName":"审美造型",
-                "alipayShopId":"",
-                "hasAuth":true,
-                "provinceCode":"110000",
-                "cityCode":"110100",
-                "districtCode":"110102"
-              },
-              {
-                "storeId":"1527579658261104107730",
-                "branchName":"上海迪士尼分店",
-                "alipayShopId":"",
-                "hasAuth":true,
-                "provinceCode":"120000",
-                "cityCode":"120100",
-                "districtCode":"120101"
-              },
-              {
-                "storeId":"1527579681050416575349",
-                "branchName":"天津狗不理包子店",
-                "alipayShopId":"",
-                "hasAuth":true,
-                "provinceCode":"120000",
-                "cityCode":"120100",
-                "districtCode":"120101"
-              }
-            ];
             this.localStorageService.setLocalstorage(STORES_DOWN, JSON.stringify(storeList));
           } else {
             this.modalSrv.error({

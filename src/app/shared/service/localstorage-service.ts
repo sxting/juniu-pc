@@ -4,12 +4,12 @@ import { Injectable } from "@angular/core";
 export class LocalStorageService {
 
   setLocalstorage(key: any, value: any) {
-      localStorage.removeItem(key);
-      localStorage.setItem(key, value);
+    sessionStorage.removeItem(key);
+    sessionStorage.setItem(key, value);
   }
 
   getLocalstorage(key: any) {
-    return localStorage.getItem(key);
+    return sessionStorage.getItem(key);
   }
 
   setSessionStorage(key: any, value: any) {

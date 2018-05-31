@@ -36,7 +36,6 @@ export class OnlyCardImportComponent {
         cardNum: this.cardNum
     };
     selectedOption: any;
-    storeList: any = JSON.parse(localStorage.getItem('Stores-Info')) ? JSON.parse(localStorage.getItem('Stores-Info')) : [];;
     typeName: any = '';
     cardList: any = [];
     rulesList: any = [];
@@ -61,7 +60,7 @@ export class OnlyCardImportComponent {
         private modalSrv: NzModalService,
         private memberService: MemberService,
         private http: _HttpClient) {
-        this.storeId = this.storeList ? this.storeList[0].storeId : '';
+        // this.storeId = this.storeList ? this.storeList[0].storeId : '';
         this.improtCardRecord();
     }
     alertAddCard(tpl: TemplateRef<{}>, type: string) {
