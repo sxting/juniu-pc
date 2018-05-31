@@ -54,7 +54,7 @@
             <span>核销对账</span>
         </button>
     </div>
-    <nz-table #basicTable [nzShowPagination]="false" [nzData]="orderListInfor">
+    <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="orderListInfor">
         <thead nz-thead class="ui-grid-thead">
             <tr>
                 <th nz-th class="" *ngFor="let item of orderTheadName;let i = index">{{item}}</th>
@@ -90,7 +90,7 @@
             <span>返回</span>
         </button>
     </div>
-    <nz-table #basicTable [nzShowPagination]="false" [nzData]="vouchersListInfor">
+    <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="vouchersListInfor">
         <thead nz-thead class="ui-grid-thead">
         <tr>
             <th nz-th class="" *ngFor="let item of marketingTheadName;let i = index">{{item}}</th>

@@ -210,7 +210,7 @@
             </div>
         </div>
 
-        <nz-table #nzTable [nzData]="reserveRecordList" [nzShowPagination]="false">
+        <nz-table [nzNoResult]="'没有数据'" #nzTable [nzData]="reserveRecordList" [nzShowPagination]="false">
             <thead>
             <tr>
                 <th *ngFor="let item of theadName"><span>{{item}}</span></th>

@@ -6,7 +6,7 @@
   </nz-breadcrumb>
 </div>
 <nz-card>
-  <nz-table #basicTable [nzData]="dataSet">
+  <nz-table [nzNoResult]="'没有数据'" #basicTable [nzData]="dataSet">
     <thead>
     <tr>
       <th *ngFor="let head of headData">{{head}}</th>

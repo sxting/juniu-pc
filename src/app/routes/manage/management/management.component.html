@@ -3,7 +3,7 @@
   <div class="buttonBox">
     <button class="buttons" nz-button [routerLink]="['/manage/management/addManagement']">新增职位</button>
   </div>
-  <nz-table #basicTable [nzShowPagination]="false" [nzData]="roleInfos">
+  <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="roleInfos">
     <thead>
       <tr>
         <th>职位编号</th>
