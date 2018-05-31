@@ -124,26 +124,34 @@ export class IndexComponent implements OnInit {
     }
 
     ngOnInit() {
-        if (JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['staffType'] == 'STORE') {
-            let data = {
-                moduleId: 9001
-            };
-            this.storesInforService.selectStores(data).subscribe(
-                (res: any) => {
-                    if (res.success) {
-                        let store = res.data.items;
-                        this.storeId = store[0] ? store[0].storeId : '';
-                    } else {
-                        this.modalSrv.error({
-                            nzTitle: '温馨提示',
-                            nzContent: res.errorInfo
-                        });
-                    }
-                }
-            );
-        }
-        this.merchantId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['merchantId'];
+      this.merchantId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['merchantId'];
+      if (JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['staffType'] == 'STORE') {
+        let data = {
+          moduleId: 9001
+        };
+        this.storesInforService.selectStores(data).subscribe(
+          (res: any) => {
+            if (res.success) {
+              let store: any = res.data.items;
+              this.storeId = store[0] ? store[0].storeId : '';
 
+              this.getIncome();
+              this.getTransationCount();
+              this.getNewCustomerInfo();
+              this.getOpenCardData();
+              this.getCardGroupType();
+              this.getNewReserveCount();
+              this.getMessageCount();
+              this.weekTurnover();
+            } else {
+              this.modalSrv.error({
+                nzTitle: '温馨提示',
+                nzContent: res.errorInfo
+              });
+            }
+          }
+        );
+      } else {
         this.getIncome();
         this.getTransationCount();
         this.getNewCustomerInfo();
@@ -152,8 +160,7 @@ export class IndexComponent implements OnInit {
         this.getNewReserveCount();
         this.getMessageCount();
         this.weekTurnover();
-
-        this.getSevenDayFlowEchart();
+      }
     }
 
     onFunctionItemClick(item: any) {

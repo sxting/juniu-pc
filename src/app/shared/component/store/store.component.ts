@@ -94,6 +94,56 @@ export class StoreComponent implements OnInit {
             this.cityStoreList = FunctionUtil.getCityList(storeList, 'store');
             this.localStorageService.setLocalstorage('cityStoreListInit', JSON.stringify(this.cityStoreList));
 
+            let selectStoresIds = '';
+            for (let i = 0; i < this.cityStoreList.length; i++) {
+              for (let j = 0; j < this.cityStoreList[i].stores.length; j++) {
+                if (this.cityStoreList[i].stores[j].change === true) {
+                  selectStoresIds += ',' + this.cityStoreList[i].stores[j].storeId;
+                }
+              }
+            }
+            if (selectStoresIds) {
+              selectStoresIds = selectStoresIds.substring(1);
+              this.storesChangeNum.emit({storesChangeNum: selectStoresIds.split(',').length});
+            }
+
+            let selectStoresIdsArr = selectStoresIds.split(',');
+            let selectStoresNames = [];
+
+            for (let i = 0; i < this.cityStoreList.length; i++) {
+              for (let j = 0; j < this.cityStoreList[i].stores.length; j++) {
+                for(let k =0; k<selectStoresIdsArr.length; k++) {
+                  if(selectStoresIdsArr[k] === this.cityStoreList[i].stores[j].storeId) {
+                    selectStoresNames.push(this.cityStoreList[i].stores[j].storeName)
+                  }
+                }
+              }
+            }
+
+            this.selectStoresIds.emit({selectStoresIds: selectStoresIds});
+            this.selectStoresNames.emit({selectStoresNames: selectStoresNames.join(',')})
+
+            if(this.getCalculateMemberNum) {
+              let data = {
+                memberType: this.memberType,
+                lastConsume: this.limitLastTime ? this.lastBuyTime : -1, //最后一次消费时间 *
+                storeIds: selectStoresIds
+              };
+              this.marketingService.getCalculateMemberNum(data).subscribe(
+                (res: any) => {
+                  if(res.success) {
+                    this.calculateMemberNum.emit({calculateMemberNum: res.data.count});
+                    this.needSendKey.emit({needSendKey: res.data.needSendKey});
+                  } else {
+                    this.modalSrv.error({
+                      nzTitle: '温馨提示',
+                      nzContent: res.errorInfo
+                    });
+                  }
+                }
+              )
+            }
+
           } else {
             this.modalSrv.error({
               nzTitle: '温馨提示',
@@ -102,57 +152,6 @@ export class StoreComponent implements OnInit {
           }
         }
       );
-
-      let selectStoresIds = '';
-      for (let i = 0; i < this.cityStoreList.length; i++) {
-        for (let j = 0; j < this.cityStoreList[i].stores.length; j++) {
-          if (this.cityStoreList[i].stores[j].change === true) {
-            selectStoresIds += ',' + this.cityStoreList[i].stores[j].storeId;
-          }
-        }
-      }
-      if (selectStoresIds) {
-        selectStoresIds = selectStoresIds.substring(1);
-        this.storesChangeNum.emit({storesChangeNum: selectStoresIds.split(',').length});
-      }
-
-      let selectStoresIdsArr = selectStoresIds.split(',');
-      let selectStoresNames = [];
-
-      for (let i = 0; i < this.cityStoreList.length; i++) {
-        for (let j = 0; j < this.cityStoreList[i].stores.length; j++) {
-          for(let k =0; k<selectStoresIdsArr.length; k++) {
-            if(selectStoresIdsArr[k] === this.cityStoreList[i].stores[j].storeId) {
-              selectStoresNames.push(this.cityStoreList[i].stores[j].storeName)
-            }
-          }
-        }
-      }
-
-      if(this.getCalculateMemberNum) {
-        let data = {
-          memberType: this.memberType,
-          lastConsume: this.limitLastTime ? this.lastBuyTime : -1, //最后一次消费时间 *
-          storeIds: selectStoresIds
-        };
-        this.marketingService.getCalculateMemberNum(data).subscribe(
-            (res: any) => {
-              if(res.success) {
-                this.calculateMemberNum.emit({calculateMemberNum: res.data.count});
-                this.needSendKey.emit({needSendKey: res.data.needSendKey});
-              } else {
-                this.modalSrv.error({
-                  nzTitle: '温馨提示',
-                  nzContent: res.errorInfo
-                });
-              }
-            }
-        )
-      }
-
-
-      this.selectStoresIds.emit({selectStoresIds: selectStoresIds});
-      this.selectStoresNames.emit({selectStoresNames: selectStoresNames.join(',')})
     }
 
   }

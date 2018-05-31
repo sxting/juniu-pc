@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
-import {Router} from "@angular/router";
+import {Router, ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-sms-marketing-index',
@@ -13,10 +13,14 @@ export class SmsMarketingIndexComponent implements OnInit {
     list2: any = [];
 
     constructor(
-        private router: Router,
+      private route: ActivatedRoute,
+      private router: Router,
     ) { }
 
+  moduleId: any = '';
+
     ngOnInit() {
+      this.moduleId = this.route.snapshot.params['menuId'];
         this.list1 = [
             { id: '01', name: '持卡会员提醒', img: './assets/img/sms_marketing_1.png', desc: '唤醒长期未到店消费的持卡会员。商家可以自主设定未到店时长，并对该期间内未到店消费的顾客发送营销短信和优惠券。' },
             { id: '02', name: '潜在会员转化', img: './assets/img/sms_marketing_2.png', desc: '潜在会员为在店内或线上渠道留过手机号，到店消费但没有办卡的会员。针对这部分会员我们可以发送短信和优惠券，促进其到店消费。' },
@@ -33,7 +37,7 @@ export class SmsMarketingIndexComponent implements OnInit {
     }
 
     onItemClick(id: string, name: string, desc: string) {
-        this.router.navigate(['/marketing/page', {id: id, name: encodeURIComponent(name), desc: encodeURIComponent(desc)}])
+        this.router.navigate(['/marketing/page', {menuId: this.moduleId, id: id, name: encodeURIComponent(name), desc: encodeURIComponent(desc)}])
     }
 
 }

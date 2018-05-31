@@ -268,7 +268,7 @@ export class SmsMarketingListComponent implements OnInit {
                 id = list[11].id;name = list[11].name;desc = list[11].desc;
         }
 
-        this.router.navigate(['/marketing/page', { marketingId: marketingId, marketingStatus: marketingStatus, id: id, name: encodeURIComponent(name), desc: encodeURIComponent(desc)}]);
+        this.router.navigate(['/marketing/page', { menuId: this.moduleId, marketingId: marketingId, marketingStatus: marketingStatus, id: id, name: encodeURIComponent(name), desc: encodeURIComponent(desc)}]);
     }
 
 }
