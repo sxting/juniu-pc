@@ -3,9 +3,9 @@ import { _HttpClient } from '@delon/theme';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ReportService } from "../shared/report.service";
-import { STORES_INFO } from "../../../shared/define/juniu-define";
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
+import { ActivatedRoute, Router } from '@angular/router';
 declare var echarts: any;
 
 @Component({
@@ -41,6 +41,8 @@ export class CustomerReportComponent implements OnInit {
         private fb: FormBuilder,
         private modalSrv: NzModalService,
         private reportService: ReportService,
+        private router: Router,
+        private route: ActivatedRoute,
         private localStorageService: LocalStorageService
     ) { }
 
@@ -54,7 +56,7 @@ export class CustomerReportComponent implements OnInit {
 
     ngOnInit() {
 
-        this.moduleId = this.route.snapshot.params['moduleId'];
+        this.moduleId = this.route.snapshot.params['menuId'];
         let userInfo;
         if (this.localStorageService.getLocalstorage('User-Info')) {
             userInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info'));

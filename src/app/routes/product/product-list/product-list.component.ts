@@ -39,6 +39,7 @@ export class ProductListComponent implements OnInit {
         private http: _HttpClient,
         private modalSrv: NzModalService,
         private router: Router,
+        private route: ActivatedRoute,
         private msg: NzMessageService,
         private localStorageService: LocalStorageService,
         private productService: ProductService
@@ -55,7 +56,7 @@ export class ProductListComponent implements OnInit {
     };
 
     ngOnInit() {
-        this.moduleId = this.route.snapshot.params['moduleId'];
+        this.moduleId = this.route.snapshot.params['menuId'];
         let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
             JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
         this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
@@ -66,7 +67,6 @@ export class ProductListComponent implements OnInit {
         //获取线下商品列表
         this.getProductListHttp(this.batchQuery);
     }
-
 
     //操作上下架商品
     operationProduct(productId: string, status: any) {
@@ -88,7 +88,6 @@ export class ProductListComponent implements OnInit {
             });
         }
     }
-
 
     //调取上架与未上架的商品
     onStatusClick() {

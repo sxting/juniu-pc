@@ -49,6 +49,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
     ngOnInit(): void {
         let sign = FunctionUtil.getUrlStringBySearch('sign') ? FunctionUtil.getUrlStringBySearch('sign') : FunctionUtil.getUrlString('sign');
         let url = FunctionUtil.getUrlStringBySearch('url') ? FunctionUtil.getUrlStringBySearch('url') : FunctionUtil.getUrlString('url');
+        this.tokenService.set({ token: '-1' });
         if (sign) {
             this.localStorageService.setLocalstorage(APP_TOKEN, sign);
             this.koubeiLogin(url)

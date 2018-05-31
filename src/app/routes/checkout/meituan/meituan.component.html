@@ -5,8 +5,7 @@
     </div>
 
     <div class="stores-box">
-        <span>选择门店</span>
-        <jn-stores-infor [moduleId]="moduleId" (storeIdOutput)="onSelectStoreClick($event)"></jn-stores-infor>
+        <jn-stores-infor [moduleId]="moduleId" (storeIdOutput)="onSelectStoreClick($event.storeId)"></jn-stores-infor>
     </div>
 
     <div *ngIf="!isClick">

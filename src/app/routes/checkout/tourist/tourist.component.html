@@ -6,7 +6,7 @@
       <nz-tab nzTitle="消费"></nz-tab>
       <nz-tab nzTitle="售卡/充值"></nz-tab>
     </nz-tabset>
-    <jn-stores-infor [moduleId]="moduleId" (storeIdOutput)="selectStoreInfo($event)"></jn-stores-infor>
+    <jn-stores-infor [moduleId]="moduleId" (storeIdOutput)="selectStoreInfo($event.storeId)"></jn-stores-infor>
   </div>
 
   <!-- 消费 -->
