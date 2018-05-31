@@ -214,27 +214,22 @@ export class TouristComponent implements OnInit {
             //每个卡的余额
             this.vipCardListfun();
 
-            if (that.xfList&&that.xfList.length>0) {
-                that.xfList.forEach(function (i: any) {
-                    i.totoleMoney = NP.round(NP.times(NP.divide(i.currentPrice, 100), i.num, NP.divide(i.discount, 100)), 2);
-                    that.totolMoney = NP.round(NP.plus(that.totolMoney, NP.times(NP.divide(i.currentPrice, 100), i.num, NP.divide(i.discount, 100))), 2);
-                    that.isVerbMoney = Math.floor(that.totolMoney);
-                })
-                //标注每个卡对应的总计减免
-                this.vipMoneyFun()
-                this.balanceFun();
-                that.productIdsFun(that.xfList);
-                ticketM = that.ticketCheck ? (that.ticket && that.xfList.length > 0 ? that.ticket.ticketMoney : 0) : 0;
-                that.totolMoney = NP.minus(that.totolMoney, ticketM, NP.divide(that.vipShowMoney, 100))
-                that.isVerbMoney = NP.minus(that.isVerbMoney, ticketM, NP.divide(that.vipShowMoney, 100))
-                that.totolMoney = that.totolMoney < 0 ? 0 : that.totolMoney;
-                that.isVerbMoney = that.isVerbMoney < 0 ? 0 : Math.floor(that.isVerbMoney);
-            } else {
-                that.totolMoney = that.inputValue;
-                that.isVerbMoney = Math.floor(that.inputValue);
-            }
+            that.xfList.forEach(function (i: any) {
+                i.totoleMoney = NP.round(NP.times(NP.divide(i.currentPrice, 100), i.num, NP.divide(i.discount, 100)), 2);
+                that.totolMoney = NP.round(NP.plus(that.totolMoney, NP.times(NP.divide(i.currentPrice, 100), i.num, NP.divide(i.discount, 100))), 2);
+                that.isVerbMoney = Math.floor(that.totolMoney);
+            })
+            //标注每个卡对应的总计减免
+            this.vipMoneyFun()
+            this.balanceFun();
+            that.productIdsFun(that.xfList);
+            ticketM = that.ticketCheck ? (that.ticket && that.xfList.length > 0 ? that.ticket.ticketMoney : 0) : 0;
+            that.totolMoney = NP.minus(that.totolMoney, ticketM, NP.divide(that.vipShowMoney, 100))
+            that.isVerbMoney = NP.minus(that.isVerbMoney, ticketM, NP.divide(that.vipShowMoney, 100))
+            that.totolMoney = that.totolMoney < 0 ? 0 : that.totolMoney;
+            that.isVerbMoney = that.isVerbMoney < 0 ? 0 : Math.floor(that.isVerbMoney);
             that.inputValue = that.isVerb ? that.isVerbMoney : that.totolMoney;
-            that.inputValue = that.inputValue.toFixed(2);
+            that.inputValue = that.inputValue ? that.inputValue.toFixed(2) : 0;
 
         } else {
             if (that.xfCardList) {
@@ -346,6 +341,7 @@ export class TouristComponent implements OnInit {
     //抹零
     moling() {
         this.isVerb = !this.isVerb;
+        this.isVerbMoney = this.totolMoney;
         this.totolMoneyFun();
     }
     //补差价操作
@@ -470,6 +466,7 @@ export class TouristComponent implements OnInit {
         this.xfList = [];
         this.vipCardList = [];
         this.cardChangeBoolean = false;
+        this.inputValue = 0;
         that.allproducks.forEach(function (i: any) {
             i.productList.forEach(function (n: any) {
                 n.click = false;
@@ -1115,7 +1112,10 @@ export class TouristComponent implements OnInit {
         this.checkoutService.rechargeAndOrderPay(rechargeObj).subscribe(
             (res: any) => {
                 if (res.success) {
-                    console.log(res.data);
+                    this.modalSrv.closeAll()
+                    this.modalSrv.success({
+                        nzContent: '收款成功'
+                    })
                 } else {
                     this.errorAlter(res.errorInfo)
                 }
@@ -1229,9 +1229,11 @@ export class TouristComponent implements OnInit {
             } else {
                 this.localStorageService.setLocalstorage(GUADAN, JSON.stringify([data]))
             }
-
+            this.modalSrv.success({
+                nzTitle: '挂单成功'
+            })
         }
-
+        this.vipXqFun();
     }
     guadanJS(index: any) {
         this.modalSrv.closeAll();
