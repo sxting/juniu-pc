@@ -41,6 +41,8 @@ export class SetComponent implements OnInit {
 
     selectedOption: string = '';
 
+  moduleId: any = '';
+
     constructor(
         private http: _HttpClient,
         private router: Router,
@@ -52,7 +54,8 @@ export class SetComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.token = this.localStorageService.getLocalstorage(APP_TOKEN);
+      this.moduleId = this.route.snapshot.params['menuId'];
+      this.token = this.localStorageService.getLocalstorage(APP_TOKEN);
         // if (this.localStorageService.getLocalstorage(STORES_INFO) &&
         //     JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
         //     let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?

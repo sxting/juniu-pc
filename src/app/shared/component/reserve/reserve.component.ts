@@ -107,7 +107,7 @@ export class ReserveComponent implements OnInit, AfterViewInit, AfterViewChecked
     this.todayDay = this.changeDate(new Date());
 
     let data = {
-      moduleId: 1,
+      moduleId: this.route.snapshot.params['menuId'],
       timestamp: new Date().getTime()
     };
     this.storesInforService.selectStores(data).subscribe(

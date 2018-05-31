@@ -126,7 +126,7 @@ export class IndexComponent implements OnInit {
     ngOnInit() {
         if (JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['staffType'] == 'STORE') {
             let data = {
-                moduleId: 1
+                moduleId: 9001
             };
             this.storesInforService.selectStores(data).subscribe(
                 (res: any) => {

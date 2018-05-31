@@ -105,8 +105,8 @@ export class StoresInforComponent implements OnInit {
                 this.storeId = ''
             }else{
               this.storeList = storeList;
-              this.storeId = this.storeList[0].storeId? this.storeList[0].storeId : '';
-              this.storeName = this.storeList[0].branchName;
+              this.storeId = this.storeList[0]? this.storeList[0].storeId : '';
+              this.storeName = this.storeList[0] ? this.storeList[0].branchName : '';
             }
             this.store = this.storeList[0];
             this.storeListPush.emit({storeList: self.storeList});

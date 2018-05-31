@@ -7,6 +7,7 @@ import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {UploadService} from "@shared/upload-img";
 import {SetingsService} from "../../shared/setings.service";
 import {Config} from "@shared/config/env.config";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-pay-download',
@@ -18,10 +19,8 @@ export class PayDownloadComponent implements OnInit {
   nzXs: any = 24;
   nzSm: any = 7;
 
-  storeName: string = '';
   storeId: any = '';
-  stores: any = [];
-  selectedOption: any = '';
+  moduleId: any = '';
 
   imgPath: any = '';
 
@@ -34,18 +33,14 @@ export class PayDownloadComponent implements OnInit {
   color: string = this.myColor;
 
   constructor(private localStorageService: LocalStorageService,
+              private route: ActivatedRoute,
               private modalSrv: NzModalService,
               private uploadService: UploadService,
               private setingsService: SetingsService,) {
   }
 
   ngOnInit() {
-    let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-      JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-    this.storeId = storeList[0].storeId;
-    this.storeName = storeList[0].storeName;
-    this.stores = storeList;
-    this.selectedOption = this.stores[0].storeId;
+    this.moduleId = this.route.snapshot.params['menuId'];
     this.downloadQronline();
   }
 

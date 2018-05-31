@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import {NzModalService} from "ng-zorro-antd";
-import {Router} from "@angular/router";
+import {Router, ActivatedRoute} from "@angular/router";
 import {SetingsService} from "../../shared/setings.service";
 import {LocalStorageService} from "@shared/service/localstorage-service";
 import {STORES_INFO} from "@shared/define/juniu-define";
@@ -26,23 +26,27 @@ export class PayRecordComponent implements OnInit {
     pageSize: any = 10;
     countPage: any = 1;
 
-    storeId: any = '1526019540509121328386';
+    storeId: any = '';
+
+  moduleId: any = '';
 
     constructor(private router: Router,
+                private route: ActivatedRoute,
                 private setingsService: SetingsService,
                 private modalSrv: NzModalService,
                 private localStorageService: LocalStorageService,
     ) {}
 
     ngOnInit() {
-        // let store: any = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
+      this.moduleId = this.route.snapshot.params['menuId'];
+      // let store: any = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
         //     JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
         // this.storeId = store[0].storeId ? store[0].storeId : '';
         this.getPayWayIndexList();
     }
 
   onStoresChange(e: any) {
-      this.storeId = e.storeId;
+      this.storeId = e.storeId ? e.storeId : '';
     this.getPayWayStatus();
   }
 
@@ -105,9 +109,9 @@ export class PayRecordComponent implements OnInit {
 
     //交易明细查询
     getDetailList() {
-        let data = {
-            // date: this.date.split(' ')[0].replace(/-/g, ''),
-            date: '20180328',
+      let data = {
+            date: this.date.split(' ')[0].replace(/-/g, ''),
+            // date: '20180328',
             pageNo: this.pageNo,
             pageSize: this.pageSize
         };
