@@ -48,6 +48,7 @@ export class CrossShopComponent implements OnInit {
     dateRange: Date = null;
     startTime: string = '';//转换字符串的时间
     endTime: string = '';//转换字符串的时间
+    moduleId: any;
 
     constructor(
         private http: _HttpClient,
@@ -77,6 +78,8 @@ export class CrossShopComponent implements OnInit {
     };
 
     ngOnInit() {
+
+        this.moduleId = this.route.snapshot.params['moduleId'];
 
         //门店列表
         if (this.localStorageService.getLocalstorage(STORES_INFO) && JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
