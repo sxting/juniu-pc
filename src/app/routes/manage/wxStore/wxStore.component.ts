@@ -497,7 +497,10 @@ export class WxStoreComponent implements OnInit {
     }
     getLocationHttp() {
         let self = this;
-        this.manageService.getLocation().subscribe(
+        let data = {
+            timestamp: new Date().getTime()
+        }
+        this.manageService.getLocation(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     self.forEachFun(res.data.items);
