@@ -192,6 +192,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
             id: 10000,
             time: +new Date
         });
+        this.localStorageService.setLocalstorage(APP_TOKEN, token);
         this.router.navigate(['/']);
         this.startupService.load();
     }

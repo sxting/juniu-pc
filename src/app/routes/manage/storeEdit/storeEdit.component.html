@@ -22,14 +22,14 @@
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7" nzFor="storeName">门店名称</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <input nz-input formControlName="storeName" id="storeName" placeholder="请输入门店名称">
+        <input nz-input formControlName="storeName" id="storeName" maxlength="20" placeholder="请输入门店名称">
         <!-- <nz-form-explain *ngIf="form.get('title').dirty && form.get('title').errors">请输入门店名称</nz-form-explain> -->
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7" nzFor="address">门店地址</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <nz-cascader [nzOptions]="cityArr" [(ngModel)]="values" [nzPlaceHolder]="'请选择门店地址'" formControlName="address" id="address" (ngModelChange)="onChanges($event)">
+        <nz-cascader [nzOptions]="cityArr" [(ngModel)]="values" maxlength="20" [nzPlaceHolder]="'请选择门店地址'" formControlName="address" id="address" (ngModelChange)="onChanges($event)">
         </nz-cascader>
       </nz-form-control>
     </nz-form-item>
@@ -37,7 +37,7 @@
       <nz-form-label nzXs="24" nzSm="7" nzFor="Alladdress">详细地址</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
         <div id="pickerBox">
-          <input nz-input id="pickerInput" type="text"  placeholder="输入关键字选取地点" />
+          <input nz-input id="pickerInput" maxlength="20" type="text"  placeholder="输入关键字选取地点" />
           <div id="poiInfo"></div>
         </div>
       </nz-form-control>

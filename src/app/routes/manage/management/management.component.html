@@ -18,8 +18,9 @@
         <td>{{item.roleId}}</td>
         <td>{{item.roleName}}</td>
         <td>{{item.belongType === 'MERCHANT'?'商家':'门店'}}</td>
-        <td class="bigtd">
-          <span style="margin-right:5px;" *ngFor="let i of item.moduleList">{{i.moduleName}}</span>
+        <td>
+            {{item.moduleList}}
+          <!-- <span style="margin-right:5px;" *ngFor="let i of item.moduleList">{{i.moduleName}}</span> -->
         </td>
         <td>
           <span class="button" (click)="bianji(item.roleId)">编辑</span>
