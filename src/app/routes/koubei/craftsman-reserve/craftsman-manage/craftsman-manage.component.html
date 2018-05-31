@@ -10,7 +10,7 @@
 
   <div class="select-store-box">
         所属门店
-        <nz-select style="min-width: 300px;" [(ngModel)]="selectedOption" (ngModelChange)="onStoresChange()" [nzShowSearch]="true">
+        <nz-select style="min-width: 300px;" [(ngModel)]="selectedOption" (ngModelChange)="onStoresChange($event)" [nzShowSearch]="true">
             <nz-option *ngFor="let store of stores" [nzLabel]="store.storeName" [nzValue]="store.storeId"></nz-option>
         </nz-select>
     </div>
