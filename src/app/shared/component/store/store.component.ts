@@ -123,7 +123,7 @@ export class StoreComponent implements OnInit {
             this.selectStoresIds.emit({selectStoresIds: selectStoresIds});
             this.selectStoresNames.emit({selectStoresNames: selectStoresNames.join(',')})
 
-            if(this.getCalculateMemberNum) {
+            if(this.getCalculateMemberNum && selectStoresIds) {
               let data = {
                 memberType: this.memberType,
                 lastConsume: this.limitLastTime ? this.lastBuyTime : -1, //最后一次消费时间 *

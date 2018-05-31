@@ -51,7 +51,7 @@ export class PayRecordComponent implements OnInit {
   }
 
     goPayWay() {
-        this.router.navigate(['/setings/pay/way', {status: this.status}])
+        this.router.navigate(['/setings/pay/way', {status: this.status, menuId: this.moduleId}])
     }
 
     //点击查看交易明细

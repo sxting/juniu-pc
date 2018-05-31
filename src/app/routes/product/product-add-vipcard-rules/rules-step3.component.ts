@@ -11,6 +11,7 @@ import { FunctionUtil } from '@shared/funtion/funtion-util';
 @Component({
   selector: 'app-rules-step3',
   templateUrl: './rules-step3.component.html',
+  styleUrls: [ './rules-step1.component.less' ]
 })
 export class RulesStep3Component implements OnInit {
 
@@ -32,6 +33,7 @@ export class RulesStep3Component implements OnInit {
     merchantId: string = '';
     storeId: string = '';//判断是门店登录还是商家登陆
     ifHttps: string = 'SERVICEITEMS';//是否要调取接口
+    ifShow: boolean = false;
 
     constructor(
         private http: _HttpClient,
@@ -168,12 +170,25 @@ export class RulesStep3Component implements OnInit {
 
     //获取商品ID
     getProductIds(event){
-        console.log(event);
         if(event){
             this.productIds = event.staffIds;
         }
     }
 
+    //选择的门店数量
+    getSelectStoresNumber(event){
+      if(event){
+        this.storesChangeNum = event.selectStaffNum;
+        this.ifShow = this.storesChangeNum == 0? true: false;
+      }
+    }
+    //选择商品数量
+    getSelectProductNumber(event: any){
+      if(event){
+        this.selectProductNumber = event.selectStaffNum;
+        this.ifShow = this.selectProductNumber == 0? true: false;
+      }
+    }
     //门店账号:带门店ID
     //商家登陆: 不需要
 
@@ -278,9 +293,6 @@ export class RulesStep3Component implements OnInit {
                     this.selectProductNumber = parseInt(dataInfor[1]);
                     this.allProductNumber = parseInt(dataInfor[2]);
 
-                    console.log(this.productIds);
-                    console.log(this.selectProductNumber);
-                    console.log(this.allProductNumber);
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -336,26 +348,35 @@ export class RulesStep3Component implements OnInit {
             type: self.item['cardType'],
             rules: [list],
         };
-        console.log(params);
-        this.productService.saveAddVipInfor(params).subscribe(
+        if(this.allProductNumber === 0){
+          this.msg.warning('需要先创建商品或者项目');
+          return;
+        }else if(this.allStoresNum === 0){
+          this.msg.warning('需要先创建门店');
+          return;
+        }else if(this.ifShow === false){
+          console.log(params);
+          this.productService.saveAddVipInfor(params).subscribe(
             (res: any) => {
-                if (res.success) {
-                    this.item.configId = res.data;
-                    setTimeout(() => {
-                        self.submitting = false;
-                        ++this.item.step;
-                    }, 1000);
-                } else {
-                    this.modalSrv.error({
-                        nzTitle: '温馨提示',
-                        nzContent: res.errorInfo
-                    });
-                }
+              self.submitting = false;
+              if (res.success) {
+                this.item.configId = res.data;
+                setTimeout(() => {
+                  ++this.item.step;
+                }, 1000);
+              } else {
+                this.modalSrv.error({
+                  nzTitle: '温馨提示',
+                  nzContent: res.errorInfo
+                });
+              }
             },
             (error) => {
-                this.msg.warning(error)
+              this.msg.warning(error)
             }
-        );
+          );
+        }
+
     }
 
     //上一步

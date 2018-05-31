@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { RulesTransferService } from "./rules-transfer.service";
-import { UploadService } from "../../../shared/upload-img/shared/upload.service";
+import { UploadService } from '@shared/upload-img';
 
 @Component({
   selector: 'app-rules-step1',
@@ -49,7 +49,7 @@ export class RulesStep1Component implements OnInit {
         this.loading = true;
         var file = event.srcElement ? event.srcElement.files : event.target.files; if (file) {
             this.loading = true;
-            this.uploadService.postWithFile(file, 'item', 'T').then((result: any) => {
+            this.uploadService.postWithFile(file, 'item', 'F').then((result: any) => {
                 this.loading = false;
                 let width = 104, height = 104;
                 this.picId = result.pictureId;
