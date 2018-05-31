@@ -201,7 +201,8 @@ export class AddManagementComponent implements OnInit {
     roleDetail(roleId: any) {
         let that = this;
         let data = {
-            roleId: roleId
+            roleId: roleId,
+            timestamp:new Date().getTime()
         }
         this.manageService.roleDetail(data).subscribe(
             (res: any) => {
