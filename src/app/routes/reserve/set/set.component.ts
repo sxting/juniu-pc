@@ -264,7 +264,7 @@ export class SetComponent implements OnInit {
 
     //跳转到新增商品页面
     goAddProduct() {
-        this.router.navigateByUrl('/product/add/product');
+        this.router.navigate(['/product/add/product', {menuId: this.moduleId}]);
         this.modalSrv.closeAll();
     }
 
