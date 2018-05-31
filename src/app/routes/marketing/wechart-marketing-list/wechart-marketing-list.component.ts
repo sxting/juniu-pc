@@ -224,7 +224,7 @@ export class WechartMarketingListComponent implements OnInit {
                 id = list[2].id;name = list[2].name;desc = list[2].desc;
         }
 
-        this.router.navigate(['/marketing/page', { marketingId: marketingId, marketingStatus: marketingStatus, id: id, name: encodeURIComponent(name), desc: encodeURIComponent(desc)}]);
+        this.router.navigate(['/marketing/page', { menuId: this.moduleId, marketingId: marketingId, marketingStatus: marketingStatus, id: id, name: encodeURIComponent(name), desc: encodeURIComponent(desc)}]);
     }
 
 }
