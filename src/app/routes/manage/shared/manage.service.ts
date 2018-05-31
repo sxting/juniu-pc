@@ -15,10 +15,18 @@ export class ManageService {
   api1 = Config.API + 'finance';
 
   //轮牌===员工列表（只有员工姓名和id）
+  // getStaffListByStoreId(storeId: string) {
+  //   let apiUrl = Config.API + 'account/staff/reserveStaffList.json';
+  //   let req = FunctionUtil.obectToURLSearchParams({ storeId: storeId });
+  //   return this.http.get(apiUrl, { storeId: storeId }).map((response: Response) => response).catch(error => {
+  //     return Observable.throw(error);
+  //   });
+  // }
+
   getStaffListByStoreId(storeId: string) {
-    let apiUrl = Config.API + 'account/staff/reserveStaffList.json';
-    let req = FunctionUtil.obectToURLSearchParams({ storeId: storeId });
-    return this.http.get(apiUrl, { storeId: storeId }).map((response: Response) => response).catch(error => {
+    let apiUrl = Config.API1 + 'account/merchant/staff/select.json';
+    let req = FunctionUtil.obectToURLSearchParams({ storeId: storeId, timestamp: new Date().getTime()});
+    return this.http.get(apiUrl, { storeId: storeId, timestamp: new Date().getTime() }).map((response: Response) => response).catch(error => {
       return Observable.throw(error);
     });
   }
