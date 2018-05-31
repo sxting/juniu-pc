@@ -675,7 +675,7 @@ export class FunctionUtil {
   }
 
   static isTel(Tel: any) {
-    var reg = /^0?1[3|4|5|7|8|9][0-9]\d{8}$/;
+    var reg = /^0?1[0-9]\d{10}$/;
     if (reg.test(Tel)) {
       return true;
     } else {

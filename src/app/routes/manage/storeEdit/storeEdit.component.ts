@@ -100,7 +100,7 @@ export class StoreEditComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     this.submitting = false;
-                    this.router.navigate(['/manage/storeList/storeEdit']);
+                    this.router.navigate(['/manage/storeList']);
                 } else {
                     this.submitting = false;
                     this.modalSrv.error({
@@ -241,8 +241,10 @@ export class StoreEditComponent implements OnInit {
 
             marker.setPosition(poi.location);
             infoWindow.setPosition(poi.location);
+            let str = JSON.stringify(info, null, 2)
+            let str1 = str.substr(1, str.length-2 );
 
-            infoWindow.setContent('地址: <pre>' + JSON.stringify(info, null, 2) + '</pre>');
+            infoWindow.setContent('<pre>' + str1 + '</pre>');
             infoWindow.open(map, marker.getPosition());
 
             //map.setCenter(marker.getPosition());

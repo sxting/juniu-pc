@@ -10,6 +10,7 @@ import { MemberService } from '../../member/shared/member.service';
 import { ProductService } from '../../product/shared/product.service';
 import { CreateOrder, OrderItem } from '../shared/checkout.model';
 import { ActivatedRoute } from '@angular/router';
+import { FunctionUtil } from '@shared/funtion/funtion-util';
 declare var swal: any;
 @Component({
     selector: 'app-tourist',
@@ -53,7 +54,7 @@ export class TouristComponent implements OnInit {
     ticketCheck: any = true;
     staffGroupData: any = [];
     radioValue: any;
-    moduleId:any;
+    moduleId: any;
     cardTabs = [
         {
             type: "储值卡",
@@ -114,6 +115,7 @@ export class TouristComponent implements OnInit {
     guadanList: any;
     shopyinList: any;
     pageSize: any = 10
+    vipdate: any;
     constructor(
         public msg: NzMessageService,
         private localStorageService: LocalStorageService,
@@ -1013,66 +1015,63 @@ export class TouristComponent implements OnInit {
     addCustomer() {
         let self = this;
         let genderStr = String(this.gender);
-        // if (!this.phone || !this.customerName) {
-        //     this.errorAlter('手机号或客户名称不能为空');
-        // } else if (!this.isTel(this.phone)) {
-        //     this.errorAlter('手机格式不对');
-        // } else if (!this.customerName) {
-        //     this.errorAlter('姓名不能为空');
-        // } else if (genderStr !== '0' && genderStr !== '1') {
-        //     this.errorAlter('性别不能空');
-        // }
-        // else {
-        if (this.customerId) {
-            this.memberService.updateCustomer({
-                'birthday': new Date(this.birthday).getFullYear() + '-' + (new Date(this.birthday).getMonth() + 1) + '-' + new Date(this.birthday).getDate(),
-                'customerName': this.vipname,
-                'gender': this.gender,
-                'phone': this.vipphone,
-                'remarks': this.remarks,
-                faceId: this.selectFaceId,
-                storeId: this.storeId,
-                customerId: this.customerId
-            }).subscribe(
-                (res: any) => {
-                    if (res.success) {
-                        if (this.currentModal) {
-                            this.currentModal.destroy();
-                        }
-                    } else {
-                        this.errorAlter(res.errorInfo)
-                    }
-                    if (res) {
-
-                    }
-                },
-                error => this.errorAlter(error)
-            );
+        if (this.vipdate) {
+            var date = this.vipdate.getFullYear() + '-' + (this.vipdate.getMonth() + 1) + '-' + this.vipdate.getDate()
+        }
+        if (!this.vipphone || !this.vipname) {
+            this.errorAlter('手机号或客户名称不能为空');
+        } else if (!FunctionUtil.isTel(this.vipphone)) {
+            this.errorAlter('手机格式不对');
+        } else if (!this.vipname) {
+            this.errorAlter('姓名不能为空');
+        } else if (genderStr !== '0' && genderStr !== '1') {
+            this.errorAlter('性别不能空');
         } else {
-            this.memberService.addCustomer({
-                'birthday': new Date(this.birthday).getFullYear() + '-' + new Date(this.birthday).getMonth() + '-' + new Date(this.birthday).getDate(),
+            let data = {
+                'birthday': date,
                 'customerName': this.vipname,
                 'gender': this.gender === '1' ? 1 : 0,
                 'phone': this.vipphone,
                 'remarks': this.remarks,
                 faceId: this.selectFaceId,
-                storeId: this.storeId
-            }).subscribe(
-                (res: any) => {
-                    if (res.success) {
-                        if (this.currentModal) {
-                            // this.currentModal.destroy();
-                            self.errorAlter('新增会员成功');
+                storeId: this.storeId,
+                customerId: this.customerId
+            }
+            if (data.customerId) {
+                this.memberService.updateCustomer(data).subscribe(
+                    (res: any) => {
+                        if (res.success) {
+                            this.modalSrv.closeAll();
+                            this.modalSrv.success({
+                                nzTitle : '修改成功'
+                            });
+                        } else {
+                            this.errorAlter(res.errorInfo)
                         }
-                    } else {
-                        this.errorAlter(res.errorInfo)
-                    }
-                },
-                error => this.errorAlter(error)
-            );
+                        if (res) {
+
+                        }
+                    },
+                    error => this.errorAlter(error)
+                );
+            } else {
+                delete data.customerId;
+                this.memberService.addCustomer(data).subscribe(
+                    (res: any) => {
+                        if (res.success) {
+                            this.modalSrv.closeAll();
+                            this.modalSrv.success({
+                                nzTitle : '新增会员成功'
+                            });
+                        } else {
+                            this.errorAlter(res.errorInfo)
+                        }
+                    },
+                    error => this.errorAlter(error)
+                );
+            }
         }
     }
-
     CardConfigRuleFun(ruleId: any, index) {
         let self = this;
         this.checkoutService
