@@ -48,11 +48,16 @@ export class AddNewProductComponent implements OnInit {
     selectStoresIds: any = ''; //选中的门店
     storesChangeNum: any; //选中门店的个数
     allStoresNum: any;//所有门店的数量
+    moduleId: string;
+
     get categoryInfor() { return this.form.controls.categoryInfor; }
     get currentPrice() { return this.form.controls['currentPrice']; }
     get stock() { return this.form.controls['stock']; }
 
     ngOnInit() {
+
+        this.moduleId = this.route.snapshot.params['menuId'];
+
         let self = this;
         this.merchantId = this.route.snapshot.params['merchantId'] ? this.route.snapshot.params['merchantId'] : FunctionUtil.getUrlString('merchantId');
         this.storeId = this.route.snapshot.params['storeId'] ? this.route.snapshot.params['storeId'] : FunctionUtil.getUrlString('storeId');

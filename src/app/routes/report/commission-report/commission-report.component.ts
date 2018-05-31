@@ -64,7 +64,7 @@ export class CommissionReportComponent implements OnInit {
 
     ngOnInit() {
 
-      this.moduleId = this.route.snapshot.params['moduleId'];
+      this.moduleId = this.route.snapshot.params['menuId'];
       let year = new Date().getFullYear();        //获取当前年份(2位)
       let month = new Date().getMonth()+1;       //获取当前月份(0-11,0代表1月)
       let changemonth = month < 10 ? '0' + month : '' + month;

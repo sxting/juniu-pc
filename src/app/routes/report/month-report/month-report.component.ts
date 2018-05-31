@@ -5,6 +5,7 @@ import { ReportService } from "../shared/report.service";
 import { LocalStorageService } from "../../../shared/service/localstorage-service";
 import {FunctionUtil} from "../../../shared/funtion/funtion-util";
 import { STORES_INFO } from '@shared/define/juniu-define';
+import { ActivatedRoute, Router } from '@angular/router';
 declare var echarts: any;
 
 @Component({
@@ -47,6 +48,8 @@ export class MonthReportComponent implements OnInit {
         public msg: NzMessageService,
         private modalSrv: NzModalService,
         private reportService: ReportService,
+        private router: Router,
+        private route: ActivatedRoute,
         private localStorageService: LocalStorageService
     ) { }
 
@@ -62,7 +65,7 @@ export class MonthReportComponent implements OnInit {
 
     ngOnInit() {
 
-        this.moduleId = this.route.snapshot.params['moduleId'];
+        this.moduleId = this.route.snapshot.params['menuId'];
         let userInfo;
         if (this.localStorageService.getLocalstorage('User-Info')) {
           userInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info'));
