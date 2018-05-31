@@ -57,15 +57,8 @@ export class ProductListComponent implements OnInit {
 
     ngOnInit() {
         this.moduleId = this.route.snapshot.params['menuId'];
-        let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
-            JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
-        this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
-
         this.getStoresInfor();//查看门店
-        this.batchQuery.merchantId = this.merchantId;
-        this.batchQuery.storeId = this.storeId;
-        //获取线下商品列表
-        this.getProductListHttp(this.batchQuery);
+
     }
 
     //操作上下架商品
@@ -99,7 +92,7 @@ export class ProductListComponent implements OnInit {
 
     //查看详情
     editProduct( ids: string ){
-        this.router.navigate(['/product/add/product', { productId: ids, storeId:this.storeId , merchantId: this.merchantId }]);
+        this.router.navigate(['/product/add/product', { productId: ids, storeId:this.storeId , merchantId: this.merchantId ,menuId: this.moduleId }]);
     }
 
     // 下架操作http请求
@@ -175,7 +168,7 @@ export class ProductListComponent implements OnInit {
 
     //新增商品
     addNewProduct(){
-        this.router.navigate(['/product/add/product', {storeId:this.storeId , merchantId: this.merchantId }]);
+        this.router.navigate(['/product/add/product', {storeId:this.storeId , merchantId: this.merchantId ,menuId: this.moduleId }]);
     }
 
     // 切换分页码
@@ -196,8 +189,16 @@ export class ProductListComponent implements OnInit {
         (res: any) => {
           if (res.success) {
             let storeList = res.data.items;
-            console.log(storeList);
-            this.localStorageService.setLocalstorage(STORES_DOWN, JSON.stringify(storeList));
+            let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+              JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+            this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
+
+            this.storeId = UserInfo.staffType === "MERCHANT"? '' : storeList[0].storeId;
+            self.batchQuery.merchantId = this.merchantId;
+            self.batchQuery.storeId = this.storeId;
+            //获取线下商品列表
+            self.getProductListHttp(self.batchQuery);
+
           } else {
             this.modalSrv.error({
               nzTitle: '温馨提示',

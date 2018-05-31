@@ -27,6 +27,8 @@
             <button nz-button (click)="prev()">上一步</button>
         </nz-form-control>
     </nz-form-item>
+    <jn-stores-transfor [moduleId]="moduleId" (storeListPush)="storeListPush($event)" (allStoresNumPush)="getAllStoresNum($event)"
+                   (storesChangeNumPush)="getStoresChangeNum($event)" (selectStoresIdsPush)="getSelectStoresIdsCsh($event)"></jn-stores-transfor>
 </form>
 <div class="border-top-1 mt-lg px-lg text-grey-dark">
 <h3 class="h3 my-md">卡规则设置说明</h3>

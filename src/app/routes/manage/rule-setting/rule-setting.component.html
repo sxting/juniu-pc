@@ -6,37 +6,37 @@
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="ruleName">规则名称</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input nz-input formControlName="ruleName" id="ruleName" placeholder="请输入提成规则名称">
+                <input nz-input formControlName="ruleName" maxlength="20" autocomplete="off" id="ruleName" placeholder="请输入提成规则名称">
                 <nz-form-explain class="errorTips"  *ngIf="form.get('ruleName').dirty && form.get('ruleName').errors">请输入提成规则名称</nz-form-explain>
             </nz-form-control>
         </nz-form-item>
-        <nz-form-item style="margin-bottom: 40px;">
+        <nz-form-item style="height: 110px;margin-bottom: 0;">
             <nz-form-label nzXs="24" nzSm="7" nzFor="type">提成</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <nz-radio-group formControlName="type">
+                <nz-radio-group formControlName="type" style="position: relative;height: 85px;">
                     <label class="lable-title" style="display: block" nz-radio *ngFor="let item of extractArr" [nzValue]="item.type" (change)="changeTypesData(item.type)">{{item.name}}
                         <p *ngIf="item.type === 'MONEY'" style="display: inline-block">
-                            <input style="width: 150px;" nz-input formControlName="deductMoney" placeholder="请输入提成金额"> 元
+                            <input style="width: 150px;" nz-input maxlength="10" formControlName="deductMoney" placeholder="请输入提成金额"> 元
                         </p>
                         <!--按比例提成-->
                         <div *ngIf="item.type === 'RATE'" class="clearfix rate">
                             <p class="fl" style="margin-right: 20px;">
                                 <label style="margin-right: 5px;">指定技师</label>
-                                <input style="width: 50px;" nz-input formControlName="assignRate" placeholder=""> %
+                                <input style="width: 50px;" nz-input maxlength="5" formControlName="assignRate" placeholder=""> %
                             </p>
                             <p class="fl">
                                 <label style="margin-right: 5px;">非指定技师</label>
-                                <input style="width: 50px;" nz-input formControlName="normalRate" placeholder=""> %
+                                <input style="width: 50px;" nz-input maxlength="5" formControlName="normalRate" placeholder=""> %
                             </p>
                         </div>
                     </label>
-                    <ng-container>
+                    <div style="position: absolute;bottom: -35px">
                         <nz-form-explain class="errorTips" *ngIf="form.value.type === 'RATE' && assignRate.errors?.pattern">非指定比例提成只能是有两位小数的数字</nz-form-explain>
                         <nz-form-explain class="errorTips" *ngIf="form.value.type === 'RATE' && normalRate.errors?.pattern">指定比例提成只能是有两位小数的数字</nz-form-explain>
                         <nz-form-explain class="errorTips" *ngIf="form.value.type === 'RATE' && ifShowErrorRateTips">按比例提成率不可为空</nz-form-explain>
                         <nz-form-explain class="errorTips" *ngIf="form.value.type === 'MONEY'&& ifShowErrorMoneyips">提成金额不可为空</nz-form-explain>
-                        <nz-form-explain class="errorTips" *ngIf="form.value.type === 'RATE' && deductMoney.errors?.pattern">指定比例提成只能是有两位小数的数字</nz-form-explain>
-                    </ng-container>
+                        <nz-form-explain class="errorTips" *ngIf="form.value.type === 'RATE' && deductMoney.errors?.pattern">指定比例提成只能是整数或者带有两位小数的数字</nz-form-explain>
+                    </div>
                 </nz-radio-group>
             </nz-form-control>
         </nz-form-item>

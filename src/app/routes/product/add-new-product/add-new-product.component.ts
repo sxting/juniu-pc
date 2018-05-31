@@ -56,57 +56,9 @@ export class AddNewProductComponent implements OnInit {
 
     ngOnInit() {
 
-        this.moduleId = this.route.snapshot.params['menuId'];
         let self = this;
-        this.merchantId = this.route.snapshot.params['merchantId'] ? this.route.snapshot.params['merchantId'] : FunctionUtil.getUrlString('merchantId');
-        this.storeId = this.route.snapshot.params['storeId'] ? this.route.snapshot.params['storeId'] : FunctionUtil.getUrlString('storeId');
+        this.moduleId = this.route.snapshot.params['menuId']? this.route.snapshot.params['menuId'] : '';//门店
         this.productId = this.route.snapshot.params['productId'] ? this.route.snapshot.params['productId'] : FunctionUtil.getUrlString('productId');
-
-        let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Down')) ?
-         JSON.parse(this.localStorageService.getLocalstorage('Stores-Down')) : [];
-
-        if (storeList) {
-            CITYLIST.forEach(function (i: any) {
-                storeList.forEach((ele: any, index: number, arr: any) => {
-                    if (i.i == ele.cityCode) {
-                        ele.cityName = i.n;
-                    }
-                })
-            })
-        }
-
-        let cityNameSpaceArr = [{
-            cityName: '',
-            cityId: '',
-        }];
-        cityNameSpaceArr.shift();
-
-        for (let i = 0; i < storeList.length; i++) {
-            if (storeList[i].cityCode == '' || storeList[i].cityCode == null) {
-                storeList[i].cityName = '其他';
-            } else if (storeList[i].cityCode != '' && storeList[i].cityName == '') {
-                cityNameSpaceArr.push({
-                    cityName: '',
-                    cityId: storeList[i].cityCode,
-                });
-            }
-        }
-        for (let i = 0; i < cityNameSpaceArr.length; i++) {
-            for (let j = 0; j < storeList.length; j++) {
-                if (cityNameSpaceArr[i].cityId == storeList[j].cityCode && storeList[j].cityName != '') {
-                    cityNameSpaceArr[i].cityName = storeList[j].cityName;
-                }
-            }
-        }
-        for (let i = 0; i < cityNameSpaceArr.length; i++) {
-            for (let j = 0; j < storeList.length; j++) {
-                if (cityNameSpaceArr[i].cityId == storeList[j].cityCode && storeList[j].cityName == '') {
-                    storeList[j].cityName = cityNameSpaceArr[i].cityName
-                }
-            }
-        }
-        this.cityStoreList = FunctionUtil.getCityListStore(storeList);
-        this.changeAllData();//获取到所有的门店ID及其num
 
         this.formData = {
             categoryInfor: [ null, [ Validators.required ] ],
@@ -119,27 +71,41 @@ export class AddNewProductComponent implements OnInit {
         };
         this.form = this.fb.group(self.formData);
         this.getCategoryListInfor();//获取商品分类信息
-
-        if(this.productId){
-            this.titleSrv.setTitle('编辑商品');
-            this.getProductDetailInfor();//查看商品详情
-        }else {
-            this.titleSrv.setTitle('新增商品');
-            for (let i = 0; i < this.cityStoreList.length; i++) {
-                for (let j = 0; j < this.cityStoreList[i].stores.length; j++) {
-                    if (this.cityStoreList[i].stores[j].change == true) {
-                        this.selectStoresIds += ',' + this.cityStoreList[i].stores[j].storeId
-                    }
-                }
-            }
-            if (this.selectStoresIds) {
-                this.selectStoresIds = this.selectStoresIds.substring(1);
-                this.storesChangeNum = this.selectStoresIds.split(',').length;
-            }
-        }
     }
 
-    //选择弹框
+    //获取门店数据
+    storeListPush(event){
+      this.cityStoreList = event.storeList? event.storeList : [];
+      let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+        JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+      this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
+      this.storeId = UserInfo.staffType === "MERCHANT"? '' : this.cityStoreList[0].storeId;
+
+      if(this.productId){
+        this.titleSrv.setTitle('编辑商品');
+        this.getProductDetailInfor();//查看商品详情
+      }else {
+        this.titleSrv.setTitle('新增商品');
+        for (let i = 0; i < this.cityStoreList.length; i++) {
+          for (let j = 0; j < this.cityStoreList[i].stores.length; j++) {
+            if (this.cityStoreList[i].stores[j].change == true) {
+              this.selectStoresIds += ',' + this.cityStoreList[i].stores[j].storeId
+            }
+          }
+        }
+        if (this.selectStoresIds) {
+          this.selectStoresIds = this.selectStoresIds.substring(1);
+          this.storesChangeNum = this.selectStoresIds.split(',').length;
+        }
+      }
+    }
+
+    //获取门店总数量
+    getAllStoresNum(event){
+      this.allStoresNum = event.allStoresNum? event.allStoresNum : 0;
+    }
+
+   //选择弹框
     onSelectAlertBtn(tpl: any, text: string, type: string){
         let self = this;
         if(type === 'CUSTOMIZE'){

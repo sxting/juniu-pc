@@ -32,6 +32,8 @@ import { UploadImageComponent } from '@shared/upload-img/upload-img.component';
 import { StoresInforService } from '@shared/stores-infor/shared/stores-infor.service';
 import { UploadService } from '@shared/upload-img';
 import { StoresInforComponent } from '@shared/stores-infor/stores-infor.component';
+import { StoresTransforComponent } from '@shared/stores-transfor/stores-transfor.component';
+import { StoresTransforService } from '@shared/stores-transfor/shared/stores-transfor.service';
 
 const THIRDMODULES = [
   NgZorroAntdModule,
@@ -47,7 +49,8 @@ const JUNIUMODULES = [
   SelectTransferComponent,
   UploadImageComponent,
   StoresInforComponent,
-  StoreComponent
+  StoreComponent,
+  StoresTransforComponent
 ];
 // endregion
 
@@ -93,8 +96,9 @@ const DIRECTIVES = [];
     ...COMPONENTS,
     ...DIRECTIVES,
     ...JUNIUMODULES,
-    ImageShowPipe
+    ImageShowPipe,
+
   ],
-  providers: [UploadService, ManageService, OrderService, MarketingService,StoresInforService],
+  providers: [UploadService, ManageService, OrderService, MarketingService,StoresInforService,StoresTransforService],
 })
 export class SharedModule {}

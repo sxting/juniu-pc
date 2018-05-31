@@ -2,6 +2,7 @@
   实体商品为店内售卖的实物商品，比如“洗发水、精油”等。
 </page-header>
 <nz-card [nzBordered]="false">
+  <jn-stores-transfor [moduleId]="moduleId" (storeListPush)="storeListPush($event)" (allStoresNumPush)="getAllStoresNum($event)"></jn-stores-transfor>
   <form nz-form [formGroup]="form" (ngSubmit)="submit()">
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="categoryId">商品分类</nz-form-label>
@@ -16,7 +17,7 @@
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="productName">商品名称</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <input nz-input formControlName="productName" id="productName" placeholder="请输入商品名称">
+        <input nz-input formControlName="productName" maxlength="20" autocomplete="off" id="productName" placeholder="请输入商品名称">
         <nz-form-explain class="errorTips"  *ngIf="form.get('productName').dirty && form.get('productName').errors">商品名称不可为空</nz-form-explain>
       </nz-form-control>
     </nz-form-item>
@@ -30,14 +31,14 @@
         </em>
       </nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <input maxlength="10" nz-input formControlName="productNo" id="productNo" placeholder="请输入1-10位商品编号">
+        <input maxlength="6" nz-input formControlName="productNo" autocomplete="off" id="productNo" placeholder="请输入1-10位商品编号">
         <nz-form-explain class="errorTips"  *ngIf="form.get('productNo').dirty && form.get('productNo').errors">商品编号只能为数字</nz-form-explain>
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="currentPrice">售价(元)</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <input nz-input formControlName="currentPrice" id="currentPrice" placeholder="请输入商品价格">
+        <input nz-input formControlName="currentPrice" autocomplete="off" id="currentPrice" placeholder="请输入商品价格">
         <ng-container *ngIf="currentPrice.dirty || currentPrice.touched">
           <nz-form-explain class="errorTips" *ngIf="currentPrice.errors?.required">商品售价不可为空</nz-form-explain>
           <nz-form-explain class="errorTips" *ngIf="currentPrice.errors?.pattern">商品售价只能是整数或者带有两位小数的数字</nz-form-explain>
@@ -47,7 +48,7 @@
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="stock">库存</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <input nz-input formControlName="stock" id="stock" placeholder="请输入商品库存">
+        <input maxlength="8" nz-input formControlName="stock" autocomplete="off" id="stock" placeholder="请输入商品库存">
         <ng-container *ngIf="stock.dirty || stock.touched">
           <nz-form-explain class="errorTips" *ngIf="stock.errors?.required">商品库存不可为空</nz-form-explain>
           <nz-form-explain class="errorTips" *ngIf="stock.errors?.pattern">商品库存只能是正整数</nz-form-explain>

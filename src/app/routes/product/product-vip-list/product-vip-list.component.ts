@@ -3,9 +3,7 @@ import { _HttpClient } from '@delon/theme';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ProductService } from "../shared/product.service";
 import { Router, ActivatedRoute } from '@angular/router';
-import { FunctionUtil } from "../../../shared/funtion/funtion-util";
 import { LocalStorageService } from "@shared/service/localstorage-service";
-import { STORES_DOWN } from '@shared/define/juniu-define';
 
 @Component({
   selector: 'app-product-vip-list',
@@ -16,7 +14,6 @@ export class ProductVipListComponent implements OnInit {
     //选择商品状态 (0: 下架、1: 上架)
     statusFlag: string = '1';
     theadName: any[] = ['卡类型', '卡名称', '卡权益', '售价(元)', '操作'];
-    // region: cateogry
     categories = [
         { id: 0, text: '全部会员卡', value: true ,type:''},
         { id: 1, text: '折扣卡', value: false, type:'REBATE'},
@@ -33,7 +30,7 @@ export class ProductVipListComponent implements OnInit {
     loading = false;//加载loading
     storeId: string;
     moduleId: string;
-    timestamp: any = new Date().getTime();//当前时间的时间戳
+    storeList: any[] = [];
 
     /**
      * 请求体
@@ -58,27 +55,18 @@ export class ProductVipListComponent implements OnInit {
 
 
     ngOnInit() {
-
-        this.moduleId = this.route.snapshot.params['menuId'];
-        this.getStoresInfor();
-        let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
-            JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
-        this.storeId = UserInfo.staffType === 'MERCHANT'? '' : UserInfo.stores[0].storeId;
-
-        this.batchQuery.storeId = this.storeId;
-        //获取会员列表
-        this.configlistHttp(this.batchQuery);
+        this.moduleId = this.route.snapshot.params['menuId'];//门店
+        this.getStoresInfor();//门店
     }
-
 
     //新增卡规则
     addNewCardRules(){
-        this.router.navigate(['/product/add/new/card/rules']);
+        this.router.navigate(['/product/add/new/card/rules',{ menuId: this.moduleId }]);
     }
 
     //查看详情
     checkDetailInfor(ids: string, type: string){
-        this.router.navigate(['/product/check/vipcard/detailinfor', { configId: ids, cardType: type }]);
+        this.router.navigate(['/product/check/vipcard/detailinfor', { configId: ids, cardType: type, menuId: this.moduleId}]);
     }
 
     //上下架商品获取
@@ -124,7 +112,6 @@ export class ProductVipListComponent implements OnInit {
 
     //选择卡类型
     changeCategory(status: boolean, idx: number, type: string) {
-        console.log(type);
         this.type = type;
         this.categories.forEach((element: any, index: number, array: any) => {
             element.value = false;
@@ -170,28 +157,32 @@ export class ProductVipListComponent implements OnInit {
 
     //门店初始化
     getStoresInfor() {
-    let self = this;
-    let data = {
-      moduleId: this.moduleId,
-      timestamp: this.timestamp
-    };
-    this.productService.selectStores(data).subscribe(
-      (res: any) => {
-        if (res.success) {
-          let storeList = res.data.items;
-          console.log(storeList);
-          this.localStorageService.setLocalstorage(STORES_DOWN, JSON.stringify(storeList));
-        } else {
-          this.modalSrv.error({
-            nzTitle: '温馨提示',
-            nzContent: res.errorInfo
-          });
+      let self = this;
+      let data = {
+        moduleId: this.moduleId,
+        timestamp: new Date().getTime()
+      };
+      this.productService.selectStores(data).subscribe(
+        (res: any) => {
+          if (res.success) {
+            this.storeList = res.data.items;
+            let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+              JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+            this.storeId = UserInfo.staffType === "MERCHANT"? '' : this.storeList[0].storeId;
+            this.batchQuery.storeId = this.storeId;
+            //获取会员列表
+            this.configlistHttp(this.batchQuery);
+          } else {
+            this.modalSrv.error({
+              nzTitle: '温馨提示',
+              nzContent: res.errorInfo
+            });
+          }
+        },
+        error => {
+          this.msg.warning(error);
         }
-      },
-      error => {
-        this.msg.warning(error);
-      }
-    );
-  }
+      );
+    }
 
 }

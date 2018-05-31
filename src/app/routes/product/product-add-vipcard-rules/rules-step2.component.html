@@ -2,7 +2,7 @@
     <nz-form-item>
         <nz-form-label nzSpan="5" nzRequired>售价(元)</nz-form-label>
         <nz-form-control nzSpan="19">
-        <input maxlength="10" nz-input formControlName="pay_account" id="pay_account" placeholder="请输入卡售价">
+        <input maxlength="10" nz-input formControlName="pay_account" autocomplete="off" id="pay_account" placeholder="请输入卡售价">
             <ng-container *ngIf="pay_account.dirty || pay_account.touched">
                 <nz-form-explain class="errorTips" *ngIf="pay_account.errors?.required">卡售价不可为空</nz-form-explain>
                 <nz-form-explain class="errorTips" *ngIf="pay_account.errors?.pattern">卡售价只能是整数或者带有两位小数的数字</nz-form-explain>
@@ -12,7 +12,7 @@
     <nz-form-item>
         <nz-form-label nzSpan="5" nzRequired nzFor="amount">{{showText}}</nz-form-label>
         <nz-form-control nzSpan="19">
-            <input maxlength="10" nz-input formControlName="amount" id="amount" [placeholder]="placeholder" (change)="changeAmount()">
+            <input maxlength="10" nz-input formControlName="amount" id="amount" autocomplete="off" [placeholder]="placeholder" (change)="changeAmount()">
             <!--储值卡-->
             <p class="tips-box" *ngIf="cardType === 'STORED' && form.value.amount && ifShow">
                 <span>充{{form.value.pay_account}}送{{giveMoney}}</span>
