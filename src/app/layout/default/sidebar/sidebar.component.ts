@@ -26,7 +26,7 @@ export class SidebarComponent {
     this.manageService.menuRoute({ menuId: menuId ,timestamp:new Date().getTime()}).subscribe(
       (res: any) => {
         if (res.success) {
-          this.router.navigate([res.data.eventRoute, { storeId: '' }]);
+          this.router.navigate([res.data.eventRoute, { menuId: menuId }]);
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',
