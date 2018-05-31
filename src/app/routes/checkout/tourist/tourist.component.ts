@@ -175,6 +175,7 @@ export class TouristComponent implements OnInit {
             i.assign = 0;
         })
 
+        console.log(that.xfList);
         that.totolMoneyFun();
     }
     selectStoreInfo(event: any) {
@@ -213,24 +214,28 @@ export class TouristComponent implements OnInit {
             //每个卡的余额
             this.vipCardListfun();
 
-            if (that.xfList) {
+            if (that.xfList&&that.xfList.length>0) {
                 that.xfList.forEach(function (i: any) {
                     i.totoleMoney = NP.round(NP.times(NP.divide(i.currentPrice, 100), i.num, NP.divide(i.discount, 100)), 2);
                     that.totolMoney = NP.round(NP.plus(that.totolMoney, NP.times(NP.divide(i.currentPrice, 100), i.num, NP.divide(i.discount, 100))), 2);
                     that.isVerbMoney = Math.floor(that.totolMoney);
                 })
+                //标注每个卡对应的总计减免
+                this.vipMoneyFun()
+                this.balanceFun();
+                that.productIdsFun(that.xfList);
+                ticketM = that.ticketCheck ? (that.ticket && that.xfList.length > 0 ? that.ticket.ticketMoney : 0) : 0;
+                that.totolMoney = NP.minus(that.totolMoney, ticketM, NP.divide(that.vipShowMoney, 100))
+                that.isVerbMoney = NP.minus(that.isVerbMoney, ticketM, NP.divide(that.vipShowMoney, 100))
+                that.totolMoney = that.totolMoney < 0 ? 0 : that.totolMoney;
+                that.isVerbMoney = that.isVerbMoney < 0 ? 0 : Math.floor(that.isVerbMoney);
+            } else {
+                that.totolMoney = that.inputValue;
+                that.isVerbMoney = Math.floor(that.inputValue);
             }
-            //标注每个卡对应的总计减免
-            this.vipMoneyFun()
-            this.balanceFun();
-            that.productIdsFun(that.xfList);
-            ticketM = that.ticketCheck ? (that.ticket && that.xfList.length > 0 ? that.ticket.ticketMoney : 0) : 0;
-            that.totolMoney = NP.minus(that.totolMoney, ticketM, NP.divide(that.vipShowMoney, 100))
-            that.isVerbMoney = NP.minus(that.isVerbMoney, ticketM, NP.divide(that.vipShowMoney, 100))
-            that.totolMoney = that.totolMoney < 0 ? 0 : that.totolMoney;
-            that.isVerbMoney = that.isVerbMoney < 0 ? 0 : Math.floor(that.isVerbMoney);
             that.inputValue = that.isVerb ? that.isVerbMoney : that.totolMoney;
             that.inputValue = that.inputValue.toFixed(2);
+
         } else {
             if (that.xfCardList) {
                 this.vipCardmoney = NP.divide(that.xfCardList.rules[that.xfCardList.ruleIndex].price, 100);
@@ -250,6 +255,13 @@ export class TouristComponent implements OnInit {
     //标注每个卡对应的总计减免
     vipMoneyFun() {
         let that = this;
+        if (!that.memberInfo) {
+            that.xfList.forEach(function (i: any) {
+                delete i.vipCard;
+                delete i.vipCardList;
+                delete i.vipMoney;
+            })
+        }
         if (that.xfList) {
             that.xfList.forEach(function (i: any) {
                 if (that.vipCardList && i.vipCard) {
@@ -334,7 +346,6 @@ export class TouristComponent implements OnInit {
     //抹零
     moling() {
         this.isVerb = !this.isVerb;
-        this.isVerbMoney = Math.floor(this.totolMoney);
         this.totolMoneyFun();
     }
     //补差价操作
@@ -570,8 +581,8 @@ export class TouristComponent implements OnInit {
                 let orderItem = {
                     productId: i.productId,
                     typeName: 'productOrderItem', //商品订单固定值
-                    originalPrice: i.originalPrice,
-                    price: i.price,
+                    originalPrice: i.currentPrice,
+                    price: i.currentPrice,
                     productName: i.productName,
                     rebate: i.discount,  //折扣
                     storeId: that.storeId,
@@ -1116,7 +1127,7 @@ export class TouristComponent implements OnInit {
     //匹配会员卡
     vipCardSearchFun() {
         let that = this;
-        if (that.xfList && that.yjcardList) {
+        if (that.xfList && that.yjcardList && that.memberInfo) {
             if (that.xfList.length > 0 && that.yjcardList.length > 0) {
                 //每个商品对应的会员卡,都存在商品的卡列表里
                 that.xfList.forEach(function (i: any) {
