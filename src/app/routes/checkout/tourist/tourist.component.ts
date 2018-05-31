@@ -212,9 +212,7 @@ export class TouristComponent implements OnInit {
             if (!this.cardChangeBoolean) this.vipCardSearchFun();
             //每个卡的余额
             this.vipCardListfun();
-            //标注每个卡对应的总计减免
-            this.vipMoneyFun()
-            this.balanceFun();
+
             if (that.xfList) {
                 that.xfList.forEach(function (i: any) {
                     i.totoleMoney = NP.round(NP.times(NP.divide(i.currentPrice, 100), i.num, NP.divide(i.discount, 100)), 2);
@@ -222,6 +220,9 @@ export class TouristComponent implements OnInit {
                     that.isVerbMoney = Math.floor(that.totolMoney);
                 })
             }
+            //标注每个卡对应的总计减免
+            this.vipMoneyFun()
+            this.balanceFun();
             that.productIdsFun(that.xfList);
             ticketM = that.ticketCheck ? (that.ticket && that.xfList.length > 0 ? that.ticket.ticketMoney : 0) : 0;
             that.totolMoney = NP.minus(that.totolMoney, ticketM, NP.divide(that.vipShowMoney, 100))
@@ -229,6 +230,7 @@ export class TouristComponent implements OnInit {
             that.totolMoney = that.totolMoney < 0 ? 0 : that.totolMoney;
             that.isVerbMoney = that.isVerbMoney < 0 ? 0 : Math.floor(that.isVerbMoney);
             that.inputValue = that.isVerb ? that.isVerbMoney : that.totolMoney;
+            that.inputValue = that.inputValue.toFixed(2);
         } else {
             if (that.xfCardList) {
                 this.vipCardmoney = NP.divide(that.xfCardList.rules[that.xfCardList.ruleIndex].price, 100);
@@ -253,10 +255,10 @@ export class TouristComponent implements OnInit {
                 if (that.vipCardList && i.vipCard) {
                     that.vipCardList.forEach(function (k: any) {
                         if (k.card.cardId === i.vipCard.card.cardId && k.checked) {
-                            if (i.vipCard.card.type === "TIMES") { i.vipMoney = NP.times(i.currentPrice, i.num) }
-                            else if (i.vipCard.card.type === "METERING") { i.vipMoney = NP.times(i.currentPrice, i.num) }
-                            else if (i.vipCard.card.type === "REBATE") { i.vipMoney = NP.times(i.currentPrice, (1 - NP.divide(i.vipCard.card.rebate, 10)), i.num); }
-                            else if (i.vipCard.card.type === "STORED") { i.vipMoney = NP.times(i.currentPrice, i.num) }
+                            if (i.vipCard.card.type === "TIMES") { i.vipMoney = NP.times(NP.times(i.totoleMoney, 100), i.num) }
+                            else if (i.vipCard.card.type === "METERING") { i.vipMoney = NP.times(NP.times(i.totoleMoney, 100), i.num) }
+                            else if (i.vipCard.card.type === "REBATE") { i.vipMoney = NP.times(NP.times(i.totoleMoney, 100), (1 - NP.divide(i.vipCard.card.rebate, 10)), i.num); }
+                            else if (i.vipCard.card.type === "STORED") { i.vipMoney = NP.times(NP.times(i.totoleMoney, 100), i.num) }
                         } else if (k.card.cardId === i.vipCard.card.cardId && !k.checked) {
                             i.vipMoney = 0;
                         }
@@ -340,7 +342,7 @@ export class TouristComponent implements OnInit {
         let that = this;
         this.modalSrv.confirm({
             nzTitle: '温馨提示',
-            nzContent: '会员卡' + that.vipMoneyName + '余额不足' + that.vipMoney / 100,
+            nzContent: '会员卡' + that.vipMoneyName + '余额不足' + NP.divide(that.vipMoney, 100),
             nzOkText: '前往充值',
             nzCancelText: '现金补差价',
             nzOnOk: () => {
@@ -350,7 +352,7 @@ export class TouristComponent implements OnInit {
             },
             nzOnCancel: () => {
                 that.modalSrv.create({
-                    nzTitle: `收款金额：${money}元,并补现金差价${that.vipMoney / 100 * -1}`,
+                    nzTitle: `收款金额：${money}元,并补现金差价${NP.times(NP.divide(that.vipMoney, 100), -1)}`,
                     nzContent: tpl,
                     nzWidth: '520px',
                     nzFooter: null,
@@ -1133,10 +1135,18 @@ export class TouristComponent implements OnInit {
                 that.xfList.forEach(function (i: any) {
                     if (i.vipCardList) {
                         for (let n = 0; n < i.vipCardList.length; n++) {
-                            if (i.vipCardList[n].card.type === 'TIMES') i.vipCard = i.vipCardList[n];
-                            if (i.vipCardList[n].card.type === 'METERING' && (i.vipCard ? i.vipCard.type === 'TIMES' : true)) i.vipCard = i.vipCardList[n];
-                            if (i.vipCardList[n].card.type === 'REBATE' && (i.vipCard ? (i.vipCard.type === 'TIMES' && i.vipCard.type === 'METERING') : true)) i.vipCard = i.vipCardList[n];
-                            if (i.vipCardList[n].card.type === 'STORED' && (i.vipCard ? (i.vipCard.type === 'TIMES' && i.vipCard.type === 'METERING' && i.vipCard.type === 'REBATE') : true)) i.vipCard = i.vipCardList[n];
+                            if (i.vipCardList[n].card.type === 'TIMES') {
+                                i.vipCard = i.vipCardList[n];
+                            }
+                            if (i.vipCardList[n].card.type === 'METERING' && (i.vipCard ? i.vipCard.card.type !== 'TIMES' : true)) {
+                                i.vipCard = i.vipCardList[n];
+                            }
+                            if (i.vipCardList[n].card.type === 'REBATE' && (i.vipCard ? (i.vipCard.card.type !== 'TIMES' && i.vipCard.card.type !== 'METERING') : true)) {
+                                i.vipCard = i.vipCardList[n];
+                            }
+                            if (i.vipCardList[n].card.type === 'STORED' && (i.vipCard ? (i.vipCard.card.type !== 'TIMES' && i.vipCard.card.type !== 'METERING' && i.vipCard.card.type !== 'REBATE') : true)) {
+                                i.vipCard = i.vipCardList[n];
+                            }
                         }
                     }
                     //把每个商品筛选出来的最优会员卡汇集到一个数组里
