@@ -9,7 +9,7 @@
     </div>
 
   </div>
-  <nz-table #basicTable [nzShowPagination]="false" [nzData]="storeInfos">
+  <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="storeInfos">
     <thead>
       <tr>
         <th>门店编号</th>

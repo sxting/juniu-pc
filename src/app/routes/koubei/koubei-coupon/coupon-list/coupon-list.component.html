@@ -4,7 +4,7 @@
     <li [class.btns_active]="statusFlag == 0" (click)="onStatusClick(0)">已结束</li>
 </ul>
 <div class="table_data clearfix">
-    <nz-table #nzTable [nzData]="activityInfos" [nzShowPagination]="false">
+    <nz-table [nzNoResult]="'没有数据'" #nzTable [nzData]="activityInfos" [nzShowPagination]="false">
         <thead class="ui-grid-thead">
         <tr>
             <th class="">序号</th>

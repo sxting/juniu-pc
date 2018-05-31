@@ -480,7 +480,7 @@
     </div>
     <div class="viplist">
       <h3 class="flex-1 text-lg borderLeft">会员累计消费金额</h3>
-      <nz-table #basicTable [nzShowPagination]="false" [nzData]="data">
+      <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="data">
         <thead>
           <tr>
             <th>消费时间</th>
@@ -589,7 +589,7 @@
 
 
 <ng-template #guadanAlert>
-  <nz-table [nzShowPagination]="false" [nzData]="guadanList">
+  <nz-table [nzNoResult]="'没有数据'" [nzShowPagination]="false" [nzData]="guadanList">
     <thead>
       <tr>
         <th>挂单时间</th>
@@ -622,7 +622,7 @@
 </ng-template>
 
 <ng-template #shouyinAlert>
-  <nz-table [nzShowPagination]="false" [nzData]="guadanList">
+  <nz-table [nzNoResult]="'没有数据'" [nzShowPagination]="false" [nzData]="guadanList">
     <thead>
       <tr>
         <th>收银时间</th>

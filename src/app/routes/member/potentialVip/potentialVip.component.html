@@ -56,7 +56,7 @@
             </nz-col>
         </nz-row>
     </form>
-    <nz-table #basicTable [nzShowPagination]="false" [nzData]="data">
+    <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="data">
         <thead>
             <tr>
                 <th>会员编号</th>
@@ -98,7 +98,7 @@
 </div>
 <ng-template #modalContent>
     <!-- <nz-form-item> -->
-    <nz-table #basicTable [nzShowPagination]="false" [nzData]="data">
+    <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="data">
         <thead>
             <tr>
                 <th>消费日期</th>

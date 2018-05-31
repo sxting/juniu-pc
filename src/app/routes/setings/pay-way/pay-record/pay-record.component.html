@@ -20,7 +20,7 @@
             <button nz-button class="fix-btn" (click)="goPayWay()">点击修改</button>
         </div>
     </nz-card>
-    <nz-table [nzData]="dataList1" [nzShowPagination]="false">
+    <nz-table [nzNoResult]="'没有数据'" [nzData]="dataList1" [nzShowPagination]="false">
         <thead>
         <tr>
             <th *ngFor="let item of theadName"><span>{{item}}</span></th>
@@ -41,7 +41,7 @@
 <ng-template #alertBox>
     <div class="alert-box">
         <button nz-button [nzType]="'default'" class="excel-btn" (click)="excel()"><span>导出Excel</span></button>
-        <nz-table [nzData]="dataList2" [nzShowPagination]="false">
+        <nz-table [nzNoResult]="'没有数据'" [nzData]="dataList2" [nzShowPagination]="false">
             <thead>
             <tr>
                 <th *ngFor="let item of alertTheadName"><span>{{item}}</span></th>

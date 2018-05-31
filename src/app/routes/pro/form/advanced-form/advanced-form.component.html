@@ -159,7 +159,7 @@
     </nz-row>
   </nz-card>
   <nz-card [nzBordered]="false" nzTitle="成员管理">
-    <nz-table formArrayName="items" [nzData]="items.value" [nzShowPagination]="false">
+    <nz-table [nzNoResult]="'没有数据'" formArrayName="items" [nzData]="items.value" [nzShowPagination]="false">
       <thead>
         <tr>
           <th>成员姓名</th>

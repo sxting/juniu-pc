@@ -15,7 +15,7 @@
         </nz-select>
     </div>
 
-    <nz-table #nzTable [nzData]="craftsmanList" [nzShowPagination]="false">
+    <nz-table [nzNoResult]="'没有数据'" #nzTable [nzData]="craftsmanList" [nzShowPagination]="false">
         <thead>
         <tr>
             <th *ngFor="let item of theadName"><span>{{item}}</span></th>
