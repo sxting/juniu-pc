@@ -226,7 +226,7 @@ export class TouristComponent implements OnInit {
             this.balanceFun();
             that.productIdsFun(that.xfList);
             ticketM = that.ticketCheck ? (that.ticket && that.xfList.length > 0 ? that.ticket.ticketMoney : 0) : 0;
-            that.totolMoney = NP.minus(that.totolMoney, ticketM, NP.divide(that.vipShowMoney, 100))
+            that.totolMoney = that.inputValue?NP.minus(that.totolMoney, ticketM, NP.divide(that.vipShowMoney, 100)):that.inputValue
             that.isVerbMoney = NP.minus(that.isVerbMoney, ticketM, NP.divide(that.vipShowMoney, 100))
             that.totolMoney = that.totolMoney < 0 ? 0 : that.totolMoney;
             that.isVerbMoney = that.isVerbMoney < 0 ? 0 : Math.floor(that.isVerbMoney);
