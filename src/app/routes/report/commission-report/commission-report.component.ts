@@ -5,6 +5,7 @@ import { ReportService } from "../shared/report.service";
 import { STORES_INFO } from '@shared/define/juniu-define';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-commission-report',
@@ -59,12 +60,13 @@ export class CommissionReportComponent implements OnInit {
         private http: _HttpClient,
         private modalSrv: NzModalService,
         private reportService: ReportService,
+        private route: ActivatedRoute,
         private localStorageService: LocalStorageService
     ) { }
 
     ngOnInit() {
 
-      this.moduleId = this.route.snapshot.params['moduleId'];
+      this.moduleId = this.route.snapshot.params['menuId'];
       let year = new Date().getFullYear();        //获取当前年份(2位)
       let month = new Date().getMonth()+1;       //获取当前月份(0-11,0代表1月)
       let changemonth = month < 10 ? '0' + month : '' + month;

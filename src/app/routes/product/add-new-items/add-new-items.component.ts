@@ -49,6 +49,7 @@ export class AddNewItemsComponent implements OnInit {
     selectStoresIds: any = ''; //选中的门店
     storesChangeNum: any; //选中门店的个数
     allStoresNum: any;//所有门店的数量
+    moduleId: string;
 
     get categoryInfor() { return this.form.controls.categoryInfor; }
     get currentPrice() { return this.form.controls['currentPrice']; }
@@ -56,6 +57,7 @@ export class AddNewItemsComponent implements OnInit {
 
     ngOnInit() {
         let self = this;
+
         this.merchantId = this.route.snapshot.params['merchantId'] ? this.route.snapshot.params['merchantId'] : FunctionUtil.getUrlString('merchantId');
         this.storeId = this.route.snapshot.params['storeId'] ? this.route.snapshot.params['storeId'] : FunctionUtil.getUrlString('storeId');
         this.productId = this.route.snapshot.params['productId'] ? this.route.snapshot.params['productId'] : FunctionUtil.getUrlString('productId');

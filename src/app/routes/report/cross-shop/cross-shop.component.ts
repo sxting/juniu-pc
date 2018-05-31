@@ -5,6 +5,7 @@ import { ReportService } from "../shared/report.service";
 import { STORES_INFO } from '@shared/define/juniu-define';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-cross-shop',
@@ -54,6 +55,7 @@ export class CrossShopComponent implements OnInit {
         private http: _HttpClient,
         private modalSrv: NzModalService,
         private msg: NzMessageService,
+        private route: ActivatedRoute,
         private reportService: ReportService,
         private localStorageService: LocalStorageService
     ) { }
@@ -79,7 +81,7 @@ export class CrossShopComponent implements OnInit {
 
     ngOnInit() {
 
-        this.moduleId = this.route.snapshot.params['moduleId'];
+      this.moduleId = this.route.snapshot.params['menuId'];
 
         //门店列表
         if (this.localStorageService.getLocalstorage(STORES_INFO) && JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
