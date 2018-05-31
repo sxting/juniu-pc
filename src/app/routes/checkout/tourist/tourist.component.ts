@@ -224,14 +224,14 @@ export class TouristComponent implements OnInit {
             }
             that.productIdsFun(that.xfList);
             ticketM = that.ticketCheck ? (that.ticket && that.xfList.length > 0 ? that.ticket.ticketMoney : 0) : 0;
-            that.totolMoney = NP.minus(that.totolMoney, ticketM, that.vipShowMoney / 100)
-            that.isVerbMoney = NP.minus(that.isVerbMoney, ticketM, that.vipShowMoney / 100)
+            that.totolMoney = NP.minus(that.totolMoney, ticketM, NP.divide(that.vipShowMoney, 100))
+            that.isVerbMoney = NP.minus(that.isVerbMoney, ticketM, NP.divide(that.vipShowMoney, 100))
             that.totolMoney = that.totolMoney < 0 ? 0 : that.totolMoney;
-            that.isVerbMoney = that.isVerbMoney < 0 ? 0 : that.isVerbMoney;
+            that.isVerbMoney = that.isVerbMoney < 0 ? 0 : Math.floor(that.isVerbMoney);
             that.inputValue = that.isVerb ? that.isVerbMoney : that.totolMoney;
         } else {
             if (that.xfCardList) {
-                this.vipCardmoney = that.xfCardList.rules[that.xfCardList.ruleIndex].price / 100;
+                this.vipCardmoney = NP.divide(that.xfCardList.rules[that.xfCardList.ruleIndex].price, 100);
                 this.isVerbVipCardmoney = Math.floor(that.vipCardmoney);
             }
         }
@@ -255,7 +255,7 @@ export class TouristComponent implements OnInit {
                         if (k.card.cardId === i.vipCard.card.cardId && k.checked) {
                             if (i.vipCard.card.type === "TIMES") { i.vipMoney = NP.times(i.currentPrice, i.num) }
                             else if (i.vipCard.card.type === "METERING") { i.vipMoney = NP.times(i.currentPrice, i.num) }
-                            else if (i.vipCard.card.type === "REBATE") { i.vipMoney = NP.times(i.currentPrice, (1-NP.divide(i.vipCard.card.rebate, 10)), i.num); }
+                            else if (i.vipCard.card.type === "REBATE") { i.vipMoney = NP.times(i.currentPrice, (1 - NP.divide(i.vipCard.card.rebate, 10)), i.num); }
                             else if (i.vipCard.card.type === "STORED") { i.vipMoney = NP.times(i.currentPrice, i.num) }
                         } else if (k.card.cardId === i.vipCard.card.cardId && !k.checked) {
                             i.vipMoney = 0;
@@ -333,6 +333,7 @@ export class TouristComponent implements OnInit {
     moling() {
         this.isVerb = !this.isVerb;
         this.isVerbMoney = Math.floor(this.totolMoney);
+        this.totolMoneyFun();
     }
     //补差价操作
     vipMoneyChajiaFun(money: any, tpl: any) {
@@ -540,11 +541,11 @@ export class TouristComponent implements OnInit {
                 orderItem = {
                     cardId: that.xfCardList.cardId,
                     staffId: that.selectedValue1,
-                    typeName: "productOrderItem",
+                    typeName: "cardOrderItem",
                 }
             } else {
                 orderItem = {
-                    typeName: 'productOrderItem',
+                    typeName: 'cardOrderItem',
                     cardConfigId: that.xfCardList.cardConfigId,
                     cardConfigName: that.xfCardList.cardConfigName,
                     cardConfigType: that.xfCardList.type,
@@ -566,7 +567,7 @@ export class TouristComponent implements OnInit {
             that.xfList.forEach(function (i: any) {
                 let orderItem = {
                     productId: i.productId,
-                    typeName: 'cardOrderItem', //商品订单固定值
+                    typeName: 'productOrderItem', //商品订单固定值
                     originalPrice: i.originalPrice,
                     price: i.price,
                     productName: i.productName,
@@ -1043,7 +1044,7 @@ export class TouristComponent implements OnInit {
                         if (res.success) {
                             this.modalSrv.closeAll();
                             this.modalSrv.success({
-                                nzTitle : '修改成功'
+                                nzTitle: '修改成功'
                             });
                         } else {
                             this.errorAlter(res.errorInfo)
@@ -1061,7 +1062,7 @@ export class TouristComponent implements OnInit {
                         if (res.success) {
                             this.modalSrv.closeAll();
                             this.modalSrv.success({
-                                nzTitle : '新增会员成功'
+                                nzTitle: '新增会员成功'
                             });
                         } else {
                             this.errorAlter(res.errorInfo)
