@@ -175,6 +175,7 @@ export class TouristComponent implements OnInit {
             i.assign = 0;
         })
 
+        console.log(that.xfList);
         that.totolMoneyFun();
     }
     selectStoreInfo(event: any) {
@@ -250,6 +251,13 @@ export class TouristComponent implements OnInit {
     //标注每个卡对应的总计减免
     vipMoneyFun() {
         let that = this;
+        if (!that.memberInfo) {
+            that.xfList.forEach(function (i: any) {
+                delete i.vipCard;
+                delete i.vipCardList;
+                delete i.vipMoney;
+            })
+        }
         if (that.xfList) {
             that.xfList.forEach(function (i: any) {
                 if (that.vipCardList && i.vipCard) {
@@ -570,8 +578,8 @@ export class TouristComponent implements OnInit {
                 let orderItem = {
                     productId: i.productId,
                     typeName: 'productOrderItem', //商品订单固定值
-                    originalPrice: i.originalPrice,
-                    price: i.price,
+                    originalPrice: i.currentPrice,
+                    price: i.currentPrice,
                     productName: i.productName,
                     rebate: i.discount,  //折扣
                     storeId: that.storeId,
@@ -1116,7 +1124,7 @@ export class TouristComponent implements OnInit {
     //匹配会员卡
     vipCardSearchFun() {
         let that = this;
-        if (that.xfList && that.yjcardList) {
+        if (that.xfList && that.yjcardList&&that.memberInfo) {
             if (that.xfList.length > 0 && that.yjcardList.length > 0) {
                 //每个商品对应的会员卡,都存在商品的卡列表里
                 that.xfList.forEach(function (i: any) {
