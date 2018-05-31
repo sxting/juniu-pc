@@ -5,6 +5,7 @@ import { ProductService } from "../shared/product.service";
 import { Router, ActivatedRoute } from '@angular/router';
 import { FunctionUtil } from "../../../shared/funtion/funtion-util";
 import { LocalStorageService } from "@shared/service/localstorage-service";
+import { STORES_DOWN } from '@shared/define/juniu-define';
 
 @Component({
   selector: 'app-product-vip-list',
@@ -31,6 +32,8 @@ export class ProductVipListComponent implements OnInit {
     totalElements: any = 0;//商品总数
     loading = false;//加载loading
     storeId: string;
+    moduleId: string;
+    timestamp: any = new Date().getTime();//当前时间的时间戳
 
     /**
      * 请求体
@@ -47,6 +50,7 @@ export class ProductVipListComponent implements OnInit {
         private http: _HttpClient,
         private modalSrv: NzModalService,
         private router: Router,
+        private route: ActivatedRoute,
         private msg: NzMessageService,
         private localStorageService: LocalStorageService,
         private productService: ProductService
@@ -55,6 +59,8 @@ export class ProductVipListComponent implements OnInit {
 
     ngOnInit() {
 
+        this.moduleId = this.route.snapshot.params['menuId'];
+        this.getStoresInfor();
         let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
             JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
         this.storeId = UserInfo.staffType === 'MERCHANT'? '' : UserInfo.stores[0].storeId;
@@ -161,5 +167,31 @@ export class ProductVipListComponent implements OnInit {
             }
         );
     }
+
+    //门店初始化
+    getStoresInfor() {
+    let self = this;
+    let data = {
+      moduleId: this.moduleId,
+      timestamp: this.timestamp
+    };
+    this.productService.selectStores(data).subscribe(
+      (res: any) => {
+        if (res.success) {
+          let storeList = res.data.items;
+          console.log(storeList);
+          this.localStorageService.setLocalstorage(STORES_DOWN, JSON.stringify(storeList));
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      },
+      error => {
+        this.msg.warning(error);
+      }
+    );
+  }
 
 }
