@@ -433,7 +433,7 @@
         </div>
         <div nz-col nzSpan="12">
           <div nz-col nzSpan="6">持卡:</div>
-          <div nz-col nzSpan="18">{{vipData?.cardApplies?vipData?.cardApplies.length:0}}张</div>
+          <div nz-col nzSpan="18">{{vipData1?.cardApplies?vipData1?.cardApplies.length:0}}张</div>
         </div>
       </div>
       <div>
@@ -443,7 +443,7 @@
         </div>
         <div nz-col nzSpan="12">
           <div nz-col nzSpan="6">累计消费金额:</div>
-          <div nz-col nzSpan="18">{{vipData?.allPay/100}}元</div>
+          <div nz-col nzSpan="18">{{vipData1?.allPay/100}}元</div>
         </div>
       </div>
     </div>
@@ -451,13 +451,13 @@
       <h3 class="flex-1 text-lg borderLeft">会员卡</h3>
 
       <div class="CardBigBox">
-        <div *ngFor="let item of cardList;let ind1 = index;" class="{{item.type}} ">
-          <p class="cardName">{{item.cardName}}</p>
+        <div *ngFor="let item of yjcardList;let ind1 = index;" class="{{item.card.type}} ">
+          <p class="cardName">{{item.card.cardName}}</p>
           <p class="cardMoney">卡余额：
-            <span class="money">{{item.balance/100}}</span>
-            <span *ngIf="item.type === 'REBATE'||item.type === 'STORED'">元</span>
-            <span *ngIf="item.type === 'METERING'">次</span>
-            <span *ngIf="item.type === 'TIMES'">天</span>
+            <span class="money">{{item.card.balance/100}}</span>
+            <span *ngIf="item.card.type === 'REBATE'||item.card.type === 'STORED'">元</span>
+            <span *ngIf="item.card.type === 'METERING'">次</span>
+            <span *ngIf="item.card.type === 'TIMES'">天</span>
           </p>
         </div>
       </div>
@@ -547,7 +547,7 @@
     <div class="lineHeight50 formItemBorder">
       <nz-form-label style="text-align:left;" nzSpan="6">顾客电话</nz-form-label>
       <nz-form-control nzSpan="18">
-        <input type="text" [(ngModel)]="vipphone" nz-input placeholder="请输入顾客电话">
+        <input type="text" [(ngModel)]="vipphone" maxlength="11" nz-input placeholder="请输入顾客电话">
       </nz-form-control>
     </div>
   </nz-form-item>
@@ -555,7 +555,7 @@
     <div class="lineHeight50 formItemBorder">
       <nz-form-label style="text-align:left;" nzSpan="6">顾客姓名</nz-form-label>
       <nz-form-control nzSpan="18">
-        <input type="text" [(ngModel)]="vipname" nz-input placeholder="请输入顾客姓名">
+        <input type="text" [(ngModel)]="vipname" maxlength="10" nz-input placeholder="请输入顾客姓名">
       </nz-form-control>
     </div>
   </nz-form-item>

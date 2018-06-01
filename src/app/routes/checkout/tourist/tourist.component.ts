@@ -73,6 +73,7 @@ export class TouristComponent implements OnInit {
             list: []
         }
     ];
+    vipData1: any;
     tabs = [
         {
             name: "扫码收款",
@@ -116,6 +117,7 @@ export class TouristComponent implements OnInit {
     shopyinList: any;
     pageSize: any = 10
     vipdate: any;
+    settleCardDTOList: any;
     constructor(
         public msg: NzMessageService,
         private localStorageService: LocalStorageService,
@@ -372,18 +374,22 @@ export class TouristComponent implements OnInit {
     jiesuan(tpl: TemplateRef<{}>) {
         let money = this.changeType ? (this.inputValue) : (this.isVerb2 ? this.isVerbVipCardmoney : this.vipCardmoney);
         let that = this;
-        console.log(that.xfList);
+        this.tanchuang();
         this.cardChangeBoolean = false;
         if (this.vipMoney < 0) {
             this.vipMoneyChajiaFun(money, tpl);
         } else {
-            this.modalSrv.create({
-                nzTitle: `收款金额：${money}元`,
-                nzContent: tpl,
-                nzWidth: '520px',
-                nzFooter: null,
-                nzOkText: null
-            });
+            if (this.settleCardDTOList && this.settleCardDTOList.length > 0) {
+                this.jiesuanFun();
+            } else {
+                this.modalSrv.create({
+                    nzTitle: `收款金额：${money}元`,
+                    nzContent: tpl,
+                    nzWidth: '520px',
+                    nzFooter: null,
+                    nzOkText: null
+                });
+            }
         }
 
     }
@@ -445,6 +451,7 @@ export class TouristComponent implements OnInit {
             nzOnOk: () => {
             }
         });
+        this.findByCustomerIdHttp(this.memberInfo.customerId);
     }
     //开通会员
     kaitongVipFun(tpl: TemplateRef<{}>) {
@@ -506,6 +513,33 @@ export class TouristComponent implements OnInit {
             nzTitle: `请引导用户使用${type}付款`,
             nzOnOk: () => console.log('Info OK')
         });
+    }
+    tanchuang() {
+        let settleCardDTOList = [];
+        this.settleCardDTOList = [];
+        let that = this;
+        if (that.vipCardList && that.vipCardList.length > 0) {
+            that.vipCardList.forEach(function (i: any) {
+                let data = {
+                    productIdList: [],
+                    cardId: i.card.cardId,
+                    amount: 0,
+                    type: i.card.type
+                }
+                if (i.checked) settleCardDTOList.push(data)
+            })
+            settleCardDTOList.forEach(function (i: any) {
+                that.xfList.forEach(function (n: any) {
+                    if (n.vipCard && i.cardId === n.vipCard.card.cardId) {
+                        i.productIdList.push(n.productId)
+                        if (i.type === 'TIMES') i.amount = 0;
+                        else if (i.type === 'METERING') i.amount += n.num;
+                        else i.amount += NP.times(n.num, n.totoleMoney);
+                    }
+                })
+            })
+        }
+        this.settleCardDTOList = settleCardDTOList;
     }
     //结算fun
     jiesuanFun(type?: any) {
@@ -1181,6 +1215,7 @@ export class TouristComponent implements OnInit {
     vipDataRadio(ind?: any) {
         let self = this;
         self.yjcardList = this.vipData[this.radioValue].cardApplies;
+        this.vipData1 = this.vipData[this.radioValue];
         if (this.vipData[this.radioValue].customer) {
             self.memberInfo = {
                 customerName: this.vipData[this.radioValue].customer.customerName,
@@ -1325,5 +1360,25 @@ export class TouristComponent implements OnInit {
                 }
             }
         });
+    }
+
+    findByCustomerIdHttp(customerId: any) {
+        let data = {
+            customerId: customerId
+        }
+        this.checkoutService
+            .findByCustomerId(data)
+            .subscribe(
+                (res: any) => {
+                    if (res.success) {
+                        console.log(res.data)
+                    } else {
+                        this.errorAlter(res.errorInfo)
+                    }
+
+                },
+                error => this.errorAlter(error)
+            );
+
     }
 }

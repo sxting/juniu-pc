@@ -158,8 +158,15 @@ export class MemberService {
                 return Observable.throw(error);
             });
     }
-
-
+    //
+    customerOrders(data?: any) {
+        let apiUrl = Config.API + '/order/customerOrders.json';
+        return this.http.get(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
     /**
      * 获取老卡导入卡类型及其卡名称
      **/

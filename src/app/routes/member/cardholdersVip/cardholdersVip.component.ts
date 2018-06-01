@@ -9,6 +9,7 @@ import { tap, map } from 'rxjs/operators';
 import { MemberService } from '../shared/member.service';
 import { Config } from '@shared/config/env.config';
 import { LocalStorageService } from '@shared/service/localstorage-service';
+import { ActivatedRoute } from '@angular/router';
 declare var GoEasy: any;
 
 @Component({
@@ -68,14 +69,16 @@ export class CardholdersVipComponent {
     headUrl: any;
     parm: any;
     modal: any;
-
+    moduleId: any;
     constructor(private http: _HttpClient,
         private modalService: NzModalService,
         public msg: NzMessageService,
         private localStorageService: LocalStorageService,
         private modalSrv: NzModalService,
+        private route: ActivatedRoute,
         private memberService: MemberService) {
         let that = this;
+        this.moduleId = this.route.snapshot.params['menuId'];
         this.customerlistHttp();
         // var goEasy = new GoEasy({
         //     appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
@@ -122,9 +125,11 @@ export class CardholdersVipComponent {
             lastConsumeStart: this.q.dateRange2 ? this.formatDateTime(this.q.dateRange2[0], 'start') : '',
             lastConsumeEnd: this.q.dateRange2 ? this.formatDateTime(this.q.dateRange2[1], 'end') : '',
             consumeMoneyFrom: this.q.money ? this.q.money[0] : '',
-            consumeMoneyTo: this.q.money ? this.q.money[1] : ''
+            consumeMoneyTo: this.q.money ? this.q.money[1] : '',
+            storeId: this.storeId
         }
         if (!this.q.phone) delete data.phone;
+        if (!data.storeId) delete data.storeId;
         if (!this.q.status && this.q.status !== 0) delete data.gender;
         if (!this.q.dateRange1) { delete data.start; delete data.end }
         if (!this.q.dateRange2) { delete data.lastConsumeStart; delete data.lastConsumeEnd }
@@ -208,27 +213,26 @@ export class CardholdersVipComponent {
             }
         )
     }
-    getData(e?:any) {
-        console.log(this.q);
+    getData(e?: any) {
+        this.pageIndex = e;
         this.customerlistHttp();
     }
     getData2(index?: any) {
-        this.pageIndex = index;
-        this.ordersHttp(this.phone, this.storeId);
+        this.pageIndex2 = index;
+        this.ordersHttp(this.customerId);
     }
     checkboxChange(list: SimpleTableData[]) {
         this.selectedRows = list;
         this.totalCallNo = this.selectedRows.reduce((total, cv) => total + cv.callNo, 0);
     }
-    ordersHttp(phone: any, storeId: any) {
+    ordersHttp(customerId: any) {
         let that = this;
         let data = {
             pageIndex: this.pageIndex2,
             pageSize: 10,
-            phone: phone,
-            storeId: storeId
+            customerId: customerId,
         };
-        this.memberService.orders(data).subscribe(
+        this.memberService.customerOrders(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     this.data2 = res.data.orders;
@@ -250,11 +254,10 @@ export class CardholdersVipComponent {
     remove() {
 
     }
-    add(tpl: TemplateRef<{}>, phone: any, storeId: any) {
+    add(tpl: TemplateRef<{}>, phone: any, customerId: any) {
         this.phone = phone;
-        this.storeId = storeId;
-
-        this.ordersHttp(phone, storeId);
+        this.customerId = customerId;
+        this.ordersHttp(this.customerId);
         this.modalSrv.create({
             nzTitle: '消费记录',
             nzContent: tpl,
@@ -290,10 +293,11 @@ export class CardholdersVipComponent {
     bianji(tpl: TemplateRef<{}>, customerId: any, phone: any, storeId: any) {
         this.customerId = customerId;
         this.phone = phone;
-        this.storeId = storeId;
+        this.storeId = storeId
         let that = this;
         let data = {
-            customerId: customerId
+            customerId: customerId,
+            // storeId:storeId
         };
         this.getCustomerhttp(data);
         this.modalSrv.create({
@@ -348,7 +352,10 @@ export class CardholdersVipComponent {
     reset(ls: any[]) {
 
     }
-
+    selectStoreInfo(e) {
+        this.storeId = e;
+        this.customerlistHttp();
+    }
     renlianshibie(tpl: TemplateRef<{}>) {
         this.modalSrv.create({
             nzTitle: '人脸识别录入',
