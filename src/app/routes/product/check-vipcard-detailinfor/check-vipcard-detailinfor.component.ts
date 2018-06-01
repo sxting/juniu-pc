@@ -6,7 +6,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { ProductService } from '../shared/product.service';
-import { CITYLIST } from '@shared/define/juniu-define';
 declare var PhotoClip: any;
 
 @Component({
@@ -60,7 +59,7 @@ export class CheckVipcardDetailinforComponent implements OnInit {
     CardBackGround: any;
     backGroundImg: string = '';//卡面背景图地址
     moduleId: string;
-
+    validateTypeText: string = '';//使用有效期
 
     constructor(
         private http: _HttpClient,
@@ -97,7 +96,7 @@ export class CheckVipcardDetailinforComponent implements OnInit {
 
         this.formData = {
             cardConfigName:[ null, [ Validators.required ] ],
-            validateType: [ self.validateType[0].type, [ Validators.required ] ],
+            validateType: [ 'FOREVER', [ Validators.required ] ],
             validate: [ null , [ ]],
             effectivityDays: [ 1, [ Validators.required, Validators.min(1) ]],
             isPinCard: [ self.isPinCardArr[0].ifPin , [ Validators.required ]],
@@ -195,35 +194,6 @@ export class CheckVipcardDetailinforComponent implements OnInit {
             self.productIds = dataInfor[0];
             this.ifHttps = type;
         }
-    }
-
-    //点击传递有效期限
-    changeData(){
-        let self = this;
-        let cardConfigName = this.form.controls.cardConfigName.value;
-        let validateType = this.form.controls.validateType.value;
-        let isPinCard = this.form.controls.isPinCard.value;
-        let storeIds = this.form.controls.storeIds.value;
-        let productTypes = this.form.controls.productTypes.value;
-        let storeType = this.form.controls.storeType.value;
-
-        if(this.form.controls.validateType.value === 'FOREVER' && this.form.controls.effectivityDays.value == ''){
-            this.formData = {
-                cardConfigName:[ cardConfigName, [ Validators.required ] ],
-                validateType: [ validateType, [ Validators.required ] ],
-                validate: [ '99999999' , [ ]],
-                effectivityDays: [ 1, [ Validators.required, Validators.min(1) ]],
-                isPinCard: [ isPinCard , [ Validators.required ]],
-                productTypes: [ productTypes, [ Validators.required ] ],
-                storeIds: [ storeIds,  [ ]],
-                storeType: [ storeType, [ Validators.required ] ]
-            };
-            this.form = this.fb.group(self.formData);
-        }
-    }
-    checkData(){
-        var reg = /^[1-9]\d*$/;
-        this.ifShowErrorTips = !reg.test(this.form.controls.effectivityDays.value)? false : true ; //判断是否是正整数
     }
 
     //修改卡面图片
@@ -425,7 +395,6 @@ export class CheckVipcardDetailinforComponent implements OnInit {
                     this.backGroundImg = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.backgroundId}/resize_${250}_${150}/mode_fill`;
 
                     let isPinCard = res.data.rules[0].isPinCard === 1? self.isPinCardArr[0].ifPin : self.isPinCardArr[1].ifPin;
-                    let validateType = res.data.rules[0].validateType === 'FOREVER'? self.validateType[0].type : self.validateType[1].type;
                     let validate = res.data.rules[0].validate;
                     let effectivityDays = res.data.rules[0].validateType === 'FOREVER'? 1 : res.data.rules[0].validate;
                     let storeType = res.data.rules[0].applyStoreType === 'ALLSTORES'? self.storeStatus[0].value : self.storeStatus[1].value;
@@ -437,10 +406,12 @@ export class CheckVipcardDetailinforComponent implements OnInit {
                     }else {
                         productTypes = self.productTypesArr[2].value;
                     }
+                    this.validateTypeText = res.data.rules[0].validateType === 'FOREVER'? '永久有效' : '自开卡之日起' +  effectivityDays  + '天内有效';
+
                     this.ifHttps = productTypes;//判断是否是自定义商品,是的话点击的时候不请求数据
                     this.formData = {
                         cardConfigName:[ res.data.cardConfigName, [ Validators.required ] ],
-                        validateType: [ validateType, [ Validators.required ] ],
+                        validateType: [ res.data.rules[0].validateType, [ Validators.required ] ],
                         validate: [ validate , [ ]],
                         effectivityDays: [ effectivityDays, [ Validators.required, Validators.min(1) ]],
                         isPinCard: [ isPinCard , [ Validators.required ]],
@@ -457,7 +428,6 @@ export class CheckVipcardDetailinforComponent implements OnInit {
                     /******* 匹配选中的商品 *********/
                     let applyProductIds = res.data.rules[0].applyProductIds? res.data.rules[0].applyProductIds.split(',') : [];
                     FunctionUtil.getDataChange(this.productListInfor, applyProductIds);//转换后台拿过来的数据
-                    console.log(this.productListInfor);
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',

@@ -252,10 +252,8 @@ export class AddNewStaffComponent implements OnInit {
             (res: any) => {
               self.submitting = false;
               if (res.success) {
-                    setTimeout(() => {
-                        self.msg.success(`员工创建成功`);
-                        self.router.navigate(['/manage/staff/list']);
-                    }, 1000);
+                  self.msg.success(`员工创建成功`);
+                  self.router.navigate(['/manage/staff/list']);
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -276,10 +274,8 @@ export class AddNewStaffComponent implements OnInit {
             (res: any) => {
               self.submitting = false;
               if (res.success) {
-                    setTimeout(() => {
-                        self.msg.success(`改修员工信息成功`);
-                        self.router.navigate(['/manage/staff/list']);
-                    }, 1000);
+                    self.msg.success(`改修员工信息成功`);
+                    self.router.navigate(['/manage/staff/list']);
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',

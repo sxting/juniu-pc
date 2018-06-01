@@ -60,7 +60,7 @@
                 <label nz-radio *ngFor="let list of validateType" [nzValue]="list.type" (click)="changeData()">
                     {{list.name}}
                     <p class="ifshow" *ngIf="list.type === 'days'">
-                        <input style="margin: 0 10px;" nz-input formControlName="effectivityDays" id="effectivityDays" placeholder="请输入天数"/>天内有效
+                        <input style="margin: 0 10px;" maxlength="5" nz-input formControlName="effectivityDays" id="effectivityDays" placeholder="请输入天数"/>天内有效
                     </p>
                 </label>
             </nz-radio-group>

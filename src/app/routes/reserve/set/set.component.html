@@ -107,8 +107,8 @@
         <!--</td>-->
         <td>
           <div class="staff-set-box">
-            <div class="none" *ngIf="craftsman.products.length == 0">暂无可预约商品</div>
-            <div *ngIf="craftsman.products.length > 0" class="staff-set">
+            <div class="none" *ngIf="craftsman?.products && craftsman?.products.length == 0">暂无可预约商品</div>
+            <div *ngIf="craftsman?.products && craftsman?.products.length > 0" class="staff-set">
               <span style="padding: 0 5px;" *ngFor="let product of craftsman.products">{{product.productName}}</span>
             </div>
           </div>

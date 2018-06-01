@@ -179,7 +179,7 @@ export class OrderService {
 
   //预约设置 === 查询门店商品列表
   getProductList(Params: any) {
-    let apiUrl = this.api2 + '/product/list.json';
+    let apiUrl = this.api2 + '/product/products.json';
     return this.http.get(apiUrl, Params)
       .map((response: Response) => response)
       .catch(error => {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { _HttpClient } from '@delon/theme';
+import { _HttpClient, TitleService } from '@delon/theme';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ReportService } from "../shared/report.service";
 import { ActivatedRoute, Router } from '@angular/router';
@@ -45,6 +45,7 @@ export class RevenueReportComponent implements OnInit {
         private modalSrv: NzModalService,
         private reportService: ReportService,
         private router: Router,
+        private titleSrv: TitleService,
         private route: ActivatedRoute,
         private localStorageService: LocalStorageService
     ) { }
@@ -61,6 +62,8 @@ export class RevenueReportComponent implements OnInit {
     };
 
     ngOnInit() {
+
+        this.titleSrv.setTitle('营收报表');
         this.moduleId = this.route.snapshot.params['menuId'];
         let year = new Date().getFullYear();        //获取当前年份(2位)
         let month = new Date().getMonth()+1;       //获取当前月份(0-11,0代表1月)

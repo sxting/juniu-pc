@@ -489,10 +489,11 @@ export class RuleSettingComponent implements OnInit {
   /**新增员工提成规则 */
   addNewStaffingRules(data: any) {
       let self = this;
+      this.submitting = true;
       this.manageService.addNewStaffingRules(data).subscribe(
           (res: any) => {
+              self.submitting = false;
               if (res.success) {
-                self.submitting = false;
                 self.msg.success(`创建成功`);
                 self.router.navigate(['/manage/staff/commission/list']);
               } else {
@@ -511,10 +512,11 @@ export class RuleSettingComponent implements OnInit {
   /***** 修改员工提成规则 */
   editStaffingRules(data: any) {
     let self = this;
+    this.submitting = true;
     this.manageService.editStaffingRules(data).subscribe(
       (res: any) => {
+        self.submitting = false;
         if (res.success) {
-          self.submitting = false;
           self.msg.success(`修改成功`);
           self.router.navigate(['/manage/staff/commission/list']);
         } else {
@@ -561,7 +563,6 @@ export class RuleSettingComponent implements OnInit {
         this.form.controls[ i ].updateValueAndValidity();
       }
       if (this.form.invalid) return;
-      this.submitting = true;
       if(this.ifShowErrorStaffTips && this.ifShowErrorTipsProduct && this.ifShowErrorTipsCard && this.ifShowErrorTipsSevice && this.ifShowErrorRateTips && this.ifShowErrorMoneyips){
         if(this.deductRuleId){//编辑修改
           this.editStaffingRules(dataInfor);

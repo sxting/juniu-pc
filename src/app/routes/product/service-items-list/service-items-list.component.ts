@@ -5,7 +5,6 @@ import { ProductService } from "../shared/product.service";
 import { Router, ActivatedRoute } from '@angular/router';
 import { LocalStorageService} from "@shared/service/localstorage-service";
 import { FunctionUtil } from '@shared/funtion/funtion-util';
-import { STORES_DOWN } from '@shared/define/juniu-define';
 
 
 @Component({
@@ -62,6 +61,7 @@ export class ServiceItemsListComponent implements OnInit {
     };
 
     ngOnInit() {
+        this.titleSrv.setTitle('服务项目');
         this.moduleId = this.route.snapshot.params['menuId'];
         this.getStoresInfor();//门店
     }
