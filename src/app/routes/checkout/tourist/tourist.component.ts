@@ -1361,17 +1361,22 @@ export class TouristComponent implements OnInit {
             }
         });
     }
-
+    pageIndex3: any = 1;
+    Total2:any;
+    CustomerData:any = [];
     findByCustomerIdHttp(customerId: any) {
         let data = {
-            customerId: customerId
+            customerId: customerId,
+            pageIndex: this.pageIndex3,
+            pageSize: 5
         }
         this.checkoutService
-            .findByCustomerId(data)
+            .customerOrders(data)
             .subscribe(
                 (res: any) => {
                     if (res.success) {
-                        console.log(res.data)
+                        this.CustomerData = res.data.orders
+                        this.Total2 = res.data.pageInfo.countTotal;
                     } else {
                         this.errorAlter(res.errorInfo)
                     }
@@ -1380,5 +1385,9 @@ export class TouristComponent implements OnInit {
                 error => this.errorAlter(error)
             );
 
+    }
+    getData2(e){
+        this.pageIndex3 = e;
+        this.findByCustomerIdHttp(this.memberInfo.customerId);
     }
 }
