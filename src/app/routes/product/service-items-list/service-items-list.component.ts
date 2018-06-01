@@ -33,6 +33,7 @@ export class ServiceItemsListComponent implements OnInit {
     storeId: string = '';
     merchantId: string = '';
     itemsListInfor: any[] =[];
+    storeList: any = [];
     moduleId: string;
     timestamp: any = new Date().getTime();//当前时间的时间戳
 
@@ -61,17 +62,8 @@ export class ServiceItemsListComponent implements OnInit {
     };
 
     ngOnInit() {
-
         this.moduleId = this.route.snapshot.params['menuId'];
         this.getStoresInfor();//门店
-        let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
-            JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
-        this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
-
-        this.batchQuery.merchantId = this.merchantId;
-        this.batchQuery.storeId = this.storeId;
-        //获取列表信息
-        this.getServiceItemsListHttp(this.batchQuery);
     }
 
     //查看详情
@@ -202,8 +194,16 @@ export class ServiceItemsListComponent implements OnInit {
         (res: any) => {
           if (res.success) {
             let storeList = res.data.items;
-            console.log(storeList);
-            this.localStorageService.setLocalstorage(STORES_DOWN, JSON.stringify(storeList));
+            this.storeList = storeList;
+            let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+              JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+            this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
+            this.storeId = UserInfo.staffType === "MERCHANT"? '' : this.storeList[0].storeId;
+            this.batchQuery.merchantId = this.merchantId;
+            this.batchQuery.storeId = this.storeId;
+            //获取列表信息
+            this.getServiceItemsListHttp(this.batchQuery);
+
           } else {
             this.modalSrv.error({
               nzTitle: '温馨提示',

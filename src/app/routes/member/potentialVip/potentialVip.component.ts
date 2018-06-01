@@ -1,3 +1,4 @@
+
 import { _HttpClient } from '@delon/theme';
 import { SimpleTableComponent, SimpleTableColumn, SimpleTableData } from '@delon/abc';
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
@@ -9,6 +10,7 @@ import { tap, map } from 'rxjs/operators';
 import { MemberService } from '../shared/member.service';
 import { Config } from '@shared/config/env.config';
 import { LocalStorageService } from '@shared/service/localstorage-service';
+import { ActivatedRoute } from '@angular/router';
 declare var GoEasy: any;
 
 @Component({
@@ -17,6 +19,7 @@ declare var GoEasy: any;
     styleUrls: ['./potentialVip.component.css']
 })
 export class PotentialVipComponent {
+    
     q: any = {
         phone: null,
         dateStart: '',
@@ -67,16 +70,17 @@ export class PotentialVipComponent {
     headUrl: any;
     parm: any;
     modal: any;
-
+    moduleId: any;
     constructor(private http: _HttpClient,
         private modalService: NzModalService,
         public msg: NzMessageService,
-        private modalSrv: NzModalService,
         private localStorageService: LocalStorageService,
+        private modalSrv: NzModalService,
+        private route: ActivatedRoute,
         private memberService: MemberService) {
         let that = this;
+        this.moduleId = this.route.snapshot.params['menuId'];
         this.customerlistHttp();
-
         // var goEasy = new GoEasy({
         //     appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
         // });
@@ -103,7 +107,7 @@ export class PotentialVipComponent {
         //     },
         //     error => FunctionUtil.errorAlter(error)
         // )
-        // console.log(JSON.parse(sessionStorage.getItem(FACE_OBJ)));
+        console.log(JSON.parse(sessionStorage.getItem(FACE_OBJ)));
         // var t1 = window.setInterval(function () {
         //     self.faceObj = sessionStorage.getItem(FACE_OBJ) ? JSON.parse(sessionStorage.getItem(FACE_OBJ)) : [];
         // }, 1000);
@@ -122,9 +126,11 @@ export class PotentialVipComponent {
             lastConsumeStart: this.q.dateRange2 ? this.formatDateTime(this.q.dateRange2[0], 'start') : '',
             lastConsumeEnd: this.q.dateRange2 ? this.formatDateTime(this.q.dateRange2[1], 'end') : '',
             consumeMoneyFrom: this.q.money ? this.q.money[0] : '',
-            consumeMoneyTo: this.q.money ? this.q.money[1] : ''
+            consumeMoneyTo: this.q.money ? this.q.money[1] : '',
+            storeId: this.storeId
         }
         if (!this.q.phone) delete data.phone;
+        if (!data.storeId) delete data.storeId;
         if (!this.q.status && this.q.status !== 0) delete data.gender;
         if (!this.q.dateRange1) { delete data.start; delete data.end }
         if (!this.q.dateRange2) { delete data.lastConsumeStart; delete data.lastConsumeEnd }
@@ -151,7 +157,6 @@ export class PotentialVipComponent {
                         }
                     });
                     this.data = res.data.pageInfos;
-                    this.loading = false;
                     this.Total = res.data.pageInfo.countTotal;
                 } else {
                     this.modalSrv.error({
@@ -159,6 +164,7 @@ export class PotentialVipComponent {
                         nzContent: res.errorInfo
                     });
                 }
+                this.loading = false;
             },
             error => {
                 FunctionUtil.errorAlter(error);
@@ -208,27 +214,26 @@ export class PotentialVipComponent {
             }
         )
     }
-    getData(e?:any) {
-        console.log(this.q);
+    getData(e?: any) {
+        this.pageIndex = e;
         this.customerlistHttp();
     }
     getData2(index?: any) {
-        this.pageIndex = index;
-        this.ordersHttp(this.phone, this.storeId);
+        this.pageIndex2 = index;
+        this.ordersHttp(this.customerId);
     }
     checkboxChange(list: SimpleTableData[]) {
         this.selectedRows = list;
         this.totalCallNo = this.selectedRows.reduce((total, cv) => total + cv.callNo, 0);
     }
-    ordersHttp(phone: any, storeId: any) {
+    ordersHttp(customerId: any) {
         let that = this;
         let data = {
             pageIndex: this.pageIndex2,
             pageSize: 10,
-            phone: phone,
-            storeId: storeId
+            customerId: customerId,
         };
-        this.memberService.orders(data).subscribe(
+        this.memberService.customerOrders(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     this.data2 = res.data.orders;
@@ -250,11 +255,10 @@ export class PotentialVipComponent {
     remove() {
 
     }
-    add(tpl: TemplateRef<{}>, phone: any, storeId: any) {
+    add(tpl: TemplateRef<{}>, phone: any, customerId: any) {
         this.phone = phone;
-        this.storeId = storeId;
-
-        this.ordersHttp(phone, storeId);
+        this.customerId = customerId;
+        this.ordersHttp(this.customerId);
         this.modalSrv.create({
             nzTitle: '消费记录',
             nzContent: tpl,
@@ -290,10 +294,11 @@ export class PotentialVipComponent {
     bianji(tpl: TemplateRef<{}>, customerId: any, phone: any, storeId: any) {
         this.customerId = customerId;
         this.phone = phone;
-        this.storeId = storeId;
+        this.storeId = storeId
         let that = this;
         let data = {
-            customerId: customerId
+            customerId: customerId,
+            // storeId:storeId
         };
         this.getCustomerhttp(data);
         this.modalSrv.create({
@@ -312,26 +317,34 @@ export class PotentialVipComponent {
             gender: that.gender,
             phone: that.customer_phone,
             customerName: that.customer_name,
-            birthday: that.formatDateTime(that._date,'start'),
+            birthday: that.formatDateTime(that._date, 'start'),
             faceId: this.faceId,
             faceImg: this.faceImgId,
             storeId: this.storeId
+        }
+        if (!data.customerName) {
+            this.errorAlter('请填写会员姓名');
+        }
+        if (!data.phone) {
+            this.errorAlter('请填写会员手机号');
         }
         if (!this.faceId)
             delete data.faceId;
         if (!this.faceImgId)
             delete data.faceImg;
         if (!data.phone) {
-            FunctionUtil.errorAlter('请填写手机号');
+            this.errorAlter('请填写手机号');
         } else {
             this.memberService.updateCustomer(data).subscribe(
                 (res: any) => {
-                    if (res) {
+                    if (res.success) {
                         that.customerlistHttp();
+                    } else {
+                        this.errorAlter(res.errorInfo);
                     }
                 },
                 error => {
-                    FunctionUtil.errorAlter(error);
+                    this.errorAlter(error);
                 }
             );
         }
@@ -340,7 +353,10 @@ export class PotentialVipComponent {
     reset(ls: any[]) {
 
     }
-
+    selectStoreInfo(e) {
+        this.storeId = e;
+        this.customerlistHttp();
+    }
     renlianshibie(tpl: TemplateRef<{}>) {
         this.modalSrv.create({
             nzTitle: '人脸识别录入',
@@ -355,6 +371,12 @@ export class PotentialVipComponent {
         let month = date.getMonth() + 1;
         let day = date.getDate();
         return year + '-' + (month.toString().length > 1 ? month : ('0' + month)) + '-' + (day.toString().length > 1 ? day : ('0' + day)) + (type === 'start' ? ' 00:00:00' : ' 23:59:59');
+    }
+    errorAlter(err: any) {
+        this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: err
+        });
     }
     faceImg(item: any) {
         this.faceImgId = item.faceImgId ? item.faceImgId : item.picId;

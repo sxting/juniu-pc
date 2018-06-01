@@ -13,7 +13,7 @@
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="staffName">员工姓名</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <input maxlength="10" nz-input formControlName="staffName" autocomplete="off" id="staffName" placeholder="员工姓名会展示在各种员工报表和顾客预约页面，请仔细填写">
+        <input nz-input formControlName="staffName" autocomplete="off" id="staffName" placeholder="员工姓名会展示在各种员工报表和顾客预约页面，请仔细填写">
         <nz-form-explain class="errorTips" *ngIf="form.get('staffName').dirty && form.get('staffName').errors">请输入员工姓名</nz-form-explain>
       </nz-form-control>
     </nz-form-item>
@@ -30,10 +30,10 @@
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="password">登录密码</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <input type="password" nz-input  autocomplete="off" formControlName="password" id="password" placeholder="员工可以用手机号和密码登录桔牛后台">
+        <input type="password" minlength="6" nz-input  autocomplete="off" formControlName="password" id="password" placeholder="员工可以用手机号和密码登录桔牛后台">
         <ng-container *ngIf="password.dirty || password.touched">
           <nz-form-explain class="errorTips" *ngIf="password.errors?.required">请设置登录密码</nz-form-explain>
-          <!--<nz-form-explain class="errorTips" *ngIf="password.errors?.pattern">登录密码必须为6-16位大小写字母和数字组成</nz-form-explain>-->
+          <nz-form-explain class="errorTips" *ngIf="password.errors?.pattern">登录密码必须为6-16位大小写字母和数字组成</nz-form-explain>
         </ng-container>
       </nz-form-control>
     </nz-form-item>

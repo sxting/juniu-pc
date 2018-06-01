@@ -54,21 +54,24 @@ export class StoreEditComponent implements OnInit {
             this.errAlert('请填写分店名称');
         } else if (!this.adressCode && !(this.data ? this.data.provinceCode : false)) {
             this.errAlert('请选择门店地址');
+        }else if (!this.location){
+            this.errAlert('请填写门店详细地址');
+        } else {
+            let data = {
+                address: this.location ? this.location.name : this.data.address,
+                branchName: this.form.controls.storeName.value ? this.form.controls.storeName.value : this.data.branchName,
+                cityCode: this.adressCode ? this.adressCode[1] : this.data.cityCode,
+                districtCode: this.adressCode ? this.adressCode[2] : this.data.districtCode,
+                latitude: this.location ? this.location.location.lat : this.data.latitude,
+                longitude: this.location ? this.location.location.lng : this.data.longitude,
+                provinceCode: this.adressCode ? this.adressCode[0] : this.data.provinceCode,
+                timestamp: new Date().getTime(),
+                storeId: this.storeId
+            }
+            if (!this.storeId) delete data.storeId
+            if (this.storeId) this.modifyInfoFun(data)
+            else this.storeCreateHttp(data)
         }
-        let data = {
-            address: this.location ? this.location.name : this.data.address,
-            branchName: this.form.controls.storeName.value ? this.form.controls.storeName.value : this.data.branchName,
-            cityCode: this.adressCode ? this.adressCode[1] : this.data.cityCode,
-            districtCode: this.adressCode ? this.adressCode[2] : this.data.districtCode,
-            latitude: this.location ? this.location.location.lat : this.data.latitude,
-            longitude: this.location ? this.location.location.lng : this.data.longitude,
-            provinceCode: this.adressCode ? this.adressCode[0] : this.data.provinceCode,
-            timestamp: new Date().getTime(),
-            storeId: this.storeId
-        }
-        if (!this.storeId) delete data.storeId
-        if (this.storeId) this.modifyInfoFun(data)
-        else this.storeCreateHttp(data)
     }
     onChanges(values: any): void {
         this.adressCode = values;
@@ -110,7 +113,7 @@ export class StoreEditComponent implements OnInit {
                     });
                 }
                 this.submitting = false;
-                
+
             },
             (error) => {
                 this.msg.warning(error)
@@ -248,7 +251,7 @@ export class StoreEditComponent implements OnInit {
             marker.setPosition(poi.location);
             infoWindow.setPosition(poi.location);
             let str = JSON.stringify(info, null, 2)
-            let str1 = str.substr(1, str.length-2 );
+            let str1 = str.substr(1, str.length - 2);
 
             infoWindow.setContent('<pre>' + str1 + '</pre>');
             infoWindow.open(map, marker.getPosition());

@@ -55,19 +55,7 @@
 <ng-template #modalContent>
     <div class="addStaffBox-main">
         <div>
-            <div class="addStaffBox-main-left icon-asterisks-1-copy iconfont">门店</div>
-            <div class="addStaffBox-main-right">
-                <!-- <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth" (storeListPush)="storeListPush($event)"
-      (storeIdOutput)="getStoreId($event)"></jn-stores-infor> -->
-                <jn-stores-infor [moduleId]="moduleId" (storeIdOutput)="selectStoreInfo($event)"></jn-stores-infor>
-                <!-- <nz-select style="width:240px;" (ngModelChange)="selectStoreInfo($event)" [nzPlaceHolder]="'请选择一个门店'"
-                    [nzShowSearch]="true">
-                    <nz-option [nzLabel]="'请选择一个门店'" [nzValue]="'ALL'">
-                    </nz-option>
-                    <nz-option *ngFor="let item of storeList" [nzLabel]="item.storeName" [nzValue]="item">
-                    </nz-option>
-                </nz-select> -->
-            </div>
+            <jn-stores-infor [moduleId]="moduleId" style="padding-left: 35px;" [ifStoresAll]="false" (storeIdOutput)="selectStoreInfo($event)"></jn-stores-infor>
         </div>
         <div>
             <div class="addStaffBox-main-left icon-asterisks-1-copy iconfont">手机号</div>
