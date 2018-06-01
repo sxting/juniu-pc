@@ -672,8 +672,13 @@ export class TouristComponent implements OnInit {
             create.money = that.isVerb2 ? that.isVerbVipCardmoney * 100 : that.vipCardmoney * 100;
             create.originMoney = create.money;
         } else {
-            create.money = that.isVerb ? that.isVerbMoney * 100 : that.totolMoney * 100;
-            create.originMoney = create.money;
+            if(this.xfList &&this.xfList.length>0){
+                create.money = that.isVerb ? that.isVerbMoney * 100 : that.totolMoney * 100;
+                create.originMoney = create.money;
+            }else{
+                create.money = this.inputValue* 100 ;
+            }
+            
         }
 
         create.storeId = this.storeId;
