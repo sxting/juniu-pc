@@ -701,6 +701,7 @@ export class TouristComponent implements OnInit {
                         nzContent: '收款成功'
                     })
                     this.vipXqFun();
+                    this.searchMemberCard(true);
                 } else {
                     this.errorAlter(res.errorInfo)
                 }
