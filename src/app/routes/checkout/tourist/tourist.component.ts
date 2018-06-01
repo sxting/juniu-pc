@@ -73,6 +73,7 @@ export class TouristComponent implements OnInit {
             list: []
         }
     ];
+    vipData1: any;
     tabs = [
         {
             name: "扫码收款",
@@ -116,6 +117,10 @@ export class TouristComponent implements OnInit {
     shopyinList: any;
     pageSize: any = 10
     vipdate: any;
+    settleCardDTOList: any;
+    pageIndex3: any = 1;
+    Total2: any;
+    CustomerData: any = [];
     constructor(
         public msg: NzMessageService,
         private localStorageService: LocalStorageService,
@@ -372,18 +377,22 @@ export class TouristComponent implements OnInit {
     jiesuan(tpl: TemplateRef<{}>) {
         let money = this.changeType ? (this.inputValue) : (this.isVerb2 ? this.isVerbVipCardmoney : this.vipCardmoney);
         let that = this;
-        console.log(that.xfList);
+        this.tanchuang();
         this.cardChangeBoolean = false;
         if (this.vipMoney < 0) {
             this.vipMoneyChajiaFun(money, tpl);
         } else {
-            this.modalSrv.create({
-                nzTitle: `收款金额：${money}元`,
-                nzContent: tpl,
-                nzWidth: '520px',
-                nzFooter: null,
-                nzOkText: null
-            });
+            if (this.settleCardDTOList && this.settleCardDTOList.length > 0) {
+                this.jiesuanFun();
+            } else {
+                this.modalSrv.create({
+                    nzTitle: `收款金额：${money}元`,
+                    nzContent: tpl,
+                    nzWidth: '520px',
+                    nzFooter: null,
+                    nzOkText: null
+                });
+            }
         }
 
     }
@@ -445,6 +454,7 @@ export class TouristComponent implements OnInit {
             nzOnOk: () => {
             }
         });
+        this.findByCustomerIdHttp(this.memberInfo.customerId);
     }
     //开通会员
     kaitongVipFun(tpl: TemplateRef<{}>) {
@@ -507,13 +517,40 @@ export class TouristComponent implements OnInit {
             nzOnOk: () => console.log('Info OK')
         });
     }
+    tanchuang() {
+        let settleCardDTOList = [];
+        this.settleCardDTOList = [];
+        let that = this;
+        if (that.vipCardList && that.vipCardList.length > 0) {
+            that.vipCardList.forEach(function (i: any) {
+                let data = {
+                    productIdList: [],
+                    cardId: i.card.cardId,
+                    amount: 0,
+                    type: i.card.type
+                }
+                if (i.checked) settleCardDTOList.push(data)
+            })
+            settleCardDTOList.forEach(function (i: any) {
+                that.xfList.forEach(function (n: any) {
+                    if (n.vipCard && i.cardId === n.vipCard.card.cardId) {
+                        i.productIdList.push(n.productId)
+                        if (i.type === 'TIMES') i.amount = 0;
+                        else if (i.type === 'METERING') i.amount += n.num;
+                        else i.amount += NP.times(n.num, n.totoleMoney);
+                    }
+                })
+            })
+        }
+        this.settleCardDTOList = settleCardDTOList;
+    }
     //结算fun
     jiesuanFun(type?: any) {
         let that = this;
         console.log(this.authCode)
         let create = <CreateOrder>{};
         create.customerName = this.memberInfo.customerName;
-        create.phone = this.phone;
+        create.phone = this.memberInfo.phone;
         create.authCode = this.authCode;
         create.birthday = this.memberInfo.birthday;
         create.gender = this.memberInfo.gender;
@@ -635,8 +672,13 @@ export class TouristComponent implements OnInit {
             create.money = that.isVerb2 ? that.isVerbVipCardmoney * 100 : that.vipCardmoney * 100;
             create.originMoney = create.money;
         } else {
-            create.money = that.isVerb ? that.isVerbMoney * 100 : that.totolMoney * 100;
-            create.originMoney = create.money;
+            if(this.xfList &&this.xfList.length>0){
+                create.money = that.isVerb ? that.isVerbMoney * 100 : that.totolMoney * 100;
+                create.originMoney = create.money;
+            }else{
+                create.money = this.inputValue* 100 ;
+            }
+            
         }
 
         create.storeId = this.storeId;
@@ -716,8 +758,7 @@ export class TouristComponent implements OnInit {
         );
     }
     /**搜索会员卡 */
-    searchMemberCard(event?: any, jiesuan?: any) {
-        this.phone = this.vipsearch;
+    searchMemberCard(type?:any) {
         this.yjcardList = [];
         let self = this;
         this.cardChangeBoolean = false;
@@ -729,8 +770,7 @@ export class TouristComponent implements OnInit {
                         if (res.success) {
                             self.vipData = res.data;
                             if (self.vipData && self.vipData.length > 0) self.vipDataBoolean = true;
-
-
+                            if(type) this.vipDataRadio(0);
                         } else {
                             self.errorAlter(res.errorInfo)
                         }
@@ -1116,6 +1156,7 @@ export class TouristComponent implements OnInit {
                     this.modalSrv.success({
                         nzContent: '收款成功'
                     })
+                    this.searchMemberCard(true);
                 } else {
                     this.errorAlter(res.errorInfo)
                 }
@@ -1179,8 +1220,10 @@ export class TouristComponent implements OnInit {
 
     }
     vipDataRadio(ind?: any) {
+        this.radioValue = Number(ind);
         let self = this;
         self.yjcardList = this.vipData[this.radioValue].cardApplies;
+        this.vipData1 = this.vipData[this.radioValue];
         if (this.vipData[this.radioValue].customer) {
             self.memberInfo = {
                 customerName: this.vipData[this.radioValue].customer.customerName,
@@ -1240,7 +1283,7 @@ export class TouristComponent implements OnInit {
         this.xfList = this.guadanList[index].xfList;
         // this.memberInfo = this.shopyinList[index].vip;
         this.vipsearch = this.guadanList[index].vip.phone;
-        this.searchMemberCard();
+        this.searchMemberCard(true);
     }
     guadanSC(index: any) {
         let that = this;
@@ -1325,5 +1368,32 @@ export class TouristComponent implements OnInit {
                 }
             }
         });
+    }
+
+    findByCustomerIdHttp(customerId: any) {
+        let data = {
+            customerId: customerId,
+            pageIndex: this.pageIndex3,
+            pageSize: 5
+        }
+        this.checkoutService
+            .customerOrders(data)
+            .subscribe(
+                (res: any) => {
+                    if (res.success) {
+                        this.CustomerData = res.data.orders
+                        this.Total2 = res.data.pageInfo.countTotal;
+                    } else {
+                        this.errorAlter(res.errorInfo)
+                    }
+
+                },
+                error => this.errorAlter(error)
+            );
+
+    }
+    getData2(e) {
+        this.pageIndex3 = e;
+        this.findByCustomerIdHttp(this.memberInfo.customerId);
     }
 }

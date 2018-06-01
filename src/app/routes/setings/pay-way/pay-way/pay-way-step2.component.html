@@ -2,7 +2,7 @@
     <nz-form-item>
         <nz-form-label nzSpan="5" nzRequired>行业类型</nz-form-label>
         <nz-form-control [nzSpan]="16">
-            <nz-select formControlName="hangye_type" [nzPlaceHolder]="'请选择行业类型'">
+            <nz-select formControlName="hangye_type" [nzPlaceHolder]="'请选择行业类型'" [nzShowSearch]="true">
                 <nz-option *ngFor="let hangyeType of hangyeTypeList" [nzLabel]="hangyeType.industryName" [nzValue]="hangyeType.industryId"></nz-option>
             </nz-select>
             <nz-form-explain class="error-color" *ngIf="hangye_type.dirty && hangye_type.errors">请选择行业类型</nz-form-explain>

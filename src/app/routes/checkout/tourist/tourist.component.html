@@ -22,7 +22,7 @@
           </div> -->
           <div class="shouyinMiddle">
             <nz-input-group nzSearch style="width:280px;margin-top:30px;" [nzSuffix]="suffixIconButton1">
-              <input type="text" [(ngModel)]="vipsearch" (keyup)="searchMemberCard()" (keyup.enter)="searchMemberCard(true)" nz-input placeholder="请输入手机号/姓名">
+              <input type="text" [(ngModel)]="vipsearch" (keyup)="searchMemberCard()" (keyup.enter)="searchMemberCard()" nz-input placeholder="请输入手机号/姓名">
             </nz-input-group>
             <ng-template #suffixIconButton1>
               <button nz-button nzType="primary" (click)="searchMemberCard()" nzSearch>
@@ -212,7 +212,7 @@
                   <div nz-col nzSpan="18">
                     <nz-switch style="float:left;" (ngModelChange)="moling()" [ngModel]="isVerb" nzCheckedChildren="是" nzUnCheckedChildren="否"></nz-switch>
                     <span style="float:right;">收款：
-                      <input type="text" style="width:100px;" [(ngModel)]="inputValue" nz-input> </span>
+                      <input type="text" style="width:100px;" onkeyup="if(this.value<0)this.value = 0" [(ngModel)]="inputValue" nz-input> </span>
                   </div>
                 </div>
               </nz-form-item>
@@ -244,7 +244,7 @@
             </div> -->
           <div class="shouyinMiddle">
             <nz-input-group nzSearch style="width:280px;margin-top:30px;" [nzSuffix]="suffixIconButton">
-              <input type="text" [(ngModel)]="vipsearch" (keyup)="searchMemberCard()" (keyup.enter)="searchMemberCard(true)" nz-input placeholder="请输入手机号/姓名">
+              <input type="text" [(ngModel)]="vipsearch" (keyup)="searchMemberCard()" (keyup.enter)="searchMemberCard()" nz-input placeholder="请输入手机号/姓名">
             </nz-input-group>
             <ng-template #suffixIconButton>
               <button nz-button nzType="primary" (click)="searchMemberCard()" nzSearch>
@@ -253,7 +253,7 @@
             </ng-template>
             <div class="vipArrBox" *ngIf="vipDataBoolean">
               <nz-radio-group [(ngModel)]="radioValue" style="display: block;" (ngModelChange)="vipDataRadio($event)">
-                <label nz-radio *ngFor="let item of vipData;let ind = index;" (click)="vipDataRadio($event,ind)" nzValue="{{ind}}">姓名：{{item.customer.customerName}} 电话：{{item.customer.phone}}</label>
+                <label nz-radio *ngFor="let item of vipData;let ind = index;" (click)="vipDataRadio(ind)" nzValue="{{ind}}">姓名：{{item.customer.customerName}} 电话：{{item.customer.phone}}</label>
               </nz-radio-group>
             </div>
             <div class="kaitongVIP iconfont icon-iconfonticon02" (click)="kaitongVipFun(kaitongVip)">开通新会员</div>
@@ -433,7 +433,7 @@
         </div>
         <div nz-col nzSpan="12">
           <div nz-col nzSpan="6">持卡:</div>
-          <div nz-col nzSpan="18">{{vipData?.cardApplies?vipData?.cardApplies.length:0}}张</div>
+          <div nz-col nzSpan="18">{{vipData1?.cardApplies?vipData1?.cardApplies.length:0}}张</div>
         </div>
       </div>
       <div>
@@ -443,7 +443,7 @@
         </div>
         <div nz-col nzSpan="12">
           <div nz-col nzSpan="6">累计消费金额:</div>
-          <div nz-col nzSpan="18">{{vipData?.allPay/100}}元</div>
+          <div nz-col nzSpan="18">{{vipData1?.allPay/100}}元</div>
         </div>
       </div>
     </div>
@@ -451,13 +451,13 @@
       <h3 class="flex-1 text-lg borderLeft">会员卡</h3>
 
       <div class="CardBigBox">
-        <div *ngFor="let item of cardList;let ind1 = index;" class="{{item.type}} ">
-          <p class="cardName">{{item.cardName}}</p>
+        <div *ngFor="let item of yjcardList;let ind1 = index;" class="{{item.card.type}} ">
+          <p class="cardName">{{item.card.cardName}}</p>
           <p class="cardMoney">卡余额：
-            <span class="money">{{item.balance/100}}</span>
-            <span *ngIf="item.type === 'REBATE'||item.type === 'STORED'">元</span>
-            <span *ngIf="item.type === 'METERING'">次</span>
-            <span *ngIf="item.type === 'TIMES'">天</span>
+            <span class="money">{{item.card.balance/100}}</span>
+            <span *ngIf="item.card.type === 'REBATE'||item.card.type === 'STORED'">元</span>
+            <span *ngIf="item.card.type === 'METERING'">次</span>
+            <span *ngIf="item.card.type === 'TIMES'">天</span>
           </p>
         </div>
       </div>
@@ -480,7 +480,7 @@
     </div>
     <div class="viplist">
       <h3 class="flex-1 text-lg borderLeft">会员累计消费金额</h3>
-      <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="data">
+      <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="CustomerData">
         <thead>
           <tr>
             <th>消费时间</th>
@@ -490,7 +490,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of data">
+          <tr *ngFor="let item of CustomerData">
             <td>{{item.juniuoModel.dateCreated}}</td>
             <td>{{item.bizTypeName}}</td>
             <td>{{item.payTypeName}}</td>
@@ -547,7 +547,7 @@
     <div class="lineHeight50 formItemBorder">
       <nz-form-label style="text-align:left;" nzSpan="6">顾客电话</nz-form-label>
       <nz-form-control nzSpan="18">
-        <input type="text" [(ngModel)]="vipphone" nz-input placeholder="请输入顾客电话">
+        <input type="text" [(ngModel)]="vipphone" maxlength="11" nz-input placeholder="请输入顾客电话">
       </nz-form-control>
     </div>
   </nz-form-item>
@@ -555,7 +555,7 @@
     <div class="lineHeight50 formItemBorder">
       <nz-form-label style="text-align:left;" nzSpan="6">顾客姓名</nz-form-label>
       <nz-form-control nzSpan="18">
-        <input type="text" [(ngModel)]="vipname" nz-input placeholder="请输入顾客姓名">
+        <input type="text" [(ngModel)]="vipname" maxlength="10" nz-input placeholder="请输入顾客姓名">
       </nz-form-control>
     </div>
   </nz-form-item>
@@ -563,7 +563,7 @@
     <div class="lineHeight50 formItemBorder">
       <nz-form-label style="text-align:left;" nzSpan="6">生日</nz-form-label>
       <nz-form-control nzSpan="18">
-        <nz-date-picker [(ngModel)]="vipdate" ></nz-date-picker>
+        <nz-date-picker [(ngModel)]="vipdate"></nz-date-picker>
       </nz-form-control>
     </div>
   </nz-form-item>

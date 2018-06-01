@@ -22,6 +22,12 @@
                     </nz-form-control>
                 </nz-form-item>
             </nz-col>
+            <nz-col nzMd="8" nzSm="24">
+                <nz-form-item>
+                    <jn-stores-infor [moduleId]="moduleId" (storeIdOutput)="selectStoreInfo($event.storeId)"></jn-stores-infor>
+                </nz-form-item>
+            </nz-col>
+            
             <nz-col nzMd="8" nzSm="24" *ngIf="expandForm">
                 <nz-form-item>
                     <nz-form-label nzFor="dateRange1">会员创建日期</nz-form-label>
@@ -79,7 +85,7 @@
                 <td>{{item.phone}}</td>
                 <td>{{item.customerSourceName}}</td>
                 <td>
-                    <span class="button" (click)="add(modalContent,item.phone,item.storeId)">消费记录</span>
+                    <span class="button" (click)="add(modalContent,item.phone,item.customerId)">消费记录</span>
                     <nz-divider nzType="vertical"></nz-divider>
                     <span class="button" (click)="bianji(modalContent2,item.customerId,item.phone,item.storeId)">编辑</span>
                 </td>
@@ -160,6 +166,7 @@
         <div>
             <div class="addStaffBox-main-left icon-asterisks-1-copy iconfont">生日</div>
             <div class="addStaffBox-main-right">
+                    <nz-date-picker [(ngModel)]="_date" (ngModelChange)="onChange($event)" nzShowTime></nz-date-picker>
                 <!-- <nz-datepicker [(ngModel)]="_date" [nzPlaceHolder]="'Select date'" [nzFormat]="'YYYY/MM/DD'"></nz-datepicker> -->
             </div>
         </div>
