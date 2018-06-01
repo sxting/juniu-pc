@@ -119,7 +119,7 @@ export class TouristComponent implements OnInit {
     vipdate: any;
     settleCardDTOList: any;
     pageIndex3: any = 1;
-    Total2: any;
+    Total2: any =1;
     CustomerData: any = [];
     constructor(
         public msg: NzMessageService,
@@ -1380,8 +1380,8 @@ export class TouristComponent implements OnInit {
             .subscribe(
                 (res: any) => {
                     if (res.success) {
-                        this.CustomerData = res.data.orders
-                        this.Total2 = res.data.pageInfo.countTotal;
+                        this.CustomerData = res.data.content
+                        this.Total2 = res.data.totalElements;
                     } else {
                         this.errorAlter(res.errorInfo)
                     }
