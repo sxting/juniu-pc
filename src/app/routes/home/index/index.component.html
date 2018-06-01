@@ -5,7 +5,7 @@
     <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
         <g2-card
             [title]="'今日营收（元）'"
-            total="{{IncomeData.todayIncomeAmount/100}}"
+            total="{{IncomeData.todayIncomeAmount/100 ? IncomeData.todayIncomeAmount/100 : 0}}"
             contentHeight="44px"
             [footer]="footer1">
             <trend flag="up" style="display:block; margin-top:2px;">
