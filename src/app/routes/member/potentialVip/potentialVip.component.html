@@ -27,12 +27,12 @@
                     <jn-stores-infor [moduleId]="moduleId" (storeIdOutput)="selectStoreInfo($event.storeId)"></jn-stores-infor>
                 </nz-form-item>
             </nz-col>
-            
+
             <nz-col nzMd="8" nzSm="24" *ngIf="expandForm">
                 <nz-form-item>
                     <nz-form-label nzFor="dateRange1">会员创建日期</nz-form-label>
                     <nz-form-control>
-                        <nz-range-picker [(ngModel)]="q.dateRange1" nzDropdownClassName="right320"  name="dateRange1" id="dateRange1"></nz-range-picker>
+                        <nz-range-picker [(ngModel)]="q.dateRange1" nzDropdownClassName="right320" name="dateRange1" id="dateRange1"></nz-range-picker>
                     </nz-form-control>
                 </nz-form-item>
             </nz-col>
@@ -73,6 +73,8 @@
                 <th>性别</th>
                 <th>手机号</th>
                 <th>会员来源</th>
+                <th>累计消费金额(元)</th>
+                <!-- <th>持卡张数</th> -->
                 <th>操作</th>
             </tr>
         </thead>
@@ -84,6 +86,8 @@
                 <td>{{item.genderName}}</td>
                 <td>{{item.phone}}</td>
                 <td>{{item.customerSourceName}}</td>
+                <td>{{item.allMoney/100}}</td>
+                <!-- <td (click)="vipCardFun(vipCard,item.customerId)" class="icon-xiala iconfont">{{item.cardCount ||0}}</td> -->
                 <td>
                     <span class="button" (click)="add(modalContent,item.phone,item.customerId)">消费记录</span>
                     <nz-divider nzType="vertical"></nz-divider>
@@ -166,7 +170,7 @@
         <div>
             <div class="addStaffBox-main-left icon-asterisks-1-copy iconfont">生日</div>
             <div class="addStaffBox-main-right">
-                    <nz-date-picker [(ngModel)]="_date" (ngModelChange)="onChange($event)" nzShowTime></nz-date-picker>
+                <nz-date-picker [(ngModel)]="_date" (ngModelChange)="onChange($event)"></nz-date-picker>
                 <!-- <nz-datepicker [(ngModel)]="_date" [nzPlaceHolder]="'Select date'" [nzFormat]="'YYYY/MM/DD'"></nz-datepicker> -->
             </div>
         </div>
@@ -189,5 +193,15 @@
         <div class="RenlianImg" *ngFor="let item of faceObj" (click)="RenlianImgChooise(item)">
             <img src="{{item.faceImgId | imageShow:144:200}}" alt="">
         </div>
+    </div>
+</ng-template>
+
+<ng-template #vipCard>
+    <div *ngFor="let item of vipCardList" class="{{item.type}} cardBox">
+        <div class="cardName">{{item.cardName}}</div>
+        <div class="cardMoney" *ngIf="item.type === 'REBATE'||item.type === 'STORED'">余额：{{item.balance/100}}元</div>
+        <div class="cardMoney" *ngIf="item.type === 'METERING'">余额：{{item.balance}}次</div>
+        <div class="cardMoney" *ngIf="item.type === 'TIMES'">{{item.validity}}到期</div>
+        <div class="chongzhi" (click)="xiaoka(item.cardId)">销卡</div>
     </div>
 </ng-template>

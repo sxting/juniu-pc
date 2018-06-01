@@ -473,12 +473,30 @@ export class MemberService {
     }
 
     // 选择门店
-  selectStores(data: any){
-    let apiUrl = Config.API1 + 'account/merchant/store/select.json';
-    return this.http.get(apiUrl,  data )
-      .map((response: Response) => response)
-      .catch(error => {
-        return Observable.throw(error);
-      });
-  }
+    selectStores(data: any) {
+        let apiUrl = Config.API1 + 'account/merchant/store/select.json';
+        return this.http.get(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    //查找会员的会员卡
+    customerCards(data) {
+        // 类型 REGISTER或者VALID
+        let apiUrl = Config.API + '/member/customerCards.json';
+        return this.http.get(apiUrl, data).map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    //消卡 /pinCard.json
+    pinCard (data) {
+        // 类型 REGISTER或者VALID
+        let apiUrl = Config.API + '/member/pinCard.json';
+        return this.http.get(apiUrl, data).map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
 }

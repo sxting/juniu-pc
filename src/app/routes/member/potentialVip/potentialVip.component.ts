@@ -50,12 +50,13 @@ export class PotentialVipComponent {
         { money: '5000-10000', from: [5000, 10000] },
         { money: '10000-99999999', from: [10000, 99999] }
     ]
+    vipCardList: any = [];
     selectedRows: SimpleTableData[] = [];
     description = '';
     totalCallNo = 0;
     expandForm = false;
     Total: any;
-    Total2: any;
+    Total2: any = 1;
     pageIndex: any = 1;
     pageIndex2: any = 1;
     StoresInfo: any = this.localStorageService.getLocalstorage(STORES_INFO) ? JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
@@ -236,9 +237,9 @@ export class PotentialVipComponent {
         this.memberService.customerOrders(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    this.data2 = res.data.orders;
+                    this.data2 = res.data.content;
                     this.loading = false;
-                    this.Total2 = res.data.pageInfo.countTotal;
+                    this.Total2 = res.data.totalElements;
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -383,5 +384,53 @@ export class PotentialVipComponent {
         this.faceId = item.faceId;
         this.headUrl = Config.OSS_IMAGE_URL
             + `${item.faceImgId ? item.faceImgId : item.picId}/resize_144_144/mode_fill`;
+    }
+
+    vipCardFun(tpl: TemplateRef<{}>, customerId: any) {
+        this.customerCardsHttp(customerId)
+        this.modalSrv.create({
+            nzTitle: '持有会员卡',
+            nzContent: tpl,
+            nzWidth: '600px',
+            nzOnOk: () => {
+            }
+        });
+    }
+    customerCardsHttp(customerId: any) {
+        let data = {
+            customerId: customerId
+        }
+        this.memberService.customerCards(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.vipCardList = res.data
+                } else {
+                    this.errorAlter(res.errorInfo);
+                }
+            },
+            error => {
+                this.errorAlter(error);
+            }
+        );
+    }
+    xiaoka(cardId: any) {
+        let data = {
+            cardId: cardId
+        }
+        this.memberService.pinCard(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.modalSrv.closeAll();
+                    this.modalSrv.success({
+                        nzTitle: '销卡成功'
+                    });
+                } else {
+                    this.errorAlter(res.errorInfo);
+                }
+            },
+            error => {
+                this.errorAlter(error);
+            }
+        );
     }
 }
