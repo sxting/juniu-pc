@@ -5,6 +5,7 @@ import { OrderService } from "@shared/component/reserve/shared/order.service";
 import { LocalStorageService } from "@shared/service/localstorage-service";
 import { FunctionUtil } from "@shared/funtion/funtion-util";
 import { NzModalService } from "ng-zorro-antd";
+import {USER_INFO} from "@shared/define/juniu-define";
 
 @Component({
   selector: 'app-set',
@@ -16,7 +17,7 @@ export class SetComponent implements OnInit {
     stores: any = [];
     storeId: any = '';
     storeName: string = '门店名称';
-    merchantId: any = 'merchantId';
+    merchantId: any = '';
     merchantName: string = 'merchantName';
     selectedOption: string = '';
 
@@ -72,6 +73,7 @@ export class SetComponent implements OnInit {
 
     ngOnInit() {
       this.moduleId = this.route.snapshot.params['menuId'];
+      this.merchantId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['merchantId'];
       // if (this.localStorageService.getLocalstorage('Stores-Info') &&
         //     JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')).length > 0) {
         //     let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) ?
@@ -240,7 +242,9 @@ export class SetComponent implements OnInit {
                     })
                 });
 
-                this.staffTimeProductVos.forEach(function (staff: any) {
+              console.log(this.staffTimeProductVos);
+
+              this.staffTimeProductVos.forEach(function (staff: any) {
                     if(staff.staffId == self.staffId) {
                         staff.staffId = self.staffId;
                         staff.products = products;
@@ -555,7 +559,8 @@ export class SetComponent implements OnInit {
     //查询门店商品列表
     getProductList(productIds: string) {
         let data = {
-            storeId: this.storeId
+            storeId: this.storeId,
+          merchantId: this.merchantId
         };
         this.orderService.getProductList(data).subscribe(
             (res: any) => {
@@ -657,6 +662,9 @@ export class SetComponent implements OnInit {
                             }
                         })
                     });
+
+                  console.log(this.craftsmanList);
+
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
