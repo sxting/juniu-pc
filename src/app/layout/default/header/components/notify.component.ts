@@ -24,14 +24,17 @@ export class HeaderNotifyComponent {
     {
       title: '未读消息',
       list: [],
+      clearText: ' '
     },
     {
       title: '已读消息',
       list: [],
+      clearText: ' '
     }
   ];
-  count = 3;
+  count = 0;
   loading = false;
+  messageId: any = '';
 
   constructor(private msg: NzMessageService,
               private homeService: HomeService,
@@ -71,16 +74,16 @@ export class HeaderNotifyComponent {
         if (res.success) {
           let data = res.data;
           // data = [
-          //   {title: '消息标题2', content: '消息内容2', status: 0},
-          //   {title: '消息标题3', content: '消息内容3', status: 0},
-          //   {title: '消息标题4', content: '消息内容4', status: 1}
+          //   {title: '消息标题2', content: '消息内容2', status: 0, messageId: '02'},
+          //   {title: '消息标题3', content: '消息内容3', status: 0, messageId: '03'},
+          //   {title: '消息标题4', content: '消息内容4', status: 1, messageId: '04'}
           // ];
 
           let noticeData: any = [];
 
-          data.forEach(function (item: any, index: any) {
+          data.forEach(function (item: any) {
             noticeData.push({
-              id: index,
+              messageId: item.messageId,
               title: item.title + ':' + item.content,
               type: item.status == 0 ? '未读消息' : '已读消息'
             })
@@ -98,6 +101,35 @@ export class HeaderNotifyComponent {
     )
   }
 
+  getMessageInfo() {
+    let data = {
+      messageId: this.messageId
+    };
+    this.homeService.getMessageInfo(data).subscribe(
+      (res: any) => {
+        if(res.success) {
+
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      }
+    )
+  }
+
+  clear(type: string) {
+    // this.msg.success(`清空了 ${type}`);
+  }
+
+  select(res: any) {
+    console.dir(res);
+    this.messageId = res.item.messageId;
+    this.getMessageInfo();
+    // this.msg.success(`点击了 ${res.title} 的 ${res.item.title}`);
+  }
+
   updateNoticeData(notices: NoticeIconList[]): NoticeItem[] {
     const data = this.data2.slice();
     data.forEach(i => (i.list = []));
@@ -109,11 +141,4 @@ export class HeaderNotifyComponent {
     return data;
   }
 
-  clear(type: string) {
-    // this.msg.success(`清空了 ${type}`);
-  }
-
-  select(res: any) {
-    this.msg.success(`点击了 ${res.title} 的 ${res.item.title}`);
-  }
 }
