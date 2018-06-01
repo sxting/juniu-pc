@@ -96,6 +96,16 @@ export class HomeService {
         });
     }
 
+  //消息详情 /message/info.json
+  getMessageInfo(Params: any) {
+    let apiUrl = this.api1 + '/message/info.json';
+    return this.http.get(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
     //近七日流水   /weekTurnover.json
     weekTurnover(data?: any) {
         let apiUrl = Config.API + '/order/weekTurnover.json';
