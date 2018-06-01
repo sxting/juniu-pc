@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { _HttpClient } from '@delon/theme';
+import { _HttpClient, TitleService } from '@delon/theme';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ReportService } from "../shared/report.service";
 import { STORES_INFO } from '@shared/define/juniu-define';
@@ -57,6 +57,7 @@ export class CrossShopComponent implements OnInit {
         private msg: NzMessageService,
         private route: ActivatedRoute,
         private reportService: ReportService,
+        private titleSrv: TitleService,
         private localStorageService: LocalStorageService
     ) { }
 
@@ -81,8 +82,8 @@ export class CrossShopComponent implements OnInit {
 
     ngOnInit() {
 
-       this.moduleId = this.route.snapshot.params['menuId'];
-
+        this.titleSrv.setTitle('跨店结算');
+        this.moduleId = this.route.snapshot.params['menuId'];
         //门店列表
         if (this.localStorageService.getLocalstorage(STORES_INFO) && JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
           let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?

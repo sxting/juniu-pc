@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { _HttpClient } from '@delon/theme';
+import { _HttpClient, TitleService } from '@delon/theme';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ReportService } from "../shared/report.service";
 import { LocalStorageService } from "../../../shared/service/localstorage-service";
@@ -50,6 +50,7 @@ export class MonthReportComponent implements OnInit {
         private reportService: ReportService,
         private router: Router,
         private route: ActivatedRoute,
+        private titleSrv: TitleService,
         private localStorageService: LocalStorageService
     ) { }
 
@@ -65,6 +66,7 @@ export class MonthReportComponent implements OnInit {
 
     ngOnInit() {
 
+        this.titleSrv.setTitle('月报表');
         this.moduleId = this.route.snapshot.params['menuId'];
         let userInfo;
         if (this.localStorageService.getLocalstorage('User-Info')) {

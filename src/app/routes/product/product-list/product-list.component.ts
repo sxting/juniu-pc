@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { _HttpClient } from '@delon/theme';
+import { _HttpClient, TitleService } from '@delon/theme';
 import { ProductService } from "../shared/product.service";
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -41,6 +41,7 @@ export class ProductListComponent implements OnInit {
         private router: Router,
         private route: ActivatedRoute,
         private msg: NzMessageService,
+        private titleSrv: TitleService,
         private localStorageService: LocalStorageService,
         private productService: ProductService
     ) { }
@@ -56,6 +57,7 @@ export class ProductListComponent implements OnInit {
     };
 
     ngOnInit() {
+        this.titleSrv.setTitle('商品');
         this.moduleId = this.route.snapshot.params['menuId'];
         this.getStoresInfor();//查看门店
 

@@ -11,7 +11,7 @@
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="cardConfigName">卡名称</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input nz-input formControlName="cardConfigName" id="productName" placeholder="请输入卡名称">
+                <input maxlength="20" nz-input formControlName="cardConfigName" id="productName" placeholder="请输入卡名称">
                 <nz-form-explain *ngIf="form.get('cardConfigName').dirty && form.get('cardConfigName').errors">请输入卡名称</nz-form-explain>
             </nz-form-control>
         </nz-form-item>
@@ -62,24 +62,14 @@
             <nz-form-label nzXs="24" nzSm="7">折扣</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10"><nz-form-text>{{rebate}}折</nz-form-text></nz-form-control>
         </nz-form-item>
+
         <nz-form-item *ngIf="ifShow">
             <nz-form-label nzXs="24" nzSm="7" nzFor="validateType">使用有效期</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <nz-radio-group formControlName="validateType">
-                    <label nz-radio *ngFor="let list of validateType" [nzValue]="list.type" (click)="changeData()">
-                        {{list.name}}
-                        <p class="ifshow" *ngIf="list.type === 'days'">
-                            <input style="width: 100px;margin: 0 5px;" nz-input formControlName="effectivityDays" id="effectivityDays" placeholder="请输入天数" (change)="checkData()"/>天内有效
-                        </p>
-                    </label>
-                </nz-radio-group>
-                <ng-container *ngIf="form.value.validateType === 'days'&& effectivityDays.dirty || effectivityDays.touched">
-                    <nz-form-explain class="errorTips" *ngIf="effectivityDays.errors?.required">使用有效期不可为空</nz-form-explain>
-                    <nz-form-explain class="errorTips" *ngIf="effectivityDays.errors?.pattern">使用有效期至少为一天</nz-form-explain>
-                    <nz-form-explain class="errorTips" *ngIf="form.value.effectivityDays && !ifShowErrorTips">使用有效期只能为正整数</nz-form-explain>
-                </ng-container>
+              <nz-form-text>{{validateTypeText}}</nz-form-text>
             </nz-form-control>
         </nz-form-item>
+
         <nz-form-item  *ngIf="ifShow">
             <nz-form-label nzXs="24" nzSm="7" nzFor="isPinCard">是否可销卡</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10"  *ngIf="cardType === 'STORED' || cardType === 'REBATE' || cardType === 'METERING'">

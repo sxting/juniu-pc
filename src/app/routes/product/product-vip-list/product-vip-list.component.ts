@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { _HttpClient } from '@delon/theme';
+import { _HttpClient, TitleService } from '@delon/theme';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ProductService } from "../shared/product.service";
 import { Router, ActivatedRoute } from '@angular/router';
@@ -49,12 +49,14 @@ export class ProductVipListComponent implements OnInit {
         private router: Router,
         private route: ActivatedRoute,
         private msg: NzMessageService,
+        private titleSrv: TitleService,
         private localStorageService: LocalStorageService,
         private productService: ProductService
     ) { }
 
 
     ngOnInit() {
+        this.titleSrv.setTitle('会员卡');
         this.moduleId = this.route.snapshot.params['menuId'];//门店
         this.getStoresInfor();//门店
     }
