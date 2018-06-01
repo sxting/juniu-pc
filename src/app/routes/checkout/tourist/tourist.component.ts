@@ -118,6 +118,9 @@ export class TouristComponent implements OnInit {
     pageSize: any = 10
     vipdate: any;
     settleCardDTOList: any;
+    pageIndex3: any = 1;
+    Total2: any;
+    CustomerData: any = [];
     constructor(
         public msg: NzMessageService,
         private localStorageService: LocalStorageService,
@@ -547,7 +550,7 @@ export class TouristComponent implements OnInit {
         console.log(this.authCode)
         let create = <CreateOrder>{};
         create.customerName = this.memberInfo.customerName;
-        create.phone = this.phone;
+        create.phone = this.memberInfo.phone;
         create.authCode = this.authCode;
         create.birthday = this.memberInfo.birthday;
         create.gender = this.memberInfo.gender;
@@ -750,8 +753,7 @@ export class TouristComponent implements OnInit {
         );
     }
     /**搜索会员卡 */
-    searchMemberCard(event?: any, jiesuan?: any) {
-        this.phone = this.vipsearch;
+    searchMemberCard(type?:any) {
         this.yjcardList = [];
         let self = this;
         this.cardChangeBoolean = false;
@@ -763,8 +765,7 @@ export class TouristComponent implements OnInit {
                         if (res.success) {
                             self.vipData = res.data;
                             if (self.vipData && self.vipData.length > 0) self.vipDataBoolean = true;
-
-
+                            if(type) this.vipDataRadio(0);
                         } else {
                             self.errorAlter(res.errorInfo)
                         }
@@ -1150,6 +1151,7 @@ export class TouristComponent implements OnInit {
                     this.modalSrv.success({
                         nzContent: '收款成功'
                     })
+                    this.searchMemberCard();
                 } else {
                     this.errorAlter(res.errorInfo)
                 }
@@ -1213,6 +1215,7 @@ export class TouristComponent implements OnInit {
 
     }
     vipDataRadio(ind?: any) {
+        this.radioValue = Number(ind);
         let self = this;
         self.yjcardList = this.vipData[this.radioValue].cardApplies;
         this.vipData1 = this.vipData[this.radioValue];
@@ -1361,9 +1364,7 @@ export class TouristComponent implements OnInit {
             }
         });
     }
-    pageIndex3: any = 1;
-    Total2:any;
-    CustomerData:any = [];
+
     findByCustomerIdHttp(customerId: any) {
         let data = {
             customerId: customerId,
@@ -1386,7 +1387,7 @@ export class TouristComponent implements OnInit {
             );
 
     }
-    getData2(e){
+    getData2(e) {
         this.pageIndex3 = e;
         this.findByCustomerIdHttp(this.memberInfo.customerId);
     }
