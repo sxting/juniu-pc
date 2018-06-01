@@ -253,7 +253,7 @@
             </ng-template>
             <div class="vipArrBox" *ngIf="vipDataBoolean">
               <nz-radio-group [(ngModel)]="radioValue" style="display: block;" (ngModelChange)="vipDataRadio($event)">
-                <label nz-radio *ngFor="let item of vipData;let ind = index;" (click)="vipDataRadio($event,ind)" nzValue="{{ind}}">姓名：{{item.customer.customerName}} 电话：{{item.customer.phone}}</label>
+                <label nz-radio *ngFor="let item of vipData;let ind = index;" (click)="vipDataRadio(ind)" nzValue="{{ind}}">姓名：{{item.customer.customerName}} 电话：{{item.customer.phone}}</label>
               </nz-radio-group>
             </div>
             <div class="kaitongVIP iconfont icon-iconfonticon02" (click)="kaitongVipFun(kaitongVip)">开通新会员</div>

@@ -1151,7 +1151,7 @@ export class TouristComponent implements OnInit {
                     this.modalSrv.success({
                         nzContent: '收款成功'
                     })
-                    this.searchMemberCard();
+                    this.searchMemberCard(true);
                 } else {
                     this.errorAlter(res.errorInfo)
                 }
@@ -1278,7 +1278,7 @@ export class TouristComponent implements OnInit {
         this.xfList = this.guadanList[index].xfList;
         // this.memberInfo = this.shopyinList[index].vip;
         this.vipsearch = this.guadanList[index].vip.phone;
-        this.searchMemberCard();
+        this.searchMemberCard(true);
     }
     guadanSC(index: any) {
         let that = this;
