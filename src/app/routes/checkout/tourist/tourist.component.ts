@@ -1349,17 +1349,16 @@ export class TouristComponent implements OnInit {
                 } else if (selectData['recordTypeName'] === '开卡') {
                     this.errorAlter('开卡业务，不得退款');
                 } else {
-                    this.loading();
                     obj.checkoutService.backOrder(selectData['orderId']).subscribe(
                         (res: any) => {
                             if (res) {
                                 if (res.success) {
-                                    this.modalSrv.success({
+                                    obj.modalSrv.success({
                                         nzTitle: '退款成功'
                                     });
                                     obj.getOrderHistoryListHttp();
                                 } else {
-                                    this.errorAlter(res.errorInfo)
+                                    obj.errorAlter(res.errorInfo)
                                 }
                             }
                         },

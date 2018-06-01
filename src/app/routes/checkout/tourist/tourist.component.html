@@ -623,7 +623,7 @@
 </ng-template>
 
 <ng-template #shouyinAlert>
-  <nz-table [nzNoResult]="'没有数据'" [nzShowPagination]="false" [nzData]="guadanList">
+  <nz-table [nzNoResult]="'没有数据'" [nzShowPagination]="false" [nzData]="shopyinList">
     <thead>
       <tr>
         <th>收银时间</th>
@@ -646,9 +646,9 @@
         <td>{{item.customerName}}</td>
         <td>{{item.paidMoney/100}}</td>
         <td>
-          <span class="button" (click)="guadanJS(ind)">撤销</span>
+          <span class="button" *ngIf="item.statusName !== '已取消'" (click)="refund(item)">撤销</span>
+          <span class="button" *ngIf="item.statusName === '已取消'">已退款</span>
         </td>
-
       </tr>
     </tbody>
   </nz-table>
