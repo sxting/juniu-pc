@@ -1,11 +1,12 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
-import { KoubeiService } from "../shared/koubei.service";
 import { LocalStorageService } from "@shared/service/localstorage-service";
 import { NzModalService, NzMessageService } from "ng-zorro-antd";
 import { FunctionUtil } from "@shared/funtion/funtion-util";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
+import { KoubeiService } from '../../koubei/shared/koubei.service';
+import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-koubei-print',
@@ -18,7 +19,7 @@ export class KoubeiPrintComponent implements OnInit {
     submitting: boolean = false;
 
     theadName: any[] = ['终端编号', '终端名称', '终端秘钥', '所属门店', '操作'];
-    // stores: any[] = [];
+    stores: any[] = [];
     storeId: string = '';
 
     deviceName: any; //终端名称
@@ -32,20 +33,18 @@ export class KoubeiPrintComponent implements OnInit {
     printerDeviceId: any;
 
     printList: any[] = [];
-    stores:any;
-    moduleId: any = '';
-
+    moduleId: any;
     constructor(
-        private route: ActivatedRoute,
-        private koubeiService: KoubeiService,
         private localStorageService: LocalStorageService,
         private fb: FormBuilder,
         private msg: NzMessageService,
+        private route: ActivatedRoute,
+        private router: Router,
+        private koubeiService: KoubeiService,
         private modalSrv: NzModalService
     ) { }
 
     ngOnInit() {
-        this.moduleId = this.route.snapshot.params['menuId'];
         this.moduleId = this.route.snapshot.params['menuId'];
         this.selectStoresHttp();
     }
@@ -64,7 +63,7 @@ export class KoubeiPrintComponent implements OnInit {
             this.getPrintDetail();
         } else { //新增
             //各种都置空
-            // this.storeId = '';
+            this.storeId = '';
             this.printerDeviceId = '';
             this.deviceName = '';
             this.yunApiKey = '';
@@ -75,10 +74,6 @@ export class KoubeiPrintComponent implements OnInit {
             this.yunUsername = '';
             this.formInit();
         }
-    }
-
-    onStaffStoresChange(e: any) {
-        this.storeId = e.storeId;
     }
 
     get yun_username() { return this.form.controls['yun_username']; }
@@ -99,7 +94,7 @@ export class KoubeiPrintComponent implements OnInit {
                 yun_device_id: [this.yunDeviceId, Validators.required],
                 yun_device_key: [this.yunDeviceKey, Validators.required],
                 yun_device_sim_no: [this.yunDeviceSimNo, []],
-                // selected_store: [this.storeId, Validators.required],
+                selected_store: [this.storeId, Validators.required],
             });
         }
         else {
@@ -111,7 +106,7 @@ export class KoubeiPrintComponent implements OnInit {
                 yun_device_id: ['', Validators.required],
                 yun_device_key: ['', Validators.required],
                 yun_device_sim_no: ['', []],
-                // selected_store: ['', Validators.required],
+                selected_store: ['', Validators.required],
             });
         }
     }
@@ -124,7 +119,7 @@ export class KoubeiPrintComponent implements OnInit {
         if (this.form.invalid) return;
         this.submitting = true;
 
-        // this.storeId = this.form.value.selected_store;
+        this.storeId = this.form.value.selected_store;
         this.deviceName = this.form.value.device_name;
         this.yunApiKey = this.form.value.yun_api_key;
         this.yunDeviceId = this.form.value.yun_device_id;
