@@ -73,11 +73,11 @@ export class HeaderNotifyComponent {
         this.loading = false;
         if (res.success) {
           let data = res.data;
-          data = [
-            {title: '消息标题2', content: '消息内容2', status: 0, messageId: '02'},
-            {title: '消息标题3', content: '消息内容3', status: 0, messageId: '03'},
-            {title: '消息标题4', content: '消息内容4', status: 1, messageId: '04'}
-          ];
+          // data = [
+          //   {title: '消息标题2', content: '消息内容2', status: 0, messageId: '02'},
+          //   {title: '消息标题3', content: '消息内容3', status: 0, messageId: '03'},
+          //   {title: '消息标题4', content: '消息内容4', status: 1, messageId: '04'}
+          // ];
 
           let noticeData: any = [];
 
