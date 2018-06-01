@@ -119,7 +119,7 @@ export class TouristComponent implements OnInit {
     vipdate: any;
     settleCardDTOList: any;
     pageIndex3: any = 1;
-    Total2: any =1;
+    Total2: any = 1;
     CustomerData: any = [];
     constructor(
         public msg: NzMessageService,
@@ -647,7 +647,8 @@ export class TouristComponent implements OnInit {
                             i.productIdList.push(n.productId)
                             if (i.type === 'TIMES') i.amount = 0;
                             else if (i.type === 'METERING') i.amount += n.num;
-                            else i.amount += NP.times(n.num, n.totoleMoney);
+                            else if (i.type === 'REBATE') i.amount += NP.times(n.num, n.totoleMoney, 100, NP.divide(n.vipCard.card.rebate, 10));
+                            else i.amount += NP.times(n.num, n.totoleMoney, 100);
                         }
                     })
                 })
@@ -672,13 +673,13 @@ export class TouristComponent implements OnInit {
             create.money = that.isVerb2 ? that.isVerbVipCardmoney * 100 : that.vipCardmoney * 100;
             create.originMoney = create.money;
         } else {
-            if(this.xfList &&this.xfList.length>0){
+            if (this.xfList && this.xfList.length > 0) {
                 create.money = that.isVerb ? that.isVerbMoney * 100 : that.totolMoney * 100;
                 create.originMoney = create.money;
-            }else{
-                create.money = this.inputValue* 100 ;
+            } else {
+                create.money = this.inputValue * 100;
             }
-            
+
         }
 
         create.storeId = this.storeId;
@@ -759,7 +760,7 @@ export class TouristComponent implements OnInit {
         );
     }
     /**搜索会员卡 */
-    searchMemberCard(type?:any) {
+    searchMemberCard(type?: any) {
         this.yjcardList = [];
         let self = this;
         this.cardChangeBoolean = false;
@@ -771,7 +772,7 @@ export class TouristComponent implements OnInit {
                         if (res.success) {
                             self.vipData = res.data;
                             if (self.vipData && self.vipData.length > 0) self.vipDataBoolean = true;
-                            if(type) this.vipDataRadio(0);
+                            if (type) this.vipDataRadio(0);
                         } else {
                             self.errorAlter(res.errorInfo)
                         }
