@@ -10,7 +10,7 @@
     <nz-form-item>
         <nz-form-label nzSpan="5" nzRequired nzFor="cardConfigName">卡名称</nz-form-label>
         <nz-form-control nzSpan="19">
-            <input maxlength="16" nz-input formControlName="cardConfigName" id="cardConfigName" placeholder="请输入卡名称">
+            <input maxlength="16" nz-input formControlName="cardConfigName" autocomplete="off" id="cardConfigName" placeholder="请输入卡名称">
             <ng-container *ngIf="cardConfigName.dirty || cardConfigName.touched">
                 <nz-form-explain class="errorTips" *ngIf="cardConfigName.errors?.required">请输入卡名称</nz-form-explain>
             </ng-container>

@@ -7,6 +7,7 @@ import { ProductService } from "../shared/product.service";
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { CITYLIST } from '@shared/define/juniu-define';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-rules-step3',
@@ -34,10 +35,13 @@ export class RulesStep3Component implements OnInit {
     storeId: string = '';//判断是门店登录还是商家登陆
     ifHttps: string = 'SERVICEITEMS';//是否要调取接口
     ifShow: boolean = false;
+    moduleId: any;
 
     constructor(
         private http: _HttpClient,
         private fb: FormBuilder,
+        private router: Router,
+        private route: ActivatedRoute,
         private modalSrv: NzModalService,
         private msg: NzMessageService,
         private localStorageService: LocalStorageService,
@@ -47,55 +51,11 @@ export class RulesStep3Component implements OnInit {
 
     ngOnInit() {
         let self = this;
+        this.moduleId = this.route.snapshot.params['menuId'];//门店
+
         let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
           JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
         this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
-
-        let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Down')) ?
-          JSON.parse(this.localStorageService.getLocalstorage('Stores-Down')) : [];
-
-        if (storeList) {
-          CITYLIST.forEach(function (i: any) {
-            storeList.forEach((ele: any, index: number, arr: any) => {
-              if (i.i == ele.cityCode) {
-                ele.cityName = i.n;
-              }
-            })
-          })
-        }
-
-        let cityNameSpaceArr = [{
-          cityName: '',
-          cityId: '',
-        }];
-        cityNameSpaceArr.shift();
-
-        for (let i = 0; i < storeList.length; i++) {
-          if (storeList[i].cityCode == '' || storeList[i].cityCode == null) {
-            storeList[i].cityName = '其他';
-          } else if (storeList[i].cityCode != '' && storeList[i].cityName == '') {
-            cityNameSpaceArr.push({
-              cityName: '',
-              cityId: storeList[i].cityCode,
-            });
-          }
-        }
-        for (let i = 0; i < cityNameSpaceArr.length; i++) {
-          for (let j = 0; j < storeList.length; j++) {
-            if (cityNameSpaceArr[i].cityId == storeList[j].cityCode && storeList[j].cityName != '') {
-              cityNameSpaceArr[i].cityName = storeList[j].cityName;
-            }
-          }
-        }
-        for (let i = 0; i < cityNameSpaceArr.length; i++) {
-          for (let j = 0; j < storeList.length; j++) {
-            if (cityNameSpaceArr[i].cityId == storeList[j].cityCode && storeList[j].cityName == '') {
-              storeList[j].cityName = cityNameSpaceArr[i].cityName
-            }
-          }
-        }
-        this.cityStoreList = FunctionUtil.getCityListStore(storeList);
-        this.changeAllData();//获取到所有的门店ID及其num
 
         this.form = this.fb.group({
             productTypes: [ self.productTypes[0].value, [ Validators.required ] ],
@@ -112,6 +72,45 @@ export class RulesStep3Component implements OnInit {
         this.getAllbuySearchs(data);//获取所有的商品
 
     }
+
+    //获取门店数据
+    storeListPush(event){
+      this.cityStoreList = event.storeList? event.storeList : [];
+      console.log(this.cityStoreList);
+    }
+
+    //获取门店总数量
+    getAllStoresNum(event){
+      this.allStoresNum = event.allStoresNum? event.allStoresNum : 0;
+    }
+
+    //获取门店选择的数量
+    getStoresChangeNum(event){
+      this.storesChangeNum = event.storesChangeNum? event.storesChangeNum : 0;
+    }
+
+    //获取选择的门店ID
+    getSelectStoresIdsCsh(event){
+      this.selectStoresIds = event.selectStoresIds? event.selectStoresIds : '';
+    }
+
+    //选择弹框的门店数量
+    getSelectStoresNumber(event){
+      if(event){
+        this.storesChangeNum = event.selectStaffNum;
+        this.ifShow = this.storesChangeNum == 0? true: false;
+      }
+    }
+
+    //获取弹框的时候门店ID
+    getSelectStoresIds(event){
+      console.log(event);
+      if(event){
+        this.selectStoresIds = event.staffIds;
+      }
+    }
+
+
 
     //选择弹框
     onSelectAlertBtn(tpl: any, text: string, type: string){
@@ -130,6 +129,7 @@ export class RulesStep3Component implements OnInit {
             this.changeAllData();
         }
     }
+
     //选择商品弹框
     onSelectAlertBtnProduct(tpl: any, text: string, type: string){
         let self = this;
@@ -160,13 +160,6 @@ export class RulesStep3Component implements OnInit {
         }
     }
 
-    //获取到门店ID
-    getSelectStoresIds(event){
-        console.log(event);
-        if(event){
-            this.selectStoresIds = event.staffIds;
-        }
-    }
 
     //获取商品ID
     getProductIds(event){
@@ -175,13 +168,6 @@ export class RulesStep3Component implements OnInit {
         }
     }
 
-    //选择的门店数量
-    getSelectStoresNumber(event){
-      if(event){
-        this.storesChangeNum = event.selectStaffNum;
-        this.ifShow = this.storesChangeNum == 0? true: false;
-      }
-    }
     //选择商品数量
     getSelectProductNumber(event: any){
       if(event){
@@ -349,7 +335,7 @@ export class RulesStep3Component implements OnInit {
             rules: [list],
         };
         if(this.allProductNumber === 0){
-          this.msg.warning('需要先创建商品或者项目');
+          this.msg.warning('需要先创建商品或者服务项目');
           return;
         }else if(this.allStoresNum === 0){
           this.msg.warning('需要先创建门店');

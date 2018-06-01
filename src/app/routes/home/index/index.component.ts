@@ -100,7 +100,7 @@ export class IndexComponent implements OnInit {
     }
 
     ngOnInit() {
-      this.guadanCount = this.localStorageService.getLocalstorage('GUADAN');
+      this.guadanCount = this.localStorageService.getLocalstorage('GUADAN') ? this.localStorageService.getLocalstorage('GUADAN') : 0;
       this.merchantId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['merchantId'];
       if (JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['staffType'] == 'STORE') {
         let data = {

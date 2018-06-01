@@ -59,6 +59,8 @@ export class CheckVipcardDetailinforComponent implements OnInit {
     isVisible: boolean = false;//是否重新选择图片
     CardBackGround: any;
     backGroundImg: string = '';//卡面背景图地址
+    moduleId: string;
+
 
     constructor(
         private http: _HttpClient,
@@ -77,53 +79,8 @@ export class CheckVipcardDetailinforComponent implements OnInit {
     ngOnInit() {
 
         let self = this;
+        this.moduleId = this.route.snapshot.params['menuId']? this.route.snapshot.params['menuId'] : '';//门店
         this.titleSrv.setTitle('编辑会员卡');
-        let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Down')) ?
-          JSON.parse(this.localStorageService.getLocalstorage('Stores-Down')) : [];
-
-        if (storeList) {
-          CITYLIST.forEach(function (i: any) {
-            storeList.forEach((ele: any, index: number, arr: any) => {
-              if (i.i == ele.cityCode) {
-                ele.cityName = i.n;
-              }
-            })
-          })
-        }
-
-        let cityNameSpaceArr = [{
-          cityName: '',
-          cityId: '',
-        }];
-        cityNameSpaceArr.shift();
-
-        for (let i = 0; i < storeList.length; i++) {
-          if (storeList[i].cityCode == '' || storeList[i].cityCode == null) {
-            storeList[i].cityName = '其他';
-          } else if (storeList[i].cityCode != '' && storeList[i].cityName == '') {
-            cityNameSpaceArr.push({
-              cityName: '',
-              cityId: storeList[i].cityCode,
-            });
-          }
-        }
-        for (let i = 0; i < cityNameSpaceArr.length; i++) {
-          for (let j = 0; j < storeList.length; j++) {
-            if (cityNameSpaceArr[i].cityId == storeList[j].cityCode && storeList[j].cityName != '') {
-              cityNameSpaceArr[i].cityName = storeList[j].cityName;
-            }
-          }
-        }
-        for (let i = 0; i < cityNameSpaceArr.length; i++) {
-          for (let j = 0; j < storeList.length; j++) {
-            if (cityNameSpaceArr[i].cityId == storeList[j].cityCode && storeList[j].cityName == '') {
-              storeList[j].cityName = cityNameSpaceArr[i].cityName
-            }
-          }
-        }
-        this.cityStoreList = FunctionUtil.getCityListStore(storeList);
-        this.changeAllData();//获取到所有的门店ID及其num
-
         this.cardType = this.route.snapshot.params['cardType'] ? this.route.snapshot.params['cardType'] : FunctionUtil.getUrlString('cardType');
         this.configId = this.route.snapshot.params['configId'] ? this.route.snapshot.params['configId'] : FunctionUtil.getUrlString('configId');
 
@@ -138,13 +95,6 @@ export class CheckVipcardDetailinforComponent implements OnInit {
         }
         self.ifShow = this.cardType === 'TIMES'? false : true;//详情页面的选填信息
 
-        let data = {
-            merchantId: this.merchantId,
-            storeId: this.storeId,
-            categoryType: ''
-        };
-        this.getAllbuySearchs(data);//获取所有的商品
-
         this.formData = {
             cardConfigName:[ null, [ Validators.required ] ],
             validateType: [ self.validateType[0].type, [ Validators.required ] ],
@@ -156,6 +106,28 @@ export class CheckVipcardDetailinforComponent implements OnInit {
             storeType: [ self.storeStatus[0].value, [ Validators.required ] ]
         };
         this.form = this.fb.group(self.formData);
+    }
+
+    //获取门店数据
+    storeListPush(event){
+      this.cityStoreList = event.storeList? event.storeList : [];
+      let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+        JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+      this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
+      this.storeId = UserInfo.staffType === "MERCHANT"? '' : this.cityStoreList[0].storeId;
+
+      let data = {
+        merchantId: this.merchantId,
+        storeId: this.storeId,
+        categoryType: ''
+      };
+      this.getAllbuySearchs(data);//获取所有的商品
+
+    }
+
+    //获取门店总数量
+    getAllStoresNum(event){
+      this.allStoresNum = event.allStoresNum? event.allStoresNum : 0;
     }
 
     //选择弹框

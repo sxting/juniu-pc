@@ -55,7 +55,8 @@ export class SmsNotificationsComponent implements OnInit {
         let self = this;
         this.loading = true;
         let batchQuery =  {
-            staffId: this.staffId
+            staffId: this.staffId,
+            timestamp: new Date().getTime()
         };
         this.manageService.smsPushConfig(batchQuery).subscribe(
             (res: any) => {
@@ -102,6 +103,7 @@ export class SmsNotificationsComponent implements OnInit {
             staffId: this.staffId,
             roleName: this.roleName,
             staffName: this.staffName,
+            timestamp: new Date().getTime(),
             pushChannel: 'SMS'
         };
         this.manageService.setPushSmsHttps(params).subscribe(

@@ -5,7 +5,6 @@ import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
-import { STORES_STAFF } from '@shared/define/juniu-define';
 
 @Component({
   selector: 'app-staff-list',
@@ -27,7 +26,6 @@ export class StaffListComponent implements OnInit {
     moduleId: any;
     ifStoresAll: boolean = true;//是否有全部门店
     ifStoresAuth: boolean = false;//是否授权
-    timestamp: any = new Date().getTime();//当前时间的时间戳
 
     constructor(
         private http: _HttpClient,
@@ -48,13 +46,12 @@ export class StaffListComponent implements OnInit {
     //门店id
     getStoreId(event: any){
       this.storeId = event.storeId? event.storeId : '';
-      this.staffListHttp();//员工列表请求数据
     }
 
     //返回门店数据
     storeListPush(event: any){
       this.storeList = event.storeList? event.storeList : [];
-      this.localStorageService.setLocalstorage(STORES_STAFF, JSON.stringify(this.storeList));
+      this.staffListHttp();//员工列表请求数据
     }
 
     //删除员工
@@ -74,12 +71,12 @@ export class StaffListComponent implements OnInit {
 
     //编辑
     editStaffInfor(id: string){
-        this.router.navigate(['/manage/add/new/staff', {staffId: id}]);
+        this.router.navigate(['/manage/add/new/staff', {staffId: id, menuId: this.moduleId}]);
     }
 
     //新增员工
     addstaff(){
-        this.router.navigate(['/manage/add/new/staff']);
+        this.router.navigate(['/manage/add/new/staff',{ menuId: this.moduleId }]);
     }
 
     // 切换分页码
@@ -92,13 +89,13 @@ export class StaffListComponent implements OnInit {
     //微信推送
     WeChatpush(staffId: string){
         let id = staffId;
-        this.router.navigate(['/manage/wechat/notice', {staffId : id}]);
+        this.router.navigate(['/manage/wechat/notice', {staffId : id, menuId: this.moduleId}]);
     }
 
     //短信通知
     smsNotice(staffId: string){
         let id = staffId;
-        this.router.navigate(['/manage/sms/notice', {staffId : id}]);
+        this.router.navigate(['/manage/sms/notice', {staffId : id, menuId: this.moduleId}]);
     }
 
     //查询条件
@@ -113,7 +110,8 @@ export class StaffListComponent implements OnInit {
         let self = this;
         this.loading = true;
         let batchQuery =  {
-            staffId: staffId
+            staffId: staffId,
+            timestamp: new Date().getTime()
         };
         this.manageService.staffremove(batchQuery).subscribe(
             (res: any) => {
@@ -146,7 +144,7 @@ export class StaffListComponent implements OnInit {
             pageSize: that.pageSize,
             storeId: that.storeId,
             staffName: that.staffName,
-            timestamp: that.timestamp
+            timestamp: new Date().getTime()
         };
         this.manageService.staffList(batchQuery).subscribe(
             (res: any) => {
@@ -170,7 +168,7 @@ export class StaffListComponent implements OnInit {
                         if(item.belongType === 'STORE'){
                           for(let j = 0;j < storeList.length; j++){
                             if(item.storeId === storeList[j].storeId){
-                              storeName = storeList[j].storeName;
+                              storeName = storeList[j].branchName;
                             }
                           }
                         }else {
@@ -180,7 +178,6 @@ export class StaffListComponent implements OnInit {
                       });
                     }
                     that.staffListInfos = res.data.items;
-                    console.log(that.staffListInfos);
                     that.countTotal = res.data.page.countTotal;
                 } else {
                     this.modalSrv.error({

@@ -72,13 +72,15 @@ export class AddNewStaffComponent implements OnInit {
         self.formData = {
             staffName: [null, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
             phone: [null, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
-            password: [null, [Validators.required, Validators.pattern(`^(?=.*\\d)(?=.*[a-z]).{6,16}$`)]],
+            password: [null, [Validators.required]],
             belongType: [ this.belongList[0].value, [Validators.required]],//门店员工职位
             storeId: [self.storeList[0].storeId, [Validators.required]],
             roleId: [null, [Validators.required]],
         };
         self.form = self.fb.group(self.formData);
     }
+
+   // Validators.pattern(`^(?=.*\\d)(?=.*[a-z]).{6,16}$`)
 
 
     //切换员工员工归属属性
@@ -156,7 +158,7 @@ export class AddNewStaffComponent implements OnInit {
                     self.formData = {
                       staffName: [null, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
                       phone: [null, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
-                      password: [null, [Validators.required, Validators.pattern(`^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,16}$`)]],
+                      password: [null, [Validators.required]],
                       belongType: [ this.belongList[0].value, [Validators.required]],//门店员工职位
                       storeId: [self.storeList[0].storeId, [Validators.required]],
                       roleId: [ roleId, [Validators.required]]
@@ -204,7 +206,7 @@ export class AddNewStaffComponent implements OnInit {
                     self.formData = {
                         staffName: [ res.data.staffName, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
                         phone: [ res.data.contactPhone, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
-                        password: [ res.data.password, [Validators.required, Validators.pattern(`^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,16}$`)]],
+                        password: [ res.data.password, [Validators.required]],
                         belongType: [ res.data.belongType, [Validators.required]],//门店员工职位
                         storeId: [ storeId, [Validators.required]],
                         roleId: [ res.data.roleId, [Validators.required]],

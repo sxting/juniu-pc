@@ -79,6 +79,7 @@ export class WechatNotificationsComponent implements OnInit {
         let self = this;
         this.loading = true;
         let batchQuery =  {
+            timestamp: new Date().getTime(),
             staffId: staffId
         };
         this.manageService.wechatPushConfig(batchQuery).subscribe(
@@ -132,7 +133,8 @@ export class WechatNotificationsComponent implements OnInit {
         let receiveType = this.form.controls.receiveType.value;
         let params = {
             pushTypeList: [ reportTypes, receiveType ],
-            staffId: this.staffId
+            staffId: this.staffId,
+            timestamp: new Date().getTime()
         };
         this.manageService.setPushWechat(params).subscribe(
             (res: any) => {

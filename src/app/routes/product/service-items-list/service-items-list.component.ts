@@ -76,7 +76,7 @@ export class ServiceItemsListComponent implements OnInit {
 
     //查看详情
     editProduct( ids: string ){
-        this.router.navigate(['/product/add/new/items', { productId: ids, storeId: this.storeId , merchantId: this.merchantId }]);
+        this.router.navigate(['/product/add/new/items', { productId: ids, storeId: this.storeId , merchantId: this.merchantId, menuId: this.moduleId }]);
     }
 
     //操作上下架商品
@@ -183,7 +183,7 @@ export class ServiceItemsListComponent implements OnInit {
 
     //新增服务项目
     addNewItemServes(){
-        this.router.navigate(['/product/add/new/items', {storeId:this.storeId , merchantId: this.merchantId }]);
+        this.router.navigate(['/product/add/new/items', {storeId:this.storeId , merchantId: this.merchantId ,menuId: this.moduleId }]);
     }
 
     // 切换分页码

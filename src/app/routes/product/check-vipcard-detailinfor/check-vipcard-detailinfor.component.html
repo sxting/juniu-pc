@@ -2,6 +2,7 @@
     会员卡创建后，一些参数可以修改，比如卡名称、卡面图片、适用商品和门店；而卡类型、售价等参数不可修改。
 </page-header>
 <nz-card [nzBordered]="false" style="margin-bottom: 0!important;">
+    <jn-stores-transfor [moduleId]="moduleId" (storeListPush)="storeListPush($event)" (allStoresNumPush)="getAllStoresNum($event)"></jn-stores-transfor>
     <form nz-form [formGroup]="form">
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7">卡类型</nz-form-label>

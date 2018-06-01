@@ -536,6 +536,9 @@ export class RuleSettingComponent implements OnInit {
       this.ifShowErrorTipsProduct = this.selectProductNumber === 0? true : false;//是否选择商品
       this.ifShowErrorTipsCard = this.selectCardNumber === 0? true : false;//是否选择会员卡
       this.ifShowErrorTipsSevice = this.selectSeviceItemsNumber === 0? true : false;//是否选择服务项目
+      this.ifShowErrorRateTips = parseFloat(this.form.controls.assignRate.value)/100 && parseFloat(this.form.controls.assignRate.value)/100? false : true;
+      this.ifShowErrorMoneyips = parseFloat(this.form.controls.deductMoney.value)*100? false : true;
+
       let dataInfor = {
         ruleName: this.form.controls.ruleName.value,
         assignRate: parseFloat(this.form.controls.assignRate.value)/100,
@@ -559,7 +562,7 @@ export class RuleSettingComponent implements OnInit {
       }
       if (this.form.invalid) return;
       this.submitting = true;
-      if(this.ifShowErrorStaffTips && this.ifShowErrorTipsProduct && this.ifShowErrorTipsCard && this.ifShowErrorTipsSevice){
+      if(this.ifShowErrorStaffTips && this.ifShowErrorTipsProduct && this.ifShowErrorTipsCard && this.ifShowErrorTipsSevice && this.ifShowErrorRateTips && this.ifShowErrorMoneyips){
         if(this.deductRuleId){//编辑修改
           this.editStaffingRules(dataInfor);
         }else{//修增
