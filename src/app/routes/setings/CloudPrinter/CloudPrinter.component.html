@@ -91,7 +91,7 @@
             <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="selected_store">选择门店</nz-form-label>
             <nz-form-control nzXs="24" nzSm="17" nzMd="17">
                 <nz-select formControlName="selected_store" nzPlaceHolder="请选择一个门店" [nzShowSearch]="true">
-                    <nz-option *ngFor="let store of stores" [nzLabel]="store.storeName" [nzValue]="store.storeId"></nz-option>
+                    <nz-option *ngFor="let store of stores" [nzLabel]="store.branchName" [nzValue]="store.storeId"></nz-option>
                 </nz-select>
                 <!-- <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth" (storeListPush)="storeListPush($event)"
       (storeIdOutput)="getStoreId($event)"></jn-stores-infor> -->
