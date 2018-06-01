@@ -16,9 +16,9 @@ export class SidebarComponent {
     private router: Router,
     public msgSrv: NzMessageService,
   ) { }
-  click(item: any) {
-    if (item.children.length == 0) {
-      this.menuRouteHttp(item.menuId);
+  click(menuId: any) {
+    if (menuId) {
+      this.menuRouteHttp(menuId);
     }
   }
 
