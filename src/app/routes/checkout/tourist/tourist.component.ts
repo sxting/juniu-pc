@@ -119,7 +119,7 @@ export class TouristComponent implements OnInit {
     vipdate: any;
     settleCardDTOList: any;
     pageIndex3: any = 1;
-    Total2: any;
+    Total2: any =1;
     CustomerData: any = [];
     constructor(
         public msg: NzMessageService,
@@ -1349,17 +1349,16 @@ export class TouristComponent implements OnInit {
                 } else if (selectData['recordTypeName'] === '开卡') {
                     this.errorAlter('开卡业务，不得退款');
                 } else {
-                    this.loading();
                     obj.checkoutService.backOrder(selectData['orderId']).subscribe(
                         (res: any) => {
                             if (res) {
                                 if (res.success) {
-                                    this.modalSrv.success({
+                                    obj.modalSrv.success({
                                         nzTitle: '退款成功'
                                     });
                                     obj.getOrderHistoryListHttp();
                                 } else {
-                                    this.errorAlter(res.errorInfo)
+                                    obj.errorAlter(res.errorInfo)
                                 }
                             }
                         },
@@ -1381,8 +1380,8 @@ export class TouristComponent implements OnInit {
             .subscribe(
                 (res: any) => {
                     if (res.success) {
-                        this.CustomerData = res.data.orders
-                        this.Total2 = res.data.pageInfo.countTotal;
+                        this.CustomerData = res.data.content
+                        this.Total2 = res.data.totalElements;
                     } else {
                         this.errorAlter(res.errorInfo)
                     }

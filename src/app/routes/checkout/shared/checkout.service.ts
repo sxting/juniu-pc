@@ -69,7 +69,7 @@ export class CheckoutService {
         let apiUrl = Config.API + 'order/back.json';
         let req = FunctionUtil.obectToURLSearchParams({ orderId: orderId });
         let data = { orderId: orderId };
-        return this.http.get(apiUrl, orderId).map((response: Response) => response).catch(error => {
+        return this.http.get(apiUrl, data).map((response: Response) => response).catch(error => {
             return Observable.throw(error);
         });
     }

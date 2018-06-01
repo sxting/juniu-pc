@@ -54,7 +54,7 @@ export class CardholdersVipComponent {
     totalCallNo = 0;
     expandForm = false;
     Total: any;
-    Total2: any;
+    Total2: any =1;
     pageIndex: any = 1;
     pageIndex2: any = 1;
     StoresInfo: any = this.localStorageService.getLocalstorage(STORES_INFO) ? JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
@@ -235,9 +235,9 @@ export class CardholdersVipComponent {
         this.memberService.customerOrders(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    this.data2 = res.data.orders;
+                    this.data2 = res.data.content;
                     this.loading = false;
-                    this.Total2 = res.data.pageInfo.countTotal;
+                    this.Total2 = res.data.totalElements;
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',

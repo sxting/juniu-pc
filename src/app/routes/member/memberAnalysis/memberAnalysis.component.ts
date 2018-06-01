@@ -4,6 +4,8 @@ import { _HttpClient } from '@delon/theme';
 import { SimpleTableColumn } from '@delon/abc';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { MemberService } from '../shared/member.service';
+import { USER_INFO } from '@shared/define/juniu-define';
+import { ActivatedRoute } from '@angular/router';
 declare var echarts: any;
 declare var DataView: any;
 declare var interval: any;
@@ -33,8 +35,8 @@ export class MemberAnalysisComponent implements OnInit {
     startDay: any;
     endDay: any;
     type: any = 'money';
-    storeId: any = '1525940433796116388373';
-    merchantId: any = '1517308425509187014931';
+    storeId: any;
+    merchantId: any ;
     dateType: any = 'week';
     rankingListData: any[] = Array(10).fill({}).map((item, i) => {
         return {
@@ -55,20 +57,21 @@ export class MemberAnalysisComponent implements OnInit {
     pageIndex: any = 1;
     index: any = 0;
     index2: any = 0;
+    moduleId:any;
+    userInfo:any = this.localStorageService.getLocalstorage(USER_INFO) ? JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)) : '';
+    
     constructor(public msg: NzMessageService,
         private localStorageService: LocalStorageService,
         private modalSrv: NzModalService,
+        private route: ActivatedRoute,
         private memberService: MemberService, private http: _HttpClient) {
-        this.http.get('/chart').subscribe((res: any) => {
-            this.webSite = res.visitData.slice(0, 10);
-            this.offlineChartData = res.offlineChartData;
-        });
+  
     }
     ngOnInit() {
-        this.memberStatisticsFunHttp();
-        this.memberMonthAvgHttp();
-        this.consumptionFrequencyHttp();
-        this.lastTimeHttp();
+        this.moduleId = this.route.snapshot.params['menuId'];
+        this.merchantId = this.userInfo.merchantId;
+        this.selectStoresHttp()
+
     }
 
     //今日新增会员、今日开卡张数、会员转换率、男女分布
@@ -234,5 +237,32 @@ export class MemberAnalysisComponent implements OnInit {
     }
     change2(e) {
         this.index2 = e.index
+    }
+    selectStoresHttp() {
+        let data = {
+            moduleId: this.moduleId,
+            timestamp: new Date().getTime()
+        }
+        this.loading = true;
+        let that = this;
+        this.memberService.selectStores(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.storeId = this.userInfo.staffType === 'MERCHANT' ? '' : res.data.items[0].storeId;
+                    this.memberStatisticsFunHttp();
+                    this.memberMonthAvgHttp();
+                    this.consumptionFrequencyHttp();
+                    this.lastTimeHttp();
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => {
+                this.errorAlter(error);
+            }
+        );
     }
 }

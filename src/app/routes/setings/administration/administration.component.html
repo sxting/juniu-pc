@@ -123,7 +123,7 @@
             <nz-form-label nzXs="24" nzSm="7" nzFor="newpassword">新密码</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="16">
                 <nz-input-group nzSize="large" nzPrefixIcon="anticon anticon-lock">
-                    <input nz-input formControlName="newpassword" maxlength="11" placeholder="新密码">
+                    <input nz-input formControlName="newpassword" maxlength="16" placeholder="新密码">
                 </nz-input-group>
                 <nz-form-explain *ngIf="newpassword.dirty && newpassword.errors">密码格式有误！</nz-form-explain>
             </nz-form-control>
@@ -132,7 +132,7 @@
             <nz-form-label nzXs="24" nzSm="7" nzFor="renewpassword">重复密码</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="16">
                 <nz-input-group nzSize="large" nzPrefixIcon="anticon anticon-lock">
-                    <input nz-input formControlName="renewpassword" maxlength="11" placeholder="重复密码">
+                    <input nz-input formControlName="renewpassword" maxlength="16" placeholder="重复密码">
                 </nz-input-group>
                 <nz-form-explain *ngIf="renewpassword.dirty && renewpassword.errors">密码格式有误！</nz-form-explain>
             </nz-form-control>
@@ -140,7 +140,7 @@
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7">手机号</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="16">
-                {{oldphone}}
+                {{userInfo.loginName}}
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
