@@ -56,8 +56,7 @@ export class RuleSettingComponent implements OnInit {
 
   timestamp: any = new Date().getTime();//当前时间的时间戳
 
-  ifShowErrorRateTips: boolean = false;//按比例提成率不可为空
-  ifShowErrorMoneyips: boolean = false;//提成金额不可为空
+  checkRate: boolean = true;//提成不可为空
 
   constructor(
       private http: _HttpClient,
@@ -179,9 +178,9 @@ export class RuleSettingComponent implements OnInit {
   //提成的发生改变的时候
   changeTypesData(type: string){
       if(type === 'RATE'){
-          this.ifShowErrorRateTips = this.form.controls.assignRate.value == null|| this.form.controls.normalRate.value == null? true : false;
+          this.checkRate = this.form.controls.assignRate.value == null|| this.form.controls.normalRate.value == null? true : false;
       }else {
-          this.ifShowErrorMoneyips = this.form.controls.deductMoney.value == null? true : false;
+          this.checkRate = this.form.controls.deductMoney.value == null? true : false;
       }
   }
 
@@ -538,32 +537,35 @@ export class RuleSettingComponent implements OnInit {
       this.ifShowErrorTipsProduct = this.selectProductNumber === 0? true : false;//是否选择商品
       this.ifShowErrorTipsCard = this.selectCardNumber === 0? true : false;//是否选择会员卡
       this.ifShowErrorTipsSevice = this.selectSeviceItemsNumber === 0? true : false;//是否选择服务项目
-      this.ifShowErrorRateTips = parseFloat(this.form.controls.assignRate.value)/100 && parseFloat(this.form.controls.assignRate.value)/100? false : true;
-      this.ifShowErrorMoneyips = parseFloat(this.form.controls.deductMoney.value)*100? false : true;
 
       let dataInfor = {
-        ruleName: this.form.controls.ruleName.value,
-        assignRate: parseFloat(this.form.controls.assignRate.value)/100,
-        normalRate: parseFloat(this.form.controls.assignRate.value)/100,
-        productIds: this.productIds,
-        staffIds: this.selectStaffIds,
-        storeId: this.storeId,
-        serviceItemIds: this.seviceItemsIds,
-        type: this.form.controls.type.value,
-        cardConfigRuleIds: this.cardConfigRuleIds,
-        deductMoney: parseFloat(this.form.controls.deductMoney.value)*100,
-        deductRuleId: this.deductRuleId,
-        cardConfigRuleCount: this.selectCardNumber,
-        productCount: this.selectProductNumber,
-        staffCount: this.selectStaffNumber
+          ruleName: this.form.controls.ruleName.value,
+          assignRate: parseFloat(this.form.controls.assignRate.value)/100,
+          normalRate: parseFloat(this.form.controls.normalRate.value)/100,
+          productIds: this.productIds,
+          staffIds: this.selectStaffIds,
+          storeId: this.storeId,
+          serviceItemIds: this.seviceItemsIds,
+          type: this.form.controls.type.value,
+          cardConfigRuleIds: this.cardConfigRuleIds,
+          deductMoney: parseFloat(this.form.controls.deductMoney.value)*100,
+          deductRuleId: this.deductRuleId,
+          cardConfigRuleCount: this.selectCardNumber,
+          productCount: this.selectProductNumber,
+          staffCount: this.selectStaffNumber
       };
-
       for (const i in this.form.controls) {
         this.form.controls[ i ].markAsDirty();
         this.form.controls[ i ].updateValueAndValidity();
       }
       if (this.form.invalid) return;
-      if(this.ifShowErrorStaffTips && this.ifShowErrorTipsProduct && this.ifShowErrorTipsCard && this.ifShowErrorTipsSevice && this.ifShowErrorRateTips && this.ifShowErrorMoneyips){
+
+      if(this.form.controls.type.value === 'RATE'){
+        this.checkRate = this.form.controls.assignRate.value == null|| this.form.controls.normalRate.value == null? false : true;
+      }else {
+        this.checkRate = this.form.controls.deductMoney.value == null? false : true;
+      }
+      if(!this.ifShowErrorStaffTips && !this.ifShowErrorTipsProduct && !this.ifShowErrorTipsCard && !this.ifShowErrorTipsSevice && this.checkRate){
         if(this.deductRuleId){//编辑修改
           this.editStaffingRules(dataInfor);
         }else{//修增

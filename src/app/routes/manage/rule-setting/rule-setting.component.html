@@ -31,11 +31,11 @@
                         </div>
                     </label>
                     <div style="position: absolute;bottom: -35px">
-                        <nz-form-explain class="errorTips" *ngIf="form.value.type === 'RATE' && assignRate.errors?.pattern">非指定比例提成只能是有两位小数的数字</nz-form-explain>
-                        <nz-form-explain class="errorTips" *ngIf="form.value.type === 'RATE' && normalRate.errors?.pattern">指定比例提成只能是有两位小数的数字</nz-form-explain>
-                        <nz-form-explain class="errorTips" *ngIf="form.value.type === 'RATE' && ifShowErrorRateTips">按比例提成率不可为空</nz-form-explain>
-                        <nz-form-explain class="errorTips" *ngIf="form.value.type === 'MONEY'&& ifShowErrorMoneyips">提成金额不可为空</nz-form-explain>
-                        <nz-form-explain class="errorTips" *ngIf="form.value.type === 'RATE' && deductMoney.errors?.pattern">指定比例提成只能是整数或者带有两位小数的数字</nz-form-explain>
+                        <nz-form-explain class="errorTips" *ngIf="form.value.type === 'RATE' && assignRate.errors?.pattern">指定比例只能是整数或带有两位小数的数字</nz-form-explain>
+                        <nz-form-explain class="errorTips" *ngIf="form.value.type === 'RATE' && normalRate.errors?.pattern">非指定比例只能是整数或带有两位小数的数字</nz-form-explain>
+                        <nz-form-explain class="errorTips" *ngIf="form.value.type === 'RATE' && !checkRate">按比例提成率不可为空</nz-form-explain>
+                        <nz-form-explain class="errorTips" *ngIf="form.value.type === 'MONEY' && deductMoney.errors?.pattern">提成金额只能是整数或带有两位小数的数字</nz-form-explain>
+                        <nz-form-explain class="errorTips" *ngIf="form.value.type === 'MONEY'&& !checkRate">提成金额不可为空</nz-form-explain>
                     </div>
                 </nz-radio-group>
             </nz-form-control>
