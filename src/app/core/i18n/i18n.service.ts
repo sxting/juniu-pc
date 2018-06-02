@@ -27,7 +27,7 @@ export class I18NService implements AlainI18NService {
   ) {
     const defaultLan = settings.layout.lang || translate.getBrowserLang();
     const lans = this._langs.map(item => item.code);
-    this._default = lans.includes(defaultLan) ? defaultLan : lans[0];
+    this._default = lans.includes(defaultLan) ? defaultLan : lans[1];
     translate.addLangs(lans);
     this.setZorro(this._default).setDateFns(this._default);
   }
