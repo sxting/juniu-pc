@@ -99,7 +99,7 @@
     <ul class="add_content">
       <li class="clearfix" *ngFor="let list of addNewCommodityType;let types = index">
         <span>{{types+1}}</span>
-        <input nz-input class="" type="text" placeholder="请输入分类名称" maxlength="20" [value]="list.categoryName" (change)="addDescriptions($event.target.value, types)" />
+        <input nz-input class="" type="text" placeholder="请输入分类名称" maxlength="10" [value]="list.categoryName" (change)="addDescriptions($event.target.value, types)" />
         <span class="add_btns" (click)="deleteCategoryClick(types,list.categoryId)">删除</span>
       </li>
       <li class="btns-add-new">
