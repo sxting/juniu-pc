@@ -5,7 +5,7 @@ import { ManageService } from '../shared/manage.service';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { LocalStorageService } from '@shared/service/localstorage-service';
-import { USER_INFO } from '@shared/define/juniu-define';
+import { USER_INFO, CITY_LIST } from '@shared/define/juniu-define';
 declare var AMap;
 declare var AMapUI
 @Component({
@@ -46,7 +46,10 @@ export class StoreEditComponent implements OnInit {
     ngOnInit() {
         this.storeId = this.route.snapshot.params['storeId'];
         this.merchantName = this.userInfo.merchantName;
-        this.getLocationHttp();
+        this.cityArr =  JSON.parse(this.localStorageService.getLocalstorage(CITY_LIST)) ;
+        if (this.route.snapshot.params['storeId']) {
+            this.getStoreInfo(this.route.snapshot.params['storeId']);
+        }
         this.mapFun();
     }
     submit() {
@@ -54,7 +57,7 @@ export class StoreEditComponent implements OnInit {
             this.errAlert('请填写分店名称');
         } else if (!this.adressCode && !(this.data ? this.data.provinceCode : false)) {
             this.errAlert('请选择门店地址');
-        }else if (!this.location){
+        } else if (!this.location) {
             this.errAlert('请填写门店详细地址');
         } else {
             let data = {
@@ -141,31 +144,28 @@ export class StoreEditComponent implements OnInit {
             }
         );
     }
-    getLocationHttp() {
-        let self = this;
-        let data = {
-            timestamp: new Date().getTime(),
-        }
-        this.manageService.getLocation(data).subscribe(
-            (res: any) => {
-                if (res.success) {
-                    self.forEachFun(res.data.items);
-                    this.cityArr = res.data.items;
-                    if (self.route.snapshot.params['storeId']) {
-                        self.getStoreInfo(this.route.snapshot.params['storeId']);
-                    }
-                } else {
-                    this.modalSrv.error({
-                        nzTitle: '温馨提示',
-                        nzContent: res.errorInfo
-                    });
-                }
-            },
-            (error) => {
-                this.msg.warning(error)
-            }
-        );
-    }
+    // getLocationHttp() {
+    //     let self = this;
+    //     let data = {
+    //         timestamp: new Date().getTime(),
+    //     }
+    //     this.manageService.getLocation(data).subscribe(
+    //         (res: any) => {
+    //             if (res.success) {
+    //                 self.forEachFun(res.data.items);
+
+    //             } else {
+    //                 this.modalSrv.error({
+    //                     nzTitle: '温馨提示',
+    //                     nzContent: res.errorInfo
+    //                 });
+    //             }
+    //         },
+    //         (error) => {
+    //             this.msg.warning(error)
+    //         }
+    //     );
+    // }
     getStoreInfo(e) {
         let self = this;
         let data = {
@@ -266,27 +266,7 @@ export class StoreEditComponent implements OnInit {
 
 
     }
-    forEachFun(arr: any, arr2?: any) {
-        let that = this;
-        arr.forEach(function (i: any) {
-            i.value = i.code;
-            i.label = i.name;
-            that.forEachFun2(i);
-        })
-    }
-    forEachFun2(arr: any) {
-        let that = this;
-        if (arr.hasSubset) {
-            arr.subset.forEach(function (n: any) {
-                n.value = n.code;
-                n.label = n.name;
-                that.forEachFun2(n);
-            })
-            arr.children = arr.subset;
-        } else {
-            arr.isLeaf = true;
-        }
-    }
+
     errAlert(err) {
         this.modalSrv.error({
             nzTitle: '温馨提示',

@@ -499,4 +499,11 @@ export class MemberService {
                 return Observable.throw(error);
             });
     }
+    //门店字典 /dic/get/location.json
+    getLocation(data) {
+        let apiUrl = Config.API1 + 'account/dic/get/location.json';
+        return this.http.get(apiUrl, data).map((response: Response) => response).catch(error => {
+            return Observable.throw(error);
+        });
+    }
 }

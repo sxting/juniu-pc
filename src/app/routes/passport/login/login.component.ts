@@ -9,7 +9,7 @@ import { environment } from '@env/environment';
 import { MemberService } from '../../member/shared/member.service';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
-import { APP_TOKEN, STORES_INFO, ALIPAY_SHOPS, USER_INFO, MODULES } from '@shared/define/juniu-define';
+import { APP_TOKEN, STORES_INFO, ALIPAY_SHOPS, USER_INFO, MODULES, CITY_LIST } from '@shared/define/juniu-define';
 import { StartupService } from '@core/startup/startup.service';
 
 @Component({
@@ -50,6 +50,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
         let sign = FunctionUtil.getUrlStringBySearch('sign') ? FunctionUtil.getUrlStringBySearch('sign') : FunctionUtil.getUrlString('sign');
         let url = FunctionUtil.getUrlStringBySearch('url') ? FunctionUtil.getUrlStringBySearch('url') : FunctionUtil.getUrlString('url');
         this.tokenService.set({ token: '-1' });
+        this.getLocationHttp();
         if (sign) {
             this.localStorageService.setLocalstorage(APP_TOKEN, sign);
             this.koubeiLogin(url)
@@ -228,5 +229,48 @@ export class UserLoginComponent implements OnDestroy, OnInit {
             nzTitle: '温馨提示',
             nzContent: err
         });
+    }
+    getLocationHttp() {
+        let self = this;
+        let data = {
+            timestamp: new Date().getTime(),
+        }
+        this.memberService.getLocation(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    self.forEachFun(res.data.items);
+                    this.localStorageService.setLocalstorage(CITY_LIST, JSON.stringify(res.data.items));
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            (error) => {
+                this.msg.warning(error)
+            }
+        );
+    }
+    forEachFun(arr: any, arr2?: any) {
+        let that = this;
+        arr.forEach(function (i: any) {
+            i.value = i.code;
+            i.label = i.name;
+            that.forEachFun2(i);
+        })
+    }
+    forEachFun2(arr: any) {
+        let that = this;
+        if (arr.hasSubset) {
+            arr.subset.forEach(function (n: any) {
+                n.value = n.code;
+                n.label = n.name;
+                that.forEachFun2(n);
+            })
+            arr.children = arr.subset;
+        } else {
+            arr.isLeaf = true;
+        }
     }
 }
