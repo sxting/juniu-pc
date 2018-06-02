@@ -119,7 +119,7 @@ export class TouristComponent implements OnInit {
     vipdate: any;
     settleCardDTOList: any;
     pageIndex3: any = 1;
-    Total2: any =1;
+    Total2: any = 1;
     CustomerData: any = [];
     constructor(
         public msg: NzMessageService,
@@ -136,7 +136,7 @@ export class TouristComponent implements OnInit {
     ngOnInit() {
         let that = this;
         this.moduleId = this.route.snapshot.params['menuId'];
-        this.changeFun();
+        // this.changeFun();
         this.guadanList = this.localStorageService.getLocalstorage(GUADAN) ? JSON.parse(this.localStorageService.getLocalstorage(GUADAN)) : [];
     }
     //切换数据
@@ -227,10 +227,18 @@ export class TouristComponent implements OnInit {
             //标注每个卡对应的总计减免
             this.vipMoneyFun()
             this.balanceFun();
+
+            this.tanchuang();
             that.productIdsFun(that.xfList);
             ticketM = that.ticketCheck ? (that.ticket && that.xfList.length > 0 ? that.ticket.ticketMoney : 0) : 0;
-            that.totolMoney = NP.minus(that.totolMoney, ticketM, NP.divide(that.vipShowMoney, 100))
-            that.isVerbMoney = NP.minus(that.isVerbMoney, ticketM, NP.divide(that.vipShowMoney, 100))
+            if (this.settleCardDTOList && this.settleCardDTOList.length > 0) {
+                that.totolMoney = NP.divide(that.vipShowMoney, 100)
+                that.isVerbMoney = NP.divide(that.vipShowMoney, 100)
+            } else {
+                that.totolMoney = NP.minus(that.totolMoney, ticketM)
+                that.isVerbMoney = NP.minus(that.isVerbMoney, ticketM)
+            }
+
             that.totolMoney = that.totolMoney < 0 ? 0 : that.totolMoney;
             that.isVerbMoney = that.isVerbMoney < 0 ? 0 : Math.floor(that.isVerbMoney);
             that.inputValue = that.isVerb ? that.isVerbMoney : that.totolMoney;
@@ -269,7 +277,7 @@ export class TouristComponent implements OnInit {
                         if (k.card.cardId === i.vipCard.card.cardId && k.checked) {
                             if (i.vipCard.card.type === "TIMES") { i.vipMoney = NP.times(NP.times(i.totoleMoney, 100), i.num) }
                             else if (i.vipCard.card.type === "METERING") { i.vipMoney = NP.times(NP.times(i.totoleMoney, 100), i.num) }
-                            else if (i.vipCard.card.type === "REBATE") { i.vipMoney = NP.times(NP.times(i.totoleMoney, 100), (1 - NP.divide(i.vipCard.card.rebate, 10)), i.num); }
+                            else if (i.vipCard.card.type === "REBATE") { i.vipMoney = NP.times(NP.times(i.totoleMoney, 100), NP.divide(i.vipCard.card.rebate, 10), i.num); }
                             else if (i.vipCard.card.type === "STORED") { i.vipMoney = NP.times(NP.times(i.totoleMoney, 100), i.num) }
                         } else if (k.card.cardId === i.vipCard.card.cardId && !k.checked) {
                             i.vipMoney = 0;
@@ -377,7 +385,6 @@ export class TouristComponent implements OnInit {
     jiesuan(tpl: TemplateRef<{}>) {
         let money = this.changeType ? (this.inputValue) : (this.isVerb2 ? this.isVerbVipCardmoney : this.vipCardmoney);
         let that = this;
-        this.tanchuang();
         this.cardChangeBoolean = false;
         if (this.vipMoney < 0) {
             this.vipMoneyChajiaFun(money, tpl);
@@ -647,7 +654,8 @@ export class TouristComponent implements OnInit {
                             i.productIdList.push(n.productId)
                             if (i.type === 'TIMES') i.amount = 0;
                             else if (i.type === 'METERING') i.amount += n.num;
-                            else i.amount += NP.times(n.num, n.totoleMoney);
+                            else if (i.type === 'REBATE') i.amount += NP.times(n.num, n.totoleMoney, 100, NP.divide(n.vipCard.card.rebate, 10));
+                            else i.amount += NP.times(n.num, n.totoleMoney, 100);
                         }
                     })
                 })
@@ -672,13 +680,13 @@ export class TouristComponent implements OnInit {
             create.money = that.isVerb2 ? that.isVerbVipCardmoney * 100 : that.vipCardmoney * 100;
             create.originMoney = create.money;
         } else {
-            if(this.xfList &&this.xfList.length>0){
+            if (this.xfList && this.xfList.length > 0) {
                 create.money = that.isVerb ? that.isVerbMoney * 100 : that.totolMoney * 100;
                 create.originMoney = create.money;
-            }else{
-                create.money = this.inputValue* 100 ;
+            } else {
+                create.money = this.inputValue * 100;
             }
-            
+
         }
 
         create.storeId = this.storeId;
@@ -701,6 +709,7 @@ export class TouristComponent implements OnInit {
                         nzContent: '收款成功'
                     })
                     this.vipXqFun();
+                    this.searchMemberCard(true);
                 } else {
                     this.errorAlter(res.errorInfo)
                 }
@@ -758,7 +767,7 @@ export class TouristComponent implements OnInit {
         );
     }
     /**搜索会员卡 */
-    searchMemberCard(type?:any) {
+    searchMemberCard(type?: any) {
         this.yjcardList = [];
         let self = this;
         this.cardChangeBoolean = false;
@@ -770,7 +779,7 @@ export class TouristComponent implements OnInit {
                         if (res.success) {
                             self.vipData = res.data;
                             if (self.vipData && self.vipData.length > 0) self.vipDataBoolean = true;
-                            if(type) this.vipDataRadio(0);
+                            if (type) this.vipDataRadio(0);
                         } else {
                             self.errorAlter(res.errorInfo)
                         }
@@ -1052,7 +1061,7 @@ export class TouristComponent implements OnInit {
         this.manageService.getStaffListByStoreId(this.storeId).subscribe(
             (res: any) => {
                 if (res.success) {
-                    this.staffGroupData = res.data.reserveStaffs;
+                    this.staffGroupData = res.data.items;
                 } else {
                     this.errorAlter(res.errorInfo)
                 }
@@ -1190,7 +1199,7 @@ export class TouristComponent implements OnInit {
                             if (i.vipCardList[n].card.type === 'TIMES') {
                                 i.vipCard = i.vipCardList[n];
                             }
-                            if (i.vipCardList[n].card.type === 'METERING' && (i.vipCard ? i.vipCard.card.type !== 'TIMES' : true)) {
+                            if (i.vipCardList[n].card.type === 'METERING' && (i.vipCard ? i.vipCard.card.type !== 'TIMES' : true) && i.vipCardList[n].card.balance > 0) {
                                 i.vipCard = i.vipCardList[n];
                             }
                             if (i.vipCardList[n].card.type === 'REBATE' && (i.vipCard ? (i.vipCard.card.type !== 'TIMES' && i.vipCard.card.type !== 'METERING') : true)) {

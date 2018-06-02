@@ -1,15 +1,16 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
-import { KoubeiService } from "../shared/koubei.service";
 import { LocalStorageService } from "@shared/service/localstorage-service";
-import {NzModalService, NzMessageService} from "ng-zorro-antd";
+import { NzModalService, NzMessageService } from "ng-zorro-antd";
 import { FunctionUtil } from "@shared/funtion/funtion-util";
-import {FormGroup, FormBuilder, Validators} from "@angular/forms";
-import {ActivatedRoute} from "@angular/router";
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { KoubeiService } from '../../koubei/shared/koubei.service';
+import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-koubei-print',
-  templateUrl: './koubei-print.component.html',
+    selector: 'app-koubei-print',
+    templateUrl: './koubei-print.component.html',
     styleUrls: ['./koubei-print.component.less']
 })
 export class KoubeiPrintComponent implements OnInit {
@@ -18,7 +19,7 @@ export class KoubeiPrintComponent implements OnInit {
     submitting: boolean = false;
 
     theadName: any[] = ['终端编号', '终端名称', '终端秘钥', '所属门店', '操作'];
-    // stores: any[] = [];
+    stores: any[] = [];
     storeId: string = '';
 
     deviceName: any; //终端名称
@@ -32,30 +33,20 @@ export class KoubeiPrintComponent implements OnInit {
     printerDeviceId: any;
 
     printList: any[] = [];
-
-  moduleId: any = '';
-
+    moduleId: any;
     constructor(
-      private route: ActivatedRoute,
-      private koubeiService: KoubeiService,
         private localStorageService: LocalStorageService,
         private fb: FormBuilder,
         private msg: NzMessageService,
+        private route: ActivatedRoute,
+        private router: Router,
+        private koubeiService: KoubeiService,
         private modalSrv: NzModalService
     ) { }
 
     ngOnInit() {
-      this.moduleId = this.route.snapshot.params['menuId'];
-
-      // if (this.localStorageService.getLocalstorage('Stores-Info') &&
-        //     JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')).length > 0) {
-        //     let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) ?
-        //         JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) : [];
-        //     this.stores = storeList;
-        // }
-
-        this.getPrintList();
-        this.formInit();
+        this.moduleId = this.route.snapshot.params['menuId'];
+        this.selectStoresHttp();
     }
 
     // 点击新增、编辑打印机
@@ -67,12 +58,12 @@ export class KoubeiPrintComponent implements OnInit {
             nzFooter: null
         });
 
-        if(id) { //编辑
+        if (id) { //编辑
             this.printerDeviceId = id;
             this.getPrintDetail();
         } else { //新增
             //各种都置空
-            // this.storeId = '';
+            this.storeId = '';
             this.printerDeviceId = '';
             this.deviceName = '';
             this.yunApiKey = '';
@@ -85,10 +76,6 @@ export class KoubeiPrintComponent implements OnInit {
         }
     }
 
-  onStaffStoresChange(e: any) {
-      this.storeId = e.storeId;
-  }
-
     get yun_username() { return this.form.controls['yun_username']; }
     get yun_user_id() { return this.form.controls['yun_user_id']; }
     get yun_api_key() { return this.form.controls['yun_user_id']; }
@@ -98,7 +85,7 @@ export class KoubeiPrintComponent implements OnInit {
     get selected_store() { return this.form.controls['selected_store']; }
 
     formInit() {
-        if(this.printerDeviceId) {
+        if (this.printerDeviceId) {
             this.form = this.fb.group({
                 yun_username: [this.yunUsername, Validators.required],
                 yun_user_id: [this.yunUserId, Validators.required],
@@ -107,7 +94,7 @@ export class KoubeiPrintComponent implements OnInit {
                 yun_device_id: [this.yunDeviceId, Validators.required],
                 yun_device_key: [this.yunDeviceKey, Validators.required],
                 yun_device_sim_no: [this.yunDeviceSimNo, []],
-                // selected_store: [this.storeId, Validators.required],
+                selected_store: [this.storeId, Validators.required],
             });
         }
         else {
@@ -119,20 +106,20 @@ export class KoubeiPrintComponent implements OnInit {
                 yun_device_id: ['', Validators.required],
                 yun_device_key: ['', Validators.required],
                 yun_device_sim_no: ['', []],
-                // selected_store: ['', Validators.required],
+                selected_store: ['', Validators.required],
             });
         }
     }
 
     submit() {
         for (const i in this.form.controls) {
-            this.form.controls[ i ].markAsDirty();
-            this.form.controls[ i ].updateValueAndValidity();
+            this.form.controls[i].markAsDirty();
+            this.form.controls[i].updateValueAndValidity();
         }
         if (this.form.invalid) return;
         this.submitting = true;
 
-        // this.storeId = this.form.value.selected_store;
+        this.storeId = this.form.value.selected_store;
         this.deviceName = this.form.value.device_name;
         this.yunApiKey = this.form.value.yun_api_key;
         this.yunDeviceId = this.form.value.yun_device_id;
@@ -154,7 +141,7 @@ export class KoubeiPrintComponent implements OnInit {
             nzOnOk: () => {
                 self.deletePrint();
             },
-            nzOnCancel: () => {}
+            nzOnCancel: () => { }
         });
     }
 
@@ -164,7 +151,7 @@ export class KoubeiPrintComponent implements OnInit {
     getPrintList() {
         this.koubeiService.getPrintList().subscribe(
             (res: any) => {
-                if(res.success) {
+                if (res.success) {
                     this.printList = res.data;
                 } else {
                     this.modalSrv.error({
@@ -189,7 +176,7 @@ export class KoubeiPrintComponent implements OnInit {
         };
         this.koubeiService.getPrintDetail(data).subscribe(
             (res: any) => {
-                if(res.success) {
+                if (res.success) {
                     this.storeId = res.data.storeId;
                     this.deviceName = res.data.deviceName;
                     this.yunApiKey = res.data.yunApiKey;
@@ -229,13 +216,13 @@ export class KoubeiPrintComponent implements OnInit {
             yunUsername: this.yunUsername,
             printerDeviceId: this.printerDeviceId
         };
-        if(!this.printerDeviceId) {
+        if (!this.printerDeviceId) {
             delete data.printerDeviceId
         }
         this.koubeiService.editPrint(data).subscribe(
             (res: any) => {
                 this.submitting = false;
-                if(res.success) {
+                if (res.success) {
                     this.msg.success('保存成功');
                     this.modalSrv.closeAll();
                     this.getPrintList();
@@ -262,7 +249,7 @@ export class KoubeiPrintComponent implements OnInit {
         };
         this.koubeiService.deletePrint(data).subscribe(
             (res: any) => {
-                if(res.success) {
+                if (res.success) {
                     this.getPrintList();
                 } else {
                     this.modalSrv.error({
@@ -279,5 +266,35 @@ export class KoubeiPrintComponent implements OnInit {
             }
         )
     }
-
+    errorAlter(err: any) {
+        this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: err
+        });
+    }
+    selectStoresHttp() {
+        let data = {
+            moduleId: this.moduleId,
+            timestamp: new Date().getTime()
+        }
+        let that = this;
+        this.koubeiService.selectStores(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.storeId = res.data.items[0].storeId;
+                    this.stores = res.data.items;
+                    this.getPrintList();
+                    this.formInit();
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => {
+                this.errorAlter(error);
+            }
+        );
+    }
 }
