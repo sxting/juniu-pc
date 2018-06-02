@@ -136,7 +136,7 @@ export class TouristComponent implements OnInit {
     ngOnInit() {
         let that = this;
         this.moduleId = this.route.snapshot.params['menuId'];
-        this.changeFun();
+        // this.changeFun();
         this.guadanList = this.localStorageService.getLocalstorage(GUADAN) ? JSON.parse(this.localStorageService.getLocalstorage(GUADAN)) : [];
     }
     //切换数据
@@ -1061,7 +1061,7 @@ export class TouristComponent implements OnInit {
         this.manageService.getStaffListByStoreId(this.storeId).subscribe(
             (res: any) => {
                 if (res.success) {
-                    this.staffGroupData = res.data.reserveStaffs;
+                    this.staffGroupData = res.data.items;
                 } else {
                     this.errorAlter(res.errorInfo)
                 }
