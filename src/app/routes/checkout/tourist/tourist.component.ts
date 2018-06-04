@@ -780,6 +780,7 @@ export class TouristComponent implements OnInit {
                 .subscribe(
                     (res: any) => {
                         if (res.success) {
+                            if (res.data && res.data.length === 0) self.errorAlter('未查询到该会员');
                             self.vipData = res.data;
                             self.changeFun();
                             if (self.vipData && self.vipData.length > 0) self.vipDataBoolean = true;
