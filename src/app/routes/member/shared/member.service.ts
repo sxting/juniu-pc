@@ -189,7 +189,15 @@ export class MemberService {
                 return Observable.throw(error);
             });
     }
-
+    storeTypesOldCards2(data?: any) {
+        let apiUrl = Config.API + 'member/config/lists.json';
+        let param = FunctionUtil.obectToURLSearchParams(data);
+        return this.http.get(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
     /**
      * 获取老卡导入卡类型及其卡名称
      **/
