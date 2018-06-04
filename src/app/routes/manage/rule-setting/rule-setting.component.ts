@@ -55,7 +55,6 @@ export class RuleSettingComponent implements OnInit {
   ifShowErrorTipsSevice: boolean = false;
 
   timestamp: any = new Date().getTime();//当前时间的时间戳
-
   checkRate: boolean = true;//提成不可为空
 
   constructor(
@@ -87,7 +86,7 @@ export class RuleSettingComponent implements OnInit {
       }
 
       this.formData = {
-          ruleName: [null, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
+          ruleName: [null, [Validators.required, Validators.maxLength(20)]],
           assignRate: [ null ,Validators.compose([ Validators.pattern(`^[0-9]+(.[0-9]{2})?$`)])],//指定技师
           normalRate: [ null ,Validators.compose([ Validators.pattern(`^[0-9]+(.[0-9]{2})?$`)])],//非指定技师
           deductMoney: [ null ,Validators.compose([  Validators.pattern(`^[0-9]+(.[0-9]{2})?$`)])],//按固定金额提成
@@ -177,11 +176,11 @@ export class RuleSettingComponent implements OnInit {
 
   //提成的发生改变的时候
   changeTypesData(type: string){
-      if(type === 'RATE'){
-          this.checkRate = this.form.controls.assignRate.value == null|| this.form.controls.normalRate.value == null? true : false;
-      }else {
-          this.checkRate = this.form.controls.deductMoney.value == null? true : false;
-      }
+    if(type === 'RATE'){
+      this.checkRate = this.form.controls.assignRate.value == '' || this.form.controls.assignRate.value == null|| this.form.controls.normalRate.value == '' || this.form.controls.normalRate.value == null? false : true;
+    }else {
+      this.checkRate = this.form.controls.deductMoney.value == '' || this.form.controls.deductMoney.value == null? false : true;
+    }
   }
 
   /********************  数据处理  ***********************/
@@ -331,6 +330,7 @@ export class RuleSettingComponent implements OnInit {
           selectNumber = selectIds.split(',').length;
           allNumber = selectIds.split(',').length;
       }
+      console.log(selectIds + '-' + selectNumber + '-' + allNumber);
       return selectIds + '-' + selectNumber + '-' + allNumber;
   }
 
@@ -561,10 +561,11 @@ export class RuleSettingComponent implements OnInit {
       if (this.form.invalid) return;
 
       if(this.form.controls.type.value === 'RATE'){
-        this.checkRate = this.form.controls.assignRate.value == null|| this.form.controls.normalRate.value == null? false : true;
+        this.checkRate = this.form.controls.assignRate.value == '' || this.form.controls.assignRate.value == null|| this.form.controls.normalRate.value == '' || this.form.controls.normalRate.value == null? false : true;
       }else {
-        this.checkRate = this.form.controls.deductMoney.value == null? false : true;
+        this.checkRate = this.form.controls.deductMoney.value == '' || this.form.controls.deductMoney.value == null? false : true;
       }
+
       if(!this.ifShowErrorStaffTips && !this.ifShowErrorTipsProduct && !this.ifShowErrorTipsCard && !this.ifShowErrorTipsSevice && this.checkRate){
         if(this.deductRuleId){//编辑修改
           this.editStaffingRules(dataInfor);

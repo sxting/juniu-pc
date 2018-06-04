@@ -181,6 +181,9 @@ export class ServiceItemsListComponent implements OnInit {
     // 切换分页码
     paginate(event: any) {
         this.pageNo = event;
+        this.batchQuery.pageNo = this.pageNo;
+        //获取列表信息
+        this.getServiceItemsListHttp(this.batchQuery);
     }
 
     //门店初始化
