@@ -180,7 +180,6 @@ export class TouristComponent implements OnInit {
             i.assign = 0;
         })
 
-        console.log(that.xfList);
         that.totolMoneyFun();
     }
     selectStoreInfo(event: any) {
@@ -275,10 +274,10 @@ export class TouristComponent implements OnInit {
                 if (that.vipCardList && i.vipCard) {
                     that.vipCardList.forEach(function (k: any) {
                         if (k.card.cardId === i.vipCard.card.cardId && k.checked) {
-                            if (i.vipCard.card.type === "TIMES") { i.vipMoney = NP.times(NP.times(i.totoleMoney, 100), i.num) }
-                            else if (i.vipCard.card.type === "METERING") { i.vipMoney = NP.times(NP.times(i.totoleMoney, 100), i.num) }
-                            else if (i.vipCard.card.type === "REBATE") { i.vipMoney = NP.times(NP.times(i.totoleMoney, 100), NP.divide(i.vipCard.card.rebate, 10), i.num); }
-                            else if (i.vipCard.card.type === "STORED") { i.vipMoney = NP.times(NP.times(i.totoleMoney, 100), i.num) }
+                            if (i.vipCard.card.type === "TIMES") { i.vipMoney = NP.times(NP.times(i.currentPrice, 100), i.num) }
+                            else if (i.vipCard.card.type === "METERING") { i.vipMoney = NP.times(NP.times(i.currentPrice, 100), i.num) }
+                            else if (i.vipCard.card.type === "REBATE") { i.vipMoney = NP.times(NP.times(i.currentPrice, 100), NP.divide(i.vipCard.card.rebate, 10), i.num); }
+                            else if (i.vipCard.card.type === "STORED") { i.vipMoney = NP.times(NP.times(i.currentPrice, 100), i.num) }
                         } else if (k.card.cardId === i.vipCard.card.cardId && !k.checked) {
                             i.vipMoney = 0;
                         }
@@ -295,13 +294,15 @@ export class TouristComponent implements OnInit {
         if (that.vipCardList && that.xfList) {
             if (that.vipCardList.length > 0 && that.xfList.length > 0) {
                 that.vipCardList.forEach(function (i: any) {
+                    let vipMoney2 = 0;
                     that.xfList.forEach(function (n: any) {
-                        if (n.vipCard && i.card.cardId === n.vipCard.card.cardId && i.card.cardId !== 'TIMES') {
-                            i.card.balance2 -= n.vipMoney
+                        if (n.vipCard && i.card.cardId === n.vipCard.card.cardId && i.card.type !== 'TIMES') {
+                            // i.card.balance2 -= n.vipMoney
+                            vipMoney2 += n.vipMoney;
                             vipMoney += n.vipMoney;
                         }
                     })
-                    if (i.card.balance2 < 0 && i.card.type !== "TIMES" && i.card.type !== "METERING") {
+                    if (i.card.balance2 < vipMoney2 && i.card.type !== "TIMES" && i.card.type !== "METERING") {
                         that.vipMoney += i.card.balance2;
                         that.vipMoneyName += i.card.cardName + ' ';
                     }
@@ -769,6 +770,8 @@ export class TouristComponent implements OnInit {
     /**搜索会员卡 */
     searchMemberCard(type?: any) {
         this.yjcardList = [];
+        this.vipCardList = [];
+        this.xfList = [];
         let self = this;
         this.cardChangeBoolean = false;
         if (this.vipsearch && (this.vipsearch.length === 0 || this.vipsearch.length >= 11 || event)) {
@@ -778,6 +781,7 @@ export class TouristComponent implements OnInit {
                     (res: any) => {
                         if (res.success) {
                             self.vipData = res.data;
+                            self.changeFun();
                             if (self.vipData && self.vipData.length > 0) self.vipDataBoolean = true;
                             if (type) this.vipDataRadio(0);
                         } else {
@@ -1333,7 +1337,6 @@ export class TouristComponent implements OnInit {
                 (res: any) => {
                     if (res.success) {
                         self.shopyinList = res.data.orders;
-                        console.log(res.data);
                     } else {
                         self.errorAlter(res.errorInfo)
                     }

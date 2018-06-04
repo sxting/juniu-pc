@@ -30,7 +30,7 @@
               </button>
             </ng-template>
             <div class="vipArrBox" *ngIf="vipDataBoolean">
-              <nz-radio-group [(ngModel)]="radioValue" style="display: block;" (ngModelChange)="vipDataRadio()">
+              <nz-radio-group [(ngModel)]="radioValue" style="display: block;" >
                 <label nz-radio *ngFor="let item of vipData;let ind = index;" (click)="vipDataRadio(ind)" nzValue="{{ind}}">姓名：{{item.customer.customerName}} 电话：{{item.customer.phone}}</label>
               </nz-radio-group>
             </div>
@@ -192,7 +192,7 @@
                       <label nz-checkbox *ngFor="let item of vipCardList" (ngModelChange)="cardChangeFun(item.card.cardConfigRuleId)" [(ngModel)]="item.checked">
                         <span>
                           <span>
-                            <span class="iconfont icon-card"></span>
+                            <span style="font-size:18px;" class="iconfont {{item.card.type==='REBATE'?'icon-zhe':''}} {{item.card.type==='METERING'?'icon-ji':''}} {{item.card.type==='TIMES'?'icon-qi':''}} {{item.card.type==='STORED'?'icon-chu':''}}"></span>
                             <span>{{item.card.cardName}}</span>
                           </span>
                           <br />
