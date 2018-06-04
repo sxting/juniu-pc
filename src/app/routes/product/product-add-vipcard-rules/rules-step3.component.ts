@@ -302,12 +302,20 @@ export class RulesStep3Component implements OnInit {
         this.submitting = true;
 
         let amount;
-        if(self.item['cardType'] === 'METERING' || self.item['cardType'] === 'TIMES'){//计次卡,期限卡
+        if(self.item['cardType'] === 'METERING'){//计次卡
             amount = parseFloat(self.item['amount']);
         }else if(self.item['cardType'] === 'REBATE'){//折扣卡
             amount = parseFloat(self.item['pay_account'])*100;
+        }else if(self.item['cardType'] === 'TIMES'){//期限卡
+            amount = 0;
         }else{//储值卡
             amount = parseFloat(self.item['amount'])*100;
+        }
+        let validate;
+        if(self.item['cardType'] === 'TIMES'){
+          validate = parseFloat(self.item['amount']);
+        }else{
+          validate = self.item['validateType'] === 'FOREVER'? 99999 : self.item['effectivityDays']
         }
         let list = {
             applyProductIds: this.productIds,
@@ -321,7 +329,7 @@ export class RulesStep3Component implements OnInit {
             merchantId: "",
             price: parseFloat(self.item['pay_account'])*100,//售价
             rebate: self.item['cardType'] === 'REBATE'? parseFloat(self.item['amount']) : 0,
-            validate: self.item['validateType'] === 'FOREVER'? 99999 : self.item['effectivityDays'],
+            validate: validate,
             validateType: self.item['validateType']
         };
         let params = {
@@ -341,7 +349,6 @@ export class RulesStep3Component implements OnInit {
           this.msg.warning('需要先创建门店');
           return;
         }else if(this.ifShow === false){
-          console.log(params);
           this.productService.saveAddVipInfor(params).subscribe(
             (res: any) => {
               self.submitting = false;

@@ -52,8 +52,8 @@ export class StartupService {
         .subscribe(
           ([langData, appData]) => {
             // setting language data
-            this.translate.setTranslation(this.i18n.defaultLang, langData);
-            this.translate.setDefaultLang(this.i18n.defaultLang);
+            // this.translate.setTranslation(this.i18n.defaultLang, langData);
+            // this.translate.setDefaultLang(this.i18n.defaultLang);
             // application data
             const res: any = appData;
             let menuList = this.localStorageService.getLocalstorage(USER_INFO) ? JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)).menuList : [];

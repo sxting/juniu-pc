@@ -451,7 +451,7 @@ export class CheckVipcardDetailinforComponent implements OnInit {
       else{
         this.submitting = true;
         let list = {
-          applyProductIds: this.backgroundId,
+          applyProductIds: this.productIds,
           applyProductType: this.form.controls.productTypes.value,
           applyStoreIds: this.selectStoresIds,
           applyStoreType: this.form.controls.storeType.value,

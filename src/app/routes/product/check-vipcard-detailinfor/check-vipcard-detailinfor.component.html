@@ -45,7 +45,7 @@
         <!--期限卡-->
         <nz-form-item *ngIf="cardType === 'TIMES'">
             <nz-form-label nzXs="24" nzSm="7">可使用天数</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10"><nz-form-text>{{balance}}天</nz-form-text></nz-form-control>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10"><nz-form-text>{{validate}}天</nz-form-text></nz-form-control>
         </nz-form-item>
         <!--计次卡-->
         <nz-form-item *ngIf="cardType === 'METERING'">

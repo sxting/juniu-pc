@@ -37,13 +37,13 @@
             </ng-container>
             <ng-container *ngIf="cardType === 'REBATE' && amount.dirty || amount.touched">
                 <nz-form-explain class="errorTips" *ngIf="cardType === 'REBATE' && amount.errors?.required">请输入折扣卡的折扣</nz-form-explain>
-                <nz-form-explain class="errorTips" *ngIf="cardType === 'REBATE' && amount.errors?.pattern">折扣卡的折扣只能是整数或者带有两位小数的数字</nz-form-explain>
-                <nz-form-explain class="errorTips" *ngIf="cardType === 'REBATE' && !ifShow">折扣卡的折扣只能是0.10-9.90范围之内的数字</nz-form-explain>
+                <nz-form-explain class="errorTips" *ngIf="cardType === 'REBATE' && form.value.amount && amount.errors?.pattern">折扣卡的折扣只能是整数或者带有两位小数的数字</nz-form-explain>
+                <nz-form-explain class="errorTips" *ngIf="cardType === 'REBATE' && form.value.amount && !ifShow">折扣卡的折扣只能是0.10-9.90范围之内的数字</nz-form-explain>
             </ng-container>
             <ng-container *ngIf="cardType === 'METERING' && amount.dirty || amount.touched">
                 <nz-form-explain class="errorTips" *ngIf="cardType === 'METERING' && amount.errors?.required">请输入计次卡的次数</nz-form-explain>
-                <nz-form-explain class="errorTips" *ngIf="cardType === 'METERING' && amount.errors?.pattern">计次卡次数只是数字</nz-form-explain>
-                <nz-form-explain class="errorTips" *ngIf="cardType === 'METERING' && !ifShow">计次卡的次数只能是正整数</nz-form-explain>
+                <nz-form-explain class="errorTips" *ngIf="cardType === 'METERING' && form.value.amount && amount.errors?.pattern">计次卡次数只是数字</nz-form-explain>
+                <nz-form-explain class="errorTips" *ngIf="cardType === 'METERING' && form.value.amount && !ifShow">计次卡的次数只能是正整数</nz-form-explain>
             </ng-container>
             <ng-container *ngIf="cardType === 'TIMES' && amount.dirty || amount.touched">
                 <nz-form-explain class="errorTips" *ngIf="cardType === 'TIMES' && amount.errors?.required">请输入期限卡的天数</nz-form-explain>

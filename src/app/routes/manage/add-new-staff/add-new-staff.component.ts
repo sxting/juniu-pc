@@ -144,8 +144,6 @@ export class AddNewStaffComponent implements OnInit {
                         self.RolesListInfor = res.data.merchantRoles;
                     }
                     let roleId = self.RolesListInfor[0]? self.RolesListInfor[0].roleId : '';
-                    console.log(self.storeList);
-
                     self.formData = {
                       staffName: [null, [ Validators.required ]],
                       phone: [null, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
@@ -185,7 +183,6 @@ export class AddNewStaffComponent implements OnInit {
                     this.loading = false;
                     self.picId = res.data.portrait.imageId;//员工图像
                     self.imagePath = res.data.portrait.imageUrl;//员工图像地址
-                    self.passwordPre = res.data.password;//拿到上次的密码
                     if(res.data.belongType === 'STORE'){
                       self.RolesListInfor = self.storeRoles;
                       self.ifShow = true;
@@ -194,15 +191,19 @@ export class AddNewStaffComponent implements OnInit {
                       self.RolesListInfor = self.merchantRoles;
                     }
                     let storeId = res.data.storeId === ''&& res.data.belongType === 'MERCHANT'? self.storeList[0].storeId : res.data.storeId;
+                    let password = res.data.password.length > 16? res.data.password.substring(0,12)+'...' : res.data.password;//拿到上次的密码
+                    self.passwordPre = res.data.password;
+
                     self.formData = {
                         staffName: [ res.data.staffName, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
                         phone: [ res.data.contactPhone, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
-                        password: [ res.data.password, [Validators.required]],
+                        password: [ password, [Validators.required]],
                         belongType: [ res.data.belongType, [Validators.required]],//门店员工职位
                         storeId: [ storeId, [Validators.required]],
                         roleId: [ res.data.roleId, [Validators.required]],
                     };
                     self.form = self.fb.group(self.formData);
+
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -218,31 +219,32 @@ export class AddNewStaffComponent implements OnInit {
 
     // 新增员工
     submit(){
-        let self = this;
+      let self = this;
         for (const i in this.form.controls) {
             this.form.controls[ i ].markAsDirty();
             this.form.controls[ i ].updateValueAndValidity();
         }
       if (this.form.invalid) return;
       this.submitting = true;
-        let storeId = this.form.controls.belongType.value === 'STORE'? this.form.controls.storeId.value : '';
-        let password = this.passwordPre === this.form.controls.password.value? '' : this.form.controls.password.value;
-        let params = {
-            staffName: this.form.controls.staffName.value,
-            belongType: this.form.controls.belongType.value,
-            contactPhone: this.form.controls.phone.value,
-            password: password,
-            roleId: this.form.controls.roleId.value,
-            portrait: this.picId,
-            staffId: this.staffId,
-            storeId:storeId,
-            timestamp: new Date().getTime()
-        };
-        if(this.staffId){//修改
-            this.editStaff(params);
-        }else{//新增
-            this.creatStaff(params);
-        }
+      let storeId = this.form.controls.belongType.value === 'STORE'? this.form.controls.storeId.value : '';
+      let passwordValue = this.form.controls.password.value;
+      let password = passwordValue.substring(passwordValue.length - 3) === '...'? this.passwordPre : this.form.controls.password.value;
+      let params = {
+          staffName: this.form.controls.staffName.value,
+          belongType: this.form.controls.belongType.value,
+          contactPhone: this.form.controls.phone.value,
+          password: password,
+          roleId: this.form.controls.roleId.value,
+          portrait: this.picId,
+          staffId: this.staffId,
+          storeId:storeId,
+          timestamp: new Date().getTime()
+      };
+      if(this.staffId){//修改
+          this.editStaff(params);
+      }else{//新增
+          this.creatStaff(params);
+      }
     }
 
     // 创建员工
