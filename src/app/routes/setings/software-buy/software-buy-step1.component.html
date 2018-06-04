@@ -13,7 +13,7 @@
           <span class="free" *ngIf="!package.price">免费</span>
           <span class="price-box" *ngIf="package.price">
             <!--DAY, MONTH, QUARTER, YEAR-->
-            <span>{{package.price}}</span>元 /
+            <span>{{package.price/100}}</span>元 /
             {{package.timeUnit === 'DAY' ? '天' : package.timeUnit === 'MONTH' ? '月' : package.timeUnit === 'QUARTER' ? '季' : '年'}}
             / 店
           </span>
