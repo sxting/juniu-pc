@@ -359,7 +359,7 @@
             <nz-form-label nzXs="24" nzFor="presentPrice" nzSm="7" nzRequired>拼团价 </nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="8">
                 <nz-input-group nzSize="large">
-                    <input nz-input formControlName="presentPrice" maxlength="8" placeholder="请输入项目拼团价">
+                    <input nz-input formControlName="presentPrice" onkeyup="if(this.value<0)this.value = 0;if(this.value>99999999)this.value =99999999;" maxlength="8" placeholder="请输入项目拼团价">
                 </nz-input-group>
                 <nz-form-explain *ngIf="presentPrice.dirty && presentPrice.errors">拼团价格式书写有误</nz-form-explain>
             </nz-form-control>
