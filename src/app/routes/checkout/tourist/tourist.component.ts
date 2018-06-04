@@ -149,6 +149,8 @@ export class TouristComponent implements OnInit {
     //收银开卡切换
     change(e: any) {
         this.changeType = e.index === 0 ? true : false;
+        this.vipCardList= [];
+        this.settleCardDTOList = [];
     }
     cardTypeChange(e: any) {
         this.cardTypeChangeIndex = e.index;
@@ -655,8 +657,8 @@ export class TouristComponent implements OnInit {
                             i.productIdList.push(n.productId)
                             if (i.type === 'TIMES') i.amount = 0;
                             else if (i.type === 'METERING') i.amount += n.num;
-                            else if (i.type === 'REBATE') i.amount += NP.times(n.num, n.totoleMoney, 100, NP.divide(n.vipCard.card.rebate, 10));
-                            else i.amount += NP.times(n.num, n.totoleMoney, 100);
+                            else if (i.type === 'REBATE') i.amount += NP.times(n.num, n.currentPrice/100, 100, NP.divide(n.vipCard.card.rebate, 10));
+                            else i.amount += NP.times(n.num, n.currentPrice/100, 100);
                         }
                     })
                 })
