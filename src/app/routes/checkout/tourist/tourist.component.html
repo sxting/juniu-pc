@@ -310,8 +310,9 @@
                     </div>
                     <div class="icon-success iconfont" *ngIf="rule.click"></div>
                     <div class="BOTTOM">
-                      <span *ngIf="rule.applyStoreType === 'ALL'">全店通用</span>
-                      <span *ngIf="rule.applyStoreType !== 'ALL'">部分商品可用</span>
+                      <span *ngIf="rule.applyProductType === 'SERVICEITEMS'">限全部服务项目可用</span>
+                      <span *ngIf="rule.applyProductType === 'ALL'">限全部商品可用</span>
+                      <span *ngIf="rule.applyProductType === 'CUSTOMIZE'">限{{item.applyProductNames}}使用</span>
                       <span style="float:right;margin-right:10px;">有效期: {{rule.validate}}天</span>
                     </div>
                   </div>
@@ -604,7 +605,7 @@
       <tr *ngFor="let item of guadanList;let ind = index;">
         <td>{{item.date}}</td>
         <td>
-          <span *ngFor="let i of item.xfList">{{i.productNo}}{{i.productName}}</span>
+          {{item.xfList[0].productNo}}{{item.xfList[0].productName}}等
         </td>
         <td>{{item.totoleMoney}}</td>
         <td>{{item.vip?item.vip.customerName +':'+item.vip.phone:'散客'}}</td>
