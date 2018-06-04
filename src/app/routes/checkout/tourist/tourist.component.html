@@ -192,7 +192,7 @@
                       <label nz-checkbox *ngFor="let item of vipCardList" (ngModelChange)="cardChangeFun(item.card.cardConfigRuleId)" [(ngModel)]="item.checked">
                         <span>
                           <span>
-                            <span class="iconfont icon-card"></span>
+                            <span style="font-size:18px;" class="iconfont {{item.card.type==='REBATE'?'icon-zhe':''}} {{item.card.type==='METERING'?'icon-ji':''}} {{item.card.type==='TIMES'?'icon-qi':''}} {{item.card.type==='STORED'?'icon-chu':''}}"></span>
                             <span>{{item.card.cardName}}</span>
                           </span>
                           <br />
