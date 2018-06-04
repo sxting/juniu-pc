@@ -23,7 +23,7 @@ export class CheckVipcardDetailinforComponent implements OnInit {
     configId: string;//ID
     cardTypeName: string;//卡类型名称
     validate: any;//使用天数
-    isPinCardArr: any[] = [{ name: '不可销卡(默认)', ifPin: '1'}, { name: '按照无折扣进行销卡', ifPin: '0' }];//是否可销卡
+    isPinCardArr: any[] = [{ name: '不可销卡(默认)', ifPin: '0'}, { name: '按照无折扣进行销卡', ifPin: '1' }];//是否可销卡
     validateType: any[] = [{ name: '永久有效(默认)', type: 'FOREVER'}, { name: '自开卡之日起', type: 'days' }];//使用有效期
     productTypesArr: any = [{ name: '全部服务项目(默认)', value: 'SERVICEITEMS'}, { name: '全部项目和商品', value: 'ALL'},{name: '自定义', value: 'CUSTOMIZE'}];
     storeStatus: any = [{ name: '全部门店(默认)', value: 'ALLSTORES'},{ name: '自定义', value: 'CUSTOMIZE'}];
@@ -394,7 +394,7 @@ export class CheckVipcardDetailinforComponent implements OnInit {
                     this.backgroundId = res.data.background;
                     this.backGroundImg = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.backgroundId}/resize_${250}_${150}/mode_fill`;
 
-                    let isPinCard = res.data.rules[0].isPinCard === 1? self.isPinCardArr[0].ifPin : self.isPinCardArr[1].ifPin;
+                    let isPinCard = res.data.rules[0].isPinCard === 1? self.isPinCardArr[1].ifPin : self.isPinCardArr[0].ifPin;
                     let validate = res.data.rules[0].validate;
                     let effectivityDays = res.data.rules[0].validateType === 'FOREVER'? 1 : res.data.rules[0].validate;
                     let storeType = res.data.rules[0].applyStoreType === 'ALLSTORES'? self.storeStatus[0].value : self.storeStatus[1].value;

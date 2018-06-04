@@ -16,7 +16,7 @@ export class RulesStep2Component implements OnInit {
     form: FormGroup;
     formData: any;
     loading = false;
-    isPinCardArr: any[] = [{ name: '不可销卡(默认)', ifPin: '1'}, { name: '按照无折扣进行销卡', ifPin: '0' }];//是否可销卡
+    isPinCardArr: any[] = [{ name: '不可销卡(默认)', ifPin: '0'}, { name: '按照无折扣进行销卡', ifPin: '1' }];//是否可销卡
     validateType: any[] = [{ name: '永久有效(默认)', type: 'FOREVER'}, { name: '自开卡之日起', type: 'days' }];//使用有效期
     cardType: string = '';//新增的卡类型
     showText: string = '';//显示文字

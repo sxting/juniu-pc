@@ -5,7 +5,6 @@ import { RulesTransferService } from "./rules-transfer.service";
 import { NzMessageService, NzModalService} from 'ng-zorro-antd';
 import { ProductService } from "../shared/product.service";
 import { LocalStorageService } from '@shared/service/localstorage-service';
-import { CITYLIST } from '@shared/define/juniu-define';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -110,8 +109,6 @@ export class RulesStep3Component implements OnInit {
       }
     }
 
-
-
     //选择弹框
     onSelectAlertBtn(tpl: any, text: string, type: string){
         let self = this;
@@ -159,7 +156,6 @@ export class RulesStep3Component implements OnInit {
             this.ifHttps = type;
         }
     }
-
 
     //获取商品ID
     getProductIds(event){
