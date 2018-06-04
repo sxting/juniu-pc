@@ -30,7 +30,7 @@
               </button>
             </ng-template>
             <div class="vipArrBox" *ngIf="vipDataBoolean">
-              <nz-radio-group [(ngModel)]="radioValue" style="display: block;" (ngModelChange)="vipDataRadio()">
+              <nz-radio-group [(ngModel)]="radioValue" style="display: block;" >
                 <label nz-radio *ngFor="let item of vipData;let ind = index;" (click)="vipDataRadio(ind)" nzValue="{{ind}}">姓名：{{item.customer.customerName}} 电话：{{item.customer.phone}}</label>
               </nz-radio-group>
             </div>

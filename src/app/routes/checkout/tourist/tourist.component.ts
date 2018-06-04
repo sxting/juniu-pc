@@ -180,7 +180,6 @@ export class TouristComponent implements OnInit {
             i.assign = 0;
         })
 
-        console.log(that.xfList);
         that.totolMoneyFun();
     }
     selectStoreInfo(event: any) {
@@ -771,6 +770,8 @@ export class TouristComponent implements OnInit {
     /**搜索会员卡 */
     searchMemberCard(type?: any) {
         this.yjcardList = [];
+        this.vipCardList = [];
+        this.xfList = [];
         let self = this;
         this.cardChangeBoolean = false;
         if (this.vipsearch && (this.vipsearch.length === 0 || this.vipsearch.length >= 11 || event)) {
@@ -780,6 +781,7 @@ export class TouristComponent implements OnInit {
                     (res: any) => {
                         if (res.success) {
                             self.vipData = res.data;
+                            self.changeFun();
                             if (self.vipData && self.vipData.length > 0) self.vipDataBoolean = true;
                             if (type) this.vipDataRadio(0);
                         } else {
