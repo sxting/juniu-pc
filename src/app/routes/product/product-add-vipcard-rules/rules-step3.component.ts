@@ -165,12 +165,18 @@ export class RulesStep3Component implements OnInit {
                 nzOkText: '保存',
                 nzOnOk: function(){
                     self.ifHttps = 'CUSTOMIZE';
+                    if((self.productIds.split(',').length < self.selectProductNumber)&&(self.item['cardType'] === 'REBATE')){
+                      self.msg.warning('该卡使用范围缩小，可能影响顾客体验');
+                    }
                 }
             });
         }else {
             let dataInfor = this.getOthersData(self.productListInfor).split('-');
             self.productIds = dataInfor[0];
             self.applyProductNames = dataInfor[3];
+            if(this.ifHttps === 'ALL' && type === 'SERVICEITEMS' && self.item['cardType'] === 'REBATE'){
+              self.msg.warning('该卡使用范围缩小，可能影响顾客体验');
+            }
             this.ifHttps = type;
         }
     }

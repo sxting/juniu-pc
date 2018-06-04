@@ -184,7 +184,7 @@ export class CheckVipcardDetailinforComponent implements OnInit {
             storeId: this.storeId,
             categoryType: typeData
         };
-        console.log(this.ifHttps);
+        this.selectProductNumber = this.productIds.split(',').length;
         if(this.ifHttps != type){
             this.getAllbuySearchs(data);//获取所有的商品
         }
@@ -197,14 +197,19 @@ export class CheckVipcardDetailinforComponent implements OnInit {
                 nzOkText: '保存',
                 nzOnOk: function(){
                     self.ifHttps = 'CUSTOMIZE';
-                    console.log(self.productIds);
+                    if((self.productIds.split(',').length < self.selectProductNumber)&&(self.cardType === 'REBATE')){
+                      self.msg.warning('该卡使用范围缩小，可能影响顾客体验');
+                    }
                 }
             });
         }else {
-            let dataInfor = this.getOthersData(self.productListInfor).split('-');
-            self.productIds = dataInfor[0];
-            self.applyProductNames = dataInfor[3];
-            this.ifHttps = type;
+          let dataInfor = this.getOthersData(self.productListInfor).split('-');
+          self.productIds = dataInfor[0];
+          self.applyProductNames = dataInfor[3];
+          if(this.ifHttps === 'ALL' && type === 'SERVICEITEMS' && self.cardType === 'REBATE'){
+            self.msg.warning('该卡使用范围缩小，可能影响顾客体验');
+          }
+          this.ifHttps = type;
         }
     }
 
