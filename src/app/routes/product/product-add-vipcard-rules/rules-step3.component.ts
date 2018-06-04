@@ -35,6 +35,8 @@ export class RulesStep3Component implements OnInit {
     ifHttps: string = 'SERVICEITEMS';//是否要调取接口
     ifShow: boolean = false;
     moduleId: any;
+    applyStoreNames: string = '';
+    applyProductNames: string = '';
 
     constructor(
         private http: _HttpClient,
@@ -72,6 +74,11 @@ export class RulesStep3Component implements OnInit {
 
     }
 
+    // 初始化所有门店名称
+    selectStoresNamesPush(event){
+      this.applyStoreNames = event.storeName? event.storeName : '';
+    }
+
     //获取门店数据
     storeListPush(event){
       this.cityStoreList = event.storeList? event.storeList : [];
@@ -83,6 +90,11 @@ export class RulesStep3Component implements OnInit {
       this.allStoresNum = event.allStoresNum? event.allStoresNum : 0;
     }
 
+    // 适用门店名称
+    getStoreNames(event){
+      this.applyStoreNames = event.staffNames? event.staffNames : '';
+    }
+
     //获取门店选择的数量
     getStoresChangeNum(event){
       this.storesChangeNum = event.storesChangeNum? event.storesChangeNum : 0;
@@ -91,6 +103,11 @@ export class RulesStep3Component implements OnInit {
     //获取选择的门店ID
     getSelectStoresIdsCsh(event){
       this.selectStoresIds = event.selectStoresIds? event.selectStoresIds : '';
+    }
+
+    // 使用商品名称
+    getProductNames(event){
+      this.applyProductNames = event.staffNames? event.staffNames : '';
     }
 
     //选择弹框的门店数量
@@ -153,6 +170,7 @@ export class RulesStep3Component implements OnInit {
         }else {
             let dataInfor = this.getOthersData(self.productListInfor).split('-');
             self.productIds = dataInfor[0];
+            self.applyProductNames = dataInfor[3];
             this.ifHttps = type;
         }
     }
@@ -212,6 +230,7 @@ export class RulesStep3Component implements OnInit {
         this.allStoresNum = 0;
         this.storesChangeNum = 0;
         this.selectStoresIds = '';
+        this.applyStoreNames = '';
         this.cityStoreList.forEach(function (item: any) {
             let arr = [];
             item.change = true;
@@ -230,7 +249,8 @@ export class RulesStep3Component implements OnInit {
         for (let i = 0; i < this.cityStoreList.length; i++) {
             for (let j = 0; j < this.cityStoreList[i].stores.length; j++) {
                 if (this.cityStoreList[i].stores[j].change == true) {
-                    this.selectStoresIds += ',' + this.cityStoreList[i].stores[j].storeId
+                    this.selectStoresIds += ',' + this.cityStoreList[i].stores[j].storeId;
+                    this.applyStoreNames += ',' + this.cityStoreList[i].stores[j].staffName;
                 }
             }
         }
@@ -238,8 +258,12 @@ export class RulesStep3Component implements OnInit {
             this.selectStoresIds = this.selectStoresIds.substring(1);
             this.storesChangeNum = this.selectStoresIds.split(',').length;
             this.allStoresNum = this.selectStoresIds.split(',').length;
+            this.applyStoreNames = this.applyStoreNames.substring(1);
+        }else{
+            this.selectStoresIds = '';
+            this.storesChangeNum = 0;
+            this.applyStoreNames = '';
         }
-        console.log(this.cityStoreList);
     }
 
     //拿到项目对应的数量/总数/ID
@@ -247,10 +271,12 @@ export class RulesStep3Component implements OnInit {
         let selectIds = '';
         let selectNumber = 0;
         let allNumber = 0;
+        let productName = '';
         for (let i = 0; i < cardListInfor.length; i++) {
             for (let j = 0; j < cardListInfor[i].staffs.length; j++) {
                 if (cardListInfor[i].staffs[j].change === true) {
                     selectIds += ',' + cardListInfor[i].staffs[j].staffId;
+                    productName += ',' + cardListInfor[i].staffs[j].staffName;
                 }
             }
         }
@@ -258,8 +284,9 @@ export class RulesStep3Component implements OnInit {
             selectIds = selectIds.substring(1);
             selectNumber = selectIds.split(',').length;
             allNumber = selectIds.split(',').length;
+            productName = productName.substring(1);
         }
-        return selectIds + '-' + selectNumber + '-' + allNumber;
+        return selectIds + '-' + selectNumber + '-' + allNumber + '-' + productName;
     }
 
     /********************  Http请求处理  ***********************/
@@ -274,7 +301,7 @@ export class RulesStep3Component implements OnInit {
                     this.productIds = dataInfor[0];
                     this.selectProductNumber = parseInt(dataInfor[1]);
                     this.allProductNumber = parseInt(dataInfor[2]);
-
+                    this.applyProductNames = dataInfor[3];
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -315,6 +342,8 @@ export class RulesStep3Component implements OnInit {
         }
         let list = {
             applyProductIds: this.productIds,
+            applyStoreNames: this.applyStoreNames,
+            applyProductNames: this.applyProductNames,
             applyProductType: self.form.controls.productTypes.value,
             applyStoreIds: this.selectStoresIds,
             applyStoreType: self.item['storeType'],
