@@ -89,7 +89,8 @@ export class RulesStep2Component implements OnInit {
             }
             this.ifShowError =  parseFloat(this.form.controls.amount.value) < 1 || parseFloat(this.form.controls.amount.value) > 99999999? false : true;
         }else if(this.cardType === 'REBATE'){//折扣卡
-          this.ifShow = parseFloat(this.form.controls.amount.value) < 0.1 || parseFloat(this.form.controls.amount.value) > 9.9? false : true;
+            this.ifShow = parseFloat(this.form.controls.amount.value) < 0.1 || parseFloat(this.form.controls.amount.value) > 9.9? false : true;
+            this.ifShowError = this.ifShow;
         }else {//计次卡
             let check = reg.test(this.form.controls.amount.value);
             this.ifShow = check?  true : false;//判断是否是正整数
@@ -120,8 +121,8 @@ export class RulesStep2Component implements OnInit {
             this.form.controls[ i ].updateValueAndValidity();
         }
         if (this.form.invalid) return;
-
         this.item = Object.assign(this.item, this.form.value);
+
         if(this.ifShow && this.ifShowError){
           ++this.item.step;
         }
