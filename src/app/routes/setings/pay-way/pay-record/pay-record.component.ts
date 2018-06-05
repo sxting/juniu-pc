@@ -81,8 +81,9 @@ export class PayRecordComponent implements OnInit {
             date: this.date.split(' ')[0]
         };
 
+        let date = this.date.split(' ')[0].replace(/-/g, '');
 
-        window.open(`${Config.API}finance/cleaning/detail/export.excel?date=${this.date.split(' ')[0]}&merchantId=${this.merchantId}&token=${this.token}`);
+      window.open(`${Config.API}finance/cleaning/detail/export.excel?date=${date}&merchantId=${this.merchantId}&token=${this.token}`);
 
         // this.setingsService.exportExcel(data).subscribe(
         //     (res: any) => {

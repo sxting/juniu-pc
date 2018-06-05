@@ -7,7 +7,6 @@ import { SetingsService } from "../../shared/setings.service";
 import { NzModalService } from "ng-zorro-antd";
 import { _HttpClient } from "@delon/theme";
 import { Config } from "@shared/config/env.config";
-var node1 = '';
 var self: any = '';
 @Component({
     selector: 'app-pay-way-step2',
