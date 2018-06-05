@@ -28,7 +28,7 @@
         </nz-form-control>
     </nz-form-item>
     <jn-stores-transfor [moduleId]="moduleId" (storeListPush)="storeListPush($event)" (allStoresNumPush)="getAllStoresNum($event)"
-                   (storesChangeNumPush)="getStoresChangeNum($event)" (selectStoresIdsPush)="getSelectStoresIdsCsh($event)"></jn-stores-transfor>
+                   (storesChangeNumPush)="getStoresChangeNum($event)" (selectStoresIdsPush)="getSelectStoresIdsCsh($event)" (selectStoresNamesPush)="selectStoresNamesPush($event)"></jn-stores-transfor>
 </form>
 <div class="border-top-1 mt-lg px-lg text-grey-dark">
 <h3 class="h3 my-md">卡规则设置说明</h3>
@@ -39,11 +39,11 @@
 <!--选择门店弹框-->
 <ng-template #alertStore>
     <app-select-transfer [cityStoreList]="cityStoreList" [allStaffNum]="allStoresNum" (staffIds)="getSelectStoresIds($event)"
-                         (selectStaffNum)="getSelectStoresNumber($event)"></app-select-transfer>
+                         (selectStaffNum)="getSelectStoresNumber($event)" (staffNames)="getStoreNames($event)"></app-select-transfer>
 </ng-template>
 
 <!--选择商品弹框-->
 <ng-template #alertProduct>
     <app-select-transfer [cityStoreList]="productListInfor" [allStaffNum]="allProductNumber" (staffIds)="getProductIds($event)"
-                         (selectStaffNum)="getSelectProductNumber($event)"></app-select-transfer>
+                         (selectStaffNum)="getSelectProductNumber($event)" (staffNames)="getProductNames($event)"></app-select-transfer>
 </ng-template>

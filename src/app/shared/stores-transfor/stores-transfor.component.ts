@@ -33,6 +33,7 @@ export class StoresTransforComponent implements OnInit {
     allStoresNum: any = 0;
     storesChangeNum: any = 0;
     selectStoresIds: any = '';
+    selectStoresNames: any = '';
 
     @Output()
     public storeListPush = new EventEmitter(); //所有门店信息
@@ -46,6 +47,8 @@ export class StoresTransforComponent implements OnInit {
     @Output()
     public selectStoresIdsPush = new EventEmitter(); //所有门店ID
 
+    @Output()
+    public selectStoresNamesPush = new EventEmitter(); //所有门店名称
 
     ngOnInit() {
       this.getStoresInfor();//门店选择
@@ -125,6 +128,7 @@ export class StoresTransforComponent implements OnInit {
     this.allStoresNum = 0;
     this.storesChangeNum = 0;
     this.selectStoresIds = '';
+    this.selectStoresNames = '';
     this.storeList.forEach(function (item: any) {
       let arr = [];
       item.change = true;
@@ -142,13 +146,16 @@ export class StoresTransforComponent implements OnInit {
     });
     for (let i = 0; i < this.storeList.length; i++) {
       for (let j = 0; j < this.storeList[i].stores.length; j++) {
+        console.log(this.storeList[i]);
         if (this.storeList[i].stores[j].change == true) {
-          this.selectStoresIds += ',' + this.storeList[i].stores[j].storeId
+          this.selectStoresIds += ',' + this.storeList[i].stores[j].storeId;
+          this.selectStoresNames += ',' + this.storeList[i].stores[j].storeName;
         }
       }
     }
     if (this.selectStoresIds) {
       this.selectStoresIds = this.selectStoresIds.substring(1);
+      this.selectStoresNames = this.selectStoresNames.substring(1);
       this.storesChangeNum = this.selectStoresIds.split(',').length;
       this.allStoresNum = this.selectStoresIds.split(',').length;
     }
@@ -156,7 +163,7 @@ export class StoresTransforComponent implements OnInit {
     this.storesChangeNumPush.emit({ storesChangeNum: this.storesChangeNum });
     this.selectStoresIdsPush.emit({ selectStoresIds: this.selectStoresIds });
     this.storeListPush.emit({ storeList: this.storeList });
-
+    this.selectStoresNamesPush.emit({ storeName: this.selectStoresNames });
   }
 
 }

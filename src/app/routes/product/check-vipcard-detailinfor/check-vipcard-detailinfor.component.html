@@ -106,12 +106,14 @@
 
 <!--选择弹框-->
 <ng-template #alertStore>
-    <app-select-transfer [cityStoreList]="cityStoreList" [allStaffNum]="allStoresNum" (staffIds)="getSelectStoresIds($event)"></app-select-transfer>
+    <app-select-transfer [cityStoreList]="cityStoreList" [allStaffNum]="allStoresNum"
+                         (staffIds)="getSelectStoresIds($event)" (staffNames)="getStoreNames($event)"></app-select-transfer>
 </ng-template>
 
 <!--选择商品弹框-->
 <ng-template #alertProduct>
-    <app-select-transfer [cityStoreList]="productListInfor" [allStaffNum]="allProductNumber" (staffIds)="getProductIds($event)"></app-select-transfer>
+    <app-select-transfer [cityStoreList]="productListInfor" [allStaffNum]="allProductNumber"
+                         (staffIds)="getProductIds($event)" (staffNames)="getProductNames($event)"></app-select-transfer>
 </ng-template>
 
 <!--选择图片的弹框-->

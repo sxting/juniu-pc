@@ -53,13 +53,14 @@ export class CheckVipcardDetailinforComponent implements OnInit {
     rebate: number = 0;//折扣卡的折扣
     balance: number = 0;//储值卡内充值金额
     ifShow: boolean = true;//是否显示填选信息
-    ifShowErrorTips: boolean = true;//是否显示错误信息
 
     isVisible: boolean = false;//是否重新选择图片
     CardBackGround: any;
     backGroundImg: string = '';//卡面背景图地址
     moduleId: string;
     validateTypeText: string = '';//使用有效期
+    applyStoreNames: string = '';
+    applyProductNames: string = '';
 
     constructor(
         private http: _HttpClient,
@@ -155,12 +156,22 @@ export class CheckVipcardDetailinforComponent implements OnInit {
         }
     }
 
+    // 适用门店名称
+    getStoreNames(event){
+      this.applyStoreNames = event.staffNames? event.staffNames : '';
+    }
+
     //获取商品ID
     getProductIds(event){
         console.log(event);
         if(event){
             this.productIds = event.staffIds;
         }
+    }
+
+    // 使用商品名称
+    getProductNames(event){
+      this.applyProductNames = event.staffNames? event.staffNames : '';
     }
 
     //选择商品弹框
@@ -173,7 +184,7 @@ export class CheckVipcardDetailinforComponent implements OnInit {
             storeId: this.storeId,
             categoryType: typeData
         };
-        console.log(this.ifHttps);
+        this.selectProductNumber = this.productIds.split(',').length;
         if(this.ifHttps != type){
             this.getAllbuySearchs(data);//获取所有的商品
         }
@@ -186,13 +197,19 @@ export class CheckVipcardDetailinforComponent implements OnInit {
                 nzOkText: '保存',
                 nzOnOk: function(){
                     self.ifHttps = 'CUSTOMIZE';
-                    console.log(self.productIds);
+                    if((self.productIds.split(',').length < self.selectProductNumber)&&(self.cardType === 'REBATE')){
+                      self.msg.warning('该卡使用范围缩小，可能影响顾客体验');
+                    }
                 }
             });
         }else {
-            let dataInfor = this.getOthersData(self.productListInfor).split('-');
-            self.productIds = dataInfor[0];
-            this.ifHttps = type;
+          let dataInfor = this.getOthersData(self.productListInfor).split('-');
+          self.productIds = dataInfor[0];
+          self.applyProductNames = dataInfor[3];
+          if(this.ifHttps === 'ALL' && type === 'SERVICEITEMS' && self.cardType === 'REBATE'){
+            self.msg.warning('该卡使用范围缩小，可能影响顾客体验');
+          }
+          this.ifHttps = type;
         }
     }
 
@@ -237,6 +254,7 @@ export class CheckVipcardDetailinforComponent implements OnInit {
         this.allStoresNum = 0;
         this.storesChangeNum = 0;
         this.selectStoresIds = '';
+        this.applyStoreNames = '';
         this.cityStoreList.forEach(function (item: any) {
             let arr = [];
             item.change = true;
@@ -255,35 +273,41 @@ export class CheckVipcardDetailinforComponent implements OnInit {
         for (let i = 0; i < this.cityStoreList.length; i++) {
             for (let j = 0; j < this.cityStoreList[i].stores.length; j++) {
                 if (this.cityStoreList[i].stores[j].change == true) {
-                    this.selectStoresIds += ',' + this.cityStoreList[i].stores[j].storeId
+                    this.selectStoresIds += ',' + this.cityStoreList[i].stores[j].storeId;
+                    this.applyStoreNames += ',' + this.cityStoreList[i].stores[j].storeName;
                 }
             }
         }
         if (this.selectStoresIds) {
             this.selectStoresIds = this.selectStoresIds.substring(1);
             this.allStoresNum = this.selectStoresIds.split(',').length;
+            this.applyStoreNames = this.applyStoreNames.substring(1);
         }
         console.log(this.cityStoreList);
     }
 
+
     //拿到项目对应的数量/总数/ID
     getOthersData(cardListInfor: any){
-        let selectIds = '';
-        let selectNumber = 0;
-        let allNumber = 0;
-        for (let i = 0; i < cardListInfor.length; i++) {
-            for (let j = 0; j < cardListInfor[i].staffs.length; j++) {
-                if (cardListInfor[i].staffs[j].change === true) {
-                    selectIds += ',' + cardListInfor[i].staffs[j].staffId;
-                }
-            }
+      let selectIds = '';
+      let selectNumber = 0;
+      let allNumber = 0;
+      let productName = '';
+      for (let i = 0; i < cardListInfor.length; i++) {
+        for (let j = 0; j < cardListInfor[i].staffs.length; j++) {
+          if (cardListInfor[i].staffs[j].change === true) {
+            selectIds += ',' + cardListInfor[i].staffs[j].staffId;
+            productName += ',' + cardListInfor[i].staffs[j].staffName;
+          }
         }
-        if (selectIds) {
-            selectIds = selectIds.substring(1);
-            selectNumber = selectIds.split(',').length;
-            allNumber = selectIds.split(',').length;
-        }
-        return selectIds + '-' + selectNumber + '-' + allNumber;
+      }
+      if (selectIds) {
+        selectIds = selectIds.substring(1);
+        selectNumber = selectIds.split(',').length;
+        allNumber = selectIds.split(',').length;
+        productName = productName.substring(1);
+      }
+      return selectIds + '-' + selectNumber + '-' + allNumber + '-' + productName;
     }
 
     //选择商品项目数据转换
@@ -353,8 +377,9 @@ export class CheckVipcardDetailinforComponent implements OnInit {
                     this.productIds = dataInfor[0];
                     this.selectProductNumber = parseInt(dataInfor[1]);
                     this.allProductNumber = parseInt(dataInfor[2]);
+                    this.applyProductNames = dataInfor[3];
 
-                    if(this.checkDetailBoo){
+                  if(this.checkDetailBoo){
                         this.vipDetailHttp();//查看详情
                     }
                 } else {
@@ -393,6 +418,8 @@ export class CheckVipcardDetailinforComponent implements OnInit {
                     this.balance = res.data.rules[0].balance;//储值卡和计次卡
                     this.backgroundId = res.data.background;
                     this.backGroundImg = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.backgroundId}/resize_${250}_${150}/mode_fill`;
+                    this.applyStoreNames = res.data.rules[0].applyStoreNames;
+                    this.applyProductNames = res.data.rules[0].applyProductNames;
 
                     let isPinCard = res.data.rules[0].isPinCard === 1? self.isPinCardArr[1].ifPin : self.isPinCardArr[0].ifPin;
                     let validate = res.data.rules[0].validate;
@@ -452,6 +479,8 @@ export class CheckVipcardDetailinforComponent implements OnInit {
         this.submitting = true;
         let list = {
           applyProductIds: this.productIds,
+          applyStoreNames: this.applyStoreNames,
+          applyProductNames: this.applyProductNames,
           applyProductType: this.form.controls.productTypes.value,
           applyStoreIds: this.selectStoresIds,
           applyStoreType: this.form.controls.storeType.value,
