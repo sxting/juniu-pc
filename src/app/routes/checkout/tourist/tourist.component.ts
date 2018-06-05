@@ -34,7 +34,7 @@ export class TouristComponent implements OnInit {
     totolMoney: any = 0;
     isVerbMoney: any = 0;
     cardTypeListArr: any = []
-
+    loading: any = false;
     allproducks: any;
     formatterPercent = value => `${value} %`;
     parserPercent = value => value.replace(' %', '');
@@ -121,6 +121,7 @@ export class TouristComponent implements OnInit {
     pageIndex3: any = 1;
     Total2: any = 1;
     CustomerData: any = [];
+    spinBoolean: boolean = false;
     constructor(
         public msg: NzMessageService,
         private localStorageService: LocalStorageService,
@@ -149,7 +150,7 @@ export class TouristComponent implements OnInit {
     //收银开卡切换
     change(e: any) {
         this.changeType = e.index === 0 ? true : false;
-        this.vipCardList= [];
+        this.vipCardList = [];
         this.settleCardDTOList = [];
     }
     cardTypeChange(e: any) {
@@ -276,10 +277,10 @@ export class TouristComponent implements OnInit {
                 if (that.vipCardList && i.vipCard) {
                     that.vipCardList.forEach(function (k: any) {
                         if (k.card.cardId === i.vipCard.card.cardId && k.checked) {
-                            if (i.vipCard.card.type === "TIMES") { i.vipMoney = NP.times(NP.divide(i.discount,100),NP.times(NP.divide(i.currentPrice,100), 100), i.num) }
-                            else if (i.vipCard.card.type === "METERING") { i.vipMoney = NP.times(NP.divide(i.discount,100),NP.times(NP.divide(i.currentPrice,100), 100), i.num) }
-                            else if (i.vipCard.card.type === "REBATE") { i.vipMoney = NP.times(NP.divide(i.discount,100),NP.times(NP.divide(i.currentPrice,100), 100),NP.divide(i.discount,100), NP.divide(i.vipCard.card.rebate, 10), i.num); }
-                            else if (i.vipCard.card.type === "STORED") { i.vipMoney = NP.times(NP.divide(i.discount,100),NP.times(NP.divide(i.currentPrice,100), 100), i.num) }
+                            if (i.vipCard.card.type === "TIMES") { i.vipMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), i.num) }
+                            else if (i.vipCard.card.type === "METERING") { i.vipMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), i.num) }
+                            else if (i.vipCard.card.type === "REBATE") { i.vipMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), NP.divide(i.discount, 100), NP.divide(i.vipCard.card.rebate, 10), i.num); }
+                            else if (i.vipCard.card.type === "STORED") { i.vipMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), i.num) }
                         } else if (k.card.cardId === i.vipCard.card.cardId && !k.checked) {
                             i.vipMoney = 0;
                         }
@@ -657,8 +658,8 @@ export class TouristComponent implements OnInit {
                             i.productIdList.push(n.productId)
                             if (i.type === 'TIMES') i.amount = 0;
                             else if (i.type === 'METERING') i.amount += n.num;
-                            else if (i.type === 'REBATE') i.amount += NP.times(n.num, n.currentPrice/100, 100, NP.divide(n.vipCard.card.rebate, 10));
-                            else i.amount += NP.times(n.num, n.currentPrice/100, 100);
+                            else if (i.type === 'REBATE') i.amount += NP.times(n.num, n.currentPrice / 100, 100, NP.divide(n.vipCard.card.rebate, 10));
+                            else i.amount += NP.times(n.num, n.currentPrice / 100, 100);
                         }
                     })
                 })
@@ -697,6 +698,7 @@ export class TouristComponent implements OnInit {
         // create.faceId = this.selectFaceId;
         create.customerId = this.memberInfo.customerId;
         console.log(create);
+        this.spinBoolean = true;
         if (this.xyVip) {
             that.rechargeAndOrderPayFun(create)
         } else {
@@ -704,6 +706,7 @@ export class TouristComponent implements OnInit {
         }
     }
     createOrderFun(create: any) {
+        this.loading = true;
         this.checkoutService.createOrder(create).subscribe(
             (res: any) => {
                 if (res.success) {
@@ -716,6 +719,8 @@ export class TouristComponent implements OnInit {
                 } else {
                     this.errorAlter(res.errorInfo)
                 }
+                this.loading = false;
+                this.spinBoolean = false;
             },
             error => this.errorAlter(error)
         );
@@ -1165,6 +1170,7 @@ export class TouristComponent implements OnInit {
     /**充值且付款 */
     rechargeAndOrderPayFun(rechargeObj: any) {
         let self = this;
+        this.loading = true;
         this.checkoutService.rechargeAndOrderPay(rechargeObj).subscribe(
             (res: any) => {
                 if (res.success) {
@@ -1176,6 +1182,8 @@ export class TouristComponent implements OnInit {
                 } else {
                     this.errorAlter(res.errorInfo)
                 }
+                this.loading = false;
+                this.spinBoolean = false;
             },
             error => this.errorAlter(error)
         );
