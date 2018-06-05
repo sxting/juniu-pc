@@ -202,6 +202,68 @@
         <div class="cardMoney" *ngIf="item.type === 'REBATE'||item.type === 'STORED'">余额：{{item.balance/100}}元</div>
         <div class="cardMoney" *ngIf="item.type === 'METERING'">余额：{{item.balance}}次</div>
         <div class="cardMoney" *ngIf="item.type === 'TIMES'">{{item.validity}}到期</div>
-        <div class="chongzhi" (click)="xiaoka(item.cardId)">销卡</div>
+        <div class="chongzhi" (click)="xiaoka(item.cardId,pincard)">销卡</div>
+    </div>
+</ng-template>
+
+<ng-template #pincard>
+    <div class="addStaffBox-main">
+        <div>
+            <div class="addStaffBox-main-left ">会员卡名称</div>
+            <div class="addStaffBox-main-right">
+                {{pincardInfo?.cardName}}
+            </div>
+        </div>
+        <div>
+            <div class="addStaffBox-main-left">会员卡类型</div>
+            <div class="addStaffBox-main-right">
+                {{pincardInfo?.typeName}}
+            </div>
+        </div>
+        <!-- <div>
+            <div class="addStaffBox-main-left icon-asterisks-1-copy iconfont">会员卡规则</div>
+            <div class="addStaffBox-main-right">
+                {{pincardInfo?.cardName}}
+            </div>
+        </div> -->
+        <div>
+            <div class="addStaffBox-main-left ">卡内余额</div>
+            <div class="addStaffBox-main-right" *ngIf="pincardInfo?.type==='STORED'||pincardInfo?.type==='REBATE'">
+                {{pincardInfo?.balance/100}}元
+            </div>
+            <div class="addStaffBox-main-right" *ngIf="pincardInfo?.type==='METERING'">
+                {{pincardInfo?.balance}}次
+            </div>
+            <div class="addStaffBox-main-right" *ngIf="pincardInfo?.type==='TIMES'">
+                {{pincardInfo?.balance}}天
+            </div>
+        </div>
+        <div>
+            <div class="addStaffBox-main-left">售价</div>
+            <div class="addStaffBox-main-right">
+                {{pincardInfo?.price/100}}
+            </div>
+        </div>
+        <div>
+            <div class="addStaffBox-main-left">累计消费金额</div>
+            <div class="addStaffBox-main-right">
+                {{pincardInfo?.consumeMoney/100}}
+            </div>
+        </div>
+        <div>
+            <div class="addStaffBox-main-left">实际退款</div>
+            <div class="addStaffBox-main-right">
+                {{pincardInfo?.backMoney/100}}
+            </div>
+        </div>
+
+    </div>
+    <div style="    padding-top: 20px;
+    border-top: 1px solid #f5f5f5;
+    margin-top: 20px;">
+        <div>说明</div>
+        <div>关于销卡</div>
+        <div>1.若商家建立卡规则时设置可销卡，且顾客提出销卡要求，则系统会将顾客在该卡上的消费历史折算成商品原价，重新计算会员卡余额后进行销卡和退款操作。</div>
+        <div>2.当会员在该卡上的累计消费金额小于该卡的售价，将差价退还给消费者，反之将该卡删除。</div>
     </div>
 </ng-template>
