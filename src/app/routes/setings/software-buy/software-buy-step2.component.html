@@ -2,7 +2,7 @@
     <div class="title">
       您选择了：桔牛系统·{{item.package.packageName}}；售价：
       <span *ngIf="!item.package.price">免费</span>
-      <span *ngIf="item.package.price">{{item.package.price}}元 /
+      <span *ngIf="item.package.price">{{item.package.price/100}}元 /
         {{item.package.timeUnit === 'DAY' ? '天' : item.package.timeUnit === 'MONTH' ? '月' : item.package.timeUnit === 'QUARTER' ? '季' : '年'}}
         / 店</span>
     </div>

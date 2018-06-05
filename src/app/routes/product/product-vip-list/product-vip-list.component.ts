@@ -143,19 +143,7 @@ export class ProductVipListComponent implements OnInit {
                 if (res.success) {
                     that.loading = false;
                     res.data.cardConfig.forEach(function (item: any) {
-                      let arrText = '';
-                      let length = item.rules[0].applyStoreIds.split(',').length;
-                      if(item.type === 'STORED'){
-                        arrText = parseFloat(item.rules[0].balance)/100 + '元储值,' + ' ' + length + '店通用';
-                      }else if(item.type === 'METERING'){
-                        arrText = parseFloat(item.rules[0].balance) + '次' +  item.cardConfigName + '(等),' + ' ' + length + '店通用';
-                      }else if(item.type === 'TIMES'){
-                        let date = parseFloat(item.rules[0].balance) === 365?  '一年' : item.rules[0].balance;
-                        arrText =  date + item.cardConfigName + '(等),' + ' ' + length + '店通用';
-                      }else {
-                        arrText =  '全部项目(部分项目)' + item.rules[0].rebate + ' ' + '折,' + ' ' + length + '店通用';
-                      }
-                      item.cardRights = arrText;
+                      item.cardRights = item.rules[0].applyStoreIds.split(',').length + '店通用';
                     });
                     that.vipItemListInfor = res.data.cardConfig;
                     that.totalElements = res.data.pageInfo.countTotal;

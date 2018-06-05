@@ -46,6 +46,7 @@ export class SoftBuyStep4Component implements OnInit {
     this.setingsService.packageInvoice(data).subscribe(
       (res: any) => {}
     );
+    this.item.step = 0;
     this.router.navigate(['/manage/storeList', {}])
   }
 }

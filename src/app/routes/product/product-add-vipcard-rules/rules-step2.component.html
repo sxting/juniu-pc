@@ -2,8 +2,12 @@
     <nz-form-item>
         <nz-form-label nzSpan="5" nzRequired>售价(元)</nz-form-label>
         <nz-form-control nzSpan="19">
-        <input maxlength="10" nz-input formControlName="pay_account" autocomplete="off" id="pay_account" placeholder="请输入卡售价">
+        <input maxlength="11" nz-input formControlName="pay_account" autocomplete="off" id="pay_account" placeholder="请输入卡售价"  (change)="changeAmount()">
             <ng-container *ngIf="pay_account.dirty || pay_account.touched">
+                <nz-form-explain class="errorTips" *ngIf="cardType === 'STORED' && pay_account.errors?.min">储值卡的卡内充值金额输入范围“0.01-99999999.99”</nz-form-explain>
+                <nz-form-explain class="errorTips" *ngIf="cardType === 'REBATE' && pay_account.errors?.min">折扣卡的卡内充值金额输入范围“0.01-99999999.99”</nz-form-explain>
+                <nz-form-explain class="errorTips" *ngIf="cardType === 'METERING' && pay_account.errors?.min">计次卡的卡内充值金额输入范围“0.01-99999999.99”</nz-form-explain>
+                <nz-form-explain class="errorTips" *ngIf="cardType === 'TIMES' && pay_account.errors?.min">期限卡的卡内充值金额输入范围“0.01-99999999.99”</nz-form-explain>
                 <nz-form-explain class="errorTips" *ngIf="pay_account.errors?.required">卡售价不可为空</nz-form-explain>
                 <nz-form-explain class="errorTips" *ngIf="pay_account.errors?.pattern">卡售价只能是整数或者带有两位小数的数字</nz-form-explain>
             </ng-container>
@@ -30,7 +34,9 @@
             <p class="tips-box" *ngIf="cardType === 'TIMES' && form.value.amount && ifShow">
                 <span>{{times}}</span>
             </p>
+          <!--输入范围“0.01-99999999.99-->
             <ng-container *ngIf="cardType === 'STORED' && amount.dirty || amount.touched">
+                <nz-form-explain class="errorTips" *ngIf="cardType === 'STORED' && form.value.amount && !ifShowError">储值卡的卡内充值金额输入范围“0.01-99999999.99</nz-form-explain>
                 <nz-form-explain class="errorTips" *ngIf="cardType === 'STORED' && amount.errors?.required">请输入储值卡内充值金额</nz-form-explain>
                 <nz-form-explain class="errorTips" *ngIf="cardType === 'STORED' && amount.errors?.pattern">卡内充值金额只能是整数或者带有两位小数的数字</nz-form-explain>
                 <nz-form-explain class="errorTips" *ngIf="cardType === 'STORED' && !ifShow">卡内充值金额不能小于售价</nz-form-explain>
@@ -41,11 +47,13 @@
                 <nz-form-explain class="errorTips" *ngIf="cardType === 'REBATE' && form.value.amount && !ifShow">折扣卡的折扣只能是0.10-9.90范围之内的数字</nz-form-explain>
             </ng-container>
             <ng-container *ngIf="cardType === 'METERING' && amount.dirty || amount.touched">
+                <nz-form-explain class="errorTips" *ngIf="cardType === 'METERING' && form.value.amount && !ifShowError">计次卡的可使用次数为“1-99999”</nz-form-explain>
                 <nz-form-explain class="errorTips" *ngIf="cardType === 'METERING' && amount.errors?.required">请输入计次卡的次数</nz-form-explain>
                 <nz-form-explain class="errorTips" *ngIf="cardType === 'METERING' && form.value.amount && amount.errors?.pattern">计次卡次数只是数字</nz-form-explain>
                 <nz-form-explain class="errorTips" *ngIf="cardType === 'METERING' && form.value.amount && !ifShow">计次卡的次数只能是正整数</nz-form-explain>
             </ng-container>
             <ng-container *ngIf="cardType === 'TIMES' && amount.dirty || amount.touched">
+                <nz-form-explain class="errorTips" *ngIf="cardType === 'TIMES' && form.value.amount && !ifShowError">期限卡的可使用天数的输入范围“1-99999999”</nz-form-explain>
                 <nz-form-explain class="errorTips" *ngIf="cardType === 'TIMES' && amount.errors?.required">请输入期限卡的天数</nz-form-explain>
                 <nz-form-explain class="errorTips" *ngIf="cardType === 'TIMES' && amount.errors?.pattern && !ifShow">期限卡的天数只能是数字</nz-form-explain>
                 <nz-form-explain class="errorTips" *ngIf="cardType === 'TIMES' && !ifShow">期限卡的天数只能是正整数</nz-form-explain>
