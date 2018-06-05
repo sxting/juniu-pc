@@ -275,7 +275,7 @@ export class MsmNoticeComponent implements OnInit {
         this.modalSrv.create({
             nzTitle: '请选择一个短信包',
             nzContent: tpl,
-            nzWidth: '800px',
+            nzWidth: '600px',
             nzOnOk: () => {
             },
             nzOnCancel: () => {
