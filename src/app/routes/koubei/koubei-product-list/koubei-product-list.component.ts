@@ -126,7 +126,7 @@ export class KoubeiProductListComponent implements OnInit {
 
     /**************************页面基础操作开始*********************************/
 
-    // handleCancel(): void { this.isVisible = false; }//关闭关联口碑账号的弹框
+    handleCancel(): void { this.isVisible = false; }//关闭关联口碑账号的弹框
 
     //删除下架商品
     delete(id: any){
