@@ -5,6 +5,7 @@ import {Router, ActivatedRoute} from "@angular/router";
 import {SetingsService} from "../../shared/setings.service";
 import {LocalStorageService} from "@shared/service/localstorage-service";
 import {STORES_INFO} from "@shared/define/juniu-define";
+import {Config} from "@shared/config/env.config";
 
 @Component({
   selector: 'app-pay-record',
@@ -30,6 +31,10 @@ export class PayRecordComponent implements OnInit {
     storeId: any = '';
 
   moduleId: any = '';
+  merchantId: string = '';
+  token: string = '';
+
+  haveData: boolean = true;
 
     constructor(private router: Router,
                 private route: ActivatedRoute,
@@ -40,9 +45,11 @@ export class PayRecordComponent implements OnInit {
 
     ngOnInit() {
       this.moduleId = this.route.snapshot.params['menuId'];
-      // let store: any = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-        //     JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-        // this.storeId = store[0].storeId ? store[0].storeId : '';
+      let userInfo: any = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+            JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+      this.merchantId = userInfo.merchantId;
+      this.token = this.localStorageService.getLocalstorage('App-Token');
+
         this.getPayWayIndexList();
     }
 
@@ -52,7 +59,9 @@ export class PayRecordComponent implements OnInit {
   }
 
     goPayWay() {
+      if(this.haveData) {
         this.router.navigate(['/setings/pay/way', {status: this.status, menuId: this.moduleId}])
+      }
     }
 
     //点击查看交易明细
@@ -71,20 +80,24 @@ export class PayRecordComponent implements OnInit {
         let data = {
             date: this.date.split(' ')[0]
         };
-        this.setingsService.exportExcel(data).subscribe(
-            (res: any) => {
-               if(res.success) {
-                  this.modalSrv.confirm({
-                      nzContent: '导出成功'
-                  })
-               } else {
-                   this.modalSrv.error({
-                       nzTitle: '温馨提示',
-                       nzContent: res.errorInfo
-                   });
-               }
-            }
-        )
+
+
+        window.open(`${Config.API}finance/cleaning/detail/export.excel?date=${this.date.split(' ')[0]}&merchantId=${this.merchantId}&token=${this.token}`);
+
+        // this.setingsService.exportExcel(data).subscribe(
+        //     (res: any) => {
+        //        if(res.success) {
+        //           this.modalSrv.confirm({
+        //               nzContent: '导出成功'
+        //           })
+        //        } else {
+        //            this.modalSrv.error({
+        //                nzTitle: '温馨提示',
+        //                nzContent: res.errorInfo
+        //            });
+        //        }
+        //     }
+        // )
     }
 
     paginate(event: any) {
@@ -139,6 +152,12 @@ export class PayRecordComponent implements OnInit {
             (res: any) => {
                 if(res.success) {
                   this.statusData = res.data;
+
+                  if(res.data.haveData || res.data.applyStatus == 0) {
+                    this.haveData = true;
+                  } else {
+                    this.haveData = false;
+                  }
                     //status: string = '3'; //审核中0   审核通过1   审核未通过2   3未申请
                     if(res.data.examineStatus == 0) {
                         this.status = '0';

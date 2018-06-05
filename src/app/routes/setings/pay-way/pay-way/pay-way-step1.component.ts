@@ -38,7 +38,7 @@ export class PayWayStep1Component implements OnInit {
         (res: any) => {
           if(res['success']) {
             this.item.itemData = res.data;
-            this.item.type = res.data.bankAccount.accountType == 1 ? 'qiye' : 'geti'
+            this.item.type = res.data.bankAccount&&res.data.bankAccount.accountType == 1 ? 'qiye' : 'geti'
           } else {
             this.modalSrv.error({
               nzTitle: '温馨提示',
