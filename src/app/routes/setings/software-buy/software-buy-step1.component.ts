@@ -32,6 +32,13 @@ export class SoftBuyStep1Component implements OnInit {
 
   ngOnInit() {
     this.moduleId = this.route.snapshot.params['menuId'];
+    let userInfo;
+    if (this.localStorageService.getLocalstorage('User-Info')) {
+      userInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info'));
+    }
+    if (userInfo) {
+      this.staffType = userInfo.staffType;
+    }
   }
 
   onSelectStoreChange(e: any) {

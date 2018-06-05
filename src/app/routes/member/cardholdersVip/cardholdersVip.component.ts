@@ -71,6 +71,7 @@ export class CardholdersVipComponent {
     parm: any;
     modal: any;
     moduleId: any;
+    pincardInfo: any;
     constructor(private http: _HttpClient,
         private modalService: NzModalService,
         public msg: NzMessageService,
@@ -215,11 +216,15 @@ export class CardholdersVipComponent {
         )
     }
     getData(e?: any) {
-        this.pageIndex = e;
+        if (e) {
+            this.pageIndex = e;
+        }
         this.customerlistHttp();
     }
     getData2(index?: any) {
-        this.pageIndex2 = index;
+        if (index) {
+            this.pageIndex2 = index;
+        }
         this.ordersHttp(this.customerId);
     }
     checkboxChange(list: SimpleTableData[]) {
@@ -412,7 +417,38 @@ export class CardholdersVipComponent {
             }
         );
     }
-    xiaoka(cardId: any) {
+    xiaoka(cardId: any, tpl: TemplateRef<{}>) {
+        let data = {
+            cardId: cardId
+        }
+        let that = this;
+        this.memberService.pinCardinfo(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.pincardInfo = res.data;
+                    this.modalSrv.closeAll();
+                    if (this.pincardInfo.type === 'STORED') this.pincardInfo.typeName = '储值卡';
+                    if (this.pincardInfo.type === 'REBATE') this.pincardInfo.typeName = '折扣卡';
+                    if (this.pincardInfo.type === 'METERING') this.pincardInfo.typeName = '计次卡';
+                    if (this.pincardInfo.type === 'TIMES') this.pincardInfo.typeName = '期限卡';
+                    this.modalSrv.create({
+                        nzTitle: '销卡',
+                        nzContent: tpl,
+                        nzWidth: '600px',
+                        nzOnOk: () => {
+                            that.xiaokaInfo(cardId);
+                        }
+                    });
+                } else {
+                    this.errorAlter(res.errorInfo);
+                }
+            },
+            error => {
+                this.errorAlter(error);
+            }
+        );
+    }
+    xiaokaInfo(cardId: any) {
         let data = {
             cardId: cardId
         }

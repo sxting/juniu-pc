@@ -499,6 +499,14 @@ export class MemberService {
             });
     }
     //消卡 /pinCard.json
+    pinCardinfo (data) {
+        // 类型 REGISTER或者VALID
+        let apiUrl = Config.API + '/member/pinCardInfo.json';
+        return this.http.get(apiUrl, data).map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
     pinCard (data) {
         // 类型 REGISTER或者VALID
         let apiUrl = Config.API + '/member/pinCard.json';
