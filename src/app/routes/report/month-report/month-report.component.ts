@@ -177,7 +177,6 @@ export class MonthReportComponent implements OnInit {
         let self = this;
         this.reportService.getMonthreportInfor(batchQuery).subscribe(
             (res: any) => {
-                console.dir(res);
                 //客流量
                 self.PassengerFlow = res.data.currentMonthCount? parseFloat(res.data.currentMonthCount) + '' : 0 + '';
                 self.avgPassengerFlow = res.data.avgCount;

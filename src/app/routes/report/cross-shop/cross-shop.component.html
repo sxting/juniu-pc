@@ -13,7 +13,7 @@
 </nz-card>
 <!--图表-->
 <nz-card [nzBordered]="false">
-    <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="settlementInfor">
+    <nz-table [nzNoResult]="'暂无跨店结算数据'" #basicTable [nzShowPagination]="false" [nzData]="settlementInfor">
         <thead nz-thead class="ui-grid-thead">
         <tr>
             <th nz-th class="">序号</th>
@@ -69,7 +69,7 @@
                 </nz-col>
             </nz-row>
         </form>
-        <nz-table [nzNoResult]="'没有数据'" #nzTable [nzData]="settlementDetailList" [nzShowPagination]="false">
+        <nz-table [nzNoResult]="'暂无数据'" #nzTable [nzData]="settlementDetailList" [nzShowPagination]="false">
             <thead>
               <tr>
                   <th *ngFor="let item of alertTableTitle"><span>{{item}}</span></th>
