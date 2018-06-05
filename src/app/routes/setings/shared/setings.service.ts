@@ -369,9 +369,18 @@ export class SetingsService {
                 return Observable.throw(error);
             });
     }
-    //短信包列表
+    //短信包列表  
     smsBatch() {
         let apiUrl = Config.API + 'account/sms/package/list.json';
+        return this.http.get(apiUrl)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+
+    merchantsmsBatch() {
+        let apiUrl = Config.API1 + 'account/merchant/sms/batch.json';
         return this.http.get(apiUrl)
             .map((response: Response) => response)
             .catch(error => {
