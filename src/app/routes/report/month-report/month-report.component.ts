@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { _HttpClient, TitleService } from '@delon/theme';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ReportService } from "../shared/report.service";
-import { LocalStorageService } from "../../../shared/service/localstorage-service";
-import {FunctionUtil} from "../../../shared/funtion/funtion-util";
-import { STORES_INFO } from '@shared/define/juniu-define';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LocalStorageService } from '@shared/service/localstorage-service';
+import { FunctionUtil } from '@shared/funtion/funtion-util';
 declare var echarts: any;
 
 @Component({

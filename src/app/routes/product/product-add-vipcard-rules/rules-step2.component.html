@@ -74,7 +74,8 @@
             </nz-radio-group>
             <ng-container *ngIf="form.value.validateType === 'days'&& effectivityDays.dirty || effectivityDays.touched">
                 <nz-form-explain class="errorTips" *ngIf="effectivityDays.errors?.required">使用有效期不可为空</nz-form-explain>
-                <nz-form-explain class="errorTips" *ngIf="effectivityDays.errors?.pattern">使用有效期至少为一天</nz-form-explain>
+                <nz-form-explain class="errorTips" *ngIf="effectivityDays.errors?.min">使用有效期至少为一天</nz-form-explain>
+                <nz-form-explain class="errorTips" *ngIf="effectivityDays.errors?.pattern">使用有效期只能是正整数</nz-form-explain>
             </ng-container>
         </nz-form-control>
     </nz-form-item>

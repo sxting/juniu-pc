@@ -50,7 +50,7 @@ export class RulesStep2Component implements OnInit {
             validateType: [ self.validateType[0].type, [ Validators.required ] ],
             validate: [ null , [ ]],
             pay_account: [ null, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{2})?$`) ,Validators.min(0.01)])],
-            effectivityDays: [ 1, [ Validators.required, Validators.min(1) ]],
+            effectivityDays: [ 1, Validators.compose([Validators.required, Validators.pattern(`[0-9]+`) ,Validators.min(1)])],
             amount: [ null, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{2})?$`)] )],
             public: [ 1, [ Validators.min(1), Validators.max(3) ] ],
             isPinCard: [ self.isPinCardArr[0].ifPin , [ Validators.required ]]
@@ -100,16 +100,17 @@ export class RulesStep2Component implements OnInit {
 
     //点击传递有效期限
     changeData(){
-        let self = this;
-        let pay_account = this.form.controls.pay_account.value;
-        let amount = this.form.controls.amount.value;
-        if(this.form.controls.validateType.value === 'FOREVER' && this.form.controls.effectivityDays.value == ''){
-            this.formData.effectivityDays = '1';
-            this.formData.amount = amount;
-            this.formData.pay_account = pay_account;
-            this.formData.validate = '99999999';
-            this.form = this.fb.group(self.formData);
-        }
+      console.log(0);
+      let self = this;
+      let pay_account = this.form.controls.pay_account.value;
+      let amount = this.form.controls.amount.value;
+      if(this.form.controls.validateType.value === 'FOREVER' && this.form.controls.effectivityDays.value == ''){
+          this.formData.effectivityDays = '1';
+          this.formData.amount = amount;
+          this.formData.pay_account = pay_account;
+          this.formData.validate = '99999999';
+          this.form = this.fb.group(self.formData);
+      }
     }
 
     /*** 提交数据 ***/

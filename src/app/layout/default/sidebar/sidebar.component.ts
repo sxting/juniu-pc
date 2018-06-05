@@ -23,10 +23,12 @@ export class SidebarComponent {
   }
 
   menuRouteHttp(menuId: any) {
-    this.manageService.menuRoute({ menuId: menuId ,timestamp:new Date().getTime()}).subscribe(
+    this.manageService.menuRoute({ menuId: menuId, timestamp: new Date().getTime() }).subscribe(
       (res: any) => {
         if (res.success) {
-          this.router.navigate([res.data.eventRoute, { menuId: menuId }]);
+          if (res.data.eventRoute) {
+            this.router.navigate([res.data.eventRoute, { menuId: menuId }]);
+          }
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',

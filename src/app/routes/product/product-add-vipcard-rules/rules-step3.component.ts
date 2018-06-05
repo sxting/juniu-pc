@@ -53,6 +53,7 @@ export class RulesStep3Component implements OnInit {
     ngOnInit() {
         let self = this;
         this.moduleId = this.route.snapshot.params['menuId'];//门店
+        this.item.moduleId = this.moduleId;
 
         let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
           JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
