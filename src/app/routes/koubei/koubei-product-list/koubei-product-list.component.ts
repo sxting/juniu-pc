@@ -110,7 +110,7 @@ export class KoubeiProductListComponent implements OnInit {
             this.providerLogin = true;
         }
 
-        // this.isVisible = true;//关联口碑账号
+        this.isVisible = this.alipayPid? false : true;//关联口碑账号
         // let Pid = 'BINDING_ALIPAY_' + this.alipayPid;
         // var goEasy = new GoEasy({
         //   appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
@@ -125,6 +125,8 @@ export class KoubeiProductListComponent implements OnInit {
     }
 
     /**************************页面基础操作开始*********************************/
+
+    // handleCancel(): void { this.isVisible = false; }//关闭关联口碑账号的弹框
 
     //删除下架商品
     delete(id: any){

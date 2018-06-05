@@ -123,7 +123,7 @@
 </ng-template>
 
 <!--选择图片的弹框-->
-<nz-modal [(nzVisible)]="isVisible" nzWidth ="500" [nzFooter]="null"  nzTitle="选择卡面图片" nzOkText="确定" nzCancelText="取消">
+<nz-modal [(nzVisible)]="isVisible" nzWidth ="500" [nzFooter]="null"  nzTitle="选择卡面图片" nzOkText="确定" nzCancelText="取消" (nzOnCancel)="handleCancel()">
   <!--修改卡面背景-->
   <nz-form-text class="btn-photo-clip">
     <span class="btn-img">点击重新上传卡面图</span>
