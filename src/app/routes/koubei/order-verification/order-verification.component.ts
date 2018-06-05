@@ -45,26 +45,6 @@ export class OrderVerificationComponent implements OnInit {
 
   ngOnInit() {
     this.moduleId = this.route.snapshot.params['menuId'];
-    if (this.checkoutShow) {
-      this.storeId = this.StoresInfo[0] ? this.StoresInfo[0].shopId : '';
-    } else {
-      let stores = this.localStorageService.getLocalstorage(USER_INFO) ? JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)).stores : '';
-      try {
-        if (JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)).staffType === 'MERCHANT') {
-          stores.forEach(function (i: any, m: any) {
-            if (!i.alipayShopId) {
-              stores.splice(m, 1);
-            }
-          })
-          this.storeId = stores ? stores[0].alipayShopId : '';
-        } else {
-          this.storeId = stores ? stores[0].alipayShopId : '';
-        }
-      } catch (error) {
-
-      }
-
-    }
     let batchQuery = {
       pageIndex: 1,
       pageSize: 10

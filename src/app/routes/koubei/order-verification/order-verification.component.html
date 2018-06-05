@@ -2,7 +2,7 @@
     <nz-tabset>
         <nz-tab nzTitle="扫码核销">
             <div class="member-top-middle">
-                <jn-stores-infor [moduleId]="moduleId" (storeIdOutput)="selectStoreInfo($event.storeId)"></jn-stores-infor>
+                <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false" (storeIdOutput)="selectStoreInfo($event.storeId)"></jn-stores-infor>
             </div>
             <div class="sm-button {{checkoutShow?'sm-button2':''}} " (click)="scanPay()">扫描顾客核销码</div>
             <div class="gai"></div>

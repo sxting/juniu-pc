@@ -572,7 +572,7 @@ export class TouristComponent implements OnInit {
             if (this.xyVip) create.bizType = 'RECHARGE';
             else if (that.memberInfo.phone && !this.xyVip) create.bizType = 'OPENCARD';
         } else {
-            if (that.memberInfo.phone) create.bizType = 'MEMBER';
+            if (create.settleCardDTOList && create.settleCardDTOList.length > 0) create.bizType = 'MEMBER';
             else create.bizType = 'FIT';
         }
 
