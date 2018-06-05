@@ -216,11 +216,15 @@ export class PotentialVipComponent {
         )
     }
     getData(e?: any) {
-        this.pageIndex = e;
+        if (e) {
+            this.pageIndex = e;
+        }
         this.customerlistHttp();
     }
     getData2(index?: any) {
-        this.pageIndex2 = index;
+        if (index) {
+            this.pageIndex2 = index;
+        }
         this.ordersHttp(this.customerId);
     }
     checkboxChange(list: SimpleTableData[]) {
