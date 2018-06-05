@@ -30,7 +30,7 @@
               </button>
             </ng-template>
             <div class="vipArrBox" *ngIf="vipDataBoolean">
-              <nz-radio-group [(ngModel)]="radioValue" style="display: block;" >
+              <nz-radio-group [(ngModel)]="radioValue" style="display: block;">
                 <label nz-radio *ngFor="let item of vipData;let ind = index;" (click)="vipDataRadio(ind)" nzValue="{{ind}}">姓名：{{item.customer.customerName}} 电话：{{item.customer.phone}}</label>
               </nz-radio-group>
             </div>
@@ -212,7 +212,8 @@
                   <div nz-col nzSpan="18">
                     <nz-switch style="float:left;" (ngModelChange)="moling()" [ngModel]="isVerb" nzCheckedChildren="是" nzUnCheckedChildren="否"></nz-switch>
                     <span style="float:right;">收款：
-                      <input type="text" style="width:100px;"  onkeyup="if(this.value<0)this.value = 0;if(this.value>99999999)this.value =99999999;" [(ngModel)]="inputValue" nz-input> </span>
+                      <input type="text" style="width:100px;" onkeyup="if(this.value<0)this.value = 0;if(this.value>99999999)this.value =99999999;"
+                        [(ngModel)]="inputValue" nz-input> </span>
                   </div>
                 </div>
               </nz-form-item>
@@ -220,7 +221,7 @@
                 <div class="lineHeight50">
                   <div style="text-align:right;">
                     <button class="buttons" style="margin-right:20px;" nz-button (click)="guadan()">挂单</button>
-                    <button class="buttons" nz-button nzType="primary" type="submit" (click)="jiesuan(jiesuanAlert)">结算</button>
+                    <button class="buttons" nz-button nzType="primary" type="submit" [nzLoading]="loading" (click)="jiesuan(jiesuanAlert)">结算</button>
                   </div>
                 </div>
               </nz-form-item>
@@ -515,7 +516,7 @@
         [(ngModel)]="authCode">
     </nz-tab>
     <nz-tab nzTitle="记录收款">
-      <div class="iconBox">
+      <div class="iconBox" *ngIf="!spinBoolean">
         <div class="wbox" (click)="goToSubmitOrder2('WECHATPAY')">
           <div class="iconfont icon-w"></div>
           <div class="zi">微信</div>
@@ -532,6 +533,11 @@
           <div class="iconfont icon-y"></div>
           <div class="zi">银行卡</div>
         </div>
+      </div>
+      <div style="height: 80px;
+      line-height: 80px;
+      text-align: center;" *ngIf="spinBoolean">
+        <nz-spin [nzSize]="'large'"></nz-spin>
       </div>
     </nz-tab>
   </nz-tabset>
@@ -654,3 +660,6 @@
     </tbody>
   </nz-table>
 </ng-template>
+
+
+<!-- <nz-spin></nz-spin> -->

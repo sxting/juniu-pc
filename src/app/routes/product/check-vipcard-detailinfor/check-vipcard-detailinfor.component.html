@@ -86,6 +86,9 @@
                 <nz-radio-group formControlName="productTypes">
                     <label nz-radio *ngFor="let list of productTypesArr" [nzValue]="list.value" (click)="onSelectAlertBtnProduct(alertProduct, '适用商品', list.value)">{{list.name}}</label>
                 </nz-radio-group>
+                <ng-container *ngIf="productIds == '' && !showErrorTip">
+                  <nz-form-explain class="errorTips">适用商品不可为空</nz-form-explain>
+                </ng-container>
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
@@ -94,6 +97,9 @@
                 <nz-radio-group formControlName="storeType">
                     <label nz-radio *ngFor="let item of storeStatus"  [nzValue]="item.value" (click)="onSelectAlertBtn(alertStore, '门店', item.value)">{{item.name}}</label>
                 </nz-radio-group>
+                <ng-container *ngIf="selectStoresIds == '' && !showErrorTip">
+                  <nz-form-explain class="errorTips">适用门店不可为空</nz-form-explain>
+                </ng-container>
             </nz-form-control>
         </nz-form-item>
         <nz-form-item (click)="submit()">

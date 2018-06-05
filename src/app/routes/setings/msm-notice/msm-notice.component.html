@@ -155,8 +155,8 @@
 <ng-template #modalContent3>
   <div *ngIf="!temBoolean">
     <nz-radio-group [(ngModel)]="radioValue">
-      <label (click)="radioFun()" *ngFor="let item of dataNote" nz-radio [nzValue]="item.smsPackageId">
-        <span>{{item.name}}</span>
+      <label style="display:block;" *ngFor="let item of dataNote" (click)="radioFun(item.packageId)" nz-radio [nzValue]="item.packageId">
+        <span>{{item.packageName}}</span>
       </label>
     </nz-radio-group>
   </div>

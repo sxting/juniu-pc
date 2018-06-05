@@ -99,7 +99,7 @@ export class CommodityStatementComponent implements OnInit {
                     let moneyList = [];
                     res.data.moneyList.forEach((element: any, index: number) => {
                         let list = {
-                            x: element.name,
+                            x: element.name.length > 8? element.name.substring(0,5) + '...' : element.name,
                             y: element.value/100
                         };
                         moneyList.push(list);
@@ -108,7 +108,7 @@ export class CommodityStatementComponent implements OnInit {
                     let countList = [];
                     res.data.countList.forEach((element: any, index: number) => {
                         let item = {
-                            x: element.name,
+                            x: element.name.length > 8? element.name.substring(0,5) + '...' : element.name,
                             y: element.value
                         };
                         countList.push(item);

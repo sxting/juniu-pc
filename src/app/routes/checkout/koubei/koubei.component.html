@@ -1,1 +1,52 @@
-<jn-order-verification></jn-order-verification>
+<g2-card>
+    <nz-tabset>
+        <nz-tab nzTitle="扫码核销">
+            <div class="member-top-middle">
+                <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false" [ifStoresAuth]="true" (storeIdOutput)="selectStoreInfo($event.storeId)"></jn-stores-infor>
+            </div>
+            <div class="sm-button {{checkoutShow?'sm-button2':''}} " (click)="scanPay()">扫描顾客核销码</div>
+            <div class="gai"></div>
+            <input type="text" id="authCode" [(ngModel)]="authCode" name="authCode" (ngModelChange)="goToSubmitOrder()" class="input pay-code-input">
+        </nz-tab>
+        <nz-tab nzTitle="手动核销">
+            <div class="member-top-middle" *ngIf="checkoutShow">
+                <jn-stores-infor *ngIf="checkoutShow" [moduleId]="moduleId" (storeIdOutput)="selectStoreInfo($event)"></jn-stores-infor>
+            </div>
+            <div class="member-top-middle">
+                <span style="margin-right:24px;">核销码</span>
+                <input type="text" id="tauthCode" [(ngModel)]="tauthCode" placeholder="请输入顾客核销码">
+            </div>
+            <div class="sm-button" (click)="goToSubmitOrder()">点击核销</div>
+        </nz-tab>
+    </nz-tabset>
+    <div class="manage-home-bottom">
+        <div class="manage-title">近10条核销记录</div>
+        <div class="manage-home-bottom-main">
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <td>核销时间</td>
+                            <!-- <td>核销码</td> -->
+                            <td>核销门店</td>
+                            <td>核销商品</td>
+                            <td>核销金额(元)</td>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="dataShow">
+                        <tr *ngFor="let item of listData">
+                            <td>{{item.settleTime}}</td>
+                            <td>{{item.settleStoreName}}</td>
+                            <td>{{item.content}}</td>
+                            <td>{{item.amount/100}}</td>
+                        </tr>
+
+                    </tbody>
+                    <tr *ngIf="!dataShow">
+                        <td colspan="4">暂无数据</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</g2-card>

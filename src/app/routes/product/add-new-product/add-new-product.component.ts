@@ -408,7 +408,6 @@ export class AddNewProductComponent implements OnInit {
             this.form.controls[ i ].updateValueAndValidity();
         }
         if (this.form.invalid) return;
-        this.submitting = true;
         let categoryInfor = this.form.controls.categoryInfor.value;
         let params = {
             productName: this.form.controls.productName.value,
@@ -426,14 +425,13 @@ export class AddNewProductComponent implements OnInit {
             applyStoreType: this.form.controls.storeType.value,
             categoryType: 'PHYICALGOODS'
         };
+        this.submitting = true;
         this.productService.saveAddProductInfor(params).subscribe(
             (res: any) => {
+                self.submitting = false;
                 if (res.success) {
-                     setTimeout(() => {
-                         self.submitting = false;
-                         self.msg.success(`提交成功`);
-                         self.router.navigate(['/product/list']);
-                     }, 1000);
+                   self.msg.success(`提交成功`);
+                   self.router.navigate(['/product/list']);
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',

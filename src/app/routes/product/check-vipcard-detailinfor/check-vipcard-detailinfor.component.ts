@@ -53,6 +53,7 @@ export class CheckVipcardDetailinforComponent implements OnInit {
     rebate: number = 0;//折扣卡的折扣
     balance: number = 0;//储值卡内充值金额
     ifShow: boolean = true;//是否显示填选信息
+    showErrorTip: boolean = true;//是否显示门店及其商品的提示
 
     isVisible: boolean = false;//是否重新选择图片
     CardBackGround: any;
@@ -141,6 +142,7 @@ export class CheckVipcardDetailinforComponent implements OnInit {
                 nzCancelText: null,
                 nzOkText: '保存',
                 nzOnOk: function(){
+                    self.showErrorTip = self.selectStoresIds == ''? false : true;
                 }
             });
         }else {
@@ -150,10 +152,7 @@ export class CheckVipcardDetailinforComponent implements OnInit {
 
     //获取到门店ID
     getSelectStoresIds(event){
-        console.log(event);
-        if(event){
-            this.selectStoresIds = event.staffIds;
-        }
+        this.selectStoresIds = event.staffIds? event.staffIds : '';
     }
 
     // 适用门店名称
@@ -200,6 +199,7 @@ export class CheckVipcardDetailinforComponent implements OnInit {
                     if((self.productIds.split(',').length < self.selectProductNumber)&&(self.cardType === 'REBATE')){
                       self.msg.warning('该卡使用范围缩小，可能影响顾客体验');
                     }
+                    self.showErrorTip = self.productIds == ''? false : true;
                 }
             });
         }else {
@@ -210,6 +210,7 @@ export class CheckVipcardDetailinforComponent implements OnInit {
             self.msg.warning('该卡使用范围缩小，可能影响顾客体验');
           }
           this.ifHttps = type;
+          self.showErrorTip = self.productIds? true : false;
         }
     }
 
@@ -283,9 +284,9 @@ export class CheckVipcardDetailinforComponent implements OnInit {
             this.allStoresNum = this.selectStoresIds.split(',').length;
             this.applyStoreNames = this.applyStoreNames.substring(1);
         }
-        console.log(this.cityStoreList);
+        this.showErrorTip = this.selectStoresIds? true : false;
+      console.log(this.cityStoreList);
     }
-
 
     //拿到项目对应的数量/总数/ID
     getOthersData(cardListInfor: any){
@@ -476,7 +477,6 @@ export class CheckVipcardDetailinforComponent implements OnInit {
       }
       if (this.form.invalid) return;
       else{
-        this.submitting = true;
         let list = {
           applyProductIds: this.productIds,
           applyStoreNames: this.applyStoreNames,
@@ -506,24 +506,25 @@ export class CheckVipcardDetailinforComponent implements OnInit {
           rules: [list],
         };
         console.log(params);
-        this.productService.saveAddVipInfor(params).subscribe(
-          (res: any) => {
-            if (res.success) {
-              setTimeout(() => {
-                self.submitting = false;
-              }, 1000);
-              this.router.navigate(['/product/vip/list']);
-            } else {
-              this.modalSrv.error({
-                nzTitle: '温馨提示',
-                nzContent: res.errorInfo
-              });
+        if(this.showErrorTip){
+          this.submitting = true;
+          this.productService.saveAddVipInfor(params).subscribe(
+            (res: any) => {
+              self.submitting = false;
+              if (res.success) {
+                this.router.navigate(['/product/vip/list']);
+              } else {
+                this.modalSrv.error({
+                  nzTitle: '温馨提示',
+                  nzContent: res.errorInfo
+                });
+              }
+            },
+            (error) => {
+              this.msg.warning(error)
             }
-          },
-          (error) => {
-            this.msg.warning(error)
-          }
-        );
+          );
+        }
       }
     }
 

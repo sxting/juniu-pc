@@ -177,7 +177,6 @@ export class MonthReportComponent implements OnInit {
         let self = this;
         this.reportService.getMonthreportInfor(batchQuery).subscribe(
             (res: any) => {
-                console.dir(res);
                 //客流量
                 self.PassengerFlow = res.data.currentMonthCount? parseFloat(res.data.currentMonthCount) + '' : 0 + '';
                 self.avgPassengerFlow = res.data.avgCount;
@@ -228,9 +227,7 @@ export class MonthReportComponent implements OnInit {
       let year = this.reportDate.getFullYear();        //获取当前年份(2位)
       let month = this.reportDate.getMonth()+1;       //获取当前月份(0-11,0代表1月)
       let changemonth = month < 10 ? '0' + month : '' + month;
-      let day = this.reportDate.getDate();        //获取当前日(1-31)
-      let changeday = day < 10 ? '0' + day : '' + day;
-      this.reportDateChange = year+'-'+changemonth+'-'+changeday;
+      this.reportDateChange = year+'-'+changemonth;
       this.batchQuery.yyyymm = this.reportDateChange;
       //获取商品报表信息
       this.getMonthreportInfor(this.batchQuery);
