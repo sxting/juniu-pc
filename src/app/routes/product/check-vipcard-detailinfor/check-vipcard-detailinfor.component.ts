@@ -477,7 +477,6 @@ export class CheckVipcardDetailinforComponent implements OnInit {
       }
       if (this.form.invalid) return;
       else{
-        this.submitting = true;
         let list = {
           applyProductIds: this.productIds,
           applyStoreNames: this.applyStoreNames,
@@ -508,6 +507,7 @@ export class CheckVipcardDetailinforComponent implements OnInit {
         };
         console.log(params);
         if(this.showErrorTip){
+          this.submitting = true;
           this.productService.saveAddVipInfor(params).subscribe(
             (res: any) => {
               self.submitting = false;

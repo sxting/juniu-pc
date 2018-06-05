@@ -28,7 +28,7 @@ export class KoubeiProductListComponent implements OnInit {
     koubeiProductListInfor: any = [];//口碑商品列表信息
     isVisible = false;//是否显示弹框
 
-  //门店
+    //门店
     storeList: any[] = [];//门店列表
     expandForm = false;
     storeId: string = '';//门店
@@ -111,16 +111,16 @@ export class KoubeiProductListComponent implements OnInit {
         }
 
         // this.isVisible = true;//关联口碑账号
-        let Pid = 'BINDING_ALIPAY_' + this.alipayPid;
-        var goEasy = new GoEasy({
-          appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
-        });
-        goEasy.subscribe({
-          channel: Pid,
-          onMessage: function (message) {
-            console.log(message);
-          }
-        });
+        // let Pid = 'BINDING_ALIPAY_' + this.alipayPid;
+        // var goEasy = new GoEasy({
+        //   appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
+        // });
+        // goEasy.subscribe({
+        //   channel: Pid,
+        //   onMessage: function (message) {
+        //     console.log(message);
+        //   }
+        // });
 
     }
 
