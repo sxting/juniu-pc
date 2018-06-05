@@ -69,25 +69,22 @@ export class MeituanComponent implements OnInit {
             this.staffType = userInfo.staffType;
         }
 
-        if (this.localStorageService.getLocalstorage(STORES_INFO) &&
-            JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
-            let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-                JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-            this.stores = storeList;
+        // if (this.localStorageService.getLocalstorage(STORES_INFO) &&
+        //     JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
+            // let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
+            //     JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
+            // this.stores = storeList;
 
-            this.stores.forEach(function (item: any, index: any) {
-                self.shops.push({
-                    shopId: item.storeId,
-                    shopName: item.storeName,
-                    shopAddress: '',
-                });
-            });
+            // this.stores.forEach(function (item: any, index: any) {
+            //     self.shops.push({
+            //         shopId: item.storeId,
+            //         shopName: item.storeName,
+            //         shopAddress: '',
+            //     });
+            // });
 
-            let url = 'https://e.dianping.com/open/merchant/auth?appKey=' + this.appKey + '&requestModules=' + encodeURIComponent(JSON.stringify(this.requestModules)) + '&shopList='
-                + encodeURIComponent(JSON.stringify(this.shops));
-
-            this.url = this.sanitizer.bypassSecurityTrustResourceUrl(url)
-        }
+            
+        // }
 
         if (this.staffType === 'STORE') {
             this.storeId = this.stores[0].storeId;
@@ -110,6 +107,10 @@ export class MeituanComponent implements OnInit {
         this.getReceiptList();
         if (this.storeId) {
             this.checkAuth();
+            let url = 'https://e.dianping.com/open/merchant/auth?appKey=' + this.appKey + '&requestModules=' + encodeURIComponent(JSON.stringify(this.requestModules)) + '&shopList='
+                + encodeURIComponent(JSON.stringify(this.shops));
+
+            this.url = this.sanitizer.bypassSecurityTrustResourceUrl(url)
         }
     }
 
@@ -195,7 +196,7 @@ export class MeituanComponent implements OnInit {
         this.checkoutService.checkAuth(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    this.isShouQuan = res;
+                    this.isShouQuan = res.data;
                     if (!this.isShouQuan) {//如果没授权
                         this.shouquanAlert();
                     }

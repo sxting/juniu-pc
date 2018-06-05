@@ -11,7 +11,7 @@
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="cardConfigName">卡名称</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input maxlength="20" nz-input formControlName="cardConfigName" id="productName" placeholder="请输入卡名称">
+                <input maxlength="20" nz-input formControlName="cardConfigName" autocomplete="off"  id="productName" placeholder="请输入卡名称">
                 <nz-form-explain *ngIf="form.get('cardConfigName').dirty && form.get('cardConfigName').errors">请输入卡名称</nz-form-explain>
             </nz-form-control>
         </nz-form-item>
@@ -81,7 +81,7 @@
             <nz-form-control nzXs="24" nzSm="12" nzMd="10" *ngIf="cardType === 'TIMES'"><nz-form-text>不可销卡</nz-form-text></nz-form-control>
         </nz-form-item>
         <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzFor="productTypes">适用商品</nz-form-label>
+            <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="productTypes">适用商品</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
                 <nz-radio-group formControlName="productTypes">
                     <label nz-radio *ngFor="let list of productTypesArr" [nzValue]="list.value" (click)="onSelectAlertBtnProduct(alertProduct, '适用商品', list.value)">{{list.name}}</label>
@@ -89,7 +89,7 @@
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzFor="storeType">适用门店</nz-form-label>
+            <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="storeType">适用门店</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
                 <nz-radio-group formControlName="storeType">
                     <label nz-radio *ngFor="let item of storeStatus"  [nzValue]="item.value" (click)="onSelectAlertBtn(alertStore, '门店', item.value)">{{item.name}}</label>
