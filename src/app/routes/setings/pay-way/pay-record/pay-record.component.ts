@@ -20,6 +20,7 @@ export class PayRecordComponent implements OnInit {
 
     //审核状态
     status: string = '3'; //审核中0   审核通过1   审核未通过2   3未申请
+  statusData: any;
 
     date: any = '';
     pageNo: any = 1;
@@ -137,6 +138,7 @@ export class PayRecordComponent implements OnInit {
         this.setingsService.getPayWayStatus(data).subscribe(
             (res: any) => {
                 if(res.success) {
+                  this.statusData = res.data;
                     //status: string = '3'; //审核中0   审核通过1   审核未通过2   3未申请
                     if(res.data.examineStatus == 0) {
                         this.status = '0';
