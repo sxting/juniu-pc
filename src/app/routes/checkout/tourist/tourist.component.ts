@@ -299,7 +299,7 @@ export class TouristComponent implements OnInit {
                 that.vipCardList.forEach(function (i: any) {
                     let vipMoney2 = 0;
                     that.xfList.forEach(function (n: any) {
-                        if (n.vipCard && i.card.cardId === n.vipCard.card.cardId && i.card.type !== 'TIMES') {
+                        if (n.vipCard && i.card.cardId === n.vipCard.card.cardId) {
                             // i.card.balance2 -= n.vipMoney
                             vipMoney2 += n.vipMoney;
                             vipMoney += n.vipMoney;
