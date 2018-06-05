@@ -88,6 +88,7 @@ export class SoftBuyStep2Component implements OnInit {
             item.disabled = !item.selectable;
             item.amountOffsetData = item.amountOffset/100;
             item.realAmountData = item.realAmount/100;
+            item.daysRemaining = item.daysRemaining == -1 ? '永久' : item.daysRemaining
           });
         } else {
           this.modalSrv.error({
