@@ -68,7 +68,7 @@ export class AdministrationComponent implements OnInit {
 
     getCaptcha(counts: any) {
         if (counts === 'count')
-            this.getCode(this.oldphone, counts)
+            this.getCode(this.userInfo.loginName, counts)
         if (counts === 'count1')
             this.getCode(this.form.value.mobile, counts)
     }
@@ -140,7 +140,8 @@ export class AdministrationComponent implements OnInit {
         }
         if (this.captcha.invalid || this.captcha2.invalid || this.mobile.invalid) return false;
         else {
-            this.modifyPhoneHttp(this.form.value.mobile, this.form.value.captcha2, this.form.value.captcha);
+            if (this.userInfo.loginName === this.form.value.mobile) this.errorAlter('新手机号不能与旧手机号相同');
+            else this.modifyPhoneHttp(this.form.value.mobile, this.form.value.captcha2, this.form.value.captcha);
         };
     }
     submit2() {
