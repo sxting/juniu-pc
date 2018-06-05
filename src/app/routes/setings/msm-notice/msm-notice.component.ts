@@ -5,7 +5,7 @@ import { NzModalService, NzMessageService } from 'ng-zorro-antd';
 import { TemplateRef } from '@angular/core';
 declare var DataSet;
 declare var echarts;
-
+declare var GoEasy: any;
 
 @Component({
     selector: 'app-msm-notice',
@@ -63,8 +63,6 @@ export class MsmNoticeComponent implements OnInit {
     dataNote: any;
     radioValue: any;
     temBoolean = false;
-
-
     result: any;
     payType: any = '';
     codeImgUrl: any = '';
@@ -79,6 +77,7 @@ export class MsmNoticeComponent implements OnInit {
         this.smsStatisticsHttp();
         this.configQueryHttp();
         this.smsListHttp();
+
     }
     onPayWayClick(type: any) {
         if (!this.payType) {
@@ -284,15 +283,15 @@ export class MsmNoticeComponent implements OnInit {
             }
         });
     }
-    radioFun() {
+    radioFun(packageId: any) {
         this.temBoolean = true;
     }
     smsListHttp() {
         let that = this;
-        this.setingsService.smsBatch().subscribe(
+        this.setingsService.merchantsmsBatch().subscribe(
             (res: any) => {
                 if (res) {
-                    that.dataNote = res.data;
+                    that.dataNote = res.data.items;
                 }
             },
             error => {
@@ -308,6 +307,18 @@ export class MsmNoticeComponent implements OnInit {
         this.setingsService.smsRecharge(data).subscribe(
             (res: any) => {
                 if (res) {
+                    var goEasy = new GoEasy({
+                        appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
+                    });
+                    goEasy.subscribe({
+                        channel: 'SMS_PACKAGE_' + res.data.orderNo,
+                        onMessage: (message: any) => {
+                            if (confirm(message.content)) {
+                                this.modalSrv.closeAll();
+                                this.msg.success('支付成功');
+                            }
+                        }
+                    });
                 }
             },
             error => {
@@ -329,17 +340,18 @@ export class MsmNoticeComponent implements OnInit {
                 if (res.success) {
                     this.codeImgUrl = res.data.codeImgUrl;
                     let self = this, time = 0;
-                    let timer = setInterval(function () {
-                        time += 3000;
-                        if (time >= 6000) {
-                            self.modalSrv.error({
-                                nzTitle: '温馨提示',
-                                nzContent: '支付超时'
-                            });
-                            clearInterval(timer);
-                        }
-                        self.getPayUrlQuery();
-                    }, 3000)
+                    this.smsRechargeHttp(this.radioValue);
+                    // let timer = setInterval(function () {
+                    //     time += 3000;
+                    //     if (time >= 6000) {
+                    //         self.modalSrv.error({
+                    //             nzTitle: '温馨提示',
+                    //             nzContent: '支付超时'
+                    //         });
+                    //         clearInterval(timer);
+                    //     }
+                    //     self.getPayUrlQuery();
+                    // }, 3000)
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
