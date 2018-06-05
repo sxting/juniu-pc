@@ -46,7 +46,7 @@ export class StoreEditComponent implements OnInit {
     ngOnInit() {
         this.storeId = this.route.snapshot.params['storeId'];
         this.merchantName = this.userInfo.merchantName;
-        this.cityArr =  JSON.parse(this.localStorageService.getLocalstorage(CITY_LIST)) ;
+        this.cityArr = JSON.parse(this.localStorageService.getLocalstorage(CITY_LIST));
         if (this.route.snapshot.params['storeId']) {
             this.getStoreInfo(this.route.snapshot.params['storeId']);
         }
@@ -57,7 +57,7 @@ export class StoreEditComponent implements OnInit {
             this.errAlert('请填写分店名称');
         } else if (!this.adressCode && !(this.data ? this.data.provinceCode : false)) {
             this.errAlert('请选择门店地址');
-        } else if (!this.location) {
+        } else if (!this.location && !(this.data ? this.data.latitude : false)) {
             this.errAlert('请填写门店详细地址');
         } else {
             let data = {
