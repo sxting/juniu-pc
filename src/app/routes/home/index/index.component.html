@@ -10,11 +10,11 @@
             [footer]="footer1">
             <trend flag="up" style="display:block; margin-top:2px;">
                 周同比
-                <span class="pl-sm">{{(IncomeData.todayIncomeAmount/IncomeData.lastweekDayIncomeAmount) ? (IncomeData.todayIncomeAmount/IncomeData.lastweekDayIncomeAmount)*100 : 0}}%</span>
+                <span class="pl-sm">{{(IncomeData.lastweekDayIncomeAmount && IncomeData.todayIncomeAmount/IncomeData.lastweekDayIncomeAmount) ? ((IncomeData.todayIncomeAmount/IncomeData.lastweekDayIncomeAmount)*100).toFixed(2) : 0}}%</span>
             </trend>
             <trend flag="down">
                 日环比
-                <span class="pl-sm">{{(IncomeData.todayIncomeAmount/IncomeData.yesterdayIncomeAmount) ? (IncomeData.todayIncomeAmount/IncomeData.yesterdayIncomeAmount)*100 : 0}}%</span>
+                <span class="pl-sm">{{(IncomeData.yesterdayIncomeAmount && IncomeData.todayIncomeAmount/IncomeData.yesterdayIncomeAmount) ? ((IncomeData.todayIncomeAmount/IncomeData.yesterdayIncomeAmount)*100).toFixed(2) : 0}}%</span>
             </trend>
             <ng-template #footer1>
                 <p class="text-truncate mb0">日均销售额<span class="ml-sm">￥{{IncomeData.aveIncome/100}}</span></p>
@@ -30,11 +30,11 @@
             [footer]="footer2">
             <trend flag="up" style="display:block; margin-top:2px;">
                 周同比<span class="pl-sm">
-                {{transationCount.todayCount/transationCount.lastWeekDayCount ? (transationCount.todayCount/transationCount.lastWeekDayCount)*100 : 0}}%</span>
+                {{transationCount.lastWeekDayCount && transationCount.todayCount/transationCount.lastWeekDayCount ? ((transationCount.todayCount/transationCount.lastWeekDayCount)*100).toFixed(2) : 0}}%</span>
             </trend>
             <trend flag="down">
                 日环比
-                <span class="pl-sm">{{transationCount.todayCount/transationCount.yesterdayCount ? (transationCount.todayCount/transationCount.yesterdayCount)*100 : 0}}%</span>
+                <span class="pl-sm">{{transationCount.yesterdayCount && transationCount.todayCount/transationCount.yesterdayCount ? ((transationCount.todayCount/transationCount.yesterdayCount)*100).toFixed(2) : 0}}%</span>
             </trend>
             <ng-template #footer2>
                 <p class="text-truncate mb0">日均交易笔<span class="ml-sm">{{transationCount.avgCount}}笔</span></p>

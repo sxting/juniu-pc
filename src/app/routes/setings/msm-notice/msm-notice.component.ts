@@ -156,11 +156,11 @@ export class MsmNoticeComponent implements OnInit {
                     this.surplusNumber = res.data.surplusNumber || 0;
                     if (res.data.configList) {
                         if (res.data.configList.indexOf('NOTICE_OPENCARD') > -1) this.openCard = true;
-                        if (res.data.configList.indexOf('NOTICE_RECHARGE') > -1) this.recharge = true;
+                        if (res.data.configList.indexOf('NOTICE_RECARGE') > -1) this.recharge = true;
                         if (res.data.configList.indexOf('NOTICE_CONSUME') > -1) this.consume = true;
                         if (res.data.configList.indexOf('RESERVE_TO_MERCHANT') > -1) this.reserveRemind = true;
                         if (res.data.configList.indexOf('RESERVE_SUCCESS_CUSTOMER') > -1) this.reserveSuccess = true;
-                        if (res.data.configList.indexOf('RESERVE_RSFUSE_CUSTOMER') > -1) this.reserveRefuse = true;
+                        if (res.data.configList.indexOf('RESERVE_REFUSE_CUSTOMER') > -1) this.reserveRefuse = true;
                     }
                 } else {
                     this.modalSrv.error({

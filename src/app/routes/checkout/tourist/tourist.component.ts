@@ -276,10 +276,10 @@ export class TouristComponent implements OnInit {
                 if (that.vipCardList && i.vipCard) {
                     that.vipCardList.forEach(function (k: any) {
                         if (k.card.cardId === i.vipCard.card.cardId && k.checked) {
-                            if (i.vipCard.card.type === "TIMES") { i.vipMoney = NP.times(NP.times(NP.divide(i.currentPrice,100), 100), i.num) }
-                            else if (i.vipCard.card.type === "METERING") { i.vipMoney = NP.times(NP.times(NP.divide(i.currentPrice,100), 100), i.num) }
-                            else if (i.vipCard.card.type === "REBATE") { i.vipMoney = NP.times(NP.times(NP.divide(i.currentPrice,100), 100), NP.divide(i.vipCard.card.rebate, 10), i.num); }
-                            else if (i.vipCard.card.type === "STORED") { i.vipMoney = NP.times(NP.times(NP.divide(i.currentPrice,100), 100), i.num) }
+                            if (i.vipCard.card.type === "TIMES") { i.vipMoney = NP.times(NP.divide(i.discount,100),NP.times(NP.divide(i.currentPrice,100), 100), i.num) }
+                            else if (i.vipCard.card.type === "METERING") { i.vipMoney = NP.times(NP.divide(i.discount,100),NP.times(NP.divide(i.currentPrice,100), 100), i.num) }
+                            else if (i.vipCard.card.type === "REBATE") { i.vipMoney = NP.times(NP.divide(i.discount,100),NP.times(NP.divide(i.currentPrice,100), 100),NP.divide(i.discount,100), NP.divide(i.vipCard.card.rebate, 10), i.num); }
+                            else if (i.vipCard.card.type === "STORED") { i.vipMoney = NP.times(NP.divide(i.discount,100),NP.times(NP.divide(i.currentPrice,100), 100), i.num) }
                         } else if (k.card.cardId === i.vipCard.card.cardId && !k.checked) {
                             i.vipMoney = 0;
                         }
@@ -572,7 +572,7 @@ export class TouristComponent implements OnInit {
             if (this.xyVip) create.bizType = 'RECHARGE';
             else if (that.memberInfo.phone && !this.xyVip) create.bizType = 'OPENCARD';
         } else {
-            if (that.memberInfo.phone) create.bizType = 'MEMBER';
+            if (create.settleCardDTOList && create.settleCardDTOList.length > 0) create.bizType = 'MEMBER';
             else create.bizType = 'FIT';
         }
 
