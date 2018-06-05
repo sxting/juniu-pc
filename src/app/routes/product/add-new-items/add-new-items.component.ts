@@ -397,15 +397,12 @@ export class AddNewItemsComponent implements OnInit {
     }
 
     submit() {
-        console.log(this.form.controls);
-
         let self = this;
         for (const i in this.form.controls) {
             this.form.controls[ i ].markAsDirty();
             this.form.controls[ i ].updateValueAndValidity();
         }
         if (this.form.invalid) return;
-        this.submitting = true;
         let categoryInfor = this.form.controls.categoryInfor.value;
         let params = {
             productName: this.form.controls.productName.value,
@@ -422,11 +419,12 @@ export class AddNewItemsComponent implements OnInit {
             applyStoreType: this.form.controls.storeType.value,
             categoryType: 'SERVICEITEMS'
         };
+        this.submitting = true;
         this.productService.saveAddProductInfor(params).subscribe(
             (res: any) => {
+                self.submitting = false;
                 if (res.success) {
                     setTimeout(() => {
-                        self.submitting = false;
                         self.msg.success(`提交成功`);
                         self.router.navigate(['/product/service/items/list']);
                     }, 1000);
