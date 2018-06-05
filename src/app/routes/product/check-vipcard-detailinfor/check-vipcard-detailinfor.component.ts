@@ -366,6 +366,7 @@ export class CheckVipcardDetailinforComponent implements OnInit {
             this.msg.warning(error);
         })
     }
+    handleCancel(): void { this.isVisible = false; }
 
     // 获取全部商品
     getAllbuySearchs(data: any) {
@@ -512,7 +513,7 @@ export class CheckVipcardDetailinforComponent implements OnInit {
             (res: any) => {
               self.submitting = false;
               if (res.success) {
-                this.router.navigate(['/product/vip/list']);
+                this.router.navigate(['/product/vip/list', { menuId : this.moduleId }]);
               } else {
                 this.modalSrv.error({
                   nzTitle: '温馨提示',

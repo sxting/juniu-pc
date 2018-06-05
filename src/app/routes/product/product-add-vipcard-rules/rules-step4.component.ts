@@ -49,12 +49,12 @@ export class RulesStep4Component implements OnInit {
 
     //返回列表
     comeBackVipList(){
-        this.router.navigate(['/product/vip/list']);
+        this.router.navigate(['/product/vip/list', { menuId: this.item.moduleId}]);
     }
 
     //查看会员详情
     checkDetailInfor(){
-        this.router.navigate(['/product/check/vipcard/detailinfor', { configId: this.configId, cardType: this.cardType }]);
+        this.router.navigate(['/product/check/vipcard/detailinfor', { configId: this.configId, cardType: this.cardType, menuId: this.item.moduleId}]);
     }
 
     //查看会员卡详情
