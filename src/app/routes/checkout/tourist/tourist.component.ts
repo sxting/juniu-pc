@@ -20,7 +20,7 @@ declare var swal: any;
 export class TouristComponent implements OnInit {
     storeId: any;
     changeType: boolean = true;//收银开卡切换
-    vipsearch: string = '15533677252';//vip搜索框
+    vipsearch: string = '16666666666';//vip搜索框
     renlian: boolean = true;//人脸识别
     isVerb: boolean = false;//是否抹零
     isVerb2: boolean = false;
@@ -305,10 +305,10 @@ export class TouristComponent implements OnInit {
                             vipMoney += n.vipMoney;
                         }
                     })
-                    if (i.card.balance2 < vipMoney2 && i.card.type !== "TIMES" && i.card.type !== "METERING") {
-                        that.vipMoney += i.card.balance2;
-                        that.vipMoneyName += i.card.cardName + ' ';
-                    }
+                    // if (i.card.balance2 < vipMoney2 && i.card.type !== "TIMES" && i.card.type !== "METERING") {
+                    //     that.vipMoney += i.card.balance2;
+                    //     that.vipMoneyName += i.card.cardName + ' ';
+                    // }
                 })
             }
         }
@@ -390,21 +390,21 @@ export class TouristComponent implements OnInit {
         let money = this.changeType ? (this.inputValue) : (this.isVerb2 ? this.isVerbVipCardmoney : this.vipCardmoney);
         let that = this;
         this.cardChangeBoolean = false;
-        if (this.vipMoney < 0) {
-            this.vipMoneyChajiaFun(money, tpl);
+        // if (this.vipMoney > 0) {
+        //     this.vipMoneyChajiaFun(money, tpl);
+        // } else {
+        if (this.settleCardDTOList && this.settleCardDTOList.length > 0) {
+            this.jiesuanFun();
         } else {
-            if (this.settleCardDTOList && this.settleCardDTOList.length > 0) {
-                this.jiesuanFun();
-            } else {
-                this.modalSrv.create({
-                    nzTitle: `收款金额：${money}元`,
-                    nzContent: tpl,
-                    nzWidth: '520px',
-                    nzFooter: null,
-                    nzOkText: null
-                });
-            }
+            this.modalSrv.create({
+                nzTitle: `收款金额：${money}元`,
+                nzContent: tpl,
+                nzWidth: '520px',
+                nzFooter: null,
+                nzOkText: null
+            });
         }
+        // }
 
     }
     changejiesuan(e: any) {
@@ -697,7 +697,6 @@ export class TouristComponent implements OnInit {
         create.wipeDecimal = that.changeType ? that.isVerb : that.isVerb2;
         // create.faceId = this.selectFaceId;
         create.customerId = this.memberInfo.customerId;
-        console.log(create);
         this.spinBoolean = true;
         if (this.xyVip) {
             that.rechargeAndOrderPayFun(create)

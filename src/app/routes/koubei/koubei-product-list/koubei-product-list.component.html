@@ -109,7 +109,7 @@
 </ng-template>
 
 <!--关联口碑账号-->
-<nz-modal [(nzVisible)]="isVisible" nzWidth ="800" [nzFooter]="null"  nzTitle="关联口碑账号" nzOkText="确定" nzCancelText="取消">
+<nz-modal [(nzVisible)]="isVisible" nzWidth ="800" [nzFooter]="null"  nzTitle="关联口碑账号" nzOkText="确定" nzCancelText="取消"  (nzOnCancel)="handleCancel()">
   <div class="associatedAccount">
     <p>系统检测到您尚未关联口碑账号，暂时无法使用此功能。</p>
     <p>如果您尚未注册口碑账号，您可以 <a class="" href="javascript:;">点此注册</a></p>

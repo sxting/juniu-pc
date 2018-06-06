@@ -366,6 +366,7 @@ export class CheckVipcardDetailinforComponent implements OnInit {
             this.msg.warning(error);
         })
     }
+    handleCancel(): void { this.isVisible = false; }
 
     // 获取全部商品
     getAllbuySearchs(data: any) {
