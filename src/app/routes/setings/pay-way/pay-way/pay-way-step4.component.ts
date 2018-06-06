@@ -231,11 +231,11 @@ export class PayWayStep4Component implements OnInit {
             merchantDetail: {
                 address: item['detail_address'], //详细地址 , *
                 businessLicense: item['yingyezz_code'], //营业执照编码 为数字或字母 , *
-                province: item.step2ProvinceId, //省份名称 , ["010000,北京", "110100,北京市", "110228,密云县"]
+                province: item['shanghu_address'][0], //省份名称 , ["010000,北京", "110100,北京市", "110228,密云县"]
                 // province: '010000', //省份名称 , ["010000,北京", "110100,北京市", "110228,密云县"]
-                city: item.step2CityId, //城市 , 010100
+                city: item['shanghu_address'][1], //城市 , 010100
                 // city: '010100', //城市 , 010100
-                county: item.step2DistrictId, //区域 , 010101
+                county: item['shanghu_address'][2], //区域 , 010101
                 // county: '010119', //区域 , 010101
                 customerPhone: item['service_tel'], //客服电话 , *
                 email: item['email'], // *
@@ -263,8 +263,8 @@ export class PayWayStep4Component implements OnInit {
                 bankName: item['zhihang_name'].split(',')[1], //开户支行名称 ,* branchName
                 // province: '010000', //开户支行所在省 ,*
                 // city: '010100', //开户支行所在市 , *
-                province: item.step3ProvinceId, //开户支行所在省 ,*
-                city: item.step3CityId, //开户支行所在市 , *
+                province: item['in_shengshiqu'][0], //开户支行所在省 ,*
+                city: item['in_shengshiqu'][1], //开户支行所在市 , *
                 idCard: item['kaihur_shenfz'], //持卡人证件号码 ,*
                 idCardType: 1, //1:身份证 2:护 照，账户类型为 “1:企业”时非 必填 ,
                 tel: item['kaihur_tel'], //开户人手机号码 , *

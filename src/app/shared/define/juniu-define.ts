@@ -40,6 +40,8 @@ export const GUADAN: any = 'guadan';
 export const STORES_DOWN: string = 'Stores-Down';
 export const STORES_STAFF: string = 'Stores-Staff';
 export const CITY_LIST: string = 'city-list';
+//支付通道省市区 finance
+export const FINANCE_CITY_LIST: string = 'finance-city-list';
 //  WECHATPAY('微信支付'),
 // ALIPAY('支付宝支付'),
 // CASH('现金支付'),

@@ -46,8 +46,7 @@
         <nz-form-control [nzSpan]="16">
             <nz-cascader [nzPlaceHolder]="'请选择地址'"
                          formControlName="in_shengshiqu"
-                         [nzOptions]="provinces"
-                         [nzLoadData]="loadData"
+                         [nzOptions]="_options"
                          (nzChange)="selectCity($event)" >
                 <!--(ngModelChange)="selectCity($event)" -->
             </nz-cascader>
