@@ -6,15 +6,15 @@
             </div>
             <div class="sm-button {{checkoutShow?'sm-button2':''}} " (click)="scanPay()">扫描顾客核销码</div>
             <div class="gai"></div>
-            <input type="text" id="authCode" [(ngModel)]="authCode" name="authCode" (ngModelChange)="goToSubmitOrder()" class="input pay-code-input">
+            <input type="text" nz-input id="authCode" [(ngModel)]="authCode" name="authCode" (ngModelChange)="goToSubmitOrder()" class="input pay-code-input">
         </nz-tab>
         <nz-tab nzTitle="手动核销">
             <div class="member-top-middle" *ngIf="checkoutShow">
                 <jn-stores-infor *ngIf="checkoutShow" [moduleId]="moduleId" (storeIdOutput)="selectStoreInfo($event)"></jn-stores-infor>
             </div>
             <div class="member-top-middle">
-                <span style="margin-right:24px;">核销码</span>
-                <input type="text" id="tauthCode" [(ngModel)]="tauthCode" placeholder="请输入顾客核销码">
+                <span style="margin-right:24px;">核销码:</span>
+                <input type="text" id="tauthCode" nz-input [(ngModel)]="tauthCode" placeholder="请输入顾客核销码">
             </div>
             <div class="sm-button" (click)="goToSubmitOrder()">点击核销</div>
         </nz-tab>

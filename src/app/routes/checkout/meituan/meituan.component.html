@@ -10,11 +10,11 @@
 
     <div *ngIf="!isClick">
         <div class="quan-input-box" *ngIf="type === 'input'">
-            <span>输入券码</span>
-            <input type="text" placeholder="请输入团购券序列号" [(ngModel)]="receiptCode">
+            <span>输入券码:</span>
+            <input type="text" nz-input placeholder="请输入团购券序列号" [(ngModel)]="receiptCode">
         </div>
 
-        <input class="hidden" type="text" id="qrCode" [(ngModel)]="qrCode" name="qrCode" (ngModelChange)="scanPrepare()">
+        <input nz-input class="hidden"  type="text" id="qrCode" [(ngModel)]="qrCode" name="qrCode" (ngModelChange)="scanPrepare()">
 
         <div class="saoma-btn">
             <span *ngIf="type === 'saoma'" (click)="onClickBtnClick('saoma')">扫码验券</span>
@@ -70,9 +70,12 @@
                 </tr>
             </tbody>
         </nz-table>
-
-        <nz-pagination (nzPageIndexClickChange)="paginate($event)" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)" [nzPageIndex]="1"
+        <div class="nzPaginationBox">
+            <nz-pagination  class="nzPagination" (nzPageIndexClickChange)="paginate($event)" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)" [nzPageIndex]="1"
             [nzTotal]="countPage"></nz-pagination>
+        </div>
+        <!-- <nz-pagination (nzPageIndexClickChange)="paginate($event)" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)" [nzPageIndex]="1"
+            [nzTotal]="countPage"></nz-pagination> -->
 
     </div>
 </g2-card>
