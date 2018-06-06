@@ -1004,7 +1004,7 @@ export class TouristComponent implements OnInit {
             storeId: this.storeId
         }
         let that = this;
-        this.memberService.storeTypesOldCards(data).subscribe(
+        this.memberService.storeTypesOldCards2(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     this.cardConfigList = res.data.cardConfig;
