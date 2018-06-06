@@ -1,3 +1,4 @@
+
 <page-header #ph [title]="''">
     <nz-radio-group [(ngModel)]="putaway" class="mr-md fr">
         <label nz-radio-button [nzValue]="'1'" (click)="onStatusClick()">
@@ -26,7 +27,7 @@
         </thead>
         <tbody nz-tbody class="ui-grid-tbody">
         <tr nz-tbody-tr *ngFor="let item of productListInfor;let i = index">
-            <td nz-td>{{item.productNo}}</td>
+            <td nz-td>{{item.productNo? item.productNo : '-'}}</td>
             <td nz-td>{{item.categoryName}}</td>
             <td nz-td>{{item.productName}}</td>
             <td nz-td>{{item.stock}}</td>
