@@ -515,7 +515,7 @@ export class TouristComponent implements OnInit {
     /**扫码支付提交订单 */
     goToSubmitOrder(click?: any, type?: any) {
         let self = this;
-        if (this.authCode.length >= 17) {
+        if (this.authCode.length >= 18) {
             this.jiesuanFun();
         }
     }

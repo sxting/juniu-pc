@@ -49,6 +49,7 @@ export class AddNewProductComponent implements OnInit {
     storesChangeNum: any; //选中门店的个数
     allStoresNum: any;//所有门店的数量
     moduleId: string;
+    ifShow: boolean = false;//门店错误提示
 
     get categoryInfor() { return this.form.controls.categoryInfor; }
     get currentPrice() { return this.form.controls['currentPrice']; }
@@ -97,6 +98,7 @@ export class AddNewProductComponent implements OnInit {
           this.selectStoresIds = this.selectStoresIds.substring(1);
           this.storesChangeNum = this.selectStoresIds.split(',').length;
         }
+        this.ifShow = this.selectStoresIds === ''? true : false;
       }
     }
 
@@ -116,6 +118,8 @@ export class AddNewProductComponent implements OnInit {
                 nzCancelText: null,
                 nzOkText: '保存',
                 nzOnOk: function(){
+                  console.log(self.selectStoresIds);
+                  self.ifShow = self.selectStoresIds === ''? true : false;
                 }
             });
         }else {
@@ -125,10 +129,7 @@ export class AddNewProductComponent implements OnInit {
 
     //获取到门店ID
     getSelectStoresIds(event){
-        console.log(event);
-        if(event){
-            this.selectStoresIds = event.staffIds;
-        }
+      this.selectStoresIds = event.staffIds? event.staffIds : '';
     }
 
     //增加商品分类信息
@@ -205,8 +206,7 @@ export class AddNewProductComponent implements OnInit {
             this.selectStoresIds = this.selectStoresIds.substring(1);
             this.allStoresNum = this.selectStoresIds.split(',').length;
         }
-
-        console.log(this.cityStoreList);
+        this.ifShow = this.selectStoresIds === ''? true : false;
     }
 
     /*************************  Http请求开始  ********************************/
@@ -401,8 +401,7 @@ export class AddNewProductComponent implements OnInit {
     }
 
     submit() {
-        console.log(this.form.controls.categoryInfor.value);
-        let self = this;
+      let self = this;
         for (const i in this.form.controls) {
             this.form.controls[ i ].markAsDirty();
             this.form.controls[ i ].updateValueAndValidity();
@@ -425,23 +424,25 @@ export class AddNewProductComponent implements OnInit {
             applyStoreType: this.form.controls.storeType.value,
             categoryType: 'PHYICALGOODS'
         };
-        this.submitting = true;
-        this.productService.saveAddProductInfor(params).subscribe(
+        if(this.ifShow == false){
+          this.submitting = true;
+          this.productService.saveAddProductInfor(params).subscribe(
             (res: any) => {
-                self.submitting = false;
-                if (res.success) {
-                   self.msg.success(`提交成功`);
-                   self.router.navigate(['/product/list']);
-                } else {
-                    this.modalSrv.error({
-                        nzTitle: '温馨提示',
-                        nzContent: res.errorInfo
-                    });
-                }
+              self.submitting = false;
+              if (res.success) {
+                self.msg.success(`提交成功`);
+                self.router.navigate(['/product/list', { menuId: self.moduleId}]);
+              } else {
+                this.modalSrv.error({
+                  nzTitle: '温馨提示',
+                  nzContent: res.errorInfo
+                });
+              }
             },
             (error) => {
-                this.msg.warning(error)
+              this.msg.warning(error)
             }
-        );
+          );
+        }
     }
 }
