@@ -97,7 +97,7 @@ export class SetingsService {
 
     /*软件购买 end*/
 
-    //短信购买
+    //短信购买  
     buySmsPackage(Params: any) {
         let apiUrl = Config.API + 'account/sms/package/buySmsPackage.json';
         return this.http.get(apiUrl, Params)
@@ -106,7 +106,14 @@ export class SetingsService {
                 return Observable.throw(error);
             });
     }
-
+    payUrl(Params: any) {
+        let apiUrl = Config.API + 'finance/pay/url.json';
+        return this.http.post(apiUrl, Params)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
     /*支付通道start*/
 
     //省份列表
@@ -399,6 +406,17 @@ export class SetingsService {
     // 选择门店
     selectStores(data: any) {
         let apiUrl = Config.API1 + 'account/merchant/store/select.json';
+        return this.http.get(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+
+    //商家员工选择列表
+
+    selectStaff(data: any) {
+        let apiUrl = Config.API1 + 'account/merchant/staff/select.json';
         return this.http.get(apiUrl, data)
             .map((response: Response) => response)
             .catch(error => {

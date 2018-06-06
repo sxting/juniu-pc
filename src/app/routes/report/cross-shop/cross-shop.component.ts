@@ -45,11 +45,11 @@ export class CrossShopComponent implements OnInit {
     storeId: string = '';
     merchantId: string;
     consumeType: string;//消费类型
-
     dateRange: Date = null;
     startTime: string = '';//转换字符串的时间
     endTime: string = '';//转换字符串的时间
     moduleId: any;
+    ifStoresAll: boolean = false;
 
     constructor(
         private http: _HttpClient,
@@ -84,6 +84,15 @@ export class CrossShopComponent implements OnInit {
         this.titleSrv.setTitle('跨店结算');
         this.moduleId = this.route.snapshot.params['menuId'];
         this.getStoresInfor();//门店初始化
+    }
+
+    //弹框的选择门店
+    getStoreId(event){
+      this.storeId = event.storeId? event.storeId : '';
+      this.batchQueryAlert.storeId = this.storeId;
+      this.batchQueryAlert.pageIndex = 1;
+      this.batchQueryAlert.merchantId = this.merchantId;
+      this.crossShopInforDetailHttp(this.batchQueryAlert);
     }
 
     //点击查看详情
@@ -176,13 +185,6 @@ export class CrossShopComponent implements OnInit {
     //选择消费类型
     selectConsumeType(){
       this.batchQueryAlert.consumeType = this.consumeType;
-      this.batchQueryAlert.pageIndex = 1;
-      this.crossShopInforDetailHttp(this.batchQueryAlert);
-    }
-
-    //选择门店
-    selectStore() {
-      this.batchQueryAlert.storeId = this.storeId;
       this.batchQueryAlert.pageIndex = 1;
       this.crossShopInforDetailHttp(this.batchQueryAlert);
     }
