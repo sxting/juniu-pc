@@ -1,3 +1,5 @@
+@import 'node_modules/@delon/theme/styles/default';
+
 .container {
     background-color: #fff;
     padding: 10px 20px 20px;
@@ -22,8 +24,8 @@
     }
 
      li.btns_active {
-        color: #FF6600;
-        border-bottom: 2px solid #FF6600;
+        color: @primary-color;
+        border-bottom: 2px solid @primary-color;
     }
 }
 
@@ -46,7 +48,7 @@
     height: 30px;
     text-align: center;
     line-height: 30px;
-    background: #ff6600;
+    background: @primary-color;
     color: #fff;
     border-radius: 5px;
     margin-left: 20px;
