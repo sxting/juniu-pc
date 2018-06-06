@@ -14,7 +14,7 @@ declare var swal: any;
 @Component({
   selector: 'jn-existingGroups',
   templateUrl: './existingGroups.component.html',
-  styleUrls: ['./existingGroups.component.css']
+  styleUrls: ['./existingGroups.component.less']
 })
 
 export class ExistingGroupsComponent implements OnInit {

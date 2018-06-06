@@ -16,7 +16,7 @@ declare var swal: any;
 @Component({
     selector: 'app-koubei',
     templateUrl: './koubei.component.html',
-    styleUrls: ['./koubei.component.css']
+    styleUrls: ['./koubei.component.less']
 })
 
 export class KoubeiComponent implements OnInit {

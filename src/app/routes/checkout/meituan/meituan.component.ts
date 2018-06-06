@@ -15,7 +15,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
     selector: 'app-meituan',
     templateUrl: './meituan.component.html',
-    styleUrls: ['./meituan.component.css']
+    styleUrls: ['./meituan.component.less']
 })
 export class MeituanComponent implements OnInit {
     constructor(
