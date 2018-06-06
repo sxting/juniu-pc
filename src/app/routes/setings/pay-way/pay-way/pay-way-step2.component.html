@@ -32,8 +32,8 @@
         <nz-form-control [nzSpan]="16">
             <nz-cascader [nzPlaceHolder]="'请选择商户地址'"
                          formControlName="shanghu_address"
-                         [nzOptions]="provinces"
-                         [nzLoadData]="loadData" (nzChange)="selectCity($event)"></nz-cascader>
+                         [nzOptions]="_options"
+                         (nzChange)="selectCity($event)"></nz-cascader>
             <nz-form-explain class="error-color" *ngIf="shanghu_address.dirty && shanghu_address.errors">请选择商户地址</nz-form-explain>
         </nz-form-control>
     </nz-form-item>
