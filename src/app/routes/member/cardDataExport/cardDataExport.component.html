@@ -4,7 +4,7 @@
     <div class="">
         <!-- <div class="addStaffBox-main-left ">选择门店</div>
         <div class="addStaffBox-main-right"> -->
-            <jn-stores-infor style="padding-left:33px;" [moduleId]="moduleId" (storeIdOutput)="selectStoreInfo($event)"></jn-stores-infor>
+            <jn-stores-infor style="padding-left:33px;" [ifStoresAll]="false" [moduleId]="moduleId" (storeIdOutput)="selectStoreInfo($event.storeId)"></jn-stores-infor>
             <!-- <nz-select [(ngModel)]="selectedOption" style="width:240px;" (ngModelChange)="selectStoreInfo($event)" [nzPlaceHolder]="'请选择一个门店'"
                 [nzShowSearch]="true">
                 <nz-option *ngFor="let item of storeList" [nzLabel]="item.storeName" [nzValue]="item">

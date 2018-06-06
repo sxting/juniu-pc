@@ -6,11 +6,11 @@
             contentHeight="44px" [footer]="footer1">
             <trend flag="{{topData?.customerInfoDTO.weekRatio<0?'down':'up'}}" style="display:block; margin-top:2px;">周同比
                 <span class="pl-sm">{{(topData?.customerInfoDTO.weekRatio
-                    <0?topData?.customerInfoDTO.weekRatio*-1:topData?.customerInfoDTO.weekRatio)||0}}%</span>
+                    <0?topData?.customerInfoDTO.weekRatio*-100:topData?.customerInfoDTO.weekRatio*100)||0}}%</span>
             </trend>
             <trend flag="{{topData?.customerInfoDTO.dayRatio<0?'down':'up'}}">日环比
                 <span class="pl-sm">{{(topData?.customerInfoDTO.dayRatio
-                    <0?topData?.customerInfoDTO.dayRatio*-1:topData?.customerInfoDTO.dayRatio)||0}}%</span>
+                    <0?topData?.customerInfoDTO.dayRatio*-100:topData?.customerInfoDTO.dayRatio*100)||0}}%</span>
             </trend>
             <ng-template #footer1>
                 <p class="text-truncate mb0">日均新增会员
@@ -25,11 +25,11 @@
             [footer]="footer2">
             <trend flag="{{topData?.openCardDTO.weekRatio<0?'down':'up'}}" style="display:block; margin-top:2px;">周同比
                 <span class="pl-sm">{{(topData?.openCardDTO.weekRatio
-                    <0?topData?.openCardDTO.weekRatio*-1:topData?.openCardDTO.weekRatio)||0}}%</span>
+                    <0?topData?.openCardDTO.weekRatio*-100:topData?.openCardDTO.weekRatio*100)||0}}%</span>
             </trend>
             <trend flag="{{topData?.openCardDTO.dayRatio<0?'down':'up'}}">日环比
                 <span class="pl-sm">{{(topData?.openCardDTO.dayRatio
-                    <0?topData?.openCardDTO.dayRatio*-1:topData?.openCardDTO.dayRatio)||0}}%</span>
+                    <0?topData?.openCardDTO.dayRatio*-100:topData?.openCardDTO.dayRatio*100)||0}}%</span>
             </trend>
             <ng-template #footer2>
                 <p class="text-truncate mb0">日均开卡数

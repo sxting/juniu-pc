@@ -23,12 +23,20 @@ export class SidebarComponent {
   }
 
   menuRouteHttp(menuId: any) {
-    if (typeof (menuId) === 'string') {
+    if (typeof (menuId) === 'string' && Number(menuId) + '' !== 'NaN') {
       this.manageService.menuRoute({ menuId: menuId, timestamp: new Date().getTime() }).subscribe(
         (res: any) => {
           if (res.success) {
-            if (res.data.eventRoute) {
-              this.router.navigate([res.data.eventRoute, { menuId: menuId }]);
+            if (res.data.eventType === 'ROUTE') {
+              if (res.data.eventRoute) {
+                this.router.navigate([res.data.eventRoute, { menuId: menuId }]);
+              }
+            } else if (res.data.eventType === 'NONE') {
+
+            } else if (res.data.eventType === 'API') {
+
+            } else if (res.data.eventType === 'REDIRECT') {
+
             }
           } else {
             this.modalSrv.error({

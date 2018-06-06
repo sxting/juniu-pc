@@ -245,7 +245,7 @@
             </div> -->
           <div class="shouyinMiddle">
             <nz-input-group nzSearch style="width:280px;margin-top:30px;" [nzSuffix]="suffixIconButton">
-              <input type="text" [(ngModel)]="vipsearch"  nz-input placeholder="请输入手机号/姓名">
+              <input type="text" [(ngModel)]="vipsearch" nz-input placeholder="请输入手机号/姓名">
             </nz-input-group>
             <ng-template #suffixIconButton>
               <button nz-button nzType="primary" (click)="searchMemberCard()" nzSearch>
@@ -313,7 +313,7 @@
                     <div class="BOTTOM">
                       <span *ngIf="rule.applyProductType === 'SERVICEITEMS'">限全部服务项目可用</span>
                       <span *ngIf="rule.applyProductType === 'ALL'">限全部商品可用</span>
-                      <span *ngIf="rule.applyProductType === 'CUSTOMIZE'">限{{item.applyProductNames}}使用</span>
+                      <span style="display: inline-block;width: 90px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" *ngIf="rule.applyProductType === 'CUSTOMIZE'">{{rule.applyProductNames?'限'+rule.applyProductNames+'使用':'部分商品可用'}}</span>
                       <span style="float:right;margin-right:10px;">有效期: {{rule.validate}}天</span>
                     </div>
                   </div>

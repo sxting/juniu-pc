@@ -167,6 +167,9 @@ export class CrossShopComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     that.loading = false;
+                    res.data.list.forEach(function(item: any){
+                      item.consumeTypeText = item.consumeType == 'OTHERSHOP'? '本店会员他店消费' : '他店会员本店消费';
+                    });
                     that.settlementDetailList = res.data.list;
                     that.countPage = res.data.pageInfo.countTotal;
                 } else {

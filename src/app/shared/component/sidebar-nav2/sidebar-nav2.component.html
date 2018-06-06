@@ -135,9 +135,9 @@
                                     <ng-container *ngFor="let child3 of child2.children">
                                         <li *ngIf="child3._hidden !== true" class="{{child3.menuId === menuId?'nav-item-selected':''}}" [class.nav-submenu-open]="child3._open">
                                             <!-- link -->
-                                            <a *ngIf="child3._type === 1" class="{{child2.menuId}}" (click)="onselect(child3)" [target]="child3.target">{{ child3.menuName }}</a>
+                                            <a *ngIf="child3._type === 1" class="{{child3.menuId}}" (click)="onselect(child3)" [target]="child3.target">{{ child3.menuName }}</a>
                                             <!-- external link -->
-                                            <a *ngIf="child3._type === 2" class="{{child2.menuId}}" (click)="onselect(child3)" href="{{ child3.menuId }}" target="{{ child3.target }}">{{ child3.menuName }}</a>
+                                            <a *ngIf="child3._type === 2" class="{{child3.menuId}}" (click)="onselect(child3)" href="{{ child2.menuId }}" target="{{ child3.target }}">{{ child3.menuName }}</a>
                                             <!-- badge -->
                                             <div *ngIf="child3.badge" title="{{child3.badge}}" class="badge badge-{{child3.badge_status}} {{child2.menuId}}" [class.badge-dot]="child3.badge_dot">
                                                 <em>{{child3.badge}}</em>
