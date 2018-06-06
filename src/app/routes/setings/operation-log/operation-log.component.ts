@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import { SetingsService } from '../shared/setings.service';
 import { NzModalService } from 'ng-zorro-antd';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-operation-log',
@@ -16,18 +17,22 @@ export class OperationLogComponent implements OnInit {
     operationId: any;
     storeId: any;
     operationDate: any;
-    logType: any;;
+    logType: any = 'SYSTEM_DATA';
+    staffList:any = [];
+    moduleId:any;
     constructor(
         private setingsService: SetingsService,
         private modalSrv: NzModalService,
+        private route: ActivatedRoute,
         private http: _HttpClient
     ) { }
 
     ngOnInit() {
-        this.operationLogHttp();
+        this.moduleId = this.route.snapshot.params['menuId'];
     }
     getData(e: any) {
-        console.log(e)
+        this.pageNo = e;
+        this.operationLogHttp();
     }
     operationLogHttp() {
         let data = {
@@ -59,6 +64,47 @@ export class OperationLogComponent implements OnInit {
                 }
             }, error => this.errorAlter(error)
         );
+    }
+    selectStaffHttp() {
+        let data = {
+            storeId: this.storeId
+        }
+        this.setingsService.selectStaff(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.staffList = res.data.items;
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    })
+                }
+            }, error => this.errorAlter(error)
+        );
+    }
+    onChange(e) {
+        this.operationDate = this.formatDateTime(e, 'start');
+        this.operationLogHttp();
+    }
+    staffChange(e){
+        this.operationId = e;
+        this.operationLogHttp();
+    }
+    typeChange(e){
+        if(e.index === 0) this.logType = 'SYSTEM_DATA';
+        if(e.index === 1) this.logType = 'MANAGE_SETTING';
+        this.operationLogHttp();
+    }
+    formatDateTime(date: any, type: any) {
+        let year = date.getFullYear();
+        let month = date.getMonth() + 1;
+        let day = date.getDate();
+        return year + '-' + (month.toString().length > 1 ? month : ('0' + month)) + '-' + (day.toString().length > 1 ? day : ('0' + day)) + (type === 'start' ? ' 00:00:00' : ' 23:59:59');
+    }
+    selectStoreInfo(e) {
+        this.storeId = e;
+        this.operationLogHttp();
+        this.selectStaffHttp();
     }
     errorAlter(err: any) {
         this.modalSrv.error({
