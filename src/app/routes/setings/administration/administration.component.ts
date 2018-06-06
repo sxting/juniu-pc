@@ -99,7 +99,7 @@ export class AdministrationComponent implements OnInit {
             nzWidth: '600px',
             nzOnOk: () => {
                 this.submit();
-                return this.submit();
+                // return this.submit();
             }
         });
     }
@@ -112,7 +112,7 @@ export class AdministrationComponent implements OnInit {
             nzWidth: '600px',
             nzOnOk: () => {
                 this.submit2();
-                return this.submit2();
+                // return this.submit2();
             }
         });
     }

@@ -54,7 +54,7 @@
     </div>
 </nz-card>
 <ng-template #modalContent1>
-    <form nz-form [formGroup]="form" (ngSubmit)="submit()">
+    <form nz-form [formGroup]="form">
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7">原手机号</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="16">
@@ -109,7 +109,7 @@
     </form>
 </ng-template>
 <ng-template #modalContent2>
-    <form nz-form [formGroup]="form2" (ngSubmit)="submit2()">
+    <form nz-form [formGroup]="form2" >
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7" nzFor="oldpassword">原密码</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="16">
