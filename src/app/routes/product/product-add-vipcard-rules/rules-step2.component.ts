@@ -57,6 +57,7 @@ export class RulesStep2Component implements OnInit {
         };
         this.form = this.fb.group(self.formData);
         this.form.patchValue(this.item);
+        this.changeAmount();
     }
 
     //#region get form fields
@@ -100,7 +101,6 @@ export class RulesStep2Component implements OnInit {
 
     //点击传递有效期限
     changeData(){
-      console.log(0);
       let self = this;
       let pay_account = this.form.controls.pay_account.value;
       let amount = this.form.controls.amount.value;
@@ -115,7 +115,6 @@ export class RulesStep2Component implements OnInit {
 
     /*** 提交数据 ***/
     _submitForm() {
-        console.log(this.form.controls);
         let self = this;
         for (const i in this.form.controls) {
             this.form.controls[ i ].markAsDirty();
@@ -123,7 +122,6 @@ export class RulesStep2Component implements OnInit {
         }
         if (this.form.invalid) return;
         this.item = Object.assign(this.item, this.form.value);
-
         if(this.ifShow && this.ifShowError){
           ++this.item.step;
         }

@@ -25,7 +25,7 @@
         </thead>
         <tbody nz-tbody class="ui-grid-tbody">
         <tr nz-tbody-tr *ngFor="let item of itemsListInfor;let i = index">
-            <td nz-td>{{item.productNo}}</td>
+            <td nz-td>{{item.productNo? item.productNo : '-'}}</td>
             <td nz-td>{{item.categoryName}}</td>
             <td nz-td>{{item.productName}}</td>
             <td nz-td>{{item.currentPrice/100}}</td>

@@ -31,7 +31,7 @@
         </em>
       </nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <input maxlength="6" nz-input formControlName="productNo" autocomplete="off" id="productNo" placeholder="请输入1-10位商品编号">
+        <input maxlength="6" nz-input formControlName="productNo" autocomplete="off" id="productNo" placeholder="请输入1-6位商品编号">
         <nz-form-explain class="errorTips"  *ngIf="form.get('productNo').dirty && form.get('productNo').errors">商品编号只能为数字</nz-form-explain>
       </nz-form-control>
     </nz-form-item>
@@ -64,6 +64,9 @@
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
         <nz-radio-group formControlName="storeType">
           <label nz-radio *ngFor="let item of storeStatus"  [nzValue]="item.value" (click)="onSelectAlertBtn(alertStore, '门店', item.value)">{{item.name}}</label>
+          <ng-container>
+            <nz-form-explain class="errorTips" *ngIf="selectStoresIds === '' && ifShow">请至少选择一个门店</nz-form-explain>
+          </ng-container>
         </nz-radio-group>
       </nz-form-control>
     </nz-form-item>
