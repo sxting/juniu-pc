@@ -23,23 +23,25 @@ export class SidebarComponent {
   }
 
   menuRouteHttp(menuId: any) {
-    this.manageService.menuRoute({ menuId: menuId, timestamp: new Date().getTime() }).subscribe(
-      (res: any) => {
-        if (res.success) {
-          if (res.data.eventRoute) {
-            this.router.navigate([res.data.eventRoute, { menuId: menuId }]);
+    if (typeof (menuId) === 'string') {
+      this.manageService.menuRoute({ menuId: menuId, timestamp: new Date().getTime() }).subscribe(
+        (res: any) => {
+          if (res.success) {
+            if (res.data.eventRoute) {
+              this.router.navigate([res.data.eventRoute, { menuId: menuId }]);
+            }
+          } else {
+            this.modalSrv.error({
+              nzTitle: '温馨提示',
+              nzContent: res.errorInfo
+            });
           }
-        } else {
-          this.modalSrv.error({
-            nzTitle: '温馨提示',
-            nzContent: res.errorInfo
-          });
+        },
+        (error) => {
+          this.msgSrv.warning(error)
         }
-      },
-      (error) => {
-        this.msgSrv.warning(error)
-      }
-    );
+      );
+    }
   }
   errorAlert(err: any) {
     this.modalSrv.error({

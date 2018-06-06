@@ -423,4 +423,13 @@ export class SetingsService {
                 return Observable.throw(error);
             });
     }
+    //日志类型
+    operationType(data: any) {
+        let apiUrl = Config.API1 + 'account/merchant/operation/log/type.json';
+        return this.http.get(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
 }

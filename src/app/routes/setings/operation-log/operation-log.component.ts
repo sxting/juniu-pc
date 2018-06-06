@@ -29,6 +29,7 @@ export class OperationLogComponent implements OnInit {
 
     ngOnInit() {
         this.moduleId = this.route.snapshot.params['menuId'];
+        this.operationTypeHttp();
     }
     getData(e: any) {
         this.pageNo = e;
@@ -111,5 +112,22 @@ export class OperationLogComponent implements OnInit {
             nzTitle: '温馨提示',
             nzContent: err
         });
+    }
+    operationTypeHttp(){
+        let data = {
+            timestamp: new Date().getTime()
+        }
+        this.setingsService.operationType(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.staffList = res.data.items;
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    })
+                }
+            }, error => this.errorAlter(error)
+        );
     }
 }
