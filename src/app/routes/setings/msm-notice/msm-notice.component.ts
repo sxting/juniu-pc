@@ -343,7 +343,7 @@ export class MsmNoticeComponent implements OnInit {
                     let self = this, time = 0;
                     let timer = setInterval(function () {
                         time += 3000;
-                        if (time >= 6000) {
+                        if (time >= 60000) {
                             self.modalSrv.error({
                                 nzTitle: '温馨提示',
                                 nzContent: '支付超时'
