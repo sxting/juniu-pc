@@ -323,7 +323,6 @@ export class RulesStep3Component implements OnInit {
 
     _submitForm(){
         let self = this;
-        this.submitting = true;
         for (const i in this.form.controls) {
             this.form.controls[ i ].markAsDirty();
             this.form.controls[ i ].updateValueAndValidity();
@@ -380,6 +379,7 @@ export class RulesStep3Component implements OnInit {
           this.msg.warning('需要先创建门店');
           return;
         }else if(this.ifShow === false){
+          this.submitting = true;
           this.productService.saveAddVipInfor(params).subscribe(
             (res: any) => {
               self.submitting = false;
