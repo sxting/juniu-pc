@@ -3,6 +3,7 @@ import { _HttpClient } from '@delon/theme';
 import { SetingsService } from '../shared/setings.service';
 import { NzModalService, NzMessageService } from 'ng-zorro-antd';
 import { TemplateRef } from '@angular/core';
+import { OnChanges } from '@angular/core';
 declare var DataSet;
 declare var echarts;
 declare var GoEasy: any;
@@ -12,7 +13,7 @@ declare var GoEasy: any;
     templateUrl: './msm-notice.component.html',
     styleUrls: ['./msm-notice.component.less']
 })
-export class MsmNoticeComponent implements OnInit {
+export class MsmNoticeComponent implements OnInit, OnChanges {
     data: any = [
         { x: new Date(), y1: 3, y2: 3 },
         { x: new Date(), y1: 4, y2: 3 },
@@ -69,6 +70,7 @@ export class MsmNoticeComponent implements OnInit {
     amount: any;
     orderNo: any;
     packageName: any;
+    goEasy: any
     constructor(
         private setingsService: SetingsService,
         public msg: NzMessageService,
@@ -80,7 +82,27 @@ export class MsmNoticeComponent implements OnInit {
         this.smsStatisticsHttp();
         this.configQueryHttp();
         this.smsListHttp();
+        this.goEasy = new GoEasy({
+            appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
+        });
+    }
+    ngOnChanges() {
+        if (this.orderNo) {
+            let goEasy = new GoEasy({
+                appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
+            });
 
+            goEasy.subscribe({
+                channel: 'SMS_PACKAGE_' + this.orderNo,
+                onMessage: (message: any) => {
+                    console.log(message);
+                    if (confirm(message.content)) {
+                        this.modalSrv.closeAll();
+                        this.msg.success('充值成功');
+                    }
+                }
+            });
+        }
     }
     onPayWayClick(type: any) {
         if (!this.payType) {
@@ -327,7 +349,7 @@ export class MsmNoticeComponent implements OnInit {
         );
     }
 
-    timer:any;
+    timer: any;
     //获取支付二维码
     getPayUrl() {
         let data = {
@@ -374,20 +396,18 @@ export class MsmNoticeComponent implements OnInit {
                     //描述:查询支付二维码 订单的支付状态tradeState: SUCCESS—支付成功 REFUND—转入退款 NOTPAY—未支付 CLOSED—已关闭 REVERSE—已冲正 REVOK—已撤销
                     if (res.data.tradeState === 'SUCCESS') {
                         clearInterval(this.timer);
-                        // this.msg.success('支付成功');
-                        var goEasy = new GoEasy({
-                            appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
-                        });
-                        goEasy.subscribe({
-                            channel: 'SMS_PACKAGE_' + res.data.orderNo,
-                            onMessage: (message: any) => {
-                                console.log(message);
-                                if (confirm(message.content)) {
-                                    this.modalSrv.closeAll();
-                                    this.msg.success('充值成功');
-                                }
-                            }
-                        });
+                        this.modalSrv.closeAll();
+                        this.msg.success('支付成功');
+                        console.log(orderNo);
+                        // this.goEasy.subscribe({
+                        //     channel: 'SMS_PACKAGE_' + orderNo,
+                        //     onMessage: (message: any) => {
+                        //         console.log(message);
+                        //         if (confirm(message.content)) {
+                        //             this.msg.success('充值成功');
+                        //         }
+                        //     }
+                        // });
                     }
                 } else {
                     this.modalSrv.error({
