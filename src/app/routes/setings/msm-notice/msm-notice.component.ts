@@ -68,7 +68,7 @@ export class MsmNoticeComponent implements OnInit {
     codeImgUrl: any = '';
     amount: any;
     orderNo: any;
-    packageName:any;
+    packageName: any;
     constructor(
         private setingsService: SetingsService,
         public msg: NzMessageService,
@@ -280,6 +280,7 @@ export class MsmNoticeComponent implements OnInit {
             nzContent: tpl,
             nzWidth: '600px',
             nzOnOk: () => {
+                that.temBoolean = false;
             },
             nzOnCancel: () => {
                 that.temBoolean = false;
@@ -287,6 +288,8 @@ export class MsmNoticeComponent implements OnInit {
         });
     }
     radioFun(packageId: any) {
+        this.temBoolean = false;
+        this.payType = '';
         this.smsRechargeHttp(packageId);
     }
     smsListHttp() {
@@ -313,7 +316,7 @@ export class MsmNoticeComponent implements OnInit {
                     this.amount = res.data.price;
                     this.orderNo = res.data.orderNo;
                     this.packageName = res.data.packageName;
-                    
+
                     this.temBoolean = true;
                 }
             },
@@ -330,7 +333,7 @@ export class MsmNoticeComponent implements OnInit {
             amount: this.amount,
             payType: this.payType, //支付方式
             orderNo: this.orderNo,
-            body:this.packageName,
+            body: this.packageName,
             timestamp: new Date().getTime()
         };
         this.setingsService.payUrl(data).subscribe(
@@ -338,30 +341,17 @@ export class MsmNoticeComponent implements OnInit {
                 if (res.success) {
                     this.codeImgUrl = res.data.codeImgUrl;
                     let self = this, time = 0;
-                    this.smsRechargeHttp(this.radioValue);
-                    var goEasy = new GoEasy({
-                        appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
-                    });
-                    goEasy.subscribe({
-                        channel: 'SMS_PACKAGE_' + res.data.orderNo,
-                        onMessage: (message: any) => {
-                            if (confirm(message.content)) {
-                                this.modalSrv.closeAll();
-                                this.msg.success('支付成功');
-                            }
+                    let timer = setInterval(function () {
+                        time += 3000;
+                        if (time >= 6000) {
+                            self.modalSrv.error({
+                                nzTitle: '温馨提示',
+                                nzContent: '支付超时'
+                            });
+                            clearInterval(timer);
                         }
-                    });
-                    // let timer = setInterval(function () {
-                    //     time += 3000;
-                    //     if (time >= 6000) {
-                    //         self.modalSrv.error({
-                    //             nzTitle: '温馨提示',
-                    //             nzContent: '支付超时'
-                    //         });
-                    //         clearInterval(timer);
-                    //     }
-                    //     self.getPayUrlQuery();
-                    // }, 3000)
+                        self.getPayUrlQuery();
+                    }, 3000)
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -382,7 +372,21 @@ export class MsmNoticeComponent implements OnInit {
                 if (res.success) {
                     //描述:查询支付二维码 订单的支付状态tradeState: SUCCESS—支付成功 REFUND—转入退款 NOTPAY—未支付 CLOSED—已关闭 REVERSE—已冲正 REVOK—已撤销
                     if (res.data.tradeState === 'SUCCESS') {
-                        this.msg.success('支付成功');
+                        // this.msg.success('支付成功');
+                        var goEasy = new GoEasy({
+                            appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
+                        });
+                        goEasy.subscribe({
+                            channel: 'SMS_PACKAGE_' + res.data.orderNo,
+                            onMessage: (message: any) => {
+                                if (confirm(message.content)) {
+                                    this.modalSrv.closeAll();
+                                    this.msg.success('充值成功');
+                                }
+                            }
+                        });
+                    }else{
+                        this.msg.error('支付失败');
                     }
                 } else {
                     this.modalSrv.error({

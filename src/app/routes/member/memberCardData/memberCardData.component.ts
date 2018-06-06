@@ -177,6 +177,8 @@ export class MemberCardDataComponent implements OnInit {
             that.weekDayArr.push(i.name);
             that.weekDaylineDownMoney.push((that.types === 'COUNT' ? i.value : i.value / 100));
         });
+        that.weekDayArr.reverse();
+        that.weekDaylineDownMoney.reverse();
         let option = {
             tooltip: {
                 trigger: 'axis'
@@ -296,6 +298,12 @@ export class MemberCardDataComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     if (type === 'CARDTYPE') {
+                        res.data.chartVos.forEach(function (i: any) {
+                            if (i.name === 'REBATE') i.name = '折扣卡';
+                            if (i.name === 'STORED') i.name = '储值卡';
+                            if (i.name === 'METERING') i.name = '计次卡';
+                            if (i.name === 'TIMES') i.name = '期限卡';
+                        })
                         that.openCardEchart(res.data.chartVos)
                     }
                     if (type === 'CARDRULE') {

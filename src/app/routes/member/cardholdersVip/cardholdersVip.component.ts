@@ -303,7 +303,6 @@ export class CardholdersVipComponent {
         let that = this;
         let data = {
             customerId: customerId,
-            // storeId:storeId
         };
         this.getCustomerhttp(data);
         this.modalSrv.create({
@@ -311,11 +310,11 @@ export class CardholdersVipComponent {
             nzContent: tpl,
             // nzWidth: '50%',
             nzOnOk: () => {
-                this.updateCustomerHttp();
+                this.updateCustomerHttp(storeId);
             }
         });
     }
-    updateCustomerHttp() {
+    updateCustomerHttp(storeId) {
         let that = this;
         let data = {
             customerId: that.customerId,
@@ -325,7 +324,7 @@ export class CardholdersVipComponent {
             birthday: that.formatDateTime(that._date, 'start'),
             faceId: this.faceId,
             faceImg: this.faceImgId,
-            storeId: this.storeId
+            storeId: storeId
         }
         if (!data.customerName) {
             this.errorAlter('请填写会员姓名');

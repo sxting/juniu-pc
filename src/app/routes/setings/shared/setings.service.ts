@@ -97,7 +97,7 @@ export class SetingsService {
 
     /*软件购买 end*/
 
-    //短信购买  
+    //短信购买
     buySmsPackage(Params: any) {
         let apiUrl = Config.API + 'account/sms/package/buySmsPackage.json';
         return this.http.get(apiUrl, Params)
@@ -115,6 +115,16 @@ export class SetingsService {
             });
     }
     /*支付通道start*/
+
+    //省市区数据列表 common/location.json
+    getCommonLocation() {
+      let apiUrl = this.api5 + '/common/location.json';
+      return this.http.get(apiUrl)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
 
     //省份列表
     getProvinceList() {
@@ -376,7 +386,7 @@ export class SetingsService {
                 return Observable.throw(error);
             });
     }
-    //短信包列表  
+    //短信包列表
     smsBatch() {
         let apiUrl = Config.API + 'account/sms/package/list.json';
         return this.http.get(apiUrl)
@@ -432,4 +442,5 @@ export class SetingsService {
                 return Observable.throw(error);
             });
     }
+
 }

@@ -5,8 +5,9 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import {SetingsService} from "../../shared/setings.service";
 import {NzModalService} from "ng-zorro-antd";
 import {FunctionUtil} from "@shared/funtion/funtion-util";
-import {CITYLIST} from "@shared/define/juniu-define";
+import {CITYLIST, FINANCE_CITY_LIST} from "@shared/define/juniu-define";
 import {Config} from "@shared/config/env.config";
+import {LocalStorageService} from "@shared/service/localstorage-service";
 
 var self: any = '';
 
@@ -28,40 +29,21 @@ export class PayWayStep3Component implements OnInit {
     cityId: string; //(string, optional): 市 ,
     districtId: string; //(string, optional): 区/县 ,
 
-    provinces: any = [];
-    shanghuAddress: any = '';
-
     constructor(
         public item: TransferService,
         private fb: FormBuilder,
         private setingsService: SetingsService,
         private http: _HttpClient,
-        private modalSrv: NzModalService
+        private modalSrv: NzModalService,
+        private localStorageService: LocalStorageService
     ) { }
 
     ngOnInit() {
+        this._options = JSON.parse(this.localStorageService.getLocalstorage(FINANCE_CITY_LIST));
         self = this;
         this.formInit();
-
-        //编辑第一次进来  step2ProvinceName 是空的
-        if(this.item.itemData) {
-          if(!this.item.step3ProvinceName) {
-            this.item.step3ProvinceId = this.shanghuAddress[0].split(',')[0];
-            this.item.step3CityId = this.shanghuAddress[1].split(',')[0];
-
-            this.item.step3ProvinceName = this.shanghuAddress[0].split(',')[1];
-            this.item.step3CityName = this.shanghuAddress[1].split(',')[1];
-          }
-        }
-
-        if(this.item['in_shengshiqu'] && this.item.step3ProvinceName) {
-          this.item['in_shengshiqu'] = [this.item.step3ProvinceName, this.item.step3CityName];
-        }
-
         this.form.patchValue(this.item);
-        // this.manageCityData();
         this.getBankList();
-        this.getProvinceList();
     }
 
     // get kaihu_name() { return this.form.controls['kaihu_name']; }
@@ -83,10 +65,9 @@ export class PayWayStep3Component implements OnInit {
             this.cityId = data.bankAccount.city;
             this.getBankBranchList();
             let shanghuAddress = [
-                data.bankAccount.province + ', ',
-                data.bankAccount.city + ', ',
+                data.bankAccount.province,
+                data.bankAccount.city,
             ];
-            this.shanghuAddress = shanghuAddress;
             let zhihangName = data.bankAccount.contactLine + ',' + data.bankAccount.bankName;
             if(this.item.type === 'qiye') {
                 this.form = this.fb.group({
@@ -96,7 +77,7 @@ export class PayWayStep3Component implements OnInit {
                     kaihur_tel: [{value: data.bankAccount.tel, disabled: true}, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
                     kaihuhang: [{value: data.bankAccount.bankId + '', disabled: true}, [Validators.required]],
                     zhihang_name: [{value: zhihangName, disabled: true}, [Validators.required]],
-                    in_shengshiqu: [{value: [shanghuAddress[0].split(',')[1], shanghuAddress[1].split(',')[1]], disabled: true}, [Validators.required]],
+                    in_shengshiqu: [{value: shanghuAddress, disabled: true}, [Validators.required]],
                     jiesuan_zhanghao: [{value: data.bankAccount.accountCode, disabled: true}, [Validators.required]],
                 });
             } else {
@@ -107,7 +88,7 @@ export class PayWayStep3Component implements OnInit {
                     kaihur_tel: [{value: data.bankAccount.tel, disabled: true}, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
                     kaihuhang: [{value: data.bankAccount.bankId + '', disabled: true}, [Validators.required]],
                     zhihang_name: [{value: zhihangName, disabled: true}, [Validators.required]],
-                    in_shengshiqu: [{value: [shanghuAddress[0].split(',')[1], shanghuAddress[1].split(',')[1]], disabled: true}, [Validators.required]],
+                    in_shengshiqu: [{value: shanghuAddress, disabled: true}, [Validators.required]],
                     yinhang_kaohao: [{value: data.bankAccount.accountCode, disabled: true}, [Validators.required]]
                 });
             }
@@ -142,17 +123,9 @@ export class PayWayStep3Component implements OnInit {
     selectCity(event: any) {
         console.dir(event);
         if (event) {
-            this.provinceId = event[0].split(',')[0];
-            this.cityId = event[1].split(',')[0];
-            this.districtId = event[2].split(',')[0];
-
-            this.item.step3ProvinceId = event[0].split(',')[0];
-            this.item.step3CityId = event[1].split(',')[0];
-            this.item.step3DistrictId = event[2].split(',')[0];
-
-            this.item.step3ProvinceName = event[0].split(',')[1];
-            this.item.step3CityName = event[1].split(',')[1];
-            this.item.step3DistrictName = event[2].split(',')[1];
+            this.provinceId = event[0];
+            this.cityId = event[1];
+            this.districtId = event[2];
 
             if(this.form.value.kaihuhang) {
                this.getBankBranchList();
@@ -160,87 +133,10 @@ export class PayWayStep3Component implements OnInit {
         }
     }
 
-    loadData(node: any, index: number): PromiseLike<any> {
-        return new Promise((resolve) => {
-            if(index < 0) {
-                self.setingsService.getProvinceList().subscribe(
-                    (res: any) => {
-                        if (res.success) {
-                            self.provinces = [];
-                            res.data.forEach(function (province: any) {
-                                self.provinces.push({
-                                    value: province.provinceId + ',' + province.provinceName,
-                                    label: province.provinceName,
-                                })
-                            });
-                            node.children = self.provinces;
-                        } else {
-                            self.modalSrv.error({
-                                nzTitle: '温馨提示',
-                                nzContent: res.errorInfo
-                            });
-                        }
-                    }
-                )
-            }else if(index === 0) {
-                let data = {
-                    provinceId: node.value.split(',')[0]
-                };
-                console.log(data);
-                let apiUrl = Config.API + 'finance' + '/common/list/city.json';
-                self.http.get(apiUrl, data).subscribe(
-                    (res: any) => {
-                        if (res['success']) {
-                            let cities = [];
-                            res.data.forEach(function (city: any) {
-                                cities.push({
-                                    value: city.cityId + ',' + city.cityName,
-                                    label: city.cityName,
-                                })
-                            });
-                            node.children = cities;
-                        } else {
-                            self.modalSrv.error({
-                                nzTitle: '温馨提示',
-                                nzContent: res['errorInfo']
-                            });
-                        }
-                    }
-                );
-            } else {
-                let data = {
-                    cityId: node.value.split(',')[0]
-                };
-                self.setingsService.getAreaList(data).subscribe(
-                    (res: any) => {
-                        if (res.success) {
-                            let areas = [];
-                            res.data.forEach(function (area: any) {
-                                areas.push({
-                                    value: area.areaId + ',' + area.areaName,
-                                    label: area.areaName,
-                                    isLeaf: true
-                                })
-                            });
-                            node.children = areas;
-                        } else {
-                            this.modalSrv.error({
-                                nzTitle: '温馨提示',
-                                nzContent: res.errorInfo
-                            });
-                        }
-                    }
-                )
-            }
-            resolve();
-        });
-    }
-
     onBankChange(e: any) {
         this.bankId = e;
         this.getBankBranchList();
     }
-
 
     //上一步
     prev() {
@@ -305,78 +201,6 @@ export class PayWayStep3Component implements OnInit {
                     nzTitle: '温馨提示',
                     nzContent: error
                 });
-            }
-        )
-    }
-
-
-    /**处理省市区数据 */
-    manageCityData() {
-        let cityData = CITYLIST;
-        let newArr = [];
-        let provinceArray = [];
-        cityData.forEach(element => {
-            if (element.f === '1') {
-                provinceArray.push(element);
-            }
-        });
-        provinceArray = FunctionUtil.getNoRepeat(JSON.parse(JSON.stringify(provinceArray)));
-        provinceArray.forEach((newAddress, j) => {
-            newArr.push(
-                {
-                    value: newAddress.i + ',' + newAddress.n,
-                    label: newAddress.n,
-                    children: []
-                }
-            );
-            cityData.forEach((address, i) => {
-                if (address.f === newAddress.i) {
-                    newArr[j].children.push({
-                        i: address.i,
-                        value: address.i + ',' + address.n,
-                        label: address.n,
-                        children: []
-                    });
-                }
-            });
-            newArr[j].children = FunctionUtil.getNoRepeat(JSON.parse(JSON.stringify(newArr[j].children)));
-            newArr[j].children.forEach((district, index) => {
-                cityData.forEach((address, i) => {
-                    if (address.f === district.i) {
-                        district.children.push({
-                            value: address.i + ',' + address.n,
-                            label: address.n,
-                            children: [],
-                            isLeaf: true
-                        });
-                    }
-                });
-                district.children = FunctionUtil.getNoRepeat(JSON.parse(JSON.stringify(district.children)));
-            });
-        });
-        this._options = newArr;
-
-        console.dir(newArr);
-    }
-
-    getProvinceList() {
-        let self = this;
-        this.setingsService.getProvinceList().subscribe(
-            (res: any) => {
-                if (res.success) {
-                    this.provinces = [];
-                    res.data.forEach(function (province: any) {
-                        self.provinces.push({
-                            value: province.provinceId + ',' + province.provinceName,
-                            label: province.provinceName,
-                        })
-                    })
-                } else {
-                    this.modalSrv.error({
-                        nzTitle: '温馨提示',
-                        nzContent: res.errorInfo
-                    });
-                }
             }
         )
     }
