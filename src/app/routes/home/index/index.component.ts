@@ -90,7 +90,7 @@ export class IndexComponent implements OnInit {
 
     constructor(
         private http: _HttpClient,
-        public msg: NzMessageService,
+        private msg: NzMessageService,
         private router: Router,
         private homeService: HomeService,
         private localStorageService: LocalStorageService,
@@ -315,6 +315,16 @@ export class IndexComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     this.newCustomerInfo = res.data;
+                    if(this.newCustomerInfo.weekRatio) {
+                      this.newCustomerInfo.weekRatioShow = Math.abs(this.newCustomerInfo.weekRatio)
+                    } else {
+                      this.newCustomerInfo.weekRatioShow = this.newCustomerInfo.weekRatio;
+                    }
+                    if(this.newCustomerInfo.dayRatio) {
+                      this.newCustomerInfo.dayRatioShow = Math.abs(this.newCustomerInfo.dayRatio)
+                    } else {
+                      this.newCustomerInfo.dayRatioShow = this.newCustomerInfo.dayRatio;
+                    }
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -335,6 +345,17 @@ export class IndexComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     this.openCardData = res.data;
+
+                    if(this.openCardData.weekRatio) {
+                      this.openCardData.weekRatioShow = Math.abs(Number(this.openCardData.weekRatio));
+                    } else {
+                      this.openCardData.weekRatioShow = this.openCardData.weekRatio;
+                    }
+                    if(this.openCardData.dayRatio) {
+                      this.openCardData.dayRatioShow = Math.abs(Number(this.openCardData.dayRatio));
+                    } else {
+                      this.openCardData.dayRatioShow = this.openCardData.dayRatio;
+                    }
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
