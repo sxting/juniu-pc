@@ -14,6 +14,22 @@ export class TransferService {
 
     itemData: any;
 
+    step2ProvinceId: string = '';
+    step2CityId: string = '';
+    step2DistrictId: string = '';
+
+    step2ProvinceName: string = '';
+    step2CityName: string = '';
+    step2DistrictName: string = '';
+
+    step3ProvinceId: string = '';
+    step3CityId: string = '';
+    step3DistrictId: string = '';
+
+    step3ProvinceName: string = '';
+    step3CityName: string = '';
+    step3DistrictName: string = '';
+
     again() {
         this.type = 'qiye';
     }
