@@ -396,7 +396,7 @@ export class TouristComponent implements OnInit {
         if (this.settleCardDTOList && this.settleCardDTOList.length > 0) {
             this.jiesuanFun();
         } else {
-            if (money !== 0) {
+            if(money !== 0){
                 this.modalSrv.create({
                     nzTitle: `收款金额：${money}元`,
                     nzContent: tpl,
@@ -407,6 +407,7 @@ export class TouristComponent implements OnInit {
             }
         }
         // }
+
     }
     changejiesuan(e: any) {
         this.jiesuanType = e.index;
@@ -514,7 +515,7 @@ export class TouristComponent implements OnInit {
         console.log(this.selectedValue1)
     }
     /**扫码支付提交订单 */
-    goToSubmitOrder(event: any) {
+    goToSubmitOrder(event:any) {
         let self = this;
         if (event.length >= 18) {
             this.authCode = event;
