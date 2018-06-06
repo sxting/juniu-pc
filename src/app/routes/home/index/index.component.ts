@@ -59,13 +59,13 @@ export class IndexComponent implements OnInit {
             "id": "6",
             "title": "口碑核销",
             "logo": "./assets/img/koubei.png",
-            "href": "",
+            "href": "/checkout/koubei",
         },
         {
             "id": "7",
             "title": "美大验券",
             "logo": "./assets/img/disnping.png",
-            "href": "",
+            "href": "/checkout/meituan",
         }
     ];
 
