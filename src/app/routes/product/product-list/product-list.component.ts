@@ -105,7 +105,6 @@ export class ProductListComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     this.loading = false;
-                    console.log(res.data);
                     self.msg.success(`商品下架成功`);
                     this.getProductListHttp(this.batchQuery);
                 } else {
