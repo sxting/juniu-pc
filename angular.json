@@ -18,7 +18,7 @@
             "polyfills": "src/polyfills.ts",
             "assets": [
               "src/assets",
-              "src/favicon.ico"
+              "src/juniu.ico"
             ],
             "styles": [
               "node_modules/simple-line-icons/css/simple-line-icons.css",
@@ -88,7 +88,7 @@
             ],
             "assets": [
               "src/assets",
-              "src/favicon.ico"
+              "src/juniu.ico"
             ]
           }
         },
