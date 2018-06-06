@@ -9,6 +9,7 @@ import { LocalStorageService } from '@shared/service/localstorage-service';
 import { UploadService } from '@shared/upload-img';
 import { CITYLIST, KOUBEI_ITEM_CATEGORYS } from '@shared/define/juniu-define';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
+import * as differenceInDays from 'date-fns/difference_in_days';
 declare var PhotoClip: any;
 
 @Component({
@@ -23,7 +24,7 @@ export class AddKoubeiProductComponent implements OnInit {
     formData: any;
     categoryId: string = '';//分类信息ID
     submitting = false;
-
+    today = new Date(new Date().getTime() - 24*60*60*1000); //提前一周 ==开始时间
     koubeiItemCategorys: any;//口碑分类信息
     num: number = 0;
     ifcopy: boolean = false;//查看是否是复制进来的
@@ -295,23 +296,24 @@ export class AddKoubeiProductComponent implements OnInit {
 
     //获取到门店ID
     getSelectStoresIds(event){
-        if(event){
-            this.selectStoresIds = event.staffIds;
-        }
+      this.selectStoresIds = event.staffIds? event.staffIds : '';
     }
 
     //获取到门店选中的数量
     getSelectStoresNumber(event: any){
-        if(event){
-            this.storesChangeNum = event.selectStaffNum;
-        }
+      this.storesChangeNum = event.selectStaffNum? event.selectStaffNum : 0;
     }
 
     disabledStartDate = (putawayDate: Date): boolean => {
-      if (!putawayDate || !this.soldOutDate) {
-        return false;
+      if (!putawayDate || !this.soldOutDate) {//没有下架时间的时候
+        if(this.form.controls.dateRange.value[0]){//有核销时间
+          return putawayDate.getTime() < this.form.controls.dateRange.value[0].getTime();
+        }else{
+          return putawayDate.getTime() < this.today.getTime();
+        }
+      }else{
+        return putawayDate.getTime() > this.soldOutDate.getTime();
       }
-      return putawayDate.getTime() > this.soldOutDate.getTime();
     };
 
     disabledEndDate = (soldOutDate: Date): boolean => {
@@ -319,6 +321,15 @@ export class AddKoubeiProductComponent implements OnInit {
         return false;
       }
       return soldOutDate.getTime() <= this.putawayDate.getTime();
+    };
+
+    //校验核销开始时间
+    disabledDate = (current: Date): boolean => {
+      if(this.putawayDate && (this.putawayDate.getTime() >= this.today.getTime())){
+        return differenceInDays(current, this.putawayDate) <= 0;
+      }else{
+        return differenceInDays(current, this.today) <= 0;
+      }
     };
 
     onStartChange(date: Date): void {

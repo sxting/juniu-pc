@@ -195,7 +195,7 @@
                     <span class="text-thing" style="color: #999999;font-size: 12px;">输入范围7-360天</span>
                 </div>
                 <div class="clearfix" *ngIf="form.value.validityPeriodType == 'FIXED'">
-                    <nz-range-picker formControlName="dateRange" nzShowTime></nz-range-picker>
+                    <nz-range-picker [nzDisabledDate]="disabledDate" formControlName="dateRange" nzShowTime ></nz-range-picker>
                 </div>
                 <ng-container *ngIf="form.value.validityPeriodType == 'RELATIVE'&& expiryDay.dirty || expiryDay.touched">
                     <nz-form-explain class="errorTips" *ngIf="expiryDay.errors?.required">请填写使用有效期。</nz-form-explain>
