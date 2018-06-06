@@ -85,6 +85,7 @@ export class MsmNoticeComponent implements OnInit {
     onPayWayClick(type: any) {
         if (!this.payType) {
             this.payType = type;
+            clearInterval(this.timer);
             this.getPayUrl();
         }
     }
@@ -326,7 +327,7 @@ export class MsmNoticeComponent implements OnInit {
         );
     }
 
-
+    timer:any;
     //获取支付二维码
     getPayUrl() {
         let data = {
@@ -341,16 +342,16 @@ export class MsmNoticeComponent implements OnInit {
                 if (res.success) {
                     this.codeImgUrl = res.data.codeImgUrl;
                     let self = this, time = 0;
-                    let timer = setInterval(function () {
+                    this.timer = setInterval(function () {
                         time += 3000;
                         if (time >= 60000) {
                             self.modalSrv.error({
                                 nzTitle: '温馨提示',
                                 nzContent: '支付超时'
                             });
-                            clearInterval(timer);
+                            clearInterval(this.timer);
                         }
-                        self.getPayUrlQuery();
+                        self.getPayUrlQuery(self.orderNo);
                     }, 3000)
                 } else {
                     this.modalSrv.error({
@@ -363,15 +364,16 @@ export class MsmNoticeComponent implements OnInit {
     }
 
     //查询支付结果
-    getPayUrlQuery() {
+    getPayUrlQuery(orderNo) {
         let data = {
-            orderId: this.result.orderNo,
+            orderId: orderNo,
         };
         this.setingsService.getPayUrlQuery(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     //描述:查询支付二维码 订单的支付状态tradeState: SUCCESS—支付成功 REFUND—转入退款 NOTPAY—未支付 CLOSED—已关闭 REVERSE—已冲正 REVOK—已撤销
                     if (res.data.tradeState === 'SUCCESS') {
+                        clearInterval(this.timer);
                         // this.msg.success('支付成功');
                         var goEasy = new GoEasy({
                             appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
@@ -379,6 +381,7 @@ export class MsmNoticeComponent implements OnInit {
                         goEasy.subscribe({
                             channel: 'SMS_PACKAGE_' + res.data.orderNo,
                             onMessage: (message: any) => {
+                                console.log(message);
                                 if (confirm(message.content)) {
                                     this.modalSrv.closeAll();
                                     this.msg.success('充值成功');
