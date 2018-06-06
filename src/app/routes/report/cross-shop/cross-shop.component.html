@@ -31,8 +31,8 @@
             <tr nz-tbody-tr *ngFor="let item of settlementInfor;let i = index">
                 <td nz-td>{{i+1}}</td>
                 <td nz-td>{{item.storeName}}</td>
-                <td nz-td>{{item.payMoney/100}}</td>
                 <td nz-td>{{item.receiveMoney/100}}</td>
+                <td nz-td>{{item.payMoney/100}}</td>
                 <td nz-td>{{item.clearMoney/100}}</td>
                 <td nz-td style="color:#ff6600" (click)="checkDetailInfor(checkDetail, item.storeId)" style="color: #1890ff;cursor: pointer">查看</td>
             </tr>
