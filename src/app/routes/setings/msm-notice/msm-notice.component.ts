@@ -385,8 +385,6 @@ export class MsmNoticeComponent implements OnInit {
                                 }
                             }
                         });
-                    }else{
-                        this.msg.error('支付失败');
                     }
                 } else {
                     this.modalSrv.error({
