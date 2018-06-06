@@ -15,7 +15,7 @@ declare var echarts: any;
 @Component({
     selector: 'jn-resultStatistics',
     templateUrl: './resultStatistics.component.html',
-    styleUrls: ['./resultStatistics.component.css']
+    styleUrls: ['./resultStatistics.component.less']
 })
 
 export class ResultStatisticsComponent implements OnInit {

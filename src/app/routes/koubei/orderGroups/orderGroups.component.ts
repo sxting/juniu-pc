@@ -20,7 +20,7 @@ declare var swal: any;
 @Component({
     selector: 'jn-orderGroups',
     templateUrl: './orderGroups.component.html',
-    styleUrls: ['./orderGroups.component.css']
+    styleUrls: ['./orderGroups.component.less']
 })
 
 export class OrderGroupsComponent implements OnInit {
