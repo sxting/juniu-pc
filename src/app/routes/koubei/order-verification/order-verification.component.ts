@@ -16,7 +16,7 @@ declare var swal: any;
 @Component({
   selector: 'jn-order-verification',
   templateUrl: './order-verification.component.html',
-  styleUrls: ['./order-verification.component.css']
+  styleUrls: ['./order-verification.component.less']
 })
 
 export class OrderVerificationComponent implements OnInit {
