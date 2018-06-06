@@ -45,19 +45,14 @@
 <!--点击弹出框-->
 <ng-template #checkDetail>
     <div class="reserve-record-alert">
-        <form nz-form [nzLayout]="'inline'" class="search__form mb24">
+        <form nz-form [nzLayout]="'inline'" class="search__form mb24 clearfix">
             <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
                 <nz-col nzMd="8" nzSm="24">
                   <nz-form-item>
-                    <nz-form-label nzFor="status">门店</nz-form-label>
-                    <nz-form-control>
-                      <nz-select  style="width: 200px;" [(ngModel)]="storeId" (ngModelChange)="selectStore()" name="storeList" id="storeList" [nzPlaceHolder]="'请选择一个门店'" [nzShowSearch]="true">
-                        <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.storeName" [nzValue]="i.storeId"></nz-option>
-                      </nz-select>
-                    </nz-form-control>
+                    <jn-stores-infor  [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
                   </nz-form-item>
                 </nz-col>
-                <nz-col nzMd="8" nzSm="24">
+                <nz-col nzMd="8" nzSm="24" class="fr">
                     <nz-form-item>
                         <nz-form-label nzFor="status">消费类型</nz-form-label>
                         <nz-form-control>

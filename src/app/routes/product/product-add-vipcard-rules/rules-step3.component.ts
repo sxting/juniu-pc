@@ -329,8 +329,6 @@ export class RulesStep3Component implements OnInit {
         }
         if (this.form.invalid) return;
         this.item = Object.assign(this.item, this.form.value);
-        this.submitting = true;
-
         let amount;
         if(self.item['cardType'] === 'METERING'){//计次卡
             amount = parseFloat(self.item['amount']);
@@ -381,6 +379,7 @@ export class RulesStep3Component implements OnInit {
           this.msg.warning('需要先创建门店');
           return;
         }else if(this.ifShow === false){
+          this.submitting = true;
           this.productService.saveAddVipInfor(params).subscribe(
             (res: any) => {
               self.submitting = false;

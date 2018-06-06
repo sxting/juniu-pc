@@ -42,6 +42,24 @@ export class PayWayStep2Component implements OnInit {
     ngOnInit() {
         self = this;
         this.formInit();
+
+        //编辑第一次进来  step2ProvinceName 是空的
+        if(this.item.itemData) {
+          if(!this.item.step2ProvinceName) {
+            this.item.step2ProvinceId = this.shanghuAddress[0].split(',')[0];
+            this.item.step2CityId = this.shanghuAddress[1].split(',')[0];
+            this.item.step2DistrictId = this.shanghuAddress[2].split(',')[0];
+
+            this.item.step2ProvinceName = this.shanghuAddress[0].split(',')[1];
+            this.item.step2CityName = this.shanghuAddress[1].split(',')[1];
+            this.item.step2DistrictName = this.shanghuAddress[2].split(',')[1];
+          }
+        }
+
+        if(this.item['shanghu_address'] && this.item.step2ProvinceName) {
+          this.item['shanghu_address'] = [this.item.step2ProvinceName, this.item.step2CityName, this.item.step2DistrictName];
+        }
+
         this.form.patchValue(this.item);
         this.getIndustryList();
         this.getProvinceList();
@@ -63,16 +81,16 @@ export class PayWayStep2Component implements OnInit {
 
         if(this.item.itemData) {
             this.shanghuAddress = [
-                data.merchantDetail.province + ',0',
-                data.merchantDetail.city + ',0',
-                data.merchantDetail.county + ',0',
+                data.merchantDetail.province + ', ',
+                data.merchantDetail.city + ', ',
+                data.merchantDetail.county + ', ',
             ];
             console.log(this.shanghuAddress);
             this.form = this.fb.group({
                 hangye_type: [data.merchantDetail.industrId + '', Validators.required],
                 yingyezz_code: [data.merchantDetail.businessLicense, Validators.required],
                 shanghu_jc: [data.merchantDetail.merchantShortName, Validators.required],
-                shanghu_address: [this.shanghuAddress, Validators.required],
+                shanghu_address: [[this.shanghuAddress[0].split(',')[1], this.shanghuAddress[1].split(',')[1], this.shanghuAddress[2].split(',')[1]], Validators.required],
                 detail_address: [data.merchantDetail.address, Validators.required],
                 fuzer: [data.merchantDetail.legalPerson, Validators.required],
                 shenfz_number: [data.merchantDetail.idCode, [Validators.required, Validators.pattern(/^\d{15}$|^\d{18}$|^\d{17}(\d|X|x)$/)]],
@@ -103,6 +121,14 @@ export class PayWayStep2Component implements OnInit {
             this.provinceId = event[0].split(',')[0];
             this.cityId = event[1].split(',')[0];
             this.districtId = event[2].split(',')[0];
+
+            this.item.step2ProvinceId = event[0].split(',')[0];
+            this.item.step2CityId = event[1].split(',')[0];
+            this.item.step2DistrictId = event[2].split(',')[0];
+
+            this.item.step2ProvinceName = event[0].split(',')[1];
+            this.item.step2CityName = event[1].split(',')[1];
+            this.item.step2DistrictName = event[2].split(',')[1];
         }
     }
 
@@ -115,7 +141,7 @@ export class PayWayStep2Component implements OnInit {
                             self.provinces = [];
                             res.data.forEach(function (province: any) {
                                 self.provinces.push({
-                                    value: province.provinceId + ',0',
+                                    value: province.provinceId + ',' + province.provinceName,
                                     label: province.provinceName,
                                 })
                             });
@@ -139,7 +165,7 @@ export class PayWayStep2Component implements OnInit {
                             let cities = [];
                             res.data.forEach(function (city: any) {
                                 cities.push({
-                                    value: city.cityId + ',0',
+                                    value: city.cityId + ',' + city.cityName,
                                     label: city.cityName,
                                 })
                             });
@@ -162,7 +188,7 @@ export class PayWayStep2Component implements OnInit {
                             let areas = [];
                             res.data.forEach(function (area: any) {
                                 areas.push({
-                                    value: area.areaId + ',0',
+                                    value: area.areaId + ',' + area.areaName,
                                     label: area.areaName,
                                     isLeaf: true
                                 })
@@ -282,7 +308,7 @@ export class PayWayStep2Component implements OnInit {
                     this.provinces = [];
                     res.data.forEach(function (province: any) {
                         self.provinces.push({
-                            value: province.provinceId + ',0',
+                            value: province.provinceId + ',' + province.provinceName,
                             label: province.provinceName,
                         })
                     })

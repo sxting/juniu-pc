@@ -29,6 +29,7 @@ export class PayWayStep3Component implements OnInit {
     districtId: string; //(string, optional): 区/县 ,
 
     provinces: any = [];
+    shanghuAddress: any = '';
 
     constructor(
         public item: TransferService,
@@ -41,6 +42,22 @@ export class PayWayStep3Component implements OnInit {
     ngOnInit() {
         self = this;
         this.formInit();
+
+        //编辑第一次进来  step2ProvinceName 是空的
+        if(this.item.itemData) {
+          if(!this.item.step3ProvinceName) {
+            this.item.step3ProvinceId = this.shanghuAddress[0].split(',')[0];
+            this.item.step3CityId = this.shanghuAddress[1].split(',')[0];
+
+            this.item.step3ProvinceName = this.shanghuAddress[0].split(',')[1];
+            this.item.step3CityName = this.shanghuAddress[1].split(',')[1];
+          }
+        }
+
+        if(this.item['in_shengshiqu'] && this.item.step3ProvinceName) {
+          this.item['in_shengshiqu'] = [this.item.step3ProvinceName, this.item.step3CityName];
+        }
+
         this.form.patchValue(this.item);
         // this.manageCityData();
         this.getBankList();
@@ -66,9 +83,10 @@ export class PayWayStep3Component implements OnInit {
             this.cityId = data.bankAccount.city;
             this.getBankBranchList();
             let shanghuAddress = [
-                data.bankAccount.province + ',0',
-                data.bankAccount.city + ',0',
+                data.bankAccount.province + ', ',
+                data.bankAccount.city + ', ',
             ];
+            this.shanghuAddress = shanghuAddress;
             let zhihangName = data.bankAccount.contactLine + ',' + data.bankAccount.bankName;
             if(this.item.type === 'qiye') {
                 this.form = this.fb.group({
@@ -78,7 +96,7 @@ export class PayWayStep3Component implements OnInit {
                     kaihur_tel: [{value: data.bankAccount.tel, disabled: true}, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
                     kaihuhang: [{value: data.bankAccount.bankId + '', disabled: true}, [Validators.required]],
                     zhihang_name: [{value: zhihangName, disabled: true}, [Validators.required]],
-                    in_shengshiqu: [{value: shanghuAddress, disabled: true}, [Validators.required]],
+                    in_shengshiqu: [{value: [shanghuAddress[0].split(',')[1], shanghuAddress[1].split(',')[1]], disabled: true}, [Validators.required]],
                     jiesuan_zhanghao: [{value: data.bankAccount.accountCode, disabled: true}, [Validators.required]],
                 });
             } else {
@@ -89,7 +107,7 @@ export class PayWayStep3Component implements OnInit {
                     kaihur_tel: [{value: data.bankAccount.tel, disabled: true}, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
                     kaihuhang: [{value: data.bankAccount.bankId + '', disabled: true}, [Validators.required]],
                     zhihang_name: [{value: zhihangName, disabled: true}, [Validators.required]],
-                    in_shengshiqu: [{value: shanghuAddress, disabled: true}, [Validators.required]],
+                    in_shengshiqu: [{value: [shanghuAddress[0].split(',')[1], shanghuAddress[1].split(',')[1]], disabled: true}, [Validators.required]],
                     yinhang_kaohao: [{value: data.bankAccount.accountCode, disabled: true}, [Validators.required]]
                 });
             }
@@ -127,6 +145,14 @@ export class PayWayStep3Component implements OnInit {
             this.provinceId = event[0].split(',')[0];
             this.cityId = event[1].split(',')[0];
             this.districtId = event[2].split(',')[0];
+
+            this.item.step3ProvinceId = event[0].split(',')[0];
+            this.item.step3CityId = event[1].split(',')[0];
+            this.item.step3DistrictId = event[2].split(',')[0];
+
+            this.item.step3ProvinceName = event[0].split(',')[1];
+            this.item.step3CityName = event[1].split(',')[1];
+            this.item.step3DistrictName = event[2].split(',')[1];
 
             if(this.form.value.kaihuhang) {
                this.getBankBranchList();
