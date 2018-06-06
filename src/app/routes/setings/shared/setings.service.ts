@@ -442,4 +442,5 @@ export class SetingsService {
                 return Observable.throw(error);
             });
     }
+
 }
