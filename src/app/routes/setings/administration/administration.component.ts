@@ -32,6 +32,7 @@ export class AdministrationComponent implements OnInit {
     loading = false;
     count = 0;
     count1 = 0;
+    count2 = 0
     interval$: any;
     interval$2: any;
 
@@ -71,6 +72,8 @@ export class AdministrationComponent implements OnInit {
             this.getCode(this.userInfo.loginName, counts)
         if (counts === 'count1')
             this.getCode(this.form.value.mobile, counts)
+        if (counts === 'count2')
+            this.getCode(this.userInfo.loginName, counts)
     }
     ngOnInit() {
     }
@@ -96,7 +99,7 @@ export class AdministrationComponent implements OnInit {
             nzWidth: '600px',
             nzOnOk: () => {
                 this.submit();
-                return this.submit();
+                // return this.submit();
             }
         });
     }
@@ -109,7 +112,7 @@ export class AdministrationComponent implements OnInit {
             nzWidth: '600px',
             nzOnOk: () => {
                 this.submit2();
-                return this.submit2();
+                // return this.submit2();
             }
         });
     }

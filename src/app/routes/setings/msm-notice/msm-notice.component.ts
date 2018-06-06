@@ -66,6 +66,9 @@ export class MsmNoticeComponent implements OnInit {
     result: any;
     payType: any = '';
     codeImgUrl: any = '';
+    amount: any;
+    orderNo: any;
+    packageName:any;
     constructor(
         private setingsService: SetingsService,
         public msg: NzMessageService,
@@ -284,7 +287,7 @@ export class MsmNoticeComponent implements OnInit {
         });
     }
     radioFun(packageId: any) {
-        this.temBoolean = true;
+        this.smsRechargeHttp(packageId);
     }
     smsListHttp() {
         let that = this;
@@ -307,18 +310,11 @@ export class MsmNoticeComponent implements OnInit {
         this.setingsService.smsRecharge(data).subscribe(
             (res: any) => {
                 if (res) {
-                    var goEasy = new GoEasy({
-                        appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
-                    });
-                    goEasy.subscribe({
-                        channel: 'SMS_PACKAGE_' + res.data.orderNo,
-                        onMessage: (message: any) => {
-                            if (confirm(message.content)) {
-                                this.modalSrv.closeAll();
-                                this.msg.success('支付成功');
-                            }
-                        }
-                    });
+                    this.amount = res.data.price;
+                    this.orderNo = res.data.orderNo;
+                    this.packageName = res.data.packageName;
+                    
+                    this.temBoolean = true;
                 }
             },
             error => {
@@ -331,16 +327,30 @@ export class MsmNoticeComponent implements OnInit {
     //获取支付二维码
     getPayUrl() {
         let data = {
-            smsPackageId: this.radioValue,
-            type: this.payType, //支付方式
+            amount: this.amount,
+            payType: this.payType, //支付方式
+            orderNo: this.orderNo,
+            body:this.packageName,
             timestamp: new Date().getTime()
         };
-        this.setingsService.buySmsPackage(data).subscribe(
+        this.setingsService.payUrl(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     this.codeImgUrl = res.data.codeImgUrl;
                     let self = this, time = 0;
                     this.smsRechargeHttp(this.radioValue);
+                    var goEasy = new GoEasy({
+                        appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
+                    });
+                    goEasy.subscribe({
+                        channel: 'SMS_PACKAGE_' + res.data.orderNo,
+                        onMessage: (message: any) => {
+                            if (confirm(message.content)) {
+                                this.modalSrv.closeAll();
+                                this.msg.success('支付成功');
+                            }
+                        }
+                    });
                     // let timer = setInterval(function () {
                     //     time += 3000;
                     //     if (time >= 6000) {
