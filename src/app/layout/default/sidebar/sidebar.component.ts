@@ -23,7 +23,6 @@ export class SidebarComponent {
   }
 
   menuRouteHttp(menuId: any) {
-    console.log(typeof (Number(menuId)))
     if (typeof (menuId) === 'string' && Number(menuId) + '' !== 'NaN') {
       this.manageService.menuRoute({ menuId: menuId, timestamp: new Date().getTime() }).subscribe(
         (res: any) => {

@@ -709,12 +709,18 @@ export class TouristComponent implements OnInit {
         this.checkoutService.createOrder(create).subscribe(
             (res: any) => {
                 if (res.success) {
-                    this.modalSrv.closeAll()
-                    this.modalSrv.success({
-                        nzContent: '收款成功'
-                    })
-                    this.vipXqFun();
-                    this.searchMemberCard(true);
+                    if (res.data === 'CLOSE') {
+                        this.modalSrv.error({
+                            nzContent: '支付失败'
+                        })
+                    } else {
+                        this.modalSrv.closeAll()
+                        this.modalSrv.success({
+                            nzContent: '收款成功'
+                        })
+                        this.vipXqFun();
+                        this.searchMemberCard(true);
+                    }
                 } else {
                     this.errorAlter(res.errorInfo)
                 }
