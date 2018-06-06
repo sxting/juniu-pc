@@ -41,6 +41,12 @@ export class HeaderNotifyComponent {
               private modalSrv: NzModalService,
   ) {
     this.getMessageCount();
+
+    // let self = this;
+    // setInterval(function () {
+    //   self.getMessageCount();
+    //   self.getMessageList();
+    // }, 60000)
   }
 
   //系统通知
@@ -73,14 +79,7 @@ export class HeaderNotifyComponent {
         this.loading = false;
         if (res.success) {
           let data = res.data;
-          // data = [
-          //   {title: '消息标题2', content: '消息内容2', status: 0, messageId: '02'},
-          //   {title: '消息标题3', content: '消息内容3', status: 0, messageId: '03'},
-          //   {title: '消息标题4', content: '消息内容4', status: 1, messageId: '04'}
-          // ];
-
           let noticeData: any = [];
-
           data.forEach(function (item: any) {
             noticeData.push({
               messageId: item.messageId,
@@ -108,7 +107,8 @@ export class HeaderNotifyComponent {
     this.homeService.getMessageInfo(data).subscribe(
       (res: any) => {
         if(res.success) {
-
+          this.getMessageList();
+          this.getMessageCount();
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',
