@@ -512,8 +512,7 @@
     <nz-tab nzTitle="扫码收款">
       <button class="buttons" nz-button nzType="primary" type="submit" (click)="scanPay(jiazai)">扫码收款</button>
       <br />
-      <input nz-input id="authCode1" placeholder="顾客付款码" (ngModelChange)="goToSubmitOrder()" style="width:128px;margin:30px 0 26px 0;"
-        [(ngModel)]="authCode">
+      <input nz-input id="authCode1" placeholder="顾客付款码" (ngModelChange)="goToSubmitOrder($event)" style="width:128px;margin:30px 0 26px 0;" [(ngModel)]="authCode">
     </nz-tab>
     <nz-tab nzTitle="记录收款">
       <div class="iconBox" *ngIf="!spinBoolean">

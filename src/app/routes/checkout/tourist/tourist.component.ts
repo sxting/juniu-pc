@@ -396,16 +396,17 @@ export class TouristComponent implements OnInit {
         if (this.settleCardDTOList && this.settleCardDTOList.length > 0) {
             this.jiesuanFun();
         } else {
-            this.modalSrv.create({
-                nzTitle: `收款金额：${money}元`,
-                nzContent: tpl,
-                nzWidth: '520px',
-                nzFooter: null,
-                nzOkText: null
-            });
+            if (money !== 0) {
+                this.modalSrv.create({
+                    nzTitle: `收款金额：${money}元`,
+                    nzContent: tpl,
+                    nzWidth: '520px',
+                    nzFooter: null,
+                    nzOkText: null
+                });
+            }
         }
         // }
-
     }
     changejiesuan(e: any) {
         this.jiesuanType = e.index;
@@ -513,9 +514,10 @@ export class TouristComponent implements OnInit {
         console.log(this.selectedValue1)
     }
     /**扫码支付提交订单 */
-    goToSubmitOrder(click?: any, type?: any) {
+    goToSubmitOrder(event: any) {
         let self = this;
-        if (this.authCode.length >= 18) {
+        if (event.length >= 18) {
+            this.authCode = event;
             this.jiesuanFun();
         }
     }
@@ -568,7 +570,7 @@ export class TouristComponent implements OnInit {
         if (this.ticket) {
             create.couponId = this.ticket.selectCouponId;
         }
-        const codeTyeNum = this.authCode.substring(0, 2);
+        const codeTyeNum = this.authCode;
         if (!this.changeType) {
             if (this.xyVip) create.bizType = 'RECHARGE';
             else if (that.memberInfo.phone && !this.xyVip) create.bizType = 'OPENCARD';
