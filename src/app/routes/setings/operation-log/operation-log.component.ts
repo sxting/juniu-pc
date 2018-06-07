@@ -22,6 +22,7 @@ export class OperationLogComponent implements OnInit {
     moduleId: any;
     operationTypeList: any;
     dataItems: any;
+    date:any
     constructor(
         private setingsService: SetingsService,
         private modalSrv: NzModalService,

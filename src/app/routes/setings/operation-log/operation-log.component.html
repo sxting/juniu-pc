@@ -11,7 +11,7 @@
     <span>
         <span>选择日期:</span>
         <span>
-            <nz-date-picker  (ngModelChange)="onChange($event)" nzShowTime></nz-date-picker>
+            <nz-date-picker  [(ngModel)]="date" (ngModelChange)="onChange($event)" ></nz-date-picker>
         </span>
     </span>
     <span>
