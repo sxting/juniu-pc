@@ -47,11 +47,11 @@
             <ng-template #footer4>
                 <trend flag="{{topData?.memberInfoDTO.weekRatio<0?'down':'up'}}" style="margin-top:2px;float: left;">周同比
                     <span class="pl-sm">{{(topData?.memberInfoDTO.weekRatio
-                        <0?topData?.memberInfoDTO.weekRatio*-1:topData?.memberInfoDTO.weekRatio)||0}}%</span>
+                        <0?topData?.memberInfoDTO.weekRatio*-100:topData?.memberInfoDTO.weekRatio*100)||0}}%</span>
                 </trend>
                 <trend flag="{{topData?.memberInfoDTO.dayRatio<0?'down':'up'}}" style="float: right;">日环比
                     <span class="pl-sm">{{(topData?.memberInfoDTO.dayRatio
-                        <0?topData?.memberInfoDTO.dayRatio*-1:topData?.memberInfoDTO.dayRatio)||0}}%</span>
+                        <0?topData?.memberInfoDTO.dayRatio*-100:topData?.memberInfoDTO.dayRatio*100)||0}}%</span>
                 </trend>
             </ng-template>
         </g2-card>
