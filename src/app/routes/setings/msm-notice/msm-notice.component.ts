@@ -393,7 +393,7 @@ export class MsmNoticeComponent implements OnInit, OnChanges {
         this.setingsService.getPayUrlQuery(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    //描述:查询支付二维码 订单的支付状态tradeState: SUCCESS—支付成功 REFUND—转入退款 NOTPAY—未支付 CLOSED—已关闭 REVERSE—已冲正 REVOK—已撤销
+                    //描述:查询支付二维码 订单的支付状态tradeState: SUCCESS—支付成功 REFUND—转入退款 NOTPAY—未支付 CLOSED—已关闭 REVERSE—已冲正 REVOK—已撤销 
                     if (res.data.tradeState === 'SUCCESS') {
                         clearInterval(this.timer);
                         this.modalSrv.closeAll();
@@ -409,6 +409,10 @@ export class MsmNoticeComponent implements OnInit, OnChanges {
                         //         }
                         //     }
                         // });
+                    }
+                    if(res.data.tradeState === 'NOTPAY'||res.data.tradeState === 'CLOSED'||res.data.tradeState === 'REVOK'){
+                        clearInterval(this.timer);
+                        this.modalSrv.closeAll();
                     }
                 } else {
                     this.modalSrv.error({
