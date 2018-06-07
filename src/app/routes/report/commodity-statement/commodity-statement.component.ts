@@ -48,7 +48,6 @@ export class CommodityStatementComponent implements OnInit {
 
     ngOnInit() {
 
-      this.titleSrv.setTitle('商品报表');
       this.moduleId = this.route.snapshot.params['menuId'];
       let year = new Date().getFullYear();        //获取当前年份(2位)
       let month = new Date().getMonth()+1;       //获取当前月份(0-11,0代表1月)

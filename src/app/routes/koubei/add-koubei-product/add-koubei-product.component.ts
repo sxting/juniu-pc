@@ -91,7 +91,6 @@ export class AddKoubeiProductComponent implements OnInit {
     ngOnInit() {
 
         let self = this;
-        this.titleSrv.setTitle('新增商品');
         this.status = self.ItemsStatus[0].value;
 
       //门店
@@ -176,7 +175,6 @@ export class AddKoubeiProductComponent implements OnInit {
         this.ifcopy = this.route.snapshot.params['ifcopy'] ? this.route.snapshot.params['ifcopy'] : false;
         // 口碑商品查询编辑
         if (this.koubeiProductId) {
-            this.titleSrv.setTitle('商品编辑');
             let batchQuery = {
                 koubeiProductId: this.koubeiProductId
             };

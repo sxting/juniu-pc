@@ -83,10 +83,8 @@ export class AddNewProductComponent implements OnInit {
       this.storeId = UserInfo.staffType === "MERCHANT"? '' : this.cityStoreList[0].storeId;
 
       if(this.productId){
-        this.titleSrv.setTitle('编辑商品');
         this.getProductDetailInfor();//查看商品详情
       }else {
-        this.titleSrv.setTitle('新增商品');
         for (let i = 0; i < this.cityStoreList.length; i++) {
           for (let j = 0; j < this.cityStoreList[i].stores.length; j++) {
             if (this.cityStoreList[i].stores[j].change == true) {

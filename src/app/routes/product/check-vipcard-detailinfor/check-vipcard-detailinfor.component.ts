@@ -81,7 +81,6 @@ export class CheckVipcardDetailinforComponent implements OnInit {
 
         let self = this;
         this.moduleId = this.route.snapshot.params['menuId']? this.route.snapshot.params['menuId'] : '';//门店
-        this.titleSrv.setTitle('编辑会员卡');
         this.cardType = this.route.snapshot.params['cardType'] ? this.route.snapshot.params['cardType'] : FunctionUtil.getUrlString('cardType');
         this.configId = this.route.snapshot.params['configId'] ? this.route.snapshot.params['configId'] : FunctionUtil.getUrlString('configId');
 

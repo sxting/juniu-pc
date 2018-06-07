@@ -57,7 +57,6 @@ export class ProductListComponent implements OnInit {
     };
 
     ngOnInit() {
-        this.titleSrv.setTitle('商品');
         this.moduleId = this.route.snapshot.params['menuId'];
         this.getStoresInfor();//查看门店
 

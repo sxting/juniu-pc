@@ -79,12 +79,6 @@ export class RuleSettingComponent implements OnInit {
       this.storeId = this.route.snapshot.params['storeId'];//门店ID
       this.merchantId = this.route.snapshot.params['merchantId'];//门店ID
       this.deductRuleId = this.route.snapshot.params['deductRuleId'];//提成规则ID
-      if(this.deductRuleId){
-          this.titleSrv.setTitle('编辑提成规则');
-      }else {
-          this.titleSrv.setTitle('提成规则设置');
-      }
-
       this.formData = {
           ruleName: [null, [Validators.required, Validators.maxLength(20)]],
           assignRate: [ null ,Validators.compose([ Validators.pattern(`^[0-9]+(.[0-9]{2})?$`)])],//指定技师

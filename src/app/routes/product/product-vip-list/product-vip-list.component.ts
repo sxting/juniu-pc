@@ -56,7 +56,6 @@ export class ProductVipListComponent implements OnInit {
 
 
     ngOnInit() {
-        this.titleSrv.setTitle('会员卡');
         this.moduleId = this.route.snapshot.params['menuId'];//门店
         this.getStoresInfor();//门店
     }

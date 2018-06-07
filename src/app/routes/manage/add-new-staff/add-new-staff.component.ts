@@ -55,12 +55,6 @@ export class AddNewStaffComponent implements OnInit {
         let self = this;
         this.moduleId = this.route.snapshot.params['menuId'];//门店
         this.staffId = this.route.snapshot.params['staffId'] ? this.route.snapshot.params['staffId'] : FunctionUtil.getUrlString('staffId');
-
-        if(this.staffId){
-          this.titleSrv.setTitle('编辑员工');
-        }else {
-          this.titleSrv.setTitle('新增员工');
-        }
         self.formData = {
           staffName: [null, [Validators.required]],
           phone: [null, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],

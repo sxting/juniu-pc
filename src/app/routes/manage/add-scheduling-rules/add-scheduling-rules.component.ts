@@ -69,11 +69,6 @@ export class AddSchedulingRulesComponent implements OnInit {
       this.storeId = this.route.snapshot.params['storeId'];//门店ID
       this.schedulingConfigId = this.route.snapshot.params['schedulingConfigId']? this.route.snapshot.params['schedulingConfigId'] : '';//门店ID
       //排班
-      if(this.schedulingConfigId){
-        this.titleSrv.setTitle('编辑排班');
-      }else{
-        this.titleSrv.setTitle('新增排班');
-      }
       this.form = self.fb.group({
           ruleName: [null, [ Validators.required ]],
       });
