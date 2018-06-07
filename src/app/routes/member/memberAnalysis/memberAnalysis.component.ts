@@ -1,11 +1,12 @@
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, OnDestroy } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import { SimpleTableColumn } from '@delon/abc';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { MemberService } from '../shared/member.service';
 import { USER_INFO } from '@shared/define/juniu-define';
 import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 declare var echarts: any;
 declare var DataView: any;
 declare var interval: any;
@@ -15,7 +16,7 @@ declare var interval: any;
     templateUrl: './memberAnalysis.component.html',
     styleUrls: ['./memberAnalysis.component.less']
 })
-export class MemberAnalysisComponent implements OnInit {
+export class MemberAnalysisComponent implements OnInit ,OnDestroy{
     salesPieData: any;
     salesTotal = 0;
     data: any = {
@@ -36,7 +37,7 @@ export class MemberAnalysisComponent implements OnInit {
     endDay: any;
     type: any = 'money';
     storeId: any;
-    merchantId: any ;
+    merchantId: any;
     dateType: any = 'week';
     rankingListData: any[] = Array(10).fill({}).map((item, i) => {
         return {
@@ -57,15 +58,17 @@ export class MemberAnalysisComponent implements OnInit {
     pageIndex: any = 1;
     index: any = 0;
     index2: any = 0;
-    moduleId:any;
-    userInfo:any = this.localStorageService.getLocalstorage(USER_INFO) ? JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)) : '';
-    
+    moduleId: any;
+    userInfo: any = this.localStorageService.getLocalstorage(USER_INFO) ? JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)) : '';
+
     constructor(public msg: NzMessageService,
         private localStorageService: LocalStorageService,
         private modalSrv: NzModalService,
         private route: ActivatedRoute,
-        private memberService: MemberService, private http: _HttpClient) {
-  
+        private router: Router,
+        private memberService: MemberService,
+         private http: _HttpClient) {
+
     }
     ngOnInit() {
         this.moduleId = this.route.snapshot.params['menuId'];
@@ -73,7 +76,9 @@ export class MemberAnalysisComponent implements OnInit {
         this.selectStoresHttp()
 
     }
-
+    ngOnDestroy(): void {
+        this.modalSrv.closeAll();
+    }
     //今日新增会员、今日开卡张数、会员转换率、男女分布
     memberStatisticsFunHttp() {
         let data = {
@@ -224,6 +229,7 @@ export class MemberAnalysisComponent implements OnInit {
     }
     getData2(e: any) {
         this.pageIndex = e;
+        console.log(e)
         this.chakanXQ()
     }
     errorAlter(err: any) {
@@ -264,5 +270,8 @@ export class MemberAnalysisComponent implements OnInit {
                 this.errorAlter(error);
             }
         );
+    }
+    fbyxhd() {
+        this.router.navigate(['/marketing/sms/index', { menuId: '90070101' }]);
     }
 }
