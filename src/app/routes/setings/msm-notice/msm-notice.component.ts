@@ -304,9 +304,11 @@ export class MsmNoticeComponent implements OnInit, OnChanges {
             nzWidth: '600px',
             nzOnOk: () => {
                 that.temBoolean = false;
+                clearInterval(that.timer);
             },
             nzOnCancel: () => {
                 that.temBoolean = false;
+                clearInterval(that.timer);
             }
         });
     }
@@ -359,6 +361,7 @@ export class MsmNoticeComponent implements OnInit, OnChanges {
             body: this.packageName,
             timestamp: new Date().getTime()
         };
+        let that = this;
         this.setingsService.payUrl(data).subscribe(
             (res: any) => {
                 if (res.success) {
@@ -371,7 +374,7 @@ export class MsmNoticeComponent implements OnInit, OnChanges {
                                 nzTitle: '温馨提示',
                                 nzContent: '支付超时'
                             });
-                            clearInterval(this.timer);
+                            clearInterval(that.timer);
                         }
                         self.getPayUrlQuery(self.orderNo);
                     }, 3000)
@@ -410,7 +413,7 @@ export class MsmNoticeComponent implements OnInit, OnChanges {
                         //     }
                         // });
                     }
-                    if(res.data.tradeState === 'NOTPAY'||res.data.tradeState === 'CLOSED'||res.data.tradeState === 'REVOK'){
+                    if(res.data.tradeState === 'CLOSED'||res.data.tradeState === 'REVOK'){
                         clearInterval(this.timer);
                         this.modalSrv.closeAll();
                     }
