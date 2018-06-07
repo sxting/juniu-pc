@@ -85,7 +85,7 @@ export class MemberAnalysisComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     that.topData = res.data
-                    that.salesPieData = [{ x: '男', y: res.data.ratio.maleRatio }, { x: '女', y: res.data.ratio.femaleRatio }, { x: '不详', y: res.data.ratio.unknow }];
+                    that.salesPieData = [{ x: '男', y: res.data.ratio.maleCount }, { x: '女', y: res.data.ratio.femaleCount }, { x: '不详', y: res.data.ratio.unknowCount }];
                     if (that.salesPieData) that.salesTotal = that.salesPieData.reduce((pre, now) => now.y + pre, 0);
                 } else {
                     this.modalSrv.error({

@@ -40,10 +40,10 @@
     </div>
 
     <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-        <g2-card [title]="'会员转化率'" total="{{topData?.memberInfoDTO.avgdayNum?topData?.memberInfoDTO.avgdayNum:0}}%" contentHeight="44px"
+        <g2-card [title]="'会员转化率'" total="{{topData?.memberInfoDTO.conversionRate?topData?.memberInfoDTO.conversionRate*100:0}}%" contentHeight="44px"
             [footer]="footer4">
-            <g2-mini-progress height="46" percent="{{topData?.memberInfoDTO.avgdayNum?topData?.memberInfoDTO.avgdayNum:0}}" strokeWidth="8"
-                target="{{topData?.memberInfoDTO.avgdayNum?topData?.memberInfoDTO.avgdayNum:0}}" color="#13C2C2"></g2-mini-progress>
+            <g2-mini-progress height="46" percent="{{topData?.memberInfoDTO.conversionRate?topData?.memberInfoDTO.conversionRate*100:0}}" strokeWidth="8"
+                target="{{topData?.memberInfoDTO.conversionRate?topData?.memberInfoDTO.conversionRate*100:0}}" color="#13C2C2"></g2-mini-progress>
             <ng-template #footer4>
                 <trend flag="{{topData?.memberInfoDTO.weekRatio<0?'down':'up'}}" style="margin-top:2px;float: left;">周同比
                     <span class="pl-sm">{{(topData?.memberInfoDTO.weekRatio
