@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import { SetingsService } from '../shared/setings.service';
 import { NzModalService, NzMessageService } from 'ng-zorro-antd';
@@ -13,7 +13,7 @@ declare var GoEasy: any;
     templateUrl: './msm-notice.component.html',
     styleUrls: ['./msm-notice.component.less']
 })
-export class MsmNoticeComponent implements OnInit, OnChanges {
+export class MsmNoticeComponent implements OnInit, OnChanges,OnDestroy {
     data: any = [
         { x: new Date(), y1: 3, y2: 3 },
         { x: new Date(), y1: 4, y2: 3 },
@@ -103,6 +103,9 @@ export class MsmNoticeComponent implements OnInit, OnChanges {
                 }
             });
         }
+    }
+    ngOnDestroy(){
+        clearInterval(this.timer);
     }
     onPayWayClick(type: any) {
         if (!this.payType) {
