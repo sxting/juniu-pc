@@ -4,6 +4,9 @@ import { _HttpClient } from '@delon/theme';
 import { MemberService } from '../shared/member.service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { SimpleTableColumn } from '@delon/abc';
+import { ActivatedRoute } from '@angular/router';
+import { USER_INFO } from '@shared/define/juniu-define';
+import { LocalStorageService } from '@shared/service/localstorage-service';
 
 @Component({
     selector: 'app-onlyCardImport',
@@ -42,6 +45,7 @@ export class OnlyCardImportComponent {
     storeName: any;
     status: any = 0;
     pageIndex: any = 1;
+    userInfo = this.localStorageService.getLocalstorage(USER_INFO) ? JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)) : '';
     columns: SimpleTableColumn[] = [
         { title: '导入时间', index: 'juniuoModel.dateCreated' },
         { title: '会员姓名', index: 'name' },
@@ -53,15 +57,19 @@ export class OnlyCardImportComponent {
         { title: '有效期截止', index: 'validity' }
 
     ];
+    moduleId: any;
     showStoredCardRule: boolean = false;//是否显示储值卡规则
     Total: any = 1;
     constructor(
         public msg: NzMessageService,
         private modalSrv: NzModalService,
+        private localStorageService: LocalStorageService,
+        private route: ActivatedRoute,
         private memberService: MemberService,
         private http: _HttpClient) {
         // this.storeId = this.storeList ? this.storeList[0].storeId : '';
-        this.improtCardRecord();
+        this.moduleId = this.route.snapshot.params['menuId'];
+        this.selectStoresHttp();
     }
     alertAddCard(tpl: TemplateRef<{}>, type: string) {
         this.cardType = type;
@@ -112,17 +120,13 @@ export class OnlyCardImportComponent {
     }
     selectStoreInfo(e: any) {
         console.log(e);
-        if (e === 'ALL') {
-            this.storeId = '';
-        } else {
-            this.storeId = e.storeId;
-            // this.storeName = event.split(',')[1];
-            let batchQuery = {
-                storeId: e.storeId,
-                storeName: e.storeName
-            };
-            this.storeTypesOldCards(batchQuery);
-        }
+        this.storeId = e.storeId;
+        // this.storeName = event.split(',')[1];
+        let batchQuery = {
+            storeId: e.storeId,
+            storeName: e.storeName
+        };
+        this.storeTypesOldCards(batchQuery);
     }
     //校验并赋值
     checksumAssignment(text: string, type: string) {
@@ -321,6 +325,7 @@ export class OnlyCardImportComponent {
         this.cardType = '';
         this.effectivityDays = '';
         this.phone = '';
+        this.storeId = '';
         this.name = '';
         this.cardNum = '';
         this.selectedOption = '';
@@ -358,5 +363,33 @@ export class OnlyCardImportComponent {
             error => FunctionUtil.errorAlter(error)
         )
     }
-  
+    errorAlter(err: any) {
+        this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: err
+        });
+    }
+    selectStoresHttp() {
+        let data = {
+            moduleId: this.moduleId,
+            timestamp: new Date().getTime()
+        }
+        let that = this;
+        this.memberService.selectStores(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.storeId = this.userInfo.staffType === 'MERCHANT' ? '' : res.data.items[0].storeId;
+                    this.improtCardRecord();
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => {
+                this.errorAlter(error);
+            }
+        );
+    }
 }
