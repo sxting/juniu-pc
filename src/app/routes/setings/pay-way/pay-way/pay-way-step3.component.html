@@ -64,7 +64,7 @@
     <nz-form-item>
         <nz-form-label nzSpan="5" nzRequired nzFor="zhihang_name">支行名称</nz-form-label>
         <nz-form-control nzSpan="16">
-            <nz-select formControlName="zhihang_name" [nzPlaceHolder]="'请选择支行'">
+            <nz-select formControlName="zhihang_name" [nzShowSearch]="true" [nzPlaceHolder]="'请选择支行'">
                 <nz-option *ngFor="let item of bankBranchList" [nzLabel]="item.branchName" [nzValue]="item.branchId + ',' + item.branchName"></nz-option>
                     <!--branchId,branchName-->
             </nz-select>

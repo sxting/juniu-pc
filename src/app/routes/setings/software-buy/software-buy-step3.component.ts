@@ -29,7 +29,6 @@ export class SoftBuyStep3Component implements OnInit, OnDestroy {
   merchantId: string = '';
 
     ngOnInit() {
-      this.merchantId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['merchantId'];
       console.dir(this.item);
       this.getPackagePreorder()
     }
@@ -87,7 +86,6 @@ export class SoftBuyStep3Component implements OnInit, OnDestroy {
   getPayUrl() {
     let data = {
       amount: this.result.orderAmount, //价格
-      merchantId: this.merchantId, //
       body: this.result.packageName, //版本名称
       orderNo: this.result.orderNo, //订单号
       payType: this.payType, //支付方式
