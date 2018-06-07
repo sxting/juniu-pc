@@ -14,7 +14,8 @@ import {Config} from "@shared/config/env.config";
 })
 export class PayRecordComponent implements OnInit {
 
-    theadName: any[] = ['结算时间', '收款账号', '备注', '金额', '操作'];
+    theadName: any[] = ['结算时间', '金额', '操作'];
+    // theadName: any[] = ['结算时间', '收款账号', '备注', '金额', '操作'];
     alertTheadName: any[] = ['交易时间', '交易方式', '交易号', '实付金额', '手续费', '实收金额'];
     dataList1: any[] = [];
     dataList2: any = [];

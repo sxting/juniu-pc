@@ -43,6 +43,12 @@ export class PayWayStep3Component implements OnInit {
         self = this;
         this.formInit();
         this.form.patchValue(this.item);
+        if(this.item['zhihang_name']) {
+            this.bankId = this.item['kaihuhang'];
+            this.provinceId = this.item['in_shengshiqu'][0];
+            this.cityId = this.item['in_shengshiqu'][1];
+            this.getBankBranchList()
+        }
         this.getBankList();
     }
 

@@ -3,7 +3,7 @@ import {Component, OnInit, OnDestroy} from '@angular/core';
 
 import {NzModalService, NzMessageService} from "ng-zorro-antd";
 import {LocalStorageService} from "@shared/service/localstorage-service";
-import {STORES_INFO} from "@shared/define/juniu-define";
+import {STORES_INFO, USER_INFO} from "@shared/define/juniu-define";
 import {SoftTransferService} from "./soft-transfer.service";
 import {SetingsService} from "../shared/setings.service";
 
@@ -25,6 +25,8 @@ export class SoftBuyStep3Component implements OnInit, OnDestroy {
   result: any;
   payType: any = '';
   codeImgUrl: any = '';
+
+  merchantId: string = '';
 
     ngOnInit() {
       console.dir(this.item);
@@ -84,7 +86,6 @@ export class SoftBuyStep3Component implements OnInit, OnDestroy {
   getPayUrl() {
     let data = {
       amount: this.result.orderAmount, //价格
-      // amount: 1, //价格
       body: this.result.packageName, //版本名称
       orderNo: this.result.orderNo, //订单号
       payType: this.payType, //支付方式
