@@ -56,7 +56,7 @@ export class TouristComponent implements OnInit {
     staffGroupData: any = [];
     radioValue: any;
     moduleId: any;
-    store:any;
+    store: any;
     cardTabs = [
         {
             type: "储值卡",
@@ -789,9 +789,12 @@ export class TouristComponent implements OnInit {
     }
     /**搜索会员卡 */
     searchMemberCard(type?: any) {
-        this.yjcardList = [];
-        this.vipCardList = [];
-        this.xfList = [];
+        if (!type) {
+            this.yjcardList = [];
+            this.vipCardList = [];
+            this.xfList = [];
+        }
+
         let self = this;
         this.cardChangeBoolean = false;
         if (this.vipsearch && (this.vipsearch.length === 0 || this.vipsearch.length >= 11 || event)) {
@@ -1317,6 +1320,7 @@ export class TouristComponent implements OnInit {
     }
     guadanJS(index: any) {
         this.modalSrv.closeAll();
+        this.guadanList = this.localStorageService.getLocalstorage(GUADAN) ? JSON.parse(this.localStorageService.getLocalstorage(GUADAN)) : [];
         this.xfList = this.guadanList[index].xfList;
         // this.memberInfo = this.shopyinList[index].vip;
         this.vipsearch = this.guadanList[index].vip.phone;
