@@ -18,8 +18,10 @@ export class OperationLogComponent implements OnInit {
     storeId: any;
     operationDate: any;
     logType: any = 'SYSTEM_DATA';
-    staffList:any = [];
-    moduleId:any;
+    staffList: any = [];
+    moduleId: any;
+    operationTypeList: any;
+    dataItems: any;
     constructor(
         private setingsService: SetingsService,
         private modalSrv: NzModalService,
@@ -87,13 +89,22 @@ export class OperationLogComponent implements OnInit {
         this.operationDate = this.formatDateTime(e, 'start');
         this.operationLogHttp();
     }
-    staffChange(e){
+    staffChange(e) {
         this.operationId = e;
         this.operationLogHttp();
     }
-    typeChange(e){
-        if(e.index === 0) this.logType = 'SYSTEM_DATA';
-        if(e.index === 1) this.logType = 'MANAGE_SETTING';
+    operationTypeChange(e) {
+        this.operationType = e;
+        this.operationLogHttp();
+    }
+    typeChange(e) {
+        if (e.index === 0) this.logType = 'SYSTEM_DATA';
+        if (e.index === 1) this.logType = 'MANAGE_SETTING';
+        let that = this;
+        this.operationType = '';
+        this.dataItems.forEach(function (i: any) {
+            if (that.logType === i.typeCode) that.operationTypeList = i.operationType;
+        })
         this.operationLogHttp();
     }
     formatDateTime(date: any, type: any) {
@@ -113,14 +124,18 @@ export class OperationLogComponent implements OnInit {
             nzContent: err
         });
     }
-    operationTypeHttp(){
+    operationTypeHttp() {
+        let that = this;
         let data = {
             timestamp: new Date().getTime()
         }
         this.setingsService.operationType(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    this.staffList = res.data.items;
+                    this.dataItems = res.data.items;
+                    this.dataItems.forEach(function (i: any) {
+                        if (that.logType === i.typeCode) that.operationTypeList = i.operationType;
+                    })
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
