@@ -72,6 +72,9 @@ export class SoftBuyStep1Component implements OnInit {
   }
 
   onItemClick(item: any) {
+    if(!item.selectable) {
+      return;
+    }
     this.item.package = item;
     this.item.storeId = this.storeId;
     ++this.item.step;
