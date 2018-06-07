@@ -161,14 +161,14 @@ export class PayRecordComponent implements OnInit {
                     this.haveData = false;
                   }
                     //status: string = '3'; //审核中0   审核通过1   审核未通过2   3未申请
-                    if(res.data.examineStatus == 0) {
+                    if(res.data.examineStatus == '0') {
                         this.status = '0';
-                    } else if(res.data.examineStatus == 1) {
+                    } else if(res.data.examineStatus == '1') {
                         this.status = '1'
-                    } else if(res.data.examineStatus == 2 || res.data.examineStatus == 3) {
+                    } else if(res.data.examineStatus == '2' || res.data.examineStatus == '3') {
                         this.status = '2'
                     }
-                    if(res.data.applyStatus == 0) {
+                    if(res.data.applyStatus == '0') {
                         this.status = '3'
                     }
                 } else {
