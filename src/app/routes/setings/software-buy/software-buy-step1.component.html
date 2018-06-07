@@ -24,7 +24,7 @@
           </ul>
         </div>
         <div class="use-btn" [class.disabled]="!package.selectable">
-          <span *ngIf="!package.selectable">正在使用</span>
+          <span *ngIf="!package.selectable">购买</span>
           <span *ngIf="package.selectable && package.useState">续费</span>
           <span *ngIf="package.selectable && !package.useState">现在升级</span>
         </div>

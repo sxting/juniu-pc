@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 
 import {NzModalService, NzMessageService} from "ng-zorro-antd";
 import {LocalStorageService} from "@shared/service/localstorage-service";
@@ -12,7 +12,7 @@ import {SetingsService} from "../shared/setings.service";
     templateUrl: 'software-buy-step3.component.html',
     styleUrls: ['software-buy.component.less'],
 })
-export class SoftBuyStep3Component implements OnInit {
+export class SoftBuyStep3Component implements OnInit, OnDestroy {
 
     constructor(
         public item: SoftTransferService,
@@ -29,6 +29,11 @@ export class SoftBuyStep3Component implements OnInit {
     ngOnInit() {
       console.dir(this.item);
       this.getPackagePreorder()
+    }
+
+    ngOnDestroy() {
+      let self =this;
+      clearInterval(self.timer);
     }
 
     onPayWayClick(type: any) {
