@@ -14,6 +14,21 @@ export class TransferService {
 
     itemData: any;
 
+    imagePath1: string;
+    image_id1: string;
+    imagePath2: string;
+    image_id2: string;
+    imagePath3: string;
+    image_id3: string;
+    imagePath4: string = '/assets/img/yhk_zm.jpg';
+    image_id4: string;
+    imagePath5: string = '/assets/img/yhk_back.jpg';
+    image_id5: string;
+    imagePath6: string = '/assets/img/sfz_zm.jpg';
+    image_id6: string;
+    imagePath7: string = '/assets/img/sfz_back.jpg';
+    image_id7: string;
+
     again() {
         this.type = 'qiye';
     }

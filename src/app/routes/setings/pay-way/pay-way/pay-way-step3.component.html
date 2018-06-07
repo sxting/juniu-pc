@@ -48,11 +48,7 @@
                          formControlName="in_shengshiqu"
                          [nzOptions]="_options"
                          (nzChange)="selectCity($event)" >
-                <!--(ngModelChange)="selectCity($event)" -->
             </nz-cascader>
-            <!--<nz-select formControlName="in_shengshiqu">-->
-                <!--<nz-option [nzLabel]="4" [nzValue]="4"></nz-option>-->
-            <!--</nz-select>-->
             <nz-form-explain class="error-color" *ngIf="in_shengshiqu.dirty && in_shengshiqu.errors">请选择所在省/市/区</nz-form-explain>
         </nz-form-control>
     </nz-form-item>

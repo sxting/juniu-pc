@@ -3,7 +3,7 @@ import {Component, OnInit, OnDestroy} from '@angular/core';
 
 import {NzModalService, NzMessageService} from "ng-zorro-antd";
 import {LocalStorageService} from "@shared/service/localstorage-service";
-import {STORES_INFO} from "@shared/define/juniu-define";
+import {STORES_INFO, USER_INFO} from "@shared/define/juniu-define";
 import {SoftTransferService} from "./soft-transfer.service";
 import {SetingsService} from "../shared/setings.service";
 
@@ -26,7 +26,10 @@ export class SoftBuyStep3Component implements OnInit, OnDestroy {
   payType: any = '';
   codeImgUrl: any = '';
 
+  merchantId: string = '';
+
     ngOnInit() {
+      this.merchantId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['merchantId'];
       console.dir(this.item);
       this.getPackagePreorder()
     }
@@ -84,7 +87,7 @@ export class SoftBuyStep3Component implements OnInit, OnDestroy {
   getPayUrl() {
     let data = {
       amount: this.result.orderAmount, //价格
-      // amount: 1, //价格
+      merchantId: this.merchantId, //
       body: this.result.packageName, //版本名称
       orderNo: this.result.orderNo, //订单号
       payType: this.payType, //支付方式
