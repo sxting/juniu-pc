@@ -20,10 +20,11 @@ declare var swal: any;
 export class TouristComponent implements OnInit {
     storeId: any;
     changeType: boolean = true;//收银开卡切换
-    vipsearch: string = '16666666666';//vip搜索框
+    vipsearch: string;//vip搜索框
     renlian: boolean = true;//人脸识别
     isVerb: boolean = false;//是否抹零
     isVerb2: boolean = false;
+    hasAuth: any;
     StoresInfo: any = this.localStorageService.getLocalstorage(STORES_INFO) ? JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
     shopList: any = []
     yjcardList: any = [];
@@ -55,6 +56,7 @@ export class TouristComponent implements OnInit {
     staffGroupData: any = [];
     radioValue: any;
     moduleId: any;
+    store:any;
     cardTabs = [
         {
             type: "储值卡",
@@ -122,6 +124,7 @@ export class TouristComponent implements OnInit {
     Total2: any = 1;
     CustomerData: any = [];
     spinBoolean: boolean = false;
+    storeList: any;
     constructor(
         public msg: NzMessageService,
         private localStorageService: LocalStorageService,
@@ -137,6 +140,7 @@ export class TouristComponent implements OnInit {
     ngOnInit() {
         let that = this;
         this.moduleId = this.route.snapshot.params['menuId'];
+        this.getStoresInfor();
         // this.changeFun();
         this.guadanList = this.localStorageService.getLocalstorage(GUADAN) ? JSON.parse(this.localStorageService.getLocalstorage(GUADAN)) : [];
     }
@@ -186,7 +190,8 @@ export class TouristComponent implements OnInit {
         that.totolMoneyFun();
     }
     selectStoreInfo(event: any) {
-        this.storeId = event;
+        this.storeId = event.storeId;
+        this.hasAuth = event.hasAuth;
         this.changeFun();
     }
     //消费清单下拉
@@ -396,7 +401,7 @@ export class TouristComponent implements OnInit {
         if (this.settleCardDTOList && this.settleCardDTOList.length > 0) {
             this.jiesuanFun();
         } else {
-            if(money !== 0){
+            if (money !== 0) {
                 this.modalSrv.create({
                     nzTitle: `收款金额：${money}元`,
                     nzContent: tpl,
@@ -515,7 +520,7 @@ export class TouristComponent implements OnInit {
         console.log(this.selectedValue1)
     }
     /**扫码支付提交订单 */
-    goToSubmitOrder(event:any) {
+    goToSubmitOrder(event: any) {
         let self = this;
         if (event.length >= 18) {
             this.authCode = event;
@@ -1425,5 +1430,33 @@ export class TouristComponent implements OnInit {
     getData2(e) {
         this.pageIndex3 = e;
         this.findByCustomerIdHttp(this.memberInfo.customerId);
+    }
+
+    //门店初始化
+    getStoresInfor() {
+        let self = this;
+        let data = {
+            moduleId: this.moduleId,
+            timestamp: new Date().getTime()
+        };
+        this.checkoutService.selectStores(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.storeList = res.data.items;
+                    this.store = res.data.items[0];
+                    this.storeId = res.data.items[0].storeId;
+                    this.hasAuth = res.data.items[0].hasAuth;
+                    this.changeFun();
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => {
+                this.msg.warning(error);
+            }
+        );
     }
 }

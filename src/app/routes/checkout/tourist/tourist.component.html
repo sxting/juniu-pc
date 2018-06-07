@@ -6,7 +6,16 @@
       <nz-tab nzTitle="消费"></nz-tab>
       <nz-tab nzTitle="售卡/充值"></nz-tab>
     </nz-tabset>
-    <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false" [ifStoresAuth]="true" (storeIdOutput)="selectStoreInfo($event.storeId)"></jn-stores-infor>
+    <!-- <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false" [ifStoresAuth]="true" (storeIdOutput)="selectStoreInfo($event.storeId)"></jn-stores-infor> -->
+
+    <nz-form-item>
+      <nz-form-label style="display: inline-block">选择门店</nz-form-label>
+      <nz-form-control style="display: inline-block">
+        <nz-select [(ngModel)]="store" (selectStoreInfo)="selectStore($event)" style="width: 200px;" [nzPlaceHolder]="'请选择一个门店'" [nzShowSearch]="true">
+          <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.branchName" [nzValue]="i" ></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
   </div>
 
   <!-- 消费 -->
@@ -22,10 +31,14 @@
           </div> -->
           <div class="shouyinMiddle">
             <nz-input-group nzSearch style="width:280px;margin-top:30px;" [nzSuffix]="suffixIconButton1">
-              <input type="text" [(ngModel)]="vipsearch" nz-input placeholder="请输入手机号/姓名">
+              <input type="text" [(ngModel)]="vipsearch" *ngIf="hasAuth"  nz-input placeholder="请输入手机号/姓名">
+              <input type="text" [(ngModel)]="vipsearch" *ngIf="!hasAuth" disabled  nz-input placeholder="请输入手机号/姓名">
             </nz-input-group>
             <ng-template #suffixIconButton1>
-              <button nz-button nzType="primary" (click)="searchMemberCard()" nzSearch>
+              <button nz-button nzType="primary" *ngIf="hasAuth" (click)="searchMemberCard()" nzSearch>
+                查询会员
+              </button>
+              <button nz-button nzType="primary" *ngIf="!hasAuth" disabled  (click)="searchMemberCard()" nzSearch>
                 查询会员
               </button>
             </ng-template>
@@ -512,7 +525,8 @@
     <nz-tab nzTitle="扫码收款">
       <button class="buttons" nz-button nzType="primary" type="submit" (click)="scanPay(jiazai)">扫码收款</button>
       <br />
-      <input nz-input id="authCode1" placeholder="顾客付款码" (ngModelChange)="goToSubmitOrder($event)" style="width:128px;margin:30px 0 26px 0;" [(ngModel)]="authCode">
+      <input nz-input id="authCode1" placeholder="顾客付款码" (ngModelChange)="goToSubmitOrder($event)" style="width:128px;margin:30px 0 26px 0;"
+        [(ngModel)]="authCode">
     </nz-tab>
     <nz-tab nzTitle="记录收款">
       <div class="iconBox" *ngIf="!spinBoolean">
