@@ -124,6 +124,8 @@ export class SoftBuyStep3Component implements OnInit {
             this.msg.success('支付成功');
             this.item.orderNo = this.result.orderNo;
             ++this.item.step
+          } else if(res.data.tradeState === 'NOTPAY' || res.data.tradeState === 'CLOSED' || res.data.tradeState === 'REVOK') {
+            clearInterval(this.timer);
           }
         } else {
           this.modalSrv.error({

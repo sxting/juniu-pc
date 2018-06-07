@@ -29,7 +29,7 @@
                 <nz-form-label nzXs="24" nzSm="7" nzRequired>商家Logo</nz-form-label>
                 <nz-form-control>
                     <div class="form-img-box">
-                        <img class="image" [src]="imagePath">
+                        <img class="image" [src]="imagePath" *ngIf="imagePath">
                         <span class="iconfont icon-tianjia"><br>上传</span>
                         <input type="file" accept="image" (change)="uploadImage($event)">
                     </div>
