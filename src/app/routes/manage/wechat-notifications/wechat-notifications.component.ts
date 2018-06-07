@@ -40,7 +40,6 @@ export class WechatNotificationsComponent implements OnInit {
         let self = this;
         this.staffId = this.route.snapshot.params['staffId'];//员工ID
         this.faceQRcode(this.staffId);//微信二维码
-        this.titleSrv.setTitle('微信推送');
         this.formData = {
             reportType: [self.reportTypes[0].value, [Validators.required]],
             receiveType: [self.storeNotice[0].value, [Validators.required]]

@@ -38,7 +38,6 @@ export class SmsNotificationsComponent implements OnInit {
 
     ngOnInit() {
         let self = this;
-        this.titleSrv.setTitle('设置短信推送');
         this.staffId = this.route.snapshot.params['staffId'];//员工ID
         this.SMSconfigInforHttp();//查询短信推送配置
 

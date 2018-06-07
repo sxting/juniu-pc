@@ -11,7 +11,7 @@
     <span>
         <span>选择日期:</span>
         <span>
-            <nz-date-picker  (ngModelChange)="onChange($event)" nzShowTime></nz-date-picker>
+            <nz-date-picker  [(ngModel)]="date" (ngModelChange)="onChange($event)" ></nz-date-picker>
         </span>
     </span>
     <span>
@@ -28,8 +28,8 @@
     <span>
         <span>操作类型:</span>
         <span>
-            <nz-select style="width:100px;" [nzPlaceHolder]="'请选择'" (ngModelChange)="staffChange($event)" [nzShowSearch]="true">
-                <nz-option *ngFor="let item of staffList"  [nzLabel]="item.staffId" [nzValue]="item.staffName"></nz-option>
+            <nz-select style="width:200px;" [(ngModel)]="operationType" [nzPlaceHolder]="'请选择'" (ngModelChange)="operationTypeChange($event)" [nzShowSearch]="true">
+                <nz-option *ngFor="let item of operationTypeList"  [nzLabel]="item.typeName" [nzValue]="item.typeCode"></nz-option>
             </nz-select>
         </span>
     </span>

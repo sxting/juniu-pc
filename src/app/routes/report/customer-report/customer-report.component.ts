@@ -57,7 +57,6 @@ export class CustomerReportComponent implements OnInit {
 
     ngOnInit() {
 
-        this.titleSrv.setTitle('顾客报表');
         this.moduleId = this.route.snapshot.params['menuId'];
         let userInfo;
         if (this.localStorageService.getLocalstorage('User-Info')) {

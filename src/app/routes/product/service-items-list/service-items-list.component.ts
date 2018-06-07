@@ -61,7 +61,6 @@ export class ServiceItemsListComponent implements OnInit {
     };
 
     ngOnInit() {
-        this.titleSrv.setTitle('服务项目');
         this.moduleId = this.route.snapshot.params['menuId'];
         this.getStoresInfor();//门店
     }

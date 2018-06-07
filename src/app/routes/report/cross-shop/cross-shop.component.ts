@@ -81,7 +81,6 @@ export class CrossShopComponent implements OnInit {
     };
 
     ngOnInit() {
-        this.titleSrv.setTitle('跨店结算');
         this.moduleId = this.route.snapshot.params['menuId'];
         this.getStoresInfor();//门店初始化
     }

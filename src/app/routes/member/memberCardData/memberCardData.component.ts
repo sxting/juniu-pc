@@ -173,6 +173,7 @@ export class MemberCardDataComponent implements OnInit {
     getSevenDayFlowEchart(data) {
         let that = this;
         that.weekDayArr = [];
+        that.weekDaylineDownMoney = [];
         data.forEach(function (i: any) {
             that.weekDayArr.push(i.name);
             that.weekDaylineDownMoney.push((that.types === 'COUNT' ? i.value : i.value / 100));

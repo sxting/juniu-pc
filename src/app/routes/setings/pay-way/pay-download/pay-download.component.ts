@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {_HttpClient} from '@delon/theme';
 import {LocalStorageService} from "@shared/service/localstorage-service";
 import {NzModalService} from "ng-zorro-antd";
-import {STORES_INFO} from "@shared/define/juniu-define";
+import {STORES_INFO, USER_INFO} from "@shared/define/juniu-define";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {UploadService} from "@shared/upload-img";
 import {SetingsService} from "../../shared/setings.service";
@@ -32,6 +32,8 @@ export class PayDownloadComponent implements OnInit {
   myColor: string = 'ffffff';
   color: string = this.myColor;
 
+  merchantId: string = '';
+
   constructor(private localStorageService: LocalStorageService,
               private route: ActivatedRoute,
               private modalSrv: NzModalService,
@@ -40,6 +42,7 @@ export class PayDownloadComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.merchantId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['merchantId'];
     this.moduleId = this.route.snapshot.params['menuId'];
     this.downloadQronline();
   }
@@ -83,10 +86,10 @@ export class PayDownloadComponent implements OnInit {
   }
 
   saveQrClick() {
-    window.open(`${Config.API}finance/store/download/qr.do?storeId=${this.storeId}&logoId=${this.imageId}&color=${this.color}`);
+      window.open(`${Config.API}finance/store/download/qr.do?storeId=${this.storeId}&logoId=${this.imageId}&color=${this.color}&merchantId=${this.merchantId}`);
   }
 
   downloadQronline() {
-    this.imgPath = `${Config.API}finance/store/download/qronline.do?storeId=${this.storeId}&logoId=${this.imageId}&color=${this.color}`;
+    this.imgPath = `${Config.API}finance/store/download/qronline.do?storeId=${this.storeId}&logoId=${this.imageId}&color=${this.color}&merchantId=${this.merchantId}`;
   }
 }

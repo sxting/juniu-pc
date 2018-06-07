@@ -65,7 +65,6 @@ export class MonthReportComponent implements OnInit {
 
     ngOnInit() {
 
-        this.titleSrv.setTitle('月报表');
         this.moduleId = this.route.snapshot.params['menuId'];
         let userInfo;
         if (this.localStorageService.getLocalstorage('User-Info')) {

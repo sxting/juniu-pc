@@ -1,9 +1,9 @@
 
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 
 import {NzModalService, NzMessageService} from "ng-zorro-antd";
 import {LocalStorageService} from "@shared/service/localstorage-service";
-import {STORES_INFO} from "@shared/define/juniu-define";
+import {STORES_INFO, USER_INFO} from "@shared/define/juniu-define";
 import {SoftTransferService} from "./soft-transfer.service";
 import {SetingsService} from "../shared/setings.service";
 
@@ -12,7 +12,7 @@ import {SetingsService} from "../shared/setings.service";
     templateUrl: 'software-buy-step3.component.html',
     styleUrls: ['software-buy.component.less'],
 })
-export class SoftBuyStep3Component implements OnInit {
+export class SoftBuyStep3Component implements OnInit, OnDestroy {
 
     constructor(
         public item: SoftTransferService,
@@ -26,9 +26,16 @@ export class SoftBuyStep3Component implements OnInit {
   payType: any = '';
   codeImgUrl: any = '';
 
+  merchantId: string = '';
+
     ngOnInit() {
       console.dir(this.item);
       this.getPackagePreorder()
+    }
+
+    ngOnDestroy() {
+      let self =this;
+      clearInterval(self.timer);
     }
 
     onPayWayClick(type: any) {
@@ -79,7 +86,6 @@ export class SoftBuyStep3Component implements OnInit {
   getPayUrl() {
     let data = {
       amount: this.result.orderAmount, //价格
-      // amount: 1, //价格
       body: this.result.packageName, //版本名称
       orderNo: this.result.orderNo, //订单号
       payType: this.payType, //支付方式
@@ -124,6 +130,8 @@ export class SoftBuyStep3Component implements OnInit {
             this.msg.success('支付成功');
             this.item.orderNo = this.result.orderNo;
             ++this.item.step
+          } else if(res.data.tradeState === 'NOTPAY' || res.data.tradeState === 'CLOSED' || res.data.tradeState === 'REVOK') {
+            clearInterval(this.timer);
           }
         } else {
           this.modalSrv.error({
