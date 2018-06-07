@@ -248,11 +248,14 @@
     <nz-form-item>
         <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="storesChangeNum">选择口碑门店</nz-form-label>
         <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-            <div class="right-block fl">
+            <div class="right-block">
                 <span>{{storesChangeNum}} 家门店</span>
                 <span class="space"></span>
                 <span class="select-store-btn" (click)="onSelectStoreBtnClick(alertStore)">选择门店</span>
             </div>
+            <ng-container>
+              <nz-form-explain class="errorTips" *ngIf="selectStoresIds === '' && ifShowStoreErrorTips">请至少选择一个门店</nz-form-explain>
+            </ng-container>
         </nz-form-control>
     </nz-form-item>
     <nz-form-item (click)="submit()">
