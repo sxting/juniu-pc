@@ -398,6 +398,7 @@ export class MsmNoticeComponent implements OnInit, OnChanges {
                         clearInterval(this.timer);
                         this.modalSrv.closeAll();
                         this.msg.success('支付成功');
+                        this.configQueryHttp();
                         console.log(orderNo);
                         // this.goEasy.subscribe({
                         //     channel: 'SMS_PACKAGE_' + orderNo,
