@@ -14,6 +14,8 @@ import {Config} from "@shared/config/env.config";
 })
 export class PayRecordComponent implements OnInit {
 
+  loading: boolean = false;
+
     theadName: any[] = ['结算时间', '金额', '操作'];
     // theadName: any[] = ['结算时间', '收款账号', '备注', '金额', '操作'];
     alertTheadName: any[] = ['交易时间', '交易方式', '交易号', '实付金额', '手续费', '实收金额'];
@@ -60,6 +62,9 @@ export class PayRecordComponent implements OnInit {
   }
 
     goPayWay() {
+      if(this.loading) {
+        return;
+      }
       if(this.haveData) {
         this.router.navigate(['/setings/pay/way', {status: this.status, menuId: this.moduleId}])
       }
@@ -150,6 +155,7 @@ export class PayRecordComponent implements OnInit {
         let data = {
             storeId: this.storeId,
         };
+        this.loading = true;
         this.setingsService.getPayWayStatus(data).subscribe(
             (res: any) => {
                 if(res.success) {
@@ -161,16 +167,17 @@ export class PayRecordComponent implements OnInit {
                     this.haveData = false;
                   }
                     //status: string = '3'; //审核中0   审核通过1   审核未通过2   3未申请
-                    if(res.data.examineStatus == 0) {
+                    if(res.data.examineStatus == '0') {
                         this.status = '0';
-                    } else if(res.data.examineStatus == 1) {
+                    } else if(res.data.examineStatus == '1') {
                         this.status = '1'
-                    } else if(res.data.examineStatus == 2 || res.data.examineStatus == 3) {
+                    } else if(res.data.examineStatus == '2' || res.data.examineStatus == '3') {
                         this.status = '2'
                     }
-                    if(res.data.applyStatus == 0) {
+                    if(res.data.applyStatus == '0') {
                         this.status = '3'
                     }
+                    this.loading = false;
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
