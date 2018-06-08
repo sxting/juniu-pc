@@ -304,22 +304,23 @@ export class AddKoubeiProductComponent implements OnInit {
       this.storesChangeNum = event.selectStaffNum? event.selectStaffNum : 0;
     }
 
-
-    //上架时间
+    //上架时间的对比
     disabledStartDate = (putawayDate: Date): boolean => {
+      //核销开始时间必须晚于上架时间
       if (!putawayDate || !this.soldOutDate) {//没有下架时间的时候
-        if(this.form.controls.dateRange.value && this.form.controls.dateRange.value[0]){//有核销时间
-          return putawayDate.getTime() < this.form.controls.dateRange.value[0].getTime();
+        if(this.form.controls.dateRange.value && this.form.controls.dateRange.value[0]){//有核销开始时间
+          return putawayDate.getTime() > this.form.controls.dateRange.value[0].getTime();
         }else{
           return putawayDate.getTime() < this.today.getTime();
         }
-      }else{
+      }else{//有下架时间的时候
         return putawayDate.getTime() > this.soldOutDate.getTime();
       }
     };
 
     // 商品下架时间
     disabledEndDate = (soldOutDate: Date): boolean => {
+      //核销结束时间必须晚于商品下架时间
       if (!soldOutDate || !this.putawayDate) {//没有上架时间的时候
         if(this.form.controls.dateRange.value && this.form.controls.dateRange.value[1]){//有核销结束时间
           return soldOutDate.getTime() > this.form.controls.dateRange.value[1].getTime();
@@ -327,6 +328,7 @@ export class AddKoubeiProductComponent implements OnInit {
           return soldOutDate.getTime() < new Date().getTime();
         }
       }else{//有上架时间的时候
+        // 有上架时间的话，必须跟核销结束时间做对比，晚于上架时间，并且早于核销结束时间
         return soldOutDate.getTime() <= this.putawayDate.getTime();
       }
     };
@@ -334,7 +336,7 @@ export class AddKoubeiProductComponent implements OnInit {
     //校验核销开始时间
     disabledDate = (current: Date): boolean => {
       if(this.putawayDate && (this.putawayDate.getTime() >= this.today.getTime())){
-        return differenceInDays(current, this.putawayDate) <= 0;
+        return differenceInDays(current, this.putawayDate) < 0;
       }else{
         return differenceInDays(current, this.today) <= 0;
       }
@@ -727,96 +729,6 @@ export class AddKoubeiProductComponent implements OnInit {
         })
     }
 
-    //提交数据
-    submit() {
-        let self = this;
-        let buyerNotes: any = [];//购买须知
-        let descriptions: any = [];//详情
-        this.changeDataDetail(this.descriptions, descriptions);
-        this.changeDataDetail(this.buyerNotes, buyerNotes);
-        for (const i in this.form.controls) {
-            this.form.controls[ i ].markAsDirty();
-            this.form.controls[ i ].updateValueAndValidity();
-        }
-        if(this.form.invalid){
-          return;
-        }else if(this.checkoutTaoCanData(buyerNotes) && this.checkoutTaoCanData(descriptions)){
-            //商品分类信息
-            let categorysNameTran = '';
-            categorysNameTran = this.form.controls.categoryName.value == null? '' : this.form.controls.categoryName.value.join('－');
-            let koubeiProductId = this.ifcopy ? '' : this.koubeiProductId;//如果复制的话,不传递koubeiProductId
-            let dateRange = this.form.controls.dateRange.value;
-            let startDate = dateRange? FunctionUtil.changeDateToSeconds(dateRange[0]): '';
-            let endDate = dateRange? FunctionUtil.changeDateToSeconds(dateRange[1]) : '';
-            let imageIdsArray: any[] = [];
-            this.imageArray.forEach((image: any) => {
-              if (image.imageId !== '') {
-                imageIdsArray.push(image.imageId);
-              }
-            });
-            this.picIds = imageIdsArray.join(',');
-
-            let params = {
-                productName: this.form.controls.productName.value,
-                categoryName: categorysNameTran,
-                categoryId: this.categoryId,
-                koubeiProductId: koubeiProductId,
-                originalPrice: parseFloat(this.form.controls.originalPrice.value)*100,
-                currentPrice: parseFloat(this.form.controls.currentPrice.value)*100,
-                productNote: JSON.stringify(buyerNotes),
-                productInfo: JSON.stringify(descriptions),
-                stock: this.form.controls.stock.value,
-                weight: this.form.controls.weight.value,
-                tbCover:this.tbCover,
-                picIds: this.picIds,
-                picId: this.picId,
-                expiryDay: this.form.controls.validityPeriodType.value == 'FIXED'? 360:Number(this.form.controls.expiryDay.value),
-                validityPeriodType: this.form.controls.validityPeriodType.value,
-                validityPeriodRangeFrom: this.form.controls.validityPeriodType.value == 'FIXED'&& startDate? startDate : '',
-                validityPeriodRangeTo: this.form.controls.validityPeriodType.value == 'FIXED'&& endDate? endDate : '',
-                putawayDate: this.putawayDate? FunctionUtil.changeDateToSeconds(this.putawayDate) : '',
-                soldOutDate: this.soldOutDate? FunctionUtil.changeDateToSeconds(this.soldOutDate) : '',
-                putaway: this.status,
-                storeIds: this.selectStoresIds,
-                verifyFrequency: this.form.controls.verifyFrequency.value,
-                verifyEnableTimes: this.form.controls.verifyFrequency.value == 'simple'? 1 : Number(this.form.controls.verifyEnableTimes.value)
-            };
-            this.submitting = true;
-            this.koubeiService.saveKoubeiProductInfor(params).subscribe(
-                (res: any) => {
-                  self.submitting = false;
-                  if (res.success) {
-                        setTimeout(() => {
-                            self.msg.success(`提交成功`);
-                            if(self.koubeiProductId){
-                              self.router.navigate(['/koubei/product/list']);
-                            }else{
-                              let itemId = res.data;
-                              self.modalSrv.warning({
-                                nzTitle: '商品创建成功',
-                                nzContent: '想帮商家极速获客？马上设置口碑客分佣推广！',
-                                nzOkText: '去设置',
-                                nzMaskClosable: false,
-                                nzOnOk: function () {
-                                  self.extension(itemId);
-                                }
-                              });
-                            }
-                        }, 1000);
-                    } else {
-                        this.modalSrv.error({
-                            nzTitle: '温馨提示',
-                            nzContent: res.errorInfo
-                        });
-                    }
-                },
-                error => {
-                    this.msg.warning(error);
-                }
-            );
-        }
-    }
-
     // 获取口碑商品详情
     checkProductDetailInfor(batchQuery: any) {
         let self = this;
@@ -1058,6 +970,96 @@ export class AddKoubeiProductComponent implements OnInit {
           }
         },false);
       }
+  }
+
+    //提交数据
+    submit() {
+    let self = this;
+    let buyerNotes: any = [];//购买须知
+    let descriptions: any = [];//详情
+    this.changeDataDetail(this.descriptions, descriptions);
+    this.changeDataDetail(this.buyerNotes, buyerNotes);
+    for (const i in this.form.controls) {
+      this.form.controls[ i ].markAsDirty();
+      this.form.controls[ i ].updateValueAndValidity();
+    }
+    if(this.form.invalid){
+      return;
+    }else if(this.checkoutTaoCanData(buyerNotes) && this.checkoutTaoCanData(descriptions)){
+      //商品分类信息
+      let categorysNameTran = '';
+      categorysNameTran = this.form.controls.categoryName.value == null? '' : this.form.controls.categoryName.value.join('－');
+      let koubeiProductId = this.ifcopy ? '' : this.koubeiProductId;//如果复制的话,不传递koubeiProductId
+      let dateRange = this.form.controls.dateRange.value;
+      let startDate = dateRange? FunctionUtil.changeDateToSeconds(dateRange[0]): '';
+      let endDate = dateRange? FunctionUtil.changeDateToSeconds(dateRange[1]) : '';
+      let imageIdsArray: any[] = [];
+      this.imageArray.forEach((image: any) => {
+        if (image.imageId !== '') {
+          imageIdsArray.push(image.imageId);
+        }
+      });
+      this.picIds = imageIdsArray.join(',');
+
+      let params = {
+        productName: this.form.controls.productName.value,
+        categoryName: categorysNameTran,
+        categoryId: this.categoryId,
+        koubeiProductId: koubeiProductId,
+        originalPrice: parseFloat(this.form.controls.originalPrice.value)*100,
+        currentPrice: parseFloat(this.form.controls.currentPrice.value)*100,
+        productNote: JSON.stringify(buyerNotes),
+        productInfo: JSON.stringify(descriptions),
+        stock: this.form.controls.stock.value,
+        weight: this.form.controls.weight.value,
+        tbCover:this.tbCover,
+        picIds: this.picIds,
+        picId: this.picId,
+        expiryDay: this.form.controls.validityPeriodType.value == 'FIXED'? 360:Number(this.form.controls.expiryDay.value),
+        validityPeriodType: this.form.controls.validityPeriodType.value,
+        validityPeriodRangeFrom: this.form.controls.validityPeriodType.value == 'FIXED'&& startDate? startDate : '',
+        validityPeriodRangeTo: this.form.controls.validityPeriodType.value == 'FIXED'&& endDate? endDate : '',
+        putawayDate: this.putawayDate? FunctionUtil.changeDateToSeconds(this.putawayDate) : '',
+        soldOutDate: this.soldOutDate? FunctionUtil.changeDateToSeconds(this.soldOutDate) : '',
+        putaway: this.status,
+        storeIds: this.selectStoresIds,
+        verifyFrequency: this.form.controls.verifyFrequency.value,
+        verifyEnableTimes: this.form.controls.verifyFrequency.value == 'simple'? 1 : Number(this.form.controls.verifyEnableTimes.value)
+      };
+      this.submitting = true;
+      this.koubeiService.saveKoubeiProductInfor(params).subscribe(
+        (res: any) => {
+          self.submitting = false;
+          if (res.success) {
+            setTimeout(() => {
+              self.msg.success(`提交成功`);
+              if(self.koubeiProductId){
+                self.router.navigate(['/koubei/product/list']);
+              }else{
+                let itemId = res.data;
+                self.modalSrv.warning({
+                  nzTitle: '商品创建成功',
+                  nzContent: '想帮商家极速获客？马上设置口碑客分佣推广！',
+                  nzOkText: '去设置',
+                  nzMaskClosable: false,
+                  nzOnOk: function () {
+                    self.extension(itemId);
+                  }
+                });
+              }
+            }, 1000);
+          } else {
+            this.modalSrv.error({
+              nzTitle: '温馨提示',
+              nzContent: res.errorInfo
+            });
+          }
+        },
+        error => {
+          this.msg.warning(error);
+        }
+      );
+    }
   }
 
 }

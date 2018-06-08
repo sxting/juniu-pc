@@ -55,7 +55,7 @@ export class ServiceItemsListComponent implements OnInit {
       pageSize: this.pageSize,
         pageNo: this.pageNo,
         putaway: this.putaway,
-        categoryType: 'SERVICEITEMS',
+        categoryType: 'SERVICE',
         storeId: this.storeId,
         merchantId: this.merchantId
     };

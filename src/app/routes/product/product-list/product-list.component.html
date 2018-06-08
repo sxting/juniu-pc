@@ -35,7 +35,7 @@
             <td nz-td class="operation" style="cursor: pointer">
                 <span style="color: #FF6600" (click)="editProduct(item.productId)">查看详情</span>
                 <span class="iconfont icon-line1"></span>
-                <span style="color: #1890ff" (click)="operationProduct(item.productId,item.putaway)">{{statusFlag == 1? '下架':'上架'}}</span>
+                <span style="color: #ff7700" (click)="operationProduct(item.productId,item.putaway)">{{statusFlag == 1? '下架':'上架'}}</span>
             </td>
         </tr>
         </tbody>

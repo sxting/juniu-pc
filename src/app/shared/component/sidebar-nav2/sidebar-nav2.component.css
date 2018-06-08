@@ -1,7 +1,17 @@
 .nav>li>a>.iconfont{
     font-size: 22px !important;
-    vertical-align: middle
+    vertical-align: middle;
 }
 .nav>li>a{
     overflow: hidden;
+    color: #9EA3A9 !important;
+}
+.nav > li.nav-item-selected > a{
+    color: #fff !important;
+}
+.nav > li.nav-item-selected {
+    background: #ff7700 !important;
+}
+.nav > li.nav-item-selected > a{
+    color: #fff !important;
 }

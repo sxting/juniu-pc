@@ -47,6 +47,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
         modalSrv.closeAll();
     }
     ngOnInit(): void {
+        this.modalSrv.closeAll();
         let sign = FunctionUtil.getUrlStringBySearch('sign') ? FunctionUtil.getUrlStringBySearch('sign') : FunctionUtil.getUrlString('sign');
         let url = FunctionUtil.getUrlStringBySearch('url') ? FunctionUtil.getUrlStringBySearch('url') : FunctionUtil.getUrlString('url');
         this.tokenService.set({ token: '-1' });

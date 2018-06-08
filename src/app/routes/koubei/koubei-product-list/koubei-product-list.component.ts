@@ -5,8 +5,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { KoubeiService } from "../shared/koubei.service";
 import { DomSanitizer } from '@angular/platform-browser';
 import { LocalStorageService } from '@shared/service/localstorage-service';
-import { REFRESH, STORES_INFO } from '@shared/define/juniu-define';
+import { APP_TOKEN, REFRESH, STORES_INFO } from '@shared/define/juniu-define';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
+import { Config } from '@shared/config/env.config';
 declare var QRCode: any;
 declare var GoEasy: any;
 
@@ -41,6 +42,8 @@ export class KoubeiProductListComponent implements OnInit {
 
     //刷新商品按钮
     alipayPid: string;
+    imgQrcodeUrl: string = Config.API + 'account/manage/aliAuthorizationQRCode.img' +
+      `?token=${this.localStorageService.getLocalstorage(APP_TOKEN)}`;
     ifAlipayPidShow: boolean = false;
     merchantLogin: boolean = false;//商家登录
     providerLogin: boolean = false;//服务商登录

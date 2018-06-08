@@ -154,7 +154,7 @@ export class AdministrationComponent implements OnInit {
         }
         if (this.oldpassword.invalid || this.renewpassword.invalid || this.captcha3.invalid || this.newpassword.invalid) return false;
         else {
-            this.modifyPasswordHttp(this.form2.value.renewpassword, this.form2.value.newPassword, this.form2.value.oldpassword, this.form2.value.captcha3);
+            this.modifyPasswordHttp(this.form2.value.renewpassword, this.form2.value.newpassword, this.form2.value.oldpassword, this.form2.value.captcha3);
         };
     }
     /**

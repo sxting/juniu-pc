@@ -80,7 +80,7 @@
 <ul  class="nav">
     <ng-container *ngFor="let group of list">
         <ng-template [ngIf]="group._hidden !== true">
-            <li class="nav-group-title">
+            <li class="nav-group-title" style="color:#9EA3A9;">
                 <span>{{ group.text }}</span>
             </li>
             <ng-container *ngFor="let child1 of group.children">

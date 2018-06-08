@@ -23,8 +23,8 @@ export class RulesStep3Component implements OnInit {
     selectStoresIds: any = ''; //选中的门店
     storesChangeNum: any; //选中门店的个数
     allStoresNum: any;//所有门店的数量
-    storeStatus: any = [{ name: '全部门店(默认)', value: 'ALLSTORES'},{ name: '自定义', value: 'CUSTOMIZE'}];
-    productTypes: any = [{ name: '全部服务项目(默认)', value: 'SERVICEITEMS'}, { name: '全部项目和商品', value: 'ALL'},{name: '自定义', value: 'CUSTOMIZE'}];
+    storeStatus: any = [{ name: '全部门店(默认)', value: 'ALL'},{ name: '自定义', value: 'CUSTOMIZE'}];
+    productTypes: any = [{ name: '全部服务项目(默认)', value: 'SERVICE'}, { name: '全部项目和商品', value: 'ALL'},{name: '自定义', value: 'CUSTOMIZE'}];
     //商品
     productListInfor: any;//商品的信息
     allProductNumber: number = 0;//所有商品的数量
@@ -32,7 +32,7 @@ export class RulesStep3Component implements OnInit {
     productIds: string = '';
     merchantId: string = '';
     storeId: string = '';//判断是门店登录还是商家登陆
-    ifHttps: string = 'SERVICEITEMS';//是否要调取接口
+    ifHttps: string = 'SERVICE';//是否要调取接口
     ifShow: boolean = false;
     moduleId: any;
     applyStoreNames: string = '';
@@ -69,7 +69,7 @@ export class RulesStep3Component implements OnInit {
         let data = {
             merchantId: this.merchantId,
             storeId: this.storeId,
-            categoryType: 'SERVICEITEMS'
+            categoryType: 'SERVICE'
         };
         this.getAllbuySearchs(data);//获取所有的商品
 
@@ -148,7 +148,7 @@ export class RulesStep3Component implements OnInit {
     //选择商品弹框
     onSelectAlertBtnProduct(tpl: any, text: string, type: string){
         let self = this;
-        let typeData = type === 'SERVICEITEMS'? 'SERVICEITEMS' : '';
+        let typeData = type === 'SERVICE'? 'SERVICE' : '';
         let data = {
             merchantId: this.merchantId,
             storeId: this.storeId,
@@ -175,7 +175,7 @@ export class RulesStep3Component implements OnInit {
             let dataInfor = this.getOthersData(self.productListInfor).split('-');
             self.productIds = dataInfor[0];
             self.applyProductNames = dataInfor[3];
-            if(this.ifHttps === 'ALL' && type === 'SERVICEITEMS' && self.item['cardType'] === 'REBATE'){
+            if(this.ifHttps === 'ALL' && type === 'SERVICE' && self.item['cardType'] === 'REBATE'){
               self.msg.warning('该卡使用范围缩小，可能影响顾客体验');
             }
             this.ifHttps = type;

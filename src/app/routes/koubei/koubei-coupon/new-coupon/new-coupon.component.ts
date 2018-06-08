@@ -110,7 +110,6 @@ export class NewCouponComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.titleService.setTitle('代金券');
         this.couponId = this.route.snapshot.params['activityId'];
 
         this.isEdit = this.couponId ? true : false;

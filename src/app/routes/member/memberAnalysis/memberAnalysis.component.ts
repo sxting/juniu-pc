@@ -16,7 +16,7 @@ declare var interval: any;
     templateUrl: './memberAnalysis.component.html',
     styleUrls: ['./memberAnalysis.component.less']
 })
-export class MemberAnalysisComponent implements OnInit ,OnDestroy{
+export class MemberAnalysisComponent implements OnInit, OnDestroy {
     salesPieData: any;
     salesTotal = 0;
     data: any = {
@@ -39,6 +39,8 @@ export class MemberAnalysisComponent implements OnInit ,OnDestroy{
     storeId: any;
     merchantId: any;
     dateType: any = 'week';
+    countTotal: any;
+    customerIds: any;
     rankingListData: any[] = Array(10).fill({}).map((item, i) => {
         return {
             title: `工专路 ${i} 号店`,
@@ -67,7 +69,7 @@ export class MemberAnalysisComponent implements OnInit ,OnDestroy{
         private route: ActivatedRoute,
         private router: Router,
         private memberService: MemberService,
-         private http: _HttpClient) {
+        private http: _HttpClient) {
 
     }
     ngOnInit() {
@@ -189,6 +191,7 @@ export class MemberAnalysisComponent implements OnInit ,OnDestroy{
         );
     }
     chakanXQ(customerIds?, tpl?: TemplateRef<{}>) {
+        this.customerIds = customerIds;
         if (customerIds) {
             let data = {
                 customerIds: customerIds,
@@ -205,13 +208,17 @@ export class MemberAnalysisComponent implements OnInit ,OnDestroy{
                             if (i.gender === 2) i.genderName = '不详';
                         })
                         that.vipXQ = res.data.list
-                        if (customerIds) {
+                        this.countTotal = res.data.countTotal;
+
+                        if (customerIds && tpl) {
                             that.modalSrv.create({
                                 nzTitle: '查看详情',
                                 nzContent: tpl,
                                 nzFooter: null,
                                 nzWidth: '1000px',
-
+                                nzOnCancel: () => {
+                                    that.pageIndex = 1;
+                                }
                             });
                         }
                     } else {
@@ -230,7 +237,7 @@ export class MemberAnalysisComponent implements OnInit ,OnDestroy{
     getData2(e: any) {
         this.pageIndex = e;
         console.log(e)
-        this.chakanXQ()
+        this.chakanXQ(this.customerIds)
     }
     errorAlter(err: any) {
         this.modalSrv.error({

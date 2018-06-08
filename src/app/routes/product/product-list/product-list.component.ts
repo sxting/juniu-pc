@@ -51,7 +51,7 @@ export class ProductListComponent implements OnInit {
         pageNo: this.pageNo,
         pageSize: this.pageSize,
         putaway: this.putaway,
-        categoryType: 'PHYICALGOODS',
+        categoryType: 'GOODS',
         storeId: this.storeId,
         merchantId: this.merchantId
     };
