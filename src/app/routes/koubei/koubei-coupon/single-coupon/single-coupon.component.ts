@@ -118,7 +118,6 @@ export class SingleCouponComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.titleService.setTitle('单品券');
         this.couponId = this.route.snapshot.params['activityId'];
         this.isEdit = this.couponId ? true : false;
 

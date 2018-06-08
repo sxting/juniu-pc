@@ -129,7 +129,6 @@ export class MarketingsPageComponent implements OnInit {
     ngOnInit() {
       this.moduleId = this.route.snapshot.params['menuId'];
 
-      this.titleService.setTitle(decodeURIComponent(this.route.snapshot.params['name']));
         this.paramsId = this.route.snapshot.params['id'];
         this.paramsIdNumber = parseInt(this.paramsId);
         this.marketingId = this.route.snapshot.params['marketingId'] ? this.route.snapshot.params['marketingId'] : '';
