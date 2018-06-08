@@ -395,7 +395,7 @@ export class RuleSettingComponent implements OnInit {
           (res: any) => {
               if (res.success) {
                   this.loading = false;
-                  if(type === 'PHYICALGOODS'){
+                  if(type === 'GOODS'){
                       this.productListInfor = this.changeDataProduct(res.data);
                       let dataInfor = this.getOthersData(this.productListInfor).split('-');
                       this.productIds = dataInfor[0];
@@ -459,9 +459,9 @@ export class RuleSettingComponent implements OnInit {
               this.selectCardNumber = parseInt(dataInfor[1]);
               this.allCardNumber = parseInt(dataInfor[2]);
 
-              self.getAllbuySearchs('PHYICALGOODS');//获取商品列表信息
+              self.getAllbuySearchs('GOODS');//获取商品列表信息
               setTimeout(function () {
-                  self.getAllbuySearchs('SERVICEITEMS');//获取商品列表信息
+                  self.getAllbuySearchs('SERVICE');//获取商品列表信息
               },50);
               //编辑进来
               if (this.deductRuleId) {

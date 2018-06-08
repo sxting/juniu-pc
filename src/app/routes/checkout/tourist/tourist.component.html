@@ -63,7 +63,7 @@
               <div class="shopBigBox " *ngFor="let item of allproducks;let ind1 = index;">
                 <div class="shopTyoe">{{item.categoryName}}</div>
                 <div class="shopBox">
-                  <div *ngFor="let list of item.productList;let ind2 = index;" class="{{list.click&&list.num>0?'click':''}} {{list.categoryType==='SERVICEITEMS'?'shopBigBox1':'shopBigBox2'}}"
+                  <div *ngFor="let list of item.productList;let ind2 = index;" class="{{list.click&&list.num>0?'click':''}} {{list.categoryType==='SERVICE'?'shopBigBox1':'shopBigBox2'}}"
                     (click)="checkShop(ind1,ind2)">
                     <div class="shopTitle">{{list.productNo}}
                       <span class="shopNum" *ngIf="list.click&&list.num>0">{{list.num}}</span>
@@ -209,7 +209,7 @@
                             <span>{{item.card.cardName}}</span>
                           </span>
                           <br />
-                          <span class="ziti" *ngIf="item.applyProductType === 'SERVICEITEMS'">限全部服务项目可用</span>
+                          <span class="ziti" *ngIf="item.applyProductType === 'SERVICE'">限全部服务项目可用</span>
                           <span class="ziti" *ngIf="item.applyProductType === 'ALL'">限全部商品可用</span>
                           <span class="ziti" *ngIf="item.applyProductType === 'CUSTOMIZE'">限{{item.getApplyProductNames}}使用</span>
                         </span>
@@ -336,7 +336,7 @@
                     </div>
                     <div class="icon-success iconfont" *ngIf="rule.click"></div>
                     <div class="BOTTOM">
-                      <span *ngIf="rule.applyProductType === 'SERVICEITEMS'">限全部服务项目可用</span>
+                      <span *ngIf="rule.applyProductType === 'SERVICE'">限全部服务项目可用</span>
                       <span *ngIf="rule.applyProductType === 'ALL'">限全部商品可用</span>
                       <span style="display: inline-block;width: 90px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" *ngIf="rule.applyProductType === 'CUSTOMIZE'">{{rule.applyProductNames?'限'+rule.applyProductNames+'使用':'部分商品可用'}}</span>
                       <span style="float:right;margin-right:10px;">有效期: {{rule.validate}}天</span>

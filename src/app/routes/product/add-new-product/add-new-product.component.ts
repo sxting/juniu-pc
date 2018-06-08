@@ -37,7 +37,7 @@ export class AddNewProductComponent implements OnInit {
     addNewCommodityType: any;
     productId: string = '';//商品ID
     ItemsStatus: any = [{ name: '上架', value: '1'}, { name: '下架', value: '0'},];//上下架状态
-    storeStatus: any = [{ name: '全部门店(默认)', value: 'ALLSTORES'},{ name: '自定义', value: 'CUSTOMIZE'}];
+    storeStatus: any = [{ name: '全部门店(默认)', value: 'ALL'},{ name: '自定义', value: 'CUSTOMIZE'}];
     storeId: string = '';//查看门店登录还是商家登陆
     merchantId: string = '';
     //上传图片的时候
@@ -152,7 +152,7 @@ export class AddNewProductComponent implements OnInit {
             this.msg.warning('请先填写该商品分类后再添加!');
             return;
         }else {
-            this.addNewCommodityType.push({ categoryName: '', categoryId: '', type: 'PHYICALGOODS', merchantId: this.merchantId });
+            this.addNewCommodityType.push({ categoryName: '', categoryId: '', type: 'GOODS', merchantId: this.merchantId });
         }
     }
     addDescriptions(event: any, index: number) {
@@ -236,7 +236,7 @@ export class AddNewProductComponent implements OnInit {
         let self = this;
         this.loading = true;
         let data = {
-            categoryType: 'PHYICALGOODS'
+            categoryType: 'GOODS'
         };
         this.productService.getCategoryListInfor(data).subscribe(
             (res: any) => {
@@ -246,7 +246,7 @@ export class AddNewProductComponent implements OnInit {
                     this.categoryList = res.data;
                     if(res.data.length != 0){
                         res.data.forEach(function (item: any) {
-                            item.type = 'PHYICALGOODS';
+                            item.type = 'GOODS';
                             item.merchantId = self.merchantId;
                         });
                     }
@@ -420,7 +420,7 @@ export class AddNewProductComponent implements OnInit {
             picId: this.picId,
             stock: parseInt(this.form.controls.stock.value),
             applyStoreType: this.form.controls.storeType.value,
-            categoryType: 'PHYICALGOODS'
+            categoryType: 'GOODS'
         };
         if(this.ifShow == false){
           this.submitting = true;
