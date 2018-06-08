@@ -138,7 +138,6 @@ export class ReserveComponent implements OnInit, AfterViewInit, AfterViewChecked
     ngAfterViewInit() {
         let self = this;
       let timer = setInterval(function () {
-        console.log(self.storeId);
         if(self.storeId) {
           let getReserveConfigParams = {
             storeId: self.storeId
