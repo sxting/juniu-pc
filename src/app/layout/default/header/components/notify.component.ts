@@ -42,11 +42,11 @@ export class HeaderNotifyComponent {
   ) {
     this.getMessageCount();
 
-    // let self = this;
-    // setInterval(function () {
-    //   self.getMessageCount();
-    //   self.getMessageList();
-    // }, 60000)
+    let self = this;
+    setInterval(function () {
+      self.getMessageCount();
+      self.getMessageList();
+    }, 30000)
   }
 
   //系统通知
