@@ -56,6 +56,8 @@
         <ng-container *ngIf="currentPrice.dirty || currentPrice.touched">
           <nz-form-explain class="errorTips" *ngIf="currentPrice.errors?.required">服务项目售价不可为空</nz-form-explain>
           <nz-form-explain class="errorTips" *ngIf="currentPrice.errors?.pattern">服务项目售价只能是整数或者带有两位小数的数字</nz-form-explain>
+          <nz-form-explain class="errorTips" *ngIf="currentPrice.errors?.max">服务项目售价范围“0.01-99999999.99”</nz-form-explain>
+          <nz-form-explain class="errorTips" *ngIf="currentPrice.errors?.min">服务项目售价范围“0.01-99999999.99”</nz-form-explain>
         </ng-container>
       </nz-form-control>
     </nz-form-item>

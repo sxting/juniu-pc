@@ -66,6 +66,7 @@ export class AddKoubeiProductComponent implements OnInit {
     selectStoresIds: any = ''; //选中的门店
     storesChangeNum: any; //选中门店的个数
     allShopsNumber: number;//所有的门店数量
+    ifShowStoreErrorTips: boolean = false;
     ifShowPriceContrast: boolean = true;//价格对比
 
     get currentPrice() { return this.form.controls['currentPrice']; }
@@ -92,8 +93,7 @@ export class AddKoubeiProductComponent implements OnInit {
 
         let self = this;
         this.status = self.ItemsStatus[0].value;
-
-      //门店
+        //门店
         let storeList = JSON.parse(this.localStorageService.getLocalstorage('alipayShops')) ?
             JSON.parse(this.localStorageService.getLocalstorage('alipayShops')) : [];
         if (storeList) {
@@ -288,6 +288,7 @@ export class AddKoubeiProductComponent implements OnInit {
                 nzCancelText: null,
                 nzOkText: '保存',
                 nzOnOk: function(){
+                  this.ifShowStoreErrorTips = this.selectStoresIds === ''? true : false;
                 }
             });
     }
@@ -295,6 +296,7 @@ export class AddKoubeiProductComponent implements OnInit {
     //获取到门店ID
     getSelectStoresIds(event){
       this.selectStoresIds = event.staffIds? event.staffIds : '';
+      this.ifShowStoreErrorTips = this.selectStoresIds === ''? true : false;
     }
 
     //获取到门店选中的数量
@@ -302,9 +304,11 @@ export class AddKoubeiProductComponent implements OnInit {
       this.storesChangeNum = event.selectStaffNum? event.selectStaffNum : 0;
     }
 
+
+    //上架时间
     disabledStartDate = (putawayDate: Date): boolean => {
       if (!putawayDate || !this.soldOutDate) {//没有下架时间的时候
-        if(this.form.controls.dateRange.value[0]){//有核销时间
+        if(this.form.controls.dateRange.value && this.form.controls.dateRange.value[0]){//有核销时间
           return putawayDate.getTime() < this.form.controls.dateRange.value[0].getTime();
         }else{
           return putawayDate.getTime() < this.today.getTime();
@@ -314,11 +318,17 @@ export class AddKoubeiProductComponent implements OnInit {
       }
     };
 
+    // 商品下架时间
     disabledEndDate = (soldOutDate: Date): boolean => {
-      if (!soldOutDate || !this.putawayDate) {
-        return false;
+      if (!soldOutDate || !this.putawayDate) {//没有上架时间的时候
+        if(this.form.controls.dateRange.value && this.form.controls.dateRange.value[1]){//有核销结束时间
+          return soldOutDate.getTime() > this.form.controls.dateRange.value[1].getTime();
+        }else{
+          return soldOutDate.getTime() < new Date().getTime();
+        }
+      }else{//有上架时间的时候
+        return soldOutDate.getTime() <= this.putawayDate.getTime();
       }
-      return soldOutDate.getTime() <= this.putawayDate.getTime();
     };
 
     //校验核销开始时间
@@ -378,6 +388,7 @@ export class AddKoubeiProductComponent implements OnInit {
             this.storesChangeNum = this.selectStoresIds.split(',').length;
             this.allShopsNumber = this.selectStoresIds.split(',').length;
         }
+        this.ifShowStoreErrorTips = this.selectStoresIds === ''? true : false;
     }
 
     //将门店列表数据格式转换成按照城市分类
@@ -636,7 +647,6 @@ export class AddKoubeiProductComponent implements OnInit {
                       weight: [ weight, [  ] ],
                       storesChangeNum: [ storesChangeNum, [ Validators.required ] ]
                     });
-
                 }else {//商品图片
                     this.uploadImageResult = result;
                     this.imageArray[index].imageId = this.uploadImageResult.pictureId;

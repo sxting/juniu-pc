@@ -7,7 +7,6 @@ import { UploadService } from '@shared/upload-img';
 import { ProductService } from '../shared/product.service';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
-import { CITYLIST } from '@shared/define/juniu-define';
 
 @Component({
   selector: 'app-add-new-items',
@@ -69,7 +68,7 @@ export class AddNewItemsComponent implements OnInit {
         this.formData = {
             categoryInfor: [ null, [ Validators.required ] ],
             productName:[ null, [ Validators.required ] ],
-            currentPrice: [null, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{2})?$`)])],
+            currentPrice: [null, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{2})?$`), Validators.min(1 * 0.01),  Validators.max(11111111.11 * 9)])],
             productNo: [ null, [ Validators.pattern(`[0-9]+`)] ],
             status: [self.ItemsStatus[0].value, [ Validators.required  ] ],
             storeType: [ self.storeStatus[0].value, [ Validators.required ] ],
@@ -332,7 +331,7 @@ export class AddNewItemsComponent implements OnInit {
                     this.formData = {
                         categoryInfor: [ categoryInfor, [ Validators.required ] ],
                         productName:[ res.data.productName, [ Validators.required ] ],
-                        currentPrice: [res.data.currentPrice/100, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{2})?$`)])],
+                        currentPrice: [ res.data.currentPrice/100, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{2})?$`), Validators.min(1 * 0.01),  Validators.max(11111111.11 * 9)])],
                         productNo: [ res.data.productNo, [ Validators.pattern(`[0-9]+`)] ],
                         status: [ status, [ Validators.required  ] ],
                         storeType: [ storeType, [ Validators.required ] ],
