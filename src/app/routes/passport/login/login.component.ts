@@ -11,6 +11,7 @@ import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { APP_TOKEN, STORES_INFO, ALIPAY_SHOPS, USER_INFO, MODULES, CITY_LIST } from '@shared/define/juniu-define';
 import { StartupService } from '@core/startup/startup.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'passport-login',
@@ -34,6 +35,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
         private localStorageService: LocalStorageService,
         private memberService: MemberService,
         private startupService: StartupService,
+        private route: ActivatedRoute,
         private socialService: SocialService,
         @Optional() @Inject(ReuseTabService) private reuseTabService: ReuseTabService,
         @Inject(DA_SERVICE_TOKEN) private tokenService: TokenService) {
@@ -48,13 +50,16 @@ export class UserLoginComponent implements OnDestroy, OnInit {
     }
     ngOnInit(): void {
         this.modalSrv.closeAll();
-        let sign = FunctionUtil.getUrlStringBySearch('sign') ? FunctionUtil.getUrlStringBySearch('sign') : FunctionUtil.getUrlString('sign');
-        let url = FunctionUtil.getUrlStringBySearch('url') ? FunctionUtil.getUrlStringBySearch('url') : FunctionUtil.getUrlString('url');
+        let sign = FunctionUtil.getUrlStringBySearch('sign') ? FunctionUtil.getUrlStringBySearch('sign') : this.route.snapshot.params['sign'];
+        let url = FunctionUtil.getUrlStringBySearch('url') ? FunctionUtil.getUrlStringBySearch('url') : this.route.snapshot.params['url'];
+        // let sign1 = this.route.snapshot.params['sign'] ? this.route.snapshot.params['sign'] : this.route.snapshot.params['sign'];
+        // let url1 = this.route.snapshot.params['url'] ? this.route.snapshot.params['url'] : this.route.snapshot.params['url'];
         this.tokenService.set({ token: '-1' });
         this.getLocationHttp();
         if (sign) {
             this.localStorageService.setLocalstorage(APP_TOKEN, sign);
-            this.koubeiLogin(url)
+            this.tokenService.set({ token: sign });
+            this.koubeiLogin(url, sign)
         }
     }
     // region: fields
@@ -75,24 +80,18 @@ export class UserLoginComponent implements OnDestroy, OnInit {
     count = 0;
     interval$: any;
     // 口碑登陆
-    koubeiLogin(url: any) {
-        this.memberService.koubeiLogin().subscribe(
+    koubeiLogin(url: any, token: any) {
+        let data = {
+            token: token
+        }
+        this.memberService.loginToken(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     this.localStorageService.setLocalstorage(STORES_INFO, JSON.stringify(res.data.stores));
-                    this.localStorageService.setLocalstorage(ALIPAY_SHOPS, JSON.stringify(res.data[ALIPAY_SHOPS]));
+                    this.localStorageService.setLocalstorage(ALIPAY_SHOPS, JSON.stringify(res.data['alipayShops']));
                     this.localStorageService.setLocalstorage(USER_INFO, JSON.stringify(res.data));
-                    this.localStorageService.setLocalstorage(MODULES, JSON.stringify(res.data[MODULES]));
-                    this.tokenSetFun(res.data.token);
-                    if (url === 'koubeiproduct') {
-                        this.router.navigate(['/koubei/product/list']);
-                    } else if (url === 'marketing') {
-                        this.router.navigate(['/koubei/coupon/index']);
-                    } else if (url === 'craftsman') {
-                        this.router.navigate(['/koubei/craftsman/manage']);
-                    } else if (res.data.stores.length > 0) {
-                        this.router.navigateByUrl('/manage/storeList/matchingkoubei');
-                    }
+                    this.localStorageService.setLocalstorage(MODULES, JSON.stringify(res.data['modules']));
+                    this.tokenSetFun(token, url);
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -185,7 +184,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
             error => this.errorAlter(error)
         )
     }
-    tokenSetFun(token: any) {
+    tokenSetFun(token: any, url?: any) {
         // 清空路由复用信息
         this.reuseTabService.clear();
         this.tokenService.set({
@@ -195,7 +194,18 @@ export class UserLoginComponent implements OnDestroy, OnInit {
             time: +new Date
         });
         this.localStorageService.setLocalstorage(APP_TOKEN, token);
-        this.router.navigate(['/']);
+        if (url === 'koubeiproduct') {
+            this.router.navigate(['/koubei/product/list']);
+        } else if (url === 'marketing') {
+            this.router.navigate(['/koubei/coupon/index']);
+        } else if (url === 'craftsman') {
+            this.router.navigate(['/koubei/craftsman/manage']);
+        } else {
+            this.router.navigate(['/']);
+        }
+        // else if (res.data.stores.length > 0) {
+        //     this.router.navigateByUrl('/manage/storeList/matchingkoubei');
+        // }
         this.startupService.load();
     }
     getValidCode(phone, bizType) {
