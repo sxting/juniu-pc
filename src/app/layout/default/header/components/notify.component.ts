@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import * as distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
-import {NzMessageService, NzModalService} from 'ng-zorro-antd';
+import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { NoticeItem, NoticeIconList } from '@delon/abc';
-import {HomeService} from "../../../../routes/home/shared/home.service";
+import { HomeService } from "../../../../routes/home/shared/home.service";
 
 /**
  * 菜单通知
@@ -19,7 +19,7 @@ import {HomeService} from "../../../../routes/home/shared/home.service";
   `,
 })
 // <!--(clear)="clear($event)"-->
-export class HeaderNotifyComponent {
+export class HeaderNotifyComponent implements OnDestroy {
   data2: any = [
     {
       title: '未读消息',
@@ -35,20 +35,24 @@ export class HeaderNotifyComponent {
   count = 0;
   loading = false;
   messageId: any = '';
-
+  time:any;
   constructor(private msg: NzMessageService,
-              private homeService: HomeService,
-              private modalSrv: NzModalService,
+    private homeService: HomeService,
+    private modalSrv: NzModalService,
   ) {
     this.getMessageCount();
 
     let self = this;
-    setInterval(function () {
-      self.getMessageCount();
-      self.getMessageList();
-    }, 30000)
+    // self.time =  setInterval(function () {
+    //   self.getMessageCount();
+    //   self.getMessageList();
+    // }, 30000)
   }
-
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    clearInterval(this.time);
+  }
   //系统通知
   getMessageCount() {
     let data = {
@@ -106,7 +110,7 @@ export class HeaderNotifyComponent {
     };
     this.homeService.getMessageInfo(data).subscribe(
       (res: any) => {
-        if(res.success) {
+        if (res.success) {
           this.getMessageList();
           this.getMessageCount();
         } else {

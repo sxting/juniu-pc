@@ -39,7 +39,7 @@ const routes: Routes = [
     { path: 'print', component: KoubeiPrintComponent },
     { path: 'add/product', component: AddKoubeiProductComponent },
     { path: 'order-verification', component: OrderVerificationComponent },
-    { path: 'noteNumKoubei', component: NoteNumKoubeiComponent },
+    { path: 'noteNumKoubei', component: KoubeiMsmNoticeComponent },
     { path: 'koubeiMsmNotice', component: KoubeiMsmNoticeComponent }    
 ];
 
