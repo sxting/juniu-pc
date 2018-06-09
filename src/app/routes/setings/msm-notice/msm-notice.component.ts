@@ -115,7 +115,7 @@ export class MsmNoticeComponent implements OnInit, OnChanges, OnDestroy {
                 type: 'value'
             },
             series: [{
-                smooth: true,
+                name: '',
                 data: data2,
                 type: 'line',
                 areaStyle: {

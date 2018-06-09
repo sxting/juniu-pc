@@ -90,7 +90,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
                         this.router.navigate(['/koubei/coupon/index']);
                     } else if (url === 'craftsman') {
                         this.router.navigate(['/koubei/craftsman/manage']);
-                    } else if (res.stores.length > 0) {
+                    } else if (res.data.stores.length > 0) {
                         this.router.navigateByUrl('/manage/storeList/matchingkoubei');
                     }
                 } else {
