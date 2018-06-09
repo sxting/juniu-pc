@@ -120,7 +120,7 @@ export class AdministrationComponent implements OnInit {
         this.modalSrv.create({
             nzTitle: '支付宝授权',
             nzContent: tpl,
-            nzWidth: '600px',
+            nzWidth: '800px',
             nzOkText: '授权完成',
             nzOnOk: () => {
             }
