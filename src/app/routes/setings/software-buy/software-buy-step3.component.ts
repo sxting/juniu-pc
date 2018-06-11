@@ -127,10 +127,19 @@ export class SoftBuyStep3Component implements OnInit, OnDestroy {
           //描述:查询支付二维码 订单的支付状态tradeState: SUCCESS—支付成功 REFUND—转入退款 NOTPAY—未支付 CLOSED—已关闭 REVERSE—已冲正 REVOK—已撤销
           if(res.data.tradeState === 'SUCCESS') {
             clearInterval(this.timer);
-            this.msg.success('支付成功');
-            this.item.orderNo = this.result.orderNo;
-            ++this.item.step
-          } else if(res.data.tradeState === 'NOTPAY' || res.data.tradeState === 'CLOSED' || res.data.tradeState === 'REVOK') {
+            // this.msg.success('支付成功');
+              let self = this;
+            this.modalSrv.confirm({
+                nzTitle: '温馨提示',
+                nzContent: '支付成功',
+                nzOnOk: function () {
+                    self.item.orderNo = self.result.orderNo;
+                    ++self.item.step
+                },
+                nzCancelText: null,
+            });
+
+          } else if(res.data.tradeState === 'CLOSED' || res.data.tradeState === 'REVOK') {
             clearInterval(this.timer);
           }
         } else {

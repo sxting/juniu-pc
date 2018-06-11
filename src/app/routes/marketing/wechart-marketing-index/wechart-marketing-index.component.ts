@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import {Router, ActivatedRoute} from "@angular/router";
+import {ManageService} from "../../manage/shared/manage.service";
+import {NzModalService} from "ng-zorro-antd";
+import {LocalStorageService} from "@shared/service/localstorage-service";
+import {USER_INFO} from "@shared/define/juniu-define";
 
 @Component({
   selector: 'app-wechart-marketing-index',
@@ -16,9 +20,12 @@ export class WechartMarketingIndexComponent implements OnInit {
     constructor(
       private route: ActivatedRoute,
       private router: Router,
+      private modalSrv: NzModalService,
+      private manageService: ManageService,
+      private localStorageService: LocalStorageService,
     ) { }
 
-  moduleId: any = '';
+    moduleId: any = '';
 
     ngOnInit() {
       this.moduleId = this.route.snapshot.params['menuId'];
@@ -33,11 +40,35 @@ export class WechartMarketingIndexComponent implements OnInit {
 
         this.list3 = [
             { id: '15', name: '朋友圈广告', img: './assets/img/wechat_marketing_5.png', desc: '' }
-        ]
+        ];
+
+        let merchantId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['merchantId'];
+        // this.wxStatusHttp(merchantId);
     }
 
     onItemClick(id: string, name: string, desc: string) {
+      if(this.wxappAuth) {
         this.router.navigate(['/marketing/page', {menuId: this.moduleId, id: id, name: encodeURIComponent(name), desc: encodeURIComponent(desc)}])
+      } else {
+
+      }
+    }
+
+    wxappAuth: boolean = true;
+    //授权状态
+    wxStatusHttp(merchantId: any) {
+      this.manageService.wxStatus(merchantId).subscribe(
+        (res: any) => {
+          if (res.success) {
+            this.wxappAuth = res.data.wxappAuth ? true : false;
+          } else {
+            this.modalSrv.error({
+              nzTitle: '温馨提示',
+              nzContent: res.errorInfo
+            });
+          }
+        },
+      );
     }
 
 }

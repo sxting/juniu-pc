@@ -29,7 +29,7 @@ export class SidebarComponent {
           if (res.success) {
             if (res.data.eventType === 'ROUTE') {
               if (res.data.eventRoute) {
-                this.router.navigate([res.data.eventRoute, { menuId: menuId }]);
+                this.router.navigateByUrl(res.data.eventRoute + ';menuId=' + menuId);
               }
             } else if (res.data.eventType === 'NONE') {
 

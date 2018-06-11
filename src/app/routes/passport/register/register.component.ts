@@ -7,7 +7,8 @@ import { MemberService } from '../../member/shared/member.service';
 import { ActivatedRoute } from '@angular/router';
 import { Inject } from '@angular/core';
 import { DA_SERVICE_TOKEN, TokenService } from '@delon/auth';
-import { USER_INFO } from '@shared/define/juniu-define';
+import { USER_INFO, ALIPAY_SHOPS, APP_TOKEN } from '@shared/define/juniu-define';
+import { StartupService } from '@core/startup/startup.service';
 
 @Component({
     selector: 'passport-register',
@@ -33,6 +34,7 @@ export class UserRegisterComponent implements OnDestroy, OnInit {
         private localStorageService: LocalStorageService,
         private modalSrv: NzModalService,
         private memberService: MemberService,
+        private startupService: StartupService,
         private route: ActivatedRoute,
         @Inject(DA_SERVICE_TOKEN) private tokenService: TokenService,
         public msg: NzMessageService) {
@@ -229,7 +231,16 @@ export class UserRegisterComponent implements OnDestroy, OnInit {
             (res: any) => {
                 if (res.success) {
                     this.localStorageService.setLocalstorage(USER_INFO, JSON.stringify(res.data));
+                    this.localStorageService.setLocalstorage(ALIPAY_SHOPS, JSON.stringify(res.data['alipayShopList']));
+                    this.tokenService.set({
+                        token: token,
+                        email: `cipchk@qq.com`,
+                        id: 10000,
+                        time: +new Date
+                    });
+                    this.localStorageService.setLocalstorage(APP_TOKEN, token);
                     this.router.navigate(['/storeList/matchingkoubei']);
+                    this.startupService.load();
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',

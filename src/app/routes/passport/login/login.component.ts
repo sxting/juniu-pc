@@ -90,7 +90,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
                     this.localStorageService.setLocalstorage(ALIPAY_SHOPS, JSON.stringify(res.data['alipayShopList']));
                     this.localStorageService.setLocalstorage(USER_INFO, JSON.stringify(res.data));
                     this.localStorageService.setLocalstorage(MODULES, JSON.stringify(res.data['modules']));
-                    this.tokenSetFun(token, url);
+                    this.tokenSetFun(res.data, token, url);
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -150,7 +150,8 @@ export class UserLoginComponent implements OnDestroy, OnInit {
             (res: any) => {
                 if (res.success) {
                     this.localStorageService.setLocalstorage(USER_INFO, JSON.stringify(res.data));
-                    this.tokenSetFun(res.data.token);
+                    this.localStorageService.setLocalstorage(ALIPAY_SHOPS, JSON.stringify(res.data['alipayShopList']));
+                    this.tokenSetFun(res.data, res.data.token);
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -171,7 +172,8 @@ export class UserLoginComponent implements OnDestroy, OnInit {
             (res: any) => {
                 if (res.success) {
                     this.localStorageService.setLocalstorage(USER_INFO, JSON.stringify(res.data));
-                    this.tokenSetFun(res.data.token);
+                    this.localStorageService.setLocalstorage(ALIPAY_SHOPS, JSON.stringify(res.data['alipayShopList']));
+                    this.tokenSetFun(res.data, res.data.token);
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -183,7 +185,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
             error => this.errorAlter(error)
         )
     }
-    tokenSetFun(token: any, url?: any) {
+    tokenSetFun(res, token: any, url?: any) {
         // 清空路由复用信息
         this.reuseTabService.clear();
         this.tokenService.set({
@@ -202,7 +204,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
         } else {
             this.router.navigate(['/']);
         }
-        // else if (res.data.stores.length > 0) {
+        // else if (res.data.alipayShopList.length > 0) {
         //     this.router.navigateByUrl('/manage/storeList/matchingkoubei');
         // }
         this.startupService.load();
