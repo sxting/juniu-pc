@@ -21,8 +21,8 @@
         </ul>
     </div>
     <div style="margin-top:20px;">
-        <button class="buttons" style="margin-right:20px;"  nz-button nzType="primary" (click)="gotoWeChat()" type="submit">立即申请</button>
-        <button class="buttons" (click)="matching(modalContent)" nz-button >申请好了，点击关联</button>
+        <button class="buttons" style="margin-right:20px;" *ngIf="storeId" nz-button nzType="primary" (click)="gotoWeChat()" type="submit">立即申请</button>
+        <button class="buttons" (click)="matching(modalContent)" *ngIf="storeId" nz-button>申请好了，点击关联</button>
     </div>
 </nz-card>
 

@@ -14,7 +14,7 @@
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="productName">商品名称</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input nz-input formControlName="productName" id="productName" autocomplete="off" placeholder="请输入商品名称，限1-40个字">
+                <input nz-input maxlength="40" formControlName="productName" id="productName" autocomplete="off" placeholder="请输入商品名称，限1-40个字">
                 <nz-form-explain class="errorTips" *ngIf="form.get('productName').dirty && form.get('productName').errors">商品名称不能为空</nz-form-explain>
                 <nz-form-explain class="tips-text">请勿输入“储值卡、会员卡、VIP卡、打折卡、年卡、美容卡、健身卡”等敏感词。</nz-form-explain>
             </nz-form-control>
@@ -208,7 +208,7 @@
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7" nzFor="weight">商品顺序权重</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input nz-input maxlength="8" formControlName="weight" id="weight" placeholder="请输入商品名称，限1-40个字">
+                <input nz-input maxlength="5" formControlName="weight" id="weight" placeholder="请输入商品名称，限1-40个字">
                 <nz-form-explain class="tips-text">请输入整数，权重越大商品在店铺中展示位置越靠前，最大99999。</nz-form-explain>
             </nz-form-control>
         </nz-form-item>
@@ -272,7 +272,7 @@
 </ng-template>
 
 <!-- 口碑客 -->
-<nz-modal [(nzVisible)]="isVisible" nzWidth ="800"  nzTitle="关联口碑账号" nzOkText="确定" (nzOnOk)="handleOk()">
+<nz-modal [(nzVisible)]="isVisible" nzWidth ="800"  nzTitle="关联口碑账号" nzOkText="确定" (nzOnOk)="handleOk()" (nzOnCancel)="handleCancel('koubeike')">
   <div class="reserve-record-alert" style="height: 400px;">
     <iframe class="all-iframe" id="koubeikeFrame" [src]="trustedUrl" frameborder="0" scrolling="auto" height="100%" width="100%"></iframe>
   </div>
@@ -280,7 +280,7 @@
 
 
 <!--选择入淘首图的弹框-->
-<nz-modal [(nzVisible)]="isVisibleImg" nzWidth ="500" [nzFooter]="null"  nzTitle="选择入淘首图" nzOkText="确定">
+<nz-modal [(nzVisible)]="isVisibleImg" nzWidth ="500" [nzFooter]="null"  nzTitle="选择入淘首图" nzOkText="确定"  (nzOnCancel)="handleCancel('rutao')">
   <!--修改卡面背景-->
   <nz-form-text class="btn-photo-clip">
     <span class="btn-img">点击上传入淘首图</span>
