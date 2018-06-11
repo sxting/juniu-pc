@@ -353,7 +353,7 @@ export class AddKoubeiProductComponent implements OnInit {
       this.isVisible = false;
       this.router.navigate(['/koubei/product/list']);
     }
-    //关闭关联口碑客及其入淘的弹框
+    /**关闭关联口碑客及其入淘的弹框***/
     handleCancel(type: string): void {
       let isVisible = this.isVisible;
       let isVisibleImg = this.isVisibleImg;
@@ -363,7 +363,7 @@ export class AddKoubeiProductComponent implements OnInit {
 
   /*********************数据处理开始**************************/
 
-    //获取到所有的门店ID及其num
+    /***获取到所有的门店ID及其num***/
     changeAllData(){
         // 初始化
         this.allShopsNumber = 0;
@@ -400,7 +400,7 @@ export class AddKoubeiProductComponent implements OnInit {
         this.ifShowStoreErrorTips = this.selectStoresIds === ''? true : false;
     }
 
-    //将门店列表数据格式转换成按照城市分类
+    /** 将门店列表数据格式转换成按照城市分类 */
     getCityList(storeList: any) {
         let cityAllCodeArr = [];
         for (let i = 0; i < storeList.length; i++) {
@@ -429,7 +429,7 @@ export class AddKoubeiProductComponent implements OnInit {
         return cityArr;
     }
 
-    // 商品分类转换数据
+    /** 商品分类转换数据 */
     dataChange(child: any, obj: any) {
         let self = obj;
         self.num += 1;
@@ -447,7 +447,7 @@ export class AddKoubeiProductComponent implements OnInit {
         });
     }
 
-    //提交的时候,转换购买须知及其详细内容的数据
+    /** 提交的时候,转换购买须知及其详细内容的数据 */
     changeDataDetail(obj: any, transfor: any) {
         obj.forEach((element: any, index: number, arr: any) => {
             let list: any = [];
@@ -615,7 +615,7 @@ export class AddKoubeiProductComponent implements OnInit {
 
     /*************************  Http请求开始  ********************************/
 
-    //上传图片接口
+    /**上传图片接口**/
     uploadImage(event: any, type: string, index:number) {
         console.log(0);
         let self = this;
@@ -678,7 +678,7 @@ export class AddKoubeiProductComponent implements OnInit {
         }
     }
 
-    //上传入淘首图
+    /*上传入淘首图 ***/
     uploadTmallHomePic(){
       let self = this;
       this.isVisibleImg = true;
@@ -710,7 +710,7 @@ export class AddKoubeiProductComponent implements OnInit {
       },200);
     }
 
-    //上传图片
+    /**上传图片***/
     uploadImageWithBase64Http(base64Image) {
       let data = {
         base64Image: base64Image
@@ -736,7 +736,7 @@ export class AddKoubeiProductComponent implements OnInit {
         })
     }
 
-    // 获取口碑商品详情
+    /** 获取口碑商品详情 */
     checkProductDetailInfor(batchQuery: any) {
         let self = this;
         this.loading = true;
@@ -862,8 +862,6 @@ export class AddKoubeiProductComponent implements OnInit {
         );
     }
 
-
-
     /*** 校验购买须知及其详细内容**/
     checkoutTaoCanData(obj: any) {
         let flag = true;
@@ -926,7 +924,7 @@ export class AddKoubeiProductComponent implements OnInit {
         return flag;
     }
 
-    //口碑客推广
+    /*口碑客推广**/
     extension(itemId:string){
       let self = this;
       if(this.merchantLogin){//商家登录
@@ -973,7 +971,7 @@ export class AddKoubeiProductComponent implements OnInit {
       }
   }
 
-    //提交数据
+    /**提交数据*/
     submit() {
       let self = this;
       let buyerNotes: any = [];//购买须知
