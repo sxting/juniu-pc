@@ -2,15 +2,15 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { SettingsService } from '@delon/theme';
 import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
-import {LocalStorageService} from "@shared/service/localstorage-service";
-import {USER_INFO} from "@shared/define/juniu-define";
+import { LocalStorageService } from "@shared/service/localstorage-service";
+import { USER_INFO } from "@shared/define/juniu-define";
 
 @Component({
   selector: 'header-user',
   template: `
   <nz-dropdown nzPlacement="bottomRight">
     <div class="item d-flex align-items-center px-sm" nz-dropdown>
-      <nz-avatar [nzSrc]="settings.user.avatar" nzSize="small" class="mr-sm"></nz-avatar>
+      <nz-avatar [nzSrc]="'./assets/img/nan.png'" nzSize="small" class="mr-sm"></nz-avatar>
       {{staffName}}
     </div>
     <div nz-menu class="width-sm">
@@ -28,7 +28,7 @@ export class HeaderUserComponent implements OnInit {
     public settings: SettingsService,
     private router: Router,
     @Inject(DA_SERVICE_TOKEN) private tokenService: ITokenService,
-  ) {}
+  ) { }
 
   staffName: any = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['staffName'];
 
@@ -41,14 +41,14 @@ export class HeaderUserComponent implements OnInit {
     const token = this.tokenService.get() || {
       token: 'nothing',
       name: 'Admin',
-      avatar: './assets/logo-color.svg',
+      avatar: './assets/img/nan.png',
       email: 'cipchk@qq.com',
     };
     this.tokenService.set(token);
   }
 
   goSetPage() {
-    this.router.navigate(['/setings/administration', {menuId: '901106'}]);
+    this.router.navigate(['/setings/administration', { menuId: '901106' }]);
   }
 
   logout() {
