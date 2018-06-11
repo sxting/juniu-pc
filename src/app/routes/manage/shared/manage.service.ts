@@ -797,4 +797,13 @@ export class ManageService {
         return Observable.throw(error);
       });
   }
+  //导入口碑门店
+  ImportkoubeiShop(data: any) {
+    let apiUrl = Config.API1 + 'account/merchant/store/import/koubei/shop.json';
+    return this.http.post(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
 }
