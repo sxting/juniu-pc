@@ -37,7 +37,7 @@
               <nz-divider nzType="vertical"></nz-divider>
               <span class="button" *ngIf="item.validityPeriodDays?item.validityPeriodDays>0:true" (click)="fufei('shengji',item.storeId)">升级</span>
               <span class="button" *ngIf="item.validityPeriodDays?item.validityPeriodDays>0:false" (click)="fufei('xufei',item.storeId)">续费</span>
-              <nz-divider nzType="vertical"></nz-divider>
+              <nz-divider nzType="vertical" *ngIf="item.validityPeriodDays?item.validityPeriodDays>0:true||item.validityPeriodDays?item.validityPeriodDays>0:false"></nz-divider>
               <span class="button" (click)="storeDeleteHttp(item.storeId)">删除</span>
             </td>
 
