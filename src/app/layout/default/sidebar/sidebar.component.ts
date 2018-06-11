@@ -38,6 +38,9 @@ export class SidebarComponent {
             } else if (res.data.eventType === 'REDIRECT') {
 
             }
+            if (res.data.eventMsg) {
+              this.errorAlert('请先创建门店');
+            }
           } else {
             this.modalSrv.error({
               nzTitle: '温馨提示',
