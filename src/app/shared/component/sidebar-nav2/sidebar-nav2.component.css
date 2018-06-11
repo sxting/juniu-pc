@@ -15,3 +15,9 @@
 .nav > li.nav-item-selected > a{
     color: #fff !important;
 }
+.nav>.nav-submenu-open{
+    border-left-color: #ff7700;
+}
+.nav > li > a i{
+    margin-right: 0 !important;
+}
