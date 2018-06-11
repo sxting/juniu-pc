@@ -70,7 +70,9 @@ export class BindWechartStoreComponent {
                 if (typeof (e.data.success) !== 'undefined') {
                     if (e.data.success === true) {
                         self.errorAlter('授权成功');
-                        self.router.navigate(['/manage/storeList/wxStore', { storeId: self.storeId }]);
+                        if (self.storeId) {
+                            self.router.navigate(['/manage/storeList/wxStore', { storeId: self.storeId }]);
+                        }
                         modal.destroy()
                     } else {
                         self.errorAlter('授权失败');
@@ -81,7 +83,7 @@ export class BindWechartStoreComponent {
         }
 
     }
-    gotoWeChat(){
+    gotoWeChat() {
         window.open('https://mp.weixin.qq.com/')
     }
     errorAlter(err: any) {
