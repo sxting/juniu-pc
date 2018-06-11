@@ -272,7 +272,7 @@
 </ng-template>
 
 <!-- 口碑客 -->
-<nz-modal [(nzVisible)]="isVisible" nzWidth ="800"  nzTitle="关联口碑账号" nzOkText="确定" (nzOnOk)="handleOk()">
+<nz-modal [(nzVisible)]="isVisible" nzWidth ="800"  nzTitle="关联口碑账号" nzOkText="确定" (nzOnOk)="handleOk()" (nzOnCancel)="handleCancel('koubeike')">
   <div class="reserve-record-alert" style="height: 400px;">
     <iframe class="all-iframe" id="koubeikeFrame" [src]="trustedUrl" frameborder="0" scrolling="auto" height="100%" width="100%"></iframe>
   </div>
@@ -280,7 +280,7 @@
 
 
 <!--选择入淘首图的弹框-->
-<nz-modal [(nzVisible)]="isVisibleImg" nzWidth ="500" [nzFooter]="null"  nzTitle="选择入淘首图" nzOkText="确定">
+<nz-modal [(nzVisible)]="isVisibleImg" nzWidth ="500" [nzFooter]="null"  nzTitle="选择入淘首图" nzOkText="确定"  (nzOnCancel)="handleCancel('rutao')">
   <!--修改卡面背景-->
   <nz-form-text class="btn-photo-clip">
     <span class="btn-img">点击上传入淘首图</span>
