@@ -275,7 +275,7 @@ export class ManageService {
   //授权状态
   wxStatus(data: any) {
     let apiUrl = '//w.juniuo.com/wxapp/checkAuth.json';
-    let req = FunctionUtil.obectToURLSearchParams({ merchantId: data });
+    let req = FunctionUtil.obectToURLSearchParams({ merchantId: data, timestamp: new Date().getTime() });
     return this.http.get(apiUrl, { merchantId: data }).map((response: Response) => response).catch(error => {
       return Observable.throw(error);
     });
