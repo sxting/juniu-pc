@@ -108,64 +108,42 @@ export class RuleSettingComponent implements OnInit {
 
   //员工选中的ID
   getStaffIds(event: any){
-      console.log(event);
-      if(event){
-          this.selectStaffIds = event.staffIds;
-      }
+    this.selectStaffIds = event.staffIds? event.staffIds : '';
   }
 
   //员工选中的数量
   getSelectStaffNum(event: any){
-      if(event){
-          this.selectStaffNumber = event.selectStaffNum;
-      }
+    this.selectStaffNumber = event.selectStaffNum? event.selectStaffNum : 0;
   }
 
   //商品选中的ID
   getproductIds(event: any){
-      if(event){
-          this.productIds = event.staffIds;
-      }
+    this.productIds = event.staffIds? event.staffIds : '';
   }
 
   //商品选中的数量
   getSelectProductNumber(event: any){
-      console.log(event);
-      if(event){
-          this.selectProductNumber = event.selectStaffNum;
-      }
+    this.selectProductNumber = event.selectStaffNum? event.selectStaffNum : 0;
   }
 
   //会员卡选中的ID
   getCardConfigRuleIds(event: any){
-      console.log(event);
-      if(event){
-          this.cardConfigRuleIds = event.staffIds;
-      }
+    this.cardConfigRuleIds = event.staffIds? event.staffIds : '';
   }
 
   //会员卡选中的数量
   getSelectCardNumber(event: any){
-      console.log(event);
-      if(event){
-          this.selectCardNumber = event.selectStaffNum;
-      }
+    this.selectCardNumber = event.selectStaffNum? event.selectStaffNum : 0;
   }
 
   //服务项目选中的ID
   getSeviceItemsIds(event: any){
-      console.log(event);
-      if(event){
-          this.seviceItemsIds = event.staffIds;
-      }
+    this.seviceItemsIds = event.staffIds? event.staffIds : '';
   }
 
   //服务项目选中的数量
   getSelectSeviceItemsNumber(event: any){
-      console.log(event);
-      if(event){
-          this.selectSeviceItemsNumber = event.selectStaffNum;
-      }
+    this.selectSeviceItemsNumber = event.selectStaffNum? event.selectStaffNum : 0;
   }
 
   //提成的发生改变的时候
@@ -309,6 +287,7 @@ export class RuleSettingComponent implements OnInit {
 
   //拿到项目对应的数量/总数/ID
   getOthersData(cardListInfor: any){
+      console.log(cardListInfor);
       let selectIds = '';
       let selectNumber = 0;
       let allNumber = 0;
@@ -324,7 +303,6 @@ export class RuleSettingComponent implements OnInit {
           selectNumber = selectIds.split(',').length;
           allNumber = selectIds.split(',').length;
       }
-      console.log(selectIds + '-' + selectNumber + '-' + allNumber);
       return selectIds + '-' + selectNumber + '-' + allNumber;
   }
 
@@ -397,6 +375,10 @@ export class RuleSettingComponent implements OnInit {
                   this.loading = false;
                   if(type === 'GOODS'){
                       this.productListInfor = this.changeDataProduct(res.data);
+
+                      console.log(this.productListInfor);
+                      console.log(this.getOthersData(this.productListInfor));
+
                       let dataInfor = this.getOthersData(this.productListInfor).split('-');
                       this.productIds = dataInfor[0];
                       this.selectProductNumber = parseInt(dataInfor[1]);
