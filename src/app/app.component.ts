@@ -34,12 +34,14 @@ export class AppComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private localStorageService: LocalStorageService,
+    private route: ActivatedRoute,
     private titleSrv: TitleService,
     @Inject(DA_SERVICE_TOKEN) private tokenService: TokenService
   ) { }
 
   ngOnInit() {
     var token = this.tokenService.get().token;
+    let that = this;
     var userInfo = this.localStorageService.getLocalstorage(USER_INFO);
     let sign = FunctionUtil.getUrlStringBySearch('sign') ? FunctionUtil.getUrlStringBySearch('sign') : FunctionUtil.getUrlString('sign');
     let url = FunctionUtil.getUrlStringBySearch('url') ? FunctionUtil.getUrlStringBySearch('url') : FunctionUtil.getUrlString('url');
@@ -51,7 +53,6 @@ export class AppComponent implements OnInit {
         this.router.navigate(['/passport/login']);
       }
     }
-    var that = this;
     // this.router.events
     //   .filter(event => event instanceof NavigationEnd)
     //   .map(() => this.activatedRoute)

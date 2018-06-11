@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { KoubeiService } from "../shared/koubei.service";
 import { DomSanitizer } from '@angular/platform-browser';
 import { LocalStorageService } from '@shared/service/localstorage-service';
-import { APP_TOKEN, REFRESH, STORES_INFO } from '@shared/define/juniu-define';
+import { APP_TOKEN, REFRESH } from '@shared/define/juniu-define';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { Config } from '@shared/config/env.config';
 declare var QRCode: any;
@@ -48,7 +48,6 @@ export class KoubeiProductListComponent implements OnInit {
     merchantLogin: boolean = false;//商家登录
     providerLogin: boolean = false;//服务商登录
 
-
     constructor(
         private http: _HttpClient,
         private koubeiService: KoubeiService,
@@ -72,27 +71,24 @@ export class KoubeiProductListComponent implements OnInit {
     ngOnInit() {
         let self = this;
         //门店列表
-        if (this.localStorageService.getLocalstorage(STORES_INFO) && JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
-            let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-                JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-            let list = {
-              storeId: '',
-              storeName: '全部门店'
-            };
-            storeList.splice(0, 0, list);//给数组第一位插入值
-            this.storeList = storeList;
-            this.storeId = '';
-        }
+        let storeList = JSON.parse(this.localStorageService.getLocalstorage('alipayShops')) ?
+          JSON.parse(this.localStorageService.getLocalstorage('alipayShops')) : [];
+        let list = {
+          storeId: '',
+          storeName: '全部门店'
+        };
+        storeList.splice(0, 0, list);//给数组第一位插入值
+        this.storeList = storeList;
+        this.storeId = '';
 
         let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
             JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
 
         this.alipayPid = UserInfo.alipayPid;
         this.ifAlipayPidShow = this.alipayPid === '' || this.alipayPid === null ? false : true;
-
         let Refresh = this.localStorageService.getLocalstorage('Refresh') ?  this.localStorageService.getLocalstorage('Refresh') : '';
 
-        if(this.alipayPid&&Refresh == ''){
+        if(this.alipayPid && Refresh == ''){
           this.refreshProductList();
           this.localStorageService.setLocalstorage(REFRESH, true);
         }else {
@@ -152,9 +148,7 @@ export class KoubeiProductListComponent implements OnInit {
             self.createQrcode(index, id);
         }, 50);
     }
-    hideQrcode() {
-        this.activeIndex = 0;
-    }
+    hideQrcode() {  this.activeIndex = 0; }
 
     //复制商品
     copyProduct(itemId: string) {

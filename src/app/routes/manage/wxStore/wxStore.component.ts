@@ -15,8 +15,7 @@ import { Validators } from '@angular/forms';
     styleUrls: ['./wxStore.component.less']
 })
 export class WxStoreComponent implements OnInit {
-    StoresInfo: any = this.localStorageService.getLocalstorage(STORES_INFO) ? JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-    storeId: any = this.StoresInfo[0] ? this.StoresInfo[0].storeId : '';
+    storeId: any ;
     submitting = false;
     form: FormGroup;
     values: any[] = null;

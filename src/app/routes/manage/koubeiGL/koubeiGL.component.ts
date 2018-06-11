@@ -39,44 +39,68 @@ export class KoubeiGLComponent implements OnInit {
     ngOnInit(): void {
         this.storeId = this.route.snapshot.params['storeId'];
         this.branchName = this.route.snapshot.params['branchName'];
-        this.alipayShop = this.localStorageService.getLocalstorage(USER_INFO) ? JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)).alipayShops : [];
+        this.alipayShop = this.localStorageService.getLocalstorage(USER_INFO) ? JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)).alipayShopList : [];
         this.alipayShopId = this.alipayShop ? this.alipayShop[0].shopId : '';
     }
     selectStoreInfo(e) {
         this.alipayShopId = e;
     }
-    baocun() {
-        let self = this;
-        let data = {
-            storeId: this.storeId,
-            alipayShopId: this.alipayShopId
-        }
-        if (!this.alipayShopId) this.errorAlert('请选择口碑门店')
-        else {
-            this.submitting = true;
-            self.manageService.matchKoubeiShop(data).subscribe(
-                (res: any) => {
-                    if (res.success) {
-                        this.router.navigate(['/manage/storeList']);
-                    } else {
-                        self.modalSrv.error({
-                            nzTitle: '温馨提示',
-                            nzContent: res.errorInfo
-                        });
-                    }
-                    this.submitting = false;
-                },
-                (error) => {
-                    self.msg.warning(error)
-                }
-            );
-        }
+    // baocun() {
+    //     let self = this;
+    //     let data = {
+    //         storeId: this.storeId,
+    //         alipayShopId: this.alipayShopId
+    //     }
+    //     if (!this.alipayShopId) this.errorAlert('请选择口碑门店')
+    //     else {
+    //         this.submitting = true;
+    //         self.manageService.matchKoubeiShop(data).subscribe(
+    //             (res: any) => {
+    //                 if (res.success) {
+    //                     this.router.navigate(['/manage/storeList']);
+    //                 } else {
+    //                     self.modalSrv.error({
+    //                         nzTitle: '温馨提示',
+    //                         nzContent: res.errorInfo
+    //                     });
+    //                 }
+    //                 this.submitting = false;
+    //             },
+    //             (error) => {
+    //                 self.msg.warning(error)
+    //             }
+    //         );
+    //     }
 
-    }
+    // }
     quxiao() {
         this.router.navigate(['/manage/storeList']);
     }
-
+    baocun() {
+        let data = {
+            timestamp: new Date().getTime(),
+            platformMapperId: this.alipayShopId,
+            platformType: 'ALIPAY',
+            storeId: this.storeId
+        }
+        this.manageService.bindingPlatform(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    // this.modalSrv.success({ nzTitle: '温馨提示' });
+                    this.router.navigate(['/manage/storeList']);
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+                this.submitting = false;
+            },
+            (error) => {
+                this.errorAlert(error)
+            }
+        );
+    }
     errorAlert(err: any) {
         this.modalSrv.error({
             nzTitle: '温馨提示',

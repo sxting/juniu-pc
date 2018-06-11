@@ -9,7 +9,40 @@
     <p>如果您已经是口碑商家，您只需要<a>点击关联</a> 即可用桔牛系统管理线上线下所有门店和生意。</p>
     <p>如果您还不是口碑商家，您可以先到口碑平台进行<a>开店</a>。(不知道如何开店？<a>联系我们</a>为您提供运营支持)</p>
     <div style="margin-top:20px;">
-        <button class="buttons" style="margin-right:20px;" nz-button nzType="primary" (click)="bindkoubei()" type="submit">点击关联</button>
+        <button class="buttons" style="margin-right:20px;" nz-button nzType="primary" (click)="bindkoubei(modalContent3)" type="submit">点击关联</button>
         <button class="buttons" nz-button (click)="matching()">去口碑平台开店</button>
     </div>
 </nz-card>
+
+
+<ng-template #modalContent3>
+    <div class="associatedAccount">
+        <p>系统检测到您尚未关联口碑账号，暂时无法使用此功能。</p>
+        <p>如果您尚未注册口碑账号，您可以
+            <a class="" href="javascript:;">点此注册</a>
+        </p>
+        <p>如果您已注册口碑账号，您可以使用口碑商家总账号支付宝扫描下方二维码，进行授权关联。</p>
+    </div>
+    <div class="associatedAccount-steps">
+        <nz-card [nzBordered]="false">
+            <nz-steps>
+                <nz-step nzTitle="步骤一"></nz-step>
+                <nz-step nzTitle="步骤二"></nz-step>
+                <nz-step nzTitle="步骤三"></nz-step>
+            </nz-steps>
+            <div class="clearfix steps">
+                <p class="fl">
+                    <span>打开支付宝App</span>
+                    <span>登录口碑商家总账号</span>
+                </p>
+                <p class="fl">扫描下方二维码</p>
+                <p class="fl">点击“确认授权”按钮</p>
+            </div>
+            <div class="steps-images">
+                <img src="../../../../assets/img/pay.png" />
+                <img [src]="imgQrcodeUrl" />
+                <img src="../../../../assets/img/sure.png" />
+            </div>
+        </nz-card>
+    </div>
+</ng-template>
