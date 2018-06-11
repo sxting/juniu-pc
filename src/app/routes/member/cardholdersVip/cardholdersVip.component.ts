@@ -58,7 +58,6 @@ export class CardholdersVipComponent {
     Total2: any = 1;
     pageIndex: any = 1;
     pageIndex2: any = 1;
-    StoresInfo: any = this.localStorageService.getLocalstorage(STORES_INFO) ? JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
     gender: any;
     customer_phone: any;
     customer_name: any;

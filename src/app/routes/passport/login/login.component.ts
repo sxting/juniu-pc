@@ -50,8 +50,8 @@ export class UserLoginComponent implements OnDestroy, OnInit {
     }
     ngOnInit(): void {
         this.modalSrv.closeAll();
-        let sign = FunctionUtil.getUrlStringBySearch('sign') ? FunctionUtil.getUrlStringBySearch('sign') : this.route.snapshot.params['sign'];
-        let url = FunctionUtil.getUrlStringBySearch('url') ? FunctionUtil.getUrlStringBySearch('url') : this.route.snapshot.params['url'];
+        let sign = FunctionUtil.getUrlString('sign') ? FunctionUtil.getUrlString('sign') : this.route.snapshot.params['sign'];
+        let url = FunctionUtil.getUrlString('url') ? FunctionUtil.getUrlString('url') : this.route.snapshot.params['url'];
         // let sign1 = this.route.snapshot.params['sign'] ? this.route.snapshot.params['sign'] : this.route.snapshot.params['sign'];
         // let url1 = this.route.snapshot.params['url'] ? this.route.snapshot.params['url'] : this.route.snapshot.params['url'];
         this.tokenService.set({ token: '-1' });
@@ -87,8 +87,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
         this.memberService.loginToken(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    this.localStorageService.setLocalstorage(STORES_INFO, JSON.stringify(res.data.stores));
-                    this.localStorageService.setLocalstorage(ALIPAY_SHOPS, JSON.stringify(res.data['alipayShops']));
+                    this.localStorageService.setLocalstorage(ALIPAY_SHOPS, JSON.stringify(res.data['alipayShopList']));
                     this.localStorageService.setLocalstorage(USER_INFO, JSON.stringify(res.data));
                     this.localStorageService.setLocalstorage(MODULES, JSON.stringify(res.data['modules']));
                     this.tokenSetFun(token, url);

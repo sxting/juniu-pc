@@ -25,7 +25,6 @@ export class TouristComponent implements OnInit {
     isVerb: boolean = false;//是否抹零
     isVerb2: boolean = false;
     hasAuth: any;
-    StoresInfo: any = this.localStorageService.getLocalstorage(STORES_INFO) ? JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
     shopList: any = []
     yjcardList: any = [];
     cardTypeList: any = [];
