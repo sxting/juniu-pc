@@ -699,4 +699,23 @@ export class FunctionUtil {
     return parseInt(String(f * m), 10) / m;
   }
 
+  //检查是否有违禁词的方法
+  static checkKeyword(str: any) {
+    var words = '最终解释权,团购券,静坐,变态,储值卡,充值卡,会员卡,VIP卡,打折卡,年卡,美容卡,便秘,健身卡,玻尿酸,美瞳,套现,微信,美团,医疗,下注,奶粉,癌症,金银,废物,代谢,￥,套现,日你';
+    var wordArr = words.split(',');
+
+    // 进行检查，没有匹配的返回false
+    for (var i = 0; i < wordArr.length; i++) {
+      var word = wordArr[i];
+
+      // 正则检查关键词，发现有匹配的返回该关键词
+      var patt = new RegExp(word, 'i');
+      if (patt.test(str)) {
+        //alert(productName + " matched " + word);
+        return word;
+      }
+    }
+    return false;
+  }
+
 }

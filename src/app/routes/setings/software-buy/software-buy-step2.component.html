@@ -14,7 +14,7 @@
     </nz-alert>
   </div>
 
-  <simple-table #st [columns]="columns" [data]="dataList" [loading]="loading" (checkboxChange)="checkboxChange($event)">
+  <simple-table #st [columns]="columns" [data]="dataList" [loading]="loading" (change)="change($event)" (checkboxChange)="checkboxChange($event)">
     <ng-template st-row="status" let-i></ng-template>
   </simple-table>
     <div class="btn-box">

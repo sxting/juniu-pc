@@ -146,7 +146,6 @@ export class AddKoubeiProductComponent implements OnInit {
                 }
             }
         }
-
         this.cityStoreList = this.getCityList(storeList);//将门店列表数据格式转换成按照城市分类
         this.changeAllData();//获取到所有的门店ID及其num
 
@@ -288,7 +287,7 @@ export class AddKoubeiProductComponent implements OnInit {
                 nzCancelText: null,
                 nzOkText: '保存',
                 nzOnOk: function(){
-                  this.ifShowStoreErrorTips = this.selectStoresIds === ''? true : false;
+                  self.ifShowStoreErrorTips = self.selectStoresIds === ''? true : false;
                 }
             });
     }
@@ -354,8 +353,15 @@ export class AddKoubeiProductComponent implements OnInit {
       this.isVisible = false;
       this.router.navigate(['/koubei/product/list']);
     }
+    //关闭关联口碑客及其入淘的弹框
+    handleCancel(type: string): void {
+      let isVisible = this.isVisible;
+      let isVisibleImg = this.isVisibleImg;
+      this.isVisible = type === 'koubeike'? false : isVisible;
+      this.isVisibleImg = type === 'rutao'? false : isVisibleImg;
+    }
 
-    /*********************数据处理开始**************************/
+  /*********************数据处理开始**************************/
 
     //获取到所有的门店ID及其num
     changeAllData(){
@@ -385,6 +391,7 @@ export class AddKoubeiProductComponent implements OnInit {
                 }
             }
         }
+
         if (this.selectStoresIds) {
             this.selectStoresIds = this.selectStoresIds.substring(1);
             this.storesChangeNum = this.selectStoresIds.split(',').length;
@@ -744,9 +751,20 @@ export class AddKoubeiProductComponent implements OnInit {
                     let startDate = res.data.validityPeriodRangeFrom ? res.data.validityPeriodRangeFrom : '';
                     let endDate = res.data.validityPeriodRangeTo ? res.data.validityPeriodRangeTo : '';
                     let dateRange = startDate === '' && endDate === ''? null : [ new Date(startDate), new Date(endDate)];
-                    let originalPrice = parseFloat(res.data.originalPrice) / 100 + '';
-                    let currentPrice = parseFloat(res.data.currentPrice) / 100 + '';
+                    let originalPrice = '';
+                    let currentPrice = '';
+                    if((parseFloat(res.data.originalPrice) / 100).toString().split('.')[1]){
+                      originalPrice = (parseFloat(res.data.originalPrice) / 100).toString().split('.')[1].length == 1 ? parseFloat(res.data.originalPrice) / 100 + '0' : parseFloat(res.data.originalPrice) / 100 + '';
+                    }else{
+                      originalPrice = parseFloat(res.data.originalPrice) / 100 + '';
+                    }
+                    if((parseFloat(res.data.currentPrice) / 100).toString().split('.')[1]){
+                      currentPrice = (parseFloat(res.data.currentPrice) / 100).toString().split('.')[1].length == 1?  parseFloat(res.data.currentPrice) / 100 + '0' : parseFloat(res.data.currentPrice) / 100 + '';
+                    }else{
+                      currentPrice = parseFloat(res.data.currentPrice) / 100 + '';
+                    }
                     self.categoryId = res.data.categoryId && res.data.categoryId !== null? res.data.categoryId : '';
+                    let verifyEnableTimes = res.data.verifyEnableTimes === 1 && res.data.verifyFrequency === 'simple'? 2 : res.data.verifyEnableTimes;
 
                     //商品首图
                     self.picId = res.data.picId;//首图ID
@@ -820,7 +838,7 @@ export class AddKoubeiProductComponent implements OnInit {
                       expiryDay:[ expiryDay, Validators.compose([ Validators.required, Validators.pattern(`[0-9]+`), Validators.min(7), Validators.max(36 * 10) ])],
                       picId: [ res.data.picId, [ Validators.required ] ],
                       verifyFrequency: [ res.data.verifyFrequency, [ Validators.required ] ],//核销类型
-                      verifyEnableTimes:[ res.data.verifyEnableTimes, Validators.compose([ Validators.required, Validators.pattern(`[0-9]+`), Validators.min(2), Validators.max(5 * 10) ])],//多次核销的次数
+                      verifyEnableTimes:[ verifyEnableTimes, Validators.compose([ Validators.required, Validators.pattern(`[0-9]+`), Validators.min(2), Validators.max(5 * 10) ])],//多次核销的次数
                       validityPeriodType:[ validityPeriodType, [ Validators.required ] ],//核销类型
                       dateRange:[ dateRange, [  ] ],
                       weight: [ res.data.weight, [  ] ],
@@ -844,24 +862,7 @@ export class AddKoubeiProductComponent implements OnInit {
         );
     }
 
-    //检查是否有违禁词的方法
-    checkKeyword(str: any) {
-        var words = '最终解释权,团购券,静坐,变态,储值卡,充值卡,会员卡,VIP卡,打折卡,年卡,美容卡,便秘,健身卡,玻尿酸,美瞳,套现,微信,美团,医疗,下注,奶粉,癌症,金银,废物,代谢,￥,套现,日你';
-        var wordArr = words.split(',');
 
-        // 进行检查，没有匹配的返回false
-        for (var i = 0; i < wordArr.length; i++) {
-            var word = wordArr[i];
-
-            // 正则检查关键词，发现有匹配的返回该关键词
-            var patt = new RegExp(word, 'i');
-            if (patt.test(str)) {
-                //alert(productName + " matched " + word);
-                return word;
-            }
-        }
-        return false;
-    }
 
     /*** 校验购买须知及其详细内容**/
     checkoutTaoCanData(obj: any) {
@@ -883,13 +884,13 @@ export class AddKoubeiProductComponent implements OnInit {
                                 self.msg.warning('商品描述详情不能为纯数字');
                                 flag = false;
                                 return flag;
-                            } else if (self.checkKeyword(details)) {
-                                let word = self.checkKeyword(details);
+                            } else if (FunctionUtil.checkKeyword(details)) {
+                                let word = FunctionUtil.checkKeyword(details);
                                 self.msg.warning('商品描述详情不能有违禁词"' + word + '"请修改!');
                                 flag = false;
                                 return flag;
-                            } else if (self.checkKeyword(weekData.title)) {
-                                let wordsTitle = self.checkKeyword(weekData.title);
+                            } else if (FunctionUtil.checkKeyword(weekData.title)) {
+                                let wordsTitle = FunctionUtil.checkKeyword(weekData.title);
                                 self.msg.warning('商品描述标题不能有违禁词"' + wordsTitle + '"请修改!');
                                 flag = false;
                                 return flag;
@@ -905,8 +906,8 @@ export class AddKoubeiProductComponent implements OnInit {
                 for (let i = 0; i < weekData.details.length; i++) {//details里面的全部数据
                     let details = weekData.details[i];
                     if (details) {//有details的时
-                        if (self.checkKeyword(details)) {
-                            let words = self.checkKeyword(details);
+                        if (FunctionUtil.checkKeyword(details)) {
+                            let words = FunctionUtil.checkKeyword(details);
                             self.msg.warning('商品描述详情不能有违禁词"' + words + '"请修改!');
                             flag = false;
                         } else if (!pattern.test(details)) {
@@ -974,92 +975,100 @@ export class AddKoubeiProductComponent implements OnInit {
 
     //提交数据
     submit() {
-    let self = this;
-    let buyerNotes: any = [];//购买须知
-    let descriptions: any = [];//详情
-    this.changeDataDetail(this.descriptions, descriptions);
-    this.changeDataDetail(this.buyerNotes, buyerNotes);
-    for (const i in this.form.controls) {
-      this.form.controls[ i ].markAsDirty();
-      this.form.controls[ i ].updateValueAndValidity();
-    }
-    if(this.form.invalid){
-      return;
-    }else if(this.checkoutTaoCanData(buyerNotes) && this.checkoutTaoCanData(descriptions)){
-      //商品分类信息
-      let categorysNameTran = '';
-      categorysNameTran = this.form.controls.categoryName.value == null? '' : this.form.controls.categoryName.value.join('－');
-      let koubeiProductId = this.ifcopy ? '' : this.koubeiProductId;//如果复制的话,不传递koubeiProductId
-      let dateRange = this.form.controls.dateRange.value;
-      let startDate = dateRange? FunctionUtil.changeDateToSeconds(dateRange[0]): '';
-      let endDate = dateRange? FunctionUtil.changeDateToSeconds(dateRange[1]) : '';
-      let imageIdsArray: any[] = [];
-      this.imageArray.forEach((image: any) => {
-        if (image.imageId !== '') {
-          imageIdsArray.push(image.imageId);
-        }
-      });
-      this.picIds = imageIdsArray.join(',');
-
-      let params = {
-        productName: this.form.controls.productName.value,
-        categoryName: categorysNameTran,
-        categoryId: this.categoryId,
-        koubeiProductId: koubeiProductId,
-        originalPrice: parseFloat(this.form.controls.originalPrice.value)*100,
-        currentPrice: parseFloat(this.form.controls.currentPrice.value)*100,
-        productNote: JSON.stringify(buyerNotes),
-        productInfo: JSON.stringify(descriptions),
-        stock: this.form.controls.stock.value,
-        weight: this.form.controls.weight.value,
-        tbCover:this.tbCover,
-        picIds: this.picIds,
-        picId: this.picId,
-        expiryDay: this.form.controls.validityPeriodType.value == 'FIXED'? 360:Number(this.form.controls.expiryDay.value),
-        validityPeriodType: this.form.controls.validityPeriodType.value,
-        validityPeriodRangeFrom: this.form.controls.validityPeriodType.value == 'FIXED'&& startDate? startDate : '',
-        validityPeriodRangeTo: this.form.controls.validityPeriodType.value == 'FIXED'&& endDate? endDate : '',
-        putawayDate: this.putawayDate? FunctionUtil.changeDateToSeconds(this.putawayDate) : '',
-        soldOutDate: this.soldOutDate? FunctionUtil.changeDateToSeconds(this.soldOutDate) : '',
-        putaway: this.status,
-        storeIds: this.selectStoresIds,
-        verifyFrequency: this.form.controls.verifyFrequency.value,
-        verifyEnableTimes: this.form.controls.verifyFrequency.value == 'simple'? 1 : Number(this.form.controls.verifyEnableTimes.value)
-      };
-      this.submitting = true;
-      this.koubeiService.saveKoubeiProductInfor(params).subscribe(
-        (res: any) => {
-          self.submitting = false;
-          if (res.success) {
-            setTimeout(() => {
-              self.msg.success(`提交成功`);
-              if(self.koubeiProductId){
-                self.router.navigate(['/koubei/product/list']);
-              }else{
-                let itemId = res.data;
-                self.modalSrv.warning({
-                  nzTitle: '商品创建成功',
-                  nzContent: '想帮商家极速获客？马上设置口碑客分佣推广！',
-                  nzOkText: '去设置',
-                  nzMaskClosable: false,
-                  nzOnOk: function () {
-                    self.extension(itemId);
-                  }
-                });
-              }
-            }, 1000);
-          } else {
-            this.modalSrv.error({
-              nzTitle: '温馨提示',
-              nzContent: res.errorInfo
-            });
+      let self = this;
+      let buyerNotes: any = [];//购买须知
+      let descriptions: any = [];//详情
+      this.changeDataDetail(this.descriptions, descriptions);
+      this.changeDataDetail(this.buyerNotes, buyerNotes);
+      for (const i in this.form.controls) {
+        this.form.controls[ i ].markAsDirty();
+        this.form.controls[ i ].updateValueAndValidity();
+      }
+      if(this.form.invalid){
+        return;
+      }else if(FunctionUtil.checkKeyword(this.form.controls.productName.value)){
+        let checkItemName = FunctionUtil.checkKeyword(this.form.controls.productName.value);
+        self.msg.warning("商品名称中存在禁止关键词'" + checkItemName + "'，请修改！");
+        return;
+      }else if(this.checkoutTaoCanData(buyerNotes) && this.checkoutTaoCanData(descriptions)){
+        //商品分类信息
+        let categorysNameTran = '';
+        categorysNameTran = this.form.controls.categoryName.value == null? '' : this.form.controls.categoryName.value.join('－');
+        let koubeiProductId = this.ifcopy ? '' : this.koubeiProductId;//如果复制的话,不传递koubeiProductId
+        let dateRange = this.form.controls.dateRange.value;
+        let startDate = dateRange? FunctionUtil.changeDateToSeconds(dateRange[0]): '';
+        let endDate = dateRange? FunctionUtil.changeDateToSeconds(dateRange[1]) : '';
+        let imageIdsArray: any[] = [];
+        this.imageArray.forEach((image: any) => {
+          if (image.imageId !== '') {
+            imageIdsArray.push(image.imageId);
           }
-        },
-        error => {
-          this.msg.warning(error);
-        }
-      );
-    }
+        });
+        this.picIds = imageIdsArray.join(',');
+
+        let params = {
+          productName: this.form.controls.productName.value,
+          categoryName: categorysNameTran,
+          categoryId: this.categoryId,
+          koubeiProductId: koubeiProductId,
+          originalPrice: parseFloat(this.form.controls.originalPrice.value)*100,
+          currentPrice: parseFloat(this.form.controls.currentPrice.value)*100,
+          productNote: JSON.stringify(buyerNotes),
+          productInfo: JSON.stringify(descriptions),
+          stock: this.form.controls.stock.value,
+          weight: this.form.controls.weight.value,
+          tbCover:this.tbCover,
+          picIds: this.picIds,
+          picId: this.picId,
+          expiryDay: this.form.controls.validityPeriodType.value == 'FIXED'? 360:Number(this.form.controls.expiryDay.value),
+          validityPeriodType: this.form.controls.validityPeriodType.value,
+          validityPeriodRangeFrom: this.form.controls.validityPeriodType.value == 'FIXED'&& startDate? startDate : '',
+          validityPeriodRangeTo: this.form.controls.validityPeriodType.value == 'FIXED'&& endDate? endDate : '',
+          putawayDate: this.putawayDate? FunctionUtil.changeDateToSeconds(this.putawayDate) : '',
+          soldOutDate: this.soldOutDate? FunctionUtil.changeDateToSeconds(this.soldOutDate) : '',
+          putaway: this.status,
+          storeIds: this.selectStoresIds,
+          verifyFrequency: this.form.controls.verifyFrequency.value,
+          verifyEnableTimes: this.form.controls.verifyFrequency.value == 'simple'? 1 : Number(this.form.controls.verifyEnableTimes.value)
+        };
+        this.submitting = true;
+        this.koubeiService.saveKoubeiProductInfor(params).subscribe(
+          (res: any) => {
+            self.submitting = false;
+            if (res.success) {
+              setTimeout(() => {
+                self.msg.success(`提交成功`);
+                if(self.koubeiProductId){
+                  self.router.navigate(['/koubei/product/list']);
+                }else{
+                  let itemId = res.data;
+                  self.modalSrv.warning({
+                    nzTitle: '商品创建成功',
+                    nzContent: '想帮商家极速获客？马上设置口碑客分佣推广！',
+                    nzOkText: '去设置',
+                    nzMaskClosable: false,
+                    nzCancelText: '取消',
+                    nzOnOk: function () {
+                      self.extension(itemId);
+                    },
+                    nzOnCancel: function(itemId){
+                      this.router.navigate(['/koubei/product/list']);
+                    }
+                  });
+                }
+              }, 1000);
+            } else {
+              this.modalSrv.error({
+                nzTitle: '温馨提示',
+                nzContent: res.errorInfo
+              });
+            }
+          },
+          error => {
+            this.msg.warning(error);
+          }
+        );
+      }
   }
 
 }

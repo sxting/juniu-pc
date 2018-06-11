@@ -6,6 +6,7 @@ import {STORES_INFO} from "@shared/define/juniu-define";
 import {SoftTransferService} from "./soft-transfer.service";
 import {SetingsService} from "../shared/setings.service";
 import {ActivatedRoute} from "@angular/router";
+import {FunctionUtil} from "@shared/funtion/funtion-util";
 
 @Component({
   selector: 'soft-buy-step2',
@@ -23,6 +24,7 @@ export class SoftBuyStep2Component implements OnInit {
 
   loading = false;
   selectedRows: any = [];
+  selectedPagesRows: any = [];
   totalCallNo: any = 0;
   columns: any[] = [
     {title: '', index: 'key', type: 'checkbox'},
@@ -40,14 +42,35 @@ export class SoftBuyStep2Component implements OnInit {
 
   dataList: any = [];
 
+  currentPage: any = 1;
+
   ngOnInit() {
     this.getPackageStores();
   }
 
+  change(e: any) {
+    this.currentPage = e.pi;
+  }
+
   checkboxChange(list: any) {
-    this.selectedRows = list;
+    let self = this;
+    this.selectedPagesRows.forEach(function (item: any) {
+      if(self.currentPage == item.page) {
+        item.selectedRows = list;
+      }
+    });
+
+    this.selectedRows = [];
+    this.selectedPagesRows.forEach(function (item: any) {
+      self.selectedRows = self.selectedRows.concat(item.selectedRows)
+    });
+
     this.totalCallNo = this.selectedRows.reduce(
-      (total, cv) => total + cv.realAmountData,
+      (total, cv) => {
+        let result = Number(total) + Number(cv.realAmountData);
+        let fixNum: any = (Number(result) + 1).toFixed(2);
+        return (fixNum - 1).toFixed(2)
+      },
       0,
     );
   }
@@ -81,15 +104,49 @@ export class SoftBuyStep2Component implements OnInit {
     this.setingsService.getPackageStores(data).subscribe(
       (res: any) => {
         this.loading = false;
+        let self = this;
         if(res.success) {
           this.dataList = res.data.items;
+          let selectedArr = [];
           this.dataList.forEach(function (item: any, index: any) {
             item.key = index;
             item.disabled = !item.selectable;
             item.amountOffsetData = item.amountOffset/100;
             item.realAmountData = item.realAmount/100;
-            item.daysRemaining = item.daysRemaining == -1 ? '永久' : item.daysRemaining
+            item.daysRemaining = item.daysRemaining == -1 ? '永久' : item.daysRemaining;
+            item.checked = item.selected;
+
+            if(item.checked) {
+              selectedArr.push(item);
+            }
+            // self.item.storeArr.forEach(function (store: any) {
+            //   if(store.storeId === item.storeId) {
+            //     item.checked = true;
+            //   }
+            // });
           });
+
+          let pageCount = Math.ceil(this.dataList.length/10);
+          for(let i=1; i<=pageCount; i++) {
+            this.selectedPagesRows.push({page: i, selectedRows: []})
+          }
+
+          // for(let i=1; i<=this.dataList.length; i++) {
+          //   for(let j=1; j<=pageCount; j++) {
+          //     this.selectedPagesRows[j-1]
+          //   }
+          // }
+
+          this.selectedRows = selectedArr;
+          this.totalCallNo = this.selectedRows.reduce(
+            (total, cv) => {
+              let result = Number(total) + Number(cv.realAmountData);
+              let fixNum: any = (Number(result) + 1).toFixed(2);
+              return (fixNum - 1).toFixed(2)
+            },
+            0,
+          );
+
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',

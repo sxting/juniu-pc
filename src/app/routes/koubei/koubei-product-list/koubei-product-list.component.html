@@ -22,7 +22,7 @@
                     <nz-form-label nzFor="storeList">选择门店</nz-form-label>
                     <nz-form-control>
                         <nz-select [(ngModel)]="storeId" name="status" id="status" [nzPlaceHolder]="'全部门店'" [nzShowSearch]="true">
-                            <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.storeName" [nzValue]="i.storeId"></nz-option>
+                            <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.shopName" [nzValue]="i.shopId"></nz-option>
                         </nz-select>
                     </nz-form-control>
                 </nz-form-item>
@@ -109,7 +109,7 @@
 </ng-template>
 
 <!--关联口碑账号-->
-<nz-modal [(nzVisible)]="isVisible" nzWidth ="800" [nzFooter]="null"  nzTitle="关联口碑账号" nzOkText="确定" nzCancelText="取消"  (nzOnCancel)="handleCancel()">
+<nz-modal [(nzVisible)]="isVisible" nzWidth ="800" [nzFooter]="null"  nzTitle="关联口碑账号" nzOkText="确定" nzCancelText="取消" (nzOnCancel)="handleCancel()">
   <div class="associatedAccount">
     <p>系统检测到您尚未关联口碑账号，暂时无法使用此功能。</p>
     <p>如果您尚未注册口碑账号，您可以 <a class="" target="_blank" href="https://auth.alipay.com/login/ant_sso_index.htm">点此注册</a></p>

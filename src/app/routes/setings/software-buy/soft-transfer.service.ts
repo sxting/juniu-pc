@@ -6,7 +6,7 @@ export class SoftTransferService {
 
   step: 0 | 1 | 2 | 3 = 0;
   package: any;
-  storeArr: any;
+  storeArr: any = [];
   totalPrice: any = 0;
 
   orderNo: any ='';

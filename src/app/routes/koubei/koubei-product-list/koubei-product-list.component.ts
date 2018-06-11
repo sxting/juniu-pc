@@ -74,8 +74,8 @@ export class KoubeiProductListComponent implements OnInit {
         let storeList = JSON.parse(this.localStorageService.getLocalstorage('alipayShops')) ?
           JSON.parse(this.localStorageService.getLocalstorage('alipayShops')) : [];
         let list = {
-          storeId: '',
-          storeName: '全部门店'
+          shopId: '',
+          shopName: '全部门店'
         };
         storeList.splice(0, 0, list);//给数组第一位插入值
         this.storeList = storeList;
@@ -83,19 +83,10 @@ export class KoubeiProductListComponent implements OnInit {
 
         let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
             JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
-
         this.alipayPid = UserInfo.alipayPid;
         this.ifAlipayPidShow = this.alipayPid === '' || this.alipayPid === null ? false : true;
-        let Refresh = this.localStorageService.getLocalstorage('Refresh') ?  this.localStorageService.getLocalstorage('Refresh') : '';
-
-        if(this.alipayPid && Refresh == ''){
-          this.refreshProductList();
-          this.localStorageService.setLocalstorage(REFRESH, true);
-        }else {
-          // 请求口碑商品列表
-          this.getKoubeiProductListInfor(this.batchQuery);
-        }
-
+        // 请求口碑商品列表
+        this.getKoubeiProductListInfor(this.batchQuery);
         //检查商家登陆还是服务商登陆
         if(UserInfo.alipayOperatorType){
             if(UserInfo.alipayOperatorType == 'MERCHANT'||UserInfo.alipayOperatorType == 'MER_STAFF'){//商家
@@ -108,7 +99,6 @@ export class KoubeiProductListComponent implements OnInit {
         }else {//如果是空串的话默认为服务商登陆
             this.providerLogin = true;
         }
-
         this.isVisible = this.alipayPid? false : true;//关联口碑账号
         // let Pid = 'BINDING_ALIPAY_' + this.alipayPid;
         // var goEasy = new GoEasy({
@@ -120,7 +110,6 @@ export class KoubeiProductListComponent implements OnInit {
         //     console.log(message);
         //   }
         // });
-
     }
 
     /**************************页面基础操作开始*********************************/
