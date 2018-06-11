@@ -150,6 +150,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
             (res: any) => {
                 if (res.success) {
                     this.localStorageService.setLocalstorage(USER_INFO, JSON.stringify(res.data));
+                    this.localStorageService.setLocalstorage(ALIPAY_SHOPS, JSON.stringify(res.data['alipayShopList']));
                     this.tokenSetFun(res.data.token);
                 } else {
                     this.modalSrv.error({
@@ -171,6 +172,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
             (res: any) => {
                 if (res.success) {
                     this.localStorageService.setLocalstorage(USER_INFO, JSON.stringify(res.data));
+                    this.localStorageService.setLocalstorage(ALIPAY_SHOPS, JSON.stringify(res.data['alipayShopList']));
                     this.tokenSetFun(res.data.token);
                 } else {
                     this.modalSrv.error({

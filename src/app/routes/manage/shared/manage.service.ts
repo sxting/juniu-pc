@@ -25,7 +25,7 @@ export class ManageService {
 
   getStaffListByStoreId(storeId: string) {
     let apiUrl = Config.API1 + 'account/merchant/staff/select.json';
-    let req = FunctionUtil.obectToURLSearchParams({ storeId: storeId, timestamp: new Date().getTime()});
+    let req = FunctionUtil.obectToURLSearchParams({ storeId: storeId, timestamp: new Date().getTime() });
     return this.http.get(apiUrl, { storeId: storeId, timestamp: new Date().getTime() }).map((response: Response) => response).catch(error => {
       return Observable.throw(error);
     });
@@ -423,7 +423,7 @@ export class ManageService {
   //门店字典 /dic/get/location.json
   getLocation(data) {
     let apiUrl = Config.API1 + 'account/dic/get/location.json';
-    return this.http.get(apiUrl,data).map((response: Response) => response).catch(error => {
+    return this.http.get(apiUrl, data).map((response: Response) => response).catch(error => {
       return Observable.throw(error);
     });
   }
@@ -475,7 +475,7 @@ export class ManageService {
   //员工角色请求
   rolesSelect(data: any) {
     let apiUrl = this.apiStaff + '/merchant/role/select.json';
-    return this.http.get(apiUrl,data)
+    return this.http.get(apiUrl, data)
       .map((response: Response) => response)
       .catch(error => {
         return Observable.throw(error);
@@ -779,9 +779,19 @@ export class ManageService {
   }
 
   // 选择门店
-  selectStores(data: any){
+  selectStores(data: any) {
     let apiUrl = Config.API1 + 'account/merchant/store/select.json';
-    return this.http.get(apiUrl,  data )
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  //绑定第三方平台
+  bindingPlatform(data: any) {
+    let apiUrl = Config.API1 + 'account/merchant/store/binding/platform.json';
+    return this.http.post(apiUrl, data)
       .map((response: Response) => response)
       .catch(error => {
         return Observable.throw(error);
