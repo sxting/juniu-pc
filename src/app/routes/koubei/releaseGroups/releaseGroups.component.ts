@@ -102,9 +102,10 @@ export class ReleaseGroupsComponent implements OnInit {
             inventory: [null, [Validators.required, Validators.pattern(/^[1-9]\d*$/), Validators.minLength(1), Validators.maxLength(8)]],
             peopleNumber: [null, [Validators.pattern(/^[1-9]\d*$/), Validators.minLength(1), Validators.maxLength(8)]],
             timeLimit: [null, [Validators.pattern(/^[1-9]\d*$/), Validators.max(24), Validators.min(1)]],
-            originalPrice: [null, [Validators.required, Validators.pattern(/^[1-9]\d*$/), Validators.max(99999999), Validators.min(1)]],
-            presentPrice: [null, [Validators.required, Validators.pattern(/^[1-9]\d*$/), Validators.max(99999999), Validators.min(1)]],
+            originalPrice: [null, [Validators.required, Validators.pattern(/^[0-9]+(.[0-9]{1,2})?$/), Validators.max(99999999), Validators.min(0.1)]],
+            presentPrice: [null, [Validators.required, Validators.pattern(/^[0-9]+(.[0-9]{1,2})?$/), Validators.max(99999999), Validators.min(0.1)]],
             time: [null, [Validators.required]],
+            time2: [null, [Validators.required]],
             mock: [false]
 
         });
@@ -145,7 +146,8 @@ export class ReleaseGroupsComponent implements OnInit {
             let descriptions: any = [];//详情
             this.changeDataDetail(this.descriptions, descriptions);
             this.changeDataDetail(this.buyerNotes, buyerNotes);
-
+            this.startTime = this.formatDateTime(this.form.value.time[0], 'start');
+            this.endTime = this.formatDateTime(this.form.value.time[1], 'end');
             let data = {
                 pinTuanId: this.pinTuanId,
                 pinTuanName: this.pinTuanName.value,
