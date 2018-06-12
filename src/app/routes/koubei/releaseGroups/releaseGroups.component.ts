@@ -11,7 +11,7 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { KoubeiService } from "../shared/koubei.service";
 import { LocalStorageService } from "../../../shared/service/localstorage-service";
-import { STORES_INFO, KOUBEI_ITEM_CATEGORYS, CITYLIST } from './../../../shared/define/juniu-define';
+import { STORES_INFO, KOUBEI_ITEM_CATEGORYS, CITYLIST, ALIPAY_SHOPS } from './../../../shared/define/juniu-define';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
@@ -90,7 +90,7 @@ export class ReleaseGroupsComponent implements OnInit {
         private koubeiService: KoubeiService,
         private router: Router,
         private fb: FormBuilder,
-
+        private localStorageService: LocalStorageService,
         private modalSrv: NzModalService,
         private route: ActivatedRoute,
     ) {
@@ -211,8 +211,9 @@ export class ReleaseGroupsComponent implements OnInit {
         }
     }
     ngOnInit() {
-        let storeList = JSON.parse(localStorage.getItem('alipayShops')) ?
-            JSON.parse(localStorage.getItem('alipayShops')) : [];
+        let storeList = JSON.parse(localStorage.getItem(ALIPAY_SHOPS)) ?
+            JSON.parse(localStorage.getItem(ALIPAY_SHOPS)) : [];
+        console.log(storeList)
         this.pinTuanId = this.route.snapshot.params['pinTuanId'];
         this.statusFlag = this.route.snapshot.params['status'];
         this.cityNameFun();
@@ -231,8 +232,8 @@ export class ReleaseGroupsComponent implements OnInit {
         }
     }
     cityNameFun() {
-        let storeList = JSON.parse(localStorage.getItem('alipayShops')) ?
-            JSON.parse(localStorage.getItem('alipayShops')) : [];
+        let storeList = JSON.parse(this.localStorageService.getLocalstorage(ALIPAY_SHOPS)) ?
+            JSON.parse(this.localStorageService.getLocalstorage(ALIPAY_SHOPS)) : [];
         if (storeList) {
             CITYLIST.forEach(function (i: any) {
                 storeList.forEach((ele: any, index: number, arr: any) => {
