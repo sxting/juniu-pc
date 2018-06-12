@@ -350,7 +350,7 @@
             <nz-form-label nzXs="24" nzFor="originalPrice" nzSm="7" nzRequired>原价</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="8">
                 <nz-input-group nzSize="large">
-                    <input nz-input formControlName="originalPrice" maxlength="8" placeholder="请输入项目原价">
+                    <input nz-input type="number" formControlName="originalPrice" maxlength="8" placeholder="请输入项目原价">
                 </nz-input-group>
                 <nz-form-explain *ngIf="originalPrice.dirty && originalPrice.errors">原价格式书写有误</nz-form-explain>
             </nz-form-control>
@@ -359,7 +359,7 @@
             <nz-form-label nzXs="24" nzFor="presentPrice" nzSm="7" nzRequired>拼团价 </nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="8">
                 <nz-input-group nzSize="large">
-                    <input nz-input formControlName="presentPrice" onkeyup="if(this.value<0)this.value = 0;if(this.value>99999999)this.value =99999999;" maxlength="8" placeholder="请输入项目拼团价">
+                    <input nz-input type="number" formControlName="presentPrice" maxlength="8" placeholder="请输入项目拼团价">
                 </nz-input-group>
                 <nz-form-explain *ngIf="presentPrice.dirty && presentPrice.errors">拼团价格式书写有误</nz-form-explain>
             </nz-form-control>
@@ -447,10 +447,13 @@
                 <nz-form-label nzXs="24" nzFor="time" nzSm="7">活动日期</nz-form-label>
                 <nz-form-control nzXs="24" nzSm="12" nzMd="8">
                     <nz-range-picker formControlName="time" nzShowTime></nz-range-picker>
-                    <!-- <nz-datepicker style="width: 138px;" [nzDisabled]="!canMofidy" (ngModelChange)="_startTime=$event;_startValueChange($event)"
-                                [ngModel]="_startTime" [nzDisabledDate]="_disabledStartDate1" [nzFormat]="'YYYY-MM-DD'" [nzPlaceHolder]="'开始时间'"></nz-datepicker>
-                            <nz-datepicker style="width: 138px;" [nzDisabled]="!canMofidy" (ngModelChange)="_endTime=$event;_endValueChange($event)"
-                                [ngModel]="_endTime" [nzDisabledDate]="_disabledEndDate2" [nzFormat]="'YYYY-MM-DD'" [nzPlaceHolder]="'截止时间'"></nz-datepicker> -->
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label nzXs="24" nzFor="time2" nzSm="7">核销截止日期</nz-form-label>
+                <nz-form-control nzXs="24" nzSm="12" nzMd="8">
+                    <nz-date-picker formControlName="time2" (ngModelChange)="endValueChange($event)" nzShowTime></nz-date-picker>
+                    <p class="product-tip">核销截止日期不能早于活动结束日期</p>
                 </nz-form-control>
             </nz-form-item>
             <nz-form-item>

@@ -49,9 +49,9 @@ export class RulesStep2Component implements OnInit {
         this.formData = {
             validateType: [ self.validateType[0].type, [ Validators.required ] ],
             validate: [ null , [ ]],
-            pay_account: [ null, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{2})?$`) ,Validators.min(0.01)])],
+            pay_account: [ null, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`) ,Validators.min(0.01)])],
             effectivityDays: [ 1, Validators.compose([Validators.required, Validators.pattern(`[0-9]+`) ,Validators.min(1)])],
-            amount: [ null, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{2})?$`)] )],
+            amount: [ null, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)] )],
             public: [ 1, [ Validators.min(1), Validators.max(3) ] ],
             isPinCard: [ self.isPinCardArr[0].ifPin , [ Validators.required ]]
         };
