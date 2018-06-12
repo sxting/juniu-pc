@@ -156,7 +156,8 @@
                         </div>
                         <p *ngIf="paramsId == '07'">{{coupon.couponDefProductName}}</p>
                         <p *ngIf="paramsId == '05' || paramsId == '12'">使用范围：{{coupon.consumeLimitProductNames}}</p>
-                        <p>不可用时间：
+                        <p *ngIf="(paramsId == '05' || paramsId == '12') && coupon.couponDefType == 'GIFT'">礼品：{{coupon.couponDefProductName}}</p>
+                        <p [class.dis-none]="(paramsId == '05' || paramsId == '12') && coupon.couponDefType == 'GIFT'">不可用时间：
                             <span *ngIf="!coupon.disabledWeekDate">无限制</span>
                             <span *ngIf="coupon.disabledWeekDate">
                                 {{selectedWeek1}}至{{selectedWeek2}}（{{unUseStartTime}}-{{unUseEndTime}}）
@@ -341,7 +342,8 @@
                     </div>
                     <p *ngIf="paramsId == '07'">{{selectedGiftProduct}}</p>
                     <p *ngIf="paramsId == '05' || paramsId == '12'">使用范围：{{selectedProductName}}</p>
-                    <p>不可用时间：
+                    <p *ngIf="(paramsId == '05' || paramsId == '12') && couponType == '4'">礼品：{{selectedGiftProduct}}</p>
+                    <p [class.dis-none]="(paramsId == '05' || paramsId == '12') && couponType == '4'">不可用时间：
                         <span *ngIf="!unUseTime">无限制</span>
                         <span *ngIf="unUseTime">{{selectedWeek1}}至{{selectedWeek2}}（{{unUseStartTime}}-{{unUseEndTime}}）</span>
                     </p>
@@ -424,7 +426,8 @@
                 </div>
                 <p *ngIf="paramsId == '07'">{{item.couponDefProductName}}</p>
                 <p *ngIf="paramsId == '05' || paramsId == '12'">使用范围：{{item.consumeLimitProductNames}}</p>
-                <p>不可用时间：
+                <p *ngIf="(paramsId == '05' || paramsId == '12') && item.couponDefType == 'GIFT'">礼品：{{item.couponDefProductName}}</p>
+                <p [class.dis-none]="(paramsId == '05' || paramsId == '12') && item.couponDefType == 'GIFT'">不可用时间：
                     <span *ngIf="!item.disabledWeekDate">无限制</span>
                     <span *ngIf="item.disabledWeekDate">
                         {{item.selectedWeek1}}至{{item.selectedWeek2}}（{{item.unUseStartTime}}-{{item.unUseEndTime}}）
