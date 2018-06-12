@@ -28,7 +28,7 @@ export class PayDownloadComponent implements OnInit {
   imagePath: any = '';
   uploadImageResult: any = '';
   imageId: any = '';
-  colorArr: any = ['00ff00', '0000CD', 'FFA500'];
+  colorArr: any = ['62b900', '108ee9', 'FF6600'];
   myColor: string = 'ffffff';
   color: string = this.myColor;
 

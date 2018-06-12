@@ -107,6 +107,8 @@ export class SingleCouponComponent implements OnInit {
 
     showAutoRenewal: boolean = true;
 
+    loading: boolean = false;
+
     constructor(
         private router: Router,
         private route: ActivatedRoute,
@@ -922,16 +924,19 @@ export class SingleCouponComponent implements OnInit {
             };
         }
 
+        this.loading = true;
         this.marketingService.createCoupon(params).subscribe(
             (res: any) => {
+                this.loading = false;
                 if (res.success) {
                     let self = this;
                     this.modalSrv.confirm({
                         nzTitle: '温馨提示',
                         nzContent: '单品券创建成功',
                         nzOnOk: () => {
-                            self.router.navigateByUrl('/koubei/marketing/list');
-                        }
+                            self.router.navigateByUrl('/koubei/coupon/list');
+                        },
+                        nzCancelText: null
                     });
                 } else {
                     this.modalSrv.create({
@@ -1039,16 +1044,19 @@ export class SingleCouponComponent implements OnInit {
             };
         }
 
+        this.loading = true;
         this.marketingService.editCoupon(params).subscribe(
             (res: any) => {
+                this.loading = false;
                 if (res.success) {
                     let self = this;
                     this.modalSrv.confirm({
                         nzTitle: '温馨提示',
                         nzContent: '单品券修改成功',
                         nzOnOk: () => {
-                            self.router.navigateByUrl('/koubei/marketing/list');
-                        }
+                            self.router.navigateByUrl('/koubei/coupon/list');
+                        },
+                        nzCancelText: null
                     });
                 } else {
                     this.modalSrv.create({
