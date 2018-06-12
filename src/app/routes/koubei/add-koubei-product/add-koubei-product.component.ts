@@ -1050,7 +1050,7 @@ export class AddKoubeiProductComponent implements OnInit {
                       self.extension(itemId);
                     },
                     nzOnCancel: function(itemId){
-                      this.router.navigate(['/koubei/product/list']);
+                      self.router.navigate(['/koubei/product/list']);
                     }
                   });
                 }
