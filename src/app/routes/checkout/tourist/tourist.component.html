@@ -105,7 +105,7 @@
                 <div *ngFor="let item of xfList;let ind = index;" class="{{item.open?'huise':''}}">
                   <div class="xfTop">
                     <div class="xfLeft icon-jinzhi iconfont" (click)="xfCloseShop(ind)"></div>
-                    <div style="width:310px;" (click)="xfCheckshop(item.productId)">
+                    <div style="width:300px;" (click)="xfCheckshop(item.productId)">
                       <div class="xfMiddle {{item.type}}">{{item.productNo}}</div>
                       <div class="xfRight">{{item.productName}}</div>
                       <div class="xfxiala {{item.open?'icon-xiala1':'icon-shangla'}} iconfont"></div>

@@ -24,8 +24,8 @@ export class StoresInforComponent implements OnInit {
     alipayShopId: string = '';
     store: any;
 
-    // @Input()
-    // style: string = 'width: 600px';
+    @Input()
+    widthNum: boolean = false;
 
     @Input()
     nzXs: any = '';
