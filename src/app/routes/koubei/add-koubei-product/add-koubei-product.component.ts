@@ -24,7 +24,7 @@ export class AddKoubeiProductComponent implements OnInit {
     formData: any;
     categoryId: string = '';//分类信息ID
     submitting = false;
-    today = new Date(new Date().getTime() - 24*60*60*1000); //提前一周 ==开始时间
+    today = new Date(new Date().getTime() - 12*60*60*1000); //提前一周 ==开始时间
     koubeiItemCategorys: any;//口碑分类信息
     num: number = 0;
     ifcopy: boolean = false;//查看是否是复制进来的
@@ -45,7 +45,7 @@ export class AddKoubeiProductComponent implements OnInit {
     //上下架时间
     status: any;//上下架状态
     soldOutDate: Date = null;
-    putawayDate: Date = null;
+    putawayDate: Date = new Date();
     disabled: boolean = false;
 
     //上传图片的时候
@@ -181,8 +181,8 @@ export class AddKoubeiProductComponent implements OnInit {
         }
         this.formData = {
             productName: [ null, [ Validators.required ,Validators.max(40)] ],
-            originalPrice: [null, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{2})?$`), Validators.max(1000 * 5)])],
-            currentPrice: [null, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{2})?$`), Validators.max(1000 * 5)])],
+            originalPrice: [null, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.max(1000 * 5)])],
+            currentPrice: [null, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.max(1000 * 5)])],
             categoryName:[ null, [  ] ],
             stock: [ 99999999, [ Validators.required, Validators.pattern(`[0-9]+`)] ],
             expiryDay:[ 360, Validators.compose([ Validators.required, Validators.pattern(`[0-9]+`), Validators.min(7), Validators.max(36 * 10) ])],
@@ -232,8 +232,8 @@ export class AddKoubeiProductComponent implements OnInit {
         if(this.form.controls.verifyFrequency.value === 'simple' && this.form.controls.verifyEnableTimes.value == ''){
             this.form = this.fb.group({
                     productName: [ productName, [ Validators.required ,Validators.max(40)] ],
-                    originalPrice: [ originalPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{2})?$`), Validators.max(1000 * 5)])],
-                    currentPrice: [ currentPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{2})?$`), Validators.max(1000 * 5)])],
+                    originalPrice: [ originalPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.max(1000 * 5)])],
+                    currentPrice: [ currentPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.max(1000 * 5)])],
                     categoryName:[ categoryName, [  ] ],
                     stock: [ stock, [ Validators.required, Validators.pattern(`[0-9]+`)] ],
                     expiryDay:[ expiryDay, Validators.compose([ Validators.required, Validators.pattern(`[0-9]+`), Validators.min(7), Validators.max(36 * 10) ])],
@@ -334,7 +334,7 @@ export class AddKoubeiProductComponent implements OnInit {
 
     //校验核销开始时间
     disabledDate = (current: Date): boolean => {
-      if(this.putawayDate && (this.putawayDate.getTime() >= this.today.getTime())){
+      if(this.putawayDate && (this.putawayDate.getTime() >= new Date().getTime())){
         return differenceInDays(current, this.putawayDate) < 0;
       }else{
         return differenceInDays(current, this.today) <= 0;
@@ -643,8 +643,8 @@ export class AddKoubeiProductComponent implements OnInit {
 
                     this.form = this.fb.group({
                       productName: [ productName, [ Validators.required ,Validators.max(40)] ],
-                      originalPrice: [ originalPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{2})?$`), Validators.max(1000 * 5)])],
-                      currentPrice: [ currentPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{2})?$`), Validators.max(1000 * 5)])],
+                      originalPrice: [ originalPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.max(1000 * 5)])],
+                      currentPrice: [ currentPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.max(1000 * 5)])],
                       categoryName:[ categoryName, [  ] ],
                       stock: [ stock, [ Validators.required, Validators.pattern(`[0-9]+`)] ],
                       expiryDay:[ expiryDay, Validators.compose([ Validators.required, Validators.pattern(`[0-9]+`), Validators.min(7), Validators.max(36 * 10) ])],
@@ -832,7 +832,7 @@ export class AddKoubeiProductComponent implements OnInit {
                     this.formData = {
                       productName: [ res.data.productName, [ Validators.required ,Validators.max(40)] ],
                       originalPrice: [ originalPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{2})?$`), Validators.max(1000 * 5)])],
-                      currentPrice: [ currentPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{2})?$`), Validators.max(1000 * 5)])],
+                      currentPrice: [ currentPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.max(1000 * 5)])],
                       categoryName:[ categorysName, [  ] ],
                       stock: [ res.data.stock, [ Validators.required, Validators.pattern(`[0-9]+`)] ],
                       expiryDay:[ expiryDay, Validators.compose([ Validators.required, Validators.pattern(`[0-9]+`), Validators.min(7), Validators.max(36 * 10) ])],
