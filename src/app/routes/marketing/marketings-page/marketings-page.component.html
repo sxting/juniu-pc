@@ -47,7 +47,8 @@
             <nz-form-label nzXs="24" nzSm="5" nzRequired>活动开关</nz-form-label>
             <nz-form-control nzXs="24" nzSm="15" nzMd="15">
                 <nz-switch formControlName="activity_on_off"></nz-switch>
-                <span>系统自动给过生日的会员发送短信和优惠券</span>
+                <span *ngIf="paramsId == '03'">系统自动给过生日的会员发送短信和优惠券</span>
+                <span *ngIf="paramsId == '04'">系统会在相应的节日自动发送短信和优惠券</span>
             </nz-form-control>
         </nz-form-item>
 
