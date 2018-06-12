@@ -333,8 +333,8 @@ export class OrderGroupsComponent implements OnInit {
         this.koubeiService.voucherList(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    this.koubeiProductVouchersListInfor = res.items;
-                    this.countTotal1 = res.pageInfo.countTotal;
+                    this.koubeiProductVouchersListInfor = res.data.items;
+                    this.countTotal1 = res.data.pageInfo.countTotal;
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',

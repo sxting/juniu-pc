@@ -1340,6 +1340,7 @@ export class TouristComponent implements OnInit {
         this.modalSrv.closeAll();
         this.guadanList = this.localStorageService.getLocalstorage(GUADAN) ? JSON.parse(this.localStorageService.getLocalstorage(GUADAN)) : [];
         this.xfList = this.guadanList[index].xfList;
+        this.totolMoneyFun();
         // this.memberInfo = this.shopyinList[index].vip;
         this.vipsearch = this.guadanList[index].vip.phone;
         this.searchMemberCard(true);
