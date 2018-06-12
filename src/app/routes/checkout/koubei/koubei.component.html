@@ -10,7 +10,7 @@
         </nz-tab>
         <nz-tab nzTitle="手动核销">
             <div class="member-top-middle" *ngIf="checkoutShow">
-                <jn-stores-infor *ngIf="checkoutShow" [ifStoresAll]="false" [ifStoresAuth]="true" [moduleId]="moduleId" (storeIdOutput)="selectStoreInfo($event)"></jn-stores-infor>
+                <jn-stores-infor *ngIf="checkoutShow" [ifStoresAll]="false" [ifStoresAuth]="true" [moduleId]="moduleId" (storeIdOutput)="selectStoreInfo($event.alipayShopId)"></jn-stores-infor>
             </div>
             <div class="member-top-middle">
                 <span style="margin-right:24px;">核销码:</span>
