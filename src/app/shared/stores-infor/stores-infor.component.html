@@ -2,7 +2,7 @@
   <nz-form-item>
     <nz-form-label style="display: inline-block" nzXs="{{nzXs}}" nzSm="{{nzSm1}}" nzFor="storeId" [nzRequired]="nzRequired">{{labelText}}</nz-form-label>
     <nz-form-control style="display: inline-block" nzXs="{{nzXs}}" nzSm="{{nzSm2}}">
-      <nz-select [(ngModel)]="store" name="storeId" id="storeId" (ngModelChange)="selectStore()" [nzPlaceHolder]="'请选择一个门店'" [nzShowSearch]="true">
+      <nz-select style="width: 300px;" [(ngModel)]="store" name="storeId" id="storeId" (ngModelChange)="selectStore()" [nzPlaceHolder]="'请选择一个门店'" [nzShowSearch]="true">
         <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.branchName" [nzValue]="i" [nzDisabled]="i.nzDisabled"></nz-option>
       </nz-select>
     </nz-form-control>
