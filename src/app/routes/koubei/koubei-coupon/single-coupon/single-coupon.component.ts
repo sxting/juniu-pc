@@ -930,7 +930,7 @@ export class SingleCouponComponent implements OnInit {
                         nzTitle: '温馨提示',
                         nzContent: '单品券创建成功',
                         nzOnOk: () => {
-                            self.router.navigateByUrl('/koubei/marketing/list');
+                            self.router.navigateByUrl('/koubei/coupon/list');
                         }
                     });
                 } else {
@@ -1047,7 +1047,7 @@ export class SingleCouponComponent implements OnInit {
                         nzTitle: '温馨提示',
                         nzContent: '单品券修改成功',
                         nzOnOk: () => {
-                            self.router.navigateByUrl('/koubei/marketing/list');
+                            self.router.navigateByUrl('/koubei/coupon/list');
                         }
                     });
                 } else {
