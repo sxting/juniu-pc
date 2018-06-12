@@ -11,8 +11,9 @@
     <nz-form-item>
       <nz-form-label style="display: inline-block">选择门店</nz-form-label>
       <nz-form-control style="display: inline-block">
-        <nz-select [(ngModel)]="store" (ngModelChange)="selectStoreInfo($event)" style="width: 200px;" [nzPlaceHolder]="'请选择一个门店'" [nzShowSearch]="true">
-          <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.branchName" [nzValue]="i" ></nz-option>
+        <nz-select [(ngModel)]="store" (ngModelChange)="selectStoreInfo($event)" style="width: 200px;" [nzPlaceHolder]="'请选择一个门店'"
+          [nzShowSearch]="true">
+          <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.branchName" [nzValue]="i"></nz-option>
         </nz-select>
       </nz-form-control>
     </nz-form-item>
@@ -31,14 +32,14 @@
           </div> -->
           <div class="shouyinMiddle">
             <nz-input-group nzSearch style="width:280px;margin-top:30px;" [nzSuffix]="suffixIconButton1">
-              <input type="text" [(ngModel)]="vipsearch" *ngIf="hasAuth"  nz-input placeholder="请输入手机号/姓名">
-              <input type="text" [(ngModel)]="vipsearch" *ngIf="!hasAuth" disabled  nz-input placeholder="请输入手机号/姓名">
+              <input type="text" [(ngModel)]="vipsearch" *ngIf="hasAuth" nz-input placeholder="请输入手机号/姓名">
+              <input type="text" [(ngModel)]="vipsearch" *ngIf="!hasAuth" disabled nz-input placeholder="请输入手机号/姓名">
             </nz-input-group>
             <ng-template #suffixIconButton1>
               <button nz-button nzType="primary" *ngIf="hasAuth" (click)="searchMemberCard()" nzSearch>
                 查询会员
               </button>
-              <button nz-button nzType="primary" *ngIf="!hasAuth" disabled  (click)="searchMemberCard()" nzSearch>
+              <button nz-button nzType="primary" *ngIf="!hasAuth" disabled (click)="searchMemberCard()" nzSearch>
                 查询会员
               </button>
             </ng-template>
@@ -266,14 +267,14 @@
               </button>
             </ng-template> -->
             <nz-input-group nzSearch style="width:280px;margin-top:30px;" [nzSuffix]="suffixIconButton1">
-              <input type="text" [(ngModel)]="vipsearch" *ngIf="hasAuth"  nz-input placeholder="请输入手机号/姓名">
-              <input type="text" [(ngModel)]="vipsearch" *ngIf="!hasAuth" disabled  nz-input placeholder="请输入手机号/姓名">
+              <input type="text" [(ngModel)]="vipsearch" *ngIf="hasAuth" nz-input placeholder="请输入手机号/姓名">
+              <input type="text" [(ngModel)]="vipsearch" *ngIf="!hasAuth" disabled nz-input placeholder="请输入手机号/姓名">
             </nz-input-group>
             <ng-template #suffixIconButton1>
               <button nz-button nzType="primary" *ngIf="hasAuth" (click)="searchMemberCard()" nzSearch>
                 查询会员
               </button>
-              <button nz-button nzType="primary" *ngIf="!hasAuth" disabled  (click)="searchMemberCard()" nzSearch>
+              <button nz-button nzType="primary" *ngIf="!hasAuth" disabled (click)="searchMemberCard()" nzSearch>
                 查询会员
               </button>
             </ng-template>
@@ -492,15 +493,18 @@
     <div class="vipcard">
       <h3 class="flex-1 text-lg borderLeft">优惠券</h3>
       <div class="youhuiBox">
-        <div class="youhui">
+        <div class="youhui" *ngFor="let item of ticketList">
           <div>
-            <div>100元</div>
-            <div>代金券</div>
+            <div *ngIf="item.couponDefType === 'MONEY'" style="width: 50px;">{{item.couponDefAmountByYuan}}元</div>
+            <div *ngIf="item.couponDefType === 'DISCOUNT'" style="width: 50px;">{{item.couponDefDiscount*10}}折</div>
+            <div style="width: 50px;">{{item.couponDefTypeName}}</div>
           </div>
           <div>
-            <div>国庆大酬宾</div>
-            <div>无限制</div>
-            <div>有效期：2018.02.23</div>
+            <div>{{item.couponDefName}}</div>
+            <div *ngIf="item.useLimitMoney<0&&item.consumeLimitProductIds.length===0">无限制</div>
+            <div *ngIf="item.consumeLimitProductIds.length>0?item.useLimitMoney>0:false">满{{item.useLimitMoney/100}}可用</div>
+            <div *ngIf="item.consumeLimitProductIds.length>0?item.useLimitMoney<0:false">部分商品可用</div>
+            <div>有效期：{{item.validDateEnd}}</div>
           </div>
         </div>
       </div>

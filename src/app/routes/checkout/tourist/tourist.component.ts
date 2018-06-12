@@ -244,7 +244,7 @@ export class TouristComponent implements OnInit {
                         ticketBoolean = true;
                     }
                 })
-                that.ticket = ticketBoolean ? false: that.ticket;
+                that.ticket = ticketBoolean ? false : that.ticket;
                 that.totolMoney = NP.minus(NP.divide(that.vipShowMoney, 100), ticketM)
                 that.isVerbMoney = NP.minus(NP.divide(that.vipShowMoney, 100), ticketM)
             } else {
@@ -785,6 +785,18 @@ export class TouristComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     this.ticketList = res.data;
+                    this.ticketList.forEach(function (i: any) {
+                        if (i.couponDefType === 'GIFT') {
+                            i.couponDefTypeName = '礼品券'
+                        }
+                        if (i.couponDefType === 'MONEY') {
+                            i.couponDefTypeName = '代金券'
+                        }
+                        if (i.couponDefType === 'DISCOUNT') {
+                            i.couponDefTypeName = '折扣券'
+                        }
+                    })
+                    console.log(this.ticketList);
                     that.totolMoneyFun();
                 } else {
                     this.errorAlter(res.errorInfo)
