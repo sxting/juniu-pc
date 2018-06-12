@@ -328,7 +328,11 @@ export class AddKoubeiProductComponent implements OnInit {
         }
       }else{//有上架时间的时候
         // 有上架时间的话，必须跟核销结束时间做对比，晚于上架时间，并且早于核销结束时间
-        return soldOutDate.getTime() <= this.putawayDate.getTime();
+        if(this.form.controls.dateRange.value && this.form.controls.dateRange.value[1]){//有核销结束时间
+          return soldOutDate.getTime() > this.form.controls.dateRange.value[1].getTime();
+        }else{
+          return soldOutDate.getTime() <= this.putawayDate.getTime();
+        }
       }
     };
 
