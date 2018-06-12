@@ -102,16 +102,18 @@ export class UserLoginComponent implements OnDestroy, OnInit {
         )
     }
     getCaptcha() {
-        if (this.form.value.mobile) {
-            this.count = 59;
-            this.interval$ = setInterval(() => {
-                this.count -= 1;
-                if (this.count <= 0)
-                    clearInterval(this.interval$);
-            }, 1000);
-            this.getValidCode(this.form.value.mobile, 'VALID')
-        } else {
-            this.errorAlter('请先输入手机号')
+        if (this.type === 1) {
+            if (this.form.value.mobile) {
+                this.count = 59;
+                this.interval$ = setInterval(() => {
+                    this.count -= 1;
+                    if (this.count <= 0)
+                        clearInterval(this.interval$);
+                }, 1000);
+                this.getValidCode(this.form.value.mobile, 'VALID')
+            } else {
+                this.errorAlter('请先输入手机号')
+            }
         }
     }
 

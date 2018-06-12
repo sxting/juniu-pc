@@ -238,8 +238,8 @@ export class TouristComponent implements OnInit {
             that.productIdsFun(that.xfList);
             ticketM = that.ticketCheck ? (that.ticket && that.xfList.length > 0 ? that.ticket.ticketMoney : 0) : 0;
             if (this.settleCardDTOList && this.settleCardDTOList.length > 0) {
-                that.totolMoney = NP.divide(that.vipShowMoney, 100)
-                that.isVerbMoney = NP.divide(that.vipShowMoney, 100)
+                that.totolMoney = NP.minus(NP.divide(that.vipShowMoney, 100), ticketM)
+                that.isVerbMoney = NP.minus(NP.divide(that.vipShowMoney, 100), ticketM)
             } else {
                 that.totolMoney = NP.minus(that.totolMoney, ticketM)
                 that.isVerbMoney = NP.minus(that.isVerbMoney, ticketM)
