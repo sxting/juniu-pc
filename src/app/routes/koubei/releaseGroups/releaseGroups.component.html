@@ -326,10 +326,10 @@
                             <input type="radio" *ngIf="!canMofidy" disabled (click)="ctrsFun(2)" checked name="ctrs"> 2 人
                         </span>
                         <span class="ctSpan" *ngFor="let item of ctArr">
-                            <input type="radio" *ngIf="canMofidy" (click)="ctrsFun(item.num)" name="ctrs"> {{canMofidy?item.text:''}}
+                            <input type="radio" *ngIf="canMofidy"  (click)="ctrsFun(item.num)" name="ctrs"> {{canMofidy?item.text:''}}
                             <input type="radio" *ngIf="!canMofidy" disabled (click)="ctrsFun(item.num)" name="ctrs"> {{canMofidy?'':item.text}}
                         </span>
-                        <input nz-input formControlName="peopleNumber" [style.display]="ctrsBoo ? 'block' : 'none'">
+                        <input nz-input formControlName="peopleNumber" type="number" onkeyup="if(value>100)value=100;if(value<2)value=2;" [style.display]="ctrsBoo ? 'block' : 'none'">
                     </div>
                 </nz-input-group>
                 <p class="product-tip">规定时间内拼团达到指定人数，则拼团成功，否则拼团失败且立即退款</p>

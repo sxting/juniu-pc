@@ -287,8 +287,8 @@
           </div>
           <div class="shouyinBottom">
             <div>
-              <h3 class="flex-1 text-lg borderLeft">已购会员卡充值</h3>
-              <div class="CardBigBox">
+              <h3 *ngIf="yjcardList&&yjcardList.length>0" class="flex-1 text-lg borderLeft">已购会员卡充值</h3>
+              <div *ngIf="yjcardList&&yjcardList.length>0" class="CardBigBox">
                 <div *ngFor="let item of yjcardList;let ind1 = index;" class="{{item.card.type}} ">
                   <p class="cardName">{{item.card.cardName}}</p>
                   <p class="cardMoney" *ngIf="item.card.type !== 'TIMES'">卡余额：

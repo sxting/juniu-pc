@@ -452,6 +452,14 @@ export class ReleaseGroupsComponent implements OnInit {
                     let peopleNumber = res.data.peopleNumber ? res.data.peopleNumber : null;
                     let inventory = res.data.inventory ? res.data.inventory : null;
                     let mock = res.data.mock ? res.data.mock : false;
+                    let time = [];
+                    this._startTime = new Date(res.data.startTime);
+                    this._endTime = new Date(res.data.endTime);
+                    time.push(this._startTime);
+                    time.push(this._endTime);
+                    this.validateEndTime = res.data.validateEndTime;
+
+                    this._validateEndTime = new Date(res.data.validateEndTime);
                     this.form = this.fb.group({
                         pinTuanName: [pinTuanName, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
                         inventory: [inventory, [Validators.required, Validators.pattern(/^[1-9]\d*$/), Validators.minLength(1), Validators.maxLength(8)]],
@@ -459,15 +467,14 @@ export class ReleaseGroupsComponent implements OnInit {
                         timeLimit: [timeLimit, [Validators.pattern(/^[1-9]\d*$/), Validators.max(24), Validators.min(1)]],
                         originalPrice: [originalPrice, [Validators.required, Validators.pattern(/^[1-9]\d*$/), Validators.max(99999999), Validators.min(1)]],
                         presentPrice: [presentPrice, [Validators.required, Validators.pattern(/^[1-9]\d*$/), Validators.max(99999999), Validators.min(1)]],
+                        time: [time],
+                        time2: [this._validateEndTime],
                         mock: [mock]
                     });
                     this.canMofidy = res.data.canMofidy;
                     this.startTime = res.data.startTime;
                     this.endTime = res.data.endTime;
-                    this.validateEndTime = res.data.validateEndTime;
-                    this._startTime = new Date(res.data.startTime);
-                    this._endTime = new Date(res.data.endTime);
-                    this._validateEndTime = new Date(res.data.validateEndTime);
+
                     let pictureDetails;
                     if (res.data.images) {
                         pictureDetails = res.data.images.length > 0 ? res.images : '';
