@@ -150,9 +150,14 @@
                     </div>
                     <div class="coupon-right">
                         <p>有效期：{{todayDay}}-{{coupon.validEndDate}}</p>
-                        <p *ngIf="coupon.useLimitMoney >= 0">消费满{{coupon.useLimitMoney/100}}元可用</p>
-                        <p *ngIf="coupon.useLimitMoney == '-1'">无使用门槛</p>
-                        <p>不可用时间：
+                        <div [class.dis-none]="paramsId == '07' || paramsId == '05' || paramsId == '12'">
+                            <p *ngIf="coupon.useLimitMoney >= 0">消费满{{coupon.useLimitMoney/100}}元可用</p>
+                            <p *ngIf="coupon.useLimitMoney == '-1'">无使用门槛</p>
+                        </div>
+                        <p *ngIf="paramsId == '07'">{{coupon.couponDefProductName}}</p>
+                        <p *ngIf="paramsId == '05' || paramsId == '12'">使用范围：{{coupon.consumeLimitProductNames}}</p>
+                        <p *ngIf="(paramsId == '05' || paramsId == '12') && coupon.couponDefType == 'GIFT'">礼品：{{coupon.couponDefProductName}}</p>
+                        <p [class.dis-none]="(paramsId == '05' || paramsId == '12') && coupon.couponDefType == 'GIFT'">不可用时间：
                             <span *ngIf="!coupon.disabledWeekDate">无限制</span>
                             <span *ngIf="coupon.disabledWeekDate">
                                 {{selectedWeek1}}至{{selectedWeek2}}（{{unUseStartTime}}-{{unUseEndTime}}）
@@ -198,10 +203,15 @@
                             <!--<span class="jn-color"-->
                                   <!--*ngIf="paramsId == '06' || paramsId == '13'"-->
                                   <!--(click)="onUseRangeClick('3', productListAlert)">选择可使用商品</span>-->
-                            <nz-select style="width: 200px;" nzShowSearch nzPlaceHolder="选择可使用商品" formControlName="selected_product" *ngIf="paramsId == '05' || paramsId == '12'">
+                            <nz-select style="width: 200px;" nzShowSearch nzPlaceHolder="选择可使用商品"
+                                       formControlName="selected_product"
+                                       (ngModelChange)="selectedProductChange($event)"
+                                       *ngIf="paramsId == '05' || paramsId == '12'">
                                 <nz-option *ngFor="let product of giftProductList" nzLabel="{{product.productName}}" [nzValue]="product"></nz-option>
                             </nz-select>
-
+                            <ng-container *ngIf="(paramsId == '05' || paramsId == '12') && selected_product.dirty">
+                                <nz-form-explain class="error-color" *ngIf="selected_product.errors">请选择可使用商品</nz-form-explain>
+                            </ng-container>
                         </div>
                         <p *ngIf="useRange === '3'">
                             <span [class.dis-none]="paramsId == '05' || paramsId == '12'">已选{{productIdsCount}}个商品</span>
@@ -326,12 +336,14 @@
 
                 <div class="coupon-right">
                     <p>有效期：{{todayDay}}-{{couponUseEndDay}}</p>
-                    <div [class.dis-none]="paramsId == '07'">
+                    <div [class.dis-none]="paramsId == '07' || paramsId == '05' || paramsId == '12'">
                         <p *ngIf="useMenkan">消费满{{useMenkanMoney}}元可用</p>
                         <p *ngIf="!useMenkan">无使用门槛</p>
                     </div>
                     <p *ngIf="paramsId == '07'">{{selectedGiftProduct}}</p>
-                    <p>不可用时间：
+                    <p *ngIf="paramsId == '05' || paramsId == '12'">使用范围：{{selectedProductName}}</p>
+                    <p *ngIf="(paramsId == '05' || paramsId == '12') && couponType == '4'">礼品：{{selectedGiftProduct}}</p>
+                    <p [class.dis-none]="(paramsId == '05' || paramsId == '12') && couponType == '4'">不可用时间：
                         <span *ngIf="!unUseTime">无限制</span>
                         <span *ngIf="unUseTime">{{selectedWeek1}}至{{selectedWeek2}}（{{unUseStartTime}}-{{unUseEndTime}}）</span>
                     </p>
@@ -391,9 +403,9 @@
 <ng-template #selectCoupon>
     <div>
         <nz-radio-group [(ngModel)]="couponTypeTab" (ngModelChange)="couponTabClick()">
-            <label nz-radio-button nzValue="all" [nzDisabled]="paramsId == '05' || paramsId == '12'">全部优惠券</label>
-            <label nz-radio-button nzValue="daijinquan" [nzDisabled]="paramsId == '05' || paramsId == '12'">代金券</label>
-            <label nz-radio-button nzValue="zhekouquan" [nzDisabled]="paramsId == '05' || paramsId == '12'">折扣券</label>
+            <label nz-radio-button nzValue="all" [nzDisabled]="paramsId == '05' || paramsId == '12' || paramsId == '07'">全部优惠券</label>
+            <label nz-radio-button nzValue="daijinquan" [nzDisabled]="paramsId == '05' || paramsId == '12' || paramsId == '07'">代金券</label>
+            <label nz-radio-button nzValue="zhekouquan" [nzDisabled]="paramsId == '05' || paramsId == '12' || paramsId == '07'">折扣券</label>
             <label nz-radio-button nzValue="lipinquan" [nzDisabled]="paramsId == '05' || paramsId == '12'">礼品券</label>
             <label nz-radio-button nzValue="danpinquan" [nzDisabled]="paramsId != '05' && paramsId != '12'">单品券</label>
         </nz-radio-group>
@@ -408,9 +420,14 @@
             </div>
             <div class="coupon-right">
                 <p>有效期：{{todayDay}}-{{item.validEndDate}}</p>
-                <p *ngIf="item.useLimitMoney >= 0">消费满{{item.useLimitMoney/100}}元可用</p>
-                <p *ngIf="item.useLimitMoney == '-1'">无使用门槛</p>
-                <p>不可用时间：
+                <div [class.dis-none]="paramsId == '07' || paramsId == '05' || paramsId == '12'">
+                    <p *ngIf="item.useLimitMoney >= 0">消费满{{item.useLimitMoney/100}}元可用</p>
+                    <p *ngIf="item.useLimitMoney == '-1'">无使用门槛</p>
+                </div>
+                <p *ngIf="paramsId == '07'">{{item.couponDefProductName}}</p>
+                <p *ngIf="paramsId == '05' || paramsId == '12'">使用范围：{{item.consumeLimitProductNames}}</p>
+                <p *ngIf="(paramsId == '05' || paramsId == '12') && item.couponDefType == 'GIFT'">礼品：{{item.couponDefProductName}}</p>
+                <p [class.dis-none]="(paramsId == '05' || paramsId == '12') && item.couponDefType == 'GIFT'">不可用时间：
                     <span *ngIf="!item.disabledWeekDate">无限制</span>
                     <span *ngIf="item.disabledWeekDate">
                         {{item.selectedWeek1}}至{{item.selectedWeek2}}（{{item.unUseStartTime}}-{{item.unUseEndTime}}）
