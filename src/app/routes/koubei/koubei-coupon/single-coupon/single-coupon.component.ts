@@ -657,7 +657,7 @@ export class SingleCouponComponent implements OnInit {
                         nzContent: '请输入有效的立减金额'
                     });
                     this.success = false; return;
-                } else if (parseInt(this.lijianPrice).toString().length > 5) {
+                } else if (this.lijianPrice > 99999) {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
                         nzContent: '立减金额过大'
@@ -671,7 +671,7 @@ export class SingleCouponComponent implements OnInit {
                         nzContent: '请输入有效的商品原价'
                     });
                     this.success = false; return;
-                } else if (parseInt(this.originPrice).toString().length > 5) {
+                } else if (this.originPrice > 99999) {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
                         nzContent: '商品原价过高'

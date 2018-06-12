@@ -68,7 +68,7 @@ export class KoubeiComponent implements OnInit {
     let self = this;
     let div = document.getElementById('tauthCode');
     let div2 = document.getElementById('authCode');
-    if (event.length === 12 && event.substring(0, 2) != '31') {
+    if (event && event.length === 12 && event.substring(0, 2) != '31') {
       div2.setAttribute('disabled', 'disabled');
       this.modalSrv.closeAll();
       let data = {
@@ -87,7 +87,7 @@ export class KoubeiComponent implements OnInit {
       };
       self.koubeiProductVouchersticket(data);
     }
-    if (event.length === 16 && event.substring(0, 2) == '31') {
+    if (event && event.length === 16 && event.substring(0, 2) == '31') {
       div2.setAttribute('disabled', 'disabled');
       this.modalSrv.closeAll();
       let data = {

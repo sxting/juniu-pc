@@ -76,6 +76,8 @@ export class MarketingsPageComponent implements OnInit {
     giftProductList: any = []; //礼品列表
     selectedGiftProduct: any = '赠送礼品名称';
 
+    selectedProductName: string = ''; //单品券活动 指定商品名称  用于优惠券显示;
+
     //选择优惠券
     couponTypeTab: any = 'all'; //选择优惠券类型
     couponList: any = [];
@@ -155,7 +157,8 @@ export class MarketingsPageComponent implements OnInit {
             }
         }
         if(this.paramsId == '07') {
-            this.couponType = '4'
+            this.couponType = '4'; //创建优惠券
+            this.couponTypeTab = 'lipinquan'; //选择优惠券
         } else if(this.paramsId == '08') {
             this.couponType = '3'
         } else if(this.paramsId == '09') {
@@ -358,6 +361,11 @@ export class MarketingsPageComponent implements OnInit {
         this.couponUseValidity = this.form2.value.coupon_use_validity;
         this.couponUseEndDate = FunctionUtil.getAfterSomeDay(FunctionUtil.changeDate(new Date()), this.couponUseValidity);
         this.couponUseEndDay = this.couponUseEndDate.year + '.' + this.couponUseEndDate.date.replace('-', '.');
+    }
+
+    //单品券选择指定商品  (用于优惠券的展示)
+    selectedProductChange(e: any) {
+        this.selectedProductName = e.productName;
     }
 
     //选择礼品

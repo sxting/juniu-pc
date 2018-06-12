@@ -14,14 +14,14 @@
     top: 80px;
     left: 80px;
     right: 20px;
-    bottom: 0;
+    bottom: -12px;
 }
 .settingsCollapsedFalse{
     position: absolute;
     top: 80px;
     left: 220px;
     right: 20px;
-    bottom: 20px;
+    bottom: -12px;
 }
 .renlianTrue{
     position: absolute;
@@ -393,6 +393,9 @@
 .CardBigBox{
     display: flex;
     flex-wrap: wrap;
+    height: 100px;
+    overflow: hidden;
+    overflow-y: auto;
     >div{
         width: 266px;
         height: 78px;
@@ -438,6 +441,9 @@
 .youhuiBox{
     display: flex;
     flex-wrap: wrap;
+    height: 100px;
+    overflow: hidden;
+    overflow-y: auto;
     >div{
         width: 220px;
         height: 70px;
@@ -448,7 +454,6 @@
         position: relative;        
     }
     .youhui{
-        background: url('../../../../assets/img/youhui.png') left center no-repeat;
         display: flex;
         color: #fff;    
         >div:nth-of-type(1){
@@ -458,6 +463,15 @@
             font-size: 12px;
             margin-top: 10px;
         }
+    }
+    .GIFT{
+        background: url('../../../../assets/img/youhui.png') left center no-repeat;
+    }
+    .MONEY{
+        background: url('../../../../assets/img/youhui3.png') left center no-repeat;
+    }
+    .DISCOUNT{
+        background: url('../../../../assets/img/youhui2.png') left center no-repeat;
     }
 
 }
