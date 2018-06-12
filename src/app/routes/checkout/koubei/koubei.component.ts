@@ -159,6 +159,9 @@ export class KoubeiComponent implements OnInit {
 
         if (res.success) {
           console.log(res.data);
+          this.modalSrv.success({
+            nzContent: '核销成功!'
+          });
           // swal({
           //   title: '核销成功!',
           //   html: '<div><span>核销码:</span>' + res.ticketNo + '</div>' +
