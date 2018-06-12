@@ -7,32 +7,40 @@
         </nz-tab>
     </nz-tabset>
 </nz-card>
-<div class="seachbox" style="">
-    <span>
-        <span>选择日期:</span>
-        <span>
-            <nz-date-picker  [(ngModel)]="date" (ngModelChange)="onChange($event)" ></nz-date-picker>
-        </span>
-    </span>
-    <span>
-        <jn-stores-infor style="display:inline-block !important;" [moduleId]="moduleId" [ifStoresAll]="false" [ifStoresAuth]="true" (storeIdOutput)="selectStoreInfo($event.storeId)"></jn-stores-infor>
-    </span>
-    <span>
-        <span>操作人:</span>
-        <span>
-            <nz-select style="width:100px;" [(ngModel)]="operationId" [nzPlaceHolder]="'请选择'" (ngModelChange)="staffChange($event)" [nzShowSearch]="true">
-                <nz-option *ngFor="let item of staffList"  [nzLabel]="item.staffName" [nzValue]="item.staffId"></nz-option>
-            </nz-select>
-        </span>
-    </span>
-    <span>
-        <span>操作类型:</span>
-        <span>
-            <nz-select style="width:200px;" [(ngModel)]="operationType" [nzPlaceHolder]="'请选择'" (ngModelChange)="operationTypeChange($event)" [nzShowSearch]="true">
-                <nz-option *ngFor="let item of operationTypeList"  [nzLabel]="item.typeName" [nzValue]="item.typeCode"></nz-option>
-            </nz-select>
-        </span>
-    </span>
+<div class="seachbox" style="display: flex;flex-wrap: wrap;">
+    <div style="width:400px">
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7">选择日期</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="17">
+                <nz-date-picker style="width:200px" [(ngModel)]="date" (ngModelChange)="onChange($event)"></nz-date-picker>
+            </nz-form-control>
+        </nz-form-item>
+    </div>
+    <div style="width:400px">
+        <jn-stores-infor  [nzXs]="24" [nzSm1]="7" [nzSm2]="17" style="width: 400px;display:inline-block !important;" [moduleId]="moduleId" [ifStoresAll]="false" [ifStoresAuth]="true"
+            (storeIdOutput)="selectStoreInfo($event.storeId)"></jn-stores-infor>
+    </div>
+    <div style="width:400px">
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7">操作人</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="17">
+                <nz-select style="width:172px" [(ngModel)]="operationId" [nzPlaceHolder]="'请选择'" (ngModelChange)="staffChange($event)" [nzShowSearch]="true">
+                    <nz-option *ngFor="let item of staffList" [nzLabel]="item.staffName" [nzValue]="item.staffId"></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+    </div>
+    <div style="width:400px">
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7">操作类型</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="17">
+                <nz-select style="width:172px;" [(ngModel)]="operationType" [nzPlaceHolder]="'请选择'" (ngModelChange)="operationTypeChange($event)"
+                    [nzShowSearch]="true">
+                    <nz-option *ngFor="let item of operationTypeList" [nzLabel]="item.typeName" [nzValue]="item.typeCode"></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+    </div>
 </div>
 <div class="tableBox">
     <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="data">
