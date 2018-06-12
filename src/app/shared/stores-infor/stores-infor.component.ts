@@ -21,7 +21,11 @@ export class StoresInforComponent implements OnInit {
     storeList: any = [];
     storeId: string = '';
     storeName: string = '';
+    alipayShopId: string = '';
     store: any;
+
+    // @Input()
+    // style: string = 'width: 600px';
 
     @Input()
     nzXs: any = '';
@@ -59,9 +63,10 @@ export class StoresInforComponent implements OnInit {
 
     //选择门店
     selectStore(){
-      this.storeId = this.store.storeId;
-      this.storeName = this.store.branchName;
-      this.storeIdOutput.emit({storeId: this.storeId, storeName: this.storeName});
+      this.storeId = this.store.storeId? this.store.storeId : '';
+      this.storeName = this.store.branchName? this.store.branchName : '';
+      this.alipayShopId = this.store.alipayShopId? this.store.alipayShopId : '';
+      this.storeIdOutput.emit({storeId: this.storeId, storeName: this.storeName, alipayShopId: this.alipayShopId});
     }
 
     //门店初始化
@@ -101,15 +106,17 @@ export class StoresInforComponent implements OnInit {
                   storeList.splice(0, 0, list);//给数组第一位插入值
                 }
                 this.storeList = storeList;
-                this.storeId = ''
+                this.storeId = '';
+                this.alipayShopId = '';
             }else{
               this.storeList = storeList;
               this.storeId = this.storeList[0]? this.storeList[0].storeId : '';
-              this.storeName = this.storeList[0] ? this.storeList[0].branchName : '';
+              this.storeName = this.storeList[0]? this.storeList[0].branchName : '';
+              this.alipayShopId = this.storeList[0]? this.storeList[0].alipayShopId : '';
             }
             this.store = this.storeList[0];
             this.storeListPush.emit({storeList: self.storeList});
-            this.storeIdOutput.emit({storeId: self.storeId, storeName: this.storeName });
+            this.storeIdOutput.emit({storeId: self.storeId, storeName: this.storeName, alipayShopId: this.alipayShopId});
           } else {
             this.modalSrv.error({
               nzTitle: '温馨提示',

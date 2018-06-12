@@ -621,7 +621,6 @@ export class AddKoubeiProductComponent implements OnInit {
 
     /**上传图片接口**/
     uploadImage(event: any, type: string, index:number) {
-        console.log(0);
         let self = this;
         event = event ? event : window.event;
         var file = event.srcElement ? event.srcElement.files : event.target.files; if (file) {

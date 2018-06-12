@@ -110,7 +110,6 @@ export class ProductVipListComponent implements OnInit {
         );
     }
 
-
     //选择卡类型
     changeCategory(status: boolean, idx: number, type: string) {
         this.type = type;
@@ -142,7 +141,7 @@ export class ProductVipListComponent implements OnInit {
                 if (res.success) {
                     that.loading = false;
                     res.data.cardConfig.forEach(function (item: any) {
-                      item.cardRights = item.rules[0].applyStoreIds.split(',').length + '店通用';
+                      item.cardRights = item.rules[0].applyStoreIds? item.rules[0].applyStoreIds.split(',').length + '店通用' : '0店通用';
                     });
                     that.vipItemListInfor = res.data.cardConfig;
                     that.totalElements = res.data.pageInfo.countTotal;
