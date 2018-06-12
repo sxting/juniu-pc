@@ -1,7 +1,9 @@
 <page-header></page-header>
 <div class="storeMain">
   <div class="buttonBox">
-    <button class="buttons" nz-button [routerLink]="['/manage/storeList/storeEdit']">新增门店</button>
+    <button nz-button [routerLink]="['/manage/storeList/storeEdit']" [nzType]="'primary'">
+      <span>新增门店</span>
+    </button>
     <div width="300px;">
       <nz-input-group nzSuffixIcon="anticon anticon-search" (click)="search()">
         <input [(ngModel)]="branchName" type="text" nz-input placeholder="请输入门店名称搜索">
