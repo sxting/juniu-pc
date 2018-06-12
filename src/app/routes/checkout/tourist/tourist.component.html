@@ -493,7 +493,7 @@
     <div class="vipcard">
       <h3 class="flex-1 text-lg borderLeft">优惠券</h3>
       <div class="youhuiBox">
-        <div class="youhui" *ngFor="let item of ticketList">
+        <div *ngFor="let item of ticketList" class="youhui {{item.couponDefType}}">
           <div>
             <div *ngIf="item.couponDefType === 'MONEY'" style="width: 50px;">{{item.couponDefAmountByYuan}}元</div>
             <div *ngIf="item.couponDefType === 'DISCOUNT'" style="width: 50px;">{{item.couponDefDiscount*10}}折</div>
