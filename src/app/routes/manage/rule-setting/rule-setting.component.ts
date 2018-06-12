@@ -81,9 +81,9 @@ export class RuleSettingComponent implements OnInit {
       this.deductRuleId = this.route.snapshot.params['deductRuleId'];//提成规则ID
       this.formData = {
           ruleName: [null, [Validators.required, Validators.maxLength(20)]],
-          assignRate: [ null ,Validators.compose([ Validators.pattern(`^[0-9]+(.[0-9]{2})?$`)])],//指定技师
-          normalRate: [ null ,Validators.compose([ Validators.pattern(`^[0-9]+(.[0-9]{2})?$`)])],//非指定技师
-          deductMoney: [ null ,Validators.compose([  Validators.pattern(`^[0-9]+(.[0-9]{2})?$`)])],//按固定金额提成
+          assignRate: [ null ,Validators.compose([ Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)])],//指定技师
+          normalRate: [ null ,Validators.compose([ Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)])],//非指定技师
+          deductMoney: [ null ,Validators.compose([  Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)])],//按固定金额提成
           type: [ self.extractArr[0].type, [ Validators.required] ],
       };
       this.form = self.fb.group(self.formData);
@@ -248,9 +248,9 @@ export class RuleSettingComponent implements OnInit {
                 let normalRate = res.data.type === 'RATE'?  parseFloat(res.data.normalRate)*100 : null;
                 this.formData = {
                   ruleName: [ res.data.ruleName, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
-                  assignRate: [ assignRate ,Validators.compose([ Validators.pattern(`^[0-9]+(.[0-9]{2})?$`)])],//指定技师
-                  normalRate: [ normalRate ,Validators.compose([ Validators.pattern(`^[0-9]+(.[0-9]{2})?$`)])],//非指定技师
-                  deductMoney: [ deductMoney ,Validators.compose([  Validators.pattern(`^[0-9]+(.[0-9]{2})?$`)])],//按固定金额提成
+                  assignRate: [ assignRate ,Validators.compose([ Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)])],//指定技师
+                  normalRate: [ normalRate ,Validators.compose([ Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)])],//非指定技师
+                  deductMoney: [ deductMoney ,Validators.compose([  Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)])],//按固定金额提成
                   type: [ res.data.type, [ Validators.required] ],
                 };
                 this.form = self.fb.group(self.formData);
