@@ -31,7 +31,7 @@
             </div>
           </div> -->
           <div class="shouyinMiddle">
-            <nz-input-group nzSearch style="width:280px;margin-top:30px;" [nzSuffix]="suffixIconButton1">
+            <nz-input-group nzSearch style="width:280px;" [nzSuffix]="suffixIconButton1">
               <input type="text" [(ngModel)]="vipsearch" *ngIf="hasAuth" nz-input placeholder="请输入手机号/姓名">
               <input type="text" [(ngModel)]="vipsearch" *ngIf="!hasAuth" disabled nz-input placeholder="请输入手机号/姓名">
             </nz-input-group>
@@ -105,7 +105,7 @@
                 <div *ngFor="let item of xfList;let ind = index;" class="{{item.open?'huise':''}}">
                   <div class="xfTop">
                     <div class="xfLeft icon-jinzhi iconfont" (click)="xfCloseShop(ind)"></div>
-                    <div style="width:310px;" (click)="xfCheckshop(item.productId)">
+                    <div style="width:300px;" (click)="xfCheckshop(item.productId)">
                       <div class="xfMiddle {{item.type}}">{{item.productNo}}</div>
                       <div class="xfRight">{{item.productName}}</div>
                       <div class="xfxiala {{item.open?'icon-xiala1':'icon-shangla'}} iconfont"></div>
@@ -266,7 +266,7 @@
                 查询会员
               </button>
             </ng-template> -->
-            <nz-input-group nzSearch style="width:280px;margin-top:30px;" [nzSuffix]="suffixIconButton1">
+            <nz-input-group nzSearch style="width:280px;" [nzSuffix]="suffixIconButton1">
               <input type="text" [(ngModel)]="vipsearch" *ngIf="hasAuth" nz-input placeholder="请输入手机号/姓名">
               <input type="text" [(ngModel)]="vipsearch" *ngIf="!hasAuth" disabled nz-input placeholder="请输入手机号/姓名">
             </nz-input-group>
@@ -302,7 +302,7 @@
                   <div class="chongzhi" *ngIf="item.card.type !== 'TIMES'&&item.card.type !== 'METERING'" (click)="VipcardPick(ind1)">充值</div>
                 </div>
               </div>
-              <h3 class="flex-1 text-lg borderLeft" style="margin-top:30px;">开通新会员卡</h3>
+              <h3 class="flex-1 text-lg borderLeft">开通新会员卡</h3>
               <nz-tabset (nzSelectChange)="cardTypeChange($event)">
                 <nz-tab nzTitle="储值卡"></nz-tab>
                 <nz-tab nzTitle="折扣卡"></nz-tab>
