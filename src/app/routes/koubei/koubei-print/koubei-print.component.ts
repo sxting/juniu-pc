@@ -280,11 +280,11 @@ export class KoubeiPrintComponent implements OnInit {
         let that = this;
         this.koubeiService.selectStores(data).subscribe(
             (res: any) => {
+                this.getPrintList();
+                this.formInit();
                 if (res.success) {
                     this.storeId = res.data.items[0].storeId;
                     this.stores = res.data.items;
-                    this.getPrintList();
-                    this.formInit();
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
