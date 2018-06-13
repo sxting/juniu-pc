@@ -4,6 +4,11 @@
         <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
             <nz-col nzMd="8" nzSm="24">
                 <nz-form-item>
+                    <jn-stores-infor [className]="'class1'" [className2]="'class2'" [moduleId]="moduleId" (storeIdOutput)="selectStoreInfo($event.storeId)"></jn-stores-infor>
+                </nz-form-item>
+            </nz-col>
+            <nz-col nzMd="8" nzSm="24">
+                <nz-form-item>
                     <nz-form-label nzFor="phone">会员姓名／手机号</nz-form-label>
                     <nz-form-control>
                         <input nz-input [(ngModel)]="q.phone" name="phone" placeholder="请输入会员姓名或手机号" id="phone">
@@ -22,11 +27,7 @@
                     </nz-form-control>
                 </nz-form-item>
             </nz-col>
-            <nz-col nzMd="8" nzSm="24">
-                <nz-form-item>
-                    <jn-stores-infor [moduleId]="moduleId" (storeIdOutput)="selectStoreInfo($event.storeId)"></jn-stores-infor>
-                </nz-form-item>
-            </nz-col>
+
 
             <nz-col nzMd="8" nzSm="24" *ngIf="expandForm">
                 <nz-form-item>
