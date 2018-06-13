@@ -482,10 +482,11 @@
         <div *ngFor="let item of yjcardList;let ind1 = index;" class="{{item.card.type}} ">
           <p class="cardName">{{item.card.cardName}}</p>
           <p class="cardMoney">卡余额：
-            <span class="money">{{item.card.balance/100}}</span>
+            <span *ngIf="item.card.type === 'REBATE'||item.card.type === 'STORED'" class="money">{{item.card.balance/100}}</span>
+            <span *ngIf="item.card.type === 'METERING'" class="money">{{item.card.balance}}</span>
             <span *ngIf="item.card.type === 'REBATE'||item.card.type === 'STORED'">元</span>
             <span *ngIf="item.card.type === 'METERING'">次</span>
-            <span *ngIf="item.card.type === 'TIMES'">天</span>
+            <!-- <span *ngIf="item.card.type === 'TIMES'">天</span> -->
           </p>
         </div>
       </div>

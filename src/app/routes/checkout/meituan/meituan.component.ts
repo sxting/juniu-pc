@@ -53,7 +53,7 @@ export class MeituanComponent implements OnInit {
     pageIndex: any = 1;
     pageSize: any = 10;
     countPage: any = 1;
-    moduleId:any;
+    moduleId: any;
     isShouQuan: boolean = false; //该门店是否授权
 
     deal: any = []; //团购券套餐
@@ -71,26 +71,26 @@ export class MeituanComponent implements OnInit {
 
         // if (this.localStorageService.getLocalstorage(STORES_INFO) &&
         //     JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
-            // let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-            //     JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-            // this.stores = storeList;
+        //     let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
+        //         JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
+        //     this.stores = storeList;
 
-            // this.stores.forEach(function (item: any, index: any) {
-            //     self.shops.push({
-            //         shopId: item.storeId,
-            //         shopName: item.storeName,
-            //         shopAddress: '',
-            //     });
-            // });
+        //     this.stores.forEach(function (item: any, index: any) {
+        //         self.shops.push({
+        //             shopId: item.storeId,
+        //             shopName: item.storeName,
+        //             shopAddress: '',
+        //         });
+        //     });
 
-            
+
         // }
 
-        if (this.staffType === 'STORE') {
-            this.storeId = this.stores[0].storeId;
-            this.selectedOption = this.stores[0].storeId;
-            this.checkAuth();
-        }
+        // if (this.staffType === 'STORE') {
+        //     this.storeId = this.stores[0].storeId;
+        //     this.selectedOption = this.stores[0].storeId;
+        //     this.checkAuth();
+        // }
         this.getReceiptList();
     }
 
@@ -101,14 +101,22 @@ export class MeituanComponent implements OnInit {
     }
 
     //选择门店
-    onSelectStoreClick(e:any) {
-        this.selectedOption = e;
+    onSelectStoreClick(e: any) {
+        this.selectedOption = e.storeId;
+        let self = this;
         this.storeId = this.selectedOption;
+        let shops = [];
+        let data = {
+            shopId: e.storeId,
+            shopName: e.storeName,
+            shopAddress: ''
+        }
+        shops.push(data);
         this.getReceiptList();
         if (this.storeId) {
             this.checkAuth();
             let url = 'https://e.dianping.com/open/merchant/auth?appKey=' + this.appKey + '&requestModules=' + encodeURIComponent(JSON.stringify(this.requestModules)) + '&shopList='
-                + encodeURIComponent(JSON.stringify(this.shops));
+                + encodeURIComponent(JSON.stringify(shops));
 
             this.url = this.sanitizer.bypassSecurityTrustResourceUrl(url)
         }
