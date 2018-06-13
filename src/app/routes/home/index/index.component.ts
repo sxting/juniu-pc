@@ -8,6 +8,7 @@ import { LocalStorageService } from "@shared/service/localstorage-service";
 import { STORES_INFO, USER_INFO } from "@shared/define/juniu-define";
 import { FunctionUtil } from "@shared/funtion/funtion-util";
 import { StoresInforService } from "@shared/stores-infor/shared/stores-infor.service";
+import { ManageService } from "../../manage/shared/manage.service";
 declare var echarts: any;
 
 @Component({
@@ -30,42 +31,49 @@ export class IndexComponent implements OnInit {
             "title": "快速收银",
             "logo": "./assets/img/shouyin.png",
             "href": "/checkout/tourist",
+            "menuId": '9001B1'
         },
         {
             "id": "2",
             "title": "新增预约",
             "logo": "./assets/img/yuyue.png",
             "href": "/reserve/index",
+            "menuId": '9001B2'
         },
         {
             "id": "3",
             "title": "新增会员",
             "logo": "./assets/img/xinzeng.png",
             "href": "/checkout/tourist",
+            "menuId": '9001B3'
         },
         {
             "id": "4",
             "title": "会员开卡",
             "logo": "./assets/img/kaika.png",
             "href": "/checkout/tourist",
+            "menuId": '9001B4'
         },
         {
             "id": "5",
             "title": "会员充值",
             "logo": "./assets/img/chongzhi.png",
             "href": "/checkout/tourist",
+            "menuId": '9001B5'
         },
         {
             "id": "6",
             "title": "口碑核销",
             "logo": "./assets/img/koubei.png",
             "href": "/checkout/koubei",
+            "menuId": '9001B6'
         },
         {
             "id": "7",
             "title": "美大验券",
             "logo": "./assets/img/disnping.png",
             "href": "/checkout/meituan",
+            "menuId": '9001B7'
         }
     ];
 
@@ -95,7 +103,8 @@ export class IndexComponent implements OnInit {
         private homeService: HomeService,
         private localStorageService: LocalStorageService,
         private modalSrv: NzModalService,
-        private storesInforService: StoresInforService
+        private storesInforService: StoresInforService,
+        private manageService: ManageService,
     ) {
     }
 
@@ -141,7 +150,32 @@ export class IndexComponent implements OnInit {
     }
 
     onFunctionItemClick(item: any) {
-        this.router.navigate([item.href, { id: item.id }])
+        let data = {
+            menuId: item.menuId,
+            timestamp: new Date().getTime()
+        };
+        this.manageService.menuRoute(data).subscribe(
+            (res: any) => {
+                if(res.success) {
+                    if (res.data.eventType === 'ROUTE') {
+                        if (res.data.eventRoute) {
+                            this.router.navigate([res.data.eventRoute, { id: item.id, menuId: '900201' }]);
+                        }
+                    } else if (res.data.eventType === 'NONE') {
+
+                    } else if (res.data.eventType === 'API') {
+
+                    } else if (res.data.eventType === 'REDIRECT') {
+
+                    }
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            }
+        )
     }
 
     handlePieValueFormat(value: any) {
