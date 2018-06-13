@@ -74,8 +74,7 @@ export class MarketingEffectCountComponent implements OnInit {
     hexiaotu: any;
 
     moduleId: any = '';
-
-    type: any = '';
+    type2: any = '';
 
     constructor(private route: ActivatedRoute,
                 private marketingService: MarketingService,
@@ -87,7 +86,7 @@ export class MarketingEffectCountComponent implements OnInit {
         this.moduleId = this.route.snapshot.params['menuId'];
 
         if(this.moduleId == '90070203') {
-            this.type = 'WECHAT';
+            this.type2 = 'WECHAT';
             this.options2 = this.options3;
         }
 
@@ -137,7 +136,7 @@ export class MarketingEffectCountComponent implements OnInit {
             couponDefType: this.couponDefType,
             scene: this.marketingType
         };
-        if(this.type === 'WECHAT') {
+        if(this.type2 === 'WECHAT') {
             data.marketingType = 'WECHAT';
         }
 
