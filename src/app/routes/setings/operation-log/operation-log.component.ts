@@ -22,7 +22,7 @@ export class OperationLogComponent implements OnInit {
     moduleId: any;
     operationTypeList: any;
     dataItems: any;
-    date:any
+    date:any = new Date();
     constructor(
         private setingsService: SetingsService,
         private modalSrv: NzModalService,
