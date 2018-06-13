@@ -124,6 +124,7 @@ export class TouristComponent implements OnInit {
     CustomerData: any = [];
     spinBoolean: boolean = false;
     storeList: any;
+    homeID: any;
     constructor(
         public msg: NzMessageService,
         private localStorageService: LocalStorageService,
@@ -139,6 +140,11 @@ export class TouristComponent implements OnInit {
     ngOnInit() {
         let that = this;
         this.moduleId = this.route.snapshot.params['menuId'];
+        this.homeID = this.route.snapshot.params['id'];
+        if (this.homeID === '3'||this.homeID === '4'||this.homeID === '5') {
+            this.index = 1;
+            this.change({ index: 1 })
+        }
         this.getStoresInfor();
         // this.changeFun();
         this.guadanList = this.localStorageService.getLocalstorage(GUADAN) ? JSON.parse(this.localStorageService.getLocalstorage(GUADAN)) : [];
