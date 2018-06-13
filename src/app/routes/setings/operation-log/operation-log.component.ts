@@ -87,7 +87,7 @@ export class OperationLogComponent implements OnInit {
         );
     }
     onChange(e) {
-        this.operationDate = this.formatDateTime(e, 'start');
+        this.operationDate = this.formatDateTime(e);
         this.operationLogHttp();
     }
     staffChange(e) {
@@ -108,14 +108,15 @@ export class OperationLogComponent implements OnInit {
         })
         this.operationLogHttp();
     }
-    formatDateTime(date: any, type: any) {
+    formatDateTime(date: any) {
         let year = date.getFullYear();
         let month = date.getMonth() + 1;
         let day = date.getDate();
-        return year + '-' + (month.toString().length > 1 ? month : ('0' + month)) + '-' + (day.toString().length > 1 ? day : ('0' + day)) + (type === 'start' ? ' 00:00:00' : ' 23:59:59');
+        return year + '-' + (month.toString().length > 1 ? month : ('0' + month)) + '-' + (day.toString().length > 1 ? day : ('0' + day));
     }
     selectStoreInfo(e) {
         this.storeId = e;
+        this.operationDate = this.formatDateTime(new Date());
         this.operationLogHttp();
         this.selectStaffHttp();
     }
