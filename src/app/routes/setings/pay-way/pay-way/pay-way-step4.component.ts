@@ -21,7 +21,9 @@ export class PayWayStep4Component implements OnInit {
     bigImgPath: string;
 
     storeId: any = '';
-    moduleId: any = 1;
+    moduleId: any = '';
+
+    loading: boolean = false;
 
     constructor(
         public item: TransferService,
@@ -259,9 +261,11 @@ export class PayWayStep4Component implements OnInit {
 
         console.log(data);
 
+        this.loading = true;
         if(this.item.itemData) {
             this.setingsService.updatePayWay(data).subscribe(
                 (res: any) => {
+                    this.loading = false;
                     if(res.success) {
                         ++this.item.step;
                     } else {
@@ -281,6 +285,7 @@ export class PayWayStep4Component implements OnInit {
         } else {
             this.setingsService.submitPayWay(data).subscribe(
                 (res: any) => {
+                    this.loading = false;
                     if(res.success) {
                         ++this.item.step;
                     } else {

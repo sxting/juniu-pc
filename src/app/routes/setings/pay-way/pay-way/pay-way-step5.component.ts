@@ -30,10 +30,10 @@ export class PayWayStep5Component implements OnInit {
 
     ngOnInit() {
       this.moduleId = this.route.snapshot.params['menuId'];
-      // let store: any = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-        //     JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-        // this.storeId = store[0].storeId ? store[0].storeId : '';
-        // this.getPayWayStatus();
+
+      if(this.item.status != '2') { //不是审核未通过
+          this.item.status = '0'
+      }
     }
 
   onSelectStoreChange(e: any) {
