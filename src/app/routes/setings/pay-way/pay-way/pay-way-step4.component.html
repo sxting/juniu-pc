@@ -71,7 +71,7 @@
     <nz-form-item style="margin-top: 80px">
         <nz-form-control [nzSpan]="19" [nzOffset]="5">
             <!--[disabled]="form.invalid"-->
-            <button nz-button [nzType]="'primary'">提交</button>
+            <button nz-button [nzType]="'primary'" [nzLoading]="loading">提交</button>
             <button nz-button (click)="prev()">上一步</button>
         </nz-form-control>
     </nz-form-item>
