@@ -103,7 +103,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
     }
     getCaptcha() {
         if (this.type === 1) {
-            if (this.form.value.mobile) {
+            if (this.form.value.mobile && this.form.value.mobile.length === 11) {
                 this.count = 59;
                 this.interval$ = setInterval(() => {
                     this.count -= 1;
