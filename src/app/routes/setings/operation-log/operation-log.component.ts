@@ -22,7 +22,7 @@ export class OperationLogComponent implements OnInit {
     moduleId: any;
     operationTypeList: any;
     dataItems: any;
-    date:any
+    date:any = new Date();
     constructor(
         private setingsService: SetingsService,
         private modalSrv: NzModalService,
@@ -33,6 +33,9 @@ export class OperationLogComponent implements OnInit {
     ngOnInit() {
         this.moduleId = this.route.snapshot.params['menuId'];
         this.operationTypeHttp();
+        this.operationDate = this.formatDateTime(new Date());
+        this.operationLogHttp();
+        this.selectStaffHttp();
     }
     getData(e: any) {
         this.pageNo = e;
@@ -71,7 +74,7 @@ export class OperationLogComponent implements OnInit {
     }
     selectStaffHttp() {
         let data = {
-            storeId: this.storeId
+            storeId: ''
         }
         this.setingsService.selectStaff(data).subscribe(
             (res: any) => {
@@ -116,9 +119,7 @@ export class OperationLogComponent implements OnInit {
     }
     selectStoreInfo(e) {
         this.storeId = e;
-        this.operationDate = this.formatDateTime(new Date());
-        this.operationLogHttp();
-        this.selectStaffHttp();
+        
     }
     errorAlter(err: any) {
         this.modalSrv.error({
