@@ -1035,7 +1035,7 @@ export class TouristComponent implements OnInit {
     cardStoreTypes() {
         let data = {
             pageIndex: 1,
-            pageSize: 100,
+            pageSize: 1000,
             storeId: this.storeId
         }
         let that = this;
