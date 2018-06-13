@@ -256,7 +256,8 @@ export class TouristComponent implements OnInit {
                 if (that.totolMoney > 0 || that.isVerbMoney > 0) {
                     that.totolMoney = NP.minus(NP.divide(that.vipShowMoney, 100), ticketM)
                     that.isVerbMoney = NP.minus(NP.divide(that.vipShowMoney, 100), ticketM)
-                }else{
+                    that.vipShowMoney -= (ticketM * 100);
+                } else {
                     this.vipCardList = [];
                     this.vipShowMoney = 0;
                 }
@@ -706,6 +707,24 @@ export class TouristComponent implements OnInit {
                 create.payType = 'WECHATPAY';
             }
         }
+        console.log(this.ticket);
+        console.log(create.settleCardDTOList);
+        if (create.settleCardDTOList && create.settleCardDTOList.length > 0 && create.couponId) {
+            let cardTicketList = [];
+            create.settleCardDTOList.forEach(function (i: any) {
+                if (!that.ticket.consumeLimitProductIds) cardTicketList.push(i);
+                else {
+                    i.productIdList.forEach(function (n: any) {
+                        if (that.ticket.consumeLimitProductIds.indexOf(n) > -1) cardTicketList.push(i)
+                    })
+                }
+            })
+            cardTicketList[0].amount -= ((that.ticketCheck ? (that.ticket && that.xfList.length > 0 ? that.ticket.ticketMoney : 0) : 0) * 100);
+            create.settleCardDTOList.forEach(function (i: any) {
+                if (i.cardId === cardTicketList[0].cardId) i = cardTicketList[0];
+            })
+        }
+
         if (create.settleCardDTOList && create.settleCardDTOList.length > 0) { create.recordType = 'BUCKLECARD'; create.payType = 'MEMBERCARD' }
         if (!that.changeType) {
             create.money = that.isVerb2 ? that.isVerbVipCardmoney * 100 : that.vipCardmoney * 100;
@@ -725,6 +744,7 @@ export class TouristComponent implements OnInit {
         // create.faceId = this.selectFaceId;
         create.customerId = this.memberInfo.customerId;
         this.spinBoolean = true;
+        console.log(create)
         if (this.xyVip) {
             that.rechargeAndOrderPayFun(create)
         } else {
@@ -1429,6 +1449,7 @@ export class TouristComponent implements OnInit {
                                         nzTitle: '退款成功'
                                     });
                                     obj.getOrderHistoryListHttp();
+                                    obj.searchMemberCard(true);
                                 } else {
                                     obj.errorAlter(res.errorInfo)
                                 }

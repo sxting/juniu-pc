@@ -39,7 +39,7 @@ export class SidebarComponent {
 
             }
             if (res.data.eventMsg) {
-              this.errorAlert('请先创建门店');
+              this.errorAlert(res.data.eventMsg);
             }
           } else {
             this.modalSrv.error({
