@@ -141,7 +141,7 @@ export class TouristComponent implements OnInit {
         let that = this;
         this.moduleId = this.route.snapshot.params['menuId'];
         this.homeID = this.route.snapshot.params['id'];
-        if (this.homeID === '3'||this.homeID === '4'||this.homeID === '5') {
+        if (this.homeID === '3' || this.homeID === '4' || this.homeID === '5') {
             this.index = 1;
             this.change({ index: 1 })
         }
@@ -251,8 +251,15 @@ export class TouristComponent implements OnInit {
                     }
                 })
                 that.ticket = ticketBoolean ? false : that.ticket;
-                that.totolMoney = NP.minus(NP.divide(that.vipShowMoney, 100), ticketM)
-                that.isVerbMoney = NP.minus(NP.divide(that.vipShowMoney, 100), ticketM)
+                that.totolMoney = NP.minus(that.totolMoney, ticketM)
+                that.isVerbMoney = NP.minus(that.isVerbMoney, ticketM)
+                if (that.totolMoney > 0 || that.isVerbMoney > 0) {
+                    that.totolMoney = NP.minus(NP.divide(that.vipShowMoney, 100), ticketM)
+                    that.isVerbMoney = NP.minus(NP.divide(that.vipShowMoney, 100), ticketM)
+                }else{
+                    this.vipCardList = [];
+                    this.vipShowMoney = 0;
+                }
             } else {
                 that.totolMoney = NP.minus(that.totolMoney, ticketM)
                 that.isVerbMoney = NP.minus(that.isVerbMoney, ticketM)
@@ -586,7 +593,7 @@ export class TouristComponent implements OnInit {
         create.birthday = this.memberInfo.birthday;
         create.gender = this.memberInfo.gender;
         if (this.ticket) {
-            create.couponId = this.ticket.selectCouponId;
+            create.couponId = this.ticket.couponId;
         }
         const codeTyeNum = this.authCode;
         if (!this.changeType) {
