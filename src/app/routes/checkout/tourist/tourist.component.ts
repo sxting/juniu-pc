@@ -743,10 +743,13 @@ export class TouristComponent implements OnInit {
                     })
                 }
             })
-            cardTicketList[0].amount -= ((that.ticketCheck ? (that.ticket && that.xfList.length > 0 ? that.ticket.ticketMoney : 0) : 0) * 100);
-            create.settleCardDTOList.forEach(function (i: any) {
-                if (i.cardId === cardTicketList[0].cardId) i = cardTicketList[0];
-            })
+            if (cardTicketList && cardTicketList.length > 0) {
+                cardTicketList[0].amount -= ((that.ticketCheck ? (that.ticket && that.xfList.length > 0 ? that.ticket.ticketMoney : 0) : 0) * 100);
+                create.settleCardDTOList.forEach(function (i: any) {
+                    if (i.cardId === cardTicketList[0].cardId) i = cardTicketList[0];
+                })
+            }
+
         }
 
         if (create.settleCardDTOList && create.settleCardDTOList.length > 0) { create.recordType = 'BUCKLECARD'; create.payType = 'MEMBERCARD' }
@@ -914,15 +917,17 @@ export class TouristComponent implements OnInit {
         this.ticket;
 
         this.ticketList.forEach(function (i: any) {
-            let ids = '', arr;
+            let ids = '', ids2 = '', arr, arr2;
             //优惠卷限制商品处理
             if ((i.consumeLimitProductIds && !i.couponDefProductId) || (!i.consumeLimitProductIds && i.couponDefProductId) || (i.consumeLimitProductIds && i.couponDefProductId)) {
-                ids = i.consumeLimitProductIds + ',' + i.couponDefProductId + ',' + that.productIds;
+                ids = i.consumeLimitProductIds + ',' + that.productIds;
+                ids2 = i.couponDefProductId + ',' + that.productIds;
                 arr = ids.split(',');
+                arr2 = ids2.split(',');
             }
             //优惠卷满额可用限制
 
-            if (((!i.consumeLimitProductIds && !i.couponDefProductId) || that.mm(arr)) && (i.useLimitMoney === -1 || i.useLimitMoney < that.inputValue)) {
+            if (((!i.consumeLimitProductIds && !i.couponDefProductId) || (that.mm(arr2))&&that.mm(arr)) && (i.useLimitMoney === -1 || i.useLimitMoney < that.inputValue)) {
                 if (i.couponDefType === 'GIFT') GIFTArr.push(i);
                 if (i.couponDefType === 'MONEY') MONEYArr.push(i);
                 if (i.couponDefType === 'DISCOUNT') DISCOUNTArr.push(i);
