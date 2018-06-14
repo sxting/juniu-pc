@@ -58,6 +58,7 @@
                     </tr>
                     </tbody>
                 </table>
+                <div *ngIf="data.length === 0" style="line-height: 40px; text-align: center">暂无数据</div>
             </div>
             <div class="paginate">
                 <nz-pagination (nzPageIndexClickChange)="paginate($event)" (nzPageIndexChange)="paginate($event)" [nzPageIndex]="1" [nzTotal]="countTotal"></nz-pagination>
