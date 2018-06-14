@@ -452,10 +452,12 @@ export class CheckVipcardDetailinforComponent implements OnInit {
                     /******* 匹配选中的门店 *********/
                     let applyStoreIds = res.data.rules[0].applyStoreIds? res.data.rules[0].applyStoreIds.split(',') : [];
                     FunctionUtil.getDataChange(this.cityStoreList, applyStoreIds);//转换后台拿过来的数据
+                    self.selectStoresIds = res.data.rules[0].applyStoreIds;
 
                     /******* 匹配选中的商品 *********/
                     let applyProductIds = res.data.rules[0].applyProductIds? res.data.rules[0].applyProductIds.split(',') : [];
                     FunctionUtil.getDataChange(this.productListInfor, applyProductIds);//转换后台拿过来的数据
+                    self.productIds = res.data.rules[0].applyProductIds;
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
