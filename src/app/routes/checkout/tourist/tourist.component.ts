@@ -263,10 +263,11 @@ export class TouristComponent implements OnInit {
                     that.totolMoney = NP.minus(NP.divide(that.vipShowMoney, 100), ticketM)
                     that.isVerbMoney = NP.minus(NP.divide(that.vipShowMoney, 100), ticketM)
                     that.vipShowMoney -= (ticketM * 100);
-                } else if (!ticketBoolean) {
-                    this.vipCardList = [];
-                    this.vipShowMoney = 0;
                 }
+                //  else if (!ticketBoolean) {
+                //     this.vipCardList = [];
+                //     this.vipShowMoney = 0;
+                // }
             } else {
                 that.totolMoney = NP.minus(that.totolMoney, ticketM)
                 that.isVerbMoney = NP.minus(that.isVerbMoney, ticketM)
