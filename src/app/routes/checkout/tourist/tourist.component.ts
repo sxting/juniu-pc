@@ -512,7 +512,8 @@ export class TouristComponent implements OnInit {
     vipXqFun() {
         let that = this;
         this.memberInfo = false;
-        this.ticket;
+        this.ticket = false;
+        this.ticketList = [];
         this.xfList = [];
         this.vipCardList = [];
         this.cardChangeBoolean = false;
