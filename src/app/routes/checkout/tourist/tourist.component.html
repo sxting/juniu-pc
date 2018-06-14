@@ -207,7 +207,13 @@
                         <span>
                           <span>
                             <span style="font-size:18px;" class="iconfont {{item.card.type==='REBATE'?'icon-zhe':''}} {{item.card.type==='METERING'?'icon-ji':''}} {{item.card.type==='TIMES'?'icon-qi':''}} {{item.card.type==='STORED'?'icon-chu':''}}"></span>
-                            <span style="font-size:16px;">{{item.card.cardName}}</span>
+                            <span style="font-size:16px;display: inline-block;
+                            width: 120px;
+                            height: 16px;
+                            line-height: 16px;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;">{{item.card.cardName}}</span>
                           </span>
                           <br />
                           <span class="ziti" *ngIf="item.applyProductType === 'SERVICE'">限全部服务项目可用</span>
@@ -392,9 +398,12 @@
                     </div>
                     <div nz-col nzXs="24" nz-row nzType="flex" class="shopTypeBox">
                       <div nz-col nzSpan="12">
-                        <div nz-col nzSpan="12" class="textAline">售 价</div>
-                        <div nz-col nzSpan="12">
-                          ¥{{xfCardList.rules[xfCardList.ruleIndex].price/100}}
+                        <div nz-col nzSpan="12" class="textAline">充值</div>
+                        <div nz-col nzSpan="12" *ngIf="xfCardList.type !== 'REBATE'">
+                          ¥{{xfCardList.rules[xfCardList.ruleIndex].price/100}} 
+                        </div>
+                        <div nz-col nzSpan="12" *ngIf="xfCardList.type === 'REBATE'">
+                          <input nz-input style="width:200px" id="name" name="name" type="numeber"  [(ngModel)]="REBATEValue" (ngModelChange)="REBATEValueFun($event)"  placeholder="折扣卡充值金额">
                         </div>
                       </div>
                       <!-- <div nz-col nzSpan="10">
