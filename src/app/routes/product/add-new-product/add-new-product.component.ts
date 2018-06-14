@@ -134,7 +134,7 @@ export class AddNewProductComponent implements OnInit {
     addNewProductTypes(tpl: any) {
         let self = this;
         this.modalSrv.create({
-            nzTitle: '商品分类管理',
+            nzTitle: '实物产品分类管理',
             nzContent: tpl,
             nzWidth: '600px',
             nzOkText: '保存',

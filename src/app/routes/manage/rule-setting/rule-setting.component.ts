@@ -83,7 +83,7 @@ export class RuleSettingComponent implements OnInit {
           ruleName: [null, [Validators.required, Validators.maxLength(20)]],
           assignRate: [ null ,Validators.compose([ Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)])],//指定技师
           normalRate: [ null ,Validators.compose([ Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)])],//非指定技师
-          deductMoney: [ null ,Validators.compose([  Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)])],//按固定金额提成
+          deductMoney: [ null ,Validators.compose([  Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.min(1 * 0.01),  Validators.max(11111111.11 * 9)])],//按固定金额提成
           type: [ self.extractArr[0].type, [ Validators.required] ],
       };
       this.form = self.fb.group(self.formData);

@@ -21,8 +21,7 @@
         <nz-form-control nzSpan="19">
           <div class="pics_box clearfix">
             <div class="img-box">
-              <img class="upload-img" src="./assets/img/upload.png">
-              <input type="file" accept="image" (change)="uploadImage($event)">
+              <img class="upload-img" src="./assets/img/upload.png" (click)="changeCardBg()">
               <input formControlName="picId" style="visibility: hidden"/>
               <img class="image" [src]="imagePath" *ngIf="imagePath">
               <i *ngIf="imagePath" class="iconfont icon-deleternormal" (click)="deleteImage()"></i>
@@ -44,3 +43,31 @@
     <p class="mb-sm">4. 期限卡：可以设定充值多少，有效期内任意次数消费某些指定的项目：比如充值2000元，一年内不限次数头发护理。</p>
 </div>
 
+
+<!--选择图片的弹框-->
+<nz-modal [(nzVisible)]="isVisible" nzWidth ="500" [nzFooter]="null"  nzTitle="选择卡面图片" nzOkText="确定" nzCancelText="取消" (nzOnCancel)="handleCancel()">
+  <!--修改卡面背景-->
+  <nz-form-text class="btn-photo-clip">
+    <span class="btn-img">点击重新上传卡面图</span>
+    <input type="file" id="file" accept="image" />
+  </nz-form-text>
+  <div class="clip-img-box">
+    <div id="clipArea"></div>
+    <div class="img-top">
+      <div class="logo">logo</div>
+      <div class="wenzi">
+        <div class="wenzi-top">商家名称</div>
+        <div class="wenzi-bottom">会员卡名称</div>
+      </div>
+      <div class="erweima icon-erweima iconfont"></div>
+    </div>
+    <div class="img-bottom">
+      <div class="img-tel">会员手机号</div>
+    </div>
+  </div>
+  <p class="btn-box clearfix">
+    <button class="ant-btn ng-star-inserted ant-btn-primary" type="primary" id="clipBtn">
+      <span>确定</span>
+    </button>
+  </p>
+</nz-modal>
