@@ -74,7 +74,6 @@ export class CheckVipcardDetailinforComponent implements OnInit {
         private productService: ProductService,
         private localStorageService: LocalStorageService
     ) { }
-
     get effectivityDays() { return this.form.controls['effectivityDays']; }
 
     ngOnInit() {

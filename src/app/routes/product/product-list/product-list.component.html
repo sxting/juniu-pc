@@ -9,17 +9,17 @@
         </label>
     </nz-radio-group>
     <button nz-button (click)="addNewProduct()" [nzType]="'primary'" class="fl">
-        <span>新增实体商品</span>
+        <span>新增实物产品</span>
     </button>
 </page-header>
 
 <nz-card [nzBordered]="false">
-    <nz-table [nzNoResult]="'暂无实体商品'" #basicTable [nzShowPagination]="false" [nzData]="productListInfor">
+    <nz-table [nzNoResult]="'暂无实物产品'" #basicTable [nzShowPagination]="false" [nzData]="productListInfor">
         <thead nz-thead class="ui-grid-thead">
         <tr>
-            <th nz-th class="">商品编码</th>
-            <th nz-th class="">商品分类</th>
-            <th nz-th class="">商品名称</th>
+            <th nz-th class="">产品编码</th>
+            <th nz-th class="">产品分类</th>
+            <th nz-th class="">产品名称</th>
             <th nz-th class="">库存</th>
             <th nz-th class="">售价(元)</th>
             <th nz-th class="">操作</th>

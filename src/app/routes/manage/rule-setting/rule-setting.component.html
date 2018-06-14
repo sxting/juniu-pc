@@ -35,8 +35,9 @@
                         <nz-form-explain class="errorTips" *ngIf="form.value.type === 'RATE' && normalRate.errors?.pattern">非指定比例只能是整数或带有两位小数的数字</nz-form-explain>
                         <nz-form-explain class="errorTips" *ngIf="form.value.type === 'RATE' && !checkRate">按比例提成率不可为空</nz-form-explain>
                         <nz-form-explain class="errorTips" *ngIf="form.value.type === 'MONEY' && deductMoney.errors?.pattern">提成金额只能是整数或带有两位小数的数字</nz-form-explain>
-                        <nz-form-explain class="errorTips" *ngIf="form.value.type === 'MONEY'&& !checkRate">提成金额不可为空</nz-form-explain>
-                    </div>
+                        <nz-form-explain class="errorTips" *ngIf="form.value.type === 'MONEY' && !checkRate">提成金额不可为空</nz-form-explain>
+                        <nz-form-explain class="errorTips" *ngIf="form.value.type === 'MONEY' && deductMoney.errors?.max">提成金额范围“0.01-99999999.99”</nz-form-explain>
+                        <nz-form-explain class="errorTips" *ngIf="form.value.type === 'MONEY' && deductMoney.errors?.min">提成金额范围“0.01-99999999.99”</nz-form-explain>                    </div>
                 </nz-radio-group>
             </nz-form-control>
         </nz-form-item>
