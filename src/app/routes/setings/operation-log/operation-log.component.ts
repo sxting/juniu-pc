@@ -62,7 +62,7 @@ export class OperationLogComponent implements OnInit {
         this.setingsService.operationLog(data).subscribe(
             (res: any) => {
                 if (res.success) {
-
+                    this.data = res.data.items;
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',

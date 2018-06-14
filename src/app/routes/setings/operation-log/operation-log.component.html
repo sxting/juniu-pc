@@ -49,17 +49,15 @@
                 <th>操作时间</th>
                 <th>操作类型</th>
                 <th>操作人</th>
-                <th>操作门店</th>
                 <th>修改参数</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let item of data">
-                <td>{{item.customerId}}</td>
-                <td>{{item.birthday}}</td>
-                <td>{{item.customerName}}</td>
-                <td>{{item.genderName}}</td>
-                <td>{{item.phone}}</td>
+                <td>{{item.operationDate}}</td>
+                <td>{{item.operationType}}</td>
+                <td>{{item.operator}}</td>
+                <td></td>
             </tr>
         </tbody>
     </nz-table>
