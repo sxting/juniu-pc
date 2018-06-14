@@ -251,13 +251,15 @@ export class TouristComponent implements OnInit {
                     }
                 })
                 that.ticket = ticketBoolean ? false : that.ticket;
-                that.totolMoney = NP.minus(that.totolMoney, ticketM)
-                that.isVerbMoney = NP.minus(that.isVerbMoney, ticketM)
-                if (that.totolMoney > 0 || that.isVerbMoney > 0) {
+                if (that.ticket) {
+                    that.totolMoney = NP.minus(that.totolMoney, ticketM)
+                    that.isVerbMoney = NP.minus(that.isVerbMoney, ticketM)
+                }
+                if ((that.totolMoney > 0 || that.isVerbMoney > 0) && that.ticket) {
                     that.totolMoney = NP.minus(NP.divide(that.vipShowMoney, 100), ticketM)
                     that.isVerbMoney = NP.minus(NP.divide(that.vipShowMoney, 100), ticketM)
                     that.vipShowMoney -= (ticketM * 100);
-                } else {
+                } else if (!ticketBoolean) {
                     this.vipCardList = [];
                     this.vipShowMoney = 0;
                 }
