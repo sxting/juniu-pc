@@ -1307,10 +1307,16 @@ export class TouristComponent implements OnInit {
                                 i.vipCard = i.vipCardList[n];
                             }
                             if (i.vipCardList[n].card.type === 'REBATE' && (i.vipCard ? (i.vipCard.card.type !== 'TIMES' && i.vipCard.card.type !== 'METERING') : true)) {
-                                i.vipCard = i.vipCardList[n];
+                                if (!i.vipCard) i.vipCard = i.vipCardList[n];
+                                if (i.vipCard && i.vipCardList[n].card.balance > i.vipCard.card.balance) {
+                                    i.vipCard = i.vipCardList[n];
+                                }
                             }
                             if (i.vipCardList[n].card.type === 'STORED' && (i.vipCard ? (i.vipCard.card.type !== 'TIMES' && i.vipCard.card.type !== 'METERING' && i.vipCard.card.type !== 'REBATE') : true)) {
-                                i.vipCard = i.vipCardList[n];
+                                if (!i.vipCard) i.vipCard = i.vipCardList[n];
+                                if (i.vipCard && i.vipCardList[n].card.balance > i.vipCard.card.balance) {
+                                    i.vipCard = i.vipCardList[n];
+                                }
                             }
                         }
                     }
