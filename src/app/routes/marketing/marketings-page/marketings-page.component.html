@@ -70,7 +70,7 @@
         <nz-form-item [class.dis-none]="paramsId == '03'">
             <nz-form-label nzXs="24" nzSm="5" nzRequired>发送时间</nz-form-label>
             <nz-form-control nzXs="24" nzSm="15" nzMd="15">
-                <nz-date-picker [nzDisabled]="marketingStatus === 'RUNING' || marketingStatus === 'STOP'" [nzFormat]="'yyyy-MM-dd'" formControlName="sms_send_date" [nzDisabledDate]="disabledDate"></nz-date-picker>
+                <nz-date-picker [nzShowToday]="false" [nzDisabled]="marketingStatus === 'RUNING' || marketingStatus === 'STOP'" [nzFormat]="'yyyy-MM-dd'" formControlName="sms_send_date" [nzDisabledDate]="disabledDate"></nz-date-picker>
                 <nz-time-picker [nzDisabled]="marketingStatus === 'RUNING' || marketingStatus === 'STOP'" [class.dis-none]="paramsId == '04' || paramsId == '11'" [nzFormat]="'HH:00'" style="margin-left: 10px" formControlName="sms_send_time" [nzAllowEmpty]="false"></nz-time-picker>
                 <!--<span class="jn-color" *ngIf="paramsId == '04' || paramsId == '11'">法定节假日</span>-->
                 <nz-form-explain class="error-color" *ngIf="(sms_send_time.errors || sms_send_date.errors) && sms_send_time.dirty">请选择发送时间</nz-form-explain>
@@ -151,14 +151,13 @@
                     </div>
                     <div class="coupon-right">
                         <p>有效期：{{todayDay}}-{{coupon.validEndDate}}</p>
-                        <div [class.dis-none]="paramsId == '07' || paramsId == '05' || paramsId == '12'">
+                        <div [class.dis-none]="paramsId == '05' || paramsId == '12'">
                             <p *ngIf="coupon.useLimitMoney >= 0">消费满{{coupon.useLimitMoney/100}}元可用</p>
                             <p *ngIf="coupon.useLimitMoney == '-1'">无使用门槛</p>
                         </div>
-                        <p *ngIf="paramsId == '07'">{{coupon.couponDefProductName}}</p>
                         <p *ngIf="paramsId == '05' || paramsId == '12'">使用范围：{{coupon.consumeLimitProductNames}}</p>
-                        <p *ngIf="(paramsId == '05' || paramsId == '12') && coupon.couponDefType == 'GIFT'">礼品：{{coupon.couponDefProductName}}</p>
-                        <p [class.dis-none]="(paramsId == '05' || paramsId == '12') && coupon.couponDefType == 'GIFT'">不可用时间：
+                        <p *ngIf="coupon.couponDefType == 'GIFT'">礼品：{{coupon.couponDefProductName}}</p>
+                        <p [class.dis-none]="coupon.couponDefType == 'GIFT'">不可用时间：
                             <span *ngIf="!coupon.disabledWeekDate">无限制</span>
                             <span *ngIf="coupon.disabledWeekDate">
                                 {{selectedWeek1}}至{{selectedWeek2}}（{{unUseStartTime}}-{{unUseEndTime}}）
@@ -337,14 +336,16 @@
 
                 <div class="coupon-right">
                     <p>有效期：{{todayDay}}-{{couponUseEndDay}}</p>
-                    <div [class.dis-none]="paramsId == '07' || paramsId == '05' || paramsId == '12'">
+                    <!--<div [class.dis-none]="paramsId == '07' || paramsId == '05' || paramsId == '12'">-->
+                    <div [class.dis-none]="paramsId == '05' || paramsId == '12'">
                         <p *ngIf="useMenkan">消费满{{useMenkanMoney}}元可用</p>
                         <p *ngIf="!useMenkan">无使用门槛</p>
                     </div>
-                    <p *ngIf="paramsId == '07'">{{selectedGiftProduct}}</p>
+                    <!--<p *ngIf="paramsId == '07'">{{selectedGiftProduct}}</p>-->
                     <p *ngIf="paramsId == '05' || paramsId == '12'">使用范围：{{selectedProductName}}</p>
-                    <p *ngIf="(paramsId == '05' || paramsId == '12') && couponType == '4'">礼品：{{selectedGiftProduct}}</p>
-                    <p [class.dis-none]="(paramsId == '05' || paramsId == '12') && couponType == '4'">不可用时间：
+                    <p *ngIf="couponType == '4'">礼品：{{selectedGiftProduct}}</p>
+                    <!--<p [class.dis-none]="(paramsId == '05' || paramsId == '12') && couponType == '4'">不可用时间：-->
+                    <p [class.dis-none]="couponType == '4'">不可用时间：
                         <span *ngIf="!unUseTime">无限制</span>
                         <span *ngIf="unUseTime">{{selectedWeek1}}至{{selectedWeek2}}（{{unUseStartTime}}-{{unUseEndTime}}）</span>
                     </p>
@@ -421,14 +422,13 @@
             </div>
             <div class="coupon-right">
                 <p>有效期：{{todayDay}}-{{item.validEndDate}}</p>
-                <div [class.dis-none]="paramsId == '07' || paramsId == '05' || paramsId == '12'">
+                <div [class.dis-none]="paramsId == '05' || paramsId == '12'">
                     <p *ngIf="item.useLimitMoney >= 0">消费满{{item.useLimitMoney/100}}元可用</p>
                     <p *ngIf="item.useLimitMoney == '-1'">无使用门槛</p>
                 </div>
-                <p *ngIf="paramsId == '07'">{{item.couponDefProductName}}</p>
                 <p *ngIf="paramsId == '05' || paramsId == '12'">使用范围：{{item.consumeLimitProductNames}}</p>
-                <p *ngIf="(paramsId == '05' || paramsId == '12') && item.couponDefType == 'GIFT'">礼品：{{item.couponDefProductName}}</p>
-                <p [class.dis-none]="(paramsId == '05' || paramsId == '12') && item.couponDefType == 'GIFT'">不可用时间：
+                <p *ngIf="item.couponDefType == 'GIFT'">礼品：{{item.couponDefProductName}}</p>
+                <p [class.dis-none]="item.couponDefType == 'GIFT'">不可用时间：
                     <span *ngIf="!item.disabledWeekDate">无限制</span>
                     <span *ngIf="item.disabledWeekDate">
                         {{item.selectedWeek1}}至{{item.selectedWeek2}}（{{item.unUseStartTime}}-{{item.unUseEndTime}}）
