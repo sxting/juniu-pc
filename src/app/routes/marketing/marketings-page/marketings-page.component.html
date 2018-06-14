@@ -70,7 +70,7 @@
         <nz-form-item [class.dis-none]="paramsId == '03'">
             <nz-form-label nzXs="24" nzSm="5" nzRequired>发送时间</nz-form-label>
             <nz-form-control nzXs="24" nzSm="15" nzMd="15">
-                <nz-date-picker [nzDisabled]="marketingStatus === 'RUNING' || marketingStatus === 'STOP'" [nzFormat]="'yyyy-MM-dd'" formControlName="sms_send_date" [nzDisabledDate]="disabledDate"></nz-date-picker>
+                <nz-date-picker [nzShowToday]="false" [nzDisabled]="marketingStatus === 'RUNING' || marketingStatus === 'STOP'" [nzFormat]="'yyyy-MM-dd'" formControlName="sms_send_date" [nzDisabledDate]="disabledDate"></nz-date-picker>
                 <nz-time-picker [nzDisabled]="marketingStatus === 'RUNING' || marketingStatus === 'STOP'" [class.dis-none]="paramsId == '04' || paramsId == '11'" [nzFormat]="'HH:00'" style="margin-left: 10px" formControlName="sms_send_time" [nzAllowEmpty]="false"></nz-time-picker>
                 <!--<span class="jn-color" *ngIf="paramsId == '04' || paramsId == '11'">法定节假日</span>-->
                 <nz-form-explain class="error-color" *ngIf="(sms_send_time.errors || sms_send_date.errors) && sms_send_time.dirty">请选择发送时间</nz-form-explain>
