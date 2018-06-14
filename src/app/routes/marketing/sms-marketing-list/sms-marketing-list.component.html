@@ -13,19 +13,19 @@
 
     <div class="select-box">
         <div class="activty-box">
-            活动类型
+            活动类型:
             <nz-select style="width: 200px;" (ngModelChange)="activeTypeSelect($event)" [(ngModel)]="selectedOption1">
                 <nz-option *ngFor="let option of options1" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
             </nz-select>
         </div>
         <div class="youhuijuan-box">
-            优惠券类型
+            优惠券类型:
             <nz-select style="width: 120px;" (ngModelChange)="couponTypeSelect($event)" [(ngModel)]="selectedOption2">
                 <nz-option *ngFor="let option of options2" [nzLabel]="option.label" [nzValue]="option.value">
                 </nz-option>
             </nz-select>
         </div>
-        <div class="store-box">
+        <div class="store-box" style="margin-top: -5px">
           <jn-stores-infor [moduleId]="moduleId" [labelText]="'按门店筛选'"
                            (storeIdOutput)="storeChange($event)">
           </jn-stores-infor>
@@ -69,7 +69,7 @@
                         item.scene === 'WECHAT_NEW_PROMOTION' ? '新品促销' :
                         item.scene === 'WECHAT_PRODUCT_PROMOTION' ? '指定项目促销' : '--'}}
                     </td>
-                    <td>{{item.couponDef.couponDefType==='MONEY'?'代金券':item.couponDef.couponDefType==='DISCOUNT'?'折扣券':'礼品券'}}</td>
+                    <td>{{item.couponDefType==='MONEY'?'代金券':item.couponDefType==='DISCOUNT'?'折扣券':'礼品券'}}</td>
                     <td>{{item.marketingName}}</td>
                     <td>{{item.marketingStatus==='RUNING'?'进行中':item.marketingStatus==='INIT'?'未开始':'已结束'}}</td>
                     <td>{{item.marketingStartTime}}--{{item.marketingEndTime}}</td>
