@@ -512,7 +512,8 @@ export class TouristComponent implements OnInit {
     vipXqFun() {
         let that = this;
         this.memberInfo = false;
-        this.ticket;
+        this.ticket = false;
+        this.ticketList = [];
         this.xfList = [];
         this.vipCardList = [];
         this.cardChangeBoolean = false;
@@ -847,7 +848,6 @@ export class TouristComponent implements OnInit {
             this.vipCardList = [];
             this.xfList = [];
         }
-
         let self = this;
         this.cardChangeBoolean = false;
         if (this.vipsearch && (this.vipsearch.length === 0 || this.vipsearch.length >= 11 || event)) {
@@ -856,6 +856,7 @@ export class TouristComponent implements OnInit {
                 .subscribe(
                     (res: any) => {
                         if (res.success) {
+                            this.vipXqFun();
                             if (res.data && res.data.length === 0) self.errorAlter('未查询到该会员');
                             self.vipData = res.data;
                             self.changeFun();
