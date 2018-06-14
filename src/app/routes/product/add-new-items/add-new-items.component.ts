@@ -422,10 +422,8 @@ export class AddNewItemsComponent implements OnInit {
             (res: any) => {
               self.submitting = false;
               if (res.success) {
-                setTimeout(() => {
-                  self.msg.success(`提交成功`);
-                  self.router.navigate(['/product/service/items/list']);
-                }, 1000);
+                self.msg.success(`提交成功`);
+                self.router.navigate(['/product/service/items/list']);
               } else {
                 this.modalSrv.error({
                   nzTitle: '温馨提示',
