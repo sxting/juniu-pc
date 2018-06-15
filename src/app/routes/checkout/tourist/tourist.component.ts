@@ -280,7 +280,7 @@ export class TouristComponent implements OnInit {
 
         } else {
             if (that.xfCardList) {
-                if (that.xfCardList.type === 'REBATE') {
+                if (that.xfCardList.type === 'REBATE'&&this.xyVip) {
                     this.vipCardmoney = this.REBATEValue;
                     this.isVerbVipCardmoney = Math.floor(this.REBATEValue);
                 } else {
@@ -438,7 +438,7 @@ export class TouristComponent implements OnInit {
             this.jiesuanFun();
         } else {
             let mmm = that.isVerb2 ? that.isVerbVipCardmoney : that.vipCardmoney;
-            if ((mmm <= 0 || mmm > 999999 || (/^[1-9]\d*$/).test(mmm + '')) && !this.changeType && that.xfCardList && that.xfCardList.type === 'REBATE') {
+            if ((mmm <= 0 || mmm > 999999 || (/^[1-9]\d*$/).test(mmm + '')) && !this.changeType && that.xfCardList && that.xfCardList.type === 'REBATE'&&this.xyVip) {
                 this.modalSrv.error({
                     nzContent: '请输入折扣卡充值金额（1-999999之前的整数）'
                 })
@@ -687,6 +687,7 @@ export class TouristComponent implements OnInit {
                     storeId: that.storeId,
                     staffId: i.staff,
                     assign: i.assign ? 1 : 0,
+                    num:i.num,
                     // staffName: "肖光华",
                     // staff2Name: '',
                     staff2Id: i.xiaogong

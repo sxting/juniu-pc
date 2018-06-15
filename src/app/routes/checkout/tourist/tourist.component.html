@@ -399,10 +399,10 @@
                     <div nz-col nzXs="24" nz-row nzType="flex" class="shopTypeBox">
                       <div nz-col nzSpan="12">
                         <div nz-col nzSpan="12" class="textAline">充值</div>
-                        <div nz-col nzSpan="12" *ngIf="xfCardList.type !== 'REBATE'">
+                        <div nz-col nzSpan="12" *ngIf="!xyVip">
                           ¥{{xfCardList.rules[xfCardList.ruleIndex].price/100}} 
                         </div>
-                        <div nz-col nzSpan="12" *ngIf="xfCardList.type === 'REBATE'">
+                        <div nz-col nzSpan="12" *ngIf="xfCardList.type === 'REBATE'&&xyVip">
                           <input nz-input style="width:200px" id="name" name="name" type="numeber"  [(ngModel)]="REBATEValue" (ngModelChange)="REBATEValueFun($event)"  placeholder="折扣卡充值金额">
                         </div>
                       </div>
