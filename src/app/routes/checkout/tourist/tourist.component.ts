@@ -1351,6 +1351,7 @@ export class TouristComponent implements OnInit {
                 })
                 //最终所有选取的商品所对应的会员卡
                 this.vipCardList = itemList;
+                console.log(this.vipCardList);
             }
         }
 
