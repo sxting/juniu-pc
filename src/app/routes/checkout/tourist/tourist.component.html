@@ -220,7 +220,7 @@
                           <span class="ziti" *ngIf="item.applyProductType === 'ALL'">限全部商品可用</span>
                           <span class="ziti" *ngIf="item.applyProductType === 'CUSTOMIZE'">限{{item.getApplyProductNames}}使用</span>
                           <span class="ziti" *ngIf="item.card.type !== 'TIMES'">余额 ：{{item.card.type === 'METERING'?item.card.balance:(item.card.balance/100).toFixed(2)}} {{item.card.type === 'METERING'?'次':'元'}}</span>
-                          <span class="ziti" *ngIf="item.card.type === 'TIMES'">截止日期 ：{{item.card.validity}}</span>
+                          <span class="ziti" *ngIf="item.card.type === 'TIMES'">有效期至 ：{{item.card.validity}}</span>
                         </span>
                       </label>
                     </div>
