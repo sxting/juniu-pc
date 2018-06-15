@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { KoubeiService } from "../shared/koubei.service";
 import { DomSanitizer } from '@angular/platform-browser';
 import { LocalStorageService } from '@shared/service/localstorage-service';
-import { APP_TOKEN, REFRESH } from '@shared/define/juniu-define';
+import { APP_TOKEN } from '@shared/define/juniu-define';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { Config } from '@shared/config/env.config';
 declare var QRCode: any;
@@ -42,7 +42,7 @@ export class KoubeiProductListComponent implements OnInit {
 
     //刷新商品按钮
     alipayPid: string;
-    imgQrcodeUrl: string = Config.API + 'account/manage/aliAuthorizationQRCode.img' +
+    imgQrcodeUrl: string = Config.API1 + 'account/merchant/manage/aliAuthorizationQRCode.img' +
       `?token=${this.localStorageService.getLocalstorage(APP_TOKEN)}`;
     ifAlipayPidShow: boolean = false;
     merchantLogin: boolean = false;//商家登录
@@ -100,16 +100,20 @@ export class KoubeiProductListComponent implements OnInit {
             this.providerLogin = true;
         }
         this.isVisible = this.alipayPid? false : true;//关联口碑账号
-        // let Pid = 'BINDING_ALIPAY_' + this.alipayPid;
-        // var goEasy = new GoEasy({
-        //   appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
-        // });
-        // goEasy.subscribe({
-        //   channel: Pid,
-        //   onMessage: function (message) {
-        //     console.log(message);
-        //   }
-        // });
+        if(this.isVisible){
+          let Pid = 'BINDING_ALIPAY_' + this.alipayPid;
+          var goEasy = new GoEasy({
+            appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
+          });
+          goEasy.subscribe({
+            channel: Pid,
+            onMessage: function (message) {
+              console.log(message);
+            }
+          });
+        }else{
+          this.isVisible = false;
+        }
     }
 
     /**************************页面基础操作开始*********************************/
