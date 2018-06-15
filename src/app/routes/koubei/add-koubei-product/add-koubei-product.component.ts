@@ -776,7 +776,7 @@ export class AddKoubeiProductComponent implements OnInit {
 
                     //入淘首图
                     self.tbCover = res.data.tbCover;
-                    self.imagePathTb = res.data.tbCoverUrl? `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${self.tbCover}/resize_${102}_${102}/mode_fill`: './assets/img/pic-bg.png';
+                    self.imagePathTb = res.data.tbCover? `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${self.tbCover}/resize_${102}_${102}/mode_fill`: '';
 
                     //商品图片
                     let imageArray: any[] = [];
