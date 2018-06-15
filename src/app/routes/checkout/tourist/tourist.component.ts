@@ -239,6 +239,7 @@ export class TouristComponent implements OnInit {
                 that.totolMoney = NP.round(NP.plus(that.totolMoney, NP.times(NP.divide(i.currentPrice, 100), i.num, NP.divide(i.discount, 100))), 2);
                 that.isVerbMoney = Math.floor(that.totolMoney);
             })
+            console.log(that.totolMoney)
             this.createMoney = that.totolMoney;
             //标注每个卡对应的总计减免
             this.vipMoneyFun()
@@ -263,7 +264,11 @@ export class TouristComponent implements OnInit {
                     that.totolMoney = NP.minus(NP.divide(that.vipShowMoney, 100), ticketM)
                     that.isVerbMoney = NP.minus(NP.divide(that.vipShowMoney, 100), ticketM)
                     that.vipShowMoney -= (ticketM * 100);
+                } else {
+                    that.totolMoney = NP.divide(that.vipShowMoney, 100)
+                    that.isVerbMoney = NP.divide(that.vipShowMoney, 100)
                 }
+
                 //  else if (!ticketBoolean) {
                 //     this.vipCardList = [];
                 //     this.vipShowMoney = 0;
@@ -280,7 +285,7 @@ export class TouristComponent implements OnInit {
 
         } else {
             if (that.xfCardList) {
-                if (that.xfCardList.type === 'REBATE') {
+                if (that.xfCardList.type === 'REBATE' && this.xyVip) {
                     this.vipCardmoney = this.REBATEValue;
                     this.isVerbVipCardmoney = Math.floor(this.REBATEValue);
                 } else {
@@ -437,8 +442,8 @@ export class TouristComponent implements OnInit {
         if (this.settleCardDTOList && this.settleCardDTOList.length > 0) {
             this.jiesuanFun();
         } else {
-            let mmm = that.isVerb2 ? that.isVerbVipCardmoney * 100 : that.vipCardmoney * 100;
-            if ((mmm <= 0 || mmm > 999999 || (/^[1-9]\d*$/).test(mmm + '')) && !this.changeType && that.xfCardList && that.xfCardList.type === 'REBATE') {
+            let mmm = that.isVerb2 ? that.isVerbVipCardmoney : that.vipCardmoney;
+            if ((mmm <= 0 || mmm > 999999 || (/^[1-9]\d*$/).test(mmm + '')) && !this.changeType && that.xfCardList && that.xfCardList.type === 'REBATE' && this.xyVip) {
                 this.modalSrv.error({
                     nzContent: '请输入折扣卡充值金额（1-999999之前的整数）'
                 })
@@ -687,6 +692,7 @@ export class TouristComponent implements OnInit {
                     storeId: that.storeId,
                     staffId: i.staff,
                     assign: i.assign ? 1 : 0,
+                    num: i.num,
                     // staffName: "肖光华",
                     // staff2Name: '',
                     staff2Id: i.xiaogong
@@ -865,7 +871,7 @@ export class TouristComponent implements OnInit {
         );
     }
     /**搜索会员卡 */
-    searchMemberCard(type?: any) {
+    searchMemberCard(type?: any, gd?: any, gdindx?: any) {
         if (!type) {
             this.yjcardList = [];
             this.vipCardList = [];
@@ -885,6 +891,11 @@ export class TouristComponent implements OnInit {
                             self.changeFun();
                             if (self.vipData && self.vipData.length > 0) self.vipDataBoolean = true;
                             if (type) this.vipDataRadio(0);
+
+                            if (gd) {
+                                this.xfList = this.guadanList[gdindx].xfList;
+                                this.totolMoneyFun();
+                            }
                         } else {
                             self.errorAlter(res.errorInfo)
                         }
@@ -927,7 +938,7 @@ export class TouristComponent implements OnInit {
             }
             //优惠卷满额可用限制
 
-            if (((!i.consumeLimitProductIds && !i.couponDefProductId) || (that.mm(arr2))&&that.mm(arr)) && (i.useLimitMoney === -1 || i.useLimitMoney < that.inputValue)) {
+            if (((!i.consumeLimitProductIds && !i.couponDefProductId) || (that.mm(arr2)) && that.mm(arr)) && (i.useLimitMoney === -1 || i.useLimitMoney < that.inputValue)) {
                 if (i.couponDefType === 'GIFT') GIFTArr.push(i);
                 if (i.couponDefType === 'MONEY') MONEYArr.push(i);
                 if (i.couponDefType === 'DISCOUNT') DISCOUNTArr.push(i);
@@ -1406,11 +1417,10 @@ export class TouristComponent implements OnInit {
     guadanJS(index: any) {
         this.modalSrv.closeAll();
         this.guadanList = this.localStorageService.getLocalstorage(GUADAN) ? JSON.parse(this.localStorageService.getLocalstorage(GUADAN)) : [];
-        this.xfList = this.guadanList[index].xfList;
-        this.totolMoneyFun();
-        // this.memberInfo = this.shopyinList[index].vip;
         this.vipsearch = this.guadanList[index].vip.phone;
-        this.searchMemberCard(true);
+        this.searchMemberCard(true, true, index);
+
+        // this.memberInfo = this.shopyinList[index].vip;
     }
     guadanSC(index: any) {
         let that = this;
