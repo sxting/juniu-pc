@@ -865,7 +865,7 @@ export class TouristComponent implements OnInit {
         );
     }
     /**搜索会员卡 */
-    searchMemberCard(type?: any) {
+    searchMemberCard(type?: any, gd?: any, gdindx?: any) {
         if (!type) {
             this.yjcardList = [];
             this.vipCardList = [];
@@ -885,6 +885,11 @@ export class TouristComponent implements OnInit {
                             self.changeFun();
                             if (self.vipData && self.vipData.length > 0) self.vipDataBoolean = true;
                             if (type) this.vipDataRadio(0);
+
+                            if (gd) {
+                                this.xfList = this.guadanList[gdindx].xfList;
+                                this.totolMoneyFun();
+                            }
                         } else {
                             self.errorAlter(res.errorInfo)
                         }
@@ -927,7 +932,7 @@ export class TouristComponent implements OnInit {
             }
             //优惠卷满额可用限制
 
-            if (((!i.consumeLimitProductIds && !i.couponDefProductId) || (that.mm(arr2))&&that.mm(arr)) && (i.useLimitMoney === -1 || i.useLimitMoney < that.inputValue)) {
+            if (((!i.consumeLimitProductIds && !i.couponDefProductId) || (that.mm(arr2)) && that.mm(arr)) && (i.useLimitMoney === -1 || i.useLimitMoney < that.inputValue)) {
                 if (i.couponDefType === 'GIFT') GIFTArr.push(i);
                 if (i.couponDefType === 'MONEY') MONEYArr.push(i);
                 if (i.couponDefType === 'DISCOUNT') DISCOUNTArr.push(i);
@@ -1406,11 +1411,10 @@ export class TouristComponent implements OnInit {
     guadanJS(index: any) {
         this.modalSrv.closeAll();
         this.guadanList = this.localStorageService.getLocalstorage(GUADAN) ? JSON.parse(this.localStorageService.getLocalstorage(GUADAN)) : [];
-        this.xfList = this.guadanList[index].xfList;
-        this.totolMoneyFun();
-        // this.memberInfo = this.shopyinList[index].vip;
         this.vipsearch = this.guadanList[index].vip.phone;
-        this.searchMemberCard(true);
+        this.searchMemberCard(true, true, index);
+
+        // this.memberInfo = this.shopyinList[index].vip;
     }
     guadanSC(index: any) {
         let that = this;
