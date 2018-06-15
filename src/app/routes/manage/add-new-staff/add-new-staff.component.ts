@@ -65,10 +65,7 @@ export class AddNewStaffComponent implements OnInit {
         };
         self.form = self.fb.group(self.formData);
         this.getStoresInfor();//门店
-
     }
-
-
 
     //切换员工员工归属属性
     onChangesBelongs(values: any): void {
@@ -106,8 +103,7 @@ export class AddNewStaffComponent implements OnInit {
         }
     }
 
-    /**
-     * 删除图片
+    /*** 删除图片
      * @param index
      */
     deleteImage() {
@@ -189,7 +185,7 @@ export class AddNewStaffComponent implements OnInit {
                     self.passwordPre = res.data.password;
 
                     self.formData = {
-                        staffName: [ res.data.staffName, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
+                        staffName: [ res.data.staffName, [Validators.required]],
                         phone: [ res.data.contactPhone, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
                         password: [ password, [Validators.required]],
                         belongType: [ res.data.belongType, [Validators.required]],//门店员工职位
@@ -197,7 +193,6 @@ export class AddNewStaffComponent implements OnInit {
                         roleId: [ res.data.roleId, [Validators.required]],
                     };
                     self.form = self.fb.group(self.formData);
-
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
