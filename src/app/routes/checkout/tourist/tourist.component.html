@@ -178,8 +178,8 @@
             <div class="xiaoji">
               <nz-form-item class="formItem ">
                 <div class="lineHeight50 formItemBorder">
-                  <div nz-col style="text-align:left;" nzSpan="6">优惠券</div>
-                  <div nz-col nzSpan="18">
+                  <div nz-col style="text-align:left;" nzSpan="4">优惠券</div>
+                  <div nz-col nzSpan="20">
                     <div *ngIf="xfList.length>0&&ticket">
                       <div nz-col nzSpan="18" class="yhjBox">
                         <label nz-checkbox (ngModelChange)="ngticketChange()" [(ngModel)]="ticketCheck">
@@ -200,8 +200,8 @@
               </nz-form-item>
               <nz-form-item class="formItem ">
                 <div class="lineHeight50 formItemBorder kouka">
-                  <div nz-col style="text-align:left;" nzSpan="6">扣卡</div>
-                  <div nz-col nzSpan="18">
+                  <div nz-col style="text-align:left;" nzSpan="4">会员卡</div>
+                  <div nz-col nzSpan="20">
                     <div nz-col nzSpan="16" class="yhjBox kouka2">
                       <label nz-checkbox *ngFor="let item of vipCardList" (ngModelChange)="cardChangeFun(item.card.cardConfigRuleId)" [(ngModel)]="item.checked">
                         <span>
@@ -222,14 +222,14 @@
                         </span>
                       </label>
                     </div>
-                    <div style="text-align:right;" nz-col nzSpan="8" *ngIf="vipShowMoney">-{{(vipShowMoney/100).toFixed(2)}}元</div>
+                    <div style="text-align:right;" nz-col nzSpan="8" *ngIf="vipShowMoney">扣卡：{{(vipShowMoney/100).toFixed(2)}}元</div>
                   </div>
                 </div>
               </nz-form-item>
               <nz-form-item class="formItem ">
                 <div class="lineHeight50 formItemBorder">
-                  <div nz-col style="text-align:left;" nzSpan="6">是否抹零</div>
-                  <div nz-col nzSpan="18">
+                  <div nz-col style="text-align:left;" nzSpan="4">是否抹零</div>
+                  <div nz-col nzSpan="20">
                     <nz-switch style="float:left;" (ngModelChange)="moling()" [ngModel]="isVerb" nzCheckedChildren="是" nzUnCheckedChildren="否"></nz-switch>
                     <span style="float:right;">收款：
                       <input type="text" style="width:100px;" onkeyup="if(this.value<0)this.value = 0;if(this.value>99999999)this.value =99999999;"
