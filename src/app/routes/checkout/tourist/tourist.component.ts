@@ -437,7 +437,7 @@ export class TouristComponent implements OnInit {
         if (this.settleCardDTOList && this.settleCardDTOList.length > 0) {
             this.jiesuanFun();
         } else {
-            let mmm = that.isVerb2 ? that.isVerbVipCardmoney * 100 : that.vipCardmoney * 100;
+            let mmm = that.isVerb2 ? that.isVerbVipCardmoney : that.vipCardmoney;
             if ((mmm <= 0 || mmm > 999999 || (/^[1-9]\d*$/).test(mmm + '')) && !this.changeType && that.xfCardList && that.xfCardList.type === 'REBATE') {
                 this.modalSrv.error({
                     nzContent: '请输入折扣卡充值金额（1-999999之前的整数）'

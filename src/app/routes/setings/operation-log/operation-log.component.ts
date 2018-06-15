@@ -3,6 +3,7 @@ import { _HttpClient } from '@delon/theme';
 import { SetingsService } from '../shared/setings.service';
 import { NzModalService } from 'ng-zorro-antd';
 import { ActivatedRoute } from '@angular/router';
+import { TemplateRef } from '@angular/core';
 
 @Component({
     selector: 'app-operation-log',
@@ -23,6 +24,7 @@ export class OperationLogComponent implements OnInit {
     operationTypeList: any;
     dataItems: any;
     date:any = new Date();
+    content:any;
     constructor(
         private setingsService: SetingsService,
         private modalSrv: NzModalService,
@@ -147,5 +149,16 @@ export class OperationLogComponent implements OnInit {
                 }
             }, error => this.errorAlter(error)
         );
+    }
+
+    ckxq(tpl: TemplateRef<{}>,content:any){
+        this.content = content;
+        let that = this;
+        this.modalSrv.create({
+            nzTitle: that.logType === 'SYSTEM_DATA'?'操作字段名称':'修改参数',
+            nzContent: tpl,
+            nzWidth: '800px',
+            nzFooter : null
+        });
     }
 }

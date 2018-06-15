@@ -49,7 +49,8 @@
                 <th>操作时间</th>
                 <th>操作类型</th>
                 <th>操作人</th>
-                <th>修改参数</th>
+                <th>操作门店</th>
+                <th>{{logType === 'SYSTEM_DATA'?'操作字段名称':'修改参数'}}</th>
             </tr>
         </thead>
         <tbody>
@@ -57,7 +58,11 @@
                 <td>{{item.operationDate}}</td>
                 <td>{{item.operationType}}</td>
                 <td>{{item.operator}}</td>
-                <td></td>
+                <td>{{item.storeId}}</td>
+                <td>
+                    <button nz-button  (click)="ckxq(modalContent3,item.content)">查看详情</button>
+                    <!-- <button [nzTitle]="item.content" nzPlacement="left" nz-button nz-tooltip></button> -->
+                </td>
             </tr>
         </tbody>
     </nz-table>
@@ -65,3 +70,7 @@
         <nz-pagination class="nzPagination" [nzTotal]="Total" [nzPageSize]="10" (nzPageIndexChange)="getData($event)"></nz-pagination>
     </div>
 </div>
+
+<ng-template #modalContent3>
+    <div style="word-wrap: break-word;">{{content}}</div>
+</ng-template>
