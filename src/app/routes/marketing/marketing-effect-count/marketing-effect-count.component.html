@@ -53,7 +53,8 @@
                         <td>{{item.sendCouponCount}}</td>
                         <td>{{item.settleCouponCount}}</td>
                         <td>{{item.settleCouponRate}}</td>
-                        <td>{{item.marketingStartTime+'  到  '+item.marketingEndTime}}</td>
+                        <td *ngIf="item.marketingStartTime && item.marketingEndTime">{{item.marketingStartTime+'  到  '+item.marketingEndTime}}</td>
+                        <td *ngIf="!(item.marketingStartTime && item.marketingEndTime)">--</td>
                         <td><span class="chakan" (click)="chakan(item.marketingId)">查看活动效果</span></td>
                     </tr>
                     </tbody>
