@@ -63,6 +63,7 @@ export class HeaderNotifyComponent implements OnDestroy {
         if (res.success) {
           this.count = res.data.count;
         } else {
+          clearInterval(this.time);
           this.modalSrv.error({
             nzTitle: '温馨提示',
             nzContent: res.errorInfo
