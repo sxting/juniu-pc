@@ -242,8 +242,11 @@ export class UserRegisterComponent implements OnDestroy, OnInit {
                         time: +new Date
                     });
                     this.localStorageService.setLocalstorage(APP_TOKEN, token);
-                    let route = this.route.snapshot.params['route']
-                    this.router.navigate([route]);
+                    let route = this.route.snapshot.params['count'];
+                    if (Number(route) > 0)
+                        this.router.navigate(['/home']);
+                    else
+                        this.router.navigate(['/manage/storeList/matchingkoubei']);
                     this.startupService.load();
                 } else {
                     this.modalSrv.error({
