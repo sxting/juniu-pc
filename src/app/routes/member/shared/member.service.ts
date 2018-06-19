@@ -522,4 +522,12 @@ export class MemberService {
             return Observable.throw(error);
         });
     }
+
+    //商品分类 
+    merchantInit(data) {
+        let apiUrl = Config.API1 + '/common/merchantInit.json';
+        return this.http.get(apiUrl, data).map((response: Response) => response).catch(error => {
+            return Observable.throw(error);
+        });
+    }
 }

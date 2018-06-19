@@ -9,7 +9,7 @@ import { environment } from '@env/environment';
 import { MemberService } from '../../member/shared/member.service';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
-import { APP_TOKEN, STORES_INFO, ALIPAY_SHOPS, USER_INFO, MODULES, CITY_LIST } from '@shared/define/juniu-define';
+import { APP_TOKEN, STORES_INFO, ALIPAY_SHOPS, USER_INFO, MODULES, CITY_LIST, KOUBEI_ITEM_CATEGORYS } from '@shared/define/juniu-define';
 import { StartupService } from '@core/startup/startup.service';
 import { ActivatedRoute } from '@angular/router';
 
@@ -56,6 +56,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
         // let url1 = this.route.snapshot.params['url'] ? this.route.snapshot.params['url'] : this.route.snapshot.params['url'];
         this.tokenService.set({ token: '-1' });
         this.getLocationHttp();
+        this.merchantInitHttp();
         if (sign) {
             this.localStorageService.setLocalstorage(APP_TOKEN, sign);
             this.tokenService.set({ token: sign });
@@ -254,6 +255,27 @@ export class UserLoginComponent implements OnDestroy, OnInit {
                 if (res.success) {
                     self.forEachFun(res.data.items);
                     this.localStorageService.setLocalstorage(CITY_LIST, JSON.stringify(res.data.items));
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            (error) => {
+                this.msg.warning(error)
+            }
+        );
+    }
+    merchantInitHttp() {
+        let self = this;
+        let data = {
+            timestamp: new Date().getTime(),
+        }
+        this.memberService.merchantInit(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.localStorageService.setLocalstorage(KOUBEI_ITEM_CATEGORYS, JSON.stringify(res.data.koubeiItemCategorys));
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
