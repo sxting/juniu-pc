@@ -1,4 +1,6 @@
-<page-header></page-header>
+<!--<page-header></page-header>-->
+<div class="mg-b20"></div>
+
 <div class="content_juniu">
     <div>
         <span class="add-print-btn" (click)="onAddPrintClick('', printBox)">新增打印机</span>
@@ -17,7 +19,7 @@
             <td>{{print.yunDeviceId}}</td>
             <td>{{print.deviceName}}</td>
             <td>{{print.yunDeviceKey}}</td>
-            <td><span *ngFor="let store of stores"><span *ngIf="print.storeId === store.storeId">{{store.storeName}}</span></span></td>
+            <td><span *ngFor="let store of stores"><span *ngIf="print.storeId === store.storeId">{{store.branchName}}</span></span></td>
             <td><span (click)="onAddPrintClick(print.printerDeviceId, printBox)">编辑</span> | <span (click)="onDeleteBtnClick(print.printerDeviceId)">删除</span></td>
         </tr>
         </tbody>
