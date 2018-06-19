@@ -38,7 +38,7 @@ export class UserRegisterComponent implements OnDestroy, OnInit {
         private route: ActivatedRoute,
         @Inject(DA_SERVICE_TOKEN) private tokenService: TokenService,
         public msg: NzMessageService) {
-        this.alipayPid = this.route.snapshot.params['alipayPid'];
+        this.alipayPid = this.route.snapshot.params['pid'];
         if (this.alipayPid) {
             this.form = fb.group({
                 mail: [null, []],
