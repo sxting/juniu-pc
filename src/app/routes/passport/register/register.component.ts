@@ -131,7 +131,10 @@ export class UserRegisterComponent implements OnDestroy, OnInit {
         else {
             // mock http
             this.loading = true;
-            this.registrySystem();
+            if (this.alipayPid)
+                this.registryKoubei();
+            else
+                this.registrySystem();
         }
     }
 
@@ -182,7 +185,7 @@ export class UserRegisterComponent implements OnDestroy, OnInit {
         this.memberService.registryKoubei(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    let token = this.tokenService.get().token;
+                    let token = this.route.snapshot.params['token'];
                     this.loginToken(token);
                 } else {
                     this.modalSrv.error({
@@ -239,7 +242,8 @@ export class UserRegisterComponent implements OnDestroy, OnInit {
                         time: +new Date
                     });
                     this.localStorageService.setLocalstorage(APP_TOKEN, token);
-                    this.router.navigate(['/storeList/matchingkoubei']);
+                    let route = this.route.snapshot.params['route']
+                    this.router.navigate([route]);
                     this.startupService.load();
                 } else {
                     this.modalSrv.error({
