@@ -2,13 +2,13 @@
 <div class="cardholdersVip-top">
     <form nz-form [nzLayout]="'inline'" (ngSubmit)="getData()" class="search__form">
         <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
-            <nz-col nzMd="8" nzSm="24">
+            <nz-col nzMd="8" nzSm="24" style="overflow: hidden;height: 56.5px;">
                 <nz-form-item>
                     <jn-stores-infor [className]="'class1'" [className2]="'class2'" [moduleId]="moduleId" (storeIdOutput)="selectStoreInfo($event.storeId)"></jn-stores-infor>
                 </nz-form-item>
             </nz-col>
             <nz-col nzMd="8" nzSm="24">
-                <nz-form-item>
+                <nz-form-item style="height: 56.5px;">
                     <nz-form-label nzFor="phone">会员姓名／手机号</nz-form-label>
                     <nz-form-control>
                         <input nz-input [(ngModel)]="q.phone" name="phone" placeholder="请输入会员姓名或手机号" id="phone">
@@ -16,7 +16,7 @@
                 </nz-form-item>
             </nz-col>
             <nz-col nzMd="8" nzSm="24">
-                <nz-form-item>
+                <nz-form-item style="height: 56.5px;">
                     <nz-form-label nzFor="status">性别</nz-form-label>
                     <nz-form-control>
                         <nz-select [(ngModel)]="q.status" name="status" id="status" [nzPlaceHolder]="'请选择'" [nzShowSearch]="true">
@@ -30,7 +30,7 @@
 
 
             <nz-col nzMd="8" nzSm="24" *ngIf="expandForm">
-                <nz-form-item>
+                <nz-form-item style="height: 56.5px;">
                     <nz-form-label nzFor="dateRange1">会员创建日期</nz-form-label>
                     <nz-form-control>
                         <nz-range-picker [(ngModel)]="q.dateRange1" nzDropdownClassName="right320" name="dateRange1" id="dateRange1"></nz-range-picker>
@@ -38,7 +38,7 @@
                 </nz-form-item>
             </nz-col>
             <nz-col nzMd="8" nzSm="24" *ngIf="expandForm">
-                <nz-form-item>
+                <nz-form-item style="height: 56.5px;">
                     <nz-form-label nzFor="dateRange2">最近一次消费日期</nz-form-label>
                     <nz-form-control>
                         <nz-range-picker [(ngModel)]="q.dateRange2" name="dateRange2" id="dateRange2"></nz-range-picker>
@@ -46,7 +46,7 @@
                 </nz-form-item>
             </nz-col>
             <nz-col nzMd="8" nzSm="24" *ngIf="expandForm">
-                <nz-form-item>
+                <nz-form-item style="height: 56.5px;">
                     <nz-form-label nzFor="money">累计消费金额(元)</nz-form-label>
                     <nz-form-control>
                         <nz-select [(ngModel)]="q.money" name="money" id="money" [nzPlaceHolder]="'请选择'" [nzShowSearch]="true">
