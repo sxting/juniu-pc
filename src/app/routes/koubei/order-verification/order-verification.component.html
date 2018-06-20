@@ -8,7 +8,7 @@
                     <nz-form-label style="display: inline-block">选择门店</nz-form-label>
                     <nz-form-control style="display: inline-block">
                         <nz-select [(ngModel)]="store" (ngModelChange)="selectStoreInfo($event)" style="width: 200px;" [nzPlaceHolder]="'请选择一个门店'"
-                            [nzShowSearch]="true"> 
+                            [nzShowSearch]="true">
                             <nz-option *ngFor="let i of StoresInfo; let idx = index" [nzLabel]="i.shopName" [nzValue]="i.shopId"></nz-option>
                         </nz-select>
                     </nz-form-control>
@@ -20,7 +20,15 @@
         </nz-tab>
         <nz-tab nzTitle="手动核销">
             <div class="member-top-middle" *ngIf="checkoutShow">
-                <jn-stores-infor *ngIf="checkoutShow" [moduleId]="moduleId" (storeIdOutput)="selectStoreInfo($event)"></jn-stores-infor>
+                <nz-form-item>
+                    <nz-form-label style="display: inline-block">选择门店</nz-form-label>
+                    <nz-form-control style="display: inline-block">
+                        <nz-select [(ngModel)]="store" (ngModelChange)="selectStoreInfo($event)" style="width: 200px;" [nzPlaceHolder]="'请选择一个门店'"
+                            [nzShowSearch]="true">
+                            <nz-option *ngFor="let i of StoresInfo; let idx = index" [nzLabel]="i.shopName" [nzValue]="i.shopId"></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
             </div>
             <div class="member-top-middle">
                 <span style="margin-right:24px;">核销码:</span>
