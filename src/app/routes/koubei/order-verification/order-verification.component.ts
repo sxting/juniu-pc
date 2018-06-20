@@ -31,8 +31,8 @@ export class OrderVerificationComponent implements OnInit {
   @Input()
   public checkoutShow: boolean = true;
   StoresInfo: any = this.localStorageService.getLocalstorage(USER_INFO) ?
-    JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)).alipayShops ?
-      JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)).alipayShops : [] : [];
+    JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)).alipayShopList ?
+      JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)).alipayShopList : [] : [];
   storeId: any = this.StoresInfo[0] ? this.StoresInfo[0].shopId : '';
   moduleId:any;
   constructor(
