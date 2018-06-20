@@ -32,6 +32,9 @@
 .nav>li li:hover a{
     color: #fff !important;
 }
+.nav>li  .nav-submenu-open:hover{
+    background: #040d16 !important;
+}
 /* .nav>li:hover a{
     color: #fff !important;
 } */
