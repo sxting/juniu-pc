@@ -544,6 +544,7 @@ export class TouristComponent implements OnInit {
         this.ticketList = [];
         this.xfList = [];
         this.vipCardList = [];
+        this.authCode = '';
         this.cardChangeBoolean = false;
         this.inputValue = 0;
         that.allproducks.forEach(function (i: any) {
@@ -561,6 +562,9 @@ export class TouristComponent implements OnInit {
             nzContent: tpl,
             nzWidth: '500px',
             nzOkText: null,
+            nzOnCancel:()=>{
+                this.authCode = ''
+            }
         });
         // 使条形码输入框处于选中状态
         setTimeout('document.getElementById("authCode1").focus()', 50);
