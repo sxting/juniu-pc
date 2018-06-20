@@ -69,7 +69,7 @@ export class BindWechartStoreComponent {
             window.addEventListener('message', function (e) {
                 if (typeof (e.data.success) !== 'undefined') {
                     if (e.data.success === true) {
-                        self.errorAlter('授权成功');
+                        // self.errorAlter('授权成功');
                         if (self.storeId) {
                             self.router.navigate(['/manage/storeList/wxStore', { storeId: self.storeId }]);
                         }else{
