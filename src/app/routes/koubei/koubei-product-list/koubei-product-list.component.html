@@ -10,7 +10,7 @@
     <button nz-button (click)="addProduct()" [nzType]="'primary'" class="fl">
         <span>新增商品</span>
     </button>
-    <button nz-button  *ngIf="ifAlipayPidShow"  (click)="refreshProductList()"  [nzType]="'default'" class="fl refresh">
+    <button nz-button  *ngIf="ifAlipayPidShow"  (click)="refreshProductList()"  [nzType]="'default'" class="fl refresh" [nzLoading]="loading">
         <span>刷新商品列表</span>
     </button>
 </page-header>
