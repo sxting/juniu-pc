@@ -99,21 +99,21 @@ export class KoubeiProductListComponent implements OnInit {
         }else {//如果是空串的话默认为服务商登陆
             this.providerLogin = true;
         }
-        this.isVisible = this.alipayPid? false : true;//关联口碑账号
-        if(this.isVisible){
-          let Pid = 'BINDING_ALIPAY_' + this.alipayPid;
-          var goEasy = new GoEasy({
-            appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
-          });
-          goEasy.subscribe({
-            channel: Pid,
-            onMessage: function (message) {
-              console.log(message);
-            }
-          });
-        }else{
-          this.isVisible = false;
-        }
+        // this.isVisible = this.alipayPid? false : true;//关联口碑账号
+        // if(this.isVisible){
+        //   let Pid = 'BINDING_ALIPAY_' + this.alipayPid;
+        //   var goEasy = new GoEasy({
+        //     appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
+        //   });
+        //   goEasy.subscribe({
+        //     channel: Pid,
+        //     onMessage: function (message) {
+        //       console.log(message);
+        //     }
+        //   });
+        // }else{
+        //   this.isVisible = false;
+        // }
     }
 
     /**************************页面基础操作开始*********************************/
