@@ -331,7 +331,7 @@ export class AddNewProductComponent implements OnInit {
                     console.log(res.data);
                     let categoryInfor = res.data.categoryId + ',' +  res.data.categoryName;
                     let status = res.data.putaway === 1? this.ItemsStatus[0].value : this.ItemsStatus[1].value;
-                    let storeType = res.data.applyStoreType === 'CUSTOMIZE'? this.storeStatus[1].value : this.storeStatus[1].value;
+                    let storeType = res.data.applyStoreType === 'CUSTOMIZE'? this.storeStatus[1].value : this.storeStatus[0].value;
                     this.formData = {
                         categoryInfor: [ categoryInfor, [ Validators.required ] ],
                         productName:[ res.data.productName, [ Validators.required ] ],
