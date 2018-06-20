@@ -903,6 +903,11 @@ export class TouristComponent implements OnInit {
                     },
                     error => self.errorAlter(error)
                 );
+        }else{
+            if (gd) {
+                this.xfList = this.guadanList[gdindx].xfList;
+                this.totolMoneyFun();
+            }
         }
 
     }
