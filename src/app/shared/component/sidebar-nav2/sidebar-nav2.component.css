@@ -16,8 +16,22 @@
     color: #fff !important;
 }
 .nav>.nav-submenu-open{
-    border-left-color: #ff7700;
+    /* border-left-color: #ff7700; */
+    background: #636260;
 }
 .nav > li > a i{
     margin-right: 0 !important;
 }
+.nav>li:hover{
+    background: #636260 !important;
+    /* color: #fff !important; */
+}
+.nav>li li:hover{
+    background: #ff7700 !important;
+}
+.nav>li li:hover a{
+    color: #fff !important;
+}
+/* .nav>li:hover a{
+    color: #fff !important;
+} */

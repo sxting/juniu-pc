@@ -261,13 +261,14 @@ export class TouristComponent implements OnInit {
                     that.isVerbMoney = NP.minus(that.isVerbMoney, ticketM)
                 }
                 if ((that.totolMoney > 0 || that.isVerbMoney > 0) && that.ticket) {
-                    that.totolMoney = NP.minus(NP.divide(that.vipShowMoney, 100), ticketM)
-                    that.isVerbMoney = NP.minus(NP.divide(that.vipShowMoney, 100), ticketM)
+                    that.totolMoney = NP.minus(NP.divide(that.totolMoney, 100), ticketM)
+                    that.isVerbMoney = NP.minus(NP.divide(that.isVerbMoney, 100), ticketM)
                     that.vipShowMoney -= (ticketM * 100);
-                } else {
-                    that.totolMoney = NP.divide(that.vipShowMoney, 100)
-                    that.isVerbMoney = NP.divide(that.vipShowMoney, 100)
                 }
+                // else {
+                //     that.totolMoney = NP.divide(that.vipShowMoney, 100)
+                //     that.isVerbMoney = NP.divide(that.vipShowMoney, 100)
+                // }
 
                 //  else if (!ticketBoolean) {
                 //     this.vipCardList = [];
@@ -345,7 +346,7 @@ export class TouristComponent implements OnInit {
                 that.vipCardList.forEach(function (i: any) {
                     let vipMoney2 = 0;
                     that.xfList.forEach(function (n: any) {
-                        if (n.vipCard && i.card.cardId === n.vipCard.card.cardId) {
+                        if (n.vipCard && i.card.cardId === n.vipCard.card.cardId &&(!i.applyProductIds || i.applyProductIds.indexOf(n.productId) > -1)) {
                             // i.card.balance2 -= n.vipMoney
                             vipMoney2 += n.vipMoney;
                             vipMoney += n.vipMoney;
@@ -562,7 +563,7 @@ export class TouristComponent implements OnInit {
             nzContent: tpl,
             nzWidth: '500px',
             nzOkText: null,
-            nzOnCancel:()=>{
+            nzOnCancel: () => {
                 this.authCode = ''
             }
         });
@@ -762,7 +763,7 @@ export class TouristComponent implements OnInit {
 
         }
 
-        if (create.settleCardDTOList && create.settleCardDTOList.length > 0) { create.recordType = 'BUCKLECARD'; create.payType = 'MEMBERCARD';create.bizType = 'MEMBER' }
+        if (create.settleCardDTOList && create.settleCardDTOList.length > 0) { create.recordType = 'BUCKLECARD'; create.payType = 'MEMBERCARD'; create.bizType = 'MEMBER' }
         if (!that.changeType) {
             create.money = that.isVerb2 ? that.isVerbVipCardmoney * 100 : that.vipCardmoney * 100;
             create.originMoney = create.money;
@@ -907,7 +908,7 @@ export class TouristComponent implements OnInit {
                     },
                     error => self.errorAlter(error)
                 );
-        }else{
+        } else {
             if (gd) {
                 this.xfList = this.guadanList[gdindx].xfList;
                 this.totolMoneyFun();
