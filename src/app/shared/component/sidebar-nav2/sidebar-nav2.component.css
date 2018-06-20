@@ -17,13 +17,13 @@
 }
 .nav>.nav-submenu-open{
     /* border-left-color: #ff7700; */
-    background: #636260;
+    background: #040d16;
 }
 .nav > li > a i{
     margin-right: 0 !important;
 }
 .nav>li:hover{
-    background: #636260 !important;
+    background: #040d16 !important;
     /* color: #fff !important; */
 }
 .nav>li li:hover{

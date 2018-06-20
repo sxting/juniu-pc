@@ -219,7 +219,8 @@
                           <span class="ziti" *ngIf="item.applyProductType === 'SERVICE'">限全部服务项目可用</span>
                           <span class="ziti" *ngIf="item.applyProductType === 'ALL'">限全部商品可用</span>
                           <span class="ziti" *ngIf="item.applyProductType === 'CUSTOMIZE'">限{{item.getApplyProductNames}}使用</span>
-                          <span class="ziti" *ngIf="item.card.type !== 'TIMES'">余额 ：{{item.card.type === 'METERING'?item.card.balance:(item.card.balance/100).toFixed(2)}} {{item.card.type === 'METERING'?'次':'元'}}</span>
+                          <span class="ziti" *ngIf="item.card.type !== 'TIMES'">余额 ：{{item.card.type === 'METERING'?item.card.balance:(item.card.balance/100).toFixed(2)}} {{item.card.type
+                            === 'METERING'?'次':'元'}}</span>
                           <span class="ziti" *ngIf="item.card.type === 'TIMES'">有效期至 ：{{item.card.validity}}</span>
                         </span>
                       </label>
@@ -402,10 +403,11 @@
                       <div nz-col nzSpan="12">
                         <div nz-col nzSpan="12" class="textAline">充值</div>
                         <div nz-col nzSpan="12" *ngIf="!xyVip">
-                          ¥{{xfCardList.rules[xfCardList.ruleIndex].price/100}} 
+                          ¥{{xfCardList.rules[xfCardList.ruleIndex].price/100}}
                         </div>
                         <div nz-col nzSpan="12" *ngIf="xfCardList.type === 'REBATE'&&xyVip">
-                          <input nz-input style="width:200px" id="name" name="name" type="numeber"  [(ngModel)]="REBATEValue" (ngModelChange)="REBATEValueFun($event)"  placeholder="折扣卡充值金额">
+                          <input nz-input style="width:200px" id="name" name="name" type="numeber" [(ngModel)]="REBATEValue" (ngModelChange)="REBATEValueFun($event)"
+                            placeholder="折扣卡充值金额">
                         </div>
                       </div>
                       <!-- <div nz-col nzSpan="10">
@@ -700,6 +702,9 @@
       </tr>
     </tbody>
   </nz-table>
+  <div class="nzPaginationBox">
+    <nz-pagination class="nzPagination" [nzTotal]="pageInfoNum" [nzPageSize]="10" (nzPageIndexChange)="getData($event)"></nz-pagination>
+  </div>
 </ng-template>
 
 

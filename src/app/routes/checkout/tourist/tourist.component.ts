@@ -128,6 +128,10 @@ export class TouristComponent implements OnInit {
     homeID: any;
     createMoney: any;
     REBATEValue: any = 0;
+    vipBoolean: boolean = false;
+    shopBoolean: boolean = false;
+    pageInfoNum:any = 10;
+    pageIndex:any = 1;
     constructor(
         public msg: NzMessageService,
         private localStorageService: LocalStorageService,
@@ -223,9 +227,12 @@ export class TouristComponent implements OnInit {
         // that.checkTicketStatus();
     }
     //     vipMoney += i.vipMoney;
+
     totolMoneyFun() {
         let that = this;
         this.vipCardList = [];
+        this.vipBoolean = false;
+        this.shopBoolean = false;
         if (that.changeType) {
             that.ticketListTime();
             that.totolMoney = 0;
@@ -233,18 +240,30 @@ export class TouristComponent implements OnInit {
             if (!this.cardChangeBoolean) this.vipCardSearchFun();
             //每个卡的余额
             this.vipCardListfun();
-
+            let totolMoney = 0;
             that.xfList.forEach(function (i: any) {
                 i.totoleMoney = NP.round(NP.times(NP.divide(i.currentPrice, 100), i.num, NP.divide(i.discount, 100)), 2);
-                that.totolMoney = NP.round(NP.plus(that.totolMoney, NP.times(NP.divide(i.currentPrice, 100), i.num, NP.divide(i.discount, 100))), 2);
-                that.isVerbMoney = Math.floor(that.totolMoney);
+                totolMoney = NP.round(NP.plus(that.totolMoney, NP.times(NP.divide(i.currentPrice, 100), i.num, NP.divide(i.discount, 100))), 2);
             })
-            console.log(that.totolMoney)
-            this.createMoney = that.totolMoney;
+
+            this.createMoney = totolMoney;
             //标注每个卡对应的总计减免
             this.vipMoneyFun()
             this.balanceFun();
+            that.xfList.forEach(function (i: any) {
+                if (i.vipCard) {
+                    i.totoleMoney = NP.round(NP.times(NP.divide(i.vipMoney, 100), i.num, NP.divide(i.discount, 100)), 2);
+                    that.totolMoney = NP.round(NP.plus(that.totolMoney, NP.times(NP.divide(i.vipMoney, 100), i.num, NP.divide(i.discount, 100))), 2);
+                    that.isVerbMoney = Math.floor(that.totolMoney);
+                    that.vipBoolean = true;
+                } else {
+                    i.totoleMoney = NP.round(NP.times(NP.divide(i.currentPrice, 100), i.num, NP.divide(i.discount, 100)), 2);
+                    that.totolMoney = NP.round(NP.plus(that.totolMoney, NP.times(NP.divide(i.currentPrice, 100), i.num, NP.divide(i.discount, 100))), 2);
+                    that.isVerbMoney = Math.floor(that.totolMoney);
+                    that.shopBoolean = true;
+                }
 
+            })
             this.tanchuang();
             that.productIdsFun(that.xfList);
             ticketM = that.ticketCheck ? (that.ticket && that.xfList.length > 0 ? that.ticket.ticketMoney : 0) : 0;
@@ -346,7 +365,7 @@ export class TouristComponent implements OnInit {
                 that.vipCardList.forEach(function (i: any) {
                     let vipMoney2 = 0;
                     that.xfList.forEach(function (n: any) {
-                        if (n.vipCard && i.card.cardId === n.vipCard.card.cardId &&(!i.applyProductIds || i.applyProductIds.indexOf(n.productId) > -1)) {
+                        if (n.vipCard && i.card.cardId === n.vipCard.card.cardId && (!i.applyProductIds || i.applyProductIds.indexOf(n.productId) > -1)) {
                             // i.card.balance2 -= n.vipMoney
                             vipMoney2 += n.vipMoney;
                             vipMoney += n.vipMoney;
@@ -785,7 +804,13 @@ export class TouristComponent implements OnInit {
         if (this.xyVip) {
             that.rechargeAndOrderPayFun(create)
         } else {
-            that.createOrderFun(create);
+            if(this.vipBoolean&&this.shopBoolean){
+                this.modalSrv.info({
+                    nzContent: '单笔收银不支持同时使用会员卡扣卡及现金结算，请分笔进行结算'
+                })
+            }else{
+                that.createOrderFun(create);
+            }
         }
     }
     createOrderFun(create: any) {
@@ -1125,6 +1150,7 @@ export class TouristComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     this.cardConfigList = res.data.cardConfig;
+                    this.configCardTypeList = [];
                     var arr = res.data.cardConfig;
                     var objArr: any = []; //定义一个空数组
                     var len = res.data.cardConfig.length;
@@ -1461,7 +1487,7 @@ export class TouristComponent implements OnInit {
     getOrderHistoryListHttp(phone?: any) {
         let self = this;
         let data = {
-            pageIndex: 1,
+            pageIndex: this.pageIndex,
             pageSize: this.pageSize,
             phone: phone
         }
@@ -1472,6 +1498,7 @@ export class TouristComponent implements OnInit {
                 (res: any) => {
                     if (res.success) {
                         self.shopyinList = res.data.orders;
+                        self.pageInfoNum = res.data.pageInfo.countTotal 
                     } else {
                         self.errorAlter(res.errorInfo)
                     }
@@ -1543,7 +1570,10 @@ export class TouristComponent implements OnInit {
         this.pageIndex3 = e;
         this.findByCustomerIdHttp(this.memberInfo.customerId);
     }
-
+    getData(e){
+        this.pageIndex = e;
+        this.getOrderHistoryListHttp();
+    }
     //门店初始化
     getStoresInfor() {
         let self = this;
