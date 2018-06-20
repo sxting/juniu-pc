@@ -1,9 +1,10 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnChanges, OnInit } from '@angular/core';
 import * as distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { NoticeItem, NoticeIconList } from '@delon/abc';
 import { HomeService } from "../../../../routes/home/shared/home.service";
-
+import { SimpleChanges } from '@angular/core';
+declare var GoEasy: any;
 /**
  * 菜单通知
  */
@@ -19,7 +20,7 @@ import { HomeService } from "../../../../routes/home/shared/home.service";
   `,
 })
 // <!--(clear)="clear($event)"-->
-export class HeaderNotifyComponent implements OnDestroy {
+export class HeaderNotifyComponent implements OnInit, OnDestroy, OnChanges {
   data2: any = [
     {
       title: '未读消息',
@@ -35,7 +36,7 @@ export class HeaderNotifyComponent implements OnDestroy {
   count = 0;
   loading = false;
   messageId: any = '';
-  time:any;
+  time: any;
   constructor(private msg: NzMessageService,
     private homeService: HomeService,
     private modalSrv: NzModalService,
@@ -43,10 +44,41 @@ export class HeaderNotifyComponent implements OnDestroy {
     this.getMessageCount();
 
     let self = this;
-    self.time =  setInterval(function () {
+    self.time = setInterval(function () {
       self.getMessageCount();
       // self.getMessageList();
     }, 30000)
+
+
+
+  }
+  ngOnInit(): void {
+    let goEasy = new GoEasy({
+      appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
+    });
+
+    goEasy.subscribe({
+      channel: '12345678',
+      onMessage: function (message) {
+        // if (confirm(message.content)) {
+          console.log(message.content)
+        // }
+      }
+    });
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    let goEasy = new GoEasy({
+      appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
+    });
+
+    goEasy.subscribe({
+      channel: '12345678',
+      onMessage: function (message) {
+        // if (confirm(message.content)) {
+          console.log(message.content)
+        // }
+      }
+    });
   }
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
