@@ -1,6 +1,6 @@
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
-
+import NP from 'number-precision';
 
 /**
  * Created by chounan on 17/9/8.
@@ -152,8 +152,8 @@ export class ReleaseGroupsComponent implements OnInit {
                 pinTuanId: this.pinTuanId,
                 pinTuanName: this.pinTuanName.value,
                 timeLimit: this.timeLimit.value,
-                originalPrice: this.originalPrice.value * 100,
-                presentPrice: this.presentPrice.value * 100,
+                originalPrice:  NP.times(this.originalPrice.value ,100),
+                presentPrice: NP.times(this.presentPrice.value , 100),
                 peopleNumber: this.ctrsBoo ? this.peopleNumber.value : this.peopleNumber2,
                 inventory: this.inventory.value,
                 startTime: this.startTime,
@@ -447,8 +447,8 @@ export class ReleaseGroupsComponent implements OnInit {
                     let self = this;
                     let pinTuanName = res.data.pinTuanName ? res.data.pinTuanName : null;
                     let timeLimit = res.data.timeLimit ? res.data.timeLimit : null;
-                    let originalPrice = res.data.originalPrice ? res.data.originalPrice / 100 : null;
-                    let presentPrice = res.data.presentPrice ? res.data.presentPrice / 100 : null;
+                    let originalPrice = res.data.originalPrice ? NP.divide(res.data.originalPrice , 100) : null;
+                    let presentPrice = res.data.presentPrice ? NP.divide(res.data.presentPrice , 100) : null;
                     let peopleNumber = res.data.peopleNumber ? res.data.peopleNumber : null;
                     let inventory = res.data.inventory ? res.data.inventory : null;
                     let mock = res.data.mock ? res.data.mock : false;
@@ -465,8 +465,8 @@ export class ReleaseGroupsComponent implements OnInit {
                         inventory: [inventory, [Validators.required, Validators.pattern(/^[1-9]\d*$/), Validators.minLength(1), Validators.maxLength(8)]],
                         peopleNumber: [peopleNumber, [Validators.pattern(/^[1-9]\d*$/), Validators.minLength(1), Validators.maxLength(8)]],
                         timeLimit: [timeLimit, [Validators.pattern(/^[1-9]\d*$/), Validators.max(24), Validators.min(1)]],
-                        originalPrice: [originalPrice, [Validators.required, Validators.pattern(/^[1-9]\d*$/), Validators.max(99999999), Validators.min(1)]],
-                        presentPrice: [presentPrice, [Validators.required, Validators.pattern(/^[1-9]\d*$/), Validators.max(99999999), Validators.min(1)]],
+                        originalPrice: [originalPrice, [Validators.required, Validators.pattern(/^[0-9]+(.[0-9]{1,2})?$/), Validators.max(99999999), Validators.min(0.1)]],
+                        presentPrice: [presentPrice, [Validators.required, Validators.pattern(/^[0-9]+(.[0-9]{1,2})?$/), Validators.max(99999999), Validators.min(0.1)]],
                         time: [time],
                         time2: [this._validateEndTime],
                         mock: [mock]

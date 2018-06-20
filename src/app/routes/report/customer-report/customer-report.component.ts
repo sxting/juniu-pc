@@ -27,7 +27,7 @@ export class CustomerReportComponent implements OnInit {
     pageSize: any = '10';//一页展示多少数据
     totalElements: any = 0;//商品总数
     merchantId: string = '';
-    theadName: any = ['时间', '顾客姓名', '服务技师', '类型', '金额'];//表头
+    theadName: any = ['时间', '顾客姓名', '类型', '金额'];//表头 '服务技师',先隐藏
     monthReportListInfor: any[] = [];//月报的信息列表
     currentCount: any = ''; //当日客流量
     memberPer: any = '';//会员占比

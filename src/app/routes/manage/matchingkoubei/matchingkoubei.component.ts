@@ -35,9 +35,9 @@ export class MatchingkoubeiComponent {
             nzWidth: '1000px',
             nzOnOk: () => {
                 if (that.list2 && that.list2.length > 0) {
-                    let shopIds = ''
+                    let shopIds = []
                     that.list2.forEach(function (i: any) {
-                        shopIds += i.shopId + ','
+                        shopIds.push(i.shopId)
                     })
                     that.ImportkoubeiShopHttp(shopIds)
                 }
@@ -61,9 +61,9 @@ export class MatchingkoubeiComponent {
     }
     qbdaoru() {
         let that = this;
-        let shopIds = ''
+        let shopIds = []
         that.alipayshops.forEach(function (i: any) {
-            shopIds += i.shopId + ','
+            shopIds.push(i.shopId)
         })
         that.ImportkoubeiShopHttp(shopIds)
     }

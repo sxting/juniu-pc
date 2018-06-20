@@ -36,7 +36,9 @@ export class SidebarComponent {
             } else if (res.data.eventType === 'API') {
 
             } else if (res.data.eventType === 'REDIRECT') {
-              window.open(res.data.eventRoute);
+              let href = res.data.eventRoute;
+              console.log(href)
+              window.open(href);
             }
             if (res.data.eventMsg) {
               this.errorAlert(res.data.eventMsg);
