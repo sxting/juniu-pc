@@ -1,28 +1,27 @@
 <nz-card>
-    <p>桔牛基于微信小程序的能力，为您量身打造了多套美业线上门店模板，让您的会员可以使用微信进行预约、开卡、商品购买等操作。</p>
+    <!-- <p>桔牛基于微信小程序的能力，为您量身打造了多套美业线上门店模板，让您的会员可以使用微信进行预约、开卡、商品购买等操作。</p> -->
     <div class="picBox">
         <div></div>
         <div></div>
         <div></div>
         <div></div>
     </div>
-    <p>如果您之前已经申请过微信小程序，您只需要 点击关联即可一键生成门店小程序，非常简单。
-    </p>
-    <p>如果您之前没有申请过微信小程序，但是开通过微信公众号，您只需要在微信公众平台进行简单的申请，申请通过后在桔牛后台 点击关联即可。
+    <p>桔牛将<span style="color:#ff7700;">免费赠送</span>一套标准的小程序门店，并且后续还会不断升级小程序的营销功能； 如果之前您已经申请过腾讯的账号，直接点击下方【关联】即可</p>
+    <!-- <p>如果您之前没有申请过微信小程序，但是开通过微信公众号，您只需要在微信公众平台进行简单的申请，申请通过后在桔牛后台 点击关联即可。
     </p>
     <div style="margin-top:50px;">
         <p>如果您从未了解过微信公众号和小程序的相关业务，您需要准备如下资料，用来申请微信小程序：</p>
         <ul>
             <li>微信公众平台账号</li>
             <li>营业执照</li>
-            <!-- <li>小程序签约文稿(
-                <a>点击下载</a>）</li> -->
+  
             <li>银行对公账户(无对公账户可能审核通过比较困难)</li>
         </ul>
-    </div>
+    </div> -->
     <div style="margin-top:20px;">
-        <button class="buttons" style="margin-right:20px;"  nz-button nzType="primary" (click)="gotoWeChat()" type="submit">立即申请</button>
-        <button class="buttons" (click)="matching(modalContent)"  nz-button>申请好了，点击关联</button>
+        <button class="buttons" style="margin-right:20px;" (click)="matching(modalContent)" nzType="primary" type="submit" nz-button>申请好了，点击关联</button>
+        <button class="buttons" nz-button (click)="gotoWeChat()">立即申请</button>
+
     </div>
 </nz-card>
 
