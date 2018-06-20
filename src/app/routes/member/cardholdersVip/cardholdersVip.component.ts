@@ -267,8 +267,7 @@ export class CardholdersVipComponent {
             nzTitle: '消费记录',
             nzContent: tpl,
             nzWidth: '80%',
-            nzOnOk: () => {
-            }
+            nzFooter : null
         });
     }
     getCustomerhttp(data: any) {
