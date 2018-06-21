@@ -34,6 +34,8 @@ export class RevenueReportComponent implements OnInit {
     sankePerNum: any;
     todayIncomeItem: any;
     yesterdayCompare: any;
+    todayIncomeItemDetail: any;
+    yesterdayCompareDetail: any;
 
     moduleId: any;
     ifStoresAll: boolean = true;//是否有全部门店
@@ -153,9 +155,10 @@ export class RevenueReportComponent implements OnInit {
                             that.sankePer =  allNum == 0? '-' : NP.round((num/allNum)*100,2)+'%';
                         }
                     });
-
                     that.todayIncomeItem = res.data.todayIncomeItem;
                     that.yesterdayCompare = res.data.yesterdayCompare;
+                    that.todayIncomeItemDetail = that.todayIncomeItem.lastWeekCompare*100 < 0? NP.round(that.todayIncomeItem.lastWeekCompare*100*-1,2) : NP.round(that.todayIncomeItem.lastWeekCompare*100,2);
+                    that.yesterdayCompareDetail = that.todayIncomeItem.yesterdayCompare*100 < 0? NP.round(that.todayIncomeItem.yesterdayCompare*100*-1,2) : NP.round(that.todayIncomeItem.yesterdayCompare*100,2);
 
                 } else {
                     this.modalSrv.error({
@@ -173,7 +176,6 @@ export class RevenueReportComponent implements OnInit {
     //选择门店
     selectStore() {
         this.batchQuery.storeId = this.storeId;
-        console.log(this.storeId);
         this.getCurrentIncomeHttp(this.batchQuery);
     }
 
