@@ -40,11 +40,11 @@
                     <div>
                         周同比
                         <span class="iconfont {{todayIncomeItem?.lastWeekCompare<0?'icon-xiala':'icon-up'}}"></span>
-                        {{todayIncomeItem?.lastWeekCompare*100 < 0?todayIncomeItem?.lastWeekCompare*100*-1:todayIncomeItem?.lastWeekCompare*100}}% </div>
+                        {{todayIncomeItemDetail}}% </div>
                     <div>
                         日环比
                         <span class="iconfont {{todayIncomeItem?.yesterdayCompare<0?'icon-xiala':'icon-up'}}"></span>
-                        {{todayIncomeItem?.yesterdayCompare*100 < 0?todayIncomeItem?.yesterdayCompare*100*-1:todayIncomeItem?.yesterdayCompare*100}}% </div>
+                        {{yesterdayCompareDetail}}% </div>
                 </div>
             </div>
         </nz-card>
