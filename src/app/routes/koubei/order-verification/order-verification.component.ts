@@ -34,7 +34,7 @@ export class OrderVerificationComponent implements OnInit {
     JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)).alipayShopList ?
       JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)).alipayShopList : [] : [];
   storeId: any = this.StoresInfo[0] ? this.StoresInfo[0].shopId : '';
-  moduleId:any;
+  moduleId: any;
   constructor(
     private koubeiService: KoubeiService,
     private localStorageService: LocalStorageService,
@@ -64,13 +64,13 @@ export class OrderVerificationComponent implements OnInit {
     this.storeId = e;
   }
   /**扫码 */
-  goToSubmitOrder() {
+  goToSubmitOrder(event?: any) {
     let self = this;
     let div = document.getElementById('tauthCode');
     let div2 = document.getElementById('authCode');
-    if (self.authCode.length === 12 && self.authCode.substring(0, 2) != '31') {
+    if (event && event.length === 12 && event.substring(0, 2) != '31') {
       div2.setAttribute('disabled', 'disabled');
-      this.tplModal.destroy();
+      this.modalSrv.closeAll();
       let data = {
         shopId: self.storeId,
         ticketNo: self.authCode,
@@ -87,9 +87,9 @@ export class OrderVerificationComponent implements OnInit {
       };
       self.koubeiProductVouchersticket(data);
     }
-    if (self.authCode.length === 16 && self.authCode.substring(0, 2) == '31') {
+    if (event && event.length === 16 && event.substring(0, 2) == '31') {
       div2.setAttribute('disabled', 'disabled');
-      this.tplModal.destroy();
+      this.modalSrv.closeAll();
       let data = {
         shopId: self.storeId,
         ticketNo: self.authCode,
@@ -109,18 +109,12 @@ export class OrderVerificationComponent implements OnInit {
   }
   /**扫码 */
   scanPay() {
+    setTimeout('document.getElementById("authCode").focus();', 50);
+
     this.modalSrv.info({
       nzTitle: '扫描条形码中。。。。',
-      nzOkText:'取消',
+      nzOkText: '取消',
     });
-    // swal({
-    //   title: '扫描条形码中',
-    //   showConfirmButton: false,
-    //   showCancelButton: true,
-    //   cancelButtonText: '取消',
-    //   allowOutsideClick: false
-    // }).catch(swal.noop);
-    document.getElementById('authCode').focus();
   }
   //口碑核销列表信息
   koubeiProductVouchersListFirst(batchQuery: any) {
