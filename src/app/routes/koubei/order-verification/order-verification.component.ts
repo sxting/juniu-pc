@@ -151,14 +151,9 @@ export class OrderVerificationComponent implements OnInit {
 
         if (res.success) {
           console.log(res.data);
-          // swal({
-          //   title: '核销成功!',
-          //   html: '<div><span>核销码:</span>' + res.ticketNo + '</div>' +
-          //     '<div><span>核销时间:</span>' + res.useDate + '</div>' +
-          //     '<div><span>核销门店:</span>' + res.useShop + '</div>' +
-          //     '<div><span>核销商品:</span>' + res.itemName + '</div>' +
-          //     '<div><span>核销金额:</span>' + res.price + '</div>'
-          // });
+          this.modalSrv.success({
+            nzContent: '核销成功!'
+          });
           let batchQuery = {
             pageIndex: 1,
             pageSize: 10
