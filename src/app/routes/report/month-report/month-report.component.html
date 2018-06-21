@@ -6,9 +6,6 @@
               <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth"
                                (storeListPush)="storeListPush($event)" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
             </nz-col>
-            <button nz-button (click)="exportExcel()" [nzType]="'primary'" class="fr" style="margin-right: 24px;">
-              <span>导出Excel</span>
-            </button>
             <nz-col nzMd="8" nzSm="24" class="fr">
                 <nz-form-item>
                     <nz-form-label nzFor="reportDate">选择月份</nz-form-label>
@@ -19,6 +16,9 @@
                 </nz-form-item>
             </nz-col>
         </nz-row>
+        <button nz-button (click)="exportExcel()" [nzType]="'primary'">
+          <span>导出Excel</span>
+        </button>
     </div>
 </nz-card>
 <div nz-row [nzGutter]="24" class="pt-lg">
