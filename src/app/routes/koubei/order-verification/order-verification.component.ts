@@ -31,10 +31,10 @@ export class OrderVerificationComponent implements OnInit {
   @Input()
   public checkoutShow: boolean = true;
   StoresInfo: any = this.localStorageService.getLocalstorage(USER_INFO) ?
-    JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)).alipayShops ?
-      JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)).alipayShops : [] : [];
+    JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)).alipayShopList ?
+      JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)).alipayShopList : [] : [];
   storeId: any = this.StoresInfo[0] ? this.StoresInfo[0].shopId : '';
-  moduleId:any;
+  moduleId: any;
   constructor(
     private koubeiService: KoubeiService,
     private localStorageService: LocalStorageService,
@@ -64,13 +64,13 @@ export class OrderVerificationComponent implements OnInit {
     this.storeId = e;
   }
   /**扫码 */
-  goToSubmitOrder() {
+  goToSubmitOrder(event?: any) {
     let self = this;
     let div = document.getElementById('tauthCode');
     let div2 = document.getElementById('authCode');
-    if (self.authCode.length === 12 && self.authCode.substring(0, 2) != '31') {
+    if (event && event.length === 12 && event.substring(0, 2) != '31') {
       div2.setAttribute('disabled', 'disabled');
-      this.tplModal.destroy();
+      this.modalSrv.closeAll();
       let data = {
         shopId: self.storeId,
         ticketNo: self.authCode,
@@ -87,9 +87,9 @@ export class OrderVerificationComponent implements OnInit {
       };
       self.koubeiProductVouchersticket(data);
     }
-    if (self.authCode.length === 16 && self.authCode.substring(0, 2) == '31') {
+    if (event && event.length === 16 && event.substring(0, 2) == '31') {
       div2.setAttribute('disabled', 'disabled');
-      this.tplModal.destroy();
+      this.modalSrv.closeAll();
       let data = {
         shopId: self.storeId,
         ticketNo: self.authCode,
@@ -109,18 +109,12 @@ export class OrderVerificationComponent implements OnInit {
   }
   /**扫码 */
   scanPay() {
+    setTimeout('document.getElementById("authCode").focus();', 50);
+
     this.modalSrv.info({
       nzTitle: '扫描条形码中。。。。',
-      nzOkText:'取消',
+      nzOkText: '取消',
     });
-    // swal({
-    //   title: '扫描条形码中',
-    //   showConfirmButton: false,
-    //   showCancelButton: true,
-    //   cancelButtonText: '取消',
-    //   allowOutsideClick: false
-    // }).catch(swal.noop);
-    document.getElementById('authCode').focus();
   }
   //口碑核销列表信息
   koubeiProductVouchersListFirst(batchQuery: any) {
@@ -157,14 +151,9 @@ export class OrderVerificationComponent implements OnInit {
 
         if (res.success) {
           console.log(res.data);
-          // swal({
-          //   title: '核销成功!',
-          //   html: '<div><span>核销码:</span>' + res.ticketNo + '</div>' +
-          //     '<div><span>核销时间:</span>' + res.useDate + '</div>' +
-          //     '<div><span>核销门店:</span>' + res.useShop + '</div>' +
-          //     '<div><span>核销商品:</span>' + res.itemName + '</div>' +
-          //     '<div><span>核销金额:</span>' + res.price + '</div>'
-          // });
+          this.modalSrv.success({
+            nzContent: '核销成功!'
+          });
           let batchQuery = {
             pageIndex: 1,
             pageSize: 10

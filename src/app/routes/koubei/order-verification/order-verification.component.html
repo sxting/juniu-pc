@@ -7,7 +7,7 @@
                 <nz-form-item>
                     <nz-form-label style="display: inline-block">选择门店</nz-form-label>
                     <nz-form-control style="display: inline-block">
-                        <nz-select [(ngModel)]="store" (ngModelChange)="selectStoreInfo($event)" style="width: 200px;" [nzPlaceHolder]="'请选择一个门店'"
+                        <nz-select  (ngModelChange)="selectStoreInfo($event)" style="width: 200px;" [nzPlaceHolder]="'请选择一个门店'"
                             [nzShowSearch]="true">
                             <nz-option *ngFor="let i of StoresInfo; let idx = index" [nzLabel]="i.shopName" [nzValue]="i.shopId"></nz-option>
                         </nz-select>
@@ -16,14 +16,14 @@
             </div>
             <div class="sm-button {{checkoutShow?'sm-button2':''}} " (click)="scanPay()">扫描顾客核销码</div>
             <div class="gai"></div>
-            <input type="text" nz-input id="authCode" [(ngModel)]="authCode" name="authCode" (ngModelChange)="goToSubmitOrder()" class="input pay-code-input">
+            <input type="text" nz-input id="authCode" [(ngModel)]="authCode" name="authCode" (ngModelChange)="goToSubmitOrder($event)" class="input pay-code-input">
         </nz-tab>
         <nz-tab nzTitle="手动核销">
             <div class="member-top-middle" *ngIf="checkoutShow">
                 <nz-form-item>
                     <nz-form-label style="display: inline-block">选择门店</nz-form-label>
                     <nz-form-control style="display: inline-block">
-                        <nz-select [(ngModel)]="store" (ngModelChange)="selectStoreInfo($event)" style="width: 200px;" [nzPlaceHolder]="'请选择一个门店'"
+                        <nz-select  (ngModelChange)="selectStoreInfo($event)" style="width: 200px;" [nzPlaceHolder]="'请选择一个门店'"
                             [nzShowSearch]="true">
                             <nz-option *ngFor="let i of StoresInfo; let idx = index" [nzLabel]="i.shopName" [nzValue]="i.shopId"></nz-option>
                         </nz-select>
