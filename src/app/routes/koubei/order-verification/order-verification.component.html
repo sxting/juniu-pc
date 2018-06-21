@@ -7,7 +7,7 @@
                 <nz-form-item>
                     <nz-form-label style="display: inline-block">选择门店</nz-form-label>
                     <nz-form-control style="display: inline-block">
-                        <nz-select  (ngModelChange)="selectStoreInfo($event)" style="width: 200px;" [nzPlaceHolder]="'请选择一个门店'"
+                        <nz-select  [(ngModel)]="shopId" (ngModelChange)="selectStoreInfo($event)" style="width: 200px;" [nzPlaceHolder]="'请选择一个门店'"
                             [nzShowSearch]="true">
                             <nz-option *ngFor="let i of StoresInfo; let idx = index" [nzLabel]="i.shopName" [nzValue]="i.shopId"></nz-option>
                         </nz-select>
@@ -23,7 +23,7 @@
                 <nz-form-item>
                     <nz-form-label style="display: inline-block">选择门店</nz-form-label>
                     <nz-form-control style="display: inline-block">
-                        <nz-select  (ngModelChange)="selectStoreInfo($event)" style="width: 200px;" [nzPlaceHolder]="'请选择一个门店'"
+                        <nz-select [(ngModel)]="shopId" (ngModelChange)="selectStoreInfo($event)" style="width: 200px;" [nzPlaceHolder]="'请选择一个门店'"
                             [nzShowSearch]="true">
                             <nz-option *ngFor="let i of StoresInfo; let idx = index" [nzLabel]="i.shopName" [nzValue]="i.shopId"></nz-option>
                         </nz-select>
