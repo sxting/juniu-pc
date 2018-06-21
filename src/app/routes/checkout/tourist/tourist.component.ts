@@ -242,8 +242,8 @@ export class TouristComponent implements OnInit {
             this.vipCardListfun();
             let totolMoney = 0;
             that.xfList.forEach(function (i: any) {
-                i.totoleMoney = NP.round(NP.times(NP.divide(i.currentPrice, 100), i.num, NP.divide(i.discount, 100)), 2);
-                totolMoney = NP.round(NP.plus(that.totolMoney, NP.times(NP.divide(i.currentPrice, 100), i.num, NP.divide(i.discount, 100))), 2);
+                i.totoleMoney1 = NP.round(NP.times(NP.divide(i.currentPrice, 100), i.num, NP.divide(i.discount, 100)), 2);
+                totolMoney = NP.round(NP.plus(totolMoney, NP.times(NP.divide(i.currentPrice, 100), i.num, NP.divide(i.discount, 100))), 2);
             })
 
             this.createMoney = totolMoney;
@@ -253,7 +253,7 @@ export class TouristComponent implements OnInit {
             that.xfList.forEach(function (i: any) {
                 if (i.vipCard) {
                     i.totoleMoney = NP.round(NP.times(NP.divide(i.vipMoney, 100), i.num, NP.divide(i.discount, 100)), 2);
-                    that.totolMoney = NP.round(NP.plus(that.totolMoney, NP.times(NP.divide(i.vipMoney, 100), i.num, NP.divide(i.discount, 100))), 2);
+                    that.totolMoney = NP.round(NP.plus(that.totolMoney, NP.times(NP.divide(i.vipMoney, 100), NP.divide(i.discount, 100))), 2);
                     that.isVerbMoney = Math.floor(that.totolMoney);
                     that.vipBoolean = true;
                 } else {
