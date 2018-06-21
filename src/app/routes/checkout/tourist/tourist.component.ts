@@ -280,9 +280,9 @@ export class TouristComponent implements OnInit {
                     that.isVerbMoney = NP.minus(that.isVerbMoney, ticketM)
                 }
                 if ((that.totolMoney > 0 || that.isVerbMoney > 0) && that.ticket) {
-                    that.totolMoney = NP.minus(NP.divide(that.totolMoney, 100), ticketM)
-                    that.isVerbMoney = NP.minus(NP.divide(that.isVerbMoney, 100), ticketM)
                     that.vipShowMoney -= (ticketM * 100);
+                } else if ((that.totolMoney < 0 || that.isVerbMoney < 0) && that.ticket) {
+                    that.vipShowMoney = 0;
                 }
                 // else {
                 //     that.totolMoney = NP.divide(that.vipShowMoney, 100)
@@ -463,8 +463,9 @@ export class TouristComponent implements OnInit {
         if (this.settleCardDTOList && this.settleCardDTOList.length > 0) {
             this.jiesuanFun();
         } else {
-            let mmm = that.isVerb2 ? that.isVerbVipCardmoney : that.vipCardmoney;
-            if ((mmm <= 0 || mmm > 999999 || (/^[1-9]\d*$/).test(mmm + '')) && !this.changeType && that.xfCardList && that.xfCardList.type === 'REBATE' && this.xyVip) {
+            let mmm = Number(that.isVerb2 ? that.isVerbVipCardmoney : that.vipCardmoney);
+            console.log((/^[1-9]\d*$/).test(mmm + ''));
+            if ((mmm <= 0 || mmm > 999999 || !(/^[1-9]\d*$/).test(mmm + '')) && !this.changeType && that.xfCardList && that.xfCardList.type === 'REBATE' && this.xyVip) {
                 this.modalSrv.error({
                     nzContent: '请输入折扣卡充值金额（1-999999之前的整数）'
                 })
@@ -776,6 +777,7 @@ export class TouristComponent implements OnInit {
             })
             if (cardTicketList && cardTicketList.length > 0) {
                 cardTicketList[0].amount -= ((that.ticketCheck ? (that.ticket && that.xfList.length > 0 ? that.ticket.ticketMoney : 0) : 0) * 100);
+                if (cardTicketList[0].amount < 0) cardTicketList[0].amount = 0;
                 create.settleCardDTOList.forEach(function (i: any) {
                     if (i.cardId === cardTicketList[0].cardId) i = cardTicketList[0];
                 })
@@ -802,6 +804,7 @@ export class TouristComponent implements OnInit {
         // create.faceId = this.selectFaceId;
         create.customerId = this.memberInfo.customerId;
         this.spinBoolean = true;
+        console.log(create);
         if (this.xyVip) {
             that.rechargeAndOrderPayFun(create)
         } else {

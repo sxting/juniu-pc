@@ -186,7 +186,11 @@
                           <span>
                             <span>
                               <span class="iconfont icon-quan"></span>
-                              <span>{{ticket?.tickType+' '}}{{ticket?.couponDefName}}</span>
+                              <span style="display: inline-block;
+                              width: 140px;
+                              overflow: hidden;
+                              text-overflow: ellipsis;
+                              white-space: nowrap;">{{ticket?.tickType+' '}}{{ticket?.couponDefName}}</span>
                             </span>
                             <br />
                             <span class="ziti">{{ticket?.consumeLimitProductIds.length>0?'限商品:'+(ticket?.tickType==='礼品券'?ticket?.couponDefProductName:ticket?.consumeLimitProductNames)+'可用':'无限制'}}</span>
@@ -226,6 +230,7 @@
                       </label>
                     </div>
                     <div style="text-align:right;" nz-col nzSpan="8" *ngIf="vipShowMoney">扣卡：{{(vipShowMoney/100).toFixed(2)}}元</div>
+                    <div style="text-align:right;" nz-col nzSpan="8" *ngIf="vipShowMoney === 0">扣卡：0元</div>
                   </div>
                 </div>
               </nz-form-item>
