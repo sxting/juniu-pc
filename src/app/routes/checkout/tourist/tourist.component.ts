@@ -130,8 +130,8 @@ export class TouristComponent implements OnInit {
     REBATEValue: any = 0;
     vipBoolean: boolean = false;
     shopBoolean: boolean = false;
-    pageInfoNum:any = 10;
-    pageIndex:any = 1;
+    pageInfoNum: any = 10;
+    pageIndex: any = 1;
     constructor(
         public msg: NzMessageService,
         private localStorageService: LocalStorageService,
@@ -184,6 +184,7 @@ export class TouristComponent implements OnInit {
         this.cardChangeBoolean = false;
         this.allproducks[index1].productList[index2].click = !this.allproducks[index1].productList[index2].click;
         this.allproducks[index1].productList[index2].num = !this.allproducks[index1].productList[index2].click ? 1 : this.allproducks[index1].productList[index2].num;
+        this.allproducks[index1].productList[index2].discount = !this.allproducks[index1].productList[index2].click ? 100 : this.allproducks[index1].productList[index2].discount;
         that.xfList.forEach(function (i: any, n: any) {
             i.open = false;
             if (that.allproducks[index1].productList[index2].productId === i.productId) {
@@ -198,7 +199,6 @@ export class TouristComponent implements OnInit {
             i.staffGroupData = that.staffGroupData;
             i.assign = 0;
         })
-
         that.totolMoneyFun();
     }
     selectStoreInfo(event: any) {
@@ -251,9 +251,9 @@ export class TouristComponent implements OnInit {
             this.vipMoneyFun()
             this.balanceFun();
             that.xfList.forEach(function (i: any) {
-                if (i.vipCard) {
+                if (i.vipCard && !that.cardChangeBoolean) {
                     i.totoleMoney = NP.round(NP.times(NP.divide(i.vipMoney, 100), i.num, NP.divide(i.discount, 100)), 2);
-                    that.totolMoney = NP.round(NP.plus(that.totolMoney, NP.times(NP.divide(i.vipMoney, 100), NP.divide(i.discount, 100))), 2);
+                    that.totolMoney = NP.round(NP.plus(that.totolMoney, NP.divide(i.vipMoney, 100)), 2);
                     that.isVerbMoney = Math.floor(that.totolMoney);
                     that.vipBoolean = true;
                 } else {
@@ -345,7 +345,7 @@ export class TouristComponent implements OnInit {
                         if (k.card.cardId === i.vipCard.card.cardId && k.checked) {
                             if (i.vipCard.card.type === "TIMES") { i.vipMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), i.num) }
                             else if (i.vipCard.card.type === "METERING") { i.vipMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), i.num) }
-                            else if (i.vipCard.card.type === "REBATE") { i.vipMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), NP.divide(i.discount, 100), NP.divide(i.vipCard.card.rebate, 10), i.num); }
+                            else if (i.vipCard.card.type === "REBATE") { i.vipMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), NP.divide(i.vipCard.card.rebate, 10), i.num); }
                             else if (i.vipCard.card.type === "STORED") { i.vipMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), i.num) }
                         } else if (k.card.cardId === i.vipCard.card.cardId && !k.checked) {
                             i.vipMoney = 0;
@@ -397,6 +397,7 @@ export class TouristComponent implements OnInit {
     //删除商品
     xfCloseShop(index: any) {
         this.xfList[index].num = 0;
+        this.xfList[index].discount = 100;
         this.xfList.splice(index, 1);
         this.cardChangeBoolean = false;
         this.totolMoneyFun();
@@ -804,11 +805,11 @@ export class TouristComponent implements OnInit {
         if (this.xyVip) {
             that.rechargeAndOrderPayFun(create)
         } else {
-            if(this.vipBoolean&&this.shopBoolean){
+            if (this.vipBoolean && this.shopBoolean) {
                 this.modalSrv.info({
                     nzContent: '单笔收银不支持同时使用会员卡扣卡及现金结算，请分笔进行结算'
                 })
-            }else{
+            } else {
                 that.createOrderFun(create);
             }
         }
@@ -1498,7 +1499,7 @@ export class TouristComponent implements OnInit {
                 (res: any) => {
                     if (res.success) {
                         self.shopyinList = res.data.orders;
-                        self.pageInfoNum = res.data.pageInfo.countTotal 
+                        self.pageInfoNum = res.data.pageInfo.countTotal
                     } else {
                         self.errorAlter(res.errorInfo)
                     }
@@ -1570,7 +1571,7 @@ export class TouristComponent implements OnInit {
         this.pageIndex3 = e;
         this.findByCustomerIdHttp(this.memberInfo.customerId);
     }
-    getData(e){
+    getData(e) {
         this.pageIndex = e;
         this.getOrderHistoryListHttp();
     }
