@@ -35,6 +35,7 @@ export class OrderVerificationComponent implements OnInit {
       JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)).alipayShopList : [] : [];
   storeId: any = this.StoresInfo[0] ? this.StoresInfo[0].shopId : '';
   moduleId: any;
+  shopId:any;
   constructor(
     private koubeiService: KoubeiService,
     private localStorageService: LocalStorageService,
