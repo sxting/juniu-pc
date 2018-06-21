@@ -160,7 +160,7 @@ export class MemberService {
     }
     //
     customerOrders(data?: any) {
-        let apiUrl = Config.API + '/order/customerOrders.json';
+        let apiUrl = Config.API + '/order/customerAllOrders.json';
         return this.http.get(apiUrl, data)
             .map((response: Response) => response)
             .catch(error => {
