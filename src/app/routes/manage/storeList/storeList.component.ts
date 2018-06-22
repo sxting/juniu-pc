@@ -122,7 +122,7 @@ export class StoreListComponent {
             this.router.navigate(['/manage/bindWechartStore', { storeId: e }]);
         }
         if (boolean && type === 'zhifubao') {
-            this.router.navigate(['/manage/koubeiStore', { storeId: e }]);
+            // this.router.navigate(['/manage/koubeiStore', { storeId: e }]);
         } else if (!boolean && type === 'zhifubao') {
             this.router.navigate(['/manage/bindKoubeiStore', { storeId: e, branchName: branchName }]);
         }
