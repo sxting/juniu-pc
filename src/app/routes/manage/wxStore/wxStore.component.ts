@@ -427,7 +427,7 @@ export class WxStoreComponent implements OnInit {
         this.allproducksLoc = productId;
         that.productIds = productId;
         this.productIdsCount = productCount;
-        this.updateByIsWxShowHttp(this.storeId, productId);
+        this.updateProductIsWxShowHttp(this.storeId, productId);
     }
     /*全选或者取消全选*/
     onSelectAllInputClick(cityIndex: number, change: boolean, all: any, children: any) {
