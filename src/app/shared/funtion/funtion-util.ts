@@ -75,12 +75,12 @@ export class FunctionUtil {
         }
       }
     }
-    console.log(cityArr);
     return cityArr
   }
 
   //转换后台数据(选择员工，门店，商品，服务项目等组件)
   static getDataChange(staffListInfor: any, selectedStaffIds: any) {
+    console.log(staffListInfor);
     staffListInfor.forEach(function (city: any) {
       city.change = false;
       city.checked = false;

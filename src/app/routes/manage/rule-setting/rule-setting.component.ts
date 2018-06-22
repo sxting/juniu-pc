@@ -257,29 +257,34 @@ export class RuleSettingComponent implements OnInit {
                 this.form = self.fb.group(self.formData);
 
                 /******* 服务项目 *********/
-                let itemSeviceRuleIds = res.data.serviceItemIds.split(',');
+                let itemSeviceRuleIds = res.data.serviceItemIds? res.data.serviceItemIds.split(',') : [];
+                console.log(res.data.serviceItemIds);
+
                 self.selectSeviceItemsNumber = itemSeviceRuleIds.length;
+                console.log(self.selectSeviceItemsNumber);
+
                 self.seviceItemsIds = res.data.serviceItemIds;
+                console.log(this.seviceItemsListInfor);
                 FunctionUtil.getDataChange(this.seviceItemsListInfor, itemSeviceRuleIds);//转换后台拿过来的数据
 
                 /******* 卡规则 *********/
-                let cardConfigRuleIds = res.data.cardConfigRuleIds.split(',');
+                let cardConfigRuleIds = res.data.cardConfigRuleIds? res.data.cardConfigRuleIds.split(',') : [];
                 self.selectCardNumber = cardConfigRuleIds.length;
                 self.cardConfigRuleIds = res.data.cardConfigRuleIds;
                 FunctionUtil.getDataChange(this.cardListInfor, cardConfigRuleIds);//转换后台拿过来的数据
 
                 /******* 商品 *********/
-                let productIds = res.data.productIds.split(',');
+                let productIds = res.data.productIds? res.data.productIds.split(',') : [];
                 self.selectProductNumber = productIds.length;
                 self.productIds = res.data.productIds;
                 FunctionUtil.getDataChange(this.productListInfor, productIds);//转换后台拿过来的数据
 
                 /******** 员工 *******/
-                let selectedStaffIds = res.data.staffIds.split(',');
+                let selectedStaffIds = res.data.staffIds? res.data.staffIds.split(',') : [];
                 this.selectStaffNumber = selectedStaffIds.length;
                 self.selectStaffIds = res.data.staffIds;
                 FunctionUtil.getDataChange(this.staffListInfor, selectedStaffIds);//转换后台拿过来的数据
-            }
+              }
         }, error => {
             this.msg.warning(error);
         }
@@ -288,7 +293,6 @@ export class RuleSettingComponent implements OnInit {
 
   //拿到项目对应的数量/总数/ID
   getOthersData(cardListInfor: any){
-      console.log(cardListInfor);
       let selectIds = '';
       let selectNumber = 0;
       let allNumber = 0;
@@ -376,10 +380,6 @@ export class RuleSettingComponent implements OnInit {
                   this.loading = false;
                   if(type === 'GOODS'){
                       this.productListInfor = this.changeDataProduct(res.data);
-
-                      console.log(this.productListInfor);
-                      console.log(this.getOthersData(this.productListInfor));
-
                       let dataInfor = this.getOthersData(this.productListInfor).split('-');
                       this.productIds = dataInfor[0];
                       this.selectProductNumber = parseInt(dataInfor[1]);
@@ -390,6 +390,10 @@ export class RuleSettingComponent implements OnInit {
                       this.seviceItemsIds = dataInfores[0];
                       this.selectSeviceItemsNumber = parseInt(dataInfores[1]);
                       this.seviceItemsNumber = parseInt(dataInfores[2]);
+                      //编辑进来
+                      if (this.deductRuleId) {
+                        this.deductRuleInfo(this.deductRuleId);
+                      }
                   }
               } else {
                   this.modalSrv.error({
@@ -446,10 +450,6 @@ export class RuleSettingComponent implements OnInit {
               setTimeout(function () {
                   self.getAllbuySearchs('SERVICE');//获取商品列表信息
               },50);
-              //编辑进来
-              if (this.deductRuleId) {
-                  this.deductRuleInfo(this.deductRuleId);
-              }
           } else {
               this.modalSrv.error({
                   nzTitle: '温馨提示',
