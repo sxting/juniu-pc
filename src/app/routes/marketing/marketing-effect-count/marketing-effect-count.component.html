@@ -55,7 +55,7 @@
                         <td>{{item.settleCouponRate}}</td>
                         <td *ngIf="item.marketingStartTime && item.marketingEndTime">{{item.marketingStartTime+'  到  '+item.marketingEndTime}}</td>
                         <td *ngIf="!(item.marketingStartTime && item.marketingEndTime)">--</td>
-                        <td><span class="chakan" (click)="chakan(item.marketingId)">查看活动效果</span></td>
+                        <td><span class="chakan" (click)="chakan(item.marketingId, effect)">查看活动效果</span></td>
                     </tr>
                     </tbody>
                 </table>
@@ -68,107 +68,99 @@
     </div>
 </section>
 
-<div class="alert-order-msg-bg {{showCreateOrder?'Alertshow':'Alerthidden'}}">
-    <div class="alert-create-box alert-order-msg">
-        <!--关闭按钮-->
-        <span (click)="onCloseCreateOrderBtnClick()" class="iconfont icon-tubiao06 close-alert-btn"></span>
-
+<ng-template #effect>
+  <div>
+    <div class="member-home-top">
+      <div class="member-home-bottom">
         <div>
-            <div class="member-home-top">
-                <div class="member-title">查看活动效果</div>
-
-
-                <div class="member-home-bottom">
-                    <div>
-                        <div class="member-home-bottom-t">
-                            <div class="member-home-t-t  member-home-t-t1"></div>
-                            <div class="member-home-t-b">今日带动营业额(元)</div>
-                        </div>
-                        <div class="member-home-bottom-b">
-                            <div class="member-home-b-l">
-                                <div class="member-home-b-l-t member-home-t-t"></div>
-                                <div class="member-home-b-l-b member-home-t-b member-home-t-b-color">{{daidong}}</div>
-                            </div>
-                            <div class="member-home-b-r">
-                                <div class="member-home-b-l-t member-home-t-t"></div>
-                                <div class="member-home-b-l-b member-home-t-b">累计：{{ljdaidong}}</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="member-home-bottom-t">
-                            <div class="member-home-t-t member-home-t-t2"></div>
-                            <div class="member-home-t-b">今日发劵量</div>
-                        </div>
-                        <div class="member-home-bottom-b">
-                            <div class="member-home-b-l">
-                                <div class="member-home-b-l-t member-home-t-t"></div>
-                                <div class="member-home-b-l-b member-home-t-b member-home-t-b-color">{{fajuan}}</div>
-                            </div>
-                            <div class="member-home-b-r">
-                                <div class="member-home-b-l-t member-home-t-t"></div>
-                                <div class="member-home-b-l-b member-home-t-b">累计：{{ljfajuan}}</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="member-home-bottom-t">
-                            <div class="member-home-t-t member-home-t-t3"></div>
-                            <div class="member-home-t-b">今日核销量</div>
-                        </div>
-                        <div class="member-home-bottom-b">
-                            <div class="member-home-b-l">
-                                <div class="member-home-b-l-t member-home-t-t"></div>
-                                <div class="member-home-b-l-b member-home-t-b member-home-t-b-color">{{hexiao}}</div>
-                            </div>
-                            <div class="member-home-b-r">
-                                <div class="member-home-b-l-t member-home-t-t"></div>
-                                <div class="member-home-b-l-b member-home-t-b">累计：{{ljhexiao}}</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="member-home-bottom-t">
-                            <div class="member-home-t-t member-home-t-t3"></div>
-                            <div class="member-home-t-b">累计核销率</div>
-                        </div>
-                        <div class="member-home-bottom-b">
-                            <div class="member-home-b-l">
-                                <div class="member-home-b-l-t member-home-t-t"></div>
-                                <div class="member-home-b-l-b member-home-t-b  member-home-t-b-color">{{hexiaolv}}%</div>
-                            </div>
-                            <div class="member-home-b-r">
-                                <div class="member-home-b-l-t member-home-t-t"></div>
-                                <div class="member-home-b-l-b member-home-t-b"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+          <div class="member-home-bottom-t">
+            <div class="member-home-t-t  member-home-t-t1"></div>
+            <div class="member-home-t-b">今日带动营业额(元)</div>
+          </div>
+          <div class="member-home-bottom-b">
+            <div class="member-home-b-l">
+              <div class="member-home-b-l-t member-home-t-t"></div>
+              <div class="member-home-b-l-b member-home-t-b member-home-t-b-color">{{daidong}}</div>
             </div>
-
-
-            <div class="member-bottom">
-                <div class="middle">
-                    <div class="middle-left">
-                        <div class="middle-r-title">走势图</div>
-                        <div style="display:flex;width:100%;height:300px;">
-                            <div style="width:33%;height:100%;text-align:center;">
-                                <div id="echart_first" class="{{!empty?'echartShow':''}}" style="width:330px;height:310px;"></div>
-                                <div>收益金额</div>
-                            </div>
-                            <div style="width:33%;height:100%;text-align:center;">
-                                <div id="echart_second" class="{{!empty?'echartShow':''}}" style="width:330px;height:310px;"></div>
-                                <div>发劵量</div>
-                            </div>
-                            <div style="width:33%;height:100%;text-align:center;">
-                                <div id="echart_third" class="{{!empty?'echartShow':''}}" style="width:330px;height:310px;"></div>
-                                <div>核销量</div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
+            <div class="member-home-b-r">
+              <div class="member-home-b-l-t member-home-t-t"></div>
+              <div class="member-home-b-l-b member-home-t-b">累计：{{ljdaidong}}</div>
             </div>
+          </div>
         </div>
+        <div>
+          <div class="member-home-bottom-t">
+            <div class="member-home-t-t member-home-t-t2"></div>
+            <div class="member-home-t-b">今日发劵量</div>
+          </div>
+          <div class="member-home-bottom-b">
+            <div class="member-home-b-l">
+              <div class="member-home-b-l-t member-home-t-t"></div>
+              <div class="member-home-b-l-b member-home-t-b member-home-t-b-color">{{fajuan}}</div>
+            </div>
+            <div class="member-home-b-r">
+              <div class="member-home-b-l-t member-home-t-t"></div>
+              <div class="member-home-b-l-b member-home-t-b">累计：{{ljfajuan}}</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="member-home-bottom-t">
+            <div class="member-home-t-t member-home-t-t3"></div>
+            <div class="member-home-t-b">今日核销量</div>
+          </div>
+          <div class="member-home-bottom-b">
+            <div class="member-home-b-l">
+              <div class="member-home-b-l-t member-home-t-t"></div>
+              <div class="member-home-b-l-b member-home-t-b member-home-t-b-color">{{hexiao}}</div>
+            </div>
+            <div class="member-home-b-r">
+              <div class="member-home-b-l-t member-home-t-t"></div>
+              <div class="member-home-b-l-b member-home-t-b">累计：{{ljhexiao}}</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="member-home-bottom-t">
+            <div class="member-home-t-t member-home-t-t3"></div>
+            <div class="member-home-t-b">累计核销率</div>
+          </div>
+          <div class="member-home-bottom-b">
+            <div class="member-home-b-l">
+              <div class="member-home-b-l-t member-home-t-t"></div>
+              <div class="member-home-b-l-b member-home-t-b  member-home-t-b-color">{{hexiaolv}}%</div>
+            </div>
+            <div class="member-home-b-r">
+              <div class="member-home-b-l-t member-home-t-t"></div>
+              <div class="member-home-b-l-b member-home-t-b"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
+
+
+    <div class="member-bottom">
+      <div class="middle">
+        <div class="middle-left">
+          <div class="middle-r-title">走势图</div>
+          <div style="display:flex;width:100%;height:300px;">
+            <div style="width:33%;height:100%;text-align:center;">
+              <div id="echart_first" class="{{!empty?'echartShow':''}}" style="width:330px;height:310px;"></div>
+              <div>收益金额</div>
+            </div>
+            <div style="width:33%;height:100%;text-align:center;">
+              <div id="echart_second" class="{{!empty?'echartShow':''}}" style="width:330px;height:310px;"></div>
+              <div>发劵量</div>
+            </div>
+            <div style="width:33%;height:100%;text-align:center;">
+              <div id="echart_third" class="{{!empty?'echartShow':''}}" style="width:330px;height:310px;"></div>
+              <div>核销量</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
