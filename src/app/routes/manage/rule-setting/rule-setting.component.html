@@ -50,7 +50,7 @@
                     <span class="select-store-btn" (click)="onSelectStaffBtn(alertCard,'会员卡')">选择会员卡</span>
                 </div>
               <ng-container>
-                <nz-form-explain class="errorTips"  *ngIf="selectCardNumber === 0 && ifShowErrorTipsCard">请选择会员卡</nz-form-explain>
+                <nz-form-explain class="errorTips"  *ngIf="selectCardNumber === 0 && ifShowErrorTipsCard && allTips">请选择会员卡</nz-form-explain>
               </ng-container>
             </nz-form-control>
         </nz-form-item>
@@ -63,7 +63,7 @@
                     <span class="select-store-btn" (click)="onSelectStaffBtn(alertSeviceItems, '服务项目')">选择服务项目</span>
                 </div>
               <ng-container>
-                <nz-form-explain  class="errorTips"  *ngIf="selectSeviceItemsNumber === 0 && ifShowErrorTipsSevice">请选择项服务项目</nz-form-explain>
+                <nz-form-explain  class="errorTips"  *ngIf="selectSeviceItemsNumber === 0 && ifShowErrorTipsSevice && allTips">请选择项服务项目</nz-form-explain>
               </ng-container>
             </nz-form-control>
         </nz-form-item>
@@ -76,7 +76,7 @@
                     <span class="select-store-btn" (click)="onSelectStaffBtn(alertProduct, '实体商品')">选择实体商品</span>
                 </div>
                 <ng-container>
-                  <nz-form-explain  class="errorTips" *ngIf="selectProductNumber === 0 && ifShowErrorTipsProduct">请选择实体商品</nz-form-explain>
+                  <nz-form-explain  class="errorTips" *ngIf="selectProductNumber === 0 && ifShowErrorTipsProduct && allTips">请选择实体商品</nz-form-explain>
                 </ng-container>
             </nz-form-control>
         </nz-form-item>
