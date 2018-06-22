@@ -86,6 +86,7 @@ export class ReleaseGroupsComponent implements OnInit {
     count1 = 0;
     interval$: any;
     interval$2: any;
+    status;
     constructor(
         private koubeiService: KoubeiService,
         private router: Router,
@@ -216,6 +217,8 @@ export class ReleaseGroupsComponent implements OnInit {
         console.log(storeList)
         this.pinTuanId = this.route.snapshot.params['pinTuanId'];
         this.statusFlag = this.route.snapshot.params['status'];
+
+        this.status = this.route.snapshot.params['status'];
         this.cityNameFun();
         if (this.pinTuanId) {
             this.groupsDetailhttp(this.pinTuanId);
