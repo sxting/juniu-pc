@@ -32,6 +32,7 @@ export class RuleSettingComponent implements OnInit {
   selectStaffNumber: any = 0;//选择员工的总数量
   selectStaffIds: any = '';
   ifShowErrorStaffTips: boolean = false;//选择员工的错误提示
+  allTips: boolean = false;
 
   //商品
   productListInfor: any;//商品的信息
@@ -513,7 +514,7 @@ export class RuleSettingComponent implements OnInit {
       this.ifShowErrorTipsProduct = this.selectProductNumber === 0? true : false;//是否选择商品
       this.ifShowErrorTipsCard = this.selectCardNumber === 0? true : false;//是否选择会员卡
       this.ifShowErrorTipsSevice = this.selectSeviceItemsNumber === 0? true : false;//是否选择服务项目
-
+      this.allTips = this.ifShowErrorTipsProduct || this.ifShowErrorTipsProduct || this.ifShowErrorTipsProduct? true : false;
       let dataInfor = {
           ruleName: this.form.controls.ruleName.value,
           assignRate: parseFloat(this.form.controls.assignRate.value)/100,
@@ -542,7 +543,7 @@ export class RuleSettingComponent implements OnInit {
         this.checkRate = this.form.controls.deductMoney.value == '' || this.form.controls.deductMoney.value == null? false : true;
       }
 
-      if(!this.ifShowErrorStaffTips && !this.ifShowErrorTipsProduct && !this.ifShowErrorTipsCard && !this.ifShowErrorTipsSevice && this.checkRate){
+      if((!this.ifShowErrorTipsProduct || !this.ifShowErrorTipsCard || !this.ifShowErrorTipsSevice) && this.checkRate && !this.ifShowErrorStaffTips){
         if(this.deductRuleId){//编辑修改
           this.editStaffingRules(dataInfor);
         }else{//修增
