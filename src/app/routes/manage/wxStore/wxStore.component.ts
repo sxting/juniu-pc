@@ -15,7 +15,7 @@ import { Validators } from '@angular/forms';
     styleUrls: ['./wxStore.component.less']
 })
 export class WxStoreComponent implements OnInit {
-    storeId: any ;
+    storeId: any;
     submitting = false;
     form: FormGroup;
     values: any[] = null;
@@ -52,6 +52,7 @@ export class WxStoreComponent implements OnInit {
     switch2: boolean = false;
     switch3: boolean = false;
     switch4: boolean = true;
+    staffList:any;
     constructor(
         private localStorageService: LocalStorageService,
         public msg: NzMessageService,
@@ -80,10 +81,11 @@ export class WxStoreComponent implements OnInit {
     get endTime() { return this.form.controls.endTime; }
 
     ngOnInit(): void {
+        this.storeId = this.route.snapshot.params['storeId'];
         this.getAllbuySearchs();
         // this.getStaffList();
+        this.selectStaffHttp();
         this.getAllCardsList();
-        this.storeId = this.route.snapshot.params['storeId'];
         this.getLocationHttp();
     }
     mouseAction(event: any): void {
@@ -246,7 +248,65 @@ export class WxStoreComponent implements OnInit {
             error => this.errorAlert(error)
         );
     }
+
     /**获取全部员工 */
+
+    selectStaffHttp() {
+        let data = {
+            storeId:this.storeId
+        }
+        this.manageService.selectStaff(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    let arr: any = res.data.items;
+                    var objArr: any = [];            //定义一个空数组
+                    var objArr2: any = [];
+                    arr.forEach(function (i: any) {
+                        objArr.forEach(function (n: any) {
+                            objArr2.push(n.roleId);
+                            if (n.roleId === i.roleId) {
+                                n.staffs.push({
+                                    staffId: i.staffId,
+                                    staffName: i.staffName,
+                                    staffNickName: i.staffNickName,
+                                    change: false
+                                });
+                            }
+                        });
+                        if (objArr2.indexOf(i.roleId) < 0) {
+                            objArr.push({
+                                roleName: i.roleName,
+                                roleId: i.roleId,
+                                change: false,
+                                checked: false,
+                                staffs: [{
+                                    staffId: i.staffId,
+                                    staffName: i.staffName,
+                                    staffNickName: i.staffNickName,
+                                    change: false
+                                }]
+                            });
+                        }
+
+                    });
+                    objArr.forEach(function (i: any, m: any) {
+                        let obj = i.roleId;
+                        if (objArr[m + 1]) {
+                            if (objArr[m + 1].roleId === obj) {
+                                objArr.splice(m + 1, 1);
+                            }
+                        }
+                    });
+                    this.objArr = objArr;
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    })
+                }
+            }, error => this.errorAlter(error)
+        );
+    }
     getStaffList() {
         this.manageService.getStaffListByStoreId(this.storeId).subscribe(
             (res: any) => {
@@ -556,8 +616,9 @@ export class WxStoreComponent implements OnInit {
             if (this.switch4) displayColl.push('STORE');
             let startTime = this.form.value.startTime.getMinutes();
             let endTime = this.form.value.endTime.getMinutes();
-
-            let businessHours = this.form.value.startTime.getHours() + ':' + (Number(startTime) < 10 ? '0' + startTime : startTime) + '-' + this.form.value.endTime.getHours() + ':' + (Number(endTime) < 10 ? '0' + endTime : endTime);
+            let startTimeHours = this.form.value.startTime.getHours();
+            let endTimeHours = this.form.value.endTime.getHours();
+            let businessHours = (Number(startTimeHours) < 10 ? '0' + startTimeHours : startTimeHours) + ':' + (Number(startTime) < 10 ? '0' + startTime : startTime) + '-' + (Number(endTimeHours) < 10 ? '0' + endTimeHours : endTimeHours) + ':' + (Number(endTime) < 10 ? '0' + endTime : endTime);
             this.showPics.forEach(function (i: any) {
                 if (i.imageId) {
                     bannerColl.push(i.imageId)
@@ -581,6 +642,8 @@ export class WxStoreComponent implements OnInit {
             this.modifyDetail(data);
         }
     }
+
+    
     //接口描述:更新会员卡的是否展示
     updateByIsWxShowHttp(storeId, productIds) {
         let data = {
@@ -645,6 +708,13 @@ export class WxStoreComponent implements OnInit {
                 this.msg.warning(error)
             }
         );
+    }
+
+    errorAlter(err: any) {
+        this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: err
+        });
     }
     timeFun(s) {
         var t;
