@@ -363,11 +363,11 @@ export class OrderGroupsComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     this.voucherDetailObj = res.data;
-                    if (res.orderStatus == 'PAY') {
+                    if (res.data.orderStatus == 'PAY') {
                         this.voucherDetailObj.statusName = '待核销'
-                    } else if (res.orderStatus == 'FINISH') {
+                    } else if (res.data.orderStatus == 'FINISH') {
                         this.voucherDetailObj.statusName = '已完成'
-                    } else if (res.orderStatus == 'CLOSE') {
+                    } else if (res.data.orderStatus == 'CLOSE') {
                         this.voucherDetailObj.statusName = '已取消'
                     }
                     this.voucherDetailObj.traces.forEach(function (i: any) {
