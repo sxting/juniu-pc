@@ -493,22 +493,28 @@ export class TouristComponent implements OnInit {
     cardPick(index: any, ruleIndex: any) {
         let that = this;
         this.xyVip = false;
-        if (this.cardTypeListArr.list[index].rules[ruleIndex].click) {
-            this.xfCloseCard(index);
+        if (!this.memberInfo) {
+            this.modalSrv.error({
+                nzContent: '请选择会员'
+            })
         } else {
-            this.cardTabs.forEach(function (i: any) {
-                i.list.forEach(function (n: any) {
-                    n.rules.forEach(function (m: any) {
-                        m.click = false;
+            if (this.cardTypeListArr.list[index].rules[ruleIndex].click) {
+                this.xfCloseCard(index);
+            } else {
+                this.cardTabs.forEach(function (i: any) {
+                    i.list.forEach(function (n: any) {
+                        n.rules.forEach(function (m: any) {
+                            m.click = false;
+                        })
                     })
                 })
-            })
-            this.cardTypeListArr.list[index].rules[ruleIndex].click = !this.cardTypeListArr.list[index].rules[ruleIndex].click;
-            that.xfCardList = this.cardTypeListArr.list[index].rules[ruleIndex].click ? this.cardTypeListArr.list[index] : false;
+                this.cardTypeListArr.list[index].rules[ruleIndex].click = !this.cardTypeListArr.list[index].rules[ruleIndex].click;
+                that.xfCardList = this.cardTypeListArr.list[index].rules[ruleIndex].click ? this.cardTypeListArr.list[index] : false;
 
-            that.xfCardList.ruleIndex = ruleIndex;
+                that.xfCardList.ruleIndex = ruleIndex;
+            }
+            that.totolMoneyFun();
         }
-        that.totolMoneyFun();
     }
     //充值会员卡
     VipcardPick(index: any) {

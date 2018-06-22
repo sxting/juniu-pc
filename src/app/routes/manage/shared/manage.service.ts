@@ -806,4 +806,15 @@ export class ManageService {
         return Observable.throw(error);
       });
   }
+
+  //商家员工选择列表
+
+  selectStaff(data: any) {
+    let apiUrl = Config.API1 + 'account/merchant/staff/select.json';
+    return this.http.get(apiUrl, data)
+        .map((response: Response) => response)
+        .catch(error => {
+            return Observable.throw(error);
+        });
+}
 }
