@@ -95,7 +95,6 @@ export class RuleSettingComponent implements OnInit {
   //选择员工
   onSelectStaffBtn(tpl: any, text: string){
       let self = this;
-      console.log(this.staffListInfor);
       this.allName = text;
       this.modalSrv.create({
           nzTitle: '选择'+ text,
@@ -294,7 +293,6 @@ export class RuleSettingComponent implements OnInit {
 
   //拿到项目对应的数量/总数/ID
   getOthersData(cardListInfor: any){
-      console.log(cardListInfor);
       let selectIds = '';
       let selectNumber = 0;
       let allNumber = 0;
