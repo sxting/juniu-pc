@@ -7,6 +7,8 @@ import { UploadService } from '@shared/upload-img';
 import { ProductService } from '../shared/product.service';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
+import NP from 'number-precision'
+
 
 @Component({
   selector: 'app-add-new-items',
@@ -404,7 +406,7 @@ export class AddNewItemsComponent implements OnInit {
         let params = {
             productName: this.form.controls.productName.value,
             productId: this.productId? this.productId : '',
-            currentPrice: parseFloat(this.form.controls.currentPrice.value)*100,
+            currentPrice: NP.round(Number(this.form.controls.currentPrice.value)*100,2),
             storeIds: this.selectStoresIds,
             storeId: this.storeId,
             merchantId: this.merchantId,
