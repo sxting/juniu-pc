@@ -11,6 +11,8 @@ import { CITYLIST, KOUBEI_ITEM_CATEGORYS } from '@shared/define/juniu-define';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import * as differenceInDays from 'date-fns/difference_in_days';
 declare var PhotoClip: any;
+import NP from 'number-precision'
+
 
 @Component({
   selector: 'app-add-koubei-product',
@@ -834,7 +836,7 @@ export class AddKoubeiProductComponent implements OnInit {
                     }
                     this.formData = {
                       productName: [ res.data.productName, [ Validators.required ,Validators.max(40)] ],
-                      originalPrice: [ originalPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{2})?$`), Validators.max(1000 * 5)])],
+                      originalPrice: [ originalPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.max(1000 * 5)])],
                       currentPrice: [ currentPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.max(1000 * 5)])],
                       categoryName:[ categorysName, [  ] ],
                       stock: [ res.data.stock, [ Validators.required, Validators.pattern(`[0-9]+`)] ],
@@ -1012,8 +1014,8 @@ export class AddKoubeiProductComponent implements OnInit {
           categoryName: categorysNameTran,
           categoryId: this.categoryId,
           koubeiProductId: koubeiProductId,
-          originalPrice: parseFloat(this.form.controls.originalPrice.value)*100,
-          currentPrice: parseFloat(this.form.controls.currentPrice.value)*100,
+          currentPrice: NP.round(Number(this.form.controls.currentPrice.value)*100,2),
+          originalPrice: NP.round(Number(this.form.controls.originalPrice.value)*100,2),
           productNote: JSON.stringify(buyerNotes),
           productInfo: JSON.stringify(descriptions),
           stock: this.form.controls.stock.value,

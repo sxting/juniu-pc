@@ -8,6 +8,7 @@ import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { CITYLIST } from '@shared/define/juniu-define';
 import { UploadService } from '@shared/upload-img';
+import NP from 'number-precision'
 
 @Component({
   selector: 'app-add-new-product',
@@ -409,7 +410,7 @@ export class AddNewProductComponent implements OnInit {
         let params = {
             productName: this.form.controls.productName.value,
             productId: this.productId? this.productId : '',
-            currentPrice: parseFloat(this.form.controls.currentPrice.value)*100,
+            currentPrice: NP.round(Number(this.form.controls.currentPrice.value)*100,2),
             storeIds: this.selectStoresIds,
             storeId: this.storeId,
             merchantId: this.merchantId,
