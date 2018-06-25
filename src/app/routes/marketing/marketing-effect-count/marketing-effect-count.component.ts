@@ -207,8 +207,15 @@ export class MarketingEffectCountComponent implements OnInit {
         this.showCreateOrder = false;
     }
 
-    chakan(marketingId: any) {
-        this.showCreateOrder = true;
+    chakan(marketingId: any, tpl: any) {
+        // this.showCreateOrder = true;
+
+        this.modalSrv.create({
+          nzTitle: '查看活动效果',
+          nzContent: tpl,
+          nzWidth: '1040px',
+          nzFooter: null
+        });
         this.effectDetailHttp(marketingId);
     }
 
