@@ -23,6 +23,8 @@ export class AdministrationComponent implements OnInit {
     newcode: any = '';
     imgUrl: string = Config.API + 'account/manage/aliAuthorizationQRCode.img' +
         `?token=${this.localStorageService.getLocalstorage(APP_TOKEN)}`;
+    imgQrcodeUrl: string = Config.API1 + 'account/merchant/manage/aliAuthorizationQRCode.img' +
+        `?token=${this.localStorageService.getLocalstorage(APP_TOKEN)}`;
     //表单
     form: FormGroup;
     form2: FormGroup;
