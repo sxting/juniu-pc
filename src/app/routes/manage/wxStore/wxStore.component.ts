@@ -606,6 +606,7 @@ export class WxStoreComponent implements OnInit {
         }
     }
     submit() {
+        let that = this;
         for (const i in this.form.controls) {
             this.form.controls[i].markAsDirty();
             this.form.controls[i].updateValueAndValidity();
@@ -624,11 +625,23 @@ export class WxStoreComponent implements OnInit {
             let startTimeHours = this.form.value.startTime.getHours();
             let endTimeHours = this.form.value.endTime.getHours();
             let businessHours = (Number(startTimeHours) < 10 ? '0' + startTimeHours : startTimeHours) + ':' + (Number(startTime) < 10 ? '0' + startTime : startTime) + '-' + (Number(endTimeHours) < 10 ? '0' + endTimeHours : endTimeHours) + ':' + (Number(endTime) < 10 ? '0' + endTime : endTime);
-            this.showPics.forEach(function (i: any) {
-                if (i.imageId) {
-                    bannerColl.push(i.imageId)
-                }
-            })
+
+            if (this.showPics.length > 0) {
+                this.showPics.forEach((item: any, index: number) => {
+                    if (item.imageId) {
+                        bannerColl.push(item.imageId)
+                    }
+                });
+            } else if (that.pictureDetails) {
+                that.pictureDetails.forEach(function (item: any) {
+                    bannerColl.push(item.imageId);
+                })
+            }
+            // this.showPics.forEach(function (i: any) {
+            //     if (i.imageId) {
+            //         bannerColl.push(i.imageId)
+            //     }
+            // })
             let data = {
                 address: this.data.address,
                 branchName: this.data.branchName,
