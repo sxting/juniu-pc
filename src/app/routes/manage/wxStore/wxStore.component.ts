@@ -682,7 +682,9 @@ export class WxStoreComponent implements OnInit {
                     this.cardConfigRuleCount = res.data.length;
                     let ids = '';
                     res.data.forEach(function (i: any) {
-                        ids += (i.ruleId + ',')
+                        i.rules.forEach(function (n: any) {
+                            ids += (n.ruleId + ',')
+                        })
                     })
                     this.cardConfigRuleIds = ids;
                     this.funcChecked(this.cardConfigRuleIds, this.allcards, 'rules', this.cardConfigRuleCount, 'ruleId');
