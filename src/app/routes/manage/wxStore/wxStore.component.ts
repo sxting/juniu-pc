@@ -51,7 +51,7 @@ export class WxStoreComponent implements OnInit {
     switch1: boolean = false;
     switch2: boolean = false;
     switch3: boolean = false;
-    switch4: boolean = true;
+    switch4: boolean = false;
     staffList: any;
     staffIdsArr: any;
     constructor(
