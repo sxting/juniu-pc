@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import { Router } from '@angular/router';
 import { ManageService } from '../shared/manage.service';
+import { LocalStorageService } from '@shared/service/localstorage-service';
+import { USER_INFO } from '@shared/define/juniu-define';
 
 @Component({
     selector: 'app-storeList',
@@ -17,13 +19,18 @@ export class StoreListComponent {
     storeInfos: any = [];
     pageNo: any = 1;
     branchName: any;
+    userInfo = this.localStorageService.getLocalstorage(USER_INFO) ?
+        JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)) : '';
+    checkAuthBoolean:boolean = false;
     constructor(
         public msg: NzMessageService,
         private modalSrv: NzModalService,
         private manageService: ManageService,
+        private localStorageService: LocalStorageService,
         private router: Router,
         private http: _HttpClient
     ) {
+        this.wxStatusHttp();
         this.storeListHttp();
     }
     search() {
@@ -110,6 +117,28 @@ export class StoreListComponent {
         })
 
     }
+
+    //wxStatus
+    wxStatusHttp() {
+        let data = {
+            merchantId: this.userInfo.merchantId
+        }
+        this.manageService.wxStatus2(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.checkAuthBoolean = res.data.wxappAuth?true:false;
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => {
+                this.errorAlert(error);
+            }
+        );
+    }
     errorAlert(err: any) {
         this.modalSrv.error({
             nzTitle: '温馨提示',
@@ -117,7 +146,7 @@ export class StoreListComponent {
         });
     }
     storeTypeFun(type: any, boolean: any, e: any, branchName: any) {
-        if (boolean && type === 'weixin') {
+        if ( type === 'weixin' &&this.checkAuthBoolean) {
             this.router.navigate(['/manage/storeList/wxStore', { storeId: e }]);
         } else if (!boolean && type === 'weixin') {
             this.router.navigate(['/manage/bindWechartStore', { storeId: e }]);

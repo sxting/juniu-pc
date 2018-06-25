@@ -280,6 +280,12 @@ export class ManageService {
       return Observable.throw(error);
     });
   }
+  wxStatus2(data: any) {
+    let apiUrl = 'https://w.juniuo.com/wxapp/checkAuth.json';
+    return this.http.get( apiUrl, data).map((response: Response) => response).catch(error => {
+      return Observable.throw(error);
+    });
+  }
   //获取手艺人名称
   getCraftsmanName(data: any) {
     let apiUrl = Config.API + 'staff/detail.json';
