@@ -27,6 +27,7 @@ export class StoreListComponent {
         this.storeListHttp();
     }
     search() {
+        this.pageNo = 1;
         this.storeListHttp();
     }
     bianji(e: any) {

@@ -812,9 +812,58 @@ export class ManageService {
   selectStaff(data: any) {
     let apiUrl = Config.API1 + 'account/merchant/staff/select.json';
     return this.http.get(apiUrl, data)
-        .map((response: Response) => response)
-        .catch(error => {
-            return Observable.throw(error);
-        });
-}
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  //接口描述:获取展示的商品   
+  listProductByIsWxShow(data: any) {
+    let apiUrl = Config.API + 'product/app/listProductByIsWxShow.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  //接口描述:更新会员卡的是否展示
+  // updateByIsWxShow(data: any) {
+  //   let apiUrl = Config.API + 'product/config/updateByIsWxShow.json';
+  //   return this.http.get(apiUrl, data)
+  //     .map((response: Response) => response)
+  //     .catch(error => {
+  //       return Observable.throw(error);
+  //     });
+  // }
+
+  // /merchant/staff/setStoreStaffDisplay.json
+
+
+  setStoreStaffDisplay(data: any) {
+    let apiUrl = Config.API1 + 'account/merchant/staff/setStoreStaffDisplay.json';
+    return this.http.post(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+  storeStaffDisplayMapper(data: any) {
+    let apiUrl = Config.API1 + 'account/merchant/staff/storeStaffDisplayMapper.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+  //查找要展示的会员卡规则
+  listCardConfigByIsWxShow(data: any) {
+    let apiUrl = Config.API + 'member/config/wxStoreTypes.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
 }

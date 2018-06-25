@@ -52,7 +52,8 @@ export class WxStoreComponent implements OnInit {
     switch2: boolean = false;
     switch3: boolean = false;
     switch4: boolean = true;
-    staffList:any;
+    staffList: any;
+    staffIdsArr: any;
     constructor(
         private localStorageService: LocalStorageService,
         public msg: NzMessageService,
@@ -211,6 +212,7 @@ export class WxStoreComponent implements OnInit {
                         });
                     });
                     this.allproducks = allproducks;
+                    this.listProductByIsWxShowHttp();
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -236,7 +238,7 @@ export class WxStoreComponent implements OnInit {
                         });
                     });
                     this.allcards = allcards;
-                    console.log(this.allcards);
+                    this.listCardConfigByIsWxShowHttp();
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -253,7 +255,7 @@ export class WxStoreComponent implements OnInit {
 
     selectStaffHttp() {
         let data = {
-            storeId:this.storeId
+            storeId: this.storeId
         }
         this.manageService.selectStaff(data).subscribe(
             (res: any) => {
@@ -298,6 +300,7 @@ export class WxStoreComponent implements OnInit {
                         }
                     });
                     this.objArr = objArr;
+                    this.storeStaffDisplayMapperHttp();
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -366,6 +369,7 @@ export class WxStoreComponent implements OnInit {
         let that = this;
         let staffIdsCount = 0;
         let staffId = '';
+        let staffArr = [];
         this.objArr.forEach(function (i: any) {
             i.staffs.forEach(function (n: any) {
                 if (n.change) {
@@ -376,14 +380,15 @@ export class WxStoreComponent implements OnInit {
                         staffId += ',' + n.staffId;
                         staffIdsCount += 1;
                     }
-
+                    staffArr.push(n.staffId)
                 }
             });
         });
         this.objArrLoc = staffId;
         that.staffIds = staffId;
+        that.staffIdsArr = staffArr;
         that.staffIdsCount = staffIdsCount;
-
+        that.setStoreStaffDisplayHttp();
     }
     cardSubmit() {
         let that = this;
@@ -450,7 +455,7 @@ export class WxStoreComponent implements OnInit {
         let changeArr = [];
         for (let i = 0; i < all[cityIndex][children].length; i++) {
             if (all[cityIndex][children][i].change === true) {
-                changeArr.push(this.allcards[cityIndex].rules[i]);
+                changeArr.push(all[cityIndex][children][i]);
             }
         }
         /*判断左边的全选是否设置为true*/
@@ -643,7 +648,7 @@ export class WxStoreComponent implements OnInit {
         }
     }
 
-    
+
     //接口描述:更新会员卡的是否展示
     updateByIsWxShowHttp(storeId, productIds) {
         let data = {
@@ -654,6 +659,33 @@ export class WxStoreComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
 
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            (error) => {
+                this.msg.warning(error)
+            }
+        );
+    }
+
+    listCardConfigByIsWxShowHttp() {
+        let data = {
+            storeId: this.storeId
+        }
+        this.manageService.listCardConfigByIsWxShow(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.cardConfigRuleCount = res.data.length;
+                    let ids = '';
+                    res.data.forEach(function (i: any) {
+                        ids += (i.ruleId + ',')
+                    })
+                    this.cardConfigRuleIds = ids;
+                    this.funcChecked(this.cardConfigRuleIds, this.allcards, 'rules', this.cardConfigRuleCount, 'ruleId');
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -709,7 +741,86 @@ export class WxStoreComponent implements OnInit {
             }
         );
     }
+    listProductByIsWxShowHttp() {
+        let data = {
+            storeId: this.storeId
+        }
+        this.manageService.listProductByIsWxShow(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.productIdsCount = res.data.length;
+                    let ids = '';
+                    res.data.forEach(function (i: any) {
+                        ids += (i.productId + ',')
+                    })
+                    this.allproducksLoc = ids;
+                    this.funcChecked(this.productIds, this.allproducks, 'productList', this.productIdsCount, 'productId');
+                } else {
+                    this.submitting = false;
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            (error) => {
+                this.msg.warning(error)
+            }
+        );
+    }
 
+    setStoreStaffDisplayHttp() {
+        let data = {
+            storeId: this.storeId,
+            platform: 'WECHAT',
+            staffIds: this.staffIdsArr
+        }
+        this.manageService.setStoreStaffDisplay(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    console.log(res.data)
+                } else {
+                    this.submitting = false;
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            (error) => {
+                this.msg.warning(error)
+            }
+        );
+    }
+    storeStaffDisplayMapperHttp() {
+        let data = {
+            storeId: this.storeId,
+            platform: 'WECHAT'
+        }
+        this.manageService.storeStaffDisplayMapper(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    console.log(res.data)
+                    this.staffIdsCount = res.data.staffIds.length;
+                    let ids = '';
+                    res.data.staffIds.forEach(function (i: any) {
+                        ids += (i + ',')
+                    })
+                    this.staffIds = ids;
+                    this.funcChecked(this.staffIds, this.objArr, 'staffs', this.staffIdsCount, 'staffId');
+                } else {
+                    this.submitting = false;
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            (error) => {
+                this.msg.warning(error)
+            }
+        );
+    }
     errorAlter(err: any) {
         this.modalSrv.error({
             nzTitle: '温馨提示',
