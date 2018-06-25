@@ -811,17 +811,17 @@ export class TouristComponent implements OnInit {
         create.customerId = this.memberInfo.customerId;
         this.spinBoolean = true;
         console.log(create);
-        // if (this.xyVip) {
-        //     that.rechargeAndOrderPayFun(create)
-        // } else {
-        //     if (this.vipBoolean && this.shopBoolean) {
-        //         this.modalSrv.info({
-        //             nzContent: '单笔收银不支持同时使用会员卡扣卡及现金结算，请分笔进行结算'
-        //         })
-        //     } else {
-        //         that.createOrderFun(create);
-        //     }
-        // }
+        if (this.xyVip) {
+            that.rechargeAndOrderPayFun(create)
+        } else {
+            if (this.vipBoolean && this.shopBoolean) {
+                this.modalSrv.info({
+                    nzContent: '单笔收银不支持同时使用会员卡扣卡及现金结算，请分笔进行结算'
+                })
+            } else {
+                that.createOrderFun(create);
+            }
+        }
     }
     createOrderFun(create: any) {
         this.loading = true;
