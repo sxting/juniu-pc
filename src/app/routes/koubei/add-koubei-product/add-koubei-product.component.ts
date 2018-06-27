@@ -365,6 +365,9 @@ export class AddKoubeiProductComponent implements OnInit {
       let isVisibleImg = this.isVisibleImg;
       this.isVisible = type === 'koubeike'? false : isVisible;
       this.isVisibleImg = type === 'rutao'? false : isVisibleImg;
+      if(type === 'koubeike'){
+        this.router.navigate(['/koubei/product/list']);
+      }
     }
 
   /*********************数据处理开始**************************/
@@ -854,6 +857,7 @@ export class AddKoubeiProductComponent implements OnInit {
                     /******* 匹配选中的门店 *********/
                     let applyStoreIds = res.data.storeIds? res.data.storeIds.split(',') : [];
                     this.getDataChange(this.cityStoreList, applyStoreIds);//转换后台拿过来的数据
+                    this.storesChangeNum = applyStoreIds.length;
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
