@@ -750,8 +750,8 @@ export class TouristComponent implements OnInit {
                             i.productIdList.push(n.productId)
                             if (i.type === 'TIMES') i.amount = 0;
                             else if (i.type === 'METERING') i.amount += n.num;
-                            else if (i.type === 'REBATE') i.amount += NP.times(n.num, n.currentPrice / 100, 100, NP.divide(n.vipCard.card.rebate, 10));
-                            else i.amount += NP.times(n.num, n.currentPrice / 100, 100);
+                            else if (i.type === 'REBATE') i.amount += NP.times(n.num, n.currentPrice / 100, 100, NP.divide(n.vipCard.card.rebate, 10),NP.divide(n.discount, 100));
+                            else i.amount += NP.times(n.num, n.currentPrice / 100, 100,NP.divide(n.discount, 100));
                         }
                     })
                 })

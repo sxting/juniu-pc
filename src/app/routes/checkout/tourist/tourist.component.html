@@ -465,7 +465,7 @@
       <div>
         <div nz-col nzSpan="12">
           <div nz-col nzSpan="6">性别:</div>
-          <div nz-col nzSpan="18">{{memberInfo?.gender===1?'男':'女'}}</div>
+          <div nz-col nzSpan="18">{{memberInfo?.gender===1?'男':memberInfo?.gender===0?'女':'未知'}}</div>
         </div>
         <div nz-col nzSpan="12">
           <div nz-col nzSpan="6">生日:</div>
