@@ -172,7 +172,9 @@ export class AddNewStaffComponent implements OnInit {
                 if (res.success) {
                     this.loading = false;
                     self.picId = res.data.portrait.imageId;//员工图像
-                    self.imagePath = res.data.portrait.imageUrl;//员工图像地址
+                    // self.imagePath = res.data.portrait.imageUrl;//员工图像地址
+                    this.imagePath = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.picId}/resize_${104}_${104}/mode_fill`;
+
                     if(res.data.belongType === 'STORE'){
                       self.RolesListInfor = self.storeRoles;
                       self.ifShow = true;

@@ -79,16 +79,16 @@
             </ng-container>
         </nz-form-control>
     </nz-form-item>
-    <nz-form-item>
-        <nz-form-label nzXs="24" nzSm="5" nzFor="isPinCard">是否可销卡</nz-form-label>
-        <nz-form-control nzXs="24" nzSm="12" nzMd="10"  *ngIf="cardType === 'STORED' || cardType === 'REBATE' || cardType === 'METERING'">
-            <nz-radio-group formControlName="isPinCard">
-                <label nz-radio *ngFor="let item of isPinCardArr" [nzValue]="item.ifPin">{{item.name}}</label>
-            </nz-radio-group>
-        </nz-form-control>
-        <!-- 期限卡不可销卡 -->
-        <nz-form-control nzXs="24" nzSm="12" nzMd="10" *ngIf="cardType === 'TIMES'"><nz-form-text>不可销卡</nz-form-text></nz-form-control>
-    </nz-form-item>
+    <!--<nz-form-item>-->
+        <!--<nz-form-label nzXs="24" nzSm="5" nzFor="isPinCard">是否可销卡</nz-form-label>-->
+        <!--<nz-form-control nzXs="24" nzSm="12" nzMd="10"  *ngIf="cardType === 'STORED' || cardType === 'REBATE' || cardType === 'METERING'">-->
+            <!--<nz-radio-group formControlName="isPinCard">-->
+                <!--<label nz-radio *ngFor="let item of isPinCardArr" [nzValue]="item.ifPin">{{item.name}}</label>-->
+            <!--</nz-radio-group>-->
+        <!--</nz-form-control>-->
+        <!--&lt;!&ndash; 期限卡不可销卡 &ndash;&gt;-->
+        <!--<nz-form-control nzXs="24" nzSm="12" nzMd="10" *ngIf="cardType === 'TIMES'"><nz-form-text>不可销卡</nz-form-text></nz-form-control>-->
+    <!--</nz-form-item>-->
     <nz-form-item>
         <nz-form-control nzSpan="19" nzOffset="5">
             <button nz-button [nzType]="'primary'">下一步</button>
@@ -101,5 +101,5 @@
     <p class="mb-sm">1. 卡售价为开卡时的售卖价格，卡内充值金额为开卡后卡内可以消费的余额。</p>
     <p class="mb-sm">2. 使用有效期默认为永久有效；若设置了使用有效期，卡片会在开卡后的有效期内可以使用，超过有效期将自动失效。</p>
     <p class="mb-sm">3. 请在开卡时告知顾客所开会员卡的有效期；若有效期少于30天，且余额超过5%，系统会给顾客发送短信提醒。</p>
-    <p class="mb-sm">4. 会员卡默认不可销卡；若设置可销卡，且顾客提出销卡要求，则系统会将顾客在该卡上的消费历史折算成商品原价，重新计算会员卡余额后进行销卡和退款操作。</p>
+    <!--<p class="mb-sm">4. 会员卡默认不可销卡；若设置可销卡，且顾客提出销卡要求，则系统会将顾客在该卡上的消费历史折算成商品原价，重新计算会员卡余额后进行销卡和退款操作。</p>-->
 </div>

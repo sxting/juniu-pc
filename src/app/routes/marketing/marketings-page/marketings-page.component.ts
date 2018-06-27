@@ -108,8 +108,8 @@ export class MarketingsPageComponent implements OnInit {
     memberType: any = 'ALL';
 
     disabledDate = (current: Date): boolean => {
-        return differenceInDays(current, new Date(new Date().getTime() + 24*60*60*1000)) < 0;
-        // return differenceInDays(current, new Date(new Date().getTime())) < 0;
+        // return differenceInDays(current, new Date(new Date().getTime() + 24*60*60*1000)) < 0;
+        return differenceInDays(current, new Date(new Date().getTime())) < 0;
     };
 
     //编辑
