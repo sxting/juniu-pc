@@ -25,7 +25,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
     error = '';
     type = 0;
     loading = false;
-
+    spinboolean = false;
     constructor(
         fb: FormBuilder,
         private router: Router,
@@ -85,6 +85,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
         let data = {
             token: token
         }
+        this.spinboolean = true;
         this.memberService.loginToken(data).subscribe(
             (res: any) => {
                 if (res.success) {
@@ -98,6 +99,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
                         nzContent: res.errorInfo
                     });
                 }
+                this.spinboolean = false;
             },
             error => this.errorAlter(error)
         )
