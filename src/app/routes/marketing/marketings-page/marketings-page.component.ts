@@ -977,6 +977,7 @@ export class MarketingsPageComponent implements OnInit {
         let data = {
             merchantId: this.merchantId,
         };
+        this.localStorageService.setLocalstorage('productListInit', '');
         this.marketingService.getAllProducts(data).subscribe(
             (res: any) => {
                 if(res.success) {
@@ -988,7 +989,8 @@ export class MarketingsPageComponent implements OnInit {
                             idsArr.push(item.categoryId)
                         }
                     });
-                    idsArr.forEach(function (categoryId: any) {
+                  this.productList =[];
+                  idsArr.forEach(function (categoryId: any) {
                         self.productList.push({
                             categoryId: categoryId,
                             categoryName: '',
