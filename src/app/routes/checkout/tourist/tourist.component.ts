@@ -970,7 +970,7 @@ export class TouristComponent implements OnInit {
     // 优惠卷筛选
     ticketListArrFun() {
         let GIFTArr = [], MONEYArr = [], DISCOUNTArr = [], giftMost, that = this, ticket1, ticket2, ticket3;
-        this.ticket;
+        this.ticket = false;
 
         this.ticketList.forEach(function (i: any) {
             let ids = '', ids2 = '', arr, arr2;
