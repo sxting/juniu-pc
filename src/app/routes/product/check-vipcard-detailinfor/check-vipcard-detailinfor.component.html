@@ -70,16 +70,16 @@
             </nz-form-control>
         </nz-form-item>
 
-        <nz-form-item  *ngIf="ifShow">
-            <nz-form-label nzXs="24" nzSm="7" nzFor="isPinCard">是否可销卡</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10"  *ngIf="cardType === 'STORED' || cardType === 'REBATE' || cardType === 'METERING'">
-                <nz-radio-group formControlName="isPinCard">
-                    <label nz-radio *ngFor="let item of isPinCardArr" [nzValue]="item.ifPin">{{item.name}}</label>
-                </nz-radio-group>
-            </nz-form-control>
-            <!-- 期限卡不可销卡 -->
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10" *ngIf="cardType === 'TIMES'"><nz-form-text>不可销卡</nz-form-text></nz-form-control>
-        </nz-form-item>
+        <!--<nz-form-item  *ngIf="ifShow">-->
+            <!--<nz-form-label nzXs="24" nzSm="7" nzFor="isPinCard">是否可销卡</nz-form-label>-->
+            <!--<nz-form-control nzXs="24" nzSm="12" nzMd="10"  *ngIf="cardType === 'STORED' || cardType === 'REBATE' || cardType === 'METERING'">-->
+                <!--<nz-radio-group formControlName="isPinCard">-->
+                    <!--<label nz-radio *ngFor="let item of isPinCardArr" [nzValue]="item.ifPin">{{item.name}}</label>-->
+                <!--</nz-radio-group>-->
+            <!--</nz-form-control>-->
+            <!--&lt;!&ndash; 期限卡不可销卡 &ndash;&gt;-->
+            <!--<nz-form-control nzXs="24" nzSm="12" nzMd="10" *ngIf="cardType === 'TIMES'"><nz-form-text>不可销卡</nz-form-text></nz-form-control>-->
+        <!--</nz-form-item>-->
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="productTypes">适用商品</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
