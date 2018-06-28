@@ -409,7 +409,7 @@ export class CheckVipcardDetailinforComponent implements OnInit {
                     this.isRecharge = res.data.isRecharge;
                     this.isShare = res.data.isShare;
                     this.backgroundId = res.data.background;
-                    this.isWxShow = res.data.rules[0].isWxShow;
+                    this.isWxShow = res.data.rules[0]? res.data.rules[0].isWxShow : '';
                     this.merchantId = res.data.merchantId;
                     this.storeId = res.data.storeId;
                     this.price = parseFloat(res.data.rules[0].price)/100;
@@ -449,12 +449,12 @@ export class CheckVipcardDetailinforComponent implements OnInit {
                     this.form = this.fb.group(self.formData);
 
                     /******* 匹配选中的门店 *********/
-                    let applyStoreIds = res.data.rules[0].applyStoreIds? res.data.rules[0].applyStoreIds.split(',') : [];
+                    let applyStoreIds = res.data.rules[0].applyStoreIds && res.data.rules[0].applyStoreIds != null? res.data.rules[0].applyStoreIds.split(',') : [];
                     FunctionUtil.getDataChange(this.cityStoreList, applyStoreIds);//转换后台拿过来的数据
                     self.selectStoresIds = res.data.rules[0].applyStoreIds;
 
                     /******* 匹配选中的商品 *********/
-                    let applyProductIds = res.data.rules[0].applyProductIds? res.data.rules[0].applyProductIds.split(',') : [];
+                    let applyProductIds = res.data.rules[0].applyProductIds && res.data.rules[0].applyProductIds != null? res.data.rules[0].applyProductIds.split(',') : [];
                     FunctionUtil.getDataChange(this.productListInfor, applyProductIds);//转换后台拿过来的数据
                     self.productIds = res.data.rules[0].applyProductIds;
                 } else {
