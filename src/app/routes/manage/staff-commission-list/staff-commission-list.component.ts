@@ -108,7 +108,7 @@ export class StaffCommissionListComponent implements OnInit {
                 if (res.success) {
                     this.loading = false;
                     res.data.content.forEach((element: any, index: number) => {
-                        element.rulesDetail = element.type === "RATE"? '非指定' +  NP.round(element.assignRate * 100,2) + '%,' + ' ' + '指定' + NP.round(element.normalRate * 100,2) + '%' : '提成' + Number(element.deductMoney)/100 + '元';
+                        element.rulesDetail = element.type === "RATE"? '指定' +  NP.round(element.assignRate * 100,2) + '%,' + ' ' + '非指定' + NP.round(element.normalRate * 100,2) + '%' : '提成' + Number(element.deductMoney)/100 + '元';
                         element.productNumber = Number(element.productCount)+ Number(element.cardConfigRuleCount);
                     });
                     this.commissionListInfor = res.data.content;
