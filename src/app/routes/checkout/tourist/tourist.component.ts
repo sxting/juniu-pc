@@ -153,6 +153,7 @@ export class TouristComponent implements OnInit {
             this.change({ index: 1 })
         }
         this.getStoresInfor();
+        console.log('aaa');
         // this.changeFun();
         this.guadanList = this.localStorageService.getLocalstorage(GUADAN) ? JSON.parse(this.localStorageService.getLocalstorage(GUADAN)) : [];
     }
