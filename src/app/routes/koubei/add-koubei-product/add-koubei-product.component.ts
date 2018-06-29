@@ -857,6 +857,7 @@ export class AddKoubeiProductComponent implements OnInit {
                     /******* 匹配选中的门店 *********/
                     let applyStoreIds = res.data.storeIds? res.data.storeIds.split(',') : [];
                     this.getDataChange(this.cityStoreList, applyStoreIds);//转换后台拿过来的数据
+                    this.selectStoresIds = res.data.storeIds;
                     this.storesChangeNum = applyStoreIds.length;
                 } else {
                     this.modalSrv.error({

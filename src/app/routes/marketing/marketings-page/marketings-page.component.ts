@@ -493,7 +493,8 @@ export class MarketingsPageComponent implements OnInit {
         let data: any;
         let sendTime: any = '';
         if(this.form.value.sms_send_date && this.form.value.sms_send_time) {
-            sendTime = FunctionUtil.changeDate(this.form.value.sms_send_date) + ' ' + (this.form.value.sms_send_time.getHours()) + ':00:00';
+          console.log(sendTime);
+          sendTime = FunctionUtil.changeDate(this.form.value.sms_send_date) + ' ' + (this.form.value.sms_send_time.getHours()) + ':00:00';
             if(new Date(FunctionUtil.changeDate(this.form.value.sms_send_date) + ' 00:00:00').getTime() < new Date((FunctionUtil.changeDate(this.nowTime) + ' 00:00:00')).getTime()) {
                 sendTime = FunctionUtil.changeDate(this.nowTime) + ' ' + (new Date().getHours()+1) + ':00:00';
             } else if(FunctionUtil.changeDate(this.form.value.sms_send_date) === FunctionUtil.changeDate(new Date()) && this.form.value.sms_send_time.getHours() <= new Date().getHours()) {
@@ -508,7 +509,9 @@ export class MarketingsPageComponent implements OnInit {
                 marketingName: this.form.value.activity_name, //活动名称 *
                 applyStoreIds: this.selectStoresIds, //门店id *
                 applyStoreNames: this.selectStoresNames, //门店名称 *
-                festival: FunctionUtil.changeDate(this.form.value.sms_send_date), //发送时间 * sendTime: "2018-05-22"
+                // festival: FunctionUtil.changeDate(this.form.value.sms_send_date), //发送时间 * sendTime: "2018-05-22"
+                marketingStartTime: FunctionUtil.changeDate(this.form.value.active_date[0]) + ' 00:00:00', //活动开始时间
+                marketingEndTime:  FunctionUtil.changeDate(this.form.value.active_date[1]) + ' 23:59:59', //活动结束时间
                 pullLimitType: 'UNLIMIT', //领券限制类型 UNLIMIT("无限制"),TOTAL("总数量"),目前均是无限制
                 couponDefId: this.couponId,
                 marketingId: this.marketingId,
@@ -526,7 +529,7 @@ export class MarketingsPageComponent implements OnInit {
                 applyStoreNames: this.selectStoresNames, //门店名称 *
                 marketingStartTime: FunctionUtil.changeDate(this.form.value.active_date[0]) + ' 00:00:00', //活动开始时间
                 marketingEndTime:  FunctionUtil.changeDate(this.form.value.active_date[1]) + ' 23:59:59', //活动结束时间
-                sendTime: sendTime, //发送时间 * sendTime: "2018-05-22 15:00:00"
+                // sendTime: sendTime, //发送时间 * sendTime: "2018-05-22 15:00:00"
                 pullLimitType: 'UNLIMIT', //领券限制类型 UNLIMIT("无限制"),TOTAL("总数量"),目前均是无限制
                 couponDefId: this.couponId,
                 marketingId: this.marketingId,
@@ -691,10 +694,10 @@ export class MarketingsPageComponent implements OnInit {
                     let disabledWeekDateArr = data.couponDef.disabledWeekDate.split(',');
                     this.selectedWeek1 = this.weekText(disabledWeekDateArr[0]);
                     this.selectedWeek2 = this.weekText(disabledWeekDateArr[disabledWeekDateArr.length-1]);
-                    this.unUseStartTime = (new Date(data.couponDef.validDateStart).getHours().toString().length < 2 ? ('0'+ new Date(data.couponDef.validDateStart).getHours()) : new Date(data.couponDef.validDateStart).getHours()) + ':' +
-                      (new Date(data.couponDef.validDateStart).getMinutes().toString().length < 2 ? ('0' + new Date(data.couponDef.validDateStart).getMinutes()) : new Date(data.couponDef.validDateStart).getMinutes());
-                    this.unUseEndTime = (new Date(data.couponDef.validDateEnd).getHours().toString().length < 2 ? ('0'+ new Date(data.couponDef.validDateEnd).getHours()) : new Date(data.couponDef.validDateEnd).getHours()) + ':' +
-                      (new Date(data.couponDef.validDateEnd).getMinutes().toString().length < 2 ? ('0' + new Date(data.couponDef.validDateEnd).getMinutes()) : new Date(data.couponDef.validDateEnd).getMinutes());
+                    this.unUseStartTime = (new Date(data.couponDef.disabledTimeStart).getHours().toString().length < 2 ? ('0'+ new Date(data.couponDef.disabledTimeStart).getHours()) : new Date(data.couponDef.disabledTimeStart).getHours()) + ':' +
+                      (new Date(data.couponDef.disabledTimeStart).getMinutes().toString().length < 2 ? ('0' + new Date(data.couponDef.disabledTimeStart).getMinutes()) : new Date(data.couponDef.disabledTimeStart).getMinutes());
+                    this.unUseEndTime = (new Date(data.couponDef.disabledTimeEnd).getHours().toString().length < 2 ? ('0'+ new Date(data.couponDef.disabledTimeEnd).getHours()) : new Date(data.couponDef.disabledTimeEnd).getHours()) + ':' +
+                      (new Date(data.couponDef.disabledTimeEnd).getMinutes().toString().length < 2 ? ('0' + new Date(data.couponDef.disabledTimeEnd).getMinutes()) : new Date(data.couponDef.disabledTimeEnd).getMinutes());
 
                     this.form = this.fb.group({
                         activity_obj_days: [{value: data.lastConsume, disabled: !(data.marketingStatus === 'INIT')}, this.paramsId=='01'||this.paramsId=='02'?[Validators.compose([Validators.required, Validators.pattern(`[0-9]+`)])]:[]],
@@ -957,10 +960,10 @@ export class MarketingsPageComponent implements OnInit {
                         let disabledWeekDateArr = item.disabledWeekDate.split(',');
                         item.selectedWeek1 = self.weekText(disabledWeekDateArr[0]);
                         item.selectedWeek2 = self.weekText(disabledWeekDateArr[disabledWeekDateArr.length-1]);
-                        item.unUseStartTime = (new Date(item.validDateStart).getHours().toString().length < 2 ? ('0'+ new Date(item.validDateStart).getHours()) : new Date(item.validDateStart).getHours()) + ':' +
-                          (new Date(item.validDateStart).getMinutes().toString().length < 2 ? ('0' + new Date(item.validDateStart).getMinutes()) : new Date(item.validDateStart).getMinutes());
-                        item.unUseEndTime = (new Date(item.validDateEnd).getHours().toString().length < 2 ? ('0'+ new Date(item.validDateEnd).getHours()) : new Date(item.validDateEnd).getHours()) + ':' +
-                          (new Date(item.validDateEnd).getMinutes().toString().length < 2 ? ('0' + new Date(item.validDateEnd).getMinutes()) : new Date(item.validDateEnd).getMinutes());
+                        item.unUseStartTime = (new Date(item.disabledTimeStart).getHours().toString().length < 2 ? ('0'+ new Date(item.disabledTimeStart).getHours()) : new Date(item.disabledTimeStart).getHours()) + ':' +
+                          (new Date(item.disabledTimeStart).getMinutes().toString().length < 2 ? ('0' + new Date(item.disabledTimeStart).getMinutes()) : new Date(item.disabledTimeStart).getMinutes());
+                        item.unUseEndTime = (new Date(item.disabledTimeEnd).getHours().toString().length < 2 ? ('0'+ new Date(item.disabledTimeEnd).getHours()) : new Date(item.disabledTimeEnd).getHours()) + ':' +
+                          (new Date(item.disabledTimeEnd).getMinutes().toString().length < 2 ? ('0' + new Date(item.disabledTimeEnd).getMinutes()) : new Date(item.disabledTimeEnd).getMinutes());
                     });
                 } else {
                     this.modalSrv.error({
@@ -1112,8 +1115,8 @@ export class MarketingsPageComponent implements OnInit {
             send_menkan: [null, this.paramsId=='07' || this.paramsId=='08' || this.paramsId == '09' ? [Validators.compose([Validators.required, Validators.pattern(`[0-9]+`)])]:[] ],
             sms_content: ['', []],
             active_date: [null, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' ? [] : [Validators.required]],
-            sms_send_date: [null, this.paramsId == '03' ? [] : [Validators.required]],
-            sms_send_time: [null, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' ? [] : [Validators.required]],
+            sms_send_date: [null, this.paramsId == '03' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' ? [] : [Validators.required]],
+            sms_send_time: [null, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' ? [] : [Validators.required]],
         });
 
         this.form2 = this.fb.group({
@@ -1139,8 +1142,8 @@ export class MarketingsPageComponent implements OnInit {
             send_menkan: [null, this.paramsId=='07' || this.paramsId=='08' || this.paramsId == '09' ? [Validators.compose([Validators.required, Validators.pattern(`[0-9]+`)])]:[] ],
             sms_content: ['', []],
             active_date: [null, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' ? [] : [Validators.required]],
-            sms_send_date: [null, this.paramsId == '03' ? [] : [Validators.required]],
-            sms_send_time: [null, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' ? [] : [Validators.required]],
+            sms_send_date: [null, this.paramsId == '03' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' ? [] : [Validators.required]],
+            sms_send_time: [null, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' ? [] : [Validators.required]],
             // send_time: [null, this.paramsId == '04' || this.paramsId == '11' ? [Validators.required] : []]
         });
 
@@ -1167,8 +1170,8 @@ export class MarketingsPageComponent implements OnInit {
             send_menkan: [this.form.value.send_menkan, this.paramsId=='07' || this.paramsId=='08' || this.paramsId == '09' ? [Validators.compose([Validators.required, Validators.pattern(`[0-9]+`)])]:[] ],
             sms_content: [this.form.value.sms_content, []],
             active_date: [this.form.value.active_date, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' ? [] : [Validators.required]],
-            sms_send_date: [this.form.value.sms_send_date, this.paramsId == '03' ? [] : [Validators.required]],
-            sms_send_time: [this.form.value.sms_send_time, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' ? [] : [Validators.required]],
+            sms_send_date: [this.form.value.sms_send_date, this.paramsId == '03' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13'  ? [] : [Validators.required]],
+            sms_send_time: [this.form.value.sms_send_time, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' ? [] : [Validators.required]],
         };
     }
     getForm2InitData() {
