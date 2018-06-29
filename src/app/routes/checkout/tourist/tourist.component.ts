@@ -206,6 +206,7 @@ export class TouristComponent implements OnInit {
     selectStoreInfo(event: any) {
         this.storeId = event.storeId;
         this.hasAuth = event.hasAuth;
+        this.vipXqFun();
         this.changeFun();
     }
     //消费清单下拉
@@ -267,6 +268,7 @@ export class TouristComponent implements OnInit {
 
             })
             this.tanchuang();
+
             that.productIdsFun(that.xfList);
             ticketM = that.ticketCheck ? (that.ticket && that.xfList.length > 0 ? that.ticket.ticketMoney : 0) : 0;
             if (this.settleCardDTOList && this.settleCardDTOList.length > 0) {
@@ -304,7 +306,7 @@ export class TouristComponent implements OnInit {
             that.isVerbMoney = that.isVerbMoney < 0 ? 0 : Math.floor(that.isVerbMoney);
             that.inputValue = that.isVerb ? that.isVerbMoney : that.totolMoney;
             that.inputValue = that.inputValue ? that.inputValue.toFixed(2) : 0;
-            this.ticketListArrFun();
+            // this.ticketListArrFun();
         } else {
             if (that.xfCardList) {
                 if (that.xfCardList.type === 'REBATE' && this.xyVip) {
@@ -971,7 +973,7 @@ export class TouristComponent implements OnInit {
     }
     // 优惠卷筛选
     ticketListArrFun() {
-        let GIFTArr = [], MONEYArr = [], DISCOUNTArr = [], giftMost, that = this, ticket1, ticket2, ticket3;
+        let GIFTArr = [], MONEYArr = [], DISCOUNTArr = [], giftMost, that = this, ticket1, ticket2, ticket3, money = this.isVerb ? this.isVerbMoney : this.totolMoney;
         this.ticket = false;
 
         this.ticketList.forEach(function (i: any) {
@@ -984,7 +986,7 @@ export class TouristComponent implements OnInit {
                 arr2 = ids2.split(',');
             }
             //优惠卷满额可用限制
-            if (((!i.consumeLimitProductIds && !i.couponDefProductId) || ((i.couponDefType === 'GIFT') && (that.mm(arr2))) || that.mm(arr)) && (i.useLimitMoney === -1 || i.useLimitMoney < (Number(that.inputValue) * 100))) {
+            if (((!i.consumeLimitProductIds && !i.couponDefProductId) || ((i.couponDefType === 'GIFT') && (that.mm(arr2))) || that.mm(arr)) && (i.useLimitMoney === -1 || i.useLimitMoney < (Number(money) * 100))) {
                 if (i.couponDefType === 'GIFT') GIFTArr.push(i);
                 if (i.couponDefType === 'MONEY') MONEYArr.push(i);
                 if (i.couponDefType === 'DISCOUNT') DISCOUNTArr.push(i);
