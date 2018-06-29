@@ -204,6 +204,7 @@ export class TouristComponent implements OnInit {
     selectStoreInfo(event: any) {
         this.storeId = event.storeId;
         this.hasAuth = event.hasAuth;
+        this.vipXqFun();
         this.changeFun();
     }
     //消费清单下拉
@@ -265,12 +266,13 @@ export class TouristComponent implements OnInit {
 
             })
             this.tanchuang();
+
             that.productIdsFun(that.xfList);
             ticketM = that.ticketCheck ? (that.ticket && that.xfList.length > 0 ? that.ticket.ticketMoney : 0) : 0;
             if (this.settleCardDTOList && this.settleCardDTOList.length > 0) {
                 let ticketBoolean = false;
                 this.settleCardDTOList.forEach(function (i: any) {
-                    if (i.type === "TIMES" || i.type === "METERING"|| i.type === "REBATE") {
+                    if (i.type === "TIMES" || i.type === "METERING" || i.type === "REBATE") {
                         ticketBoolean = true;
                     }
                 })
@@ -302,7 +304,7 @@ export class TouristComponent implements OnInit {
             that.isVerbMoney = that.isVerbMoney < 0 ? 0 : Math.floor(that.isVerbMoney);
             that.inputValue = that.isVerb ? that.isVerbMoney : that.totolMoney;
             that.inputValue = that.inputValue ? that.inputValue.toFixed(2) : 0;
-
+            // this.ticketListArrFun();
         } else {
             if (that.xfCardList) {
                 if (that.xfCardList.type === 'REBATE' && this.xyVip) {
@@ -750,8 +752,8 @@ export class TouristComponent implements OnInit {
                             i.productIdList.push(n.productId)
                             if (i.type === 'TIMES') i.amount = 0;
                             else if (i.type === 'METERING') i.amount += n.num;
-                            else if (i.type === 'REBATE') i.amount += NP.times(n.num, n.currentPrice / 100, 100, NP.divide(n.vipCard.card.rebate, 10),NP.divide(n.discount, 100));
-                            else i.amount += NP.times(n.num, n.currentPrice / 100, 100,NP.divide(n.discount, 100));
+                            else if (i.type === 'REBATE') i.amount += NP.times(n.num, n.currentPrice / 100, 100, NP.divide(n.vipCard.card.rebate, 10), NP.divide(n.discount, 100));
+                            else i.amount += NP.times(n.num, n.currentPrice / 100, 100, NP.divide(n.discount, 100));
                         }
                     })
                 })
@@ -969,8 +971,8 @@ export class TouristComponent implements OnInit {
     }
     // 优惠卷筛选
     ticketListArrFun() {
-        let GIFTArr = [], MONEYArr = [], DISCOUNTArr = [], giftMost, that = this, ticket1, ticket2, ticket3;
-        this.ticket;
+        let GIFTArr = [], MONEYArr = [], DISCOUNTArr = [], giftMost, that = this, ticket1, ticket2, ticket3, money = this.isVerb ? this.isVerbMoney : this.totolMoney;
+        this.ticket = false;
 
         this.ticketList.forEach(function (i: any) {
             let ids = '', ids2 = '', arr, arr2;
@@ -982,8 +984,7 @@ export class TouristComponent implements OnInit {
                 arr2 = ids2.split(',');
             }
             //优惠卷满额可用限制
-
-            if (((!i.consumeLimitProductIds && !i.couponDefProductId) || (that.mm(arr2)) && that.mm(arr)) && (i.useLimitMoney === -1 || i.useLimitMoney < that.inputValue)) {
+            if (((!i.consumeLimitProductIds && !i.couponDefProductId) || ((i.couponDefType === 'GIFT') && (that.mm(arr2))) || that.mm(arr)) && (i.useLimitMoney === -1 || i.useLimitMoney < (Number(money) * 100))) {
                 if (i.couponDefType === 'GIFT') GIFTArr.push(i);
                 if (i.couponDefType === 'MONEY') MONEYArr.push(i);
                 if (i.couponDefType === 'DISCOUNT') DISCOUNTArr.push(i);
@@ -1071,7 +1072,7 @@ export class TouristComponent implements OnInit {
                 arr2.forEach(function (i: any, n: any) {
                     if (NP.times(i.couponDefDiscount, xfListMoney) > NP.times(maxMoney.couponDefDiscount, xfListMoney) && (i.useLimitMoney === -1 || NP.divide(i.useLimitMoney, 100) >= money)) maxMoney = i;
                 })
-                maxMoney.ticketMoney = NP.divide(NP.times(maxMoney.couponDefDiscount, xfListMoney), 100);
+                maxMoney.ticketMoney = NP.divide(NP.times( NP.divide(maxMoney.couponDefDiscount,10), xfListMoney), 100);
             }
         }
         return maxMoney;
