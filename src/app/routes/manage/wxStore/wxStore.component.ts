@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { ManageService } from '../shared/manage.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { LocalStorageService } from '@shared/service/localstorage-service';
-import { STORES_INFO } from '@shared/define/juniu-define';
+import { STORES_INFO, USER_INFO } from '@shared/define/juniu-define';
 import { ActivatedRoute } from '@angular/router';
 import { Validators } from '@angular/forms';
 
@@ -27,7 +27,8 @@ export class WxStoreComponent implements OnInit {
     objArr: any = [];
     allcards: any = [];
     list: any[] = [];
-
+    userInfo = this.localStorageService.getLocalstorage(USER_INFO) ?
+    JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)) : '';
 
     expandKeys = ['1001', '10001'];
     checkedKeys = ["9001"];
