@@ -21,7 +21,7 @@ declare var swal: any;
 export class TouristComponent implements OnInit {
     storeId: any;
     changeType: boolean = true;//收银开卡切换
-    vipsearch: string;//vip搜索框
+    vipsearch: string ='15533677252';//vip搜索框
     renlian: boolean = true;//人脸识别
     isVerb: boolean = false;//是否抹零
     isVerb2: boolean = false;
@@ -200,6 +200,7 @@ export class TouristComponent implements OnInit {
             i.staffGroupData = that.staffGroupData;
             i.assign = 0;
         })
+        console.log(this.xfList);
         that.totolMoneyFun();
     }
     selectStoreInfo(event: any) {
