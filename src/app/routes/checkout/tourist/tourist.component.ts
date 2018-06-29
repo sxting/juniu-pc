@@ -840,7 +840,7 @@ export class TouristComponent implements OnInit {
                             nzContent: '收款成功'
                         })
                         this.vipXqFun();
-                        this.searchMemberCard(true);
+                        // this.searchMemberCard(true);
                     }
                 } else {
                     this.errorAlter(res.errorInfo)
@@ -1331,6 +1331,7 @@ export class TouristComponent implements OnInit {
                     this.modalSrv.success({
                         nzContent: '收款成功'
                     })
+                    this.vipXqFun();
                     this.searchMemberCard(true);
                 } else {
                     this.errorAlter(res.errorInfo)
@@ -1463,6 +1464,7 @@ export class TouristComponent implements OnInit {
         this.vipXqFun();
     }
     guadanJS(index: any) {
+        this.vipXqFun();
         this.modalSrv.closeAll();
         this.guadanList = this.localStorageService.getLocalstorage(GUADAN) ? JSON.parse(this.localStorageService.getLocalstorage(GUADAN)) : [];
         this.vipsearch = this.guadanList[index].vip.phone;
