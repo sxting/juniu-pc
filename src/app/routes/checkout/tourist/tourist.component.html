@@ -165,14 +165,14 @@
                       </div>
                     </div>
 
-                    <div nz-col nzXs="24" nz-row nzType="flex" *ngIf="memberInfo"  class="shopTypeBox">
-                      <div nz-col nzSpan="16">
+                    <div nz-col nzXs="24" nz-row nzType="flex" *ngIf="memberInfo" class="shopTypeBox">
+                      <div nz-col nzSpan="15">
                         <div nz-col nzSpan="10" class="textAline">选择扣卡</div>
-                        <div nz-col nzSpan="14">
+                        <div nz-col nzSpan="14" *ngIf="item.vipCard">
                           <span>
-                            <span style="font-size:18px;" class="iconfont {{item.vipCard.card.type==='REBATE'?'icon-zhe':''}} {{item.vipCard.card.type==='METERING'?'icon-ji':''}} {{item.vipCard.card.type==='TIMES'?'icon-qi':''}} {{item.vipCard.card.type==='STORED'?'icon-chu':''}}"></span>
+                            <span style="font-size:22px;" class="iconfont {{item.vipCard.card.type==='REBATE'?'icon-zhe':''}} {{item.vipCard.card.type==='METERING'?'icon-ji':''}} {{item.vipCard.card.type==='TIMES'?'icon-qi':''}} {{item.vipCard.card.type==='STORED'?'icon-chu':''}}"></span>
                             <span style="font-size:16px;display: inline-block;
-                            width: 115px;
+                            width: 100px;
                             height: 16px;
                             line-height: 16px;
                             overflow: hidden;
@@ -180,8 +180,36 @@
                             white-space: nowrap;">{{item.vipCard.card.cardName}}</span>
                           </span>
                         </div>
+                        <div nz-col nzSpan="14" *ngIf="!item.vipCard">
+                          <span>暂无选择会员卡</span>
+                        </div>
                       </div>
-                      <div  nz-col nzSpan="8">-{{item.totoleMoney}}  <span class="djqh">点击切换</span> </div>
+                      <div nz-col nzSpan="9"><span *ngIf="item.vipCard" style="margin-right: 10px;">-{{item.totoleMoney}}</span> 
+                        <nz-popover [nzTitle]="'选择会员卡'" [(nzVisible)]="visible" [nzTrigger]="'click'" [nzPlacement]="'bottomRight'">
+                          <button nz-button nz-popover>点击选择</button>
+                          <ng-template #nzTemplate>
+                            <div style="    height: 200px;
+                            overflow: hidden;
+                            overflow-y: auto;">
+                              <div (click)="checkVipCard('no',ind)" class="bsyhyk">不使用会员卡</div>
+                              <div *ngFor="let vipcard of item.vipCardList" class="{{vipcard.card.type}} vipcardbox" (click)="checkVipCard(vipcard,ind)">
+                                <p class="cardName">{{vipcard.card.cardName}}</p>
+                                <p class="cardMoney" *ngIf="vipcard.card.type !== 'TIMES'">卡余额：
+                                  <span *ngIf="vipcard.card.type === 'REBATE'||vipcard.card.type === 'STORED'" class="money">{{(vipcard.card.balance/100).toFixed(2)}}</span>
+                                  <span *ngIf="vipcard.card.type === 'METERING'" class="money">{{vipcard.card.balance}}</span>
+                                  <span *ngIf="vipcard.card.type === 'REBATE'||vipcard.card.type === 'STORED'">元</span>
+                                  <span *ngIf="vipcard.card.type === 'METERING'">次</span>
+                                  <!-- <span *ngIf="item.card.type === 'TIMES'">天</span> -->
+                                </p>
+
+                                <p class="cardMoney" *ngIf="vipcard.card.type === 'TIMES'">有效期至 ： {{vipcard.card.validity}}
+                                </p>
+                                <div class="icon-success iconfont" *ngIf="item.vipCard&&vipcard.card.cardId === item.vipCard.card.cardId"></div>
+                              </div>
+                            </div>
+                          </ng-template>
+                        </nz-popover>
+                      </div>
                     </div>
                   </div>
                 </div>

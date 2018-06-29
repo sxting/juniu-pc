@@ -21,7 +21,7 @@ declare var swal: any;
 export class TouristComponent implements OnInit {
     storeId: any;
     changeType: boolean = true;//收银开卡切换
-    vipsearch: string ='15533677252';//vip搜索框
+    vipsearch: string = '15533677252';//vip搜索框
     renlian: boolean = true;//人脸识别
     isVerb: boolean = false;//是否抹零
     isVerb2: boolean = false;
@@ -57,6 +57,7 @@ export class TouristComponent implements OnInit {
     radioValue: any;
     moduleId: any;
     store: any;
+    visible: any = false;
     cardTabs = [
         {
             type: "储值卡",
@@ -231,7 +232,7 @@ export class TouristComponent implements OnInit {
     }
     //     vipMoney += i.vipMoney;
 
-    totolMoneyFun() {
+    totolMoneyFun(checkCard?: any) {
         let that = this;
         this.vipCardList = [];
         this.vipBoolean = false;
@@ -240,9 +241,9 @@ export class TouristComponent implements OnInit {
             that.ticketListTime();
             that.totolMoney = 0;
             let ticketM = 0;
-            if (!this.cardChangeBoolean) this.vipCardSearchFun();
+            if (!this.cardChangeBoolean && !checkCard) this.vipCardSearchFun();
             //每个卡的余额
-            this.vipCardListfun();
+            // this.vipCardListfun();
             let totolMoney = 0;
             that.xfList.forEach(function (i: any) {
                 i.totoleMoney1 = NP.round(NP.times(NP.divide(i.currentPrice, 100), i.num, NP.divide(i.discount, 100)), 2);
@@ -324,13 +325,13 @@ export class TouristComponent implements OnInit {
         this.REBATEValue = event;
         this.totolMoneyFun();
     }
-    vipCardListfun() {
-        if (this.vipCardList) {
-            this.vipCardList.forEach(function (k: any) {
-                k.card.balance2 = k.card.balance;
-            })
-        }
-    }
+    // vipCardListfun() {
+    //     if (this.vipCardList) {
+    //         this.vipCardList.forEach(function (k: any) {
+    //             k.card.balance2 = k.card.balance;
+    //         })
+    //     }
+    // }
 
     //标注每个卡对应的总计减免
     vipMoneyFun() {
@@ -344,17 +345,17 @@ export class TouristComponent implements OnInit {
         }
         if (that.xfList) {
             that.xfList.forEach(function (i: any) {
-                if (that.vipCardList && i.vipCard) {
-                    that.vipCardList.forEach(function (k: any) {
-                        if (k.card.cardId === i.vipCard.card.cardId && k.checked) {
-                            if (i.vipCard.card.type === "TIMES") { i.vipMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), i.num) }
-                            else if (i.vipCard.card.type === "METERING") { i.vipMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), i.num) }
-                            else if (i.vipCard.card.type === "REBATE") { i.vipMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), NP.divide(i.vipCard.card.rebate, 10), i.num); }
-                            else if (i.vipCard.card.type === "STORED") { i.vipMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), i.num) }
-                        } else if (k.card.cardId === i.vipCard.card.cardId && !k.checked) {
-                            i.vipMoney = 0;
-                        }
-                    })
+                if (i.vipCard) {
+                    // i.vipCardList.forEach(function (k: any) {
+                    // if (k.card.cardId === i.vipCard.card.cardId) {
+                    if (i.vipCard.card.type === "TIMES") { i.vipMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), i.num) }
+                    else if (i.vipCard.card.type === "METERING") { i.vipMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), i.num) }
+                    else if (i.vipCard.card.type === "REBATE") { i.vipMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), NP.divide(i.vipCard.card.rebate, 10), i.num); }
+                    else if (i.vipCard.card.type === "STORED") { i.vipMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), i.num) }
+                    // } else if (k.card.cardId === i.vipCard.card.cardId) {
+                    //     i.vipMoney = 0;
+                    // }
+                    // })
                 }
             })
         }
@@ -1074,7 +1075,7 @@ export class TouristComponent implements OnInit {
                 arr2.forEach(function (i: any, n: any) {
                     if (NP.times(i.couponDefDiscount, xfListMoney) > NP.times(maxMoney.couponDefDiscount, xfListMoney) && (i.useLimitMoney === -1 || NP.divide(i.useLimitMoney, 100) >= money)) maxMoney = i;
                 })
-                maxMoney.ticketMoney = NP.divide(NP.times( NP.divide(maxMoney.couponDefDiscount,10), xfListMoney), 100);
+                maxMoney.ticketMoney = NP.divide(NP.times(NP.divide(maxMoney.couponDefDiscount, 10), xfListMoney), 100);
             }
         }
         return maxMoney;
@@ -1613,5 +1614,16 @@ export class TouristComponent implements OnInit {
                 this.msg.warning(error);
             }
         );
+    }
+
+
+    checkVipCard(data: any, ind?: any) {
+        this.visible = false;
+        if (data === 'no') {
+            this.xfList[ind].vipCard = false;
+        } else {
+            this.xfList[ind].vipCard = data;
+        }
+        this.totolMoneyFun(true);
     }
 }
