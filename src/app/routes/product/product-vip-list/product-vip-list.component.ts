@@ -67,7 +67,7 @@ export class ProductVipListComponent implements OnInit {
 
     //查看详情
     checkDetailInfor(ids: string, type: string){
-        this.router.navigate(['/product/check/vipcard/detailinfor', { configId: ids, cardType: type, menuId: this.moduleId}]);
+        this.router.navigate(['/product/check/vipcard/detailinfor', { configId: ids, cardType: type, menuId: this.moduleId,storeId: this.storeId}]);
     }
 
     //上下架商品获取

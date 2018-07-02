@@ -521,7 +521,8 @@ export class RuleSettingComponent implements OnInit {
           deductMoney: parseFloat(this.form.controls.deductMoney.value)*100,
           deductRuleId: this.deductRuleId,
           cardConfigRuleCount: this.selectCardNumber,
-          productCount: this.selectProductNumber + this.selectSeviceItemsNumber,
+          productCount: this.selectProductNumber,
+          itemCount: this.selectSeviceItemsNumber,
           staffCount: this.selectStaffNumber
       };
       for (const i in this.form.controls) {

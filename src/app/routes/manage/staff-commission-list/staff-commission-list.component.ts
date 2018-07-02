@@ -109,10 +109,9 @@ export class StaffCommissionListComponent implements OnInit {
                     this.loading = false;
                     res.data.content.forEach((element: any, index: number) => {
                         element.rulesDetail = element.type === "RATE"? '指定' +  NP.round(element.assignRate * 100,2) + '%,' + ' ' + '非指定' + NP.round(element.normalRate * 100,2) + '%' : '提成' + Number(element.deductMoney)/100 + '元';
-                        element.productNumber = Number(element.productCount)+ Number(element.cardConfigRuleCount);
+                        element.productNumber = Number(element.productCount) + Number(element.itemCount) + Number(element.cardConfigRuleCount);
                     });
                     this.commissionListInfor = res.data.content;
-
                     this.totalElements = res.data.totalElements;//商品总数量
                 } else {
                     this.modalSrv.error({

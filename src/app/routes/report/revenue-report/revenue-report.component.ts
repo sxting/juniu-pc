@@ -72,6 +72,10 @@ export class RevenueReportComponent implements OnInit {
         let day = new Date().getDate();        //获取当前日(1-31)
         this.yyyymm = new Date(year+'-'+changemonth+'-'+day);
         this.date = year+'-'+changemonth+'-'+day;
+        let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+          JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+        this.ifStoresAll = UserInfo.staffType === "MERCHANT"? true : false;
+
     }
 
     //门店id

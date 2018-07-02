@@ -56,7 +56,9 @@ export class CommodityStatementComponent implements OnInit {
 
       this.yyyymmDate = new Date(year+'-'+changemonth+'-'+day);
       this.date = year+'-'+changemonth+'-'+day;
-
+      let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+        JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+      this.ifStoresAll = UserInfo.staffType === "MERCHANT"? true : false;
     }
 
     //门店id

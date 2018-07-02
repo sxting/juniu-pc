@@ -82,6 +82,7 @@ export class CheckVipcardDetailinforComponent implements OnInit {
         this.moduleId = this.route.snapshot.params['menuId']? this.route.snapshot.params['menuId'] : '';//门店
         this.cardType = this.route.snapshot.params['cardType'] ? this.route.snapshot.params['cardType'] : FunctionUtil.getUrlString('cardType');
         this.configId = this.route.snapshot.params['configId'] ? this.route.snapshot.params['configId'] : FunctionUtil.getUrlString('configId');
+        this.storeId = this.route.snapshot.params['storeId'] ? this.route.snapshot.params['storeId'] : FunctionUtil.getUrlString('storeId');
 
         if(self.cardType === 'STORED'){
             this.cardTypeName = '储值卡';
@@ -113,7 +114,6 @@ export class CheckVipcardDetailinforComponent implements OnInit {
       let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
         JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
       this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
-      this.storeId = UserInfo.staffType === "MERCHANT"? '' : this.cityStoreList[0].storeId;
 
       let data = {
         merchantId: this.merchantId,
@@ -121,7 +121,6 @@ export class CheckVipcardDetailinforComponent implements OnInit {
         categoryType: ''
       };
       this.getAllbuySearchs(data);//获取所有的商品
-
     }
 
     //获取门店总数量
