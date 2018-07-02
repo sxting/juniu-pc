@@ -248,7 +248,7 @@ export class RuleSettingComponent implements OnInit {
                 let assignRate = res.data.type === 'RATE'?  parseFloat(res.data.assignRate)*100 : null;
                 let normalRate = res.data.type === 'RATE'?  parseFloat(res.data.normalRate)*100 : null;
                 this.formData = {
-                  ruleName: [ res.data.ruleName, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
+                  ruleName: [ res.data.ruleName, [ Validators.maxLength(20)]],
                   assignRate: [ assignRate ,Validators.compose([ Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)])],//指定技师
                   normalRate: [ normalRate ,Validators.compose([ Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)])],//非指定技师
                   deductMoney: [ deductMoney ,Validators.compose([  Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)])],//按固定金额提成
