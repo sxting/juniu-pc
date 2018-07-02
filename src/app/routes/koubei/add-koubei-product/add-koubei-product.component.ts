@@ -101,7 +101,7 @@ export class AddKoubeiProductComponent implements OnInit {
         if (storeList) {
             CITYLIST.forEach(function (i: any) {
                 storeList.forEach((ele: any, index: number, arr: any) => {
-                    if (i.i === ele.cityId) {
+                    if (i.i === ele.provinceId) {
                         ele.cityName = i.n;
                     }
                 });
@@ -109,41 +109,41 @@ export class AddKoubeiProductComponent implements OnInit {
         }
         let cityNameSpaceArr = [{
             cityName: '',
-            cityId: '',
+          provinceId: '',
         }];
         cityNameSpaceArr.shift();
         for (let i = 0; i < storeList.length; i++) {
-            if (storeList[i].cityId === '' || storeList[i].cityId === null) {
+            if (storeList[i].provinceId === '' || storeList[i].provinceId === null) {
                 storeList[i].cityName = '其他';
-            } else if (storeList[i].cityId !== '' && storeList[i].cityName === '') {
+            } else if (storeList[i].provinceId !== '' && storeList[i].cityName === '') {
                 cityNameSpaceArr.push({
                     cityName: '',
-                    cityId: storeList[i].cityId,
+                  provinceId: storeList[i].provinceId,
                 });
             }
         }
         for (let i = 0; i < storeList.length; i++) {
             let ids = [];
             for (let j = 0; j < CITYLIST.length; j++) {
-                if (storeList[i].cityId === CITYLIST[j].i) {
+                if (storeList[i].provinceId === CITYLIST[j].i) {
                     ids.push(CITYLIST[j].i)
                 }
             }
             if (ids.length === 0) {
                 storeList[i].cityName = '其他';
-                storeList[i].cityId = null;
+                storeList[i].provinceId = null;
             }
         }
         for (let i = 0; i < cityNameSpaceArr.length; i++) {
             for (let j = 0; j < storeList.length; j++) {
-                if (cityNameSpaceArr[i].cityId === storeList[j].cityId && storeList[j].cityName !== '') {
+                if (cityNameSpaceArr[i].provinceId === storeList[j].provinceId && storeList[j].cityName !== '') {
                     cityNameSpaceArr[i].cityName = storeList[j].cityName;
                 }
             }
         }
         for (let i = 0; i < cityNameSpaceArr.length; i++) {
             for (let j = 0; j < storeList.length; j++) {
-                if (cityNameSpaceArr[i].cityId === storeList[j].cityId && storeList[j].cityName === '') {
+                if (cityNameSpaceArr[i].provinceId === storeList[j].provinceId && storeList[j].cityName === '') {
                     storeList[j].cityName = cityNameSpaceArr[i].cityName;
                 }
             }
@@ -413,7 +413,7 @@ export class AddKoubeiProductComponent implements OnInit {
     getCityList(storeList: any) {
         let cityAllCodeArr = [];
         for (let i = 0; i < storeList.length; i++) {
-            cityAllCodeArr.push(storeList[i].cityId + '-' + storeList[i].cityName);
+            cityAllCodeArr.push(storeList[i].provinceId + '-' + storeList[i].cityName);
         }
         let cityCodeArr = FunctionUtil.getNoRepeat(cityAllCodeArr);
         let cityArr = [];
@@ -427,7 +427,7 @@ export class AddKoubeiProductComponent implements OnInit {
         }
         for (let i = 0; i < cityArr.length; i++) {
             for (let j = 0; j < storeList.length; j++) {
-                if (JSON.stringify(storeList[j].cityId) === cityArr[i].cityCode || storeList[j].cityId === cityArr[i].cityCode) {
+                if (JSON.stringify(storeList[j].provinceId) === cityArr[i].cityCode || storeList[j].provinceId === cityArr[i].cityCode) {
                     cityArr[i].stores.push({
                         shopId: storeList[j].shopId,
                         shopName: storeList[j].shopName,
