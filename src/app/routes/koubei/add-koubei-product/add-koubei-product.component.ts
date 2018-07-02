@@ -109,7 +109,7 @@ export class AddKoubeiProductComponent implements OnInit {
         }
         let cityNameSpaceArr = [{
             cityName: '',
-          provinceId: '',
+            provinceId: '',
         }];
         cityNameSpaceArr.shift();
         for (let i = 0; i < storeList.length; i++) {
@@ -118,7 +118,7 @@ export class AddKoubeiProductComponent implements OnInit {
             } else if (storeList[i].provinceId !== '' && storeList[i].cityName === '') {
                 cityNameSpaceArr.push({
                     cityName: '',
-                  provinceId: storeList[i].provinceId,
+                    provinceId: storeList[i].provinceId,
                 });
             }
         }
