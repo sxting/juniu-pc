@@ -799,10 +799,10 @@ export class TouristComponent implements OnInit {
             create.originMoney = create.money;
         } else {
             if (this.xfList && this.xfList.length > 0) {
-                create.money = that.createMoney * 100;
+                create.money = NP.times(that.createMoney , 100);
                 create.originMoney = create.money;
             } else {
-                create.money = this.inputValue * 100;
+                create.money = NP.times(this.inputValue , 100);
             }
 
         }
