@@ -161,14 +161,14 @@
                       </div>
                       <div nz-col nzSpan="10">
                         <div nz-col nzSpan="14" class="textAline">实 价</div>
-                        <div nz-col nzSpan="8" class="colorRed">¥{{item.totoleMoney1}}</div>
+                        <div nz-col nzSpan="8" class="colorRed"> <input nz-input type="number" style="width:90px;"  [(ngModel)]="item.totoleMoney1" (ngModelChange)="shijiaChange($event,ind)"></div>
                       </div>
                     </div>
 
                     <div nz-col nzXs="24" nz-row nzType="flex" *ngIf="memberInfo" class="shopTypeBox">
-                      <div nz-col nzSpan="15">
-                        <div nz-col nzSpan="10" class="textAline">选择扣卡</div>
-                        <div nz-col nzSpan="14" *ngIf="item.vipCard">
+                      <div nz-col nzSpan="14">
+                        <div nz-col nzSpan="9" class="textAline">选择扣卡</div>
+                        <div nz-col nzSpan="15" *ngIf="item.vipCard">
                           <span>
                             <span style="font-size:22px;" class="iconfont {{item.vipCard.card.type==='REBATE'?'icon-zhe':''}} {{item.vipCard.card.type==='METERING'?'icon-ji':''}} {{item.vipCard.card.type==='TIMES'?'icon-qi':''}} {{item.vipCard.card.type==='STORED'?'icon-chu':''}}"></span>
                             <span style="font-size:16px;display: inline-block;
@@ -180,11 +180,11 @@
                             white-space: nowrap;">{{item.vipCard.card.cardName}}</span>
                           </span>
                         </div>
-                        <div nz-col nzSpan="14" *ngIf="!item.vipCard">
+                        <div nz-col nzSpan="15" *ngIf="!item.vipCard">
                           <span>暂无选择会员卡</span>
                         </div>
                       </div>
-                      <div nz-col nzSpan="9"><span *ngIf="item.vipCard" style="margin-right: 10px;">-{{item.totoleMoney}}</span> 
+                      <div nz-col nzSpan="10"><span *ngIf="item.vipCard" style="margin-right: 10px;">-{{item.totoleMoney}}</span> 
                         <nz-popover [nzTitle]="'选择会员卡'" [(nzVisible)]="visible" [nzTrigger]="'click'" [nzPlacement]="'bottomRight'">
                           <button nz-button nz-popover>点击选择</button>
                           <ng-template #nzTemplate>
@@ -353,12 +353,12 @@
                 <div *ngFor="let item of yjcardList;let ind1 = index;" class="{{item.card.type}} ">
                   <p class="cardName">{{item.card.cardName}}</p>
                   <p class="cardMoney" *ngIf="item.card.type !== 'TIMES'">卡余额：
-                    <span class="money">{{item.card.type === 'METERING'?item.card.balance:item.card.balance/100}}</span>
+                    <span class="money1">{{item.card.type === 'METERING'?item.card.balance:item.card.balance/100}}</span>
                     <span *ngIf="item.card.type === 'REBATE'||item.card.type === 'STORED'">元</span>
                     <span *ngIf="item.card.type === 'METERING'">次</span>
                   </p>
                   <p class="cardMoney" *ngIf="item.card.type === 'TIMES'">有效期至：
-                    <span class="money" style="font-size:14px !important;">{{item.card.validity}}</span>
+                    <span class="money1" style="font-size:14px !important;">{{item.card.validity}}</span>
                   </p>
                   <div class="chongzhi" *ngIf="item.card.type !== 'TIMES'&&item.card.type !== 'METERING'" (click)="VipcardPick(ind1)">充值</div>
                 </div>
@@ -385,11 +385,11 @@
                           <span *ngIf="item.type === 'REBATE'">({{rule.rebate}}折)</span>{{item.cardConfigName}}</p>
                         <p class="cardMoney cardMoneyP" style="font-size:14px;">
                           <span>
-                            <span class="money">¥{{rule.price / 100}}</span>
+                            <span class="money1">¥{{rule.price / 100}}</span>
                             <span>元</span>
                           </span>
                           <span *ngIf="item.type !== 'TIMES'">
-                            <span class="money">{{item.type === 'METERING'?rule.balance:rule.balance / 100}}</span>
+                            <span class="money1">{{item.type === 'METERING'?rule.balance:rule.balance / 100}}</span>
                             <span *ngIf="item.type === 'REBATE'||item.type === 'STORED'">元</span>
                             <span *ngIf="item.type === 'METERING'">次</span>
                           </span>
