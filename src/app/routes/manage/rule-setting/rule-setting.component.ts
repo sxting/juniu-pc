@@ -241,9 +241,7 @@ export class RuleSettingComponent implements OnInit {
       this.manageService.deductRuleInfo(data).subscribe(
           (res: any) => {
               if (res.success) {
-                  this.loading = false;
-                // extractArr: any[] = [{name: '按比例提成', type: 'RATE'},{name: '按固定金额提成', type: 'MONEY'}];//提成类型
-
+                this.loading = false;
                 let deductMoney = res.data.type === 'MONEY'?  parseFloat(res.data.deductMoney)/100 : null;
                 let assignRate = res.data.type === 'RATE'?  parseFloat(res.data.assignRate)*100 : null;
                 let normalRate = res.data.type === 'RATE'?  parseFloat(res.data.normalRate)*100 : null;
@@ -258,13 +256,8 @@ export class RuleSettingComponent implements OnInit {
 
                 /******* 服务项目 *********/
                 let itemSeviceRuleIds = res.data.serviceItemIds? res.data.serviceItemIds.split(',') : [];
-                console.log(res.data.serviceItemIds);
-
                 self.selectSeviceItemsNumber = itemSeviceRuleIds.length;
-                console.log(self.selectSeviceItemsNumber);
-
                 self.seviceItemsIds = res.data.serviceItemIds;
-                console.log(this.seviceItemsListInfor);
                 FunctionUtil.getDataChange(this.seviceItemsListInfor, itemSeviceRuleIds);//转换后台拿过来的数据
 
                 /******* 卡规则 *********/
@@ -528,7 +521,7 @@ export class RuleSettingComponent implements OnInit {
           deductMoney: parseFloat(this.form.controls.deductMoney.value)*100,
           deductRuleId: this.deductRuleId,
           cardConfigRuleCount: this.selectCardNumber,
-          productCount: this.selectProductNumber,
+          productCount: this.selectProductNumber + this.selectSeviceItemsNumber,
           staffCount: this.selectStaffNumber
       };
       for (const i in this.form.controls) {
