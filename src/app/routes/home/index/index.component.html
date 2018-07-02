@@ -84,7 +84,7 @@
             [footer]="footer4">
             <trend flag="{{openCardData.weekRatio >= 0 ? 'up' : 'down'}}" style="display:block; margin-top:2px;">周同比
               <span class="pl-sm">
-                {{(openCardData.weekRatio||openCardData.weekRatio == 0)?openCardData.weekRatioShow*100+'%':'--'}}
+                {{weekRatioShowDetailNumber}}
               </span>
             </trend>
             <trend flag="{{openCardData.dayRatio >= 0 ? 'up' : 'down'}}" >日环比

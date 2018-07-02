@@ -10,6 +10,8 @@ import { FunctionUtil } from "@shared/funtion/funtion-util";
 import { StoresInforService } from "@shared/stores-infor/shared/stores-infor.service";
 import { ManageService } from "../../manage/shared/manage.service";
 declare var echarts: any;
+import NP from 'number-precision'
+
 
 @Component({
     selector: 'app-index',
@@ -93,8 +95,9 @@ export class IndexComponent implements OnInit {
     cardsTotal: any = 0;
     newReserveCount: any = 0; //新增预约数
     messageCount: any = 0; //系统通知
+    weekRatioShowDetailNumber: any;
 
-  guadanCount: any = 0;
+    guadanCount: any = 0;
 
     constructor(
         private http: _HttpClient,
@@ -379,13 +382,13 @@ export class IndexComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     this.openCardData = res.data;
-
                     if(this.openCardData.weekRatio) {
                       this.openCardData.weekRatioShow = Math.abs(Number(this.openCardData.weekRatio));
                     } else {
                       this.openCardData.weekRatioShow = this.openCardData.weekRatio;
                     }
-                    if(this.openCardData.dayRatio) {
+                    this.weekRatioShowDetailNumber = (this.openCardData.weekRatio||this.openCardData.weekRatio == 0)? NP.round(this.openCardData.weekRatioShow*100,2) + '%' : '--';
+                  if(this.openCardData.dayRatio) {
                       this.openCardData.dayRatioShow = Math.abs(Number(this.openCardData.dayRatio));
                     } else {
                       this.openCardData.dayRatioShow = this.openCardData.dayRatio;
