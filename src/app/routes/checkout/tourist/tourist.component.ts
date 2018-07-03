@@ -191,7 +191,8 @@ export class TouristComponent implements OnInit {
             i.open = false;
             if (that.allproducks[index1].productList[index2].productId === i.productId) {
                 that.xfList.splice(n, 1);
-                that.changeFun();
+                that.allproducks[index1].productList[index2].currentPrice = that.allproducks[index1].productList[index2].currentPrice1
+                // that.changeFun();
             }
         })
         if (this.allproducks[index1].productList[index2].click) {
@@ -401,11 +402,25 @@ export class TouristComponent implements OnInit {
     }
     //删除商品
     xfCloseShop(index: any) {
+        console.log(this.xfList[index].currentPrice1);
+        let that = this;
         this.xfList[index].num = 0;
         this.xfList[index].discount = 100;
+        this.xfList.forEach(function (i: any) {
+            that.allproducks.forEach(function(m:any){
+                m.productList.forEach(function(n:any){
+                    if(n.productId === i.productId){
+                        n.currentPrice = n.currentPrice1;
+                    }
+                })
+            })
+        })
         this.xfList.splice(index, 1);
         this.cardChangeBoolean = false;
-        this.changeFun();
+        // this.changeFun();
+        // this.xfList[index].currentPrice = this.xfList[index].currentPrice1;
+
+        
         this.totolMoneyFun();
     }
 
@@ -866,6 +881,7 @@ export class TouristComponent implements OnInit {
                             n.num = 1;
                             n.type = 'fuwu';
                             n.discount = 100;
+                            n.currentPrice1 = n.currentPrice;
                         });
                     });
                     this.allproducks = allproducks;
@@ -1622,6 +1638,17 @@ export class TouristComponent implements OnInit {
     }
     shijiaChange(event, ind) {
         this.xfList[ind].currentPrice = event * 100;
+        let that = this;
+
         this.totolMoneyFun();
+        // this.xfList.forEach(function (i: any) {
+        //     that.allproducks.forEach(function(m:any){
+        //         m.productList.forEach(function(n:any){
+        //             if(n.productId === i.productId){
+        //                 n.currentPrice = n.currentPrice1;
+        //             }
+        //         })
+        //     })
+        // })
     }
 }
