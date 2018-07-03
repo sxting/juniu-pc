@@ -761,9 +761,9 @@ export class TouristComponent implements OnInit {
                             amount: 0,
                             type: i.vipCard.card.type
                         }
-                        if (i.type === 'TIMES') data.amount = 0;
-                        else if (i.type === 'METERING') data.amount += i.num;
-                        else if (i.type === 'REBATE') data.amount += NP.times(i.num, i.currentPrice / 100, 100, NP.divide(i.vipCard.card.rebate, 10), NP.divide(i.discount, 100));
+                        if (i.vipCard.card.type === 'TIMES') data.amount = 0;
+                        else if (i.vipCard.card.type === 'METERING') data.amount += i.num;
+                        else if (i.vipCard.card.type === 'REBATE') data.amount += NP.times(i.num, i.currentPrice / 100, 100, NP.divide(i.vipCard.card.rebate, 10), NP.divide(i.discount, 100));
                         else data.amount += NP.times(i.num, i.currentPrice / 100, 100, NP.divide(i.discount, 100));
                         create.settleCardDTOList.push(data)
                     }
