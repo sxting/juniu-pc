@@ -55,24 +55,12 @@ export class RulesStep3Component implements OnInit {
         this.moduleId = this.route.snapshot.params['menuId'];//门店
         this.item.moduleId = this.moduleId;
 
-        let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
-          JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
-        this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
-
         this.form = this.fb.group({
             productTypes: [ self.productTypes[0].value, [ Validators.required ] ],
             storeIds: [ null,  [ ]],
             storeType: [ self.storeStatus[0].value, [ Validators.required ] ]
         });
         this.form.patchValue(this.item);
-
-        let data = {
-            merchantId: this.merchantId,
-            storeId: this.storeId,
-            categoryType: 'SERVICE'
-        };
-        this.getAllbuySearchs(data);//获取所有的商品
-
     }
 
     // 初始化所有门店名称
@@ -83,7 +71,6 @@ export class RulesStep3Component implements OnInit {
     //获取门店数据
     storeListPush(event){
       this.cityStoreList = event.storeList? event.storeList : [];
-      console.log(this.cityStoreList);
     }
 
     //获取门店总数量
@@ -104,6 +91,16 @@ export class RulesStep3Component implements OnInit {
     //获取选择的门店ID
     getSelectStoresIdsCsh(event){
       this.selectStoresIds = event.selectStoresIds? event.selectStoresIds : '';
+      let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+        JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+      this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
+      this.storeId = UserInfo.staffType === 'STORE'? this.selectStoresIds : '';
+      let data = {
+        merchantId: this.merchantId,
+        storeId: this.storeId,
+        categoryType: 'SERVICE'
+      };
+      this.getAllbuySearchs(data);//获取所有的商品
     }
 
     // 使用商品名称
@@ -121,7 +118,6 @@ export class RulesStep3Component implements OnInit {
 
     //获取弹框的时候门店ID
     getSelectStoresIds(event){
-      console.log(event);
       if(event){
         this.selectStoresIds = event.staffIds;
       }
