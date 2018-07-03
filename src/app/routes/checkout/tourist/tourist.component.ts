@@ -256,8 +256,14 @@ export class TouristComponent implements OnInit {
             this.vipMoneyFun()
             this.balanceFun();
             that.xfList.forEach(function (i: any) {
-                if (i.vipCard && !that.cardChangeBoolean) {
-                    i.totoleMoney = NP.round(NP.times(NP.divide(i.vipMoney, 100), i.num, NP.divide(i.discount, 100)), 2);
+                if (i.vipCard) {
+                    // i.totoleMoney = NP.round(NP.times(NP.divide(i.vipMoney, 100), i.num, NP.divide(i.discount, 100)), 2);
+                    if (i.vipCard.card.type === "TIMES") { i.totoleMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), i.num) }
+                    else if (i.vipCard.card.type === "METERING") { i.totoleMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), i.num) }
+                    else if (i.vipCard.card.type === "REBATE") { i.totoleMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), NP.divide(i.vipCard.card.rebate, 10), i.num); }
+                    else if (i.vipCard.card.type === "STORED") { i.totoleMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), i.num) }
+
+                    i.totoleMoney  =  NP.divide(i.totoleMoney ,100)
                     that.totolMoney = NP.round(NP.plus(that.totolMoney, NP.divide(i.vipMoney, 100)), 2);
                     that.isVerbMoney = Math.floor(that.totolMoney);
                     that.vipBoolean = true;
@@ -431,6 +437,7 @@ export class TouristComponent implements OnInit {
     }
     suanshu(type: any, index: any) {
         let that = this;
+        console.log(this.xfList[index])
         if (this.xfList[index].num > 0) {
             if (type === '-') {
                 this.xfList[index].num -= 1;
