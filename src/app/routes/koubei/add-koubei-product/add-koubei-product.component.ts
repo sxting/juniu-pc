@@ -183,8 +183,8 @@ export class AddKoubeiProductComponent implements OnInit {
         }
         this.formData = {
             productName: [ null, [ Validators.required ,Validators.max(40)] ],
-            originalPrice: [null, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.max(1000 * 5)])],
-            currentPrice: [null, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.max(1000 * 5)])],
+            originalPrice: [null, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)])],
+            currentPrice: [null, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.max(10000 * 3)])],
             categoryName:[ null, [  ] ],
             stock: [ 99999999, [ Validators.required, Validators.pattern(`[0-9]+`)] ],
             expiryDay:[ 360, Validators.compose([ Validators.required, Validators.pattern(`[0-9]+`), Validators.min(7), Validators.max(36 * 10) ])],
@@ -234,8 +234,8 @@ export class AddKoubeiProductComponent implements OnInit {
         if(this.form.controls.verifyFrequency.value === 'simple' && this.form.controls.verifyEnableTimes.value == ''){
             this.form = this.fb.group({
                     productName: [ productName, [ Validators.required ,Validators.max(40)] ],
-                    originalPrice: [ originalPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.max(1000 * 5)])],
-                    currentPrice: [ currentPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.max(1000 * 5)])],
+                    originalPrice: [ originalPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)])],
+                    currentPrice: [ currentPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.max(10000 * 3)])],
                     categoryName:[ categoryName, [  ] ],
                     stock: [ stock, [ Validators.required, Validators.pattern(`[0-9]+`)] ],
                     expiryDay:[ expiryDay, Validators.compose([ Validators.required, Validators.pattern(`[0-9]+`), Validators.min(7), Validators.max(36 * 10) ])],
@@ -651,8 +651,8 @@ export class AddKoubeiProductComponent implements OnInit {
 
                     this.form = this.fb.group({
                       productName: [ productName, [ Validators.required ,Validators.max(40)] ],
-                      originalPrice: [ originalPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.max(1000 * 5)])],
-                      currentPrice: [ currentPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.max(1000 * 5)])],
+                      originalPrice: [ originalPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)])],
+                      currentPrice: [ currentPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.max(10000 * 3)])],
                       categoryName:[ categoryName, [  ] ],
                       stock: [ stock, [ Validators.required, Validators.pattern(`[0-9]+`)] ],
                       expiryDay:[ expiryDay, Validators.compose([ Validators.required, Validators.pattern(`[0-9]+`), Validators.min(7), Validators.max(36 * 10) ])],
@@ -839,8 +839,8 @@ export class AddKoubeiProductComponent implements OnInit {
                     }
                     this.formData = {
                       productName: [ res.data.productName, [ Validators.required ,Validators.max(40)] ],
-                      originalPrice: [ originalPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.max(1000 * 5)])],
-                      currentPrice: [ currentPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.max(1000 * 5)])],
+                      originalPrice: [ originalPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)])],
+                      currentPrice: [ currentPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.max(10000 * 3)])],
                       categoryName:[ categorysName, [  ] ],
                       stock: [ res.data.stock, [ Validators.required, Validators.pattern(`[0-9]+`)] ],
                       expiryDay:[ expiryDay, Validators.compose([ Validators.required, Validators.pattern(`[0-9]+`), Validators.min(7), Validators.max(36 * 10) ])],

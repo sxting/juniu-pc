@@ -41,12 +41,12 @@ export class StaffCommissionListComponent implements OnInit {
 
     ngOnInit() {
       this.moduleId = this.route.snapshot.params['menuId'];
-        let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
-            JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
-        this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
+      let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+          JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+      this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
 
-        //请求员工列表数据
-        this.rulePageListHttp();
+      //请求员工列表数据
+      this.rulePageListHttp();
     }
 
     //门店id

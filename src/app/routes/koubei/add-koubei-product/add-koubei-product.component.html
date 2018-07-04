@@ -22,19 +22,19 @@
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7" nzFor="currentPrice" nzRequired>原价<span>／</span>现价(元)</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input nz-input formControlName="originalPrice" style="width: 100px;" autocomplete="off" id="originalPrice" placeholder="原价">
+                <input maxlength="11" nz-input formControlName="originalPrice" style="width: 100px;" autocomplete="off" id="originalPrice" placeholder="原价">
                 <em style="color: #333;margin-right: 8px;">/</em>
-                <input nz-input formControlName="currentPrice" style="width: 100px;" id="currentPrice" autocomplete="off" placeholder="现价" (change)="changeCurrentPrice()">
+                <input maxlength="11" nz-input formControlName="currentPrice" style="width: 100px;" id="currentPrice" autocomplete="off" placeholder="现价" (change)="changeCurrentPrice()">
                 <ng-container *ngIf="currentPrice.dirty || currentPrice.touched">
                     <nz-form-explain class="errorTips" *ngIf="currentPrice.errors?.required">商品现价不可为空</nz-form-explain>
                     <nz-form-explain class="errorTips" *ngIf="currentPrice.errors?.pattern">商品现价只能是整数或者带有两位小数的数字</nz-form-explain>
-                    <nz-form-explain class="errorTips" *ngIf="currentPrice.errors?.max">商品现价最多5000以内</nz-form-explain>
+                    <nz-form-explain class="errorTips" *ngIf="currentPrice.errors?.max">商品现价最多30000以内</nz-form-explain>
                     <nz-form-explain class="errorTips" *ngIf="!ifShowPriceContrast">商品现价必须小于商品原价</nz-form-explain>
                 </ng-container>
                 <ng-container *ngIf="originalPrice.dirty || originalPrice.touched">
                     <nz-form-explain class="errorTips" *ngIf="originalPrice.errors?.required">商品原价不可为空</nz-form-explain>
                     <nz-form-explain class="errorTips" *ngIf="originalPrice.errors?.pattern">商品原价只能是整数或者带有两位小数的数字</nz-form-explain>
-                    <nz-form-explain class="errorTips" *ngIf="originalPrice.errors?.max">商品原价最多5000以内</nz-form-explain>
+                    <!--<nz-form-explain class="errorTips" *ngIf="originalPrice.errors?.max">商品原价最多5000以内</nz-form-explain>-->
                 </ng-container>
 
                 <nz-form-explain class="tips-text">请输入具体价格，不要输入价格范围。</nz-form-explain>

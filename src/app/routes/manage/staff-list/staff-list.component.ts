@@ -38,6 +38,9 @@ export class StaffListComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+      let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+        JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+      this.ifStoresAll = UserInfo.staffType === "MERCHANT"? true : false;
       this.moduleId = this.route.snapshot.params['menuId'];
     }
 
@@ -51,6 +54,9 @@ export class StaffListComponent implements OnInit {
     //返回门店数据
     storeListPush(event: any){
       this.storeList = event.storeList? event.storeList : [];
+      let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+        JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+      this.storeId = UserInfo.staffType === "MERCHANT"? '' : this.storeList[0].storeId;
       this.staffListHttp();//员工列表请求数据
     }
 
