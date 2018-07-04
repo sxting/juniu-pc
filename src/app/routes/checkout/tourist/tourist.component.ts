@@ -21,7 +21,7 @@ declare var swal: any;
 export class TouristComponent implements OnInit {
     storeId: any;
     changeType: boolean = true;//收银开卡切换
-    vipsearch: string;//vip搜索框
+    vipsearch: string ;//vip搜索框
     renlian: boolean = true;//人脸识别
     isVerb: boolean = false;//是否抹零
     isVerb2: boolean = false;
@@ -58,6 +58,7 @@ export class TouristComponent implements OnInit {
     moduleId: any;
     store: any;
     isVisible = false;
+    visible: any = false;
     cardTabs = [
         {
             type: "储值卡",
@@ -154,6 +155,7 @@ export class TouristComponent implements OnInit {
             this.change({ index: 1 })
         }
         this.getStoresInfor();
+        console.log('aaa');
         // this.changeFun();
         this.guadanList = this.localStorageService.getLocalstorage(GUADAN) ? JSON.parse(this.localStorageService.getLocalstorage(GUADAN)) : [];
     }
@@ -190,6 +192,8 @@ export class TouristComponent implements OnInit {
             i.open = false;
             if (that.allproducks[index1].productList[index2].productId === i.productId) {
                 that.xfList.splice(n, 1);
+                that.allproducks[index1].productList[index2].currentPrice = that.allproducks[index1].productList[index2].currentPrice1
+                // that.changeFun();
             }
         })
         if (this.allproducks[index1].productList[index2].click) {
@@ -230,7 +234,7 @@ export class TouristComponent implements OnInit {
     }
     //     vipMoney += i.vipMoney;
 
-    totolMoneyFun() {
+    totolMoneyFun(checkCard?: any) {
         let that = this;
         this.vipCardList = [];
         this.vipBoolean = false;
@@ -239,9 +243,9 @@ export class TouristComponent implements OnInit {
             that.ticketListTime();
             that.totolMoney = 0;
             let ticketM = 0;
-            if (!this.cardChangeBoolean) this.vipCardSearchFun();
+            if (!this.cardChangeBoolean && !checkCard) this.vipCardSearchFun();
             //每个卡的余额
-            this.vipCardListfun();
+            // this.vipCardListfun();
             let totolMoney = 0;
             that.xfList.forEach(function (i: any) {
                 i.totoleMoney1 = NP.round(NP.times(NP.divide(i.currentPrice, 100), i.num, NP.divide(i.discount, 100)), 2);
@@ -253,8 +257,14 @@ export class TouristComponent implements OnInit {
             this.vipMoneyFun()
             this.balanceFun();
             that.xfList.forEach(function (i: any) {
-                if (i.vipCard && !that.cardChangeBoolean) {
-                    i.totoleMoney = NP.round(NP.times(NP.divide(i.vipMoney, 100), i.num, NP.divide(i.discount, 100)), 2);
+                if (i.vipCard) {
+                    // i.totoleMoney = NP.round(NP.times(NP.divide(i.vipMoney, 100), i.num, NP.divide(i.discount, 100)), 2);
+                    if (i.vipCard.card.type === "TIMES") { i.totoleMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), i.num) }
+                    else if (i.vipCard.card.type === "METERING") { i.totoleMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), i.num) }
+                    else if (i.vipCard.card.type === "REBATE") { i.totoleMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), NP.divide(i.vipCard.card.rebate, 10), i.num); }
+                    else if (i.vipCard.card.type === "STORED") { i.totoleMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), i.num) }
+
+                    i.totoleMoney  =  NP.divide(i.totoleMoney ,100)
                     that.totolMoney = NP.round(NP.plus(that.totolMoney, NP.divide(i.vipMoney, 100)), 2);
                     that.isVerbMoney = Math.floor(that.totolMoney);
                     that.vipBoolean = true;
@@ -323,13 +333,13 @@ export class TouristComponent implements OnInit {
         this.REBATEValue = event;
         this.totolMoneyFun();
     }
-    vipCardListfun() {
-        if (this.vipCardList) {
-            this.vipCardList.forEach(function (k: any) {
-                k.card.balance2 = k.card.balance;
-            })
-        }
-    }
+    // vipCardListfun() {
+    //     if (this.vipCardList) {
+    //         this.vipCardList.forEach(function (k: any) {
+    //             k.card.balance2 = k.card.balance;
+    //         })
+    //     }
+    // }
 
     //标注每个卡对应的总计减免
     vipMoneyFun() {
@@ -343,17 +353,17 @@ export class TouristComponent implements OnInit {
         }
         if (that.xfList) {
             that.xfList.forEach(function (i: any) {
-                if (that.vipCardList && i.vipCard) {
-                    that.vipCardList.forEach(function (k: any) {
-                        if (k.card.cardId === i.vipCard.card.cardId && k.checked) {
-                            if (i.vipCard.card.type === "TIMES") { i.vipMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), i.num) }
-                            else if (i.vipCard.card.type === "METERING") { i.vipMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), i.num) }
-                            else if (i.vipCard.card.type === "REBATE") { i.vipMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), NP.divide(i.vipCard.card.rebate, 10), i.num); }
-                            else if (i.vipCard.card.type === "STORED") { i.vipMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), i.num) }
-                        } else if (k.card.cardId === i.vipCard.card.cardId && !k.checked) {
-                            i.vipMoney = 0;
-                        }
-                    })
+                if (i.vipCard) {
+                    // i.vipCardList.forEach(function (k: any) {
+                    // if (k.card.cardId === i.vipCard.card.cardId) {
+                    if (i.vipCard.card.type === "TIMES") { i.vipMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), i.num) }
+                    else if (i.vipCard.card.type === "METERING") { i.vipMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), i.num) }
+                    else if (i.vipCard.card.type === "REBATE") { i.vipMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), NP.divide(i.vipCard.card.rebate, 10), i.num); }
+                    else if (i.vipCard.card.type === "STORED") { i.vipMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), i.num) }
+                    // } else if (k.card.cardId === i.vipCard.card.cardId) {
+                    //     i.vipMoney = 0;
+                    // }
+                    // })
                 }
             })
         }
@@ -399,10 +409,25 @@ export class TouristComponent implements OnInit {
     }
     //删除商品
     xfCloseShop(index: any) {
+        console.log(this.xfList[index].currentPrice1);
+        let that = this;
         this.xfList[index].num = 0;
         this.xfList[index].discount = 100;
+        this.xfList.forEach(function (i: any) {
+            that.allproducks.forEach(function(m:any){
+                m.productList.forEach(function(n:any){
+                    if(n.productId === i.productId){
+                        n.currentPrice = n.currentPrice1;
+                    }
+                })
+            })
+        })
         this.xfList.splice(index, 1);
         this.cardChangeBoolean = false;
+        // this.changeFun();
+        // this.xfList[index].currentPrice = this.xfList[index].currentPrice1;
+
+        
         this.totolMoneyFun();
     }
 
@@ -423,7 +448,7 @@ export class TouristComponent implements OnInit {
         if (this.xfList[index].num === 0) {
             this.xfList.splice(index, 1);
         }
-        that.totolMoneyFun();
+        that.totolMoneyFun(true);
     }
     //抹零
     moling() {
@@ -626,26 +651,23 @@ export class TouristComponent implements OnInit {
         let settleCardDTOList = [];
         this.settleCardDTOList = [];
         let that = this;
-        if (that.vipCardList && that.vipCardList.length > 0) {
-            that.vipCardList.forEach(function (i: any) {
-                let data = {
-                    productIdList: [],
-                    cardId: i.card.cardId,
-                    amount: 0,
-                    type: i.card.type
-                }
-                if (i.checked) settleCardDTOList.push(data)
-            })
-            settleCardDTOList.forEach(function (i: any) {
-                that.xfList.forEach(function (n: any) {
-                    if (n.vipCard && i.cardId === n.vipCard.card.cardId) {
-                        i.productIdList.push(n.productId)
-                        if (i.type === 'TIMES') i.amount = 0;
-                        else if (i.type === 'METERING') i.amount += n.num;
-                        else i.amount += NP.times(n.num, n.totoleMoney);
+        if (that.xfList && that.xfList.length > 0) {
+            that.xfList.forEach(function (i: any) {
+                if (i.vipCard) {
+                    let data = {
+                        productIdList: [i.productId],
+                        cardId: i.vipCard.card.cardId,
+                        amount: 0,
+                        type: i.vipCard.card.type
                     }
-                })
+                    if (i.type === 'TIMES') data.amount = 0;
+                    else if (i.type === 'METERING') data.amount += i.num;
+                    else if (i.type === 'REBATE') data.amount += NP.times(i.num, i.currentPrice / 100, 100, NP.divide(i.vipCard.card.rebate, 10), NP.divide(i.discount, 100));
+                    else data.amount += NP.times(i.num, i.currentPrice / 100, 100, NP.divide(i.discount, 100));
+                    settleCardDTOList.push(data)
+                }
             })
+
         }
         this.settleCardDTOList = settleCardDTOList;
     }
@@ -659,7 +681,7 @@ export class TouristComponent implements OnInit {
         create.authCode = this.authCode;
         create.birthday = this.memberInfo.birthday;
         create.gender = this.memberInfo.gender;
-        if (this.ticket) {
+        if (this.ticket && this.changeType) {
             create.couponId = this.ticket.couponId;
         }
         const codeTyeNum = this.authCode;
@@ -736,27 +758,22 @@ export class TouristComponent implements OnInit {
             })
             create.orderItem = configArray;
             create.settleCardDTOList = [];
-
-            if (that.vipCardList && that.vipCardList.length > 0) {
-                that.vipCardList.forEach(function (i: any) {
-                    let data = {
-                        productIdList: [],
-                        cardId: i.card.cardId,
-                        amount: 0,
-                        type: i.card.type
-                    }
-                    if (i.checked) create.settleCardDTOList.push(data)
-                })
-                create.settleCardDTOList.forEach(function (i: any) {
-                    that.xfList.forEach(function (n: any) {
-                        if (n.vipCard && i.cardId === n.vipCard.card.cardId) {
-                            i.productIdList.push(n.productId)
-                            if (i.type === 'TIMES') i.amount = 0;
-                            else if (i.type === 'METERING') i.amount += n.num;
-                            else if (i.type === 'REBATE') i.amount += NP.times(n.num, n.currentPrice / 100, 100, NP.divide(n.vipCard.card.rebate, 10), NP.divide(n.discount, 100));
-                            else i.amount += NP.times(n.num, n.currentPrice / 100, 100, NP.divide(n.discount, 100));
+            console.log(that.xfList)
+            if (that.xfList && that.xfList.length > 0) {
+                that.xfList.forEach(function (i: any) {
+                    if (i.vipCard) {
+                        let data = {
+                            productIdList: [i.productId],
+                            cardId: i.vipCard.card.cardId,
+                            amount: 0,
+                            type: i.vipCard.card.type
                         }
-                    })
+                        if (i.vipCard.card.type === 'TIMES') data.amount = 0;
+                        else if (i.vipCard.card.type === 'METERING') data.amount += i.num;
+                        else if (i.vipCard.card.type === 'REBATE') data.amount += NP.times(i.num, i.currentPrice / 100, 100, NP.divide(i.vipCard.card.rebate, 10), NP.divide(i.discount, 100));
+                        else data.amount += NP.times(i.num, i.currentPrice / 100, 100, NP.divide(i.discount, 100));
+                        create.settleCardDTOList.push(data)
+                    }
                 })
             }
         }
@@ -871,6 +888,7 @@ export class TouristComponent implements OnInit {
                             n.num = 1;
                             n.type = 'fuwu';
                             n.discount = 100;
+                            n.currentPrice1 = n.currentPrice;
                         });
                     });
                     this.allproducks = allproducks;
@@ -904,7 +922,6 @@ export class TouristComponent implements OnInit {
                             i.couponDefTypeName = '折扣券'
                         }
                     })
-                    console.log(this.ticketList);
                     that.totolMoneyFun();
                 } else {
                     this.errorAlter(res.errorInfo)
@@ -1073,7 +1090,7 @@ export class TouristComponent implements OnInit {
                 arr2.forEach(function (i: any, n: any) {
                     if (NP.times(i.couponDefDiscount, xfListMoney) > NP.times(maxMoney.couponDefDiscount, xfListMoney) && (i.useLimitMoney === -1 || NP.divide(i.useLimitMoney, 100) >= money)) maxMoney = i;
                 })
-                maxMoney.ticketMoney = NP.divide(NP.times( NP.divide(maxMoney.couponDefDiscount,10), xfListMoney), 100);
+                maxMoney.ticketMoney = NP.divide(NP.times(NP.divide(maxMoney.couponDefDiscount, 10), xfListMoney), 100);
             }
         }
         return maxMoney;
@@ -1374,6 +1391,9 @@ export class TouristComponent implements OnInit {
                             }
                             if (i.vipCardList[n].card.type === 'REBATE' && (i.vipCard ? (i.vipCard.card.type !== 'TIMES' && i.vipCard.card.type !== 'METERING') : true)) {
                                 if (!i.vipCard) i.vipCard = i.vipCardList[n];
+                                if (i.vipCard && i.vipCard.card.type === 'STORED') {
+                                    i.vipCard = i.vipCardList[n];
+                                }
                                 if (i.vipCard && i.vipCardList[n].card.balance > i.vipCard.card.balance) {
                                     i.vipCard = i.vipCardList[n];
                                 }
@@ -1400,7 +1420,6 @@ export class TouristComponent implements OnInit {
                 })
                 //最终所有选取的商品所对应的会员卡
                 this.vipCardList = itemList;
-                console.log(this.vipCardList);
             }
         }
 
@@ -1614,5 +1633,31 @@ export class TouristComponent implements OnInit {
                 this.msg.warning(error);
             }
         );
+    }
+
+
+    checkVipCard(data: any, ind?: any) {
+        this.visible = false;
+        if (data === 'no') {
+            this.xfList[ind].vipCard = false;
+        } else {
+            this.xfList[ind].vipCard = data;
+        }
+        this.totolMoneyFun(true);
+    }
+    shijiaChange(event, ind) {
+        this.xfList[ind].currentPrice = event * 100;
+        let that = this;
+
+        this.totolMoneyFun();
+        // this.xfList.forEach(function (i: any) {
+        //     that.allproducks.forEach(function(m:any){
+        //         m.productList.forEach(function(n:any){
+        //             if(n.productId === i.productId){
+        //                 n.currentPrice = n.currentPrice1;
+        //             }
+        //         })
+        //     })
+        // })
     }
 }
