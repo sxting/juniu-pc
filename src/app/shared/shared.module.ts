@@ -34,6 +34,7 @@ import { UploadService } from '@shared/upload-img';
 import { StoresInforComponent } from '@shared/stores-infor/stores-infor.component';
 import { StoresTransforComponent } from '@shared/stores-transfor/stores-transfor.component';
 import { StoresTransforService } from '@shared/stores-transfor/shared/stores-transfor.service';
+import { KoubeiErrComponent } from '@shared/component/koubeiErr/koubeiErr.component';
 
 const THIRDMODULES = [
   NgZorroAntdModule,
@@ -50,7 +51,8 @@ const JUNIUMODULES = [
   UploadImageComponent,
   StoresInforComponent,
   StoreComponent,
-  StoresTransforComponent
+  StoresTransforComponent,
+  KoubeiErrComponent
 ];
 // endregion
 

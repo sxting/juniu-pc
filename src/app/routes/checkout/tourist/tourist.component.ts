@@ -57,6 +57,7 @@ export class TouristComponent implements OnInit {
     radioValue: any;
     moduleId: any;
     store: any;
+    isVisible = false;
     cardTabs = [
         {
             type: "储值卡",
@@ -928,6 +929,7 @@ export class TouristComponent implements OnInit {
                     (res: any) => {
                         if (res.success) {
                             this.vipXqFun();
+                            
                             if (res.data && res.data.length === 0) self.errorAlter('未查询到该会员');
                             self.vipData = res.data;
                             self.changeFun();
@@ -941,7 +943,6 @@ export class TouristComponent implements OnInit {
                         } else {
                             self.errorAlter(res.errorInfo)
                         }
-
                     },
                     error => self.errorAlter(error)
                 );
