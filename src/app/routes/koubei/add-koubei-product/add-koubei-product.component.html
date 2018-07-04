@@ -203,6 +203,9 @@
                     <nz-form-explain class="errorTips" *ngIf="expiryDay.errors?.min">使用有效期最少7天</nz-form-explain>
                     <nz-form-explain class="errorTips" *ngIf="expiryDay.errors?.max">使用有效期最多360天</nz-form-explain>
                 </ng-container>
+                <ng-container *ngIf="form.value.validityPeriodType == ''">
+                  <nz-form-explain class="errorTips">请选择使用有效期类型。</nz-form-explain>
+                </ng-container>
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
