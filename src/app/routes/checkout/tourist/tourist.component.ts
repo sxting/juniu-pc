@@ -437,7 +437,6 @@ export class TouristComponent implements OnInit {
     }
     suanshu(type: any, index: any) {
         let that = this;
-        console.log(this.xfList[index])
         if (this.xfList[index].num > 0) {
             if (type === '-') {
                 this.xfList[index].num -= 1;
@@ -448,7 +447,7 @@ export class TouristComponent implements OnInit {
         if (this.xfList[index].num === 0) {
             this.xfList.splice(index, 1);
         }
-        that.totolMoneyFun();
+        that.totolMoneyFun(true);
     }
     //抹零
     moling() {
