@@ -2,15 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { RulesTransferService } from "./rules-transfer.service";
-import { LocalStorageService } from "../../../shared/service/localstorage-service";
-import { CITYLIST } from "../../../shared/define/juniu-define";
-import { FunctionUtil } from "../../../shared/funtion/funtion-util";
 import { NzMessageService, NzModalService} from 'ng-zorro-antd';
 import { ProductService } from "../shared/product.service";
+import { LocalStorageService } from '@shared/service/localstorage-service';
+import { FunctionUtil } from '@shared/funtion/funtion-util';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-rules-step3',
   templateUrl: './rules-step3.component.html',
+  styleUrls: [ './rules-step1.component.less' ]
 })
 export class RulesStep3Component implements OnInit {
 
@@ -22,20 +23,26 @@ export class RulesStep3Component implements OnInit {
     selectStoresIds: any = ''; //选中的门店
     storesChangeNum: any; //选中门店的个数
     allStoresNum: any;//所有门店的数量
-    storeStatus: any = [{ name: '全部门店(默认)', value: 'ALLSTORES'},{ name: '自定义', value: 'CUSTOMIZE'}];
-    productTypes: any = [{ name: '全部服务项目(默认)', value: 'SERVICEITEMS'}, { name: '全部项目和商品', value: 'ALL'},{name: '自定义', value: 'CUSTOMIZE'}];
+    storeStatus: any = [{ name: '全部门店(默认)', value: 'ALL'},{ name: '自定义', value: 'CUSTOMIZE'}];
+    productTypes: any = [{ name: '全部服务项目(默认)', value: 'SERVICE'}, { name: '全部项目和商品', value: 'ALL'},{name: '自定义', value: 'CUSTOMIZE'}];
     //商品
     productListInfor: any;//商品的信息
     allProductNumber: number = 0;//所有商品的数量
     selectProductNumber: number = 0;//选择的商品数量
     productIds: string = '';
-    merchantId: string = '1517309600312201040575';
-    storeId: string = '1525940433796116388373';//判断是门店登录还是商家登陆
-    ifHttps: string = 'SERVICEITEMS';//是否要调取接口
+    merchantId: string = '';
+    storeId: string = '';//判断是门店登录还是商家登陆
+    ifHttps: string = 'SERVICE';//是否要调取接口
+    ifShow: boolean = false;
+    moduleId: any;
+    applyStoreNames: string = '';
+    applyProductNames: string = '';
 
     constructor(
         private http: _HttpClient,
         private fb: FormBuilder,
+        private router: Router,
+        private route: ActivatedRoute,
         private modalSrv: NzModalService,
         private msg: NzMessageService,
         private localStorageService: LocalStorageService,
@@ -45,49 +52,8 @@ export class RulesStep3Component implements OnInit {
 
     ngOnInit() {
         let self = this;
-        let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) ?
-            JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) : [];
-
-        if (storeList) {
-            CITYLIST.forEach(function (i: any) {
-                storeList.forEach((ele: any, index: number, arr: any) => {
-                    if (i.i == ele.cityId) {
-                        ele.cityName = i.n;
-                    }
-                })
-            })
-        }
-        let cityNameSpaceArr = [{
-            cityName: '',
-            cityId: '',
-        }];
-        cityNameSpaceArr.shift();
-        for (let i = 0; i < storeList.length; i++) {
-            if (storeList[i].cityId == '' || storeList[i].cityId == null) {
-                storeList[i].cityName = '其他';
-            } else if (storeList[i].cityId != '' && storeList[i].cityName == '') {
-                cityNameSpaceArr.push({
-                    cityName: '',
-                    cityId: storeList[i].cityId,
-                });
-            }
-        }
-        for (let i = 0; i < cityNameSpaceArr.length; i++) {
-            for (let j = 0; j < storeList.length; j++) {
-                if (cityNameSpaceArr[i].cityId == storeList[j].cityId && storeList[j].cityName != '') {
-                    cityNameSpaceArr[i].cityName = storeList[j].cityName;
-                }
-            }
-        }
-        for (let i = 0; i < cityNameSpaceArr.length; i++) {
-            for (let j = 0; j < storeList.length; j++) {
-                if (cityNameSpaceArr[i].cityId == storeList[j].cityId && storeList[j].cityName == '') {
-                    storeList[j].cityName = cityNameSpaceArr[i].cityName
-                }
-            }
-        }
-        this.cityStoreList = FunctionUtil.getCityListStore(storeList);
-        this.changeAllData();//获取到所有的门店ID及其num
+        this.moduleId = this.route.snapshot.params['menuId'];//门店
+        this.item.moduleId = this.moduleId;
 
         this.form = this.fb.group({
             productTypes: [ self.productTypes[0].value, [ Validators.required ] ],
@@ -95,14 +61,66 @@ export class RulesStep3Component implements OnInit {
             storeType: [ self.storeStatus[0].value, [ Validators.required ] ]
         });
         this.form.patchValue(this.item);
+    }
 
-        let data = {
-            merchantId: this.merchantId,
-            storeId: this.storeId,
-            categoryType: 'SERVICEITEMS'
-        };
-        this.getAllbuySearchs(data);//获取所有的商品
+    // 初始化所有门店名称
+    selectStoresNamesPush(event){
+      this.applyStoreNames = event.storeName? event.storeName : '';
+    }
 
+    //获取门店数据
+    storeListPush(event){
+      this.cityStoreList = event.storeList? event.storeList : [];
+    }
+
+    //获取门店总数量
+    getAllStoresNum(event){
+      this.allStoresNum = event.allStoresNum? event.allStoresNum : 0;
+    }
+
+    // 适用门店名称
+    getStoreNames(event){
+      this.applyStoreNames = event.staffNames? event.staffNames : '';
+    }
+
+    //获取门店选择的数量
+    getStoresChangeNum(event){
+      this.storesChangeNum = event.storesChangeNum? event.storesChangeNum : 0;
+    }
+
+    //获取选择的门店ID
+    getSelectStoresIdsCsh(event){
+      this.selectStoresIds = event.selectStoresIds? event.selectStoresIds : '';
+      let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+        JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+      this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
+      this.storeId = UserInfo.staffType === 'STORE'? this.selectStoresIds : '';
+      let data = {
+        merchantId: this.merchantId,
+        storeId: this.storeId,
+        categoryType: 'SERVICE'
+      };
+      this.getAllbuySearchs(data);//获取所有的商品
+    }
+
+    // 使用商品名称
+    getProductNames(event){
+      this.applyProductNames = event.staffNames? event.staffNames : '';
+    }
+
+    //选择弹框的门店数量
+    getSelectStoresNumber(event){
+      if(event){
+        this.storesChangeNum = event.selectStaffNum;
+        this.ifShow = this.storesChangeNum == 0? true: false;
+      }
+    }
+
+    //获取弹框的时候门店ID
+    getSelectStoresIds(event){
+      if(event){
+        this.selectStoresIds = event.staffIds;
+      }
     }
 
     //选择弹框
@@ -122,16 +140,16 @@ export class RulesStep3Component implements OnInit {
             this.changeAllData();
         }
     }
+
     //选择商品弹框
     onSelectAlertBtnProduct(tpl: any, text: string, type: string){
         let self = this;
-        let typeData = type === 'SERVICEITEMS'? 'SERVICEITEMS' : '';
+        let typeData = type === 'SERVICE'? 'SERVICE' : '';
         let data = {
             merchantId: this.merchantId,
             storeId: this.storeId,
             categoryType: typeData
         };
-        console.log(this.ifHttps);
         if(this.ifHttps != type){
             this.getAllbuySearchs(data);//获取所有的商品
         }
@@ -144,33 +162,36 @@ export class RulesStep3Component implements OnInit {
                 nzOkText: '保存',
                 nzOnOk: function(){
                     self.ifHttps = 'CUSTOMIZE';
-                    console.log(self.productIds);
+                    if((self.productIds.split(',').length < self.selectProductNumber)&&(self.item['cardType'] === 'REBATE')){
+                      self.msg.warning('该卡使用范围缩小，可能影响顾客体验');
+                    }
                 }
             });
         }else {
             let dataInfor = this.getOthersData(self.productListInfor).split('-');
             self.productIds = dataInfor[0];
-            console.log(self.productIds);
+            self.applyProductNames = dataInfor[3];
+            if(this.ifHttps === 'ALL' && type === 'SERVICE' && self.item['cardType'] === 'REBATE'){
+              self.msg.warning('该卡使用范围缩小，可能影响顾客体验');
+            }
             this.ifHttps = type;
-        }
-    }
-
-    //获取到门店ID
-    getSelectStoresIds(event){
-        console.log(event);
-        if(event){
-            this.selectStoresIds = event.staffIds;
         }
     }
 
     //获取商品ID
     getProductIds(event){
-        console.log(event);
         if(event){
             this.productIds = event.staffIds;
         }
     }
 
+    //选择商品数量
+    getSelectProductNumber(event: any){
+      if(event){
+        this.selectProductNumber = event.selectStaffNum;
+        this.ifShow = this.selectProductNumber == 0? true: false;
+      }
+    }
     //门店账号:带门店ID
     //商家登陆: 不需要
 
@@ -212,6 +233,7 @@ export class RulesStep3Component implements OnInit {
         this.allStoresNum = 0;
         this.storesChangeNum = 0;
         this.selectStoresIds = '';
+        this.applyStoreNames = '';
         this.cityStoreList.forEach(function (item: any) {
             let arr = [];
             item.change = true;
@@ -230,7 +252,8 @@ export class RulesStep3Component implements OnInit {
         for (let i = 0; i < this.cityStoreList.length; i++) {
             for (let j = 0; j < this.cityStoreList[i].stores.length; j++) {
                 if (this.cityStoreList[i].stores[j].change == true) {
-                    this.selectStoresIds += ',' + this.cityStoreList[i].stores[j].storeId
+                    this.selectStoresIds += ',' + this.cityStoreList[i].stores[j].storeId;
+                    this.applyStoreNames += ',' + this.cityStoreList[i].stores[j].staffName;
                 }
             }
         }
@@ -238,8 +261,12 @@ export class RulesStep3Component implements OnInit {
             this.selectStoresIds = this.selectStoresIds.substring(1);
             this.storesChangeNum = this.selectStoresIds.split(',').length;
             this.allStoresNum = this.selectStoresIds.split(',').length;
+            this.applyStoreNames = this.applyStoreNames.substring(1);
+        }else{
+            this.selectStoresIds = '';
+            this.storesChangeNum = 0;
+            this.applyStoreNames = '';
         }
-        console.log(this.cityStoreList);
     }
 
     //拿到项目对应的数量/总数/ID
@@ -247,10 +274,12 @@ export class RulesStep3Component implements OnInit {
         let selectIds = '';
         let selectNumber = 0;
         let allNumber = 0;
+        let productName = '';
         for (let i = 0; i < cardListInfor.length; i++) {
             for (let j = 0; j < cardListInfor[i].staffs.length; j++) {
                 if (cardListInfor[i].staffs[j].change === true) {
                     selectIds += ',' + cardListInfor[i].staffs[j].staffId;
+                    productName += ',' + cardListInfor[i].staffs[j].staffName;
                 }
             }
         }
@@ -258,8 +287,9 @@ export class RulesStep3Component implements OnInit {
             selectIds = selectIds.substring(1);
             selectNumber = selectIds.split(',').length;
             allNumber = selectIds.split(',').length;
+            productName = productName.substring(1);
         }
-        return selectIds + '-' + selectNumber + '-' + allNumber;
+        return selectIds + '-' + selectNumber + '-' + allNumber + '-' + productName;
     }
 
     /********************  Http请求处理  ***********************/
@@ -274,10 +304,7 @@ export class RulesStep3Component implements OnInit {
                     this.productIds = dataInfor[0];
                     this.selectProductNumber = parseInt(dataInfor[1]);
                     this.allProductNumber = parseInt(dataInfor[2]);
-
-                    console.log(this.productIds);
-                    console.log(this.selectProductNumber);
-                    console.log(this.allProductNumber);
+                    this.applyProductNames = dataInfor[3];
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -298,18 +325,26 @@ export class RulesStep3Component implements OnInit {
         }
         if (this.form.invalid) return;
         this.item = Object.assign(this.item, this.form.value);
-        this.submitting = true;
-
         let amount;
-        if(self.item['cardType'] === 'METERING' || self.item['cardType'] === 'TIMES'){//计次卡,期限卡
+        if(self.item['cardType'] === 'METERING'){//计次卡
             amount = parseFloat(self.item['amount']);
         }else if(self.item['cardType'] === 'REBATE'){//折扣卡
             amount = parseFloat(self.item['pay_account'])*100;
+        }else if(self.item['cardType'] === 'TIMES'){//期限卡
+            amount = 0;
         }else{//储值卡
             amount = parseFloat(self.item['amount'])*100;
         }
+        let validate;
+        if(self.item['cardType'] === 'TIMES'){
+          validate = parseFloat(self.item['amount']);
+        }else{
+          validate = self.item['validateType'] === 'FOREVER'? 99999 : self.item['effectivityDays']
+        }
         let list = {
             applyProductIds: this.productIds,
+            applyStoreNames: this.applyStoreNames,
+            applyProductNames: this.applyProductNames,
             applyProductType: self.form.controls.productTypes.value,
             applyStoreIds: this.selectStoresIds,
             applyStoreType: self.item['storeType'],
@@ -320,7 +355,7 @@ export class RulesStep3Component implements OnInit {
             merchantId: "",
             price: parseFloat(self.item['pay_account'])*100,//售价
             rebate: self.item['cardType'] === 'REBATE'? parseFloat(self.item['amount']) : 0,
-            validate: self.item['validateType'] === 'FOREVER'? 99999 : self.item['effectivityDays'],
+            validate: validate,
             validateType: self.item['validateType']
         };
         let params = {
@@ -333,26 +368,33 @@ export class RulesStep3Component implements OnInit {
             type: self.item['cardType'],
             rules: [list],
         };
-        console.log(params);
-        this.productService.saveAddVipInfor(params).subscribe(
+        if(this.allProductNumber === 0){
+          this.msg.warning('需要先创建商品或者服务项目');
+          return;
+        }else if(this.allStoresNum === 0){
+          this.msg.warning('需要先创建门店');
+          return;
+        }else if(this.ifShow === false){
+          this.submitting = true;
+          this.productService.saveAddVipInfor(params).subscribe(
             (res: any) => {
-                if (res.success) {
-                    this.item.configId = res.data;
-                    setTimeout(() => {
-                        self.submitting = false;
-                        ++this.item.step;
-                    }, 1000);
-                } else {
-                    this.modalSrv.error({
-                        nzTitle: '温馨提示',
-                        nzContent: res.errorInfo
-                    });
-                }
+              self.submitting = false;
+              if (res.success) {
+                this.item.configId = res.data;
+                ++this.item.step;
+              } else {
+                this.modalSrv.error({
+                  nzTitle: '温馨提示',
+                  nzContent: res.errorInfo
+                });
+              }
             },
             (error) => {
-                this.msg.warning(error)
+              this.msg.warning(error)
             }
-        );
+          );
+        }
+
     }
 
     //上一步

@@ -10,7 +10,7 @@
     <button nz-button (click)="addProduct()" [nzType]="'primary'" class="fl">
         <span>新增商品</span>
     </button>
-    <button nz-button  *ngIf="ifAlipayPidShow"  (click)="refreshProductList()"  [nzType]="'default'" class="fl refresh">
+    <button nz-button  *ngIf="ifAlipayPidShow"  (click)="refreshProductList()"  [nzType]="'default'" class="fl refresh" [nzLoading]="loading">
         <span>刷新商品列表</span>
     </button>
 </page-header>
@@ -22,7 +22,7 @@
                     <nz-form-label nzFor="storeList">选择门店</nz-form-label>
                     <nz-form-control>
                         <nz-select [(ngModel)]="storeId" name="status" id="status" [nzPlaceHolder]="'全部门店'" [nzShowSearch]="true">
-                            <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.storeName" [nzValue]="i.storeId"></nz-option>
+                            <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.shopName" [nzValue]="i.shopId"></nz-option>
                         </nz-select>
                     </nz-form-control>
                 </nz-form-item>
@@ -52,7 +52,7 @@
             </nz-col>
         </nz-row>
     </form>
-    <nz-table #basicTable [nzShowPagination]="false" nzBordered [nzData]="koubeiProductListInfor">
+    <nz-table [nzNoResult]="'暂无口碑商品'" #basicTable [nzShowPagination]="false" nzBordered [nzData]="koubeiProductListInfor">
         <thead nz-thead class="ui-grid-thead">
         <tr><th nz-th class="" *ngFor="let item of theadName">{{item}}</th></tr>
         </thead>
@@ -109,10 +109,10 @@
 </ng-template>
 
 <!--关联口碑账号-->
-<nz-modal [(nzVisible)]="isVisible" nzWidth ="800" [nzFooter]="null"  nzTitle="关联口碑账号" nzOkText="确定" nzCancelText="取消">
+<nz-modal [(nzVisible)]="isVisible" nzWidth ="800" [nzFooter]="null"  nzTitle="关联口碑账号" nzOkText="确定" nzCancelText="取消" (nzOnCancel)="handleCancel()">
   <div class="associatedAccount">
     <p>系统检测到您尚未关联口碑账号，暂时无法使用此功能。</p>
-    <p>如果您尚未注册口碑账号，您可以 <a class="" href="javascript:;">点此注册</a></p>
+    <p>如果您尚未注册口碑账号，您可以 <a class="" target="_blank" href="https://auth.alipay.com/login/ant_sso_index.htm">点此注册</a></p>
     <p>如果您已注册口碑账号，您可以使用口碑商家总账号支付宝扫描下方二维码，进行授权关联。</p>
   </div>
   <div class="associatedAccount-steps">
@@ -132,7 +132,7 @@
       </div>
       <div class="steps-images">
         <img src="../../../../assets/img/pay.png" />
-        <img src="../../../../assets/img/sure.png" />
+        <img [src]="imgQrcodeUrl" />
         <img src="../../../../assets/img/sure.png" />
       </div>
     </nz-card>

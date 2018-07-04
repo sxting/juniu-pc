@@ -16,28 +16,45 @@ export class SidebarComponent {
     private router: Router,
     public msgSrv: NzMessageService,
   ) { }
-  click(item: any) {
-    if (item.children.length == 0) {
-      // this.menuRouteHttp(item.menuId);
+  click(menuId: any) {
+    if (menuId) {
+      this.menuRouteHttp(menuId);
     }
   }
 
   menuRouteHttp(menuId: any) {
-    this.manageService.roleremove({ menuId: menuId }).subscribe(
-      (res: any) => {
-        if (res.success) {
-          this.router.navigate([res.data.eventRoute, { storeId: '' }]);
-        } else {
-          this.modalSrv.error({
-            nzTitle: '温馨提示',
-            nzContent: res.errorInfo
-          });
+    if (typeof (menuId) === 'string' && Number(menuId) + '' !== 'NaN') {
+      this.manageService.menuRoute({ menuId: menuId, timestamp: new Date().getTime() }).subscribe(
+        (res: any) => {
+          if (res.success) {
+            if (res.data.eventType === 'ROUTE') {
+              if (res.data.eventRoute) {
+                this.router.navigateByUrl(res.data.eventRoute + ';menuId=' + menuId);
+              }
+            } else if (res.data.eventType === 'NONE') {
+
+            } else if (res.data.eventType === 'API') {
+
+            } else if (res.data.eventType === 'REDIRECT') {
+              let href = res.data.eventRoute;
+              console.log(href)
+              window.open(href);
+            }
+            if (res.data.eventMsg) {
+              this.errorAlert(res.data.eventMsg);
+            }
+          } else {
+            this.modalSrv.error({
+              nzTitle: '温馨提示',
+              nzContent: res.errorInfo
+            });
+          }
+        },
+        (error) => {
+          this.msgSrv.warning(error)
         }
-      },
-      (error) => {
-        this.msgSrv.warning(error)
-      }
-    );
+      );
+    }
   }
   errorAlert(err: any) {
     this.modalSrv.error({

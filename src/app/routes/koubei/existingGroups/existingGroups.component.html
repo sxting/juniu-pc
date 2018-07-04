@@ -15,7 +15,7 @@
             <span>活动执行日期</span>
             <!-- <nz-date-picker style="width: 138px;" [(ngModel)]="_startTime" (ngModelChange)="_startTime=$event;_startValueChange($event)"
                 nzShowTime></nz-date-picker> -->
-                <nz-range-picker [(ngModel)]="dateRange" (ngModelChange)="onChange($event)" nzShowTime></nz-range-picker>
+                <nz-range-picker  (ngModelChange)="onChange($event)" nzShowTime></nz-range-picker>
             <!-- <nz-datepicker style="width: 138px;" (ngModelChange)="_startTime=$event;_startValueChange($event)"
                 [ngModel]="_startTime" [nzDisabledDate]="_disabledStartDate1" [nzFormat]="'YYYY-MM-DD'" [nzPlaceHolder]="'开始时间'"></nz-datepicker>
             <nz-datepicker style="width: 138px;" (ngModelChange)="_endTime=$event;_endValueChange($event)"

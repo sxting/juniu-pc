@@ -102,28 +102,28 @@
 
                 <div class="marketing_means">
                     <div class="chou-bottom table_data clearfix">
-                        <nz-table #nzTable>
+                        <nz-table [nzNoResult]="'没有数据'" [nzShowPagination]="false" [nzData]="koubeiProductVouchersListInfor" #nzTable>
                             <thead nz-thead class="ui-grid-thead">
                                 <tr>
-                                    <th nz-th>
+                                    <th nz-th style="text-align: center;">
                                         <span>序号</span>
                                     </th>
-                                    <th nz-th>
+                                    <th nz-th style="text-align: center;">
                                         <span>核销时间</span>
                                     </th>
-                                    <th nz-th>
+                                    <th nz-th style="text-align: center;">
                                         <span>核销码</span>
                                     </th>
-                                    <th nz-th>
+                                    <th nz-th style="text-align: center;">
                                         <span>核销门店</span>
                                     </th>
-                                    <th nz-th>
+                                    <th nz-th style="text-align: center;">
                                         <span>活动名称</span>
                                     </th>
-                                    <th nz-th>
+                                    <th nz-th style="text-align: center;">
                                         <span>实收金额</span>
                                     </th>
-                                    <th nz-th>
+                                    <th nz-th style="text-align: center;">
                                         <span>操作</span>
                                     </th>
                                 </tr>
@@ -132,9 +132,9 @@
                                 <tr nz-tbody-tr *ngFor="let item of koubeiProductVouchersListInfor;let j = index">
                                     <td nz-td>{{j+1}}</td>
                                     <td nz-td>{{item.settleTime}}</td>
-                                    <td nz-td>{{item.orderNo}}</td>
-                                    <td nz-td>{{item.settleShopName}}</td>
                                     <td nz-td>{{item.code}}</td>
+                                    <td nz-td>{{item.settleShopName}}</td>
+                                    <td nz-td>{{item.pinTuanName}}</td>
                                     <td nz-td>{{item.amount/100}}</td>
                                     <td nz-td class="operation">
                                         <span (click)="checkingProductDetailInfor(HXdingdanxiangqing,item.orderNo)">查看</span>

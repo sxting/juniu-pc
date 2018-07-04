@@ -158,8 +158,15 @@ export class MemberService {
                 return Observable.throw(error);
             });
     }
-
-
+    //
+    customerOrders(data?: any) {
+        let apiUrl = Config.API + '/order/customerAllOrders.json';
+        return this.http.get(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
     /**
      * 获取老卡导入卡类型及其卡名称
      **/
@@ -182,7 +189,15 @@ export class MemberService {
                 return Observable.throw(error);
             });
     }
-
+    storeTypesOldCards2(data?: any) {
+        let apiUrl = Config.API + 'member/config/lists.json';
+        let param = FunctionUtil.obectToURLSearchParams(data);
+        return this.http.get(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
     /**
      * 获取老卡导入卡类型及其卡名称
      **/
@@ -412,7 +427,7 @@ export class MemberService {
     //账号密码登录
     loginName(data: any) {
         let apiUrl = Config.API1 + 'account/login/login/name.json';
-        return this.http.post(apiUrl, data)
+        return this.http.get(apiUrl, data)
             .map((response: Response) => response)
             .catch(error => {
                 return Observable.throw(error);
@@ -430,7 +445,7 @@ export class MemberService {
     // 手机号登录
     loginPhone(data: any) {
         let apiUrl = Config.API1 + 'account/login/phone.json';
-        return this.http.post(apiUrl, data)
+        return this.http.get(apiUrl, data)
             .map((response: Response) => response)
             .catch(error => {
                 return Observable.throw(error);
@@ -463,5 +478,56 @@ export class MemberService {
             .catch(error => {
                 return Observable.throw(error);
             });
+    }
+
+    // 选择门店
+    selectStores(data: any) {
+        let apiUrl = Config.API1 + 'account/merchant/store/select.json';
+        return this.http.get(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    //查找会员的会员卡
+    customerCards(data) {
+        // 类型 REGISTER或者VALID
+        let apiUrl = Config.API + '/member/customerCards.json';
+        return this.http.get(apiUrl, data).map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    //消卡 /pinCard.json
+    pinCardinfo (data) {
+        // 类型 REGISTER或者VALID
+        let apiUrl = Config.API + '/member/pinCardInfo.json';
+        return this.http.get(apiUrl, data).map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    pinCard (data) {
+        // 类型 REGISTER或者VALID
+        let apiUrl = Config.API + '/member/pinCard.json';
+        return this.http.get(apiUrl, data).map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    //门店字典 /dic/get/location.json
+    getLocation(data) {
+        let apiUrl = Config.API1 + 'account/dic/get/location.json';
+        return this.http.get(apiUrl, data).map((response: Response) => response).catch(error => {
+            return Observable.throw(error);
+        });
+    }
+
+    //商品分类 
+    merchantInit(data) {
+        let apiUrl = Config.API1 + '/common/merchantInit.json';
+        return this.http.get(apiUrl, data).map((response: Response) => response).catch(error => {
+            return Observable.throw(error);
+        });
     }
 }

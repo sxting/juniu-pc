@@ -1,14 +1,10 @@
 <div class="content-box">
-  <!--<div class="select-store-box">-->
-    <!--选择门店：-->
-    <!--<nz-select style="width: 200px;" [(ngModel)]="selectedOption" (ngModelChange)="onStoresChange($event)" [nzShowSearch]="true">-->
-      <!--<nz-option *ngFor="let store of stores" [nzLabel]="store.storeName" [nzValue]="store.storeId"></nz-option>-->
-    <!--</nz-select>-->
-  <!--</div>-->
-
-  <jn-stores-infor [moduleId]="1" [ifStoresAll]="false"
-                   (storeIdOutput)="onStoresChange($event)" (storeListPush)="storeListPush($event)">
-  </jn-stores-infor>
+  <div class="select-store-box">
+    选择门店：
+    <nz-select style="width: 200px;" [(ngModel)]="selectedOption" (ngModelChange)="onStoresChange($event)" [nzShowSearch]="true">
+      <nz-option *ngFor="let store of stores" [nzLabel]="store.storeName" [nzValue]="store.storeId"></nz-option>
+    </nz-select>
+  </div>
 
   <div class="clearfix">
 
@@ -87,7 +83,7 @@
 
       <div class="reserver-none" *ngIf="orderType === 'MAN' && craftsmanBindArr.length === 0">
         暂无手艺人排班 <br>
-        您可以到管理-预约设置中给手艺人设置排班和可预约商品
+        您可以到预约设置中给手艺人设置排班和可预约商品
       </div>
 
       <!--只预约商品-->
@@ -214,7 +210,7 @@
             </div>
         </div>
 
-        <nz-table #nzTable [nzData]="reserveRecordList" [nzShowPagination]="false">
+        <nz-table [nzNoResult]="'没有数据'" #nzTable [nzData]="reserveRecordList" [nzShowPagination]="false">
             <thead>
             <tr>
                 <th *ngFor="let item of theadName"><span>{{item}}</span></th>

@@ -20,7 +20,7 @@ declare var swal: any;
 @Component({
     selector: 'jn-orderGroups',
     templateUrl: './orderGroups.component.html',
-    styleUrls: ['./orderGroups.component.css']
+    styleUrls: ['./orderGroups.component.less']
 })
 
 export class OrderGroupsComponent implements OnInit {
@@ -333,8 +333,8 @@ export class OrderGroupsComponent implements OnInit {
         this.koubeiService.voucherList(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    this.koubeiProductVouchersListInfor = res.items;
-                    this.countTotal1 = res.pageInfo.countTotal;
+                    this.koubeiProductVouchersListInfor = res.data.items;
+                    this.countTotal1 = res.data.pageInfo.countTotal;
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -363,11 +363,11 @@ export class OrderGroupsComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     this.voucherDetailObj = res.data;
-                    if (res.orderStatus == 'PAY') {
+                    if (res.data.orderStatus == 'PAY') {
                         this.voucherDetailObj.statusName = '待核销'
-                    } else if (res.orderStatus == 'FINISH') {
+                    } else if (res.data.orderStatus == 'FINISH') {
                         this.voucherDetailObj.statusName = '已完成'
-                    } else if (res.orderStatus == 'CLOSE') {
+                    } else if (res.data.orderStatus == 'CLOSE') {
                         this.voucherDetailObj.statusName = '已取消'
                     }
                     this.voucherDetailObj.traces.forEach(function (i: any) {

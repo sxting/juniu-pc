@@ -1,3 +1,5 @@
+@import 'node_modules/@delon/theme/styles/default';
+@primary-color:#ff7700;
 .main_wrap {
     font-family: PingFangSC-Regular;
     position: absolute;
@@ -21,7 +23,7 @@
 }
 
 .position span:last-of-type {
-    color: #ff6600;
+    color: @primary-color;
 }
 
 .content_juniu {
@@ -53,7 +55,7 @@
     display: inline-block;
     width: 4px;
     height: 16px;
-    background-color: #FF6600;
+    background-color: @primary-color;
     margin-right: 10px;
     transform: translateY(2px);
 }
@@ -76,7 +78,7 @@
     height: 30px;
     text-align: center;
     line-height: 30px;
-    background: #ff6600;
+    background: @primary-color;
     color: #fff;
     border-radius: 5px;
     margin-left: 20px;
@@ -110,8 +112,8 @@
 }
 
 .btns_switch li.btns_active {
-    color: #FF6600;
-    border-bottom: 2px solid #FF6600;
+    color: @primary-color;
+    border-bottom: 2px solid @primary-color;
 }
 
 .click-box {
@@ -179,7 +181,7 @@
     position: absolute;
     right: 20px;
     top: 20px;
-    color: #FF6600;
+    color: @primary-color;
     font-size: 20px;
     cursor: pointer;
 }
@@ -191,7 +193,7 @@
     height: 16px;
     padding-left: 10px;
     line-height: 16px;
-    border-left: 4px solid #FF6600;
+    border-left: 4px solid @primary-color;
     margin-bottom: 20px;
 }
 
@@ -352,7 +354,7 @@
     height: 16px;
     padding-left: 10px;
     line-height: 16px;
-    border-left: 4px solid #FF6600;
+    border-left: 4px solid @primary-color;
     margin-bottom: 20px;
 }
 
@@ -426,14 +428,14 @@
 }
 
 .position span:last-of-type {
-    color: #FF6600;
+    color: @primary-color;
 }
 
 .member-home-top {
     width: 96%;
     height: 200px;
     background: #fff;
-    padding: 20px;
+    padding-left: 20px;
 }
 
 .member-title {
@@ -442,7 +444,7 @@
     color: #333333;
     line-height: 16px;
     padding-left: 5px;
-    border-left: 4px solid #FF6600;
+    border-left: 4px solid @primary-color;
 }
 
 .member-top-middle {
@@ -554,7 +556,7 @@
     font-size: 16px;
     color: #333333;
     line-height: 16px;
-    border-left: 4px solid #FF6600;
+    border-left: 4px solid @primary-color;
     padding-left: 5px;
 }
 
@@ -568,7 +570,7 @@
 }
 
 .member-home-t-b-color {
-    color: #ff6600;
+    color: @primary-color;
     font-size: 30px;
     margin-bottom: 30px;
 }

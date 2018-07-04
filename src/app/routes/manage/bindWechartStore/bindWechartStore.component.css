@@ -1,13 +1,12 @@
 .picBox{
     display: flex;
-    width: 80%;
     flex-wrap:wrap;
     margin-top: 20px;
     margin-bottom: 20px;    
 }
 .picBox>div{
-    width: 300px;
-    height: 530px;
+    width: 220px;
+    height: 389px;
     margin: 10px 0;
     margin-right: 20px;
     border: 1px solid #e5e5e5;
@@ -17,4 +16,25 @@ ul{
 }
 ul,li{
     list-style-type: square ;
+}
+
+.picBox>div:nth-of-type(1){
+    background-image: url('../../../../assets/img/koubei1.png');
+    background-repeat: no-repeat ;
+    background-size: 100%;
+}
+.picBox>div:nth-of-type(2){
+    background-image: url('../../../../assets/img/koubei2.png');
+    background-repeat: no-repeat ;
+    background-size: 100%;
+}
+.picBox>div:nth-of-type(3){
+    background-image: url('../../../../assets/img/koubei3.png');
+    background-repeat: no-repeat ;
+    background-size: 100%;
+}
+.picBox>div:nth-of-type(4){
+    background-image: url('../../../../assets/img/koubei4.png');
+    background-repeat: no-repeat ;
+    background-size: 100%;
 }

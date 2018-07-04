@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { _HttpClient } from '@delon/theme';
+import { _HttpClient, TitleService } from '@delon/theme';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ReportService } from "../shared/report.service";
-import { LocalStorageService } from "../../../shared/service/localstorage-service";
-import { FunctionUtil } from "../../../shared/funtion/funtion-util";
-import {STORES_INFO} from "../../../shared/define/juniu-define";
+import { ActivatedRoute, Router } from '@angular/router';
+import { LocalStorageService } from '@shared/service/localstorage-service';
+import { FunctionUtil } from '@shared/funtion/funtion-util';
 import NP from 'number-precision'
+
 
 @Component({
   selector: 'app-revenue-report',
@@ -33,6 +34,8 @@ export class RevenueReportComponent implements OnInit {
     sankePerNum: any;
     todayIncomeItem: any;
     yesterdayCompare: any;
+    todayIncomeItemDetail: any;
+    yesterdayCompareDetail: any;
 
     moduleId: any;
     ifStoresAll: boolean = true;//是否有全部门店
@@ -43,6 +46,9 @@ export class RevenueReportComponent implements OnInit {
         private http: _HttpClient,
         private modalSrv: NzModalService,
         private reportService: ReportService,
+        private router: Router,
+        private titleSrv: TitleService,
+        private route: ActivatedRoute,
         private localStorageService: LocalStorageService
     ) { }
 
@@ -59,13 +65,16 @@ export class RevenueReportComponent implements OnInit {
 
     ngOnInit() {
 
-        this.moduleId = 1;
+        this.moduleId = this.route.snapshot.params['menuId'];
         let year = new Date().getFullYear();        //获取当前年份(2位)
         let month = new Date().getMonth()+1;       //获取当前月份(0-11,0代表1月)
         let changemonth = month < 10 ? '0' + month : '' + month;
         let day = new Date().getDate();        //获取当前日(1-31)
         this.yyyymm = new Date(year+'-'+changemonth+'-'+day);
         this.date = year+'-'+changemonth+'-'+day;
+        let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+          JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+        this.ifStoresAll = UserInfo.staffType === "MERCHANT"? true : false;
 
     }
 
@@ -150,9 +159,10 @@ export class RevenueReportComponent implements OnInit {
                             that.sankePer =  allNum == 0? '-' : NP.round((num/allNum)*100,2)+'%';
                         }
                     });
-
                     that.todayIncomeItem = res.data.todayIncomeItem;
                     that.yesterdayCompare = res.data.yesterdayCompare;
+                    that.todayIncomeItemDetail = that.todayIncomeItem.lastWeekCompare*100 < 0? NP.round(that.todayIncomeItem.lastWeekCompare*100*-1,2) : NP.round(that.todayIncomeItem.lastWeekCompare*100,2);
+                    that.yesterdayCompareDetail = that.todayIncomeItem.yesterdayCompare*100 < 0? NP.round(that.todayIncomeItem.yesterdayCompare*100*-1,2) : NP.round(that.todayIncomeItem.yesterdayCompare*100,2);
 
                 } else {
                     this.modalSrv.error({
@@ -170,7 +180,6 @@ export class RevenueReportComponent implements OnInit {
     //选择门店
     selectStore() {
         this.batchQuery.storeId = this.storeId;
-        console.log(this.storeId);
         this.getCurrentIncomeHttp(this.batchQuery);
     }
 

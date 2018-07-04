@@ -9,6 +9,7 @@ import { tap, map } from 'rxjs/operators';
 import { MemberService } from '../shared/member.service';
 import { Config } from '@shared/config/env.config';
 import { LocalStorageService } from '@shared/service/localstorage-service';
+import { ActivatedRoute } from '@angular/router';
 declare var GoEasy: any;
 
 @Component({
@@ -48,15 +49,15 @@ export class CardholdersVipComponent {
         { money: '5000-10000', from: [5000, 10000] },
         { money: '10000-99999999', from: [10000, 99999] }
     ]
+    vipCardList: any = [];
     selectedRows: SimpleTableData[] = [];
     description = '';
     totalCallNo = 0;
     expandForm = false;
     Total: any;
-    Total2: any;
+    Total2: any = 1;
     pageIndex: any = 1;
     pageIndex2: any = 1;
-    StoresInfo: any = this.localStorageService.getLocalstorage(STORES_INFO) ? JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
     gender: any;
     customer_phone: any;
     customer_name: any;
@@ -68,14 +69,17 @@ export class CardholdersVipComponent {
     headUrl: any;
     parm: any;
     modal: any;
-
+    moduleId: any;
+    pincardInfo: any;
     constructor(private http: _HttpClient,
         private modalService: NzModalService,
         public msg: NzMessageService,
         private localStorageService: LocalStorageService,
         private modalSrv: NzModalService,
+        private route: ActivatedRoute,
         private memberService: MemberService) {
         let that = this;
+        this.moduleId = this.route.snapshot.params['menuId'];
         this.customerlistHttp();
         // var goEasy = new GoEasy({
         //     appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
@@ -122,9 +126,11 @@ export class CardholdersVipComponent {
             lastConsumeStart: this.q.dateRange2 ? this.formatDateTime(this.q.dateRange2[0], 'start') : '',
             lastConsumeEnd: this.q.dateRange2 ? this.formatDateTime(this.q.dateRange2[1], 'end') : '',
             consumeMoneyFrom: this.q.money ? this.q.money[0] : '',
-            consumeMoneyTo: this.q.money ? this.q.money[1] : ''
+            consumeMoneyTo: this.q.money ? this.q.money[1] : '',
+            storeId: this.storeId
         }
         if (!this.q.phone) delete data.phone;
+        if (!data.storeId) delete data.storeId;
         if (!this.q.status && this.q.status !== 0) delete data.gender;
         if (!this.q.dateRange1) { delete data.start; delete data.end }
         if (!this.q.dateRange2) { delete data.lastConsumeStart; delete data.lastConsumeEnd }
@@ -208,32 +214,35 @@ export class CardholdersVipComponent {
             }
         )
     }
-    getData() {
-        console.log(this.q);
+    getData(e?: any) {
+        if (e) {
+            this.pageIndex = e;
+        }
         this.customerlistHttp();
     }
-    getData2(index: any) {
-        this.pageIndex = index;
-        this.ordersHttp(this.phone, this.storeId);
+    getData2(index?: any) {
+        if (index) {
+            this.pageIndex2 = index;
+        }
+        this.ordersHttp(this.customerId);
     }
     checkboxChange(list: SimpleTableData[]) {
         this.selectedRows = list;
         this.totalCallNo = this.selectedRows.reduce((total, cv) => total + cv.callNo, 0);
     }
-    ordersHttp(phone: any, storeId: any) {
+    ordersHttp(customerId: any) {
         let that = this;
         let data = {
             pageIndex: this.pageIndex2,
             pageSize: 10,
-            phone: phone,
-            storeId: storeId
+            customerId: customerId,
         };
-        this.memberService.orders(data).subscribe(
+        this.memberService.customerOrders(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    this.data2 = res.data.orders;
+                    this.data2 = res.data.content;
                     this.loading = false;
-                    this.Total2 = res.data.pageInfo.countTotal;
+                    this.Total2 = res.data.totalElements;
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -250,17 +259,15 @@ export class CardholdersVipComponent {
     remove() {
 
     }
-    add(tpl: TemplateRef<{}>, phone: any, storeId: any) {
+    add(tpl: TemplateRef<{}>, phone: any, customerId: any) {
         this.phone = phone;
-        this.storeId = storeId;
-
-        this.ordersHttp(phone, storeId);
+        this.customerId = customerId;
+        this.ordersHttp(this.customerId);
         this.modalSrv.create({
             nzTitle: '消费记录',
             nzContent: tpl,
             nzWidth: '80%',
-            nzOnOk: () => {
-            }
+            nzFooter : null
         });
     }
     getCustomerhttp(data: any) {
@@ -290,10 +297,10 @@ export class CardholdersVipComponent {
     bianji(tpl: TemplateRef<{}>, customerId: any, phone: any, storeId: any) {
         this.customerId = customerId;
         this.phone = phone;
-        this.storeId = storeId;
+        this.storeId = storeId
         let that = this;
         let data = {
-            customerId: customerId
+            customerId: customerId,
         };
         this.getCustomerhttp(data);
         this.modalSrv.create({
@@ -301,11 +308,11 @@ export class CardholdersVipComponent {
             nzContent: tpl,
             // nzWidth: '50%',
             nzOnOk: () => {
-                this.updateCustomerHttp();
+                this.updateCustomerHttp(storeId);
             }
         });
     }
-    updateCustomerHttp() {
+    updateCustomerHttp(storeId) {
         let that = this;
         let data = {
             customerId: that.customerId,
@@ -315,7 +322,7 @@ export class CardholdersVipComponent {
             birthday: that.formatDateTime(that._date, 'start'),
             faceId: this.faceId,
             faceImg: this.faceImgId,
-            storeId: this.storeId
+            storeId: storeId
         }
         if (!data.customerName) {
             this.errorAlter('请填写会员姓名');
@@ -348,7 +355,10 @@ export class CardholdersVipComponent {
     reset(ls: any[]) {
 
     }
-
+    selectStoreInfo(e) {
+        this.storeId = e;
+        this.customerlistHttp();
+    }
     renlianshibie(tpl: TemplateRef<{}>) {
         this.modalSrv.create({
             nzTitle: '人脸识别录入',
@@ -375,5 +385,85 @@ export class CardholdersVipComponent {
         this.faceId = item.faceId;
         this.headUrl = Config.OSS_IMAGE_URL
             + `${item.faceImgId ? item.faceImgId : item.picId}/resize_144_144/mode_fill`;
+    }
+
+    vipCardFun(tpl: TemplateRef<{}>, customerId: any) {
+        this.customerCardsHttp(customerId)
+        this.modalSrv.create({
+            nzTitle: '持有会员卡',
+            nzContent: tpl,
+            nzWidth: '600px',
+            nzOnOk: () => {
+            }
+        });
+    }
+    customerCardsHttp(customerId: any) {
+        let data = {
+            customerId: customerId
+        }
+        this.memberService.customerCards(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.vipCardList = res.data
+                } else {
+                    this.errorAlter(res.errorInfo);
+                }
+            },
+            error => {
+                this.errorAlter(error);
+            }
+        );
+    }
+    xiaoka(cardId: any, tpl: TemplateRef<{}>) {
+        let data = {
+            cardId: cardId
+        }
+        let that = this;
+        this.memberService.pinCardinfo(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.pincardInfo = res.data;
+                    this.modalSrv.closeAll();
+                    if (this.pincardInfo.type === 'STORED') this.pincardInfo.typeName = '储值卡';
+                    if (this.pincardInfo.type === 'REBATE') this.pincardInfo.typeName = '折扣卡';
+                    if (this.pincardInfo.type === 'METERING') this.pincardInfo.typeName = '计次卡';
+                    if (this.pincardInfo.type === 'TIMES') this.pincardInfo.typeName = '期限卡';
+                    this.modalSrv.create({
+                        nzTitle: '销卡',
+                        nzContent: tpl,
+                        nzWidth: '600px',
+                        nzOnOk: () => {
+                            that.xiaokaInfo(cardId);
+                        }
+                    });
+                } else {
+                    this.errorAlter(res.errorInfo);
+                }
+            },
+            error => {
+                this.errorAlter(error);
+            }
+        );
+    }
+    xiaokaInfo(cardId: any) {
+        let data = {
+            cardId: cardId
+        }
+        this.memberService.pinCard(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.modalSrv.closeAll();
+                    this.customerlistHttp();
+                    this.modalSrv.success({
+                        nzTitle: '销卡成功'
+                    });
+                } else {
+                    this.errorAlter(res.errorInfo);
+                }
+            },
+            error => {
+                this.errorAlter(error);
+            }
+        );
     }
 }

@@ -15,10 +15,18 @@ export class ManageService {
   api1 = Config.API + 'finance';
 
   //轮牌===员工列表（只有员工姓名和id）
+  // getStaffListByStoreId(storeId: string) {
+  //   let apiUrl = Config.API + 'account/staff/reserveStaffList.json';
+  //   let req = FunctionUtil.obectToURLSearchParams({ storeId: storeId });
+  //   return this.http.get(apiUrl, { storeId: storeId }).map((response: Response) => response).catch(error => {
+  //     return Observable.throw(error);
+  //   });
+  // }
+
   getStaffListByStoreId(storeId: string) {
-    let apiUrl = Config.API + 'account/staff/reserveStaffList.json';
-    let req = FunctionUtil.obectToURLSearchParams({ storeId: storeId });
-    return this.http.get(apiUrl, { storeId: storeId }).map((response: Response) => response).catch(error => {
+    let apiUrl = Config.API1 + 'account/merchant/staff/select.json';
+    let req = FunctionUtil.obectToURLSearchParams({ storeId: storeId, timestamp: new Date().getTime() });
+    return this.http.get(apiUrl, { storeId: storeId, timestamp: new Date().getTime() }).map((response: Response) => response).catch(error => {
       return Observable.throw(error);
     });
   }
@@ -161,8 +169,8 @@ export class ManageService {
   //职位权限列表 /role/modules.json
   rolemodules() {
     let apiUrl = Config.API + 'account/role/modules.json';
-    // let params = FunctionUtil.obectToURLSearchParams(Params);
-    return this.http.get(apiUrl)
+    let params = FunctionUtil.obectToSetTime();
+    return this.http.get(apiUrl, params)
       .map((response: Response) => response)
       .catch(error => {
         return Observable.throw(error);
@@ -267,8 +275,14 @@ export class ManageService {
   //授权状态
   wxStatus(data: any) {
     let apiUrl = '//w.juniuo.com/wxapp/checkAuth.json';
-    let req = FunctionUtil.obectToURLSearchParams({ merchantId: data });
+    let req = FunctionUtil.obectToURLSearchParams({ merchantId: data, timestamp: new Date().getTime() });
     return this.http.get(apiUrl, { merchantId: data }).map((response: Response) => response).catch(error => {
+      return Observable.throw(error);
+    });
+  }
+  wxStatus2(data: any) {
+    let apiUrl = 'https://w.juniuo.com/wxapp/checkAuth.json';
+    return this.http.get( apiUrl, data).map((response: Response) => response).catch(error => {
       return Observable.throw(error);
     });
   }
@@ -413,9 +427,9 @@ export class ManageService {
       });
   }
   //门店字典 /dic/get/location.json
-  getLocation() {
+  getLocation(data) {
     let apiUrl = Config.API1 + 'account/dic/get/location.json';
-    return this.http.get(apiUrl).map((response: Response) => response).catch(error => {
+    return this.http.get(apiUrl, data).map((response: Response) => response).catch(error => {
       return Observable.throw(error);
     });
   }
@@ -465,9 +479,9 @@ export class ManageService {
   }
 
   //员工角色请求
-  rolesSelect() {
+  rolesSelect(data: any) {
     let apiUrl = this.apiStaff + '/merchant/role/select.json';
-    return this.http.get(apiUrl)
+    return this.http.get(apiUrl, data)
       .map((response: Response) => response)
       .catch(error => {
         return Observable.throw(error);
@@ -684,7 +698,8 @@ export class ManageService {
   //全部模块
   roleModules() {
     let apiUrl = Config.API1 + 'account/merchant/role/modules.json';
-    return this.http.get(apiUrl).map((response: Response) => response).catch(error => {
+    let params = FunctionUtil.obectToSetTime();
+    return this.http.get(apiUrl, params).map((response: Response) => response).catch(error => {
       return Observable.throw(error);
     });
   }
@@ -763,6 +778,95 @@ export class ManageService {
   packageBatch() {
     let apiUrl = Config.API1 + 'account/merchant/module/package/batch.json';
     return this.http.get(apiUrl)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  // 选择门店
+  selectStores(data: any) {
+    let apiUrl = Config.API1 + 'account/merchant/store/select.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  //绑定第三方平台
+  bindingPlatform(data: any) {
+    let apiUrl = Config.API1 + 'account/merchant/store/binding/platform.json';
+    return this.http.post(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+  //导入口碑门店
+  ImportkoubeiShop(data: any) {
+    let apiUrl = Config.API1 + 'account/merchant/store/import/koubei/shop.json';
+    return this.http.post(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  //商家员工选择列表
+
+  selectStaff(data: any) {
+    let apiUrl = Config.API1 + 'account/merchant/staff/select.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  //接口描述:获取展示的商品   
+  listProductByIsWxShow(data: any) {
+    let apiUrl = Config.API + 'product/app/listProductByIsWxShow.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  //接口描述:更新会员卡的是否展示
+  // updateByIsWxShow(data: any) {
+  //   let apiUrl = Config.API + 'product/config/updateByIsWxShow.json';
+  //   return this.http.get(apiUrl, data)
+  //     .map((response: Response) => response)
+  //     .catch(error => {
+  //       return Observable.throw(error);
+  //     });
+  // }
+
+  // /merchant/staff/setStoreStaffDisplay.json
+
+
+  setStoreStaffDisplay(data: any) {
+    let apiUrl = Config.API1 + 'account/merchant/staff/setStoreStaffDisplay.json';
+    return this.http.post(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+  storeStaffDisplayMapper(data: any) {
+    let apiUrl = Config.API1 + 'account/merchant/staff/storeStaffDisplayMapper.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+  //查找要展示的会员卡规则
+  listCardConfigByIsWxShow(data: any) {
+    let apiUrl = Config.API + 'member/config/wxStoreTypes.json';
+    return this.http.get(apiUrl, data)
       .map((response: Response) => response)
       .catch(error => {
         return Observable.throw(error);

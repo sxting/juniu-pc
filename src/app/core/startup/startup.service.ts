@@ -13,6 +13,8 @@ import { ACLService } from '@delon/acl';
 import { TranslateService } from '@ngx-translate/core';
 import { I18NService } from '../i18n/i18n.service';
 import { Config } from '@shared/config/env.config';
+import { LocalStorageService } from '@shared/service/localstorage-service';
+import { USER_INFO } from '@shared/define/juniu-define';
 
 /**
  * 用于应用启动时
@@ -26,6 +28,7 @@ export class StartupService {
     @Inject(ALAIN_I18N_TOKEN) private i18n: I18NService,
     private settingService: SettingsService,
     private aclService: ACLService,
+    private localStorageService: LocalStorageService,
     private titleService: TitleService,
     private httpClient: HttpClient,
     private injector: Injector,
@@ -37,7 +40,7 @@ export class StartupService {
     return new Promise((resolve, reject) => {
       zip(
         this.httpClient.get(`assets/tmp/i18n/${this.i18n.defaultLang}.json`),
-        this.httpClient.get('assets/tmp/app-data.json'),
+        // this.httpClient.get('assets/tmp/app-data.json'),
       )
         .pipe(
           // 接收其他拦截器后产生的异常消息
@@ -49,59 +52,38 @@ export class StartupService {
         .subscribe(
           ([langData, appData]) => {
             // setting language data
-            this.translate.setTranslation(this.i18n.defaultLang, langData);
-            this.translate.setDefaultLang(this.i18n.defaultLang);
+            // this.translate.setTranslation(this.i18n.defaultLang, langData);
+            // this.translate.setDefaultLang(this.i18n.defaultLang);
             // application data
             const res: any = appData;
-            let menuList = [
-              {
-                hasSubset: false,
-                icon: "icon-gailan",
-                menuId: "1",
-                menuName: "概览",
-                subset: []
-              },
-              {
-                hasSubset: false,
-                icon: "icon-shouyin",
-                menuId: "2",
-                menuName: "收银",
-                subset: [
-                  {
-                    hasSubset: false,
-                    icon: "icon-shouyin",
-                    menuId: "2",
-                    menuName: "收银2",
-                    subset: []
-                  }
-                ]
-              }
-            ]
-            this.forEachFun(menuList);
-            let menu = [{
-              text: "主导航",
-              i18n: "main_navigation",
-              group: true,
-              hideInBreadcrumb: true,
-              children: []
-            }]
-            menu[0].children = menuList;
-            menu[0].children.forEach(function (i: any, m: any) {
-              i.index = m;
-            })
-            console.log(menu);
-            // console.log(data);
-            // console.log(res);
-            // 应用信息：包括站点名、描述、年份
-            this.settingService.setApp(res.app);
-            // 用户信息：包括姓名、头像、邮箱地址
-            this.settingService.setUser(res.user);
-            // ACL：设置权限为全量
-            this.aclService.setFull(true);
-            // 初始化菜单
-            this.menuService.add(res.menu);
+            let menuList = this.localStorageService.getLocalstorage(USER_INFO) ? JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)).menuList : [];
+            if (menuList) {
+              this.forEachFun(menuList);
+              let menu = [{
+                text: "主导航",
+                group: true,
+                hideInBreadcrumb: true,
+                children: []
+              }]
+              menu[0].children = menuList;
+              menu[0].children.forEach(function (i: any, m: any) {
+                i.index = m;
+              })
+              console.log(menu);
+              // console.log(data);
+              // console.log(res);
+              // 应用信息：包括站点名、描述、年份
+              // this.settingService.setApp(res.app);
+              // 用户信息：包括姓名、头像、邮箱地址
+              // this.settingService.setUser(res.user);
+              // ACL：设置权限为全量
+              // this.aclService.setFull(true);
+              // 初始化菜单
+              this.menuService.add(menu);
+            }
+
             // 设置页面标题的后缀
-            this.titleService.suffix = res.app.name;
+            // this.titleService.suffix = res.app.name;
           },
           () => { },
           () => {

@@ -1,3 +1,5 @@
+@import 'node_modules/@delon/theme/styles/default';
+@primary-color:#ff7700;
 .main_wrap {
     font-family: PingFangSC-Regular;
     position: absolute;
@@ -22,7 +24,7 @@
 }
 
 .print-title span:last-of-type {
-    color: #ff6600;
+    color: @primary-color;
 }
 
 .content_juniu {
@@ -32,7 +34,7 @@
 
 .content_juniu .add-print-btn {
     display: inline-block;
-    background-color: #ff6600;
+    background-color: @primary-color;
     border-radius: 4px;
     width: 100px;
     height: 30px;
@@ -64,7 +66,7 @@
     display: inline-block;
     width: 4px;
     height: 16px;
-    background-color: #FF6600;
+    background-color: @primary-color;
     margin-right: 10px;
     -webkit-transform: translateY(2px);
     transform: translateY(2px);
@@ -81,7 +83,7 @@ th {
 .content_juniu tr td:last-child span {
     cursor: pointer;
     padding: 0 8px;
-    color: #ff6600;
+    color: @primary-color;
 }
 
 
@@ -153,7 +155,7 @@ th {
     margin: 0 20px;
     border-radius: 4px;
     font-size: 14px;
-    background: #ff6600;
+    background: @primary-color;
     color: #fff;
 }
 

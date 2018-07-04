@@ -4,6 +4,8 @@ import { ALIPAY_SHOPS, CITYLIST, STORES_INFO } from "../../define/juniu-define";
 import { MarketingService } from "../../../routes/marketing/shared/marketing.service";
 import {LocalStorageService} from "@shared/service/localstorage-service";
 import {NzModalService} from "ng-zorro-antd";
+import {StoresInforService} from "@shared/stores-infor/shared/stores-infor.service";
+import {ActivatedRoute} from "@angular/router";
 
 
 @Component({
@@ -17,6 +19,8 @@ export class StoreComponent implements OnInit {
     private localStorageService: LocalStorageService,
     private marketingService: MarketingService,
     private modalSrv: NzModalService,
+    private storesInforService: StoresInforService,
+    private route: ActivatedRoute,
   ) { }
 
   @Input()
@@ -50,90 +54,104 @@ export class StoreComponent implements OnInit {
   ngOnInit() {
 
     if (this.isEdit == false) { //新增
-      if (this.localStorageService.getLocalstorage(STORES_INFO)) {
-        let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-          JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-
-        for (let i = 0; i < storeList.length; i++) {
-          if (storeList[i].cityId === '' || storeList[i].cityId === null) {
-            storeList[i].cityName = '其他';
-          } else {
-            storeList[i].cityName = '';
-          }
-        }
-        for (let i = 0; i < storeList.length; i++) {
-          let ids = [];
-          for (let j = 0; j < CITYLIST.length; j++) {
-            if (storeList[i].cityId === CITYLIST[j].i) {
-              ids.push(CITYLIST[j].i)
-            }
-          }
-          if(ids.length === 0) {
-            storeList[i].cityName = '其他';
-            storeList[i].cityId = null;
-          }
-        }
-        for (let i = 0; i < storeList.length; i++) {
-          for (let j = 0; j < CITYLIST.length; j++) {
-            if (storeList[i].cityId === CITYLIST[j].i) {
-              storeList[i].cityName = CITYLIST[j].n;
-            }
-          }
-        }
-        this.cityStoreList = FunctionUtil.getCityList(storeList, 'store');
-        this.localStorageService.setLocalstorage('cityStoreListInit', JSON.stringify(this.cityStoreList));
-      }
-
-      let selectStoresIds = '';
-      for (let i = 0; i < this.cityStoreList.length; i++) {
-        for (let j = 0; j < this.cityStoreList[i].stores.length; j++) {
-          if (this.cityStoreList[i].stores[j].change === true) {
-            selectStoresIds += ',' + this.cityStoreList[i].stores[j].storeId;
-          }
-        }
-      }
-      if (selectStoresIds) {
-        selectStoresIds = selectStoresIds.substring(1);
-        this.storesChangeNum.emit({storesChangeNum: selectStoresIds.split(',').length});
-      }
-
-      let selectStoresIdsArr = selectStoresIds.split(',');
-      let selectStoresNames = [];
-
-      for (let i = 0; i < this.cityStoreList.length; i++) {
-        for (let j = 0; j < this.cityStoreList[i].stores.length; j++) {
-          for(let k =0; k<selectStoresIdsArr.length; k++) {
-            if(selectStoresIdsArr[k] === this.cityStoreList[i].stores[j].storeId) {
-              selectStoresNames.push(this.cityStoreList[i].stores[j].storeName)
-            }
-          }
-        }
-      }
-
-      if(this.getCalculateMemberNum) {
-        let data = {
-          memberType: this.memberType,
-          lastConsume: this.limitLastTime ? this.lastBuyTime : -1, //最后一次消费时间 *
-          storeIds: selectStoresIds
-        };
-        this.marketingService.getCalculateMemberNum(data).subscribe(
-            (res: any) => {
-              if(res.success) {
-                this.calculateMemberNum.emit({calculateMemberNum: res.data.count});
-                this.needSendKey.emit({needSendKey: res.data.needSendKey});
+      let data = {
+        moduleId: this.route.snapshot.params['menuId'],
+        timestamp: new Date().getTime()
+      };
+      this.storesInforService.selectStores(data).subscribe(
+        (res: any) => {
+          if (res.success) {
+            let storeList: any = res.data.items;
+            storeList.forEach(function (item: any) {
+              item.storeName = item.branchName;
+            });
+            for (let i = 0; i < storeList.length; i++) {
+              if (storeList[i].cityId === '' || storeList[i].cityId === null) {
+                storeList[i].cityName = '其他';
               } else {
-                this.modalSrv.error({
-                  nzTitle: '温馨提示',
-                  nzContent: res.errorInfo
-                });
+                storeList[i].cityName = '';
               }
             }
-        )
-      }
+            for (let i = 0; i < storeList.length; i++) {
+              let ids = [];
+              for (let j = 0; j < CITYLIST.length; j++) {
+                if (storeList[i].cityId === CITYLIST[j].i) {
+                  ids.push(CITYLIST[j].i)
+                }
+              }
+              if(ids.length === 0) {
+                storeList[i].cityName = '其他';
+                storeList[i].cityId = null;
+              }
+            }
+            for (let i = 0; i < storeList.length; i++) {
+              for (let j = 0; j < CITYLIST.length; j++) {
+                if (storeList[i].cityId === CITYLIST[j].i) {
+                  storeList[i].cityName = CITYLIST[j].n;
+                }
+              }
+            }
+            this.cityStoreList = FunctionUtil.getCityList(storeList, 'store');
+            this.localStorageService.setLocalstorage('cityStoreListInit', JSON.stringify(this.cityStoreList));
 
+            let selectStoresIds = '';
+            for (let i = 0; i < this.cityStoreList.length; i++) {
+              for (let j = 0; j < this.cityStoreList[i].stores.length; j++) {
+                if (this.cityStoreList[i].stores[j].change === true) {
+                  selectStoresIds += ',' + this.cityStoreList[i].stores[j].storeId;
+                }
+              }
+            }
+            if (selectStoresIds) {
+              selectStoresIds = selectStoresIds.substring(1);
+              this.storesChangeNum.emit({storesChangeNum: selectStoresIds.split(',').length});
+            }
 
-      this.selectStoresIds.emit({selectStoresIds: selectStoresIds});
-      this.selectStoresNames.emit({selectStoresNames: selectStoresNames.join(',')})
+            let selectStoresIdsArr = selectStoresIds.split(',');
+            let selectStoresNames = [];
+
+            for (let i = 0; i < this.cityStoreList.length; i++) {
+              for (let j = 0; j < this.cityStoreList[i].stores.length; j++) {
+                for(let k =0; k<selectStoresIdsArr.length; k++) {
+                  if(selectStoresIdsArr[k] === this.cityStoreList[i].stores[j].storeId) {
+                    selectStoresNames.push(this.cityStoreList[i].stores[j].storeName)
+                  }
+                }
+              }
+            }
+
+            this.selectStoresIds.emit({selectStoresIds: selectStoresIds});
+            this.selectStoresNames.emit({selectStoresNames: selectStoresNames.join(',')})
+
+            if(this.getCalculateMemberNum && selectStoresIds) {
+              let data = {
+                memberType: this.memberType,
+                lastConsume: this.limitLastTime ? this.lastBuyTime : -1, //最后一次消费时间 *
+                storeIds: selectStoresIds
+              };
+              this.marketingService.getCalculateMemberNum(data).subscribe(
+                (res: any) => {
+                  if(res.success) {
+                    this.calculateMemberNum.emit({calculateMemberNum: res.data.count});
+                    this.needSendKey.emit({needSendKey: res.data.needSendKey});
+                  } else {
+                    this.modalSrv.error({
+                      nzTitle: '温馨提示',
+                      nzContent: res.errorInfo
+                    });
+                  }
+                }
+              )
+            }
+
+          } else {
+            this.modalSrv.error({
+              nzTitle: '温馨提示',
+              nzContent: res.errorInfo
+            });
+          }
+        }
+      );
     }
 
   }

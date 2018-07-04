@@ -6,7 +6,7 @@
   </nz-breadcrumb>
 </div>
 <nz-card>
-  <nz-table #basicTable [nzData]="dataSet">
+  <nz-table [nzNoResult]="'没有数据'" #basicTable [nzData]="dataSet">
     <thead>
     <tr>
       <th *ngFor="let head of headData">{{head}}</th>
@@ -22,10 +22,10 @@
     </tr>
     </tbody>
   </nz-table>
-  <div class="paginate">
-    <nz-pagination (nzPageIndexClickChange)="paginate($event)"
-                   (nzPageIndexChange)="paginate($event)"
-                   [nzPageIndex]="1" [nzTotal]="countTotal">
-    </nz-pagination>
-  </div>
+  <!--<div class="paginate">-->
+    <!--<nz-pagination (nzPageIndexClickChange)="paginate($event)"-->
+                   <!--(nzPageIndexChange)="paginate($event)"-->
+                   <!--[nzPageIndex]="1" [nzTotal]="countTotal">-->
+    <!--</nz-pagination>-->
+  <!--</div>-->
 </nz-card>

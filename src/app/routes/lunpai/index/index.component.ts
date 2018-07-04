@@ -36,6 +36,8 @@ export class IndexComponent implements OnInit {
     //是否显示弹出框
     showAlertBox: boolean = false;
 
+  moduleId: any = '';
+
     constructor(
         private http: _HttpClient,
         private router: Router,
@@ -46,16 +48,23 @@ export class IndexComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        if (this.localStorageService.getLocalstorage(STORES_INFO) &&
-            JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
-            let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-                JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-            this.stores = storeList;
-            this.storeId = storeList[0].storeId;
-        }
+      this.moduleId = this.route.snapshot.params['menuId'];
 
-        this.getTurnRuleGroup();
+      // if (this.localStorageService.getLocalstorage(STORES_INFO) &&
+        //     JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
+        //     let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
+        //         JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
+        //     this.stores = storeList;
+        //     this.storeId = storeList[0].storeId;
+        // }
+
+        // this.getTurnRuleGroup();
     }
+
+  onSelectStoreChange(e: any) {
+    this.storeId = e.storeId;
+    this.getTurnRuleGroup();
+  }
 
     //点击轮牌等按钮
     onCandleClick(type: string, ruleId: any, imgUrl: any, name: string, tpl: TemplateRef<{}>) {
@@ -65,7 +74,7 @@ export class IndexComponent implements OnInit {
         this.staffName = name;
 
         let data = {
-            token: this.token,
+            // token: this.token,
             storeId: this.storeId,
             staffId: this.craftsmanId,
             turnRuleId: this.turnRuleId
@@ -233,7 +242,7 @@ export class IndexComponent implements OnInit {
     //查询所有轮牌组
     getTurnRuleGroup() {
         let data = {
-            token: this.token,
+            // token: this.token,
             storeId: this.storeId
         };
         this.lunpaiService.getTurnRuleGroup(data).subscribe(

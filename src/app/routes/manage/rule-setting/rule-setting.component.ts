@@ -32,6 +32,7 @@ export class RuleSettingComponent implements OnInit {
   selectStaffNumber: any = 0;//选择员工的总数量
   selectStaffIds: any = '';
   ifShowErrorStaffTips: boolean = false;//选择员工的错误提示
+  allTips: boolean = false;
 
   //商品
   productListInfor: any;//商品的信息
@@ -54,9 +55,8 @@ export class RuleSettingComponent implements OnInit {
   seviceItemsIds: string = '';
   ifShowErrorTipsSevice: boolean = false;
 
-
-  ifShowErrorRateTips: boolean = false;//按比例提成率不可为空
-  ifShowErrorMoneyips: boolean = false;//提成金额不可为空
+  timestamp: any = new Date().getTime();//当前时间的时间戳
+  checkRate: boolean = true;//提成不可为空
 
   constructor(
       private http: _HttpClient,
@@ -80,17 +80,11 @@ export class RuleSettingComponent implements OnInit {
       this.storeId = this.route.snapshot.params['storeId'];//门店ID
       this.merchantId = this.route.snapshot.params['merchantId'];//门店ID
       this.deductRuleId = this.route.snapshot.params['deductRuleId'];//提成规则ID
-      if(this.deductRuleId){
-          this.titleSrv.setTitle('编辑提成规则');
-      }else {
-          this.titleSrv.setTitle('提成规则设置');
-      }
-
       this.formData = {
-          ruleName: [null, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
-          assignRate: [ null ,Validators.compose([ Validators.pattern(`^[0-9]+(.[0-9]{2})?$`)])],//指定技师
-          normalRate: [ null ,Validators.compose([ Validators.pattern(`^[0-9]+(.[0-9]{2})?$`)])],//非指定技师
-          deductMoney: [ null ,Validators.compose([  Validators.pattern(`^[0-9]+(.[0-9]{2})?$`)])],//按固定金额提成
+          ruleName: [null, [Validators.required, Validators.maxLength(20)]],
+          assignRate: [ null ,Validators.compose([ Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)])],//指定技师
+          normalRate: [ null ,Validators.compose([ Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)])],//非指定技师
+          deductMoney: [ null ,Validators.compose([  Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.min(1 * 0.01),  Validators.max(11111111.11 * 9)])],//按固定金额提成
           type: [ self.extractArr[0].type, [ Validators.required] ],
       };
       this.form = self.fb.group(self.formData);
@@ -115,73 +109,51 @@ export class RuleSettingComponent implements OnInit {
 
   //员工选中的ID
   getStaffIds(event: any){
-      console.log(event);
-      if(event){
-          this.selectStaffIds = event.staffIds;
-      }
+    this.selectStaffIds = event.staffIds? event.staffIds : '';
   }
 
   //员工选中的数量
   getSelectStaffNum(event: any){
-      if(event){
-          this.selectStaffNumber = event.selectStaffNum;
-      }
+    this.selectStaffNumber = event.selectStaffNum? event.selectStaffNum : 0;
   }
 
   //商品选中的ID
   getproductIds(event: any){
-      if(event){
-          this.productIds = event.staffIds;
-      }
+    this.productIds = event.staffIds? event.staffIds : '';
   }
 
   //商品选中的数量
   getSelectProductNumber(event: any){
-      console.log(event);
-      if(event){
-          this.selectProductNumber = event.selectStaffNum;
-      }
+    this.selectProductNumber = event.selectStaffNum? event.selectStaffNum : 0;
   }
 
   //会员卡选中的ID
   getCardConfigRuleIds(event: any){
-      console.log(event);
-      if(event){
-          this.cardConfigRuleIds = event.staffIds;
-      }
+    this.cardConfigRuleIds = event.staffIds? event.staffIds : '';
   }
 
   //会员卡选中的数量
   getSelectCardNumber(event: any){
-      console.log(event);
-      if(event){
-          this.selectCardNumber = event.selectStaffNum;
-      }
+    this.selectCardNumber = event.selectStaffNum? event.selectStaffNum : 0;
   }
 
   //服务项目选中的ID
   getSeviceItemsIds(event: any){
-      console.log(event);
-      if(event){
-          this.seviceItemsIds = event.staffIds;
-      }
+    this.seviceItemsIds = event.staffIds? event.staffIds : '';
   }
 
   //服务项目选中的数量
   getSelectSeviceItemsNumber(event: any){
-      console.log(event);
-      if(event){
-          this.selectSeviceItemsNumber = event.selectStaffNum;
-      }
+    this.selectSeviceItemsNumber = event.selectStaffNum? event.selectStaffNum : 0;
   }
 
   //提成的发生改变的时候
   changeTypesData(type: string){
-      if(type === 'RATE'){
-          this.ifShowErrorRateTips = this.form.controls.assignRate.value == null|| this.form.controls.normalRate.value == null? true : false;
-      }else {
-          this.ifShowErrorMoneyips = this.form.controls.deductMoney.value == null? true : false;
-      }
+    if(type === 'RATE'){
+      this.checkRate = this.form.controls.assignRate.value == '' || this.form.controls.assignRate.value == null|| this.form.controls.normalRate.value == '' || this.form.controls.normalRate.value == null? false : true;
+    }else {
+      this.checkRate = this.form.controls.deductMoney.value == '' || this.form.controls.deductMoney.value == null? false : true;
+    }
   }
 
   /********************  数据处理  ***********************/
@@ -269,45 +241,43 @@ export class RuleSettingComponent implements OnInit {
       this.manageService.deductRuleInfo(data).subscribe(
           (res: any) => {
               if (res.success) {
-                  this.loading = false;
-                // extractArr: any[] = [{name: '按比例提成', type: 'RATE'},{name: '按固定金额提成', type: 'MONEY'}];//提成类型
-
+                this.loading = false;
                 let deductMoney = res.data.type === 'MONEY'?  parseFloat(res.data.deductMoney)/100 : null;
                 let assignRate = res.data.type === 'RATE'?  parseFloat(res.data.assignRate)*100 : null;
                 let normalRate = res.data.type === 'RATE'?  parseFloat(res.data.normalRate)*100 : null;
                 this.formData = {
-                  ruleName: [ res.data.ruleName, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
-                  assignRate: [ assignRate ,Validators.compose([ Validators.pattern(`^[0-9]+(.[0-9]{2})?$`)])],//指定技师
-                  normalRate: [ normalRate ,Validators.compose([ Validators.pattern(`^[0-9]+(.[0-9]{2})?$`)])],//非指定技师
-                  deductMoney: [ deductMoney ,Validators.compose([  Validators.pattern(`^[0-9]+(.[0-9]{2})?$`)])],//按固定金额提成
+                  ruleName: [ res.data.ruleName, [ Validators.maxLength(20)]],
+                  assignRate: [ assignRate ,Validators.compose([ Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)])],//指定技师
+                  normalRate: [ normalRate ,Validators.compose([ Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)])],//非指定技师
+                  deductMoney: [ deductMoney ,Validators.compose([  Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)])],//按固定金额提成
                   type: [ res.data.type, [ Validators.required] ],
                 };
                 this.form = self.fb.group(self.formData);
 
                 /******* 服务项目 *********/
-                let itemSeviceRuleIds = res.data.serviceItemIds.split(',');
+                let itemSeviceRuleIds = res.data.serviceItemIds? res.data.serviceItemIds.split(',') : [];
                 self.selectSeviceItemsNumber = itemSeviceRuleIds.length;
                 self.seviceItemsIds = res.data.serviceItemIds;
                 FunctionUtil.getDataChange(this.seviceItemsListInfor, itemSeviceRuleIds);//转换后台拿过来的数据
 
                 /******* 卡规则 *********/
-                let cardConfigRuleIds = res.data.cardConfigRuleIds.split(',');
+                let cardConfigRuleIds = res.data.cardConfigRuleIds? res.data.cardConfigRuleIds.split(',') : [];
                 self.selectCardNumber = cardConfigRuleIds.length;
                 self.cardConfigRuleIds = res.data.cardConfigRuleIds;
                 FunctionUtil.getDataChange(this.cardListInfor, cardConfigRuleIds);//转换后台拿过来的数据
 
                 /******* 商品 *********/
-                let productIds = res.data.productIds.split(',');
+                let productIds = res.data.productIds? res.data.productIds.split(',') : [];
                 self.selectProductNumber = productIds.length;
                 self.productIds = res.data.productIds;
                 FunctionUtil.getDataChange(this.productListInfor, productIds);//转换后台拿过来的数据
 
                 /******** 员工 *******/
-                let selectedStaffIds = res.data.staffIds.split(',');
+                let selectedStaffIds = res.data.staffIds? res.data.staffIds.split(',') : [];
                 this.selectStaffNumber = selectedStaffIds.length;
                 self.selectStaffIds = res.data.staffIds;
                 FunctionUtil.getDataChange(this.staffListInfor, selectedStaffIds);//转换后台拿过来的数据
-            }
+              }
         }, error => {
             this.msg.warning(error);
         }
@@ -339,6 +309,7 @@ export class RuleSettingComponent implements OnInit {
   /**获取全部员工 */
   getStaffList() {
     let data = {
+      timestamp: this.timestamp,
       storeId: this.storeId
     };
     this.manageService.selectStaffList(data).subscribe(
@@ -400,7 +371,7 @@ export class RuleSettingComponent implements OnInit {
           (res: any) => {
               if (res.success) {
                   this.loading = false;
-                  if(type === 'PHYICALGOODS'){
+                  if(type === 'GOODS'){
                       this.productListInfor = this.changeDataProduct(res.data);
                       let dataInfor = this.getOthersData(this.productListInfor).split('-');
                       this.productIds = dataInfor[0];
@@ -412,6 +383,10 @@ export class RuleSettingComponent implements OnInit {
                       this.seviceItemsIds = dataInfores[0];
                       this.selectSeviceItemsNumber = parseInt(dataInfores[1]);
                       this.seviceItemsNumber = parseInt(dataInfores[2]);
+                      //编辑进来
+                      if (this.deductRuleId) {
+                        this.deductRuleInfo(this.deductRuleId);
+                      }
                   }
               } else {
                   this.modalSrv.error({
@@ -464,14 +439,10 @@ export class RuleSettingComponent implements OnInit {
               this.selectCardNumber = parseInt(dataInfor[1]);
               this.allCardNumber = parseInt(dataInfor[2]);
 
-              self.getAllbuySearchs('PHYICALGOODS');//获取商品列表信息
+              self.getAllbuySearchs('GOODS');//获取商品列表信息
               setTimeout(function () {
-                  self.getAllbuySearchs('SERVICEITEMS');//获取商品列表信息
+                  self.getAllbuySearchs('SERVICE');//获取商品列表信息
               },50);
-              //编辑进来
-              if (this.deductRuleId) {
-                  this.deductRuleInfo(this.deductRuleId);
-              }
           } else {
               this.modalSrv.error({
                   nzTitle: '温馨提示',
@@ -487,10 +458,11 @@ export class RuleSettingComponent implements OnInit {
   /**新增员工提成规则 */
   addNewStaffingRules(data: any) {
       let self = this;
+      this.submitting = true;
       this.manageService.addNewStaffingRules(data).subscribe(
           (res: any) => {
+              self.submitting = false;
               if (res.success) {
-                self.submitting = false;
                 self.msg.success(`创建成功`);
                 self.router.navigate(['/manage/staff/commission/list']);
               } else {
@@ -509,10 +481,11 @@ export class RuleSettingComponent implements OnInit {
   /***** 修改员工提成规则 */
   editStaffingRules(data: any) {
     let self = this;
+    this.submitting = true;
     this.manageService.editStaffingRules(data).subscribe(
       (res: any) => {
+        self.submitting = false;
         if (res.success) {
-          self.submitting = false;
           self.msg.success(`修改成功`);
           self.router.navigate(['/manage/staff/commission/list']);
         } else {
@@ -534,30 +507,37 @@ export class RuleSettingComponent implements OnInit {
       this.ifShowErrorTipsProduct = this.selectProductNumber === 0? true : false;//是否选择商品
       this.ifShowErrorTipsCard = this.selectCardNumber === 0? true : false;//是否选择会员卡
       this.ifShowErrorTipsSevice = this.selectSeviceItemsNumber === 0? true : false;//是否选择服务项目
+      this.allTips = this.ifShowErrorTipsProduct || this.ifShowErrorTipsProduct || this.ifShowErrorTipsProduct? true : false;
       let dataInfor = {
-        ruleName: this.form.controls.ruleName.value,
-        assignRate: parseFloat(this.form.controls.assignRate.value)/100,
-        normalRate: parseFloat(this.form.controls.assignRate.value)/100,
-        productIds: this.productIds,
-        staffIds: this.selectStaffIds,
-        storeId: this.storeId,
-        serviceItemIds: this.seviceItemsIds,
-        type: this.form.controls.type.value,
-        cardConfigRuleIds: this.cardConfigRuleIds,
-        deductMoney: parseFloat(this.form.controls.deductMoney.value)*100,
-        deductRuleId: this.deductRuleId,
-        cardConfigRuleCount: this.selectCardNumber,
-        productCount: this.selectProductNumber,
-        staffCount: this.selectStaffNumber
+          ruleName: this.form.controls.ruleName.value,
+          assignRate: parseFloat(this.form.controls.assignRate.value)/100,
+          normalRate: parseFloat(this.form.controls.normalRate.value)/100,
+          productIds: this.productIds,
+          staffIds: this.selectStaffIds,
+          storeId: this.storeId,
+          serviceItemIds: this.seviceItemsIds,
+          type: this.form.controls.type.value,
+          cardConfigRuleIds: this.cardConfigRuleIds,
+          deductMoney: parseFloat(this.form.controls.deductMoney.value)*100,
+          deductRuleId: this.deductRuleId,
+          cardConfigRuleCount: this.selectCardNumber,
+          productCount: this.selectProductNumber,
+          itemCount: this.selectSeviceItemsNumber,
+          staffCount: this.selectStaffNumber
       };
-
       for (const i in this.form.controls) {
         this.form.controls[ i ].markAsDirty();
         this.form.controls[ i ].updateValueAndValidity();
       }
       if (this.form.invalid) return;
-      this.submitting = true;
-      if(this.ifShowErrorStaffTips && this.ifShowErrorTipsProduct && this.ifShowErrorTipsCard && this.ifShowErrorTipsSevice){
+
+      if(this.form.controls.type.value === 'RATE'){
+        this.checkRate = this.form.controls.assignRate.value == '' || this.form.controls.assignRate.value == null|| this.form.controls.normalRate.value == '' || this.form.controls.normalRate.value == null? false : true;
+      }else {
+        this.checkRate = this.form.controls.deductMoney.value == '' || this.form.controls.deductMoney.value == null? false : true;
+      }
+
+      if((!this.ifShowErrorTipsProduct || !this.ifShowErrorTipsCard || !this.ifShowErrorTipsSevice) && this.checkRate && !this.ifShowErrorStaffTips){
         if(this.deductRuleId){//编辑修改
           this.editStaffingRules(dataInfor);
         }else{//修增

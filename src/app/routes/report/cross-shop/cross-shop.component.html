@@ -13,7 +13,7 @@
 </nz-card>
 <!--图表-->
 <nz-card [nzBordered]="false">
-    <nz-table #basicTable [nzShowPagination]="false" [nzData]="settlementInfor">
+    <nz-table [nzNoResult]="'暂无跨店结算数据'" #basicTable [nzShowPagination]="false" [nzData]="settlementInfor">
         <thead nz-thead class="ui-grid-thead">
         <tr>
             <th nz-th class="">序号</th>
@@ -31,10 +31,10 @@
             <tr nz-tbody-tr *ngFor="let item of settlementInfor;let i = index">
                 <td nz-td>{{i+1}}</td>
                 <td nz-td>{{item.storeName}}</td>
-                <td nz-td>{{item.payMoney/100}}</td>
                 <td nz-td>{{item.receiveMoney/100}}</td>
+                <td nz-td>{{item.payMoney/100}}</td>
                 <td nz-td>{{item.clearMoney/100}}</td>
-                <td nz-td style="color:#ff6600" (click)="checkDetailInfor(checkDetail, item.storeId)" style="color: #1890ff;cursor: pointer">查看</td>
+                <td nz-td style="color:#ff6600" (click)="checkDetailInfor(checkDetail, item.storeId)" style="color: #ff7700;cursor: pointer">查看</td>
             </tr>
         </tbody>
     </nz-table>
@@ -45,19 +45,14 @@
 <!--点击弹出框-->
 <ng-template #checkDetail>
     <div class="reserve-record-alert">
-        <form nz-form [nzLayout]="'inline'" class="search__form mb24">
+        <form nz-form [nzLayout]="'inline'" class="search__form mb24 clearfix">
             <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
                 <nz-col nzMd="8" nzSm="24">
                   <nz-form-item>
-                    <nz-form-label nzFor="status">门店</nz-form-label>
-                    <nz-form-control>
-                      <nz-select  style="width: 200px;" [(ngModel)]="storeId" (ngModelChange)="selectStore()" name="storeList" id="storeList" [nzPlaceHolder]="'请选择一个门店'" [nzShowSearch]="true">
-                        <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.storeName" [nzValue]="i.storeId"></nz-option>
-                      </nz-select>
-                    </nz-form-control>
+                    <jn-stores-infor  [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
                   </nz-form-item>
                 </nz-col>
-                <nz-col nzMd="8" nzSm="24">
+                <nz-col nzMd="8" nzSm="24" class="fr">
                     <nz-form-item>
                         <nz-form-label nzFor="status">消费类型</nz-form-label>
                         <nz-form-control>
@@ -69,18 +64,18 @@
                 </nz-col>
             </nz-row>
         </form>
-        <nz-table #nzTable [nzData]="settlementDetailList" [nzShowPagination]="false">
+        <nz-table [nzNoResult]="'暂无数据'" #nzTable [nzData]="settlementDetailList" [nzShowPagination]="false">
             <thead>
               <tr>
                   <th *ngFor="let item of alertTableTitle"><span>{{item}}</span></th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let data of settlementDetailList;let ind = index">
+              <tr *ngFor="let data of settlementDetailList">
                   <td>{{data.date}}</td>
                   <td>{{data.customerName}}</td>
                   <td>{{data.cardName}}</td>
-                  <td>{{data.consumeType}}</td>
+                  <td>{{data.consumeTypeText}}</td>
                   <td>{{data.originMoney/100}}</td>
                   <td class="record-candle-btn">{{data.money/100}}</td>
               </tr>

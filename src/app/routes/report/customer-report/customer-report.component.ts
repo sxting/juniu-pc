@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { _HttpClient } from '@delon/theme';
+import { _HttpClient, TitleService } from '@delon/theme';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ReportService } from "../shared/report.service";
-import { STORES_INFO } from "../../../shared/define/juniu-define";
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
+import { ActivatedRoute, Router } from '@angular/router';
 declare var echarts: any;
 
 @Component({
@@ -27,7 +27,7 @@ export class CustomerReportComponent implements OnInit {
     pageSize: any = '10';//一页展示多少数据
     totalElements: any = 0;//商品总数
     merchantId: string = '';
-    theadName: any = ['时间', '顾客姓名', '服务技师', '类型', '金额'];//表头
+    theadName: any = ['时间', '顾客姓名', '类型', '金额'];//表头 '服务技师',先隐藏
     monthReportListInfor: any[] = [];//月报的信息列表
     currentCount: any = ''; //当日客流量
     memberPer: any = '';//会员占比
@@ -41,6 +41,9 @@ export class CustomerReportComponent implements OnInit {
         private fb: FormBuilder,
         private modalSrv: NzModalService,
         private reportService: ReportService,
+        private router: Router,
+        private route: ActivatedRoute,
+        private titleSrv: TitleService,
         private localStorageService: LocalStorageService
     ) { }
 
@@ -54,7 +57,7 @@ export class CustomerReportComponent implements OnInit {
 
     ngOnInit() {
 
-        this.moduleId = 1;
+        this.moduleId = this.route.snapshot.params['menuId'];
         let userInfo;
         if (this.localStorageService.getLocalstorage('User-Info')) {
             userInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info'));
@@ -62,6 +65,7 @@ export class CustomerReportComponent implements OnInit {
         if (userInfo) {
             this.merchantId = userInfo.merchantId;
         }
+        this.ifStoresAll = userInfo.staffType === "MERCHANT"? true : false;
 
         let year = new Date().getFullYear();        //获取当前年份(2位)
         let month = new Date().getMonth()+1;       //获取当前月份(0-11,0代表1月)

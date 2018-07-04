@@ -96,6 +96,26 @@ export class UploadImageComponent implements OnInit, OnChanges {
               });
             }
           }
+
+          if (this.image[0].hasOwnProperty('imageUrl')) {
+            if (this.image[0].imageUrl) {
+              this.imageArray.forEach(function (i: any) {
+                i.src = '';
+                i.imageId = '';
+              });
+              this.image.forEach((item: any, index: number) => {
+                if (this.imageArray[index].src.indexOf('taobao') > 0) {
+                  this.imageArray[index].src = Config.OSS_IMAGE_URL
+                    + `${item.imageId}/resize_80_60/mode_fill`;
+                } else {
+                  this.imageArray[index].src = Config.OSS_IMAGE_URL
+                    + `${item.imageId}/resize_80_60/mode_fill`;
+                }
+
+                this.imageArray[index].imageId = item.imageId;
+              });
+            }
+          }
         }
       }
     }

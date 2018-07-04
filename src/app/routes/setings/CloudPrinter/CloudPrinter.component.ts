@@ -7,6 +7,8 @@ import { FunctionUtil } from "@shared/funtion/funtion-util";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { KoubeiService } from '../../koubei/shared/koubei.service';
 import { SetingsService } from '../shared/setings.service';
+import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-CloudPrinter',
@@ -33,25 +35,20 @@ export class CloudPrinterComponent implements OnInit {
     printerDeviceId: any;
 
     printList: any[] = [];
-
+    moduleId: any;
     constructor(
         private localStorageService: LocalStorageService,
         private fb: FormBuilder,
         private msg: NzMessageService,
+        private route: ActivatedRoute,
+        private router: Router,
         private setingsService: SetingsService,
         private modalSrv: NzModalService
     ) { }
 
     ngOnInit() {
-        if (this.localStorageService.getLocalstorage('Stores-Info') &&
-            JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')).length > 0) {
-            let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) ?
-                JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) : [];
-            this.stores = storeList;
-        }
-
-        this.getPrintList();
-        this.formInit();
+        this.moduleId = this.route.snapshot.params['menuId'];
+        this.selectStoresHttp();
     }
 
     // 点击新增、编辑打印机
@@ -271,5 +268,35 @@ export class CloudPrinterComponent implements OnInit {
             }
         )
     }
-
+    errorAlter(err: any) {
+        this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: err
+        });
+    }
+    selectStoresHttp() {
+        let data = {
+            moduleId: this.moduleId,
+            timestamp: new Date().getTime()
+        }
+        let that = this;
+        this.setingsService.selectStores(data).subscribe(
+            (res: any) => {
+                this.getPrintList();
+                this.formInit();
+                if (res.success) {
+                    this.storeId = res.data.items[0].storeId;
+                    this.stores = res.data.items;
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => {
+                this.errorAlter(error);
+            }
+        );
+    }
 }

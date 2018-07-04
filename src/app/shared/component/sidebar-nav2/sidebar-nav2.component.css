@@ -1,7 +1,40 @@
 .nav>li>a>.iconfont{
     font-size: 22px !important;
-    vertical-align: middle
+    vertical-align: middle;
 }
 .nav>li>a{
     overflow: hidden;
+    color: #9EA3A9 !important;
 }
+.nav > li.nav-item-selected > a{
+    color: #fff !important;
+}
+.nav > li.nav-item-selected {
+    background: #ff7700 !important;
+}
+.nav > li.nav-item-selected > a{
+    color: #fff !important;
+}
+.nav>.nav-submenu-open{
+    /* border-left-color: #ff7700; */
+    background: #040d16;
+}
+.nav > li > a i{
+    margin-right: 0 !important;
+}
+.nav>li:hover{
+    background: #040d16 !important;
+    /* color: #fff !important; */
+}
+.nav>li li:hover{
+    background: #ff7700 !important;
+}
+.nav>li li:hover a{
+    color: #fff !important;
+}
+.nav>li  .nav-submenu-open:hover{
+    background: #040d16 !important;
+}
+/* .nav>li:hover a{
+    color: #fff !important;
+} */

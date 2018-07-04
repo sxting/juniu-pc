@@ -1,3 +1,4 @@
+
 <page-header #ph [title]="''">
     <nz-radio-group [(ngModel)]="putaway" class="mr-md fr">
         <label nz-radio-button [nzValue]="'1'" (click)="onStatusClick()">
@@ -8,17 +9,17 @@
         </label>
     </nz-radio-group>
     <button nz-button (click)="addNewProduct()" [nzType]="'primary'" class="fl">
-        <span>新增实体商品</span>
+        <span>新增实物产品</span>
     </button>
 </page-header>
 
 <nz-card [nzBordered]="false">
-    <nz-table #basicTable [nzShowPagination]="false" [nzData]="productListInfor">
+    <nz-table [nzNoResult]="'暂无实物产品'" #basicTable [nzShowPagination]="false" [nzData]="productListInfor">
         <thead nz-thead class="ui-grid-thead">
         <tr>
-            <th nz-th class="">商品编码</th>
-            <th nz-th class="">商品分类</th>
-            <th nz-th class="">商品名称</th>
+            <th nz-th class="">产品编码</th>
+            <th nz-th class="">产品分类</th>
+            <th nz-th class="">产品名称</th>
             <th nz-th class="">库存</th>
             <th nz-th class="">售价(元)</th>
             <th nz-th class="">操作</th>
@@ -26,7 +27,7 @@
         </thead>
         <tbody nz-tbody class="ui-grid-tbody">
         <tr nz-tbody-tr *ngFor="let item of productListInfor;let i = index">
-            <td nz-td>{{item.productNo}}</td>
+            <td nz-td>{{item.productNo? item.productNo : '-'}}</td>
             <td nz-td>{{item.categoryName}}</td>
             <td nz-td>{{item.productName}}</td>
             <td nz-td>{{item.stock}}</td>
@@ -34,7 +35,7 @@
             <td nz-td class="operation" style="cursor: pointer">
                 <span style="color: #FF6600" (click)="editProduct(item.productId)">查看详情</span>
                 <span class="iconfont icon-line1"></span>
-                <span style="color: #1890ff" (click)="operationProduct(item.productId,item.putaway)">{{statusFlag == 1? '下架':'上架'}}</span>
+                <span style="color: #ff7700" (click)="operationProduct(item.productId,item.putaway)">{{statusFlag == 1? '下架':'上架'}}</span>
             </td>
         </tr>
         </tbody>

@@ -4,6 +4,7 @@ import {SetingsService} from "../../shared/setings.service";
 import {NzModalService} from "ng-zorro-antd";
 import {LocalStorageService} from "@shared/service/localstorage-service";
 import {STORES_INFO} from "@shared/define/juniu-define";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
     selector: 'app-pay-way-step1',
@@ -17,32 +18,37 @@ export class PayWayStep1Component implements OnInit {
         private setingsService: SetingsService,
         private modalSrv: NzModalService,
         private localStorageService: LocalStorageService,
+        private route: ActivatedRoute,
     ) {}
 
-    storeId: any = '1526019540509121328386';
+    moduleId: any = 1;
+    storeId: any = '';
     ngOnInit() {
-        let store: any = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-            JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-        this.storeId = store[0].storeId ? store[0].storeId : '';
-        if(this.item.status == '1') {
-            let data = {
-                storeId: this.storeId
-            };
-            this.setingsService.getPayWay(data).subscribe(
-                (res: any) => {
-                    if(res['success']) {
-                        this.item.itemData = res.data;
-                        this.item.type = res.data.bankAccount.accountType == 1 ? 'qiye' : 'geti'
-                    } else {
-                        this.modalSrv.error({
-                            nzTitle: '温馨提示',
-                            nzContent: res['errorInfo']
-                        });
-                    }
-                }
-            );
-        }
+      this.moduleId = this.route.snapshot.params['menuId'];
     }
+
+  onSelectStoreChange(e: any) {
+    this.storeId = e.storeId;
+
+    if(this.item.status == '1') {
+      let data = {
+        storeId: this.storeId
+      };
+      this.setingsService.getPayWay(data).subscribe(
+        (res: any) => {
+          if(res['success']) {
+            this.item.itemData = res.data;
+            this.item.type = res.data.bankAccount&&res.data.bankAccount.accountType == 1 ? 'qiye' : 'geti'
+          } else {
+            this.modalSrv.error({
+              nzTitle: '温馨提示',
+              nzContent: res['errorInfo']
+            });
+          }
+        }
+      );
+    }
+  }
 
     onCardItemClick(type: string) {
         this.item.type = type;

@@ -69,7 +69,7 @@ export class CheckoutService {
         let apiUrl = Config.API + 'order/back.json';
         let req = FunctionUtil.obectToURLSearchParams({ orderId: orderId });
         let data = { orderId: orderId };
-        return this.http.get(apiUrl, orderId).map((response: Response) => response).catch(error => {
+        return this.http.get(apiUrl, data).map((response: Response) => response).catch(error => {
             return Observable.throw(error);
         });
     }
@@ -236,68 +236,95 @@ export class CheckoutService {
 
 
     //验券记录列表
-  getReceiptList(Params: any) {
-    let apiUrl = this.api1 + '/tuangou/receipt/list.json';
-    let params = FunctionUtil.obectToURLSearchParams(Params);
-    return this.http.get(apiUrl,Params)
-      .map((response: Response) => response)
-      .catch(error => {
-        return Observable.throw(error);
-      });
-  }
+    getReceiptList(Params: any) {
+        let apiUrl = this.api1 + '/tuangou/receipt/list.json';
+        let params = FunctionUtil.obectToURLSearchParams(Params);
+        return this.http.get(apiUrl, Params)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
 
-  //检查门店授权
-  checkAuth(Params: any) {
-    let apiUrl = this.api1 + '/tuangou/checkAuth.json';
-    let params = FunctionUtil.obectToURLSearchParams(Params);
-    return this.http.get(apiUrl, Params)
-      .map((response: Response) => response)
-      .catch(error => {
-        return Observable.throw(error);
-      });
-  }
+    //检查门店授权
+    checkAuth(Params: any) {
+        let apiUrl = this.api1 + '/tuangou/checkAuth.json';
+        let params = FunctionUtil.obectToURLSearchParams(Params);
+        return this.http.get(apiUrl, Params)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
 
-  //验券
-  receiptConsume(Params: any) {
-    let apiUrl = this.api1 + '/tuangou/receipt/consume.json';
-    let params = FunctionUtil.obectToURLSearchParams(Params);
-    return this.http.get(apiUrl, Params)
-      .map((response: Response) => response)
-      .catch(error => {
-        return Observable.throw(error);
-      });
-  }
+    //验券
+    receiptConsume(Params: any) {
+        let apiUrl = this.api1 + '/tuangou/receipt/consume.json';
+        let params = FunctionUtil.obectToURLSearchParams(Params);
+        return this.http.get(apiUrl, Params)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
 
-  //输码验券校验
-  receiptPrepare(Params: any) {
-    let apiUrl = this.api1 + '/tuangou/receipt/prepare.json';
-    let params = FunctionUtil.obectToURLSearchParams(Params);
-    return this.http.get(apiUrl, Params)
-      .map((response: Response) => response)
-      .catch(error => {
-        return Observable.throw(error);
-      });
-  }
+    //输码验券校验
+    receiptPrepare(Params: any) {
+        let apiUrl = this.api1 + '/tuangou/receipt/prepare.json';
+        let params = FunctionUtil.obectToURLSearchParams(Params);
+        return this.http.get(apiUrl, Params)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
 
-  //扫码验券接口
-  scanPrepare(Params: any) {
-    let apiUrl = this.api1 + '/tuangou/receipt/scan/prepare.json';
-    let params = FunctionUtil.obectToURLSearchParams(Params);
-    return this.http.get(apiUrl,Params)
-      .map((response: Response) => response)
-      .catch(error => {
-        return Observable.throw(error);
-      });
-  }
+    //扫码验券接口
+    scanPrepare(Params: any) {
+        let apiUrl = this.api1 + '/tuangou/receipt/scan/prepare.json';
+        let params = FunctionUtil.obectToURLSearchParams(Params);
+        return this.http.get(apiUrl, Params)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
 
-  //撤销验券
-  reverseConsume(Params: any) {
-    let apiUrl = this.api1 + '/tuangou/receipt/reverse/consume.json';
-    return this.http.get(apiUrl, Params)
-      .map((response: Response) => response)
-      .catch(error => {
-        return Observable.throw(error);
-      });
-  }
+    //撤销验券
+    reverseConsume(Params: any) {
+        let apiUrl = this.api1 + '/tuangou/receipt/reverse/consume.json';
+        return this.http.get(apiUrl, Params)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    //根据会员Id查找订单 
+    findByCustomerId(data) {
+        // GET /searchByFaceId.json
+        let apiUrl = Config.API + 'order/findByCustomerId.json';
+        return this.http.get(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
 
+    customerOrders(data?: any) {
+        let apiUrl = Config.API + '/order/customerOrders.json';
+        return this.http.get(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    // 选择门店
+    selectStores(data: any) {
+        let apiUrl = Config.API1 + 'account/merchant/store/select.json';
+        return this.http.get(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
 }

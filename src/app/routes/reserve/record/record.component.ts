@@ -18,10 +18,10 @@ export class RecordComponent implements OnInit {
     endDate: Date;
     maxDate: Date = new Date();
 
-    stores: any = [];
     storeId: any = '';
-    storeName: string = '请选择门店';
-    selectedOption: string = '';
+  moduleId: any = '';
+    storeName: string = '';
+
 
     cn: any = {
         firstDayOfWeek: 0,
@@ -43,25 +43,13 @@ export class RecordComponent implements OnInit {
     }
 
     ngOnInit() {
-        if (this.localStorageService.getLocalstorage('Stores-Info') &&
-            JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')).length > 0) {
-            let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) ?
-                JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) : [];
-            this.stores = storeList;
-        }
+      this.moduleId = this.route.snapshot.params['menuId'];
     }
 
     //选择门店
     onStoresChange(e: any) {
-        // this.storeId = e.target.value;
-        this.storeId = this.selectedOption;
-
-        if (this.storeId === '') {
-            this.modalSrv.error({
-                nzTitle: '温馨提示',
-                nzContent: '请选择门店'
-            });
-        }
+        this.storeId = e.storeId;
+        this.storeName = e.storeName;
     }
 
     onRecordBtnClick() {

@@ -41,6 +41,8 @@ export class SetComponent implements OnInit {
 
     selectedOption: string = '';
 
+  moduleId: any = '';
+
     constructor(
         private http: _HttpClient,
         private router: Router,
@@ -52,25 +54,26 @@ export class SetComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.token = this.localStorageService.getLocalstorage(APP_TOKEN);
-        if (this.localStorageService.getLocalstorage(STORES_INFO) &&
-            JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
-            let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-                JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-
-            this.stores = storeList;
-            this.storeId = storeList[0].storeId;
-
-            this.selectedOption = storeList[0].storeId;
-        }
-
-        this.getTurnRuleList();
+      this.moduleId = this.route.snapshot.params['menuId'];
+      this.token = this.localStorageService.getLocalstorage(APP_TOKEN);
+        // if (this.localStorageService.getLocalstorage(STORES_INFO) &&
+        //     JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
+        //     let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
+        //         JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
+        //
+        //     this.stores = storeList;
+        //     this.storeId = storeList[0].storeId;
+        //
+        //     this.selectedOption = storeList[0].storeId;
+        // }
+        //
+        // this.getTurnRuleList();
     }
 
     //选择门店
-    onSelectStoreClick(e: any) {
+  onSelectStoreChange(e: any) {
         // this.storeId = e.target.value;
-        this.storeId = this.selectedOption;
+      this.storeId = e.storeId;
 
         this.getTurnRuleList();
     }
@@ -372,7 +375,7 @@ export class SetComponent implements OnInit {
         this.manageService.getStaffListByStoreId(this.storeId).subscribe(
             (res: any) => {
                if(res.success) {
-                   let arr = res.data.reserveStaffs;
+                   let arr = res.data.items;
                    let objArr: any = []; //定义一个空数组
 
                    arr.forEach(function (i: any) {

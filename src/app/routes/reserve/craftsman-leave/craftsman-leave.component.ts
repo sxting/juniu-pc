@@ -27,8 +27,8 @@ export class CraftsmanLeaveComponent implements OnInit {
     vacationStaffIdArr: any[] = [];
     vacationDateArr: any[] = [];
     staffType: string = '';
-    allStores: string = 'all';
-    selectedOption: string = 'all';
+
+  moduleId: any = '';
 
     constructor(
         private http: _HttpClient,
@@ -40,8 +40,11 @@ export class CraftsmanLeaveComponent implements OnInit {
         public settings: SettingsService
 ) { }
 
+  ifStoresAll: boolean;
     ngOnInit() {
-        let userInfo;
+      this.moduleId = this.route.snapshot.params['menuId'];
+
+      let userInfo;
         if (this.localStorageService.getLocalstorage('User-Info')) {
             userInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info'));
         }
@@ -49,18 +52,10 @@ export class CraftsmanLeaveComponent implements OnInit {
             this.staffType = userInfo.staffType;
         }
 
-        if (this.localStorageService.getLocalstorage('Stores-Info') &&
-            JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')).length > 0) {
-            let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) ?
-                JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) : [];
-            this.stores = storeList;
-
-            if (this.staffType === 'MERCHANT') {
-                this.storeId = this.allStores;
-            } else {
-                this.storeId = storeList[0].storeId;
-                this.selectedOption = this.storeId;
-            }
+        if (this.staffType === 'MERCHANT') {
+          this.ifStoresAll = true;
+        } else {
+          this.ifStoresAll = false;
         }
 
         //生成日期数组start
@@ -92,11 +87,11 @@ export class CraftsmanLeaveComponent implements OnInit {
 
     //选择门店
     onSelectStoreChange(e: any) {
-        // this.storeId = e.target.value;
-        this.storeId = this.selectedOption;
+
+      this.storeId = e.storeId;
 
         let data;
-        if (this.storeId === this.allStores) {
+        if (!this.storeId) {
             data = {};
         } else {
             data = {
@@ -147,7 +142,7 @@ export class CraftsmanLeaveComponent implements OnInit {
                     });
                 }
                 let params;
-                if (this.storeId === this.allStores) {
+                if (!this.storeId) {
                     params = {};
                 } else {
                     params = {
@@ -185,7 +180,7 @@ export class CraftsmanLeaveComponent implements OnInit {
                     });
                 }
                 let params;
-                if (this.storeId === this.allStores) {
+                if (!this.storeId) {
                     params = {};
                 } else {
                     params = {

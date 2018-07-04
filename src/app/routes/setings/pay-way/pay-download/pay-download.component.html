@@ -2,7 +2,8 @@
 <nz-card [nzBordered]="false">
     <div class="fl form-box">
         <!--<form nz-form [formGroup]="form">-->
-      <jn-stores-infor [nzXs]="24" [nzSm1]="7" [nzRequired]="true" [moduleId]="1" [ifStoresAll]="false" (storeIdOutput)="onStoresChange($event)"></jn-stores-infor>
+      <jn-stores-infor [nzXs]="24" [nzSm1]="7" [nzSm2]="17"  [nzRequired]="true" [moduleId]="1"
+                       [ifStoresAll]="false" (storeIdOutput)="onStoresChange($event)"></jn-stores-infor>
             <!--<nz-form-item>-->
                 <!--<nz-form-label nzXs="24" nzSm="7" nzRequired>选择门店</nz-form-label>-->
                 <!--<nz-form-control>-->
@@ -28,7 +29,7 @@
                 <nz-form-label nzXs="24" nzSm="7" nzRequired>商家Logo</nz-form-label>
                 <nz-form-control>
                     <div class="form-img-box">
-                        <img class="image" [src]="imagePath">
+                        <img class="image" [src]="imagePath" *ngIf="imagePath">
                         <span class="iconfont icon-tianjia"><br>上传</span>
                         <input type="file" accept="image" (change)="uploadImage($event)">
                     </div>

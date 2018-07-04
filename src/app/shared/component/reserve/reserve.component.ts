@@ -6,6 +6,7 @@ import {FunctionUtil} from "@shared/funtion/funtion-util";
 import {STORES_INFO, ALIPAY_SHOPS} from "@shared/define/juniu-define";
 import {LocalStorageService} from "@shared/service/localstorage-service";
 import {NzModalService} from "ng-zorro-antd";
+import {StoresInforService} from "@shared/stores-infor/shared/stores-infor.service";
 declare var swal: any;
 
 @Component({
@@ -20,6 +21,7 @@ export class ReserveComponent implements OnInit, AfterViewInit, AfterViewChecked
                 private titleService: Title,
                 private orderService: OrderService,
                 private localStorageService: LocalStorageService,
+                private storesInforService: StoresInforService,
                 private modalSrv: NzModalService,) {
     }
 
@@ -98,32 +100,53 @@ export class ReserveComponent implements OnInit, AfterViewInit, AfterViewChecked
 
   selectedOption;
 
-    dateFormat: any = 'yyyy-MM-dd';
+  dateFormat: any = 'yyyy-MM-dd';
 
-    ngOnInit() {
-        this.titleService.setTitle('预约');
-        this.todayDay = this.changeDate(new Date());
+  ngOnInit() {
+    this.todayDay = this.changeDate(new Date());
 
-        // if (this.localStorageService.getLocalstorage(STORES_INFO) &&
-        //     JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
-        //     let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-        //         JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-        //
-        //     this.storeId = storeList[0].storeId;
-        //     this.storeName = storeList[0].storeName;
-        //     this.stores = storeList;
-        //     this.selectedOption = this.stores[0].storeId;
-        // }
-        //
-        // this.getReservationsNewReserveCount();
-    }
+    let data = {
+      moduleId: this.route.snapshot.params['menuId'],
+      timestamp: new Date().getTime()
+    };
+    this.storesInforService.selectStores(data).subscribe(
+      (res: any) => {
+        if (res.success) {
+          let storeList: any = res.data.items;
+          storeList.forEach(function (item: any) {
+            item.storeName = item.branchName;
+          });
+
+          if(storeList[0]) {
+            this.storeId = storeList[0].storeId;
+            // this.storeId = '1525863865366114794418';
+            this.storeName = storeList[0].storeName;
+            this.stores = storeList;
+            this.selectedOption = this.stores[0].storeId;
+          }
+          this.getReservationsNewReserveCount();
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      }
+    );
+  }
 
     ngAfterViewInit() {
-        let getReserveConfigParams = {
-            storeId: this.storeId
-        };
-      console.log(this.storeId);
-      this.getReserveConfig(getReserveConfigParams);
+        let self = this;
+      let timer = setInterval(function () {
+        if(self.storeId) {
+          let getReserveConfigParams = {
+            storeId: self.storeId
+          };
+          self.getReserveConfig(getReserveConfigParams);
+          clearInterval(timer)
+        }
+      }, 1000)
+
     }
 
     ngAfterViewChecked() {
@@ -160,7 +183,7 @@ export class ReserveComponent implements OnInit, AfterViewInit, AfterViewChecked
             time: [],
             timeShow: []
         };
-        this.storeId = e.storeId;
+        this.storeId = e;
         let getReserveConfigParams = {
             storeId: this.storeId
         };
@@ -582,45 +605,47 @@ export class ReserveComponent implements OnInit, AfterViewInit, AfterViewChecked
         this.orderService.getReserveConfig(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    let reserveConfig = res.data;
-                    this.orderType = reserveConfig.reserveType;
-                    this.timeData = reserveConfig.businessStart + '-' + reserveConfig.businessEnd;
-                    //生成时间start
-                    let timeData = reserveConfig.businessStart + '-' + reserveConfig.businessEnd;
-                    // let timeData = '09:00-19:30';
-                    let timeDataArr = timeData.split('-');
-                    let startTime = new Date(this.todayDay + ' ' + timeDataArr[0] + ':00').getTime();
-                    let endTime = new Date(this.todayDay + ' ' + timeDataArr[1] + ':00').getTime();
-                    for (let i = 0; i < ((endTime - startTime) / 1000 / 60 / 30); i++) {
-                        this.timeArr.timeShow.push(new Date(new Date(this.todayDay + ' ' + timeDataArr[0] + ':00').getTime() + 30 * 60 * 1000 * i));
-                        this.timeArr.time.push(new Date(new Date(this.todayDay + ' ' + timeDataArr[0] + ':00').getTime() + 30 * 60 * 1000 * i));
-                    }
-                    for (let i = 0; i < this.timeArr.timeShow.length; i++) {
-                        this.timeArr.timeShow[i] = (this.timeArr.timeShow[i].getHours().toString().length > 1 ? this.timeArr.timeShow[i].getHours() : '0' + this.timeArr.timeShow[i].getHours()) + ':' +
-                            (this.timeArr.timeShow[i].getMinutes().toString().length > 1 ? this.timeArr.timeShow[i].getMinutes() : '0' + this.timeArr.timeShow[i].getMinutes()) + ':00';
-                    }
-                    //生成时间end
-
-                    //判断竖线的位置
-                    let nowTime = new Date().getTime();
-                    let beforeTime = nowTime - 30 * 60 * 1000;
-                    for (let i = 0; i < this.timeArr.time.length; i++) {
-                        if (this.timeArr.time[i] < nowTime && this.timeArr.time[i] > beforeTime) {
-                            this.lineIndex = i;
+                    if(res.data) {
+                        let reserveConfig = res.data;
+                        this.orderType = reserveConfig.reserveType;
+                        this.timeData = reserveConfig.businessStart + '-' + reserveConfig.businessEnd;
+                        //生成时间start
+                        let timeData = reserveConfig.businessStart + '-' + reserveConfig.businessEnd;
+                        // let timeData = '09:00-19:30';
+                        let timeDataArr = timeData.split('-');
+                        let startTime = new Date(this.todayDay + ' ' + timeDataArr[0] + ':00').getTime();
+                        let endTime = new Date(this.todayDay + ' ' + timeDataArr[1] + ':00').getTime();
+                        for (let i = 0; i < ((endTime - startTime) / 1000 / 60 / 30); i++) {
+                            this.timeArr.timeShow.push(new Date(new Date(this.todayDay + ' ' + timeDataArr[0] + ':00').getTime() + 30 * 60 * 1000 * i));
+                            this.timeArr.time.push(new Date(new Date(this.todayDay + ' ' + timeDataArr[0] + ':00').getTime() + 30 * 60 * 1000 * i));
                         }
-                    }
+                        for (let i = 0; i < this.timeArr.timeShow.length; i++) {
+                            this.timeArr.timeShow[i] = (this.timeArr.timeShow[i].getHours().toString().length > 1 ? this.timeArr.timeShow[i].getHours() : '0' + this.timeArr.timeShow[i].getHours()) + ':' +
+                                (this.timeArr.timeShow[i].getMinutes().toString().length > 1 ? this.timeArr.timeShow[i].getMinutes() : '0' + this.timeArr.timeShow[i].getMinutes()) + ':00';
+                        }
+                        //生成时间end
 
-                    //左scroll
-                    if (this.lineIndex > 4) { //左scroll
-                        this.scrollLeft = (this.lineIndex - 4) * 116;
-                    }
+                        //判断竖线的位置
+                        let nowTime = new Date().getTime();
+                        let beforeTime = nowTime - 30 * 60 * 1000;
+                        for (let i = 0; i < this.timeArr.time.length; i++) {
+                            if (this.timeArr.time[i] < nowTime && this.timeArr.time[i] > beforeTime) {
+                                this.lineIndex = i;
+                            }
+                        }
 
-                    this.initData();
-                    if (this.orderType === 'PRODUCT') {
-                        this.productIds = res.data.productIds;
+                        //左scroll
+                        if (this.lineIndex > 4) { //左scroll
+                            this.scrollLeft = (this.lineIndex - 4) * 116;
+                        }
+
+                        this.initData();
+                        if (this.orderType === 'PRODUCT') {
+                            this.productIds = res.data.productIds;
+                        }
+                        this.showTable = true;
+                        this.isScroll = true;
                     }
-                    this.showTable = true;
-                    this.isScroll = true;
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',

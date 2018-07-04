@@ -2,11 +2,12 @@ import {Component, OnInit} from '@angular/core';
 import {_HttpClient} from '@delon/theme';
 import {LocalStorageService} from "@shared/service/localstorage-service";
 import {NzModalService} from "ng-zorro-antd";
-import {STORES_INFO} from "@shared/define/juniu-define";
+import {STORES_INFO, USER_INFO} from "@shared/define/juniu-define";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {UploadService} from "@shared/upload-img";
 import {SetingsService} from "../../shared/setings.service";
 import {Config} from "@shared/config/env.config";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-pay-download',
@@ -18,10 +19,8 @@ export class PayDownloadComponent implements OnInit {
   nzXs: any = 24;
   nzSm: any = 7;
 
-  storeName: string = '';
   storeId: any = '';
-  stores: any = [];
-  selectedOption: any = '';
+  moduleId: any = '';
 
   imgPath: any = '';
 
@@ -29,23 +28,22 @@ export class PayDownloadComponent implements OnInit {
   imagePath: any = '';
   uploadImageResult: any = '';
   imageId: any = '';
-  colorArr: any = ['00ff00', '0000CD', 'FFA500'];
+  colorArr: any = ['62b900', '108ee9', 'FF6600'];
   myColor: string = 'ffffff';
   color: string = this.myColor;
 
+  merchantId: string = '';
+
   constructor(private localStorageService: LocalStorageService,
+              private route: ActivatedRoute,
               private modalSrv: NzModalService,
               private uploadService: UploadService,
               private setingsService: SetingsService,) {
   }
 
   ngOnInit() {
-    let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-      JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-    this.storeId = storeList[0].storeId;
-    this.storeName = storeList[0].storeName;
-    this.stores = storeList;
-    this.selectedOption = this.stores[0].storeId;
+    this.merchantId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['merchantId'];
+    this.moduleId = this.route.snapshot.params['menuId'];
     this.downloadQronline();
   }
 
@@ -88,10 +86,10 @@ export class PayDownloadComponent implements OnInit {
   }
 
   saveQrClick() {
-    window.open(`${Config.API}finance/store/download/qr.do?storeId=${this.storeId}&logoId=${this.imageId}&color=${this.color}`);
+      window.open(`${Config.API}finance/store/download/qr.do?storeId=${this.storeId}&logoId=${this.imageId}&color=${this.color}&merchantId=${this.merchantId}`);
   }
 
   downloadQronline() {
-    this.imgPath = `${Config.API}finance/store/download/qronline.do?storeId=${this.storeId}&logoId=${this.imageId}&color=${this.color}`;
+    this.imgPath = `${Config.API}finance/store/download/qronline.do?storeId=${this.storeId}&logoId=${this.imageId}&color=${this.color}&merchantId=${this.merchantId}`;
   }
 }

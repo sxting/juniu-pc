@@ -49,12 +49,12 @@ export class RulesStep4Component implements OnInit {
 
     //返回列表
     comeBackVipList(){
-        this.router.navigate(['/product/vip/list']);
+        this.router.navigate(['/product/vip/list', { menuId: this.item.moduleId}]);
     }
 
     //查看会员详情
     checkDetailInfor(){
-        this.router.navigate(['/product/check/vipcard/detailinfor', { configId: this.configId, cardType: this.cardType }]);
+        this.router.navigate(['/product/check/vipcard/detailinfor', { configId: this.configId, cardType: this.cardType, menuId: this.item.moduleId}]);
     }
 
     //查看会员卡详情
@@ -68,9 +68,7 @@ export class RulesStep4Component implements OnInit {
           if (res.success) {
             this.price = parseFloat(res.data.rules[0].price)/100;
             this.productName = res.data.cardConfigName;
-            // this.backgroundId = res.data.background;
-            // this.backGroundImg = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.backgroundId}/resize_${250}_${150}/mode_fill`;
-            this.isPinCard = res.data.rules[0].isPinCard === 1? '不可销卡' : '按照无折扣进行销卡';
+            this.isPinCard = res.data.rules[0].isPinCard === 1?  '按照无折扣进行销卡' : '不可销卡';
           } else {
             this.modalSrv.error({
               nzTitle: '温馨提示',

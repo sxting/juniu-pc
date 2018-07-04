@@ -26,7 +26,7 @@
     </div>
     <div class="memberAnalysis-bottom">
         <h3 class="flex-1 text-lg borderLeft">导入记录</h3>
-        <nz-tabset  class="mr-md" (nzSelectChange)="console2($event)">
+        <nz-tabset class="mr-md" (nzSelectChange)="console2($event)">
             <nz-tab nzTitle="全部">
             </nz-tab>
             <nz-tab nzTitle="储蓄卡">
@@ -39,7 +39,7 @@
             </nz-tab>
         </nz-tabset>
         <div style="margin-top:30px;"></div>
-        <simple-table #st [columns]="columns" [data]="data2" style="min-height:600px;" [loading]="loading" (checkboxChange)="checkboxChange($event)" (filterChange)="customerlistHttp()">
+        <simple-table #st [columns]="columns" [data]="data2" style="min-height:600px;">
             <ng-template>
                 <ng-template st-row="status" let-i>
                     <nz-badge [nzStatus]="i.statusType" [nzText]="i.statusText"></nz-badge>
@@ -55,18 +55,7 @@
 <ng-template #modalContent>
     <div class="addStaffBox-main">
         <div>
-            <div class="addStaffBox-main-left icon-asterisks-1-copy iconfont">门店</div>
-            <div class="addStaffBox-main-right">
-                <!-- <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth" (storeListPush)="storeListPush($event)"
-      (storeIdOutput)="getStoreId($event)"></jn-stores-infor> -->
-                <nz-select [(ngModel)]="selectedOption" style="width:240px;" (ngModelChange)="selectStoreInfo($event)" [nzPlaceHolder]="'请选择一个门店'"
-                    [nzShowSearch]="true">
-                    <nz-option [nzLabel]="'请选择一个门店'" [nzValue]="'ALL'">
-                    </nz-option>
-                    <nz-option *ngFor="let item of storeList" [nzLabel]="item.storeName" [nzValue]="item">
-                    </nz-option>
-                </nz-select>
-            </div>
+            <jn-stores-infor [moduleId]="moduleId" style="padding-left: 35px;" [ifStoresAll]="false" (storeIdOutput)="selectStoreInfo($event)"></jn-stores-infor>
         </div>
         <div>
             <div class="addStaffBox-main-left icon-asterisks-1-copy iconfont">手机号</div>

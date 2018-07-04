@@ -16,6 +16,9 @@
                 </nz-form-item>
             </nz-col>
         </nz-row>
+        <button nz-button (click)="exportExcel()" [nzType]="'primary'">
+          <span>导出Excel</span>
+        </button>
     </div>
 </nz-card>
 <div nz-row [nzGutter]="24" class="pt-lg">
@@ -31,8 +34,8 @@
                     <i nz-tooltip class="anticon anticon-info-circle-o"></i>
                 </nz-tooltip>
             </ng-template>
-            <trend flag="up" style="display:block; margin-top:2px;">同比上月<span class="pl-sm">{{RevenueLastMonth}}</span></trend>
-            <trend flag="down">环比去年<span class="pl-sm">{{RevenueLastYear}}</span></trend>
+            <trend flag="{{ RevenueLastMonth && RevenueLastMonth.substring(0,1) === '-'?'down':'up'}}" style="display:block; margin-top:2px;">同比上月<span class="pl-sm">{{RevenueLastMonth && RevenueLastMonth.substring(0,1) === '-'? RevenueLastMonth.substring(1) : RevenueLastMonth}}</span></trend>
+            <trend flag="{{ RevenueLastYear && RevenueLastYear.substring(0,1) === '-'?'down':'up'}}">环比去年<span class="pl-sm">{{RevenueLastYear && RevenueLastYear.substring(0,1) === '-'? RevenueLastYear.substring(1) : RevenueLastYear}}</span></trend>
             <ng-template #footer1>
                 <p class="text-truncate mb0">日均营收<span class="ml-sm">￥{{avgRevenueMonth/100}}</span></p>
             </ng-template>
@@ -50,8 +53,8 @@
                     <i nz-tooltip class="anticon anticon-info-circle-o"></i>
                 </nz-tooltip>
             </ng-template>
-            <trend flag="up" style="display:block; margin-top:2px;">同比上月<span class="pl-sm">{{PassengerFlowLastMonth}}</span></trend>
-            <trend flag="down">环比去年<span class="pl-sm">{{PassengerFlowLastYear}}</span></trend>
+            <trend flag="{{ PassengerFlowLastMonth && PassengerFlowLastMonth.substring(0,1) === '-'?'down':'up'}}" style="display:block; margin-top:2px;">同比上月<span class="pl-sm">{{PassengerFlowLastMonth && PassengerFlowLastMonth.substring(0,1) === '-'? PassengerFlowLastMonth.substring(1) : PassengerFlowLastMonth}}</span></trend>
+            <trend flag="{{ PassengerFlowLastYear && PassengerFlowLastYear.substring(0,1) === '-'?'down':'up'}}">环比去年<span class="pl-sm">{{PassengerFlowLastYear && PassengerFlowLastYear.substring(0,1) === '-'? PassengerFlowLastYear.substring(1) : PassengerFlowLastYear}}</span></trend>
             <ng-template #footer2>
                 <p class="text-truncate mb0">日均客流量<span class="ml-sm">{{avgPassengerFlow}}</span></p>
             </ng-template>
@@ -69,8 +72,8 @@
                     <i nz-tooltip class="anticon anticon-info-circle-o"></i>
                 </nz-tooltip>
             </ng-template>
-            <trend flag="up" style="display:block; margin-top:2px;">同比上月<span class="pl-sm">{{StaffingMoneyLastMonth}}</span></trend>
-            <trend flag="down">环比去年<span class="pl-sm">{{StaffingMoneyLastYear}}</span></trend>
+            <trend flag="{{ StaffingMoneyLastMonth && StaffingMoneyLastMonth.substring(0,1) === '-'?'down':'up'}}" style="display:block; margin-top:2px;">同比上月<span class="pl-sm">{{StaffingMoneyLastMonth && StaffingMoneyLastMonth.substring(0,1) === '-'? StaffingMoneyLastMonth.substring(1) : StaffingMoneyLastMonth}}</span></trend>
+            <trend flag="{{ StaffingMoneyLastYear && StaffingMoneyLastYear.substring(0,1) === '-'?'down':'up'}}">环比去年<span class="pl-sm">{{StaffingMoneyLastYear && StaffingMoneyLastYear.substring(0,1) === '-'? StaffingMoneyLastYear.substring(1) : StaffingMoneyLastYear}}</span></trend>
             <ng-template #footer3>
                 <p class="text-truncate mb0">日均提成<span class="ml-sm">¥ {{avgStaffingMoney/100}}</span></p>
             </ng-template>

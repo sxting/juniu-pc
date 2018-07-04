@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { _HttpClient } from '@delon/theme';
+import { _HttpClient, TitleService } from '@delon/theme';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ReportService } from "../shared/report.service";
 import { LocalStorageService } from "../../../shared/service/localstorage-service";
 import { FunctionUtil } from "../../../shared/funtion/funtion-util";
 import { STORES_INFO } from '@shared/define/juniu-define';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-commodity-statement',
@@ -32,6 +33,9 @@ export class CommodityStatementComponent implements OnInit {
         private http: _HttpClient,
         private modalSrv: NzModalService,
         private reportService: ReportService,
+        private router: Router,
+        private route: ActivatedRoute,
+        private titleSrv: TitleService,
         private localStorageService: LocalStorageService
     ) { }
 
@@ -44,7 +48,7 @@ export class CommodityStatementComponent implements OnInit {
 
     ngOnInit() {
 
-      this.moduleId = 1;
+      this.moduleId = this.route.snapshot.params['menuId'];
       let year = new Date().getFullYear();        //获取当前年份(2位)
       let month = new Date().getMonth()+1;       //获取当前月份(0-11,0代表1月)
       let changemonth = month < 10 ? '0' + month : '' + month;
@@ -52,7 +56,9 @@ export class CommodityStatementComponent implements OnInit {
 
       this.yyyymmDate = new Date(year+'-'+changemonth+'-'+day);
       this.date = year+'-'+changemonth+'-'+day;
-
+      let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+        JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+      this.ifStoresAll = UserInfo.staffType === "MERCHANT"? true : false;
     }
 
     //门店id
@@ -94,7 +100,7 @@ export class CommodityStatementComponent implements OnInit {
                     let moneyList = [];
                     res.data.moneyList.forEach((element: any, index: number) => {
                         let list = {
-                            x: element.name,
+                            x: element.name.length > 8? element.name.substring(0,5) + '...' : element.name,
                             y: element.value/100
                         };
                         moneyList.push(list);
@@ -103,7 +109,7 @@ export class CommodityStatementComponent implements OnInit {
                     let countList = [];
                     res.data.countList.forEach((element: any, index: number) => {
                         let item = {
-                            x: element.name,
+                            x: element.name.length > 8? element.name.substring(0,5) + '...' : element.name,
                             y: element.value
                         };
                         countList.push(item);

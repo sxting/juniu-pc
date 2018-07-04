@@ -1,4 +1,6 @@
-<page-header></page-header>
+<!--<page-header></page-header>-->
+<div class="mg-b20"></div>
+
 <div class="content_juniu">
     <div>
         <span class="add-print-btn" (click)="onAddPrintClick('', printBox)">新增打印机</span>
@@ -6,7 +8,7 @@
     </div>
     <div class="content-title"><span class="left-line"></span>现有打印机</div>
 
-    <nz-table #nzTable [nzData]="printList" [nzPageSize]="10" [nzShowPagination]="false">
+    <nz-table [nzNoResult]="'没有数据'" #nzTable [nzData]="printList" [nzPageSize]="10" [nzShowPagination]="false">
         <thead>
         <tr>
             <th *ngFor="let item of theadName"><span>{{item}}</span></th>
@@ -17,7 +19,7 @@
             <td>{{print.yunDeviceId}}</td>
             <td>{{print.deviceName}}</td>
             <td>{{print.yunDeviceKey}}</td>
-            <td><span *ngFor="let store of stores"><span *ngIf="print.storeId === store.storeId">{{store.storeName}}</span></span></td>
+            <td><span *ngFor="let store of stores"><span *ngIf="print.storeId === store.storeId">{{store.branchName}}</span></span></td>
             <td><span (click)="onAddPrintClick(print.printerDeviceId, printBox)">编辑</span> | <span (click)="onDeleteBtnClick(print.printerDeviceId)">删除</span></td>
         </tr>
         </tbody>
@@ -90,11 +92,11 @@
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="selected_store">选择门店</nz-form-label>
             <nz-form-control nzXs="24" nzSm="17" nzMd="17">
+                <nz-select formControlName="selected_store" nzPlaceHolder="请选择一个门店" [nzShowSearch]="true">
+                    <nz-option *ngFor="let store of stores" [nzLabel]="store.branchName" [nzValue]="store.storeId"></nz-option>
+                </nz-select>
                 <!-- <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth" (storeListPush)="storeListPush($event)"
       (storeIdOutput)="getStoreId($event)"></jn-stores-infor> -->
-                <nz-select formControlName="selected_store" nzPlaceHolder="请选择一个门店" [nzShowSearch]="true">
-                    <nz-option *ngFor="let store of stores" [nzLabel]="store.storeName" [nzValue]="store.storeId"></nz-option>
-                </nz-select>
                 <nz-form-explain class="error-color" *ngIf="selected_store.dirty && selected_store.errors">请选择门店</nz-form-explain>
             </nz-form-control>
         </nz-form-item>

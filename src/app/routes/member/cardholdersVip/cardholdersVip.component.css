@@ -60,3 +60,59 @@
     top: 10px;
     left: 0;
 }
+.STORED{
+    background: url('../../../../assets/img/cardBg1.jpg') left center no-repeat;
+}
+.REBATE{
+    background: url('../../../../assets/img/cardBg2.jpg') left center no-repeat;
+}
+.METERING{
+    background: url('../../../../assets/img/cardBg3.jpg') left center no-repeat;
+}
+.TIMES{
+    background: url('../../../../assets/img/cardBg4.jpg') left center no-repeat;
+}
+.cardBox{
+    width: 266px;
+    height: 78px;
+    border-radius: 5px;
+    margin-right: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+    position: relative;
+    margin: 0 auto;
+}
+.cardName{
+    margin: 10px 0 10px 29px;
+    font-family: PingFangSC-Regular;
+    font-size: 18px;
+    color: #fff;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    width: 144px;
+    padding-top: 10px;
+}
+.cardMoney{
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #fff;
+    margin-left: 31px;
+}
+.chongzhi{
+    position: absolute;
+    color: #fff;
+    right: 10px;
+    bottom: 10px;
+    width: 40px;
+    text-align: center;
+    height: 24px;
+    line-height: 24px;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.icon-xiala{
+    color: #ff6600;
+    cursor: pointer;
+}

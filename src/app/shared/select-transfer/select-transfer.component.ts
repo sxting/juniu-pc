@@ -20,6 +20,9 @@ export class SelectTransferComponent implements OnInit {
     public cityStoreList: any[] = []; // 数据格式转换过的门店列表
 
     @Input()
+    public allName: string; // 标题
+
+    @Input()
     public ifSelectAll: boolean = true;
 
     @Input()
@@ -31,27 +34,31 @@ export class SelectTransferComponent implements OnInit {
     @Output()
     public selectStaffNum = new EventEmitter(); //选中门店的个数
 
+    @Output()
+    public staffNames = new EventEmitter(); //选中门店的名称
+
     selectNum: number;//记录选中的数量
 
     ngOnInit() {
 
         let staffIds: any = '';
+        let staffNames: any = '';
         for (let i = 0; i < this.cityStoreList.length; i++) {
             for (let j = 0; j < this.cityStoreList[i].staffs.length; j++) {
                 if (this.cityStoreList[i].staffs[j].change === true) {
                     staffIds += ',' + this.cityStoreList[i].staffs[j].staffId;
+                    staffNames += ',' + this.cityStoreList[i].staffs[j].staffName;
                 }
             }
         }
         if (staffIds) {
             let length = staffIds.substring(1).split(',').length;
-
             this.selectNum = length;
             this.staffIds.emit({staffIds: staffIds.substring(1)});
             this.selectStaffNum.emit({selectStaffNum: length});
-
-            console.log(this.selectNum);
+            this.staffNames.emit({staffNames: staffNames.substring(1)});
         }
+        console.log(staffNames.substring(1));
         console.log(this.selectNum);
         console.log(this.allStaffNum);
         this.ifSelectAll = this.selectNum == this.allStaffNum ? true : false;
@@ -76,11 +83,13 @@ export class SelectTransferComponent implements OnInit {
     //查看全选按钮状态
     functionIfSelectAll() {
         let staffIds = '';
+        let staffNames = '';
         this.staffIds.emit({staffIds: staffIds});
         for (let i = 0; i < this.cityStoreList.length; i++) {
             for (let j = 0; j < this.cityStoreList[i].staffs.length; j++) {
                 if (this.cityStoreList[i].staffs[j].change === true) {
                     staffIds += ',' + this.cityStoreList[i].staffs[j].staffId;
+                    staffNames += ',' + this.cityStoreList[i].staffs[j].staffName;
                 }
             }
         }
@@ -90,6 +99,8 @@ export class SelectTransferComponent implements OnInit {
         this.selectNum = selectStaffNum;//记录选中的数量
         this.selectStaffNum.emit({selectStaffNum: selectStaffNum});
         this.staffIds.emit({staffIds: staffIdsInfor});
+        this.staffNames.emit({staffNames: staffNames.substring(1)});
+
         this.ifSelectAll = this.selectNum == this.allStaffNum ? true : false;
 
         if (!staffIds) {
@@ -132,6 +143,7 @@ export class SelectTransferComponent implements OnInit {
     //通过全选按钮,改变所有的门店选这种状态
     changeAllStroesStatus(event: boolean) {
         let staffIds = '';
+        let staffNames = '';
         this.staffIds.emit({staffIds: staffIds});
         for (let i = 0; i < this.cityStoreList.length; i++) {
             this.cityStoreList[i].change = event ? true : false;
@@ -141,8 +153,10 @@ export class SelectTransferComponent implements OnInit {
                 this.cityStoreList[i].staffs[j].checked = event ? true : false;
                 if (event) {//全选中
                     staffIds += ',' + this.cityStoreList[i].staffs[j].staffId;
+                    staffNames += ',' + this.cityStoreList[i].staffs[j].staffName;
                 } else {
                     staffIds = '';
+                    staffNames = ''
                 }
             }
         }
@@ -150,11 +164,13 @@ export class SelectTransferComponent implements OnInit {
             let staffIdsInfor = staffIds ? staffIds.substring(1) : '';
             let selectStaffNum = staffIds ? staffIds.substring(1).split(',').length : 0;
             this.selectStaffNum.emit({selectStaffNum: selectStaffNum});
+            this.staffNames.emit({staffNames: staffNames.substring(1)});
             this.selectNum = selectStaffNum;//记录选中的数量
             this.staffIds.emit({staffIds: staffIdsInfor});
         }else {
             this.msg.warning('请勾选,不可为空');
             this.selectStaffNum.emit({selectStaffNum: 0});
+            this.staffNames.emit({staffNames: ''});
         }
     }
 }

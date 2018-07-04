@@ -38,8 +38,8 @@ export class DefaultInterceptor implements HttpInterceptor {
   ): Observable<any> {
     // 可能会因为 `throw` 导出无法执行 `_HttpClient` 的 `end()` 操作
     this.injector.get(_HttpClient).end();
-    // 业务处理：一些通用操作
-    if (event['body']['errorCode'] === 'invalid-guest' || event['body']['errorInfo'] === '未检查到登录状态，请先登录后再进行操作') {
+    // 业务处理：一些通用操作 
+    if (event['body']['errorCode'] === 'invalid-guest'||event['body']['errorCode'] === 'invalid_token' || event['body']['errorInfo'] === '未检查到登录状态，请先登录后再进行操作') {
       this.modalSrv.closeAll()
       this.goTo('/passport/login');
     }
@@ -66,7 +66,7 @@ export class DefaultInterceptor implements HttpInterceptor {
         // }
         break;
       case 401: // 未登录状态码
-        this.goTo('/passport/login');
+        // this.goTo('/passport/login');
         break;
       case 403:
       case 404:

@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { _HttpClient, TitleService } from '@delon/theme';
 import { ManageService} from "../shared/manage.service";
-import { LocalStorageService} from "../../../shared/service/localstorage-service";
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { FunctionUtil } from "../../../shared/funtion/funtion-util";
-import { STORES_INFO ,USER_INFO } from "../../../shared/define/juniu-define";
-
+import { LocalStorageService } from '@shared/service/localstorage-service';
+import { FunctionUtil } from '@shared/funtion/funtion-util';
+// import { STORES_INFO ,USER_INFO } from "../../../shared/define/juniu-define";
 
 @Component({
   selector: 'app-wechat-notifications',
@@ -41,7 +40,6 @@ export class WechatNotificationsComponent implements OnInit {
         let self = this;
         this.staffId = this.route.snapshot.params['staffId'];//员工ID
         this.faceQRcode(this.staffId);//微信二维码
-        this.titleSrv.setTitle('微信推送');
         this.formData = {
             reportType: [self.reportTypes[0].value, [Validators.required]],
             receiveType: [self.storeNotice[0].value, [Validators.required]]
@@ -80,6 +78,7 @@ export class WechatNotificationsComponent implements OnInit {
         let self = this;
         this.loading = true;
         let batchQuery =  {
+            timestamp: new Date().getTime(),
             staffId: staffId
         };
         this.manageService.wechatPushConfig(batchQuery).subscribe(
@@ -133,7 +132,8 @@ export class WechatNotificationsComponent implements OnInit {
         let receiveType = this.form.controls.receiveType.value;
         let params = {
             pushTypeList: [ reportTypes, receiveType ],
-            staffId: this.staffId
+            staffId: this.staffId,
+            timestamp: new Date().getTime()
         };
         this.manageService.setPushWechat(params).subscribe(
             (res: any) => {

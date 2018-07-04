@@ -11,7 +11,7 @@
       <nz-form-label nzXs="24" nzSm="7">商家名称</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
         <!-- <input nz-input formControlName="name" value="'审美'" id="name" placeholder="请输入商家名称"> -->
-        <span>审美</span>
+        <span>{{userInfo.merchantName}}</span>
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
@@ -24,7 +24,7 @@
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7" nzFor="address">门店地址</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <nz-cascader [nzDisabled]="true" formControlName="address" id="address" (ngModelChange)="onChanges($event)">
+        <nz-cascader [nzDisabled]="true" formControlName="address" id="address">
         </nz-cascader>
       </nz-form-control>
     </nz-form-item>
@@ -65,7 +65,7 @@
     <nz-form-label nzXs="24" nzSm="7">展示商品</nz-form-label>
     <nz-form-control nzXs="24" nzSm="12" nzMd="10">
       <nz-switch nzCheckedChildren="开" [ngModel]="switch1" (ngModelChange)="switchFun(1)" nzUnCheckedChildren="关"></nz-switch>
-      <span>
+      <span *ngIf="switch1">
         已展示{{productIdsCount}}个商品
         <span class="setClick" (click)="shezhi(modalContent1,'对应商品')" *ngIf="switch1">点击设置></span>
       </span>
@@ -75,7 +75,7 @@
     <nz-form-label nzXs="24" nzSm="7">展示技师</nz-form-label>
     <nz-form-control nzXs="24" nzSm="12" nzMd="10">
       <nz-switch nzCheckedChildren="开" [ngModel]="switch2" (ngModelChange)="switchFun(2)" nzUnCheckedChildren="关"></nz-switch>
-      <span>
+      <span *ngIf="switch2">
         已展示{{staffIdsCount}}个技师
         <span class="setClick" (click)="shezhi(modalContent2,'对应技师')" *ngIf="switch2">点击设置></span>
       </span>
@@ -85,7 +85,7 @@
     <nz-form-label nzXs="24" nzSm="7">展示卡级</nz-form-label>
     <nz-form-control nzXs="24" nzSm="12" nzMd="10">
       <nz-switch nzCheckedChildren="开" [ngModel]="switch3" (ngModelChange)="switchFun(3)" nzUnCheckedChildren="关"></nz-switch>
-      <span>
+      <span *ngIf="switch3">
         已展示{{cardConfigRuleCount}}个卡级
         <span class="setClick" (click)="shezhi(modalContent3,'对应卡')" *ngIf="switch3">点击设置></span>
       </span>

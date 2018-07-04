@@ -4,6 +4,8 @@ import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ManageService } from '../shared/manage.service';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
+import { LocalStorageService } from '@shared/service/localstorage-service';
+import { USER_INFO, CITY_LIST } from '@shared/define/juniu-define';
 declare var AMap;
 declare var AMapUI
 @Component({
@@ -21,10 +23,14 @@ export class StoreEditComponent implements OnInit {
     adressCode: any;
     location: any;
     storeId: any;
+    userInfo = this.localStorageService.getLocalstorage(USER_INFO) ?
+        JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)) : '';
+    merchantName: any;
     constructor(private fb: FormBuilder,
         private manageService: ManageService,
         private modalSrv: NzModalService,
         private route: ActivatedRoute,
+        private localStorageService: LocalStorageService,
         private router: Router,
         private msg: NzMessageService) {
 
@@ -38,30 +44,37 @@ export class StoreEditComponent implements OnInit {
     get address() { return this.form.controls.address; }
     get Alladdress() { return this.form.controls.Alladdress; }
     ngOnInit() {
-        this.getLocationHttp();
-        this.mapFun();
         this.storeId = this.route.snapshot.params['storeId'];
+        this.merchantName = this.userInfo.merchantName;
+        this.cityArr = JSON.parse(this.localStorageService.getLocalstorage(CITY_LIST));
+        if (this.route.snapshot.params['storeId']) {
+            this.getStoreInfo(this.route.snapshot.params['storeId']);
+        }
+        this.mapFun();
     }
     submit() {
         if (!this.form.controls.storeName.value) {
             this.errAlert('请填写分店名称');
         } else if (!this.adressCode && !(this.data ? this.data.provinceCode : false)) {
             this.errAlert('请选择门店地址');
+        } else if (!this.location && !(this.data ? this.data.latitude : false)) {
+            this.errAlert('请填写门店详细地址');
+        } else {
+            let data = {
+                address: this.location ? this.location.name : this.data.address,
+                branchName: this.form.controls.storeName.value ? this.form.controls.storeName.value : this.data.branchName,
+                cityCode: this.adressCode ? this.adressCode[1] : this.data.cityCode,
+                districtCode: this.adressCode ? this.adressCode[2] : this.data.districtCode,
+                latitude: this.location ? this.location.location.lat : this.data.latitude,
+                longitude: this.location ? this.location.location.lng : this.data.longitude,
+                provinceCode: this.adressCode ? this.adressCode[0] : this.data.provinceCode,
+                timestamp: new Date().getTime(),
+                storeId: this.storeId
+            }
+            if (!this.storeId) delete data.storeId
+            if (this.storeId) this.modifyInfoFun(data)
+            else this.storeCreateHttp(data)
         }
-        let data = {
-            address: this.location ? this.location.name : this.data.address,
-            branchName: this.form.controls.storeName.value ? this.form.controls.storeName.value : this.data.branchName,
-            cityCode: this.adressCode ? this.adressCode[1] : this.data.cityCode,
-            districtCode: this.adressCode ? this.adressCode[2] : this.data.districtCode,
-            latitude: this.location ? this.location.location.lat : this.data.latitude,
-            longitude: this.location ? this.location.location.lng : this.data.longitude,
-            provinceCode: this.adressCode ? this.adressCode[0] : this.data.provinceCode,
-            timestamp: new Date().getTime(),
-            storeId: this.storeId
-        }
-        if (!this.storeId) delete data.storeId
-        if (this.storeId) this.modifyInfoFun(data)
-        else this.storeCreateHttp(data)
     }
     onChanges(values: any): void {
         this.adressCode = values;
@@ -92,15 +105,18 @@ export class StoreEditComponent implements OnInit {
         this.manageService.storeCreate(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    this.submitting = false;
-                    this.router.navigate(['/manage/storeList/storeEdit']);
+                    this.modalSrv.success({
+                        nzContent: '门店创建成功'
+                    });
+                    this.router.navigate(['/manage/storeList']);
                 } else {
-                    this.submitting = false;
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
                         nzContent: res.errorInfo
                     });
                 }
+                this.submitting = false;
+
             },
             (error) => {
                 this.msg.warning(error)
@@ -112,6 +128,9 @@ export class StoreEditComponent implements OnInit {
         this.manageService.modifyInfo(data).subscribe(
             (res: any) => {
                 if (res.success) {
+                    this.modalSrv.success({
+                        nzContent: '门店修改成功'
+                    });
                     this.router.navigate(['/manage/storeList']);
                 } else {
                     this.modalSrv.error({
@@ -125,32 +144,33 @@ export class StoreEditComponent implements OnInit {
             }
         );
     }
-    getLocationHttp() {
-        let self = this;
-        this.manageService.getLocation().subscribe(
-            (res: any) => {
-                if (res.success) {
-                    self.forEachFun(res.data.items);
-                    this.cityArr = res.data.items;
-                    if (self.route.snapshot.params['storeId']) {
-                        self.getStoreInfo(this.route.snapshot.params['storeId']);
-                    }
-                } else {
-                    this.modalSrv.error({
-                        nzTitle: '温馨提示',
-                        nzContent: res.errorInfo
-                    });
-                }
-            },
-            (error) => {
-                this.msg.warning(error)
-            }
-        );
-    }
+    // getLocationHttp() {
+    //     let self = this;
+    //     let data = {
+    //         timestamp: new Date().getTime(),
+    //     }
+    //     this.manageService.getLocation(data).subscribe(
+    //         (res: any) => {
+    //             if (res.success) {
+    //                 self.forEachFun(res.data.items);
+
+    //             } else {
+    //                 this.modalSrv.error({
+    //                     nzTitle: '温馨提示',
+    //                     nzContent: res.errorInfo
+    //                 });
+    //             }
+    //         },
+    //         (error) => {
+    //             this.msg.warning(error)
+    //         }
+    //     );
+    // }
     getStoreInfo(e) {
         let self = this;
         let data = {
-            storeId: e
+            storeId: e,
+            timestamp: new Date().getTime(),
         }
         this.manageService.storeInfo(data).subscribe(
             (res: any) => {
@@ -230,8 +250,10 @@ export class StoreEditComponent implements OnInit {
 
             marker.setPosition(poi.location);
             infoWindow.setPosition(poi.location);
+            let str = JSON.stringify(info, null, 2)
+            let str1 = str.substr(1, str.length - 2);
 
-            infoWindow.setContent('地址: <pre>' + JSON.stringify(info, null, 2) + '</pre>');
+            infoWindow.setContent('<pre>' + str1 + '</pre>');
             infoWindow.open(map, marker.getPosition());
 
             //map.setCenter(marker.getPosition());
@@ -244,27 +266,7 @@ export class StoreEditComponent implements OnInit {
 
 
     }
-    forEachFun(arr: any, arr2?: any) {
-        let that = this;
-        arr.forEach(function (i: any) {
-            i.value = i.code;
-            i.label = i.name;
-            that.forEachFun2(i);
-        })
-    }
-    forEachFun2(arr: any) {
-        let that = this;
-        if (arr.hasSubset) {
-            arr.subset.forEach(function (n: any) {
-                n.value = n.code;
-                n.label = n.name;
-                that.forEachFun2(n);
-            })
-            arr.children = arr.subset;
-        } else {
-            arr.isLeaf = true;
-        }
-    }
+
     errAlert(err) {
         this.modalSrv.error({
             nzTitle: '温馨提示',

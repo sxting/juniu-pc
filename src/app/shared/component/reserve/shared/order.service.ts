@@ -179,7 +179,7 @@ export class OrderService {
 
   //预约设置 === 查询门店商品列表
   getProductList(Params: any) {
-    let apiUrl = this.api2 + '/product/list.json';
+    let apiUrl = this.api2 + '/product/products.json';
     return this.http.get(apiUrl, Params)
       .map((response: Response) => response)
       .catch(error => {
@@ -189,13 +189,22 @@ export class OrderService {
 
   //预约设置、请假、预约 === 查询手艺人列表
   getCraftsmanList(Params: any) {
-    let apiUrl = this.api3 + '/staff/reserveStaffList.json';
+    let apiUrl = Config.API1 + 'account/merchant/staff/reserveStaffList.json';
+    Params.timestamp = new Date().getTime();
     return this.http.get(apiUrl, Params)
       .map((response: Response) => response)
       .catch(error => {
         return Observable.throw(error);
       });
   }
+  // getCraftsmanList(Params: any) {
+  //   let apiUrl = this.api3 + '/staff/reserveStaffList.json';
+  //   return this.http.get(apiUrl, Params)
+  //     .map((response: Response) => response)
+  //     .catch(error => {
+  //       return Observable.throw(error);
+  //     });
+  // }
 
   //预约设置 === 保存手艺人商品
   saveCraftsmanProduct(Params: any) {

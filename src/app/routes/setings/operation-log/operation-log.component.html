@@ -1,66 +1,68 @@
 <page-header></page-header>
 <nz-card [nzBordered]="false" [nzBodyStyle]="{'padding.px': 12}">
-    <nz-tabset>
-        <nz-tab nzTitle="系统数据修改">
+    <nz-tabset (nzSelectChange)="typeChange($event)">
+        <nz-tab nzTitle="系统数据修改" nzValue="SYSTEM_DATA">
         </nz-tab>
-        <nz-tab nzTitle="后台管理设置">
+        <nz-tab nzTitle="后台管理设置" nzValue="MANAGE_SETTING">
         </nz-tab>
     </nz-tabset>
 </nz-card>
-<div class="seachbox" style="">
-    <span>
-        <span>选择日期:</span>
-        <span></span>
-    </span>
-    <span>
-        <span>选择门店:</span>
-        <span>
-            <nz-select style="width:100px;" [nzPlaceHolder]="'请选择'" [nzShowSearch]="true">
-                <nz-option [nzLabel]="'hehe1'" [nzValue]="1"></nz-option>
-                <nz-option [nzLabel]="'hehe2'" [nzValue]="2"></nz-option>
-                <nz-option [nzLabel]="'hehe3'" [nzValue]="3"></nz-option>
-            </nz-select>
-        </span>
-    </span>
-    <span>
-        <span>操作人:</span>
-        <span>
-            <nz-select style="width:100px;" [nzPlaceHolder]="'请选择'" [nzShowSearch]="true">
-                <nz-option [nzLabel]="'hehe1'" [nzValue]="1"></nz-option>
-                <nz-option [nzLabel]="'hehe2'" [nzValue]="2"></nz-option>
-                <nz-option [nzLabel]="'hehe3'" [nzValue]="3"></nz-option>
-            </nz-select>
-        </span>
-    </span>
-    <span>
-        <span>操作类型:</span>
-        <span>
-            <nz-select style="width:100px;" [nzPlaceHolder]="'请选择'" [nzShowSearch]="true">
-                <nz-option [nzLabel]="'hehe1'" [nzValue]="1"></nz-option>
-                <nz-option [nzLabel]="'hehe2'" [nzValue]="2"></nz-option>
-                <nz-option [nzLabel]="'hehe3'" [nzValue]="3"></nz-option>
-            </nz-select>
-        </span>
-    </span>
+<div class="seachbox" style="display: flex;flex-wrap: wrap;">
+    <div style="width:300px">
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7">选择日期</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="17">
+                <nz-date-picker style="width:200px" [(ngModel)]="date" (ngModelChange)="onChange($event)"></nz-date-picker>
+            </nz-form-control>
+        </nz-form-item>
+    </div>
+    <!-- <div style="width:400px">
+        <jn-stores-infor  [nzXs]="24" [nzSm1]="7" [nzSm2]="17" style="width: 400px;display:inline-block !important;" [moduleId]="moduleId" [ifStoresAll]="false" [ifStoresAuth]="true"
+            (storeIdOutput)="selectStoreInfo($event.storeId)"></jn-stores-infor>
+    </div> -->
+    <div style="width:300px">
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7">操作人</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="17">
+                <nz-select style="width:172px" [(ngModel)]="operationId" [nzPlaceHolder]="'请选择'" (ngModelChange)="staffChange($event)" [nzShowSearch]="true">
+                    <nz-option *ngFor="let item of staffList" [nzLabel]="item.staffName" [nzValue]="item.staffId"></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+    </div>
+    <div style="width:300px">
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7">操作类型</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="17">
+                <nz-select style="width:172px;" [(ngModel)]="operationType" [nzPlaceHolder]="'请选择'" (ngModelChange)="operationTypeChange($event)"
+                    [nzShowSearch]="true">
+                    <nz-option *ngFor="let item of operationTypeList" [nzLabel]="item.typeName" [nzValue]="item.typeCode"></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+    </div>
 </div>
 <div class="tableBox">
-    <nz-table #basicTable [nzShowPagination]="false" [nzData]="data">
+    <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="data">
         <thead>
             <tr>
                 <th>操作时间</th>
                 <th>操作类型</th>
                 <th>操作人</th>
                 <th>操作门店</th>
-                <th>修改参数</th>
+                <th>{{logType === 'SYSTEM_DATA'?'操作字段名称':'修改参数'}}</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let item of data">
-                <td>{{item.customerId}}</td>
-                <td>{{item.birthday}}</td>
-                <td>{{item.customerName}}</td>
-                <td>{{item.genderName}}</td>
-                <td>{{item.phone}}</td>
+                <td>{{item.operationDate}}</td>
+                <td>{{item.operationType}}</td>
+                <td>{{item.operator}}</td>
+                <td>{{item.storeId}}</td>
+                <td>
+                    <button nz-button  (click)="ckxq(modalContent3,item.content)">查看详情</button>
+                    <!-- <button [nzTitle]="item.content" nzPlacement="left" nz-button nz-tooltip></button> -->
+                </td>
             </tr>
         </tbody>
     </nz-table>
@@ -68,3 +70,7 @@
         <nz-pagination class="nzPagination" [nzTotal]="Total" [nzPageSize]="10" (nzPageIndexChange)="getData($event)"></nz-pagination>
     </div>
 </div>
+
+<ng-template #modalContent3>
+    <div style="word-wrap: break-word;">{{content}}</div>
+</ng-template>

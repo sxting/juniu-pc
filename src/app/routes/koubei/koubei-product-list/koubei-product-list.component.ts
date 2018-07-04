@@ -5,8 +5,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { KoubeiService } from "../shared/koubei.service";
 import { DomSanitizer } from '@angular/platform-browser';
 import { LocalStorageService } from '@shared/service/localstorage-service';
-import { REFRESH, STORES_INFO } from '@shared/define/juniu-define';
+import { APP_TOKEN } from '@shared/define/juniu-define';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
+import { Config } from '@shared/config/env.config';
 declare var QRCode: any;
 declare var GoEasy: any;
 
@@ -28,7 +29,7 @@ export class KoubeiProductListComponent implements OnInit {
     koubeiProductListInfor: any = [];//口碑商品列表信息
     isVisible = false;//是否显示弹框
 
-  //门店
+    //门店
     storeList: any[] = [];//门店列表
     expandForm = false;
     storeId: string = '';//门店
@@ -41,10 +42,11 @@ export class KoubeiProductListComponent implements OnInit {
 
     //刷新商品按钮
     alipayPid: string;
+    imgQrcodeUrl: string = Config.API1 + 'account/merchant/manage/aliAuthorizationQRCode.img' +
+      `?token=${this.localStorageService.getLocalstorage(APP_TOKEN)}`;
     ifAlipayPidShow: boolean = false;
     merchantLogin: boolean = false;//商家登录
     providerLogin: boolean = false;//服务商登录
-
 
     constructor(
         private http: _HttpClient,
@@ -69,34 +71,22 @@ export class KoubeiProductListComponent implements OnInit {
     ngOnInit() {
         let self = this;
         //门店列表
-        if (this.localStorageService.getLocalstorage(STORES_INFO) && JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
-            let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-                JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-            let list = {
-              storeId: '',
-              storeName: '全部门店'
-            };
-            storeList.splice(0, 0, list);//给数组第一位插入值
-            this.storeList = storeList;
-            this.storeId = '';
-        }
+        let storeList = JSON.parse(this.localStorageService.getLocalstorage('alipayShops')) ?
+          JSON.parse(this.localStorageService.getLocalstorage('alipayShops')) : [];
+        let list = {
+          shopId: '',
+          shopName: '全部门店'
+        };
+        storeList.splice(0, 0, list);//给数组第一位插入值
+        this.storeList = storeList;
+        this.storeId = '';
 
         let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
             JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
-
         this.alipayPid = UserInfo.alipayPid;
         this.ifAlipayPidShow = this.alipayPid === '' || this.alipayPid === null ? false : true;
-
-        let Refresh = this.localStorageService.getLocalstorage('Refresh') ?  this.localStorageService.getLocalstorage('Refresh') : '';
-
-        if(this.alipayPid&&Refresh == ''){
-          this.refreshProductList();
-          this.localStorageService.setLocalstorage(REFRESH, true);
-        }else {
-          // 请求口碑商品列表
-          this.getKoubeiProductListInfor(this.batchQuery);
-        }
-
+        // 请求口碑商品列表
+        this.getKoubeiProductListInfor(this.batchQuery);
         //检查商家登陆还是服务商登陆
         if(UserInfo.alipayOperatorType){
             if(UserInfo.alipayOperatorType == 'MERCHANT'||UserInfo.alipayOperatorType == 'MER_STAFF'){//商家
@@ -109,22 +99,26 @@ export class KoubeiProductListComponent implements OnInit {
         }else {//如果是空串的话默认为服务商登陆
             this.providerLogin = true;
         }
-
-        // this.isVisible = true;//关联口碑账号
-        let Pid = 'BINDING_ALIPAY_' + this.alipayPid;
-        var goEasy = new GoEasy({
-          appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
-        });
-        goEasy.subscribe({
-          channel: Pid,
-          onMessage: function (message) {
-            console.log(message);
-          }
-        });
-
+        // this.isVisible = this.alipayPid? false : true;//关联口碑账号
+        // if(this.isVisible){
+        //   let Pid = 'BINDING_ALIPAY_' + this.alipayPid;
+        //   var goEasy = new GoEasy({
+        //     appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
+        //   });
+        //   goEasy.subscribe({
+        //     channel: Pid,
+        //     onMessage: function (message) {
+        //       console.log(message);
+        //     }
+        //   });
+        // }else{
+        //   this.isVisible = false;
+        // }
     }
 
     /**************************页面基础操作开始*********************************/
+
+    handleCancel(): void { this.isVisible = false; }//关闭关联口碑账号的弹框
 
     //删除下架商品
     delete(id: any){
@@ -147,9 +141,7 @@ export class KoubeiProductListComponent implements OnInit {
             self.createQrcode(index, id);
         }, 50);
     }
-    hideQrcode() {
-        this.activeIndex = 0;
-    }
+    hideQrcode() {  this.activeIndex = 0; }
 
     //复制商品
     copyProduct(itemId: string) {

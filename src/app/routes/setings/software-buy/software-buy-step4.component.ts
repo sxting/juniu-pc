@@ -40,11 +40,13 @@ export class SoftBuyStep4Component implements OnInit {
       company: this.company,
       dutyParagraph: this.dutyParagraph,
       address: this.address,
-      contactPhone: this.contactPhone
+      contactPhone: this.contactPhone,
+      orderNo: this.item.orderNo
     };
     this.setingsService.packageInvoice(data).subscribe(
       (res: any) => {}
     );
+    this.item.step = 0;
     this.router.navigate(['/manage/storeList', {}])
   }
 }

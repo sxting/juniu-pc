@@ -1,18 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import { SetingsService } from '../shared/setings.service';
 import { NzModalService, NzMessageService } from 'ng-zorro-antd';
 import { TemplateRef } from '@angular/core';
+import { OnChanges } from '@angular/core';
 declare var DataSet;
 declare var echarts;
-
+declare var GoEasy: any;
 
 @Component({
     selector: 'app-msm-notice',
     templateUrl: './msm-notice.component.html',
     styleUrls: ['./msm-notice.component.less']
 })
-export class MsmNoticeComponent implements OnInit {
+export class MsmNoticeComponent implements OnInit, OnChanges, OnDestroy {
     data: any = [
         { x: new Date(), y1: 3, y2: 3 },
         { x: new Date(), y1: 4, y2: 3 },
@@ -25,26 +26,6 @@ export class MsmNoticeComponent implements OnInit {
     salesData: any[] = [];
     offlineChartData: any[] = [];
     sevenDayFlowData: any = [
-        { "x": 1523349874964, "y1": 68, "y2": 21 },
-        { "x": 1523351674964, "y1": 72, "y2": 57 },
-        { "x": 1523353474964, "y1": 25, "y2": 83 },
-        { "x": 1523355274964, "y1": 33, "y2": 98 },
-        { "x": 1523357074964, "y1": 25, "y2": 64 },
-        { "x": 1523358874964, "y1": 51, "y2": 13 },
-        { "x": 1523360674964, "y1": 12, "y2": 27 },
-        { "x": 1523362474964, "y1": 85, "y2": 37 },
-        { "x": 1523364274964, "y1": 17, "y2": 20 },
-        { "x": 1523366074964, "y1": 49, "y2": 64 },
-        { "x": 1523367874964, "y1": 26, "y2": 23 },
-        { "x": 1523369674964, "y1": 64, "y2": 68 },
-        { "x": 1523371474964, "y1": 64, "y2": 87 },
-        { "x": 1523373274964, "y1": 63, "y2": 68 },
-        { "x": 1523375074964, "y1": 78, "y2": 35 },
-        { "x": 1523376874964, "y1": 89, "y2": 29 },
-        { "x": 1523378674964, "y1": 101, "y2": 104 },
-        { "x": 1523380474964, "y1": 49, "y2": 89 },
-        { "x": 1523382274964, "y1": 90, "y2": 43 },
-        { "x": 1523384074964, "y1": 25, "y2": 29 }
     ];
     dateUnit: any;
     startDay: any;
@@ -63,11 +44,13 @@ export class MsmNoticeComponent implements OnInit {
     dataNote: any;
     radioValue: any;
     temBoolean = false;
-
-
     result: any;
     payType: any = '';
     codeImgUrl: any = '';
+    amount: any;
+    orderNo: any;
+    packageName: any;
+    goEasy: any
     constructor(
         private setingsService: SetingsService,
         public msg: NzMessageService,
@@ -76,13 +59,39 @@ export class MsmNoticeComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.smsStatisticsHttp();
+        // this.smsStatisticsHttp();
+        this.console2({ index: 0 })
         this.configQueryHttp();
         this.smsListHttp();
+        this.goEasy = new GoEasy({
+            appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
+        });
+    }
+    ngOnChanges() {
+        if (this.orderNo) {
+            let goEasy = new GoEasy({
+                appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
+            });
+
+            goEasy.subscribe({
+                channel: 'SMS_PACKAGE_' + this.orderNo,
+                onMessage: (message: any) => {
+                    console.log(message);
+                    if (confirm(message.content)) {
+                        this.modalSrv.closeAll();
+                        this.msg.success('充值成功');
+                    }
+                }
+            });
+        }
+    }
+    ngOnDestroy() {
+        clearInterval(this.timer);
     }
     onPayWayClick(type: any) {
         if (!this.payType) {
             this.payType = type;
+            clearInterval(this.timer);
             this.getPayUrl();
         }
     }
@@ -106,7 +115,7 @@ export class MsmNoticeComponent implements OnInit {
                 type: 'value'
             },
             series: [{
-                smooth: true,
+                name: '',
                 data: data2,
                 type: 'line',
                 areaStyle: {
@@ -156,11 +165,11 @@ export class MsmNoticeComponent implements OnInit {
                     this.surplusNumber = res.data.surplusNumber || 0;
                     if (res.data.configList) {
                         if (res.data.configList.indexOf('NOTICE_OPENCARD') > -1) this.openCard = true;
-                        if (res.data.configList.indexOf('NOTICE_RECHARGE') > -1) this.recharge = true;
+                        if (res.data.configList.indexOf('NOTICE_RECARGE') > -1) this.recharge = true;
                         if (res.data.configList.indexOf('NOTICE_CONSUME') > -1) this.consume = true;
                         if (res.data.configList.indexOf('RESERVE_TO_MERCHANT') > -1) this.reserveRemind = true;
                         if (res.data.configList.indexOf('RESERVE_SUCCESS_CUSTOMER') > -1) this.reserveSuccess = true;
-                        if (res.data.configList.indexOf('RESERVE_RSFUSE_CUSTOMER') > -1) this.reserveRefuse = true;
+                        if (res.data.configList.indexOf('RESERVE_REFUSE_CUSTOMER') > -1) this.reserveRefuse = true;
                     }
                 } else {
                     this.modalSrv.error({
@@ -276,23 +285,28 @@ export class MsmNoticeComponent implements OnInit {
         this.modalSrv.create({
             nzTitle: '请选择一个短信包',
             nzContent: tpl,
-            nzWidth: '800px',
+            nzWidth: '600px',
             nzOnOk: () => {
+                that.temBoolean = false;
+                clearInterval(that.timer);
             },
             nzOnCancel: () => {
                 that.temBoolean = false;
+                clearInterval(that.timer);
             }
         });
     }
-    radioFun() {
-        this.temBoolean = true;
+    radioFun(packageId: any) {
+        this.temBoolean = false;
+        this.payType = '';
+        this.smsRechargeHttp(packageId);
     }
     smsListHttp() {
         let that = this;
-        this.setingsService.smsBatch().subscribe(
+        this.setingsService.merchantsmsBatch().subscribe(
             (res: any) => {
                 if (res) {
-                    that.dataNote = res.data;
+                    that.dataNote = res.data.items;
                 }
             },
             error => {
@@ -308,6 +322,11 @@ export class MsmNoticeComponent implements OnInit {
         this.setingsService.smsRecharge(data).subscribe(
             (res: any) => {
                 if (res) {
+                    this.amount = res.data.price;
+                    this.orderNo = res.data.orderNo;
+                    this.packageName = res.data.packageName;
+
+                    this.temBoolean = true;
                 }
             },
             error => {
@@ -316,29 +335,32 @@ export class MsmNoticeComponent implements OnInit {
         );
     }
 
-
+    timer: any;
     //获取支付二维码
     getPayUrl() {
         let data = {
-            smsPackageId: this.radioValue,
-            type: this.payType, //支付方式
+            amount: this.amount,
+            payType: this.payType, //支付方式
+            orderNo: this.orderNo,
+            body: this.packageName,
             timestamp: new Date().getTime()
         };
-        this.setingsService.buySmsPackage(data).subscribe(
+        let that = this;
+        this.setingsService.payUrl(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     this.codeImgUrl = res.data.codeImgUrl;
                     let self = this, time = 0;
-                    let timer = setInterval(function () {
+                    this.timer = setInterval(function () {
                         time += 3000;
-                        if (time >= 6000) {
+                        if (time >= 60000) {
                             self.modalSrv.error({
                                 nzTitle: '温馨提示',
                                 nzContent: '支付超时'
                             });
-                            clearInterval(timer);
+                            clearInterval(that.timer);
                         }
-                        self.getPayUrlQuery();
+                        self.getPayUrlQuery(self.orderNo);
                     }, 3000)
                 } else {
                     this.modalSrv.error({
@@ -351,16 +373,33 @@ export class MsmNoticeComponent implements OnInit {
     }
 
     //查询支付结果
-    getPayUrlQuery() {
+    getPayUrlQuery(orderNo) {
         let data = {
-            orderId: this.result.orderNo,
+            orderId: orderNo,
         };
         this.setingsService.getPayUrlQuery(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    //描述:查询支付二维码 订单的支付状态tradeState: SUCCESS—支付成功 REFUND—转入退款 NOTPAY—未支付 CLOSED—已关闭 REVERSE—已冲正 REVOK—已撤销
+                    //描述:查询支付二维码 订单的支付状态tradeState: SUCCESS—支付成功 REFUND—转入退款 NOTPAY—未支付 CLOSED—已关闭 REVERSE—已冲正 REVOK—已撤销 
                     if (res.data.tradeState === 'SUCCESS') {
+                        clearInterval(this.timer);
+                        this.modalSrv.closeAll();
                         this.msg.success('支付成功');
+                        this.configQueryHttp();
+                        console.log(orderNo);
+                        // this.goEasy.subscribe({
+                        //     channel: 'SMS_PACKAGE_' + orderNo,
+                        //     onMessage: (message: any) => {
+                        //         console.log(message);
+                        //         if (confirm(message.content)) {
+                        //             this.msg.success('充值成功');
+                        //         }
+                        //     }
+                        // });
+                    }
+                    if (res.data.tradeState === 'CLOSED' || res.data.tradeState === 'REVOK') {
+                        clearInterval(this.timer);
+                        this.modalSrv.closeAll();
                     }
                 } else {
                     this.modalSrv.error({

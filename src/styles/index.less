@@ -1,5 +1,6 @@
 // 建议所有项目自定义样式放在该文件夹下
 @import 'node_modules/@delon/theme/styles/default';
+@primary-color:#ff7700;
 ul, li {
   list-style: none;
   margin:0;
@@ -22,7 +23,10 @@ button {
 .dis-inb {
   display: inline-block;
 }
-
+.mg-b20 {
+  margin-bottom: 20px;
+  height: 5px;
+}
 .clearfix:after {
   content: '';
   display: block;
@@ -65,7 +69,7 @@ button {
   float: left;
 }
 .img-box:hover{
-  border: 1px dashed #1890ff;
+  border: 1px dashed #ff7700;
 }
 .pics_box .img-box:last-child{
   margin-right: 0px;
@@ -102,4 +106,6 @@ button {
 .msmTab .ant-tabs-tab {
   margin: 0 !important;
 }
-
+.storeList .ant-table{
+  line-height: 0.5 !important;
+}

@@ -22,6 +22,7 @@ export class MarketingsPageComponent implements OnInit {
     isEdit: boolean = false;
 
     paramsId: string = '';
+    paramsIdNumber: number;
     pageHeader1: string = '';
     pageHeader2: string = '';
     pageDesc: string = '';
@@ -75,6 +76,8 @@ export class MarketingsPageComponent implements OnInit {
     giftProductList: any = []; //礼品列表
     selectedGiftProduct: any = '赠送礼品名称';
 
+    selectedProductName: string = ''; //单品券活动 指定商品名称  用于优惠券显示;
+
     //选择优惠券
     couponTypeTab: any = 'all'; //选择优惠券类型
     couponList: any = [];
@@ -105,12 +108,15 @@ export class MarketingsPageComponent implements OnInit {
     memberType: any = 'ALL';
 
     disabledDate = (current: Date): boolean => {
-        return differenceInDays(current, new Date(new Date().getTime() + 24*60*60*1000)) < 0;
+        // return differenceInDays(current, new Date(new Date().getTime() + 24*60*60*1000)) < 0;
+        return differenceInDays(current, new Date(new Date().getTime())) < 0;
     };
 
     //编辑
     marketingId: any = '';
     marketingStatus: any = '';
+
+  moduleId: any = '';
 
     constructor(
         private route: ActivatedRoute,
@@ -124,8 +130,10 @@ export class MarketingsPageComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.titleService.setTitle(decodeURIComponent(this.route.snapshot.params['name']));
+      this.moduleId = this.route.snapshot.params['menuId'];
+
         this.paramsId = this.route.snapshot.params['id'];
+        this.paramsIdNumber = parseInt(this.paramsId);
         this.marketingId = this.route.snapshot.params['marketingId'] ? this.route.snapshot.params['marketingId'] : '';
 
         if(this.paramsId.indexOf('0') >= 0) {
@@ -136,11 +144,11 @@ export class MarketingsPageComponent implements OnInit {
         this.pageHeader2 = decodeURIComponent(this.route.snapshot.params['name']);
         this.pageDesc = decodeURIComponent(this.route.snapshot.params['desc']);
 
-        if(JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['staffType'] == 'STORE') {
-            let store: any = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-                JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-            this.storeId = store[0].storeId ? store[0].storeId : '';
-        }
+        // if(JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['staffType'] == 'STORE') {
+        //     let store: any = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
+        //         JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
+        //     this.storeId = store[0].storeId ? store[0].storeId : '';
+        // }
         this.merchantId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['merchantId'];
 
         if(this.paramsId == '05' || this.paramsId == '06' || this.paramsId == '12' || this.paramsId == '13') {
@@ -150,7 +158,8 @@ export class MarketingsPageComponent implements OnInit {
             }
         }
         if(this.paramsId == '07') {
-            this.couponType = '4'
+            this.couponType = '4'; //创建优惠券
+            this.couponTypeTab = 'lipinquan'; //选择优惠券
         } else if(this.paramsId == '08') {
             this.couponType = '3'
         } else if(this.paramsId == '09') {
@@ -170,12 +179,23 @@ export class MarketingsPageComponent implements OnInit {
         }
 
         if(this.marketingId) {
-            this.getThreeCoupons();
+            // this.getThreeCoupons();
             this.editFormInit();
         } else {
             this.formInit();
         }
     }
+
+  onSelectStoreChange(e: any) {
+    if(JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['staffType'] == 'STORE') {
+      let store: any = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
+        JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
+      this.storeId = e.storeId;
+    }
+    if(this.marketingId) {
+      this.getThreeCoupons();
+    }
+  }
 
     //活动对象
     onActivityObjClick(type: string) {
@@ -344,6 +364,11 @@ export class MarketingsPageComponent implements OnInit {
         this.couponUseEndDay = this.couponUseEndDate.year + '.' + this.couponUseEndDate.date.replace('-', '.');
     }
 
+    //单品券选择指定商品  (用于优惠券的展示)
+    selectedProductChange(e: any) {
+        this.selectedProductName = e.productName;
+    }
+
     //选择礼品
     onSelectGiftChange(e: any) {
         this.selectedGiftProduct = e.productName;
@@ -468,7 +493,8 @@ export class MarketingsPageComponent implements OnInit {
         let data: any;
         let sendTime: any = '';
         if(this.form.value.sms_send_date && this.form.value.sms_send_time) {
-            sendTime = FunctionUtil.changeDate(this.form.value.sms_send_date) + ' ' + (this.form.value.sms_send_time.getHours()) + ':00:00';
+          console.log(sendTime);
+          sendTime = FunctionUtil.changeDate(this.form.value.sms_send_date) + ' ' + (this.form.value.sms_send_time.getHours()) + ':00:00';
             if(new Date(FunctionUtil.changeDate(this.form.value.sms_send_date) + ' 00:00:00').getTime() < new Date((FunctionUtil.changeDate(this.nowTime) + ' 00:00:00')).getTime()) {
                 sendTime = FunctionUtil.changeDate(this.nowTime) + ' ' + (new Date().getHours()+1) + ':00:00';
             } else if(FunctionUtil.changeDate(this.form.value.sms_send_date) === FunctionUtil.changeDate(new Date()) && this.form.value.sms_send_time.getHours() <= new Date().getHours()) {
@@ -483,7 +509,9 @@ export class MarketingsPageComponent implements OnInit {
                 marketingName: this.form.value.activity_name, //活动名称 *
                 applyStoreIds: this.selectStoresIds, //门店id *
                 applyStoreNames: this.selectStoresNames, //门店名称 *
-                festival: FunctionUtil.changeDate(this.form.value.sms_send_date), //发送时间 * sendTime: "2018-05-22"
+                // festival: FunctionUtil.changeDate(this.form.value.sms_send_date), //发送时间 * sendTime: "2018-05-22"
+                marketingStartTime: FunctionUtil.changeDate(this.form.value.active_date[0]) + ' 00:00:00', //活动开始时间
+                marketingEndTime:  FunctionUtil.changeDate(this.form.value.active_date[1]) + ' 23:59:59', //活动结束时间
                 pullLimitType: 'UNLIMIT', //领券限制类型 UNLIMIT("无限制"),TOTAL("总数量"),目前均是无限制
                 couponDefId: this.couponId,
                 marketingId: this.marketingId,
@@ -501,7 +529,7 @@ export class MarketingsPageComponent implements OnInit {
                 applyStoreNames: this.selectStoresNames, //门店名称 *
                 marketingStartTime: FunctionUtil.changeDate(this.form.value.active_date[0]) + ' 00:00:00', //活动开始时间
                 marketingEndTime:  FunctionUtil.changeDate(this.form.value.active_date[1]) + ' 23:59:59', //活动结束时间
-                sendTime: sendTime, //发送时间 * sendTime: "2018-05-22 15:00:00"
+                // sendTime: sendTime, //发送时间 * sendTime: "2018-05-22 15:00:00"
                 pullLimitType: 'UNLIMIT', //领券限制类型 UNLIMIT("无限制"),TOTAL("总数量"),目前均是无限制
                 couponDefId: this.couponId,
                 marketingId: this.marketingId,
@@ -666,10 +694,10 @@ export class MarketingsPageComponent implements OnInit {
                     let disabledWeekDateArr = data.couponDef.disabledWeekDate.split(',');
                     this.selectedWeek1 = this.weekText(disabledWeekDateArr[0]);
                     this.selectedWeek2 = this.weekText(disabledWeekDateArr[disabledWeekDateArr.length-1]);
-                    this.unUseStartTime = (new Date(data.couponDef.validDateStart).getHours().toString().length < 2 ? ('0'+ new Date(data.couponDef.validDateStart).getHours()) : new Date(data.couponDef.validDateStart).getHours()) + ':' +
-                      (new Date(data.couponDef.validDateStart).getMinutes().toString().length < 2 ? ('0' + new Date(data.couponDef.validDateStart).getMinutes()) : new Date(data.couponDef.validDateStart).getMinutes());
-                    this.unUseEndTime = (new Date(data.couponDef.validDateEnd).getHours().toString().length < 2 ? ('0'+ new Date(data.couponDef.validDateEnd).getHours()) : new Date(data.couponDef.validDateEnd).getHours()) + ':' +
-                      (new Date(data.couponDef.validDateEnd).getMinutes().toString().length < 2 ? ('0' + new Date(data.couponDef.validDateEnd).getMinutes()) : new Date(data.couponDef.validDateEnd).getMinutes());
+                    this.unUseStartTime = (new Date(data.couponDef.disabledTimeStart).getHours().toString().length < 2 ? ('0'+ new Date(data.couponDef.disabledTimeStart).getHours()) : new Date(data.couponDef.disabledTimeStart).getHours()) + ':' +
+                      (new Date(data.couponDef.disabledTimeStart).getMinutes().toString().length < 2 ? ('0' + new Date(data.couponDef.disabledTimeStart).getMinutes()) : new Date(data.couponDef.disabledTimeStart).getMinutes());
+                    this.unUseEndTime = (new Date(data.couponDef.disabledTimeEnd).getHours().toString().length < 2 ? ('0'+ new Date(data.couponDef.disabledTimeEnd).getHours()) : new Date(data.couponDef.disabledTimeEnd).getHours()) + ':' +
+                      (new Date(data.couponDef.disabledTimeEnd).getMinutes().toString().length < 2 ? ('0' + new Date(data.couponDef.disabledTimeEnd).getMinutes()) : new Date(data.couponDef.disabledTimeEnd).getMinutes());
 
                     this.form = this.fb.group({
                         activity_obj_days: [{value: data.lastConsume, disabled: !(data.marketingStatus === 'INIT')}, this.paramsId=='01'||this.paramsId=='02'?[Validators.compose([Validators.required, Validators.pattern(`[0-9]+`)])]:[]],
@@ -932,10 +960,10 @@ export class MarketingsPageComponent implements OnInit {
                         let disabledWeekDateArr = item.disabledWeekDate.split(',');
                         item.selectedWeek1 = self.weekText(disabledWeekDateArr[0]);
                         item.selectedWeek2 = self.weekText(disabledWeekDateArr[disabledWeekDateArr.length-1]);
-                        item.unUseStartTime = (new Date(item.validDateStart).getHours().toString().length < 2 ? ('0'+ new Date(item.validDateStart).getHours()) : new Date(item.validDateStart).getHours()) + ':' +
-                          (new Date(item.validDateStart).getMinutes().toString().length < 2 ? ('0' + new Date(item.validDateStart).getMinutes()) : new Date(item.validDateStart).getMinutes());
-                        item.unUseEndTime = (new Date(item.validDateEnd).getHours().toString().length < 2 ? ('0'+ new Date(item.validDateEnd).getHours()) : new Date(item.validDateEnd).getHours()) + ':' +
-                          (new Date(item.validDateEnd).getMinutes().toString().length < 2 ? ('0' + new Date(item.validDateEnd).getMinutes()) : new Date(item.validDateEnd).getMinutes());
+                        item.unUseStartTime = (new Date(item.disabledTimeStart).getHours().toString().length < 2 ? ('0'+ new Date(item.disabledTimeStart).getHours()) : new Date(item.disabledTimeStart).getHours()) + ':' +
+                          (new Date(item.disabledTimeStart).getMinutes().toString().length < 2 ? ('0' + new Date(item.disabledTimeStart).getMinutes()) : new Date(item.disabledTimeStart).getMinutes());
+                        item.unUseEndTime = (new Date(item.disabledTimeEnd).getHours().toString().length < 2 ? ('0'+ new Date(item.disabledTimeEnd).getHours()) : new Date(item.disabledTimeEnd).getHours()) + ':' +
+                          (new Date(item.disabledTimeEnd).getMinutes().toString().length < 2 ? ('0' + new Date(item.disabledTimeEnd).getMinutes()) : new Date(item.disabledTimeEnd).getMinutes());
                     });
                 } else {
                     this.modalSrv.error({
@@ -952,6 +980,7 @@ export class MarketingsPageComponent implements OnInit {
         let data = {
             merchantId: this.merchantId,
         };
+        this.localStorageService.setLocalstorage('productListInit', '');
         this.marketingService.getAllProducts(data).subscribe(
             (res: any) => {
                 if(res.success) {
@@ -963,7 +992,8 @@ export class MarketingsPageComponent implements OnInit {
                             idsArr.push(item.categoryId)
                         }
                     });
-                    idsArr.forEach(function (categoryId: any) {
+                  this.productList =[];
+                  idsArr.forEach(function (categoryId: any) {
                         self.productList.push({
                             categoryId: categoryId,
                             categoryName: '',
@@ -1085,8 +1115,8 @@ export class MarketingsPageComponent implements OnInit {
             send_menkan: [null, this.paramsId=='07' || this.paramsId=='08' || this.paramsId == '09' ? [Validators.compose([Validators.required, Validators.pattern(`[0-9]+`)])]:[] ],
             sms_content: ['', []],
             active_date: [null, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' ? [] : [Validators.required]],
-            sms_send_date: [null, this.paramsId == '03' ? [] : [Validators.required]],
-            sms_send_time: [null, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' ? [] : [Validators.required]],
+            sms_send_date: [null, this.paramsId == '03' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' ? [] : [Validators.required]],
+            sms_send_time: [null, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' ? [] : [Validators.required]],
         });
 
         this.form2 = this.fb.group({
@@ -1112,8 +1142,8 @@ export class MarketingsPageComponent implements OnInit {
             send_menkan: [null, this.paramsId=='07' || this.paramsId=='08' || this.paramsId == '09' ? [Validators.compose([Validators.required, Validators.pattern(`[0-9]+`)])]:[] ],
             sms_content: ['', []],
             active_date: [null, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' ? [] : [Validators.required]],
-            sms_send_date: [null, this.paramsId == '03' ? [] : [Validators.required]],
-            sms_send_time: [null, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' ? [] : [Validators.required]],
+            sms_send_date: [null, this.paramsId == '03' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' ? [] : [Validators.required]],
+            sms_send_time: [null, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' ? [] : [Validators.required]],
             // send_time: [null, this.paramsId == '04' || this.paramsId == '11' ? [Validators.required] : []]
         });
 
@@ -1140,8 +1170,8 @@ export class MarketingsPageComponent implements OnInit {
             send_menkan: [this.form.value.send_menkan, this.paramsId=='07' || this.paramsId=='08' || this.paramsId == '09' ? [Validators.compose([Validators.required, Validators.pattern(`[0-9]+`)])]:[] ],
             sms_content: [this.form.value.sms_content, []],
             active_date: [this.form.value.active_date, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' ? [] : [Validators.required]],
-            sms_send_date: [this.form.value.sms_send_date, this.paramsId == '03' ? [] : [Validators.required]],
-            sms_send_time: [this.form.value.sms_send_time, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' ? [] : [Validators.required]],
+            sms_send_date: [this.form.value.sms_send_date, this.paramsId == '03' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13'  ? [] : [Validators.required]],
+            sms_send_time: [this.form.value.sms_send_time, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' ? [] : [Validators.required]],
         };
     }
     getForm2InitData() {

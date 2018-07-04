@@ -7,7 +7,8 @@ import { MemberService } from '../../member/shared/member.service';
 import { ActivatedRoute } from '@angular/router';
 import { Inject } from '@angular/core';
 import { DA_SERVICE_TOKEN, TokenService } from '@delon/auth';
-import { USER_INFO } from '@shared/define/juniu-define';
+import { USER_INFO, ALIPAY_SHOPS, APP_TOKEN } from '@shared/define/juniu-define';
+import { StartupService } from '@core/startup/startup.service';
 
 @Component({
     selector: 'passport-register',
@@ -33,10 +34,11 @@ export class UserRegisterComponent implements OnDestroy, OnInit {
         private localStorageService: LocalStorageService,
         private modalSrv: NzModalService,
         private memberService: MemberService,
+        private startupService: StartupService,
         private route: ActivatedRoute,
         @Inject(DA_SERVICE_TOKEN) private tokenService: TokenService,
         public msg: NzMessageService) {
-        this.alipayPid = this.route.snapshot.params['alipayPid'];
+        this.alipayPid = this.route.snapshot.params['pid'];
         if (this.alipayPid) {
             this.form = fb.group({
                 mail: [null, []],
@@ -58,8 +60,6 @@ export class UserRegisterComponent implements OnDestroy, OnInit {
                 contactName: [null, [Validators.required, Validators.maxLength(10)]]
             });
         }
-
-
     }
 
     static checkPassword(control: FormControl) {
@@ -128,11 +128,14 @@ export class UserRegisterComponent implements OnDestroy, OnInit {
             this.form.controls[i].updateValueAndValidity();
         }
         if (this.form.invalid) return;
-        // mock http
-        this.loading = true;
-        this.registrySystem();
-
-
+        else {
+            // mock http
+            this.loading = true;
+            if (this.alipayPid)
+                this.registryKoubei();
+            else
+                this.registrySystem();
+        }
     }
 
     ngOnDestroy(): void {
@@ -182,7 +185,7 @@ export class UserRegisterComponent implements OnDestroy, OnInit {
         this.memberService.registryKoubei(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    let token = this.tokenService.get().token;
+                    let token = this.route.snapshot.params['token'];
                     this.loginToken(token);
                 } else {
                     this.modalSrv.error({
@@ -205,6 +208,7 @@ export class UserRegisterComponent implements OnDestroy, OnInit {
         };
         this.memberService.getValidCode(data).subscribe(
             (res: any) => {
+                console.log(res);
                 if (res.success) {
                     this.modalSrv.success({
                         nzContent: '发送成功'
@@ -221,7 +225,7 @@ export class UserRegisterComponent implements OnDestroy, OnInit {
             }
         );
     }
-    loginToken(token:any) {
+    loginToken(token: any) {
         let that = this;
         let data = {
             token: token,
@@ -230,7 +234,20 @@ export class UserRegisterComponent implements OnDestroy, OnInit {
             (res: any) => {
                 if (res.success) {
                     this.localStorageService.setLocalstorage(USER_INFO, JSON.stringify(res.data));
-                    this.router.navigate(['/storeList/matchingkoubei']);
+                    this.localStorageService.setLocalstorage(ALIPAY_SHOPS, JSON.stringify(res.data['alipayShopList']));
+                    this.tokenService.set({
+                        token: token,
+                        email: `cipchk@qq.com`,
+                        id: 10000,
+                        time: +new Date
+                    });
+                    this.localStorageService.setLocalstorage(APP_TOKEN, token);
+                    let route = this.route.snapshot.params['count'];
+                    if (Number(route) > 0)
+                        this.router.navigate(['/home']);
+                    else
+                        this.router.navigate(['/manage/storeList/matchingkoubei']);
+                    this.startupService.load();
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',

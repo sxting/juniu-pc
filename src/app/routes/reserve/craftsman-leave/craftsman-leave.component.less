@@ -1,6 +1,8 @@
+@import 'node_modules/@delon/theme/styles/default';
+@primary-color:#ff7700;
 .content-box {
     position: absolute;
-    top: 130px;
+    top: 80px;
     left: 210px;
     bottom: 0;
     right: 0;
@@ -26,7 +28,7 @@
     display: inline-block;
     width: 4px;
     height: 16px;
-    background-color: #FF6600;
+    background-color: @primary-color;
     margin-right: 10px;
     transform: translateY(2px);
 }
@@ -152,5 +154,5 @@
 /*}*/
 .icon-xiukexuan {
     font-size: 40px;
-    color: #FF6600;
+    color: @primary-color;
 }

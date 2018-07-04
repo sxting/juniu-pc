@@ -1,9 +1,11 @@
 <page-header></page-header>
 <div class="storeMain">
   <div class="buttonBox">
-    <button class="buttons" nz-button [routerLink]="['/manage/management/addManagement']">新增职位</button>
+    <button nz-button [routerLink]="['/manage/management/addManagement']" [nzType]="'primary'">
+      <span>新增职位</span>
+    </button>
   </div>
-  <nz-table #basicTable [nzShowPagination]="false" [nzData]="roleInfos">
+  <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="roleInfos">
     <thead>
       <tr>
         <th>职位编号</th>
@@ -18,13 +20,14 @@
         <td>{{item.roleId}}</td>
         <td>{{item.roleName}}</td>
         <td>{{item.belongType === 'MERCHANT'?'商家':'门店'}}</td>
-        <td class="bigtd">
-          <span style="margin-right:5px;" *ngFor="let i of item.moduleList">{{i.moduleName}}</span>
+        <td>
+            {{item.moduleList}}
+          <!-- <span style="margin-right:5px;" *ngFor="let i of item.moduleList">{{i.moduleName}}</span> -->
         </td>
         <td>
           <span class="button" (click)="bianji(item.roleId)">编辑</span>
           <nz-divider nzType="vertical"></nz-divider>
-          <span class="button" (click)="shanchu(item.roleId)">删除</span>
+          <span class="button" style="color: red" (click)="shanchu(item.roleId)">删除</span>
         </td>
 
       </tr>

@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { _HttpClient } from '@delon/theme';
+import { _HttpClient, TitleService } from '@delon/theme';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ProductService } from "../shared/product.service";
 import { Router, ActivatedRoute } from '@angular/router';
-import { FunctionUtil } from "../../../shared/funtion/funtion-util";
 import { LocalStorageService } from "@shared/service/localstorage-service";
 
 @Component({
@@ -15,7 +14,6 @@ export class ProductVipListComponent implements OnInit {
     //选择商品状态 (0: 下架、1: 上架)
     statusFlag: string = '1';
     theadName: any[] = ['卡类型', '卡名称', '卡权益', '售价(元)', '操作'];
-    // region: cateogry
     categories = [
         { id: 0, text: '全部会员卡', value: true ,type:''},
         { id: 1, text: '折扣卡', value: false, type:'REBATE'},
@@ -31,6 +29,8 @@ export class ProductVipListComponent implements OnInit {
     totalElements: any = 0;//商品总数
     loading = false;//加载loading
     storeId: string;
+    moduleId: string;
+    storeList: any[] = [];
 
     /**
      * 请求体
@@ -47,32 +47,27 @@ export class ProductVipListComponent implements OnInit {
         private http: _HttpClient,
         private modalSrv: NzModalService,
         private router: Router,
+        private route: ActivatedRoute,
         private msg: NzMessageService,
+        private titleSrv: TitleService,
         private localStorageService: LocalStorageService,
         private productService: ProductService
     ) { }
 
 
     ngOnInit() {
-
-        let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
-            JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
-        this.storeId = UserInfo.staffType === 'MERCHANT'? '' : UserInfo.stores[0].storeId;
-
-        this.batchQuery.storeId = this.storeId;
-        //获取会员列表
-        this.configlistHttp(this.batchQuery);
+        this.moduleId = this.route.snapshot.params['menuId'];//门店
+        this.getStoresInfor();//门店
     }
-
 
     //新增卡规则
     addNewCardRules(){
-        this.router.navigate(['/product/add/new/card/rules']);
+        this.router.navigate(['/product/add/new/card/rules',{ menuId: this.moduleId }]);
     }
 
     //查看详情
     checkDetailInfor(ids: string, type: string){
-        this.router.navigate(['/product/check/vipcard/detailinfor', { configId: ids, cardType: type }]);
+        this.router.navigate(['/product/check/vipcard/detailinfor', { configId: ids, cardType: type, menuId: this.moduleId,storeId: this.storeId}]);
     }
 
     //上下架商品获取
@@ -115,10 +110,8 @@ export class ProductVipListComponent implements OnInit {
         );
     }
 
-
     //选择卡类型
     changeCategory(status: boolean, idx: number, type: string) {
-        console.log(type);
         this.type = type;
         this.categories.forEach((element: any, index: number, array: any) => {
             element.value = false;
@@ -147,6 +140,9 @@ export class ProductVipListComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     that.loading = false;
+                    res.data.cardConfig.forEach(function (item: any) {
+                      item.cardRights = item.rules[0].applyStoreIds? item.rules[0].applyStoreIds.split(',').length + '店通用' : '0店通用';
+                    });
                     that.vipItemListInfor = res.data.cardConfig;
                     that.totalElements = res.data.pageInfo.countTotal;
                 } else {
@@ -160,6 +156,36 @@ export class ProductVipListComponent implements OnInit {
                 this.msg.warning(error);
             }
         );
+    }
+
+    //门店初始化
+    getStoresInfor() {
+      let self = this;
+      let data = {
+        moduleId: this.moduleId,
+        timestamp: new Date().getTime()
+      };
+      this.productService.selectStores(data).subscribe(
+        (res: any) => {
+          if (res.success) {
+            this.storeList = res.data.items;
+            let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+              JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+            this.storeId = UserInfo.staffType === "MERCHANT"? '' : this.storeList[0].storeId;
+            this.batchQuery.storeId = this.storeId;
+            //获取会员列表
+            this.configlistHttp(this.batchQuery);
+          } else {
+            this.modalSrv.error({
+              nzTitle: '温馨提示',
+              nzContent: res.errorInfo
+            });
+          }
+        },
+        error => {
+          this.msg.warning(error);
+        }
+      );
     }
 
 }

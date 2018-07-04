@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { ManageService } from '../shared/manage.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { LocalStorageService } from '@shared/service/localstorage-service';
-import { STORES_INFO } from '@shared/define/juniu-define';
+import { STORES_INFO, USER_INFO } from '@shared/define/juniu-define';
 import { ActivatedRoute } from '@angular/router';
 import { Validators } from '@angular/forms';
 
@@ -15,8 +15,7 @@ import { Validators } from '@angular/forms';
     styleUrls: ['./wxStore.component.less']
 })
 export class WxStoreComponent implements OnInit {
-    StoresInfo: any = this.localStorageService.getLocalstorage(STORES_INFO) ? JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-    storeId: any = this.StoresInfo[0] ? this.StoresInfo[0].storeId : '';
+    storeId: any;
     submitting = false;
     form: FormGroup;
     values: any[] = null;
@@ -28,7 +27,8 @@ export class WxStoreComponent implements OnInit {
     objArr: any = [];
     allcards: any = [];
     list: any[] = [];
-
+    userInfo = this.localStorageService.getLocalstorage(USER_INFO) ?
+    JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)) : '';
 
     expandKeys = ['1001', '10001'];
     checkedKeys = ["9001"];
@@ -52,7 +52,9 @@ export class WxStoreComponent implements OnInit {
     switch1: boolean = false;
     switch2: boolean = false;
     switch3: boolean = false;
-    switch4: boolean = true;
+    switch4: boolean = false;
+    staffList: any;
+    staffIdsArr: any;
     constructor(
         private localStorageService: LocalStorageService,
         public msg: NzMessageService,
@@ -81,10 +83,11 @@ export class WxStoreComponent implements OnInit {
     get endTime() { return this.form.controls.endTime; }
 
     ngOnInit(): void {
+        this.storeId = this.route.snapshot.params['storeId'];
         this.getAllbuySearchs();
         // this.getStaffList();
+        this.selectStaffHttp();
         this.getAllCardsList();
-        this.storeId = this.route.snapshot.params['storeId'];
         this.getLocationHttp();
     }
     mouseAction(event: any): void {
@@ -210,6 +213,7 @@ export class WxStoreComponent implements OnInit {
                         });
                     });
                     this.allproducks = allproducks;
+                    this.listProductByIsWxShowHttp();
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -235,7 +239,7 @@ export class WxStoreComponent implements OnInit {
                         });
                     });
                     this.allcards = allcards;
-                    console.log(this.allcards);
+                    this.listCardConfigByIsWxShowHttp();
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -247,7 +251,66 @@ export class WxStoreComponent implements OnInit {
             error => this.errorAlert(error)
         );
     }
+
     /**获取全部员工 */
+
+    selectStaffHttp() {
+        let data = {
+            storeId: this.storeId
+        }
+        this.manageService.selectStaff(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    let arr: any = res.data.items;
+                    var objArr: any = [];            //定义一个空数组
+                    var objArr2: any = [];
+                    arr.forEach(function (i: any) {
+                        objArr.forEach(function (n: any) {
+                            objArr2.push(n.roleId);
+                            if (n.roleId === i.roleId) {
+                                n.staffs.push({
+                                    staffId: i.staffId,
+                                    staffName: i.staffName,
+                                    staffNickName: i.staffNickName,
+                                    change: false
+                                });
+                            }
+                        });
+                        if (objArr2.indexOf(i.roleId) < 0) {
+                            objArr.push({
+                                roleName: i.roleName,
+                                roleId: i.roleId,
+                                change: false,
+                                checked: false,
+                                staffs: [{
+                                    staffId: i.staffId,
+                                    staffName: i.staffName,
+                                    staffNickName: i.staffNickName,
+                                    change: false
+                                }]
+                            });
+                        }
+
+                    });
+                    objArr.forEach(function (i: any, m: any) {
+                        let obj = i.roleId;
+                        if (objArr[m + 1]) {
+                            if (objArr[m + 1].roleId === obj) {
+                                objArr.splice(m + 1, 1);
+                            }
+                        }
+                    });
+                    this.objArr = objArr;
+                    this.storeStaffDisplayMapperHttp();
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    })
+                }
+            }, error => this.errorAlter(error)
+        );
+    }
     getStaffList() {
         this.manageService.getStaffListByStoreId(this.storeId).subscribe(
             (res: any) => {
@@ -307,6 +370,7 @@ export class WxStoreComponent implements OnInit {
         let that = this;
         let staffIdsCount = 0;
         let staffId = '';
+        let staffArr = [];
         this.objArr.forEach(function (i: any) {
             i.staffs.forEach(function (n: any) {
                 if (n.change) {
@@ -317,14 +381,15 @@ export class WxStoreComponent implements OnInit {
                         staffId += ',' + n.staffId;
                         staffIdsCount += 1;
                     }
-
+                    staffArr.push(n.staffId)
                 }
             });
         });
         this.objArrLoc = staffId;
         that.staffIds = staffId;
+        that.staffIdsArr = staffArr;
         that.staffIdsCount = staffIdsCount;
-
+        that.setStoreStaffDisplayHttp();
     }
     cardSubmit() {
         let that = this;
@@ -368,7 +433,7 @@ export class WxStoreComponent implements OnInit {
         this.allproducksLoc = productId;
         that.productIds = productId;
         this.productIdsCount = productCount;
-        this.updateByIsWxShowHttp(this.storeId, productId);
+        this.updateProductIsWxShowHttp(this.storeId, productId);
     }
     /*全选或者取消全选*/
     onSelectAllInputClick(cityIndex: number, change: boolean, all: any, children: any) {
@@ -391,7 +456,7 @@ export class WxStoreComponent implements OnInit {
         let changeArr = [];
         for (let i = 0; i < all[cityIndex][children].length; i++) {
             if (all[cityIndex][children][i].change === true) {
-                changeArr.push(this.allcards[cityIndex].rules[i]);
+                changeArr.push(all[cityIndex][children][i]);
             }
         }
         /*判断左边的全选是否设置为true*/
@@ -497,7 +562,10 @@ export class WxStoreComponent implements OnInit {
     }
     getLocationHttp() {
         let self = this;
-        this.manageService.getLocation().subscribe(
+        let data = {
+            timestamp: new Date().getTime()
+        }
+        this.manageService.getLocation(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     self.forEachFun(res.data.items);
@@ -539,6 +607,7 @@ export class WxStoreComponent implements OnInit {
         }
     }
     submit() {
+        let that = this;
         for (const i in this.form.controls) {
             this.form.controls[i].markAsDirty();
             this.form.controls[i].updateValueAndValidity();
@@ -554,13 +623,26 @@ export class WxStoreComponent implements OnInit {
             if (this.switch4) displayColl.push('STORE');
             let startTime = this.form.value.startTime.getMinutes();
             let endTime = this.form.value.endTime.getMinutes();
+            let startTimeHours = this.form.value.startTime.getHours();
+            let endTimeHours = this.form.value.endTime.getHours();
+            let businessHours = (Number(startTimeHours) < 10 ? '0' + startTimeHours : startTimeHours) + ':' + (Number(startTime) < 10 ? '0' + startTime : startTime) + '-' + (Number(endTimeHours) < 10 ? '0' + endTimeHours : endTimeHours) + ':' + (Number(endTime) < 10 ? '0' + endTime : endTime);
 
-            let businessHours = this.form.value.startTime.getHours() + ':' + (Number(startTime) < 10 ? '0' + startTime : startTime) + '-' + this.form.value.endTime.getHours() + ':' + (Number(endTime) < 10 ? '0' + endTime : endTime);
-            this.showPics.forEach(function (i: any) {
-                if (i.imageId) {
-                    bannerColl.push(i.imageId)
-                }
-            })
+            if (this.showPics.length > 0) {
+                this.showPics.forEach((item: any, index: number) => {
+                    if (item.imageId) {
+                        bannerColl.push(item.imageId)
+                    }
+                });
+            } else if (that.pictureDetails) {
+                that.pictureDetails.forEach(function (item: any) {
+                    bannerColl.push(item.imageId);
+                })
+            }
+            // this.showPics.forEach(function (i: any) {
+            //     if (i.imageId) {
+            //         bannerColl.push(i.imageId)
+            //     }
+            // })
             let data = {
                 address: this.data.address,
                 branchName: this.data.branchName,
@@ -579,6 +661,8 @@ export class WxStoreComponent implements OnInit {
             this.modifyDetail(data);
         }
     }
+
+
     //接口描述:更新会员卡的是否展示
     updateByIsWxShowHttp(storeId, productIds) {
         let data = {
@@ -589,6 +673,35 @@ export class WxStoreComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
 
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            (error) => {
+                this.msg.warning(error)
+            }
+        );
+    }
+
+    listCardConfigByIsWxShowHttp() {
+        let data = {
+            storeId: this.storeId
+        }
+        this.manageService.listCardConfigByIsWxShow(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.cardConfigRuleCount = res.data.length;
+                    let ids = '';
+                    res.data.forEach(function (i: any) {
+                        i.rules.forEach(function (n: any) {
+                            ids += (n.ruleId + ',')
+                        })
+                    })
+                    this.cardConfigRuleIds = ids;
+                    this.funcChecked(this.cardConfigRuleIds, this.allcards, 'rules', this.cardConfigRuleCount, 'ruleId');
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -643,6 +756,92 @@ export class WxStoreComponent implements OnInit {
                 this.msg.warning(error)
             }
         );
+    }
+    listProductByIsWxShowHttp() {
+        let data = {
+            storeId: this.storeId
+        }
+        this.manageService.listProductByIsWxShow(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.productIdsCount = res.data.length;
+                    let ids = '';
+                    res.data.forEach(function (i: any) {
+                        ids += (i.productId + ',')
+                    })
+                    this.allproducksLoc = ids;
+                    this.funcChecked(this.productIds, this.allproducks, 'productList', this.productIdsCount, 'productId');
+                } else {
+                    this.submitting = false;
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            (error) => {
+                this.msg.warning(error)
+            }
+        );
+    }
+
+    setStoreStaffDisplayHttp() {
+        let data = {
+            storeId: this.storeId,
+            platform: 'WECHAT',
+            staffIds: this.staffIdsArr
+        }
+        this.manageService.setStoreStaffDisplay(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    console.log(res.data)
+                } else {
+                    this.submitting = false;
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            (error) => {
+                this.msg.warning(error)
+            }
+        );
+    }
+    storeStaffDisplayMapperHttp() {
+        let data = {
+            storeId: this.storeId,
+            platform: 'WECHAT'
+        }
+        this.manageService.storeStaffDisplayMapper(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    console.log(res.data)
+                    this.staffIdsCount = res.data.staffIds.length;
+                    let ids = '';
+                    res.data.staffIds.forEach(function (i: any) {
+                        ids += (i + ',')
+                    })
+                    this.staffIds = ids;
+                    this.funcChecked(this.staffIds, this.objArr, 'staffs', this.staffIdsCount, 'staffId');
+                } else {
+                    this.submitting = false;
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            (error) => {
+                this.msg.warning(error)
+            }
+        );
+    }
+    errorAlter(err: any) {
+        this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: err
+        });
     }
     timeFun(s) {
         var t;

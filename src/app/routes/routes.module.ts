@@ -13,6 +13,7 @@ import { Exception404Component } from './exception/404.component';
 import { Exception500Component } from './exception/500.component';
 import { MemberService } from './member/shared/member.service';
 import { UserResetPasswordComponent } from './passport/resetPassword/resetPassword.component';
+import {HomeService} from "./home/shared/home.service";
 
 const COMPONENTS = [
   // passport pages
@@ -32,6 +33,6 @@ const COMPONENTS_NOROUNT = [];
   imports: [SharedModule, RouteRoutingModule],
   declarations: [...COMPONENTS, ...COMPONENTS_NOROUNT],
   entryComponents: COMPONENTS_NOROUNT,
-  providers: [MemberService]
+  providers: [MemberService, HomeService]
 })
 export class RoutesModule {}

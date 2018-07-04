@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { _HttpClient } from '@delon/theme';
+import { _HttpClient, TitleService } from '@delon/theme';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ReportService } from "../shared/report.service";
-import { STORES_INFO } from '@shared/define/juniu-define';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-commission-report',
@@ -59,12 +59,14 @@ export class CommissionReportComponent implements OnInit {
         private http: _HttpClient,
         private modalSrv: NzModalService,
         private reportService: ReportService,
+        private route: ActivatedRoute,
+        private titleSrv: TitleService,
         private localStorageService: LocalStorageService
     ) { }
 
     ngOnInit() {
 
-      this.moduleId = 1;
+      this.moduleId = this.route.snapshot.params['menuId'];
       let year = new Date().getFullYear();        //获取当前年份(2位)
       let month = new Date().getMonth()+1;       //获取当前月份(0-11,0代表1月)
       let changemonth = month < 10 ? '0' + month : '' + month;
@@ -72,6 +74,10 @@ export class CommissionReportComponent implements OnInit {
 
       this.staffingDate = new Date(year+'-'+changemonth+'-'+day);
       this.date = year+'-'+changemonth+'-'+day;
+
+      let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+        JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+      this.ifStoresAll = UserInfo.staffType === "MERCHANT"? true : false;
     }
 
     //门店id
@@ -151,8 +157,8 @@ export class CommissionReportComponent implements OnInit {
       )
   }
 
-  //员工提成的列表信息
-  getStaffingdeDuctionDown(batchQuery: any){
+    //员工提成的列表信息
+    getStaffingdeDuctionDown(batchQuery: any){
       let self = this;
       self.loading = true;
       this.reportService.getStaffingdeDuctionDown(batchQuery).subscribe(
@@ -178,25 +184,25 @@ export class CommissionReportComponent implements OnInit {
       )
   }
 
-  //倒序排序
-  Downsort(index: number,sort: string){
-      this.sortIndex = index;
-      this.sortField = sort;
-      this.batchQueryList.sortField= this.sortField;
-      this.getStaffingdeDuctionDown(this.batchQueryList);
-  }
+    //倒序排序
+    Downsort(index: number,sort: string){
+        this.sortIndex = index;
+        this.sortField = sort;
+        this.batchQueryList.sortField= this.sortField;
+        this.getStaffingdeDuctionDown(this.batchQueryList);
+    }
 
-  //选择门店
-  selectStore() {
-      this.batchQuery.storeId = this.storeId;
-      this.getStaffingdeDuctionUp(this.batchQuery)
-  }
+    //选择门店
+    selectStore() {
+        this.batchQuery.storeId = this.storeId;
+        this.getStaffingdeDuctionUp(this.batchQuery)
+    }
 
-  // 切换分页码
-  paginate(event: any) {
-      this.pageIndex = event;
-      this.batchQueryList.pageNo = this.pageIndex;
-      this.getStaffingdeDuctionUp(this.batchQueryList);
-  }
+    // 切换分页码
+    paginate(event: any) {
+        this.pageIndex = event;
+        this.batchQueryList.pageNo = this.pageIndex;
+        this.getStaffingdeDuctionUp(this.batchQueryList);
+    }
 
 }

@@ -15,6 +15,7 @@ export class SoftwareBuyComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+      this.item.step = 0;
     }
 
 }

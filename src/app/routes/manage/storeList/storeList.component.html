@@ -1,7 +1,9 @@
 <page-header></page-header>
 <div class="storeMain">
   <div class="buttonBox">
-    <button class="buttons" nz-button [routerLink]="['/manage/storeList/storeEdit']" (click)="gotoEdit()">新增门店</button>
+    <button nz-button [routerLink]="['/manage/storeList/storeEdit']" [nzType]="'primary'">
+      <span>新增门店</span>
+    </button>
     <div width="300px;">
       <nz-input-group nzSuffixIcon="anticon anticon-search" (click)="search()">
         <input [(ngModel)]="branchName" type="text" nz-input placeholder="请输入门店名称搜索">
@@ -9,7 +11,7 @@
     </div>
 
   </div>
-  <nz-table #basicTable [nzShowPagination]="false" [nzData]="storeInfos">
+  <nz-table class="storeList" [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="storeInfos">
     <thead>
       <tr>
         <th>门店编号</th>
@@ -35,9 +37,10 @@
             <td>
               <span class="button" (click)="bianji(item.storeId)">编辑</span>
               <nz-divider nzType="vertical"></nz-divider>
-              <span class="button" *ngIf="item.validityPeriodDays?item.validityPeriodDays>0:true" (click)="fufei('shengji',item.storeId)">升级</span>
+              <span class="button"  (click)="fufei('shengji',item.storeId)">升级</span>
+              <nz-divider nzType="vertical" ></nz-divider>
               <span class="button" *ngIf="item.validityPeriodDays?item.validityPeriodDays>0:false" (click)="fufei('xufei',item.storeId)">续费</span>
-              <nz-divider nzType="vertical"></nz-divider>
+              <nz-divider nzType="vertical" *ngIf="item.validityPeriodDays?item.validityPeriodDays>0:false"></nz-divider>
               <span class="button" (click)="storeDeleteHttp(item.storeId)">删除</span>
             </td>
 

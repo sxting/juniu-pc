@@ -13,7 +13,7 @@
           <span class="free" *ngIf="!package.price">免费</span>
           <span class="price-box" *ngIf="package.price">
             <!--DAY, MONTH, QUARTER, YEAR-->
-            <span>{{package.price}}</span>元 /
+            <span>{{package.price/100}}</span>元 /
             {{package.timeUnit === 'DAY' ? '天' : package.timeUnit === 'MONTH' ? '月' : package.timeUnit === 'QUARTER' ? '季' : '年'}}
             / 店
           </span>
@@ -24,11 +24,17 @@
           </ul>
         </div>
         <div class="use-btn" [class.disabled]="!package.selectable">
-          <span *ngIf="!package.selectable">正在使用</span>
+          <span *ngIf="!package.selectable">购买</span>
           <span *ngIf="package.selectable && package.useState">续费</span>
           <span *ngIf="package.selectable && !package.useState">现在升级</span>
         </div>
       </div>
     </li>
   </ul>
+</div>
+
+<div style="opacity: 0; width: 0; height: 0">
+  <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false"
+                   (storeIdOutput)="onSelectStoreChange($event)">
+  </jn-stores-infor>
 </div>

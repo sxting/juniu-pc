@@ -15,7 +15,7 @@ export class KoubeiService {
 
   api1 = Config.API + 'reserve'; //预约
   api2 = Config.API + 'product'; //商品
-  api3 = Config.API + 'account'; //员工
+  api3 = Config.API1 + 'account/merchant'; //员工
   api4 = Config.API + 'printer'; //打印机
 
   //查询手艺人列表
@@ -442,5 +442,13 @@ export class KoubeiService {
         return Observable.throw(error);
       });
   }
-
+// 选择门店
+selectStores(data: any) {
+  let apiUrl = Config.API1 + 'account/merchant/store/select.json';
+  return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+          return Observable.throw(error);
+      });
+}
 }

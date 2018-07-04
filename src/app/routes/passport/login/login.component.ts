@@ -9,7 +9,9 @@ import { environment } from '@env/environment';
 import { MemberService } from '../../member/shared/member.service';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
-import { APP_TOKEN, STORES_INFO, ALIPAY_SHOPS, USER_INFO, MODULES } from '@shared/define/juniu-define';
+import { APP_TOKEN, STORES_INFO, ALIPAY_SHOPS, USER_INFO, MODULES, CITY_LIST, KOUBEI_ITEM_CATEGORYS } from '@shared/define/juniu-define';
+import { StartupService } from '@core/startup/startup.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'passport-login',
@@ -23,7 +25,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
     error = '';
     type = 0;
     loading = false;
-
+    spinboolean = false;
     constructor(
         fb: FormBuilder,
         private router: Router,
@@ -32,6 +34,8 @@ export class UserLoginComponent implements OnDestroy, OnInit {
         private settingsService: SettingsService,
         private localStorageService: LocalStorageService,
         private memberService: MemberService,
+        private startupService: StartupService,
+        private route: ActivatedRoute,
         private socialService: SocialService,
         @Optional() @Inject(ReuseTabService) private reuseTabService: ReuseTabService,
         @Inject(DA_SERVICE_TOKEN) private tokenService: TokenService) {
@@ -45,11 +49,18 @@ export class UserLoginComponent implements OnDestroy, OnInit {
         modalSrv.closeAll();
     }
     ngOnInit(): void {
-        let sign = FunctionUtil.getUrlStringBySearch('sign') ? FunctionUtil.getUrlStringBySearch('sign') : FunctionUtil.getUrlString('sign');
-        let url = FunctionUtil.getUrlStringBySearch('url') ? FunctionUtil.getUrlStringBySearch('url') : FunctionUtil.getUrlString('url');
+        this.modalSrv.closeAll();
+        let sign = FunctionUtil.getUrlString('sign') ? FunctionUtil.getUrlString('sign') : this.route.snapshot.params['sign'];
+        let url = FunctionUtil.getUrlString('url') ? FunctionUtil.getUrlString('url') : this.route.snapshot.params['url'];
+        // let sign1 = this.route.snapshot.params['sign'] ? this.route.snapshot.params['sign'] : this.route.snapshot.params['sign'];
+        // let url1 = this.route.snapshot.params['url'] ? this.route.snapshot.params['url'] : this.route.snapshot.params['url'];
+        this.tokenService.set({ token: '-1' });
+        this.getLocationHttp();
+        this.merchantInitHttp();
         if (sign) {
             this.localStorageService.setLocalstorage(APP_TOKEN, sign);
-            this.koubeiLogin(url)
+            this.tokenService.set({ token: sign });
+            this.koubeiLogin(url, sign)
         }
     }
     // region: fields
@@ -70,45 +81,42 @@ export class UserLoginComponent implements OnDestroy, OnInit {
     count = 0;
     interval$: any;
     // 口碑登陆
-    koubeiLogin(url: any) {
-        this.memberService.koubeiLogin().subscribe(
+    koubeiLogin(url: any, token: any) {
+        let data = {
+            token: token
+        }
+        this.spinboolean = true;
+        this.memberService.loginToken(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    this.localStorageService.setLocalstorage(STORES_INFO, JSON.stringify(res.data.stores));
-                    this.localStorageService.setLocalstorage(ALIPAY_SHOPS, JSON.stringify(res.data[ALIPAY_SHOPS]));
+                    this.localStorageService.setLocalstorage(ALIPAY_SHOPS, JSON.stringify(res.data['alipayShopList']));
                     this.localStorageService.setLocalstorage(USER_INFO, JSON.stringify(res.data));
-                    this.localStorageService.setLocalstorage(MODULES, JSON.stringify(res.data[MODULES]));
-                    this.tokenSetFun(res.data.token);
-                    if (url === 'koubeiproduct') {
-                        this.router.navigate(['/koubei/product/list']);
-                    } else if (url === 'marketing') {
-                        this.router.navigate(['/koubei/coupon/index']);
-                    } else if (url === 'craftsman') {
-                        this.router.navigate(['/koubei/craftsman/manage']);
-                    } else if (res.stores.length > 0) {
-                        this.router.navigateByUrl('/manage/storeList/matchingkoubei');
-                    }
+                    this.localStorageService.setLocalstorage(MODULES, JSON.stringify(res.data['modules']));
+                    this.tokenSetFun(res.data, token, url);
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
                         nzContent: res.errorInfo
                     });
                 }
+                this.spinboolean = false;
             },
             error => this.errorAlter(error)
         )
     }
     getCaptcha() {
-        if (this.form.value.mobile) {
-            this.count = 59;
-            this.interval$ = setInterval(() => {
-                this.count -= 1;
-                if (this.count <= 0)
-                    clearInterval(this.interval$);
-            }, 1000);
-            this.getValidCode(this.form.value.mobile, 'VALID')
-        } else {
-            this.errorAlter('请先输入手机号')
+        if (this.type === 1) {
+            if (this.form.value.mobile && this.form.value.mobile.length === 11) {
+                this.count = 59;
+                this.interval$ = setInterval(() => {
+                    this.count -= 1;
+                    if (this.count <= 0)
+                        clearInterval(this.interval$);
+                }, 1000);
+                this.getValidCode(this.form.value.mobile, 'VALID')
+            } else {
+                this.errorAlter('请先输入手机号')
+            }
         }
     }
 
@@ -122,22 +130,19 @@ export class UserLoginComponent implements OnDestroy, OnInit {
             this.password.markAsDirty();
             this.password.updateValueAndValidity();
             if (this.userName.invalid || this.password.invalid) return;
-
+            this.loading = true;
+            this.loginName(this.form.value.userName, this.form.value.password);
         } else {
             this.mobile.markAsDirty();
             this.mobile.updateValueAndValidity();
             this.captcha.markAsDirty();
             this.captcha.updateValueAndValidity();
             if (this.mobile.invalid || this.captcha.invalid) return;
-        }
-        // mock http
-        this.loading = true;
-        if (this.type === 0) {
-            this.loginName(this.form.value.userName, this.form.value.password);
-        } else {
+            this.loading = true;
             this.loginPhone(this.form.value.mobile, this.form.value.captcha);
         }
-        this.tokenSetFun('4420b0ef2c53987d1cdc06d2c10f15a0');
+        // mock http
+
     }
 
     // endregion
@@ -150,7 +155,8 @@ export class UserLoginComponent implements OnDestroy, OnInit {
             (res: any) => {
                 if (res.success) {
                     this.localStorageService.setLocalstorage(USER_INFO, JSON.stringify(res.data));
-                    this.tokenSetFun(res.data.token);
+                    this.localStorageService.setLocalstorage(ALIPAY_SHOPS, JSON.stringify(res.data['alipayShopList']));
+                    this.tokenSetFun(res.data, res.data.token);
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -171,7 +177,8 @@ export class UserLoginComponent implements OnDestroy, OnInit {
             (res: any) => {
                 if (res.success) {
                     this.localStorageService.setLocalstorage(USER_INFO, JSON.stringify(res.data));
-                    this.tokenSetFun(res.data.token);
+                    this.localStorageService.setLocalstorage(ALIPAY_SHOPS, JSON.stringify(res.data['alipayShopList']));
+                    this.tokenSetFun(res.data, res.data.token);
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -183,7 +190,7 @@ export class UserLoginComponent implements OnDestroy, OnInit {
             error => this.errorAlter(error)
         )
     }
-    tokenSetFun(token: any) {
+    tokenSetFun(res, token: any, url?: any) {
         // 清空路由复用信息
         this.reuseTabService.clear();
         this.tokenService.set({
@@ -192,7 +199,20 @@ export class UserLoginComponent implements OnDestroy, OnInit {
             id: 10000,
             time: +new Date
         });
-        this.router.navigate(['/']);
+        this.localStorageService.setLocalstorage(APP_TOKEN, token);
+        if (url === 'koubeiproduct') {
+            this.router.navigate(['/koubei/product/list']);
+        } else if (url === 'marketing') {
+            this.router.navigate(['/koubei/coupon/index']);
+        } else if (url === 'craftsman') {
+            this.router.navigate(['/koubei/craftsman/manage']);
+        } else {
+            this.router.navigate(['/']);
+        }
+        // else if (res.data.alipayShopList.length > 0) {
+        //     this.router.navigateByUrl('/manage/storeList/matchingkoubei');
+        // }
+        this.startupService.load();
     }
     getValidCode(phone, bizType) {
         let that = this;
@@ -226,5 +246,69 @@ export class UserLoginComponent implements OnDestroy, OnInit {
             nzTitle: '温馨提示',
             nzContent: err
         });
+    }
+    getLocationHttp() {
+        let self = this;
+        let data = {
+            timestamp: new Date().getTime(),
+        }
+        this.memberService.getLocation(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    self.forEachFun(res.data.items);
+                    this.localStorageService.setLocalstorage(CITY_LIST, JSON.stringify(res.data.items));
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            (error) => {
+                this.msg.warning(error)
+            }
+        );
+    }
+    merchantInitHttp() {
+        let self = this;
+        let data = {
+            timestamp: new Date().getTime(),
+        }
+        this.memberService.merchantInit(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.localStorageService.setLocalstorage(KOUBEI_ITEM_CATEGORYS, JSON.stringify(res.data.koubeiItemCategorys));
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            (error) => {
+                this.msg.warning(error)
+            }
+        );
+    }
+    forEachFun(arr: any, arr2?: any) {
+        let that = this;
+        arr.forEach(function (i: any) {
+            i.value = i.code;
+            i.label = i.name;
+            that.forEachFun2(i);
+        })
+    }
+    forEachFun2(arr: any) {
+        let that = this;
+        if (arr.hasSubset) {
+            arr.subset.forEach(function (n: any) {
+                n.value = n.code;
+                n.label = n.name;
+                that.forEachFun2(n);
+            })
+            arr.children = arr.subset;
+        } else {
+            arr.isLeaf = true;
+        }
     }
 }

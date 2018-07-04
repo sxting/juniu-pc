@@ -7,7 +7,8 @@ import { UploadService } from '@shared/upload-img';
 import { ProductService } from '../shared/product.service';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
-import { CITYLIST } from '@shared/define/juniu-define';
+import NP from 'number-precision'
+
 
 @Component({
   selector: 'app-add-new-items',
@@ -37,7 +38,7 @@ export class AddNewItemsComponent implements OnInit {
     addNewCommodityType: any;
     productId: string = '';//商品ID
     ItemsStatus: any = [{ name: '上架', value: '1'}, { name: '下架', value: '0'},];//上下架状态
-    storeStatus: any = [{ name: '全部门店(默认)', value: 'ALLSTORES'},{ name: '自定义', value: 'CUSTOMIZE'}];
+    storeStatus: any = [{ name: '全部门店(默认)', value: 'ALL'},{ name: '自定义', value: 'CUSTOMIZE'}];
     storeId: string = '';//查看门店登录还是商家登陆
     merchantId: string = '';
     //上传图片的时候
@@ -49,6 +50,8 @@ export class AddNewItemsComponent implements OnInit {
     selectStoresIds: any = ''; //选中的门店
     storesChangeNum: any; //选中门店的个数
     allStoresNum: any;//所有门店的数量
+    moduleId: string;
+    ifShow: boolean = false;//门店错误提示
 
     get categoryInfor() { return this.form.controls.categoryInfor; }
     get currentPrice() { return this.form.controls['currentPrice']; }
@@ -56,82 +59,51 @@ export class AddNewItemsComponent implements OnInit {
 
     ngOnInit() {
         let self = this;
-        this.merchantId = this.route.snapshot.params['merchantId'] ? this.route.snapshot.params['merchantId'] : FunctionUtil.getUrlString('merchantId');
+        this.moduleId = this.route.snapshot.params['menuId']? this.route.snapshot.params['menuId'] : '';//门店
+
+        let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+          JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+        this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
         this.storeId = this.route.snapshot.params['storeId'] ? this.route.snapshot.params['storeId'] : FunctionUtil.getUrlString('storeId');
         this.productId = this.route.snapshot.params['productId'] ? this.route.snapshot.params['productId'] : FunctionUtil.getUrlString('productId');
-
-        let storeList = JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) ?
-            JSON.parse(this.localStorageService.getLocalstorage('Stores-Info')) : [];
-
-        if (storeList) {
-            CITYLIST.forEach(function (i: any) {
-                storeList.forEach((ele: any, index: number, arr: any) => {
-                    if (i.i == ele.cityId) {
-                        ele.cityName = i.n;
-                    }
-                })
-            })
-        }
-        let cityNameSpaceArr = [{
-            cityName: '',
-            cityId: '',
-        }];
-        cityNameSpaceArr.shift();
-        for (let i = 0; i < storeList.length; i++) {
-            if (storeList[i].cityId == '' || storeList[i].cityId == null) {
-                storeList[i].cityName = '其他';
-            } else if (storeList[i].cityId != '' && storeList[i].cityName == '') {
-                cityNameSpaceArr.push({
-                    cityName: '',
-                    cityId: storeList[i].cityId,
-                });
-            }
-        }
-        for (let i = 0; i < cityNameSpaceArr.length; i++) {
-            for (let j = 0; j < storeList.length; j++) {
-                if (cityNameSpaceArr[i].cityId == storeList[j].cityId && storeList[j].cityName != '') {
-                    cityNameSpaceArr[i].cityName = storeList[j].cityName;
-                }
-            }
-        }
-        for (let i = 0; i < cityNameSpaceArr.length; i++) {
-            for (let j = 0; j < storeList.length; j++) {
-                if (cityNameSpaceArr[i].cityId == storeList[j].cityId && storeList[j].cityName == '') {
-                    storeList[j].cityName = cityNameSpaceArr[i].cityName
-                }
-            }
-        }
-        this.cityStoreList = FunctionUtil.getCityListStore(storeList);
-        this.changeAllData();//获取到所有的门店ID及其num
 
         this.formData = {
             categoryInfor: [ null, [ Validators.required ] ],
             productName:[ null, [ Validators.required ] ],
-            currentPrice: [null, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{2})?$`)])],
+            currentPrice: [null, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.min(1 * 0.01),  Validators.max(11111111.11 * 9)])],
             productNo: [ null, [ Validators.pattern(`[0-9]+`)] ],
             status: [self.ItemsStatus[0].value, [ Validators.required  ] ],
             storeType: [ self.storeStatus[0].value, [ Validators.required ] ],
         };
         this.form = this.fb.group(self.formData);
         this.getCategoryListInfor();//获取商品分类信息
+    }
 
-        if(this.productId){
-            this.titleSrv.setTitle('编辑商品');
-            this.getProductDetailInfor();//查看商品详情
-        }else {
-            this.titleSrv.setTitle('新增商品');
-            for (let i = 0; i < this.cityStoreList.length; i++) {
-                for (let j = 0; j < this.cityStoreList[i].stores.length; j++) {
-                    if (this.cityStoreList[i].stores[j].change == true) {
-                        this.selectStoresIds += ',' + this.cityStoreList[i].stores[j].storeId
-                    }
-                }
+    //获取门店数据
+    storeListPush(event){
+      this.cityStoreList = event.storeList? event.storeList : [];
+      if(this.productId){
+        this.getProductDetailInfor();//查看商品详情
+      }else {
+
+        for (let i = 0; i < this.cityStoreList.length; i++) {
+          for (let j = 0; j < this.cityStoreList[i].stores.length; j++) {
+            if (this.cityStoreList[i].stores[j].change == true) {
+              this.selectStoresIds += ',' + this.cityStoreList[i].stores[j].storeId
             }
-            if (this.selectStoresIds) {
-                this.selectStoresIds = this.selectStoresIds.substring(1);
-                this.storesChangeNum = this.selectStoresIds.split(',').length;
-            }
+          }
         }
+        if (this.selectStoresIds) {
+          this.selectStoresIds = this.selectStoresIds.substring(1);
+          this.storesChangeNum = this.selectStoresIds.split(',').length;
+        }
+        this.ifShow = this.selectStoresIds === ''? true : false;
+      }
+    }
+
+    //获取门店总数量
+    getAllStoresNum(event){
+      this.allStoresNum = event.allStoresNum? event.allStoresNum : 0;
     }
 
     //选择弹框
@@ -145,6 +117,7 @@ export class AddNewItemsComponent implements OnInit {
                 nzCancelText: null,
                 nzOkText: '保存',
                 nzOnOk: function(){
+                  self.ifShow = self.selectStoresIds === ''? true : false;
                 }
             });
         }else {
@@ -154,10 +127,7 @@ export class AddNewItemsComponent implements OnInit {
 
     //获取到门店ID
     getSelectStoresIds(event){
-        console.log(event);
-        if(event){
-            this.selectStoresIds = event.staffIds;
-        }
+      this.selectStoresIds = event.staffIds? event.staffIds : '';
     }
 
     //增加商品分类信息
@@ -181,7 +151,7 @@ export class AddNewItemsComponent implements OnInit {
             this.msg.warning('请先填写该商品分类后再添加!');
             return;
         }else {
-            this.addNewCommodityType.push({ categoryName: '', categoryId: '', type: 'SERVICEITEMS', merchantId: this.merchantId });
+            this.addNewCommodityType.push({ categoryName: '', categoryId: '', type: 'SERVICE', merchantId: this.merchantId });
         }
     }
     addDescriptions(event: any, index: number) {
@@ -233,8 +203,7 @@ export class AddNewItemsComponent implements OnInit {
             this.selectStoresIds = this.selectStoresIds.substring(1);
             this.allStoresNum = this.selectStoresIds.split(',').length;
         }
-
-        console.log(this.cityStoreList);
+        this.ifShow = this.selectStoresIds === ''? true : false;
     }
 
     /*************************  Http请求开始  ********************************/
@@ -266,7 +235,7 @@ export class AddNewItemsComponent implements OnInit {
         let self = this;
         this.loading = true;
         let data = {
-            categoryType: 'SERVICEITEMS'
+            categoryType: 'SERVICE'
         };
         this.productService.getCategoryListInfor(data).subscribe(
             (res: any) => {
@@ -276,7 +245,7 @@ export class AddNewItemsComponent implements OnInit {
                     this.categoryList = res.data;
                     if(res.data.length != 0){
                         res.data.forEach(function (item: any) {
-                            item.type = 'SERVICEITEMS';
+                            item.type = 'SERVICE';
                             item.merchantId = self.merchantId;
                         });
                     }
@@ -331,7 +300,7 @@ export class AddNewItemsComponent implements OnInit {
         event = event ? event : window.event;
         var file = event.srcElement ? event.srcElement.files : event.target.files; if (file) {
             this.loading = true;
-            this.uploadService.postWithFile(file, 'item', 'T').then((result: any) => {
+            this.uploadService.postWithFile(file, 'item', 'F').then((result: any) => {
                 this.loading = false;
                 let width = 104, height = 104;
                 this.picId = result.pictureId;
@@ -360,11 +329,11 @@ export class AddNewItemsComponent implements OnInit {
                     console.log(res.data);
                     let categoryInfor = res.data.categoryId + ',' +  res.data.categoryName;
                     let status = res.data.putaway === 1? this.ItemsStatus[0].value : this.ItemsStatus[1].value;
-                    let storeType = res.data.applyStoreType === 'CUSTOMIZE'? this.storeStatus[1].value : this.storeStatus[1].value;
+                    let storeType = res.data.applyStoreType === 'CUSTOMIZE'? this.storeStatus[1].value : this.storeStatus[0].value;
                     this.formData = {
                         categoryInfor: [ categoryInfor, [ Validators.required ] ],
                         productName:[ res.data.productName, [ Validators.required ] ],
-                        currentPrice: [res.data.currentPrice/100, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{2})?$`)])],
+                        currentPrice: [ res.data.currentPrice/100, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.min(1 * 0.01),  Validators.max(11111111.11 * 9)])],
                         productNo: [ res.data.productNo, [ Validators.pattern(`[0-9]+`)] ],
                         status: [ status, [ Validators.required  ] ],
                         storeType: [ storeType, [ Validators.required ] ],
@@ -427,20 +396,17 @@ export class AddNewItemsComponent implements OnInit {
     }
 
     submit() {
-        console.log(this.form.controls);
-
         let self = this;
         for (const i in this.form.controls) {
             this.form.controls[ i ].markAsDirty();
             this.form.controls[ i ].updateValueAndValidity();
         }
         if (this.form.invalid) return;
-        this.submitting = true;
         let categoryInfor = this.form.controls.categoryInfor.value;
         let params = {
             productName: this.form.controls.productName.value,
             productId: this.productId? this.productId : '',
-            currentPrice: parseFloat(this.form.controls.currentPrice.value)*100,
+            currentPrice: NP.round(Number(this.form.controls.currentPrice.value)*100,2),
             storeIds: this.selectStoresIds,
             storeId: this.storeId,
             merchantId: this.merchantId,
@@ -450,27 +416,28 @@ export class AddNewItemsComponent implements OnInit {
             productNo: this.form.controls.productNo.value,
             picId: this.picId,
             applyStoreType: this.form.controls.storeType.value,
-            categoryType: 'SERVICEITEMS'
+            categoryType: 'SERVICE'
         };
-        this.productService.saveAddProductInfor(params).subscribe(
+        if(this.ifShow == false){
+          this.submitting = true;
+          this.productService.saveAddProductInfor(params).subscribe(
             (res: any) => {
-                if (res.success) {
-                    setTimeout(() => {
-                        self.submitting = false;
-                        self.msg.success(`提交成功`);
-                        self.router.navigate(['/product/service/items/list']);
-                    }, 1000);
-                } else {
-                    this.modalSrv.error({
-                        nzTitle: '温馨提示',
-                        nzContent: res.errorInfo
-                    });
-                }
+              self.submitting = false;
+              if (res.success) {
+                self.msg.success(`提交成功`);
+                self.router.navigate(['/product/service/items/list']);
+              } else {
+                this.modalSrv.error({
+                  nzTitle: '温馨提示',
+                  nzContent: res.errorInfo
+                });
+              }
             },
             (error) => {
-                this.msg.warning(error)
+              this.msg.warning(error)
             }
-        );
+          );
+        }
     }
 
 }

@@ -2,19 +2,20 @@
 <div class="memberAnalysis-top addStaffBox-main">
     <h3 class="flex-1 text-lg">卡数据导出</h3>
     <div class="">
-        <div class="addStaffBox-main-left ">选择门店</div>
-        <div class="addStaffBox-main-right">
-            <nz-select [(ngModel)]="selectedOption" style="width:240px;" (ngModelChange)="selectStoreInfo($event)" [nzPlaceHolder]="'请选择一个门店'"
+        <!-- <div class="addStaffBox-main-left ">选择门店</div>
+        <div class="addStaffBox-main-right"> -->
+            <jn-stores-infor style="padding-left:33px;" [ifStoresAll]="false" [moduleId]="moduleId" (storeIdOutput)="selectStoreInfo($event.storeId)"></jn-stores-infor>
+            <!-- <nz-select [(ngModel)]="selectedOption" style="width:240px;" (ngModelChange)="selectStoreInfo($event)" [nzPlaceHolder]="'请选择一个门店'"
                 [nzShowSearch]="true">
                 <nz-option *ngFor="let item of storeList" [nzLabel]="item.storeName" [nzValue]="item">
                 </nz-option>
-            </nz-select>
+            </nz-select> -->
             <!-- <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth" (storeListPush)="storeListPush($event)"
       (storeIdOutput)="getStoreId($event)"></jn-stores-infor> -->
-        </div>
+        <!-- </div> -->
     </div>
     <div>
-        <div class="addStaffBox-main-left ">接收邮箱</div>
+        <div class="addStaffBox-main-left " style="margin-right:10px;">接收邮箱</div>
         <div class="addStaffBox-main-right">
             <input nz-input [(ngModel)]="emailInfor" placeholder="请输入接收邮箱" style="width:240px;">
         </div>

@@ -20,7 +20,7 @@
         <nz-form-item>
             <nz-form-label class="fl">员工接收的报表类型</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <nz-select formControlName="reportType" name="reportTypes" id="reportTypes" [nzShowSearch]="true"  (ngModelChange)="onChangesRoles($event)" >
+                <nz-select formControlName="reportType" name="reportTypes" id="reportTypes" [nzShowSearch]="true" >
                     <nz-option *ngFor="let i of reportTypes; let idx = index" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
                 </nz-select>
             </nz-form-control>
@@ -29,7 +29,7 @@
         <nz-form-item>
             <nz-form-label class="fl">员工接收的到店通知</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <nz-select formControlName="receiveType" name="storeNotice" id="storeNotice" [nzShowSearch]="true"  (ngModelChange)="onChangesRoles($event)" >
+                <nz-select formControlName="receiveType" name="storeNotice" id="storeNotice" [nzShowSearch]="true">
                     <nz-option *ngFor="let i of storeNotice; let idx = index" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
                 </nz-select>
             </nz-form-control>

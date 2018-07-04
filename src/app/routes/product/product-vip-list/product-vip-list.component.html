@@ -24,7 +24,7 @@
             </nz-form-item>
         </standard-form-row>
     </form>
-    <nz-table #basicTable [nzShowPagination]="false" [nzData]="vipItemListInfor">
+    <nz-table [nzNoResult]="'暂无会员卡规则'" #basicTable [nzShowPagination]="false" [nzData]="vipItemListInfor">
         <thead nz-thead class="ui-grid-thead">
         <tr>
             <th nz-th class="" *ngFor="let list of theadName">{{list}}</th>
@@ -34,12 +34,12 @@
         <tr nz-tbody-tr *ngFor="let item of vipItemListInfor;let i = index">
             <td nz-td>{{item.typeName}}</td>
             <td nz-td>{{item.cardConfigName}}</td>
-            <td nz-td>{{item.cardConfigId}}</td>
+            <td nz-td>{{item.cardRights}}</td>
             <td nz-td>{{item.rules[0].price/100}}</td>
             <td nz-td class="operation" style="cursor: pointer">
                 <span style="color: #FF6600" (click)="checkDetailInfor(item.cardConfigId, item.type)">查看详情</span>
                 <span class="iconfont icon-line1"></span>
-                <span style="color: #1890ff" (click)="operationProductStatus(item.cardConfigId,statusFlag)">{{statusFlag == 1? '下架':'上架'}}</span>
+                <span style="color: #ff7700" (click)="operationProductStatus(item.cardConfigId,statusFlag)">{{statusFlag == 1? '下架':'上架'}}</span>
             </td>
         </tr>
         </tbody>

@@ -2,7 +2,7 @@
     <nz-form-item>
         <nz-form-label nzSpan="5" nzRequired>行业类型</nz-form-label>
         <nz-form-control [nzSpan]="16">
-            <nz-select formControlName="hangye_type" [nzPlaceHolder]="'请选择行业类型'">
+            <nz-select formControlName="hangye_type" [nzPlaceHolder]="'请选择行业类型'" [nzShowSearch]="true">
                 <nz-option *ngFor="let hangyeType of hangyeTypeList" [nzLabel]="hangyeType.industryName" [nzValue]="hangyeType.industryId"></nz-option>
             </nz-select>
             <nz-form-explain class="error-color" *ngIf="hangye_type.dirty && hangye_type.errors">请选择行业类型</nz-form-explain>
@@ -30,7 +30,10 @@
     <nz-form-item>
         <nz-form-label nzSpan="5" nzRequired>商户地址</nz-form-label>
         <nz-form-control [nzSpan]="16">
-            <nz-cascader [nzPlaceHolder]="'请选择商户地址'" formControlName="shanghu_address" [nzOptions]="provinces" [nzLoadData]="loadData" (nzChange)="selectCity($event)"></nz-cascader>
+            <nz-cascader [nzPlaceHolder]="'请选择商户地址'"
+                         formControlName="shanghu_address"
+                         [nzOptions]="_options"
+                         (nzChange)="selectCity($event)"></nz-cascader>
             <nz-form-explain class="error-color" *ngIf="shanghu_address.dirty && shanghu_address.errors">请选择商户地址</nz-form-explain>
         </nz-form-control>
     </nz-form-item>

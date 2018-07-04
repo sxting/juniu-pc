@@ -23,6 +23,7 @@ export class SetingsService {
     //购买记录  /merchant/module/purchase/record.json
     getPurchaseRecord(Params: any) {
         let apiUrl = this.api6 + '/purchase/record.json';
+        Params.timestamp = new Date().getTime();
         return this.http.get(apiUrl, Params)
             .map((response: Response) => response)
             .catch(error => {
@@ -33,6 +34,7 @@ export class SetingsService {
     //  申请发票 /merchant/module/package/invoice.json
     packageInvoice(Params: any) {
         let apiUrl = this.api6 + '/package/invoice.json';
+        Params.timestamp = new Date().getTime();
         return this.http.get(apiUrl, Params)
             .map((response: Response) => response)
             .catch(error => {
@@ -43,6 +45,7 @@ export class SetingsService {
     //模块批量查询  /merchant/module/package/batch.json
     getPackageBatchList(Params: any) {
         let apiUrl = this.api6 + '/package/batch.json';
+        Params.timestamp = new Date().getTime();
         return this.http.get(apiUrl, Params)
             .map((response: Response) => response)
             .catch(error => {
@@ -53,6 +56,7 @@ export class SetingsService {
     //购买模块包门店选择列表 /merchant/module/package/stores.json
     getPackageStores(Params: any) {
         let apiUrl = this.api6 + '/package/stores.json';
+        Params.timestamp = new Date().getTime();
         return this.http.get(apiUrl, Params)
             .map((response: Response) => response)
             .catch(error => {
@@ -63,21 +67,14 @@ export class SetingsService {
     //模块包预支付订单 /merchant/module/package/preorder.json
     getPackagePreorder(Params: any) {
         let apiUrl = this.api6 + '/package/preorder.json';
+        Params.timestamp = new Date().getTime();
         return this.http.post(apiUrl, Params)
             .map((response: Response) => response)
             .catch(error => {
                 return Observable.throw(error);
             });
     }
-    //短信购买  
-    buySmsPackage(Params: any) {
-        let apiUrl = Config.API + 'account/sms/package/buySmsPackage.json';
-        return this.http.get(apiUrl, Params)
-            .map((response: Response) => response)
-            .catch(error => {
-                return Observable.throw(error);
-            });
-    }
+
     //获取支付二维码  pay/url.json
     getPayUrl(Params: any) {
         let apiUrl = this.api5 + '/pay/url.json';
@@ -100,7 +97,34 @@ export class SetingsService {
 
     /*软件购买 end*/
 
+    //短信购买
+    buySmsPackage(Params: any) {
+        let apiUrl = Config.API + 'account/sms/package/buySmsPackage.json';
+        return this.http.get(apiUrl, Params)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    payUrl(Params: any) {
+        let apiUrl = Config.API + 'finance/pay/url.json';
+        return this.http.post(apiUrl, Params)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
     /*支付通道start*/
+
+    //省市区数据列表 common/location.json
+    getCommonLocation() {
+      let apiUrl = this.api5 + '/common/location.json';
+      return this.http.get(apiUrl)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
 
     //省份列表
     getProvinceList() {
@@ -371,6 +395,15 @@ export class SetingsService {
                 return Observable.throw(error);
             });
     }
+
+    merchantsmsBatch() {
+        let apiUrl = Config.API1 + 'account/merchant/sms/batch.json';
+        return this.http.get(apiUrl)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
     //短信充值
     smsRecharge(data) {
         let apiUrl = Config.API1 + '/account/merchant/sms/recharge.json';
@@ -379,4 +412,35 @@ export class SetingsService {
                 return Observable.throw(error);
             });
     }
+
+    // 选择门店
+    selectStores(data: any) {
+        let apiUrl = Config.API1 + 'account/merchant/store/select.json';
+        return this.http.get(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+
+    //商家员工选择列表
+
+    selectStaff(data: any) {
+        let apiUrl = Config.API1 + 'account/merchant/staff/select.json';
+        return this.http.get(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    //日志类型
+    operationType(data: any) {
+        let apiUrl = Config.API1 + 'account/merchant/operation/log/type.json';
+        return this.http.get(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+
 }

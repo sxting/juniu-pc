@@ -1,5 +1,5 @@
 @import 'node_modules/@delon/theme/styles/default';
-
+@primary-color:#ff7700;
 .page {
     font-size: 14px;
     color: #1A1A1A;
@@ -13,6 +13,7 @@
     height: 68px;
     line-height: 68px;
     padding-left: 20px;
+    padding-top: 20px;
 }
 .stores-box  select {
     border: 1px solid #E5E5E5;
@@ -37,7 +38,7 @@
     height: 30px;
     line-height: 30px;
     border-radius: 4px;
-    background-color: #FF6600;
+    background-color: @primary-color;
     color: #ffffff;
     margin-bottom: 20px;
     cursor: pointer;
@@ -59,7 +60,7 @@
     border-bottom: 1px solid #E5E5E5;
 }
 .rule-list table tr td:last-child {
-    color: #FF6600;
+    color: @primary-color;
 
     span {
         padding: 0 5px;
@@ -91,12 +92,12 @@
     display: inline-block;
     width: 4px;
     height: 16px;
-    background-color: #FF6600;
+    background-color: @primary-color;
     margin-right: 10px;
     transform: translateY(2px);
 }
 .icon-asterisks-1-copy {
-    color: #FF6600;
+    color: @primary-color;
     padding-left: 20px;
 }
 .left-text {
@@ -157,7 +158,7 @@
     height: 30px;
     line-height: 30px;
     text-align: center;
-    background-color: #FF6600;
+    background-color: @primary-color;
     color: #ffffff;
     border-radius: 4px;
     margin-left: 260px;

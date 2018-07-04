@@ -13,32 +13,32 @@ import { LocalStorageService } from '@shared/service/localstorage-service';
 })
 export class StaffSchedulingListComponent implements OnInit {
 
-  theadName: any = ['编号', '排班规则名称', '规则详情', '包含员工', '操作'];
-  schedulingListInfor: any = [];//员工提成列表信息
-  schedulingConfigId: string = '';
-  storeList: any;//门店列表
-  storeId: string = '';
-  pageNo: any = 1;//页码
-  pageSize: any = '10';//一页展示多少数据
-  totalElements: any = 0;//商品总数
-  loading = false;//加载loading
-  moduleId: any;
-  ifStoresAll: boolean = false;//是否有全部门店
-  ifStoresAuth: boolean = false;//是否授权
+    theadName: any = ['编号', '排班规则名称', '规则详情', '包含员工', '操作'];
+    schedulingListInfor: any = [];//员工提成列表信息
+    schedulingConfigId: string = '';
+    storeList: any;//门店列表
+    storeId: string = '';
+    pageNo: any = 1;//页码
+    pageSize: any = '10';//一页展示多少数据
+    totalElements: any = 0;//商品总数
+    loading = false;//加载loading
+    moduleId: any;
+    ifStoresAll: boolean = false;//是否有全部门店
+    ifStoresAuth: boolean = false;//是否授权
 
-  constructor(
-      private http: _HttpClient,
-      private modalSrv: NzModalService,
-      private localStorageService: LocalStorageService,
-      private router: Router,
-      private manageService: ManageService,
-      private msg: NzMessageService
-  ) { }
+    constructor(
+        private http: _HttpClient,
+        private modalSrv: NzModalService,
+        private localStorageService: LocalStorageService,
+        private router: Router,
+        private route: ActivatedRoute,
+        private manageService: ManageService,
+        private msg: NzMessageService
+    ) { }
 
-  ngOnInit() {
-      this.moduleId = 1;
-      this.schedulingList();//员工排班列表
-  }
+    ngOnInit() {
+      this.moduleId = this.route.snapshot.params['menuId'];
+    }
 
     //门店id
     getStoreId(event: any){
@@ -76,6 +76,12 @@ export class StaffSchedulingListComponent implements OnInit {
     //编辑
     editSchedulingInfor(ids: string){
       this.router.navigate(['/manage/add/scheduling/rules', { storeId: this.storeId, schedulingConfigId: ids}]);
+    }
+
+    // 切换分页码
+    paginate(event: any) {
+      this.pageNo = event;
+      this.schedulingList();//员工列表请求数据
     }
 
     //员工排班列表
@@ -165,5 +171,6 @@ export class StaffSchedulingListComponent implements OnInit {
           FunctionUtil.errorAlter(error);
         });
     }
+
 
 }

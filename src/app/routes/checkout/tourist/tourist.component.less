@@ -14,14 +14,14 @@
     top: 80px;
     left: 80px;
     right: 20px;
-    bottom: 0;
+    bottom: -12px;
 }
 .settingsCollapsedFalse{
     position: absolute;
     top: 80px;
     left: 220px;
     right: 20px;
-    bottom: 20px;
+    bottom: -12px;
 }
 .renlianTrue{
     position: absolute;
@@ -64,7 +64,7 @@
             padding-left: 10px;
         }
         .xiaoji{
-            height: 220px;
+            height: 150px;
             border-top: 1px solid #e8e8e8;
             position: absolute;
             bottom: -20px;
@@ -94,16 +94,14 @@
     line-height: 50px;
 }
 .shouyinMiddle{
-    height: 100px;
     position: relative;
-    border-bottom: 1px solid #e8e8e8;
 }
 .shouyinBottom{
     padding-top: 10px;
     position: absolute;
     padding-top: 10px;
     bottom: 0;
-    top: 100px;
+    top: 40px;
     left: 0;
     right: 0;
 }
@@ -316,7 +314,7 @@
     top: 125px;
     left: 10px;
     right: 0;
-    bottom: 210px;
+    bottom: 140px;
     overflow-y: auto;
     background: #FFFFFF;
     border: 1px solid #DFDFDF;
@@ -393,6 +391,9 @@
 .CardBigBox{
     display: flex;
     flex-wrap: wrap;
+    height: 100px;
+    overflow: hidden;
+    overflow-y: auto;
     >div{
         width: 266px;
         height: 78px;
@@ -402,42 +403,46 @@
         cursor: pointer;
         position: relative;        
     }
-    .cardName{
-        margin: 15px 0 16px 30px;
-        font-family: PingFangSC-Medium;
-        font-size: 16px;
+   
+}
+.cardName{
+    margin: 15px 0 16px 30px;
+    font-family: PingFangSC-Medium;
+    font-size: 16px;
+    color: #FFFFFF;
+    line-height: 16px;
+}
+.cardMoney{
+    font-size: 12px;
+    color: #FFFFFF;
+    line-height: 12px;
+    margin-left: 30px;
+    .money{
+        font-size: 20px;
+        margin-right: 4px;
         color: #FFFFFF;
-        line-height: 16px;
     }
-    .cardMoney{
-        font-size: 12px;
-        color: #FFFFFF;
-        line-height: 12px;
-        margin-left: 30px;
-        .money{
-            font-size: 20px;
-            margin-right: 4px;
-            color: #FFFFFF;
-        }
-    }
-    
-    .chongzhi{
-        position: absolute;
-        color: #fff;
-        right: 10px;
-        bottom: 10px;
-        width: 40px;
-        text-align: center;
-        height: 24px;
-        line-height: 24px;
-        border: 1px solid #fff;
-        border-radius: 4px;
-        cursor: pointer;
-    }
+}
+
+.chongzhi{
+    position: absolute;
+    color: #fff;
+    right: 10px;
+    bottom: 10px;
+    width: 40px;
+    text-align: center;
+    height: 24px;
+    line-height: 24px;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    cursor: pointer;
 }
 .youhuiBox{
     display: flex;
     flex-wrap: wrap;
+    height: 100px;
+    overflow: hidden;
+    overflow-y: auto;
     >div{
         width: 220px;
         height: 70px;
@@ -448,7 +453,6 @@
         position: relative;        
     }
     .youhui{
-        background: url('../../../../assets/img/youhui.png') left center no-repeat;
         display: flex;
         color: #fff;    
         >div:nth-of-type(1){
@@ -458,6 +462,15 @@
             font-size: 12px;
             margin-top: 10px;
         }
+    }
+    .GIFT{
+        background: url('../../../../assets/img/youhui.png') left center no-repeat;
+    }
+    .MONEY{
+        background: url('../../../../assets/img/youhui3.png') left center no-repeat;
+    }
+    .DISCOUNT{
+        background: url('../../../../assets/img/youhui2.png') left center no-repeat;
     }
 
 }
@@ -608,7 +621,7 @@
 }
 .yhjBox{
     height: 51px;
-    padding-top: 10px;
+    padding-top: 7px;
     overflow: hidden;
     label{
         line-height: 12px;
@@ -624,7 +637,7 @@
             color: #FFb421;            
         }
         .ziti{
-            padding-left: 24px;
+            padding-left: 28px;
             width: 170px;
             overflow: hidden;
             text-overflow:ellipsis;
@@ -637,7 +650,7 @@
     height: 70px;
     .kouka2{
         overflow-y: auto;
-        height: 70px !important;
+        height: 74px !important;
         label{
             margin-left: 0 !important;
         }
@@ -721,7 +734,6 @@
     border: 1px solid #ff6600;
     color: #ff6600;
     border-radius: 5px;
-    margin-top: 24px;
     margin-right: 10px;
     cursor: pointer;
 }
@@ -729,7 +741,7 @@
 .vipArrBox{
     width: 280px;
     position: absolute;
-    top: 65px;
+    top: 35px;
     z-index: 99;
     padding: 10px;
     border: 1px solid #f2f2f2;
@@ -747,4 +759,48 @@
 }
 .button{
     cursor: pointer;
+}
+.icon-zhe{
+    color: #ffb421;
+}
+.icon-ji{
+    color: #32dfb5;
+}
+.icon-qi{
+    color: #3abaf1;
+}
+.icon-chu{
+    color: #fb6832;
+}
+
+
+.djqh{
+    cursor: pointer;
+    color: #ff7700;
+    margin-left: 20px;
+}
+.vipcardbox{
+    width: 266px;
+    height: 78px;
+    border-radius: 5px;
+    margin-right: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+    position: relative;
+    padding-top: 0.1px;
+    .icon-success{
+        position: absolute;
+        color: #fff;
+        right: 10px;
+        top: 10px;
+    }
+}
+.bsyhyk{
+    height: 40px;
+    line-height: 40px;
+    background: #bfbfbf;
+    color: #fff;
+    padding-left: 20px;
+    cursor: pointer;
+    
 }

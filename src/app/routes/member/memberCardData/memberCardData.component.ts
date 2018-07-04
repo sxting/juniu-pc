@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import { MemberService } from '../shared/member.service';
 import { LocalStorageService } from '@shared/service/localstorage-service';
+import { USER_INFO } from '@shared/define/juniu-define';
+import { ActivatedRoute } from '@angular/router';
 declare var echarts: any;
 @Component({
     selector: 'app-memberCardData',
@@ -27,11 +29,12 @@ export class MemberCardDataComponent implements OnInit {
     startDate: any = null;
     endDate: any = null;
     startDay: any;
-    storeId: any = '1525940433796116388373';
+    storeId: any;
     endDay: any;
     type: any = 'money';
     dateType: any = 'week';
     topData: any;
+    userInfo = this.localStorageService.getLocalstorage(USER_INFO) ? JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)) : '';
     types = 'COUNT';
     sevenDayFlowData: any = [
         { "x": 1523349874964, "y1": 68, "y2": 21 },
@@ -57,10 +60,12 @@ export class MemberCardDataComponent implements OnInit {
     ];
     small: any;
     timeType = 'WEEK';
+    moduleId: any;
     merchantId: any = '1517308425509187014931';
     constructor(public msg: NzMessageService,
         private localStorageService: LocalStorageService,
         private modalSrv: NzModalService,
+        private route: ActivatedRoute,
         private memberService: MemberService,
         private http: _HttpClient) {
         this.http.get('/chart').subscribe((res: any) => {
@@ -71,15 +76,14 @@ export class MemberCardDataComponent implements OnInit {
             this.data = res;
             console.log(res);
             this.loading = false;
-            this.memberCardStatisticsHttp();
         });
 
 
     }
     ngOnInit() {
-        this.cardDistributionHttp('CARDRULE');
-        this.cardDistributionHttp('CARDTYPE');
-        this.cardSalesHttp();
+        this.moduleId = this.route.snapshot.params['menuId'];
+        this.selectStoresHttp()
+
         // this.console2({ index: 0 });
 
     }
@@ -169,10 +173,13 @@ export class MemberCardDataComponent implements OnInit {
     getSevenDayFlowEchart(data) {
         let that = this;
         that.weekDayArr = [];
+        that.weekDaylineDownMoney = [];
         data.forEach(function (i: any) {
             that.weekDayArr.push(i.name);
             that.weekDaylineDownMoney.push((that.types === 'COUNT' ? i.value : i.value / 100));
         });
+        that.weekDayArr.reverse();
+        that.weekDaylineDownMoney.reverse();
         let option = {
             tooltip: {
                 trigger: 'axis'
@@ -292,6 +299,12 @@ export class MemberCardDataComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     if (type === 'CARDTYPE') {
+                        res.data.chartVos.forEach(function (i: any) {
+                            if (i.name === 'REBATE') i.name = '折扣卡';
+                            if (i.name === 'STORED') i.name = '储值卡';
+                            if (i.name === 'METERING') i.name = '计次卡';
+                            if (i.name === 'TIMES') i.name = '期限卡';
+                        })
                         that.openCardEchart(res.data.chartVos)
                     }
                     if (type === 'CARDRULE') {
@@ -373,5 +386,32 @@ export class MemberCardDataComponent implements OnInit {
             nzTitle: '温馨提示',
             nzContent: err
         });
+    }
+    selectStoresHttp() {
+        let data = {
+            moduleId: this.moduleId,
+            timestamp: new Date().getTime()
+        }
+        this.loading = true;
+        let that = this;
+        this.memberService.selectStores(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.storeId = this.userInfo.staffType === 'MERCHANT' ? '' : res.data.items[0].storeId;
+                    this.cardDistributionHttp('CARDRULE');
+                    this.cardDistributionHttp('CARDTYPE');
+                    this.cardSalesHttp();
+                    this.memberCardStatisticsHttp();
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => {
+                this.errorAlter(error);
+            }
+        );
     }
 }

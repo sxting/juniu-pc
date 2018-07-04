@@ -47,9 +47,10 @@ export class FunctionUtil {
 
   //将门店列表数据格式转换成按照城市分类 storeId
   static getCityListStore(storeList: any) {
+    console.log(storeList);
     let cityAllCodeArr = [];
     for (let i = 0; i < storeList.length; i++) {
-      cityAllCodeArr.push(storeList[i].cityId + '-' + storeList[i].cityName)
+      cityAllCodeArr.push(storeList[i].cityCode + '-' + storeList[i].cityName)
     }
     let cityCodeArr = FunctionUtil.getNoRepeat(cityAllCodeArr);
     let cityArr = [];
@@ -65,10 +66,10 @@ export class FunctionUtil {
     }
     for (let i = 0; i < cityArr.length; i++) {
       for (let j = 0; j < storeList.length; j++) {
-        if (storeList[j].cityId == cityArr[i].cityCode) {
+        if (storeList[j].cityCode == cityArr[i].cityCode) {
           cityArr[i].stores.push({
             storeId: storeList[j].storeId,
-            storeName: storeList[j].storeName,
+            storeName: storeList[j].branchName,
             change: true
           })
         }
@@ -79,6 +80,7 @@ export class FunctionUtil {
 
   //转换后台数据(选择员工，门店，商品，服务项目等组件)
   static getDataChange(staffListInfor: any, selectedStaffIds: any) {
+    console.log(staffListInfor);
     staffListInfor.forEach(function (city: any) {
       city.change = false;
       city.checked = false;
@@ -278,7 +280,16 @@ export class FunctionUtil {
     arr = Object.keys(unique).map(function (u) { return JSON.parse(u); });
     return arr;
   }
-
+  static obectToSetTime(object?: any) {
+    if (object) {
+      object.timestamp = new Date().getTime()
+    } else {
+      object = {
+        timestamp: new Date().getTime()
+      }
+    }
+    return object;
+  }
 
   static obectToURLSearchParams(object: any): URLSearchParams {
     let params = new URLSearchParams();
@@ -664,7 +675,7 @@ export class FunctionUtil {
   }
 
   static isTel(Tel: any) {
-    var reg = /^0?1[3|4|5|7|8|9][0-9]\d{8}$/;
+    var reg = /^1\d{10}$/;
     if (reg.test(Tel)) {
       return true;
     } else {
@@ -686,6 +697,25 @@ export class FunctionUtil {
   static formatFloat(f: number, digit: any) {
     let m = Math.pow(10, digit);
     return parseInt(String(f * m), 10) / m;
+  }
+
+  //检查是否有违禁词的方法
+  static checkKeyword(str: any) {
+    var words = '最终解释权,团购券,静坐,变态,储值卡,充值卡,会员卡,VIP卡,打折卡,年卡,美容卡,便秘,健身卡,玻尿酸,美瞳,套现,微信,美团,医疗,下注,奶粉,癌症,金银,废物,代谢,￥,套现,日你';
+    var wordArr = words.split(',');
+
+    // 进行检查，没有匹配的返回false
+    for (var i = 0; i < wordArr.length; i++) {
+      var word = wordArr[i];
+
+      // 正则检查关键词，发现有匹配的返回该关键词
+      var patt = new RegExp(word, 'i');
+      if (patt.test(str)) {
+        //alert(productName + " matched " + word);
+        return word;
+      }
+    }
+    return false;
   }
 
 }

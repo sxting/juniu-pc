@@ -387,7 +387,7 @@
         <div *ngIf="!isEdit">
           <nz-date-picker [nzFormat]="'YYYY-MM-DD'" [(ngModel)]="sjStartDate"></nz-date-picker>
           <nz-time-picker [nzFormat]="'HH:mm'" [(ngModel)]="sjStartTime"></nz-time-picker>
-          <span style="margin-left:18px;">至</span>
+          <span>至</span>
           <nz-date-picker [nzFormat]="'YYYY-MM-DD'" [(ngModel)]="sjEndDate"></nz-date-picker>
           <nz-time-picker [nzFormat]="'HH:mm'" [(ngModel)]="sjEndTime"></nz-time-picker>
         </div>
@@ -559,7 +559,9 @@
       </div>
     </li>
   </ul>
-  <div class="submit-box"><button (click)="onSubmitClick()">提交</button></div>
+  <div class="submit-box">
+    <button nz-button nzType="primary" [nzLoading]="loading" (click)="onSubmitClick()">提交</button>
+  </div>
 </div>
 
 <!--按城市选择门店弹框-->

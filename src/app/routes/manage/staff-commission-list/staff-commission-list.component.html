@@ -4,21 +4,21 @@
 
 <nz-card [nzBordered]="false">
     <div style="display: flex">
-        <div style="width: 30%">
+        <div style="width: 30%;margin-bottom: 30px">
             <button nz-button (click)="addNewCommissionRules()" [nzType]="'primary'">
                 <span>新增提成规则</span>
             </button>
         </div>
         <form nz-form [nzLayout]="'inline'" class="search__form" style="width: 70%">
-            <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
+            <nz-row>
                 <nz-col nzMd="8" nzSm="24">
-                  <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth"
+                  <jn-stores-infor style="position: absolute;right: 0px;" [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth"
                                    (storeListPush)="storeListPush($event)" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
                 </nz-col>
             </nz-row>
         </form>
     </div>
-    <nz-table #basicTable [nzShowPagination]="false" [nzData]="commissionListInfor">
+    <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="commissionListInfor">
         <thead nz-thead class="ui-grid-thead">
         <tr>
             <th nz-th class="" *ngFor="let list of theadName">{{list}}</th>

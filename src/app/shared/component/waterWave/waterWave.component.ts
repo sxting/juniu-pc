@@ -33,7 +33,7 @@ export class WaterWaveComponent implements OnDestroy, OnChanges, OnInit {
             this._title = value;
     }
 
-    @Input() color = '#1890FF';
+    @Input() color = '#ff7700';
 
     @Input()
     get height() { return this._height; }
@@ -123,7 +123,7 @@ export class WaterWaveComponent implements OnDestroy, OnChanges, OnInit {
 
             const gradient = ctx.createLinearGradient(0, 0, 0, canvasHeight);
             gradient.addColorStop(0, '#ffffff');
-            gradient.addColorStop(1, '#1890FF');
+            gradient.addColorStop(1, '#ff7700');
             ctx.fillStyle = gradient;
             ctx.fill();
             ctx.restore();
@@ -153,7 +153,7 @@ export class WaterWaveComponent implements OnDestroy, OnChanges, OnInit {
 
                 ctx.restore();
                 ctx.clip();
-                ctx.fillStyle = '#1890FF';
+                ctx.fillStyle = '#ff7700';
             }
             } else {
             if (data >= 0.85) {

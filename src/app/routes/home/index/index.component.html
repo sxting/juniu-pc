@@ -1,22 +1,30 @@
-<page-header></page-header>
+<!--<page-header></page-header>-->
+<div class="mg-b20"></div>
 
 <div nz-row [nzGutter]="24">
     <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
         <g2-card
             [title]="'今日营收（元）'"
-            total="{{IncomeData.todayIncomeAmount/100}}"
+            total="{{IncomeData.todayIncomeAmount/100 ? IncomeData.todayIncomeAmount/100 : 0}}"
             contentHeight="44px"
             [footer]="footer1">
-            <trend flag="up" style="display:block; margin-top:2px;">
+            <trend flag="{{IncomeData.todayIncomeAmount>=IncomeData.lastweekDayIncomeAmount ? 'up' : 'down'}}" style="display:block; margin-top:2px;">
                 周同比
-                <span class="pl-sm">{{(IncomeData.todayIncomeAmount/IncomeData.lastweekDayIncomeAmount) ? (IncomeData.todayIncomeAmount/IncomeData.lastweekDayIncomeAmount)*100 : 0}}%</span>
+                <span class="pl-sm">
+                  {{(IncomeData.lastweekDayIncomeAmount && IncomeData.todayIncomeAmount/IncomeData.lastweekDayIncomeAmount) ?
+                  (((IncomeData.todayIncomeAmount>=IncomeData.lastweekDayIncomeAmount ?
+                  IncomeData.todayIncomeAmount-IncomeData.lastweekDayIncomeAmount : IncomeData.lastweekDayIncomeAmount-IncomeData.todayIncomeAmount )/IncomeData.lastweekDayIncomeAmount)*100).toFixed(2) : 0}}%
+                </span>
             </trend>
-            <trend flag="down">
+            <trend flag="{{IncomeData.todayIncomeAmount>=IncomeData.yesterdayIncomeAmount ? 'up' : 'down'}}">
                 日环比
-                <span class="pl-sm">{{(IncomeData.todayIncomeAmount/IncomeData.yesterdayIncomeAmount) ? (IncomeData.todayIncomeAmount/IncomeData.yesterdayIncomeAmount)*100 : 0}}%</span>
+                <span class="pl-sm">
+                  {{(IncomeData.yesterdayIncomeAmount && IncomeData.todayIncomeAmount/IncomeData.yesterdayIncomeAmount) ?
+                  (((IncomeData.todayIncomeAmount >= IncomeData.yesterdayIncomeAmount ? IncomeData.todayIncomeAmount - IncomeData.yesterdayIncomeAmount : IncomeData.yesterdayIncomeAmount - IncomeData.todayIncomeAmount )/IncomeData.yesterdayIncomeAmount)*100).toFixed(2) : 0}}%
+                </span>
             </trend>
             <ng-template #footer1>
-                <p class="text-truncate mb0">日均销售额<span class="ml-sm">￥{{IncomeData.aveIncome/100}}</span></p>
+                <p class="text-truncate mb0">日均销售额<span class="ml-sm">￥{{IncomeData.aveIncome?IncomeData.aveIncome/100: 0}}</span></p>
             </ng-template>
         </g2-card>
     </div>
@@ -27,13 +35,18 @@
             total="{{transationCount.todayCount}}"
             contentHeight="44px"
             [footer]="footer2">
-            <trend flag="up" style="display:block; margin-top:2px;">
+            <trend flag="{{transationCount.todayCount>=transationCount.lastWeekDayCount ? 'up' : 'down'}}" style="display:block; margin-top:2px;">
                 周同比<span class="pl-sm">
-                {{transationCount.todayCount/transationCount.lastWeekDayCount ? (transationCount.todayCount/transationCount.lastWeekDayCount)*100 : 0}}%</span>
+                {{transationCount.lastWeekDayCount && transationCount.todayCount/transationCount.lastWeekDayCount ?
+              (((transationCount.todayCount>=transationCount.lastWeekDayCount?transationCount.todayCount-transationCount.lastWeekDayCount:transationCount.lastWeekDayCount-transationCount.todayCount)/transationCount.lastWeekDayCount)*100).toFixed(2) : 0}}%
+            </span>
             </trend>
-            <trend flag="down">
+            <trend flag="{{transationCount.todayCount>=transationCount.yesterdayCount ? 'up' : 'down'}}">
                 日环比
-                <span class="pl-sm">{{transationCount.todayCount/transationCount.yesterdayCount ? (transationCount.todayCount/transationCount.yesterdayCount)*100 : 0}}%</span>
+                <span class="pl-sm">
+                  {{transationCount.yesterdayCount && transationCount.todayCount/transationCount.yesterdayCount ?
+                  (((transationCount.todayCount>=transationCount.yesterdayCount?transationCount.todayCount-transationCount.yesterdayCount:transationCount.yesterdayCount-transationCount.todayCount)/transationCount.yesterdayCount)*100).toFixed(2) : 0}}%
+                </span>
             </trend>
             <ng-template #footer2>
                 <p class="text-truncate mb0">日均交易笔<span class="ml-sm">{{transationCount.avgCount}}笔</span></p>
@@ -47,8 +60,16 @@
             total="{{newCustomerInfo.customerCount}}"
             contentHeight="44px"
             [footer]="footer3">
-            <trend flag="up" style="display:block; margin-top:2px;">周同比<span class="pl-sm">{{newCustomerInfo.weekRatio?(newCustomerInfo.weekRatio*100+'%'): '--'}}</span></trend>
-            <trend flag="down">日环比<span class="pl-sm">{{newCustomerInfo.dayRatio?newCustomerInfo.dayRatio*100+'%':'--'}}</span></trend>
+            <trend flag="{{newCustomerInfo.weekRatio >= 0 ? 'up' : 'down'}}" style="display:block; margin-top:2px;">周同比
+              <span class="pl-sm">
+                {{(newCustomerInfo.weekRatio||newCustomerInfo.weekRatio == 0)?(newCustomerInfo.weekRatioShow*100+'%'): '--'}}
+              </span>
+            </trend>
+            <trend flag="{{newCustomerInfo.dayRatio >= 0 ? 'up' : 'down'}}">日环比
+              <span class="pl-sm">
+                {{(newCustomerInfo.dayRatio||newCustomerInfo.dayRatio == 0)?newCustomerInfo.dayRatioShow*100+'%':'--'}}
+              </span>
+            </trend>
             <ng-template #footer3>
                 <p class="text-truncate mb0">日均新增会员<span class="ml-sm">{{newCustomerInfo.avgdayNum}}名</span></p>
             </ng-template>
@@ -61,8 +82,16 @@
             total="{{openCardData.openCardNum}}"
             contentHeight="44px"
             [footer]="footer4">
-            <trend flag="up" style="display:block; margin-top:2px;">周同比<span class="pl-sm">{{openCardData.weekRatio?openCardData.weekRatio*100+'%':'--'}}</span></trend>
-            <trend flag="down">日环比<span class="pl-sm">{{openCardData.dayRatio?openCardData.dayRatio*100+'%':'--'}}</span></trend>
+            <trend flag="{{openCardData.weekRatio >= 0 ? 'up' : 'down'}}" style="display:block; margin-top:2px;">周同比
+              <span class="pl-sm">
+                {{weekRatioShowDetailNumber}}
+              </span>
+            </trend>
+            <trend flag="{{openCardData.dayRatio >= 0 ? 'up' : 'down'}}" >日环比
+              <span class="pl-sm">
+                {{(openCardData.dayRatio||openCardData.dayRatio==0)?openCardData.dayRatioShow*100+'%':'--'}}
+              </span>
+            </trend>
             <ng-template #footer4>
                 <p class="text-truncate mb0">日均开卡数<span class="ml-sm">{{openCardData.avgdayNum}}张</span></p>
             </ng-template>
@@ -74,20 +103,20 @@
     <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="12">
         <nz-card nzTitle="待办事项" [nzBordered]="false">
             <div nz-row>
-                <div nz-col [nzXs]="24" [nzSm]="8" class="header-info">
+                <div nz-col [nzXs]="24" [nzSm]="12" class="header-info">
                     <span class="text-grey-dark">新增预约-<span>待处理</span></span>
                     <span class="d-block display-2">{{newReserveCount}}笔预约</span>
                     <em></em>
                 </div>
-                <div nz-col [nzXs]="24" [nzSm]="8" class="header-info">
+                <div nz-col [nzXs]="24" [nzSm]="12" class="header-info">
                     <span class="text-grey-dark">系统通知-<span>代查看</span></span>
                     <span class="d-block display-2">{{messageCount}}条消息</span>
-                    <em></em>
+                    <!--<em></em>-->
                 </div>
-                <div nz-col [nzXs]="24" [nzSm]="8" class="header-info">
-                    <span class="text-grey-dark">新增挂单-<span>代收款</span></span>
-                    <span class="d-block display-2">1笔挂单</span>
-                </div>
+                <!--<div nz-col [nzXs]="24" [nzSm]="8" class="header-info">-->
+                    <!--<span class="text-grey-dark">新增挂单-<span>代收款</span></span>-->
+                    <!--<span class="d-block display-2">{{guadanCount}}笔挂单</span>-->
+                <!--</div>-->
             </div>
         </nz-card>
 
@@ -111,7 +140,7 @@
         <nz-card [nzBordered]="false" nzTitle="会员持卡分布" [nzBodyStyle]="{'padding.px': 12}" style="min-height: 464px" class="sales-card">
             <g2-pie
                 [hasLegend]="true"
-                subTitle="持卡总数"
+                subTitle="{{ cardsTotal ? '持卡总数' : ''}}"
                 [height]="248"
                 [lineWidth]="4"
                 [total]="cardsTotal"
@@ -126,10 +155,3 @@
     <div class="sub-title"><span>近七日流水走势</span></div>
     <div id="seven_day_flow"></div>
 </div>
-
-<!--<nz-card nzTitle="近七日流水走势" [nzBordered]="false" class="offline-card mt-lg">-->
-    <!--<div class="px-lg">-->
-        <!--<g2-timeline [data]="sevenDayFlowData"-->
-                     <!--[titleMap]="{ y1: '线下购买', y2: '在线支付' }"></g2-timeline>-->
-    <!--</div>-->
-<!--</nz-card>-->

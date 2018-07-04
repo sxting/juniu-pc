@@ -2,7 +2,7 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import { NzModalService } from 'ng-zorro-antd';
 import { SetingsService } from '../shared/setings.service';
-import { VAILCODE, APP_TOKEN } from '@shared/define/juniu-define';
+import { VAILCODE, APP_TOKEN, USER_INFO } from '@shared/define/juniu-define';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Config } from '@shared/config/env.config';
 import { LocalStorageService } from '@shared/service/localstorage-service';
@@ -22,7 +22,9 @@ export class AdministrationComponent implements OnInit {
     oldcode: any = '';
     newcode: any = '';
     imgUrl: string = Config.API + 'account/manage/aliAuthorizationQRCode.img' +
-    `?token=${this.localStorageService.getLocalstorage(APP_TOKEN)}`;
+        `?token=${this.localStorageService.getLocalstorage(APP_TOKEN)}`;
+    imgQrcodeUrl: string = Config.API1 + 'account/merchant/manage/aliAuthorizationQRCode.img' +
+        `?token=${this.localStorageService.getLocalstorage(APP_TOKEN)}`;
     //表单
     form: FormGroup;
     form2: FormGroup;
@@ -32,6 +34,7 @@ export class AdministrationComponent implements OnInit {
     loading = false;
     count = 0;
     count1 = 0;
+    count2 = 0
     interval$: any;
     interval$2: any;
 
@@ -44,7 +47,9 @@ export class AdministrationComponent implements OnInit {
     sendMegLabel: string = '获取验证码';
     newsendMegLabel: string = '获取验证码';
     passWordsendMegLabel: string = '获取验证码';
-
+    userInfo = this.localStorageService.getLocalstorage(USER_INFO) ?
+        JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)) : '';
+    merchantName: any;
     constructor(
         private setingsService: SetingsService,
         private http: _HttpClient,
@@ -66,9 +71,11 @@ export class AdministrationComponent implements OnInit {
 
     getCaptcha(counts: any) {
         if (counts === 'count')
-            this.getCode(this.oldphone, counts)
+            this.getCode(this.userInfo.loginName, counts)
         if (counts === 'count1')
             this.getCode(this.form.value.mobile, counts)
+        if (counts === 'count2')
+            this.getCode(this.userInfo.loginName, counts)
     }
     ngOnInit() {
     }
@@ -94,7 +101,7 @@ export class AdministrationComponent implements OnInit {
             nzWidth: '600px',
             nzOnOk: () => {
                 this.submit();
-                return this.submit();
+                // return this.submit();
             }
         });
     }
@@ -107,7 +114,7 @@ export class AdministrationComponent implements OnInit {
             nzWidth: '600px',
             nzOnOk: () => {
                 this.submit2();
-                return this.submit2();
+                // return this.submit2();
             }
         });
     }
@@ -115,7 +122,7 @@ export class AdministrationComponent implements OnInit {
         this.modalSrv.create({
             nzTitle: '支付宝授权',
             nzContent: tpl,
-            nzWidth: '600px',
+            nzWidth: '800px',
             nzOkText: '授权完成',
             nzOnOk: () => {
             }
@@ -138,7 +145,8 @@ export class AdministrationComponent implements OnInit {
         }
         if (this.captcha.invalid || this.captcha2.invalid || this.mobile.invalid) return false;
         else {
-            this.modifyPhoneHttp(this.form.value.mobile, this.form.value.captcha2, this.form.value.captcha);
+            if (this.userInfo.loginName === this.form.value.mobile) this.errorAlter('新手机号不能与旧手机号相同');
+            else this.modifyPhoneHttp(this.form.value.mobile, this.form.value.captcha2, this.form.value.captcha);
         };
     }
     submit2() {
@@ -148,7 +156,7 @@ export class AdministrationComponent implements OnInit {
         }
         if (this.oldpassword.invalid || this.renewpassword.invalid || this.captcha3.invalid || this.newpassword.invalid) return false;
         else {
-            this.modifyPasswordHttp(this.form2.value.renewpassword, this.form2.value.newPassword, this.form2.value.oldpassword, this.form2.value.captcha3);
+            this.modifyPasswordHttp(this.form2.value.renewpassword, this.form2.value.newpassword, this.form2.value.oldpassword, this.form2.value.captcha3);
         };
     }
     /**

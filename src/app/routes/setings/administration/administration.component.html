@@ -4,7 +4,7 @@
         <div class="">
             <div class="addStaffBox-main-left ">手机号:</div>
             <div class="addStaffBox-main-right">
-                15811392601
+                {{userInfo.loginName}}
                 <span class="buttons" (click)="phoneCheck(modalContent1)">点击修改</span>
             </div>
         </div>
@@ -18,19 +18,19 @@
         <div>
             <div class="addStaffBox-main-left ">商家名称:</div>
             <div class="addStaffBox-main-right">
-                桔牛
+                {{userInfo.merchantName}}
             </div>
         </div>
         <div>
             <div class="addStaffBox-main-left ">姓名:</div>
             <div class="addStaffBox-main-right">
-                超级管理员
+                {{userInfo.staffName}}
             </div>
         </div>
         <div>
             <div class="addStaffBox-main-left ">职位:</div>
             <div class="addStaffBox-main-right">
-                超级管理员
+                {{userInfo.roleName}}
             </div>
         </div>
     </div>
@@ -40,25 +40,25 @@
         <div class="">
             <div class="addStaffBox-main-left ">支付宝授权状态:</div>
             <div class="addStaffBox-main-right">
-                未授权
-                <span class="buttons" (click)="shouquan(modalContent3)">点击授权</span>
+                {{userInfo.alipayPid?'已授权':'未授权'}}
+                <span class="buttons" *ngIf="!userInfo.alipayPid" (click)="shouquan(modalContent3)">点击授权</span>
             </div>
         </div>
         <div>
-            <div class="addStaffBox-main-left ">支付宝授权状态:</div>
-            <div class="addStaffBox-main-right">
-                已授权 PID：2088 0227 3142 5391
+            <div class="addStaffBox-main-left " *ngIf="userInfo.alipayPid">支付宝授权PID:</div>
+            <div class="addStaffBox-main-right" *ngIf="userInfo.alipayPid">
+                {{userInfo.alipayPid}}
                 <!-- <span class="buttons" (click)="qxshouquan()">取消授权</span> -->
             </div>
         </div>
     </div>
 </nz-card>
 <ng-template #modalContent1>
-    <form nz-form [formGroup]="form" (ngSubmit)="submit()">
+    <form nz-form [formGroup]="form">
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7">原手机号</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="16">
-                {{oldphone}}
+                {{userInfo.loginName}}
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
@@ -109,7 +109,7 @@
     </form>
 </ng-template>
 <ng-template #modalContent2>
-    <form nz-form [formGroup]="form2" (ngSubmit)="submit2()">
+    <form nz-form [formGroup]="form2">
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7" nzFor="oldpassword">原密码</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="16">
@@ -123,7 +123,7 @@
             <nz-form-label nzXs="24" nzSm="7" nzFor="newpassword">新密码</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="16">
                 <nz-input-group nzSize="large" nzPrefixIcon="anticon anticon-lock">
-                    <input nz-input formControlName="newpassword" maxlength="11" placeholder="新密码">
+                    <input nz-input formControlName="newpassword" maxlength="16" placeholder="新密码">
                 </nz-input-group>
                 <nz-form-explain *ngIf="newpassword.dirty && newpassword.errors">密码格式有误！</nz-form-explain>
             </nz-form-control>
@@ -132,7 +132,7 @@
             <nz-form-label nzXs="24" nzSm="7" nzFor="renewpassword">重复密码</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="16">
                 <nz-input-group nzSize="large" nzPrefixIcon="anticon anticon-lock">
-                    <input nz-input formControlName="renewpassword" maxlength="11" placeholder="重复密码">
+                    <input nz-input formControlName="renewpassword" maxlength="16" placeholder="重复密码">
                 </nz-input-group>
                 <nz-form-explain *ngIf="renewpassword.dirty && renewpassword.errors">密码格式有误！</nz-form-explain>
             </nz-form-control>
@@ -140,7 +140,7 @@
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7">手机号</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="16">
-                {{oldphone}}
+                {{userInfo.loginName}}
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
@@ -156,7 +156,7 @@
                         </nz-form-explain>
                     </nz-col>
                     <nz-col [nzSpan]="8">
-                        <button nz-button nzSize="large" (click)="getCaptcha('count')" [disabled]="count" class="ant-btn__block">{{ count ? count + 's' : '获取验证码' }}</button>
+                        <button nz-button nzSize="large" (click)="getCaptcha('count2')" [disabled]="count2" class="ant-btn__block">{{ count2 ? count2 + 's' : '获取验证码' }}</button>
                     </nz-col>
                 </nz-row>
             </nz-form-control>
@@ -164,10 +164,33 @@
     </form>
 </ng-template>
 <ng-template #modalContent3>
-    <p>支付宝授权是将桔牛系统与支付宝口碑商家系统打通的必要条件。</p>
-    <p>支付宝授权可以一键完成当面付付款通道的开通、门店数据的打通和商品、预约等业务场景的授权。</p>
-    <p>请使用商家总账号支付宝App，扫描下方二维码进行授权。</p>
-    <div class="erweimabox">
-        <img [src]="imgUrl" style="width: 200px;height: 200px;display: block;margin: 10px auto;" alt="">
+    <div class="associatedAccount">
+        <p>系统检测到您尚未关联口碑账号，暂时无法使用此功能。</p>
+        <p>如果您尚未注册口碑账号，您可以
+            <a class="" href="javascript:;">点此注册</a>
+        </p>
+        <p>如果您已注册口碑账号，您可以使用口碑商家总账号支付宝扫描下方二维码，进行授权关联。</p>
+    </div>
+    <div class="associatedAccount-steps">
+        <nz-card [nzBordered]="false">
+            <nz-steps>
+                <nz-step nzTitle="步骤一"></nz-step>
+                <nz-step nzTitle="步骤二"></nz-step>
+                <nz-step nzTitle="步骤三"></nz-step>
+            </nz-steps>
+            <div class="clearfix steps">
+                <p class="fl">
+                    <span>打开支付宝App</span>
+                    <span>登录口碑商家总账号</span>
+                </p>
+                <p class="fl">扫描下方二维码</p>
+                <p class="fl">点击“确认授权”按钮</p>
+            </div>
+            <div class="steps-images">
+                <img src="../../../../assets/img/pay.png" />
+                <img [src]="imgQrcodeUrl" />
+                <img src="../../../../assets/img/sure.png" />
+            </div>
+        </nz-card>
     </div>
 </ng-template>

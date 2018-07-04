@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { _HttpClient } from '@delon/theme';
+import { _HttpClient, TitleService } from '@delon/theme';
 import { ProductService } from "../shared/product.service";
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LocalStorageService} from "@shared/service/localstorage-service";
 import { FunctionUtil } from '@shared/funtion/funtion-util';
+import { STORES_DOWN } from '@shared/define/juniu-define';
 
 @Component({
   selector: 'app-product-list',
@@ -31,12 +32,16 @@ export class ProductListComponent implements OnInit {
     loading = false;//加载loading
     statusFlag: number = 1;//根据商品状态,切换并调取商品信息 商品状态 (0: 下架、1: 上架)
     productListInfor: any[] =[];
+    moduleId: any;
+    timestamp: any = new Date().getTime();//当前时间的时间戳
 
     constructor(
         private http: _HttpClient,
         private modalSrv: NzModalService,
         private router: Router,
+        private route: ActivatedRoute,
         private msg: NzMessageService,
+        private titleSrv: TitleService,
         private localStorageService: LocalStorageService,
         private productService: ProductService
     ) { }
@@ -46,22 +51,16 @@ export class ProductListComponent implements OnInit {
         pageNo: this.pageNo,
         pageSize: this.pageSize,
         putaway: this.putaway,
-        categoryType: 'PHYICALGOODS',
+        categoryType: 'GOODS',
         storeId: this.storeId,
         merchantId: this.merchantId
     };
 
     ngOnInit() {
-        let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
-            JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
-        this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
+        this.moduleId = this.route.snapshot.params['menuId'];
+        this.getStoresInfor();//查看门店
 
-        this.batchQuery.merchantId = this.merchantId;
-        this.batchQuery.storeId = this.storeId;
-        //获取线下商品列表
-        this.getProductListHttp(this.batchQuery);
     }
-
 
     //操作上下架商品
     operationProduct(productId: string, status: any) {
@@ -84,7 +83,6 @@ export class ProductListComponent implements OnInit {
         }
     }
 
-
     //调取上架与未上架的商品
     onStatusClick() {
         this.statusFlag = Number(this.putaway);
@@ -95,7 +93,7 @@ export class ProductListComponent implements OnInit {
 
     //查看详情
     editProduct( ids: string ){
-        this.router.navigate(['/product/add/product', { productId: ids, storeId:this.storeId , merchantId: this.merchantId }]);
+        this.router.navigate(['/product/add/product', { productId: ids, storeId:this.storeId , merchantId: this.merchantId ,menuId: this.moduleId }]);
     }
 
     // 下架操作http请求
@@ -106,7 +104,6 @@ export class ProductListComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     this.loading = false;
-                    console.log(res.data);
                     self.msg.success(`商品下架成功`);
                     this.getProductListHttp(this.batchQuery);
                 } else {
@@ -171,7 +168,7 @@ export class ProductListComponent implements OnInit {
 
     //新增商品
     addNewProduct(){
-        this.router.navigate(['/product/add/product', {storeId:this.storeId , merchantId: this.merchantId }]);
+        this.router.navigate(['/product/add/product', {storeId:this.storeId , merchantId: this.merchantId ,menuId: this.moduleId }]);
     }
 
     // 切换分页码
@@ -179,5 +176,39 @@ export class ProductListComponent implements OnInit {
         this.pageNo = event;
         this.batchQuery.pageNo = this.pageNo;
         this.getProductListHttp(this.batchQuery);
+    }
+
+    //门店初始化
+    getStoresInfor() {
+      let self = this;
+      let data = {
+        moduleId: this.moduleId,
+        timestamp: this.timestamp
+      };
+      this.productService.selectStores(data).subscribe(
+        (res: any) => {
+          if (res.success) {
+            let storeList = res.data.items;
+            let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+              JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+            this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
+
+            this.storeId = UserInfo.staffType === "MERCHANT"? '' : storeList[0].storeId;
+            self.batchQuery.merchantId = this.merchantId;
+            self.batchQuery.storeId = this.storeId;
+            //获取线下商品列表
+            self.getProductListHttp(self.batchQuery);
+
+          } else {
+            this.modalSrv.error({
+              nzTitle: '温馨提示',
+              nzContent: res.errorInfo
+            });
+          }
+        },
+        error => {
+          this.msg.warning(error);
+        }
+      );
     }
 }

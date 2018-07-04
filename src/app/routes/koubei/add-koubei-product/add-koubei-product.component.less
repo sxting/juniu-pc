@@ -1,3 +1,5 @@
+@import 'node_modules/@delon/theme/styles/default';
+@primary-color:#ff7700;
 .sales-card h2{
     font-family: PingFangSC-Medium;
     font-size: 16px;
@@ -6,14 +8,13 @@
         display: inline-block;
         width: 4px;
         height: 16px;
-        background-color: #f60;
+        background-color: @primary-color;
         margin-right: 10px;
         transform: translateY(2px);
     }
 }
 .ant-form-explain {
     font-size: 13px!important;
-    //color: #999!important;
 }
 .ant-form-item-children em {
     margin-left: 8px;
@@ -27,7 +28,7 @@
     margin-bottom: 18px;
 }
 .select-store-btn{
-    color: #f60;
+    color: @primary-color;
     cursor: pointer;
     margin-left: 20px;
     text-decoration: underline;
@@ -36,7 +37,7 @@
     margin-right: 30px;
 }
 .details_list_box .form_parent:last-child{
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 .form_parent{
     position: relative;
@@ -54,7 +55,7 @@
 .form_parent .descriptions_btns{
     font-family: PingFangSC-Regular;
     font-size: 14px;
-    color: #FF6600;
+    color: @primary-color;
     cursor: pointer
 }
 .form_parent .descriptions_btns:first-of-type{
@@ -70,16 +71,16 @@
     height: 30px;
     font-family: PingFangSC-Regular;
     font-size: 14px;
-    color: #FF6600;
+    color: @primary-color;
     line-height: 30px;
-    border: 1px solid #ff6600;
+    border: 1px solid @primary-color;
     text-align: center;
     border-radius: 4px;
     margin-top: 16px;
     cursor: pointer
 }
 .double_btn span:first-of-type{
-    background: #FF6600;
+    background: @primary-color;
     color: #fff;
     margin-right: 30px
 }
@@ -120,7 +121,7 @@
 }
 
 .btn-photo-clip{
-  color: #1890ff;
+  color: @primary-color;
   cursor: pointer;
   position: relative;
   height: 30px;
@@ -145,7 +146,7 @@
 }
 .icon-deleternormal{
   font-size: 30px;
-  color: #ff6600;
+  color: @primary-color;
   position: absolute;
   z-index: 99;
   left: 0;

@@ -40,13 +40,11 @@
                     <div>
                         周同比
                         <span class="iconfont {{todayIncomeItem?.lastWeekCompare<0?'icon-xiala':'icon-up'}}"></span>
-                        {{todayIncomeItem?.lastWeekCompare*100
-                        <0?todayIncomeItem?.lastWeekCompare*100*-1:todayIncomeItem?.lastWeekCompare*100}}% </div>
+                        {{todayIncomeItemDetail}}% </div>
                     <div>
                         日环比
                         <span class="iconfont {{todayIncomeItem?.yesterdayCompare<0?'icon-xiala':'icon-up'}}"></span>
-                        {{todayIncomeItem?.yesterdayCompare*100
-                        <0?todayIncomeItem?.yesterdayCompare*100*-1:todayIncomeItem?.yesterdayCompare*100}}% </div>
+                        {{yesterdayCompareDetail}}% </div>
                 </div>
             </div>
         </nz-card>
@@ -86,7 +84,7 @@
 </div>
 
 <nz-card [nzBordered]="false">
-    <nz-table #basicTable [nzShowPagination]="false" [nzData]="reportOrderList">
+    <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="reportOrderList">
         <thead nz-thead class="ui-grid-thead">
             <tr>
                 <th nz-th class="" *ngFor="let item of theadName;let i = index">{{item}}</th>
@@ -96,7 +94,7 @@
             <tr nz-tbody-tr *ngFor="let item of reportOrderList; let i = index">
                 <td style="color: #368ff7">{{item.payDate}}</td>
                 <td>{{item.bizTypeName}}</td>
-                <td>{{item.body}}</td>
+                <td style="width: 300px;">{{item.body}}</td>
                 <td>{{item.paidMoney/100}}</td>
             </tr>
         </tbody>

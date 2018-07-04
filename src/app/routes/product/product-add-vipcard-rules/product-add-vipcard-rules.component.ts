@@ -17,7 +17,6 @@ export class ProductAddVipcardRulesComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.titleSrv.setTitle('创建会员卡');
     }
 
 }

@@ -1,4 +1,8 @@
 <page-header [title]="'支付通道'">每天支付通道会与您自动结算，并将款项打到您配置的银行账户中。</page-header>
+<div style="opacity: 0; width: 0; height: 0;">
+  <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false"
+                   (storeIdOutput)="onStoresChange($event)"></jn-stores-infor>
+</div>
 <div class="container">
     <nz-card class="set-box">
         <img src="/assets/img/wechat_pay.svg" alt="wechat">
@@ -11,12 +15,12 @@
         <!--审核通过显示-->
         <div class="setted" *ngIf="status == '1'">
             <p class="color-000">已设置</p>
-            <p>微信支付费率：0.55%</p>
-            <p>支付宝支付费率：0.55%</p>
-            <button nz-button class="fix-btn" (click)="goPayWay()">点击修改</button>
+            <p>微信支付费率：{{statusData.wechatRate/10}}%</p>
+            <p>支付宝支付费率：{{statusData.alipaysRate/10}}%</p>
+            <button nz-button [disabled]="!haveData" class="fix-btn" (click)="goPayWay()">点击修改</button>
         </div>
     </nz-card>
-    <nz-table [nzData]="dataList1" [nzShowPagination]="false">
+    <nz-table [nzNoResult]="'没有数据'" [nzData]="dataList1" [nzShowPagination]="false">
         <thead>
         <tr>
             <th *ngFor="let item of theadName"><span>{{item}}</span></th>
@@ -25,8 +29,8 @@
         <tbody>
         <tr *ngFor="let item of dataList1">
             <td>{{item.date}}</td>
-            <td>{{item.accountNo}}</td>
-            <td>{{item.remark}}</td>
+            <!--<td>{{item.accountNo}}</td>-->
+            <!--<td>{{item.remark}}</td>-->
             <td>{{item.amount}}</td>
             <td (click)="onDetailBtnClick(alertBox, item.date)">查看交易明细</td>
         </tr>
@@ -37,7 +41,7 @@
 <ng-template #alertBox>
     <div class="alert-box">
         <button nz-button [nzType]="'default'" class="excel-btn" (click)="excel()"><span>导出Excel</span></button>
-        <nz-table [nzData]="dataList2" [nzShowPagination]="false">
+        <nz-table [nzNoResult]="'没有数据'" [nzData]="dataList2" [nzShowPagination]="false">
             <thead>
             <tr>
                 <th *ngFor="let item of alertTheadName"><span>{{item}}</span></th>

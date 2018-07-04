@@ -32,11 +32,15 @@ export class ServiceItemsListComponent implements OnInit {
     storeId: string = '';
     merchantId: string = '';
     itemsListInfor: any[] =[];
+    storeList: any = [];
+    moduleId: string;
+    timestamp: any = new Date().getTime();//当前时间的时间戳
 
     constructor(
         private http: _HttpClient,
         private modalSrv: NzModalService,
         private router: Router,
+        private route: ActivatedRoute,
         private msg: NzMessageService,
         private titleSrv: TitleService,
         private localStorageService: LocalStorageService,
@@ -51,25 +55,19 @@ export class ServiceItemsListComponent implements OnInit {
       pageSize: this.pageSize,
         pageNo: this.pageNo,
         putaway: this.putaway,
-        categoryType: 'SERVICEITEMS',
+        categoryType: 'SERVICE',
         storeId: this.storeId,
         merchantId: this.merchantId
     };
 
     ngOnInit() {
-        let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
-            JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
-        this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
-
-        this.batchQuery.merchantId = this.merchantId;
-        this.batchQuery.storeId = this.storeId;
-        //获取列表信息
-        this.getServiceItemsListHttp(this.batchQuery);
+        this.moduleId = this.route.snapshot.params['menuId'];
+        this.getStoresInfor();//门店
     }
 
     //查看详情
     editProduct( ids: string ){
-        this.router.navigate(['/product/add/new/items', { productId: ids, storeId: this.storeId , merchantId: this.merchantId }]);
+        this.router.navigate(['/product/add/new/items', { productId: ids, storeId: this.storeId , merchantId: this.merchantId, menuId: this.moduleId }]);
     }
 
     //操作上下架商品
@@ -176,12 +174,49 @@ export class ServiceItemsListComponent implements OnInit {
 
     //新增服务项目
     addNewItemServes(){
-        this.router.navigate(['/product/add/new/items', {storeId:this.storeId , merchantId: this.merchantId }]);
+        this.router.navigate(['/product/add/new/items', {storeId:this.storeId , merchantId: this.merchantId ,menuId: this.moduleId }]);
     }
 
     // 切换分页码
     paginate(event: any) {
         this.pageNo = event;
+        this.batchQuery.pageNo = this.pageNo;
+        //获取列表信息
+        this.getServiceItemsListHttp(this.batchQuery);
+    }
+
+    //门店初始化
+    getStoresInfor() {
+      let self = this;
+      let data = {
+        moduleId: this.moduleId,
+        timestamp: this.timestamp
+      };
+      this.productService.selectStores(data).subscribe(
+        (res: any) => {
+          if (res.success) {
+            let storeList = res.data.items;
+            this.storeList = storeList;
+            let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+              JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+            this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
+            this.storeId = UserInfo.staffType === "MERCHANT"? '' : this.storeList[0].storeId;
+            this.batchQuery.merchantId = this.merchantId;
+            this.batchQuery.storeId = this.storeId;
+            //获取列表信息
+            this.getServiceItemsListHttp(this.batchQuery);
+
+          } else {
+            this.modalSrv.error({
+              nzTitle: '温馨提示',
+              nzContent: res.errorInfo
+            });
+          }
+        },
+        error => {
+          this.msg.warning(error);
+        }
+      );
     }
 
 }

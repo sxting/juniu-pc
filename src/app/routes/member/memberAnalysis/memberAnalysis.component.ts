@@ -1,9 +1,12 @@
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, OnDestroy } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import { SimpleTableColumn } from '@delon/abc';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { MemberService } from '../shared/member.service';
+import { USER_INFO } from '@shared/define/juniu-define';
+import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 declare var echarts: any;
 declare var DataView: any;
 declare var interval: any;
@@ -13,7 +16,7 @@ declare var interval: any;
     templateUrl: './memberAnalysis.component.html',
     styleUrls: ['./memberAnalysis.component.less']
 })
-export class MemberAnalysisComponent implements OnInit {
+export class MemberAnalysisComponent implements OnInit, OnDestroy {
     salesPieData: any;
     salesTotal = 0;
     data: any = {
@@ -33,9 +36,11 @@ export class MemberAnalysisComponent implements OnInit {
     startDay: any;
     endDay: any;
     type: any = 'money';
-    storeId: any = '1525940433796116388373';
-    merchantId: any = '1517308425509187014931';
+    storeId: any;
+    merchantId: any;
     dateType: any = 'week';
+    countTotal: any;
+    customerIds: any;
     rankingListData: any[] = Array(10).fill({}).map((item, i) => {
         return {
             title: `工专路 ${i} 号店`,
@@ -55,22 +60,27 @@ export class MemberAnalysisComponent implements OnInit {
     pageIndex: any = 1;
     index: any = 0;
     index2: any = 0;
+    moduleId: any;
+    userInfo: any = this.localStorageService.getLocalstorage(USER_INFO) ? JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)) : '';
+
     constructor(public msg: NzMessageService,
         private localStorageService: LocalStorageService,
         private modalSrv: NzModalService,
-        private memberService: MemberService, private http: _HttpClient) {
-        this.http.get('/chart').subscribe((res: any) => {
-            this.webSite = res.visitData.slice(0, 10);
-            this.offlineChartData = res.offlineChartData;
-        });
+        private route: ActivatedRoute,
+        private router: Router,
+        private memberService: MemberService,
+        private http: _HttpClient) {
+
     }
     ngOnInit() {
-        this.memberStatisticsFunHttp();
-        this.memberMonthAvgHttp();
-        this.consumptionFrequencyHttp();
-        this.lastTimeHttp();
-    }
+        this.moduleId = this.route.snapshot.params['menuId'];
+        this.merchantId = this.userInfo.merchantId;
+        this.selectStoresHttp()
 
+    }
+    ngOnDestroy(): void {
+        this.modalSrv.closeAll();
+    }
     //今日新增会员、今日开卡张数、会员转换率、男女分布
     memberStatisticsFunHttp() {
         let data = {
@@ -82,7 +92,7 @@ export class MemberAnalysisComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     that.topData = res.data
-                    that.salesPieData = [{ x: '男', y: res.data.ratio.maleRatio }, { x: '女', y: res.data.ratio.femaleRatio }, { x: '不详', y: res.data.ratio.unknow }];
+                    that.salesPieData = [{ x: '男', y: res.data.ratio.maleCount }, { x: '女', y: res.data.ratio.femaleCount }, { x: '不详', y: res.data.ratio.unknowCount }];
                     if (that.salesPieData) that.salesTotal = that.salesPieData.reduce((pre, now) => now.y + pre, 0);
                 } else {
                     this.modalSrv.error({
@@ -181,6 +191,7 @@ export class MemberAnalysisComponent implements OnInit {
         );
     }
     chakanXQ(customerIds?, tpl?: TemplateRef<{}>) {
+        this.customerIds = customerIds;
         if (customerIds) {
             let data = {
                 customerIds: customerIds,
@@ -197,13 +208,17 @@ export class MemberAnalysisComponent implements OnInit {
                             if (i.gender === 2) i.genderName = '不详';
                         })
                         that.vipXQ = res.data.list
-                        if (customerIds) {
+                        this.countTotal = res.data.countTotal;
+
+                        if (customerIds && tpl) {
                             that.modalSrv.create({
                                 nzTitle: '查看详情',
                                 nzContent: tpl,
                                 nzFooter: null,
                                 nzWidth: '1000px',
-
+                                nzOnCancel: () => {
+                                    that.pageIndex = 1;
+                                }
                             });
                         }
                     } else {
@@ -221,7 +236,8 @@ export class MemberAnalysisComponent implements OnInit {
     }
     getData2(e: any) {
         this.pageIndex = e;
-        this.chakanXQ()
+        console.log(e)
+        this.chakanXQ(this.customerIds)
     }
     errorAlter(err: any) {
         this.modalSrv.error({
@@ -234,5 +250,35 @@ export class MemberAnalysisComponent implements OnInit {
     }
     change2(e) {
         this.index2 = e.index
+    }
+    selectStoresHttp() {
+        let data = {
+            moduleId: this.moduleId,
+            timestamp: new Date().getTime()
+        }
+        this.loading = true;
+        let that = this;
+        this.memberService.selectStores(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.storeId = this.userInfo.staffType === 'MERCHANT' ? '' : res.data.items[0].storeId;
+                    this.memberStatisticsFunHttp();
+                    this.memberMonthAvgHttp();
+                    this.consumptionFrequencyHttp();
+                    this.lastTimeHttp();
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => {
+                this.errorAlter(error);
+            }
+        );
+    }
+    fbyxhd() {
+        this.router.navigate(['/marketing/sms/index', { menuId: '90070101' }]);
     }
 }

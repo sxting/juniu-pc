@@ -1,15 +1,21 @@
-<page-header></page-header>
+<!--<page-header></page-header>-->
+<div class="mg-b20"></div>
 
 <div class="page">
   <div class="content-box">
     <div class="content-title"><span></span>预约设置</div>
     <ul>
       <li>
-        <span class="set-left">选择门店</span>
-        <nz-select style="width: 200px;" [(ngModel)]="selectedOption" (ngModelChange)="onStoresChange($event)" [nzShowSearch]="true">
-          <nz-option [nzLabel]="'请选择一个门店'" [nzValue]="''"></nz-option>
-          <nz-option *ngFor="let store of stores" [nzLabel]="store.storeName" [nzValue]="store.storeId"></nz-option>
-        </nz-select>
+
+        <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false"
+                         (storeIdOutput)="onStoresChange($event)">
+        </jn-stores-infor>
+
+        <!--<span class="set-left">选择门店</span>-->
+        <!--<nz-select style="width: 200px;" [(ngModel)]="selectedOption" (ngModelChange)="onStoresChange($event)" [nzShowSearch]="true">-->
+          <!--<nz-option [nzLabel]="'请选择一个门店'" [nzValue]="''"></nz-option>-->
+          <!--<nz-option *ngFor="let store of stores" [nzLabel]="store.storeName" [nzValue]="store.storeId"></nz-option>-->
+        <!--</nz-select>-->
       </li>
       <li>
         <span class="set-left">营业时间</span>
@@ -101,8 +107,8 @@
         <!--</td>-->
         <td>
           <div class="staff-set-box">
-            <div class="none" *ngIf="craftsman.products.length == 0">暂无可预约商品</div>
-            <div *ngIf="craftsman.products.length > 0" class="staff-set">
+            <div class="none" *ngIf="craftsman?.products && craftsman?.products.length == 0">暂无可预约商品</div>
+            <div *ngIf="craftsman?.products && craftsman?.products.length > 0" class="staff-set">
               <span style="padding: 0 5px;" *ngFor="let product of craftsman.products">{{product.productName}}</span>
             </div>
           </div>

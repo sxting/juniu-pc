@@ -1,17 +1,23 @@
-<page-header></page-header>
+<!--<page-header></page-header>-->
+<!--<div class="mg-b20"></div>-->
+
 <div class="page">
     <div class="content-box" [class.l-50]="settings.layout.collapsed">
         <div class="content-title"><span></span>员工休假</div>
         <div class="select-store-box" >
-            选择门店
-            <nz-select style="width: 200px;" [(ngModel)]="selectedOption" (ngModelChange)="onSelectStoreChange($event)"
-                       [nzShowSearch]="true">
-                <nz-option [nzLabel]="'全部门店'" [nzValue]="allStores"></nz-option>
-                <nz-option *ngFor="let store of stores" [nzLabel]="store.storeName"
-                           [nzValue]="store.storeId"></nz-option>
-            </nz-select>
+            <!--选择门店-->
+            <!--<nz-select style="width: 200px;" [(ngModel)]="selectedOption" (ngModelChange)="onSelectStoreChange($event)"-->
+                       <!--[nzShowSearch]="true">-->
+                <!--<nz-option [nzLabel]="'全部门店'" [nzValue]="allStores"></nz-option>-->
+                <!--<nz-option *ngFor="let store of stores" [nzLabel]="store.storeName"-->
+                           <!--[nzValue]="store.storeId"></nz-option>-->
+            <!--</nz-select>-->
 
+          <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="ifStoresAll"
+                           (storeIdOutput)="onSelectStoreChange($event)">
+          </jn-stores-infor>
         </div>
+
         <div class="table-box clearfix">
             <div class="prevent-line"></div>
             <div class="table-container">

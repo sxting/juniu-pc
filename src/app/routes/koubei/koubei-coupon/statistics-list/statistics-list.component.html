@@ -1,6 +1,8 @@
-<page-header></page-header>
+<!--<page-header></page-header>-->
+<div class="mg-b20"></div>
+
 <div class="table_data clearfix">
-    <nz-table #nzTable [nzData]="activityEffectInfos" [nzShowPagination]="false">
+    <nz-table [nzNoResult]="'没有数据'" #nzTable [nzData]="activityEffectInfos" [nzShowPagination]="false">
         <thead class="ui-grid-thead">
         <tr>
             <th class="">活动标题</th>

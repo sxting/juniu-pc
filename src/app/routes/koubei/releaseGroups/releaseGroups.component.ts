@@ -1,6 +1,6 @@
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
-
+import NP from 'number-precision';
 
 /**
  * Created by chounan on 17/9/8.
@@ -11,7 +11,7 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { KoubeiService } from "../shared/koubei.service";
 import { LocalStorageService } from "../../../shared/service/localstorage-service";
-import { STORES_INFO, KOUBEI_ITEM_CATEGORYS, CITYLIST } from './../../../shared/define/juniu-define';
+import { STORES_INFO, KOUBEI_ITEM_CATEGORYS, CITYLIST, ALIPAY_SHOPS } from './../../../shared/define/juniu-define';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
@@ -86,11 +86,12 @@ export class ReleaseGroupsComponent implements OnInit {
     count1 = 0;
     interval$: any;
     interval$2: any;
+    status;
     constructor(
         private koubeiService: KoubeiService,
         private router: Router,
         private fb: FormBuilder,
-
+        private localStorageService: LocalStorageService,
         private modalSrv: NzModalService,
         private route: ActivatedRoute,
     ) {
@@ -102,9 +103,10 @@ export class ReleaseGroupsComponent implements OnInit {
             inventory: [null, [Validators.required, Validators.pattern(/^[1-9]\d*$/), Validators.minLength(1), Validators.maxLength(8)]],
             peopleNumber: [null, [Validators.pattern(/^[1-9]\d*$/), Validators.minLength(1), Validators.maxLength(8)]],
             timeLimit: [null, [Validators.pattern(/^[1-9]\d*$/), Validators.max(24), Validators.min(1)]],
-            originalPrice: [null, [Validators.required, Validators.pattern(/^[1-9]\d*$/), Validators.max(99999999), Validators.min(1)]],
-            presentPrice: [null, [Validators.required, Validators.pattern(/^[1-9]\d*$/), Validators.max(99999999), Validators.min(1)]],
+            originalPrice: [null, [Validators.required, Validators.pattern(/^[0-9]+(.[0-9]{1,2})?$/), Validators.max(99999999), Validators.min(0.1)]],
+            presentPrice: [null, [Validators.required, Validators.pattern(/^[0-9]+(.[0-9]{1,2})?$/), Validators.max(99999999), Validators.min(0.1)]],
             time: [null, [Validators.required]],
+            time2: [null, [Validators.required]],
             mock: [false]
 
         });
@@ -145,13 +147,14 @@ export class ReleaseGroupsComponent implements OnInit {
             let descriptions: any = [];//详情
             this.changeDataDetail(this.descriptions, descriptions);
             this.changeDataDetail(this.buyerNotes, buyerNotes);
-
+            this.startTime = this.formatDateTime(this.form.value.time[0], 'start');
+            this.endTime = this.formatDateTime(this.form.value.time[1], 'end');
             let data = {
                 pinTuanId: this.pinTuanId,
                 pinTuanName: this.pinTuanName.value,
                 timeLimit: this.timeLimit.value,
-                originalPrice: this.originalPrice.value * 100,
-                presentPrice: this.presentPrice.value * 100,
+                originalPrice:  NP.times(this.originalPrice.value ,100),
+                presentPrice: NP.times(this.presentPrice.value , 100),
                 peopleNumber: this.ctrsBoo ? this.peopleNumber.value : this.peopleNumber2,
                 inventory: this.inventory.value,
                 startTime: this.startTime,
@@ -209,10 +212,13 @@ export class ReleaseGroupsComponent implements OnInit {
         }
     }
     ngOnInit() {
-        let storeList = JSON.parse(localStorage.getItem('alipayShops')) ?
-            JSON.parse(localStorage.getItem('alipayShops')) : [];
+        let storeList = JSON.parse(localStorage.getItem(ALIPAY_SHOPS)) ?
+            JSON.parse(localStorage.getItem(ALIPAY_SHOPS)) : [];
+        console.log(storeList)
         this.pinTuanId = this.route.snapshot.params['pinTuanId'];
         this.statusFlag = this.route.snapshot.params['status'];
+
+        this.status = this.route.snapshot.params['status'];
         this.cityNameFun();
         if (this.pinTuanId) {
             this.groupsDetailhttp(this.pinTuanId);
@@ -229,8 +235,8 @@ export class ReleaseGroupsComponent implements OnInit {
         }
     }
     cityNameFun() {
-        let storeList = JSON.parse(localStorage.getItem('alipayShops')) ?
-            JSON.parse(localStorage.getItem('alipayShops')) : [];
+        let storeList = JSON.parse(this.localStorageService.getLocalstorage(ALIPAY_SHOPS)) ?
+            JSON.parse(this.localStorageService.getLocalstorage(ALIPAY_SHOPS)) : [];
         if (storeList) {
             CITYLIST.forEach(function (i: any) {
                 storeList.forEach((ele: any, index: number, arr: any) => {
@@ -444,27 +450,34 @@ export class ReleaseGroupsComponent implements OnInit {
                     let self = this;
                     let pinTuanName = res.data.pinTuanName ? res.data.pinTuanName : null;
                     let timeLimit = res.data.timeLimit ? res.data.timeLimit : null;
-                    let originalPrice = res.data.originalPrice ? res.data.originalPrice / 100 : null;
-                    let presentPrice = res.data.presentPrice ? res.data.presentPrice / 100 : null;
+                    let originalPrice = res.data.originalPrice ? NP.divide(res.data.originalPrice , 100) : null;
+                    let presentPrice = res.data.presentPrice ? NP.divide(res.data.presentPrice , 100) : null;
                     let peopleNumber = res.data.peopleNumber ? res.data.peopleNumber : null;
                     let inventory = res.data.inventory ? res.data.inventory : null;
                     let mock = res.data.mock ? res.data.mock : false;
+                    let time = [];
+                    this._startTime = new Date(res.data.startTime);
+                    this._endTime = new Date(res.data.endTime);
+                    time.push(this._startTime);
+                    time.push(this._endTime);
+                    this.validateEndTime = res.data.validateEndTime;
+
+                    this._validateEndTime = new Date(res.data.validateEndTime);
                     this.form = this.fb.group({
                         pinTuanName: [pinTuanName, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
                         inventory: [inventory, [Validators.required, Validators.pattern(/^[1-9]\d*$/), Validators.minLength(1), Validators.maxLength(8)]],
                         peopleNumber: [peopleNumber, [Validators.pattern(/^[1-9]\d*$/), Validators.minLength(1), Validators.maxLength(8)]],
                         timeLimit: [timeLimit, [Validators.pattern(/^[1-9]\d*$/), Validators.max(24), Validators.min(1)]],
-                        originalPrice: [originalPrice, [Validators.required, Validators.pattern(/^[1-9]\d*$/), Validators.max(99999999), Validators.min(1)]],
-                        presentPrice: [presentPrice, [Validators.required, Validators.pattern(/^[1-9]\d*$/), Validators.max(99999999), Validators.min(1)]],
+                        originalPrice: [originalPrice, [Validators.required, Validators.pattern(/^[0-9]+(.[0-9]{1,2})?$/), Validators.max(99999999), Validators.min(0.1)]],
+                        presentPrice: [presentPrice, [Validators.required, Validators.pattern(/^[0-9]+(.[0-9]{1,2})?$/), Validators.max(99999999), Validators.min(0.1)]],
+                        time: [time],
+                        time2: [this._validateEndTime],
                         mock: [mock]
                     });
                     this.canMofidy = res.data.canMofidy;
                     this.startTime = res.data.startTime;
                     this.endTime = res.data.endTime;
-                    this.validateEndTime = res.data.validateEndTime;
-                    this._startTime = new Date(res.data.startTime);
-                    this._endTime = new Date(res.data.endTime);
-                    this._validateEndTime = new Date(res.data.validateEndTime);
+
                     let pictureDetails;
                     if (res.data.images) {
                         pictureDetails = res.data.images.length > 0 ? res.images : '';

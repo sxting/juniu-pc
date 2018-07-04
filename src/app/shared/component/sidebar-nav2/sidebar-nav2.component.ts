@@ -25,7 +25,7 @@ export class SidebarNav2Component implements OnInit, OnDestroy {
     private bodyEl: HTMLBodyElement;
     list: Nav[] = [];
     private change$: Subscription;
-    menuName: any;
+    menuId: any;
     @Input() autoCloseUnderPad = true;
 
     @Output()
@@ -68,8 +68,17 @@ export class SidebarNav2Component implements OnInit, OnDestroy {
         return false;
     }
     onselect(e: any) {
-        this.menuName = e.menuName;
-        this.select.emit(e);
+        if (this.settings.layout.collapsed !== true) {
+            this.menuId = e.menuId;
+        } else {
+            if (e.menuId) {
+                this.menuId = e.menuId;
+            } else {
+                this.menuId = e.target.classList[0];
+            }
+        }
+        this.select.emit(this.menuId);
+
     }
     clearFloatingContainer() {
         if (this.floatingEl) {
@@ -82,7 +91,7 @@ export class SidebarNav2Component implements OnInit, OnDestroy {
         this.clearFloatingContainer();
         this.floatingEl = this.render.createElement('div');
         this.floatingEl.classList.add(FLOATINGCLS + '-container');
-        this.floatingEl.addEventListener('click', this.floatingAreaClickHandle.bind(this), false);
+        this.floatingEl.addEventListener('click', this.onselect.bind(this), false);
         this.bodyEl.appendChild(this.floatingEl);
     }
 

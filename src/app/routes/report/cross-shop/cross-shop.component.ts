@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { _HttpClient } from '@delon/theme';
+import { _HttpClient, TitleService } from '@delon/theme';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ReportService } from "../shared/report.service";
 import { STORES_INFO } from '@shared/define/juniu-define';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-cross-shop',
@@ -41,19 +42,22 @@ export class CrossShopComponent implements OnInit {
     countPage: any = 0;//弹框商品总数
     pageIndex: number = 1;//弹框第几页吗
     storeList: any = [];//门店列表
-    storeId: string;
+    storeId: string = '';
     merchantId: string;
     consumeType: string;//消费类型
-
     dateRange: Date = null;
     startTime: string = '';//转换字符串的时间
     endTime: string = '';//转换字符串的时间
+    moduleId: any;
+    ifStoresAll: boolean = false;
 
     constructor(
         private http: _HttpClient,
         private modalSrv: NzModalService,
         private msg: NzMessageService,
+        private route: ActivatedRoute,
         private reportService: ReportService,
+        private titleSrv: TitleService,
         private localStorageService: LocalStorageService
     ) { }
 
@@ -77,28 +81,17 @@ export class CrossShopComponent implements OnInit {
     };
 
     ngOnInit() {
+        this.moduleId = this.route.snapshot.params['menuId'];
+        this.getStoresInfor();//门店初始化
+    }
 
-        //门店列表
-        if (this.localStorageService.getLocalstorage(STORES_INFO) && JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
-          let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-            JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-          let list = {
-            storeId: '',
-            storeName: '全部门店'
-          };
-          storeList.splice(0, 0, list);//给数组第一位插入值
-          this.storeList = storeList;
-          this.storeId = '';
-        }
-
-        let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
-            JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
-        this.storeId = UserInfo.staffType === 'MERCHANT'? '' : UserInfo.stores[0].storeId;
-        this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
-        this.consumeType = this.typeOfConsumption[0].value;//消费类型
-
-        this.batchQuery.merchantId = this.merchantId;
-        this.crossShopListHttp(this.batchQuery);//跨店结算列表
+    //弹框的选择门店
+    getStoreId(event){
+      this.storeId = event.storeId? event.storeId : '';
+      this.batchQueryAlert.storeId = this.storeId;
+      this.batchQueryAlert.pageIndex = 1;
+      this.batchQueryAlert.merchantId = this.merchantId;
+      this.crossShopInforDetailHttp(this.batchQueryAlert);
     }
 
     //点击查看详情
@@ -173,6 +166,9 @@ export class CrossShopComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     that.loading = false;
+                    res.data.list.forEach(function(item: any){
+                      item.consumeTypeText = item.consumeType == 'OTHERSHOP'? '本店会员他店消费' : '他店会员本店消费';
+                    });
                     that.settlementDetailList = res.data.list;
                     that.countPage = res.data.pageInfo.countTotal;
                 } else {
@@ -195,11 +191,35 @@ export class CrossShopComponent implements OnInit {
       this.crossShopInforDetailHttp(this.batchQueryAlert);
     }
 
-    //选择门店
-    selectStore() {
-      this.batchQueryAlert.storeId = this.storeId;
-      this.batchQueryAlert.pageIndex = 1;
-      this.crossShopInforDetailHttp(this.batchQueryAlert);
+    //门店初始化
+    getStoresInfor() {
+      let self = this;
+      let data = {
+        moduleId: this.moduleId,
+        timestamp: new Date().getTime()
+      };
+      this.reportService.selectStores(data).subscribe(
+        (res: any) => {
+          if (res.success) {
+            this.storeList = res.data.items;
+            let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+              JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+            this.storeId = UserInfo.staffType === "MERCHANT"? '' : this.storeList[0].storeId;
+            this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
+            this.consumeType = this.typeOfConsumption[0].value;//消费类型
+            this.batchQuery.storeId = this.storeId;
+            this.batchQuery.merchantId = this.merchantId;
+            this.crossShopListHttp(this.batchQuery);//跨店结算列表
+          } else {
+            this.modalSrv.error({
+              nzTitle: '温馨提示',
+              nzContent: res.errorInfo
+            });
+          }
+        },
+        error => {
+          this.msg.warning(error);
+        }
+      );
     }
-
 }

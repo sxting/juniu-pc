@@ -35,18 +35,18 @@ export class StaffCommissionListComponent implements OnInit {
         private manageService: ManageService,
         private localStorageService: LocalStorageService,
         private router: Router,
+        private route: ActivatedRoute,
         private msg: NzMessageService
     ) { }
 
     ngOnInit() {
+      this.moduleId = this.route.snapshot.params['menuId'];
+      let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+          JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+      this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
 
-        this.moduleId = 1;
-        let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
-            JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
-        this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
-
-        //请求员工列表数据
-        this.rulePageListHttp();
+      //请求员工列表数据
+      this.rulePageListHttp();
     }
 
     //门店id
@@ -54,6 +54,7 @@ export class StaffCommissionListComponent implements OnInit {
       this.storeId = event.storeId? event.storeId : '';
       this.rulePageListHttp();//请求员工列表数据
     }
+
     //返回门店数据
     storeListPush(event: any){
       this.storeList = event.storeList? event.storeList : [];
@@ -85,6 +86,12 @@ export class StaffCommissionListComponent implements OnInit {
         });
     }
 
+    // 切换分页码
+    paginate(event: any) {
+      this.pageNo = event;
+      this.rulePageListHttp();//员工列表请求数据
+    }
+
     /*************************  Http请求开始  ********************************/
 
     //员工列表请求
@@ -101,11 +108,10 @@ export class StaffCommissionListComponent implements OnInit {
                 if (res.success) {
                     this.loading = false;
                     res.data.content.forEach((element: any, index: number) => {
-                        element.rulesDetail = '非指定' +  NP.round(element.assignRate * 100,2) + '%,' + ' ' + '指定' + NP.round(element.normalRate * 100,2) + '%,' + ' ' + '提成' + Number(element.deductMoney)/100 + '元';
-                        element.productNumber = Number(element.productCount)+ Number(element.cardConfigRuleCount);
+                        element.rulesDetail = element.type === "RATE"? '指定' +  NP.round(element.assignRate * 100,2) + '%,' + ' ' + '非指定' + NP.round(element.normalRate * 100,2) + '%' : '提成' + Number(element.deductMoney)/100 + '元';
+                        element.productNumber = Number(element.productCount) + Number(element.itemCount) + Number(element.cardConfigRuleCount);
                     });
                     this.commissionListInfor = res.data.content;
-
                     this.totalElements = res.data.totalElements;//商品总数量
                 } else {
                     this.modalSrv.error({

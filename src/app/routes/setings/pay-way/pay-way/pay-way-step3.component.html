@@ -46,14 +46,9 @@
         <nz-form-control [nzSpan]="16">
             <nz-cascader [nzPlaceHolder]="'请选择地址'"
                          formControlName="in_shengshiqu"
-                         [nzOptions]="provinces"
-                         [nzLoadData]="loadData"
+                         [nzOptions]="_options"
                          (nzChange)="selectCity($event)" >
-                <!--(ngModelChange)="selectCity($event)" -->
             </nz-cascader>
-            <!--<nz-select formControlName="in_shengshiqu">-->
-                <!--<nz-option [nzLabel]="4" [nzValue]="4"></nz-option>-->
-            <!--</nz-select>-->
             <nz-form-explain class="error-color" *ngIf="in_shengshiqu.dirty && in_shengshiqu.errors">请选择所在省/市/区</nz-form-explain>
         </nz-form-control>
     </nz-form-item>
@@ -69,7 +64,7 @@
     <nz-form-item>
         <nz-form-label nzSpan="5" nzRequired nzFor="zhihang_name">支行名称</nz-form-label>
         <nz-form-control nzSpan="16">
-            <nz-select formControlName="zhihang_name" [nzPlaceHolder]="'请选择支行'">
+            <nz-select formControlName="zhihang_name" [nzShowSearch]="true" [nzPlaceHolder]="'请选择支行'">
                 <nz-option *ngFor="let item of bankBranchList" [nzLabel]="item.branchName" [nzValue]="item.branchId + ',' + item.branchName"></nz-option>
                     <!--branchId,branchName-->
             </nz-select>

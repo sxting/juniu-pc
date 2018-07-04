@@ -1,18 +1,19 @@
-<div class="ad-page-header" style="margin: 0 -24px; border-bottom:none !important;">
+<div class="content__title ad-ph">
   <nz-breadcrumb>
     <nz-breadcrumb-item>主页</nz-breadcrumb-item>
     <nz-breadcrumb-item>管理</nz-breadcrumb-item>
     <nz-breadcrumb-item>员工</nz-breadcrumb-item>
     <nz-breadcrumb-item>新增员工</nz-breadcrumb-item>
   </nz-breadcrumb>
-  <page-header [title]="'新增员工'">在系统中创建一个新员工，分配系统账号。</page-header>
+  <h1 class="title ng-star-inserted">新增员工</h1>
+  <div class="desc">在系统中创建一个新员工，分配系统账号。</div>
 </div>
 <nz-card [nzBordered]="false">
   <form nz-form [formGroup]="form" (ngSubmit)="submit()">
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="staffName">员工姓名</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <input maxlength="10" nz-input formControlName="staffName" autocomplete="off" id="staffName" placeholder="员工姓名会展示在各种员工报表和顾客预约页面，请仔细填写">
+        <input nz-input formControlName="staffName" autocomplete="off" id="staffName" placeholder="员工姓名会展示在各种员工报表和顾客预约页面，请仔细填写">
         <nz-form-explain class="errorTips" *ngIf="form.get('staffName').dirty && form.get('staffName').errors">请输入员工姓名</nz-form-explain>
       </nz-form-control>
     </nz-form-item>
@@ -29,7 +30,7 @@
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="password">登录密码</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <input type="password" nz-input  autocomplete="off" formControlName="password" id="password" placeholder="员工可以用手机号和密码登录桔牛后台">
+        <input type="password" minlength="6" maxlength="16" nz-input  autocomplete="off" formControlName="password" id="password" placeholder="员工可以用手机号和密码登录桔牛后台">
         <ng-container *ngIf="password.dirty || password.touched">
           <nz-form-explain class="errorTips" *ngIf="password.errors?.required">请设置登录密码</nz-form-explain>
           <nz-form-explain class="errorTips" *ngIf="password.errors?.pattern">登录密码必须为6-16位大小写字母和数字组成</nz-form-explain>
@@ -88,7 +89,7 @@
       <nz-form-label nzXs="24" nzSm="7" nzRequired>所属门店</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
         <nz-select formControlName="storeId" name="storeList" id="storeList" [nzPlaceHolder]="'请选择员工所属门店'" [nzShowSearch]="true">
-          <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.storeName" [nzValue]="i.storeId"></nz-option>
+          <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.branchName" [nzValue]="i.storeId"></nz-option>
         </nz-select>
       </nz-form-control>
     </nz-form-item>

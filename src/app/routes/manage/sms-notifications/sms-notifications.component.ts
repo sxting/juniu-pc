@@ -38,7 +38,6 @@ export class SmsNotificationsComponent implements OnInit {
 
     ngOnInit() {
         let self = this;
-        this.titleSrv.setTitle('设置短信推送');
         this.staffId = this.route.snapshot.params['staffId'];//员工ID
         this.SMSconfigInforHttp();//查询短信推送配置
 
@@ -55,7 +54,8 @@ export class SmsNotificationsComponent implements OnInit {
         let self = this;
         this.loading = true;
         let batchQuery =  {
-            staffId: this.staffId
+            staffId: this.staffId,
+            timestamp: new Date().getTime()
         };
         this.manageService.smsPushConfig(batchQuery).subscribe(
             (res: any) => {
@@ -102,6 +102,7 @@ export class SmsNotificationsComponent implements OnInit {
             staffId: this.staffId,
             roleName: this.roleName,
             staffName: this.staffName,
+            timestamp: new Date().getTime(),
             pushChannel: 'SMS'
         };
         this.manageService.setPushSmsHttps(params).subscribe(

@@ -2,7 +2,7 @@
     <div class="title">
       您选择了：桔牛系统·{{item.package.packageName}}；售价：
       <span *ngIf="!item.package.price">免费</span>
-      <span *ngIf="item.package.price">{{item.package.price}}元 /
+      <span *ngIf="item.package.price">{{item.package.price/100}}元 /
         {{item.package.timeUnit === 'DAY' ? '天' : item.package.timeUnit === 'MONTH' ? '月' : item.package.timeUnit === 'QUARTER' ? '季' : '年'}}
         / 店</span>
     </div>
@@ -14,27 +14,9 @@
     </nz-alert>
   </div>
 
-  <simple-table #st [columns]="columns" [data]="dataList" [loading]="loading" (checkboxChange)="checkboxChange($event)">
+  <simple-table #st [columns]="columns" [data]="dataList" [loading]="loading" (change)="change($event)" (checkboxChange)="checkboxChange($event)">
     <ng-template st-row="status" let-i></ng-template>
   </simple-table>
-
-    <div class="table-box" *ngIf="">
-        <table>
-            <tr>
-                <td>
-                    <span class="fl">请选择门店：</span>
-                    <span class="fr">
-                        <input type="checkbox" [checked]="seceltAll" (click)="onSelectAllClick()"> 全选
-                    </span>
-                </td>
-            </tr>
-            <tr *ngFor="let store of stores,let index = index">
-                <td>
-                    <input type="checkbox" [checked]="store.checked" (click)="onSelectClick(index)"> {{store.storeName}}
-                </td>
-            </tr>
-        </table>
-    </div>
     <div class="btn-box">
         <button nz-button [nzType]="'primary'" (click)="_submitForm()">选好了，下一步</button>
         <button nz-button (click)="prev()">返回上一步</button>

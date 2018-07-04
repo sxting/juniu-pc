@@ -5,7 +5,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ManageService } from "../shared/manage.service";
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LocalStorageService} from "@shared/service/localstorage-service";
-import { STORES_INFO} from "@shared/define/juniu-define";
 import { FunctionUtil } from "@shared/funtion/funtion-util";
 import { UploadService } from "@shared/upload-img/shared/upload.service";
 
@@ -30,10 +29,11 @@ export class AddNewStaffComponent implements OnInit {
     passwordPre: string = '';//上次的密码
     belongList: any[] = [{name: '门店', value: 'STORE'},{name: '总部', value: 'MERCHANT'}];//员工归属
     ifShow: boolean = true;//是否显示选择门店
-
     //上传图片的时候
     imagePath: string = '';
     picId: string = '';//商品首图的ID
+    moduleId: string;
+    merchantId: string;
 
     constructor(
         private http: _HttpClient,
@@ -53,36 +53,23 @@ export class AddNewStaffComponent implements OnInit {
 
     ngOnInit() {
         let self = this;
-        //门店列表
-        if (this.localStorageService.getLocalstorage(STORES_INFO) && JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)).length > 0) {
-            let storeList = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-                JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-            this.storeList = storeList;
-            this.storeId = this.storeList[0].storeId;
-        }
+        this.moduleId = this.route.snapshot.params['menuId'];//门店
         this.staffId = this.route.snapshot.params['staffId'] ? this.route.snapshot.params['staffId'] : FunctionUtil.getUrlString('staffId');
-        if(this.staffId){
-          this.titleSrv.setTitle('编辑员工');
-        }else {
-          this.titleSrv.setTitle('新增员工');
-        }
-       this.staffRolesHttp();// 员工角色请求
         self.formData = {
-            staffName: [null, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
-            phone: [null, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
-            password: [null, [Validators.required, Validators.pattern(`^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,16}$`)]],
-            belongType: [ this.belongList[0].value, [Validators.required]],//门店员工职位
-            storeId: [self.storeList[0].storeId, [Validators.required]],
-            roleId: [null, [Validators.required]],
+          staffName: [null, [Validators.required]],
+          phone: [null, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
+          password: [null, [Validators.required, Validators.pattern(`^(?=.*\\d)(?=.*[a-z]).{6,50}$`)]],
+          belongType: [ this.belongList[0].value, [Validators.required]],//门店员工职位
+          storeId: [null, [Validators.required]],
+          roleId: [ null, [Validators.required]]
         };
         self.form = self.fb.group(self.formData);
+        this.getStoresInfor();//门店
     }
-
 
     //切换员工员工归属属性
     onChangesBelongs(values: any): void {
       let self = this;
-      console.log(values);
       this.RolesListInfor = values === 'STORE'? this.storeRoles : this.merchantRoles;
       this.ifShow = values === 'STORE'? true : false;
       let staffName = this.form.controls.staffName.value;
@@ -94,7 +81,7 @@ export class AddNewStaffComponent implements OnInit {
       this.formData = {
         staffName: [ staffName, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
         phone: [ phone, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
-        password: [ password, [Validators.required, Validators.pattern(`^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,16}$`)]],
+        password: [ password, [Validators.required]],
         belongType: [ values, [Validators.required]],//门店员工职位
         storeId: [ storeId, [Validators.required]],
         roleId: [ roleId, [Validators.required]]
@@ -107,7 +94,7 @@ export class AddNewStaffComponent implements OnInit {
         event = event ? event : window.event;
         var file = event.srcElement ? event.srcElement.files : event.target.files; if (file) {
             this.loading = true;
-            this.uploadService.postWithFile(file, 'item', 'T').then((result: any) => {
+            this.uploadService.postWithFile(file, 'item', 'F').then((result: any) => {
                 this.loading = false;
                 let width = 104, height = 104;
                 this.picId = result.pictureId;
@@ -116,8 +103,7 @@ export class AddNewStaffComponent implements OnInit {
         }
     }
 
-    /**
-     * 删除图片
+    /*** 删除图片
      * @param index
      */
     deleteImage() {
@@ -131,7 +117,10 @@ export class AddNewStaffComponent implements OnInit {
     staffRolesHttp() {
         let self = this;
         this.loading = true;
-        this.manageService.rolesSelect().subscribe(
+        let data = {
+          timestamp: new Date().getTime()
+        };
+        this.manageService.rolesSelect(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     this.loading = false;
@@ -145,11 +134,10 @@ export class AddNewStaffComponent implements OnInit {
                         self.RolesListInfor = res.data.merchantRoles;
                     }
                     let roleId = self.RolesListInfor[0]? self.RolesListInfor[0].roleId : '';
-
                     self.formData = {
-                      staffName: [null, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
+                      staffName: [null, [ Validators.required ]],
                       phone: [null, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
-                      password: [null, [Validators.required, Validators.pattern(`^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,16}$`)]],
+                      password: [null, [Validators.required, Validators.pattern(`^(?=.*\\d)(?=.*[a-z]).{6,30}$`)]],
                       belongType: [ this.belongList[0].value, [Validators.required]],//门店员工职位
                       storeId: [self.storeList[0].storeId, [Validators.required]],
                       roleId: [ roleId, [Validators.required]]
@@ -176,15 +164,17 @@ export class AddNewStaffComponent implements OnInit {
         let self = this;
         this.loading = true;
         let data = {
-            staffId: this.staffId
+            staffId: this.staffId,
+            timestamp: new Date().getTime()
         };
         this.manageService.staffdetail(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     this.loading = false;
                     self.picId = res.data.portrait.imageId;//员工图像
-                    self.imagePath = res.data.portrait.imageUrl;//员工图像地址
-                    self.passwordPre = res.data.password;//拿到上次的密码
+                    // self.imagePath = res.data.portrait.imageUrl;//员工图像地址
+                    this.imagePath = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.picId}/resize_${104}_${104}/mode_fill`;
+
                     if(res.data.belongType === 'STORE'){
                       self.RolesListInfor = self.storeRoles;
                       self.ifShow = true;
@@ -193,10 +183,13 @@ export class AddNewStaffComponent implements OnInit {
                       self.RolesListInfor = self.merchantRoles;
                     }
                     let storeId = res.data.storeId === ''&& res.data.belongType === 'MERCHANT'? self.storeList[0].storeId : res.data.storeId;
+                    let password = res.data.password.length > 16? res.data.password.substring(0,12)+'...' : res.data.password;//拿到上次的密码
+                    self.passwordPre = res.data.password;
+
                     self.formData = {
-                        staffName: [ res.data.staffName, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
+                        staffName: [ res.data.staffName, [Validators.required]],
                         phone: [ res.data.contactPhone, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
-                        password: [ res.data.password, [Validators.required, Validators.pattern(`^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,16}$`)]],
+                        password: [ password, [Validators.required]],
                         belongType: [ res.data.belongType, [Validators.required]],//门店员工职位
                         storeId: [ storeId, [Validators.required]],
                         roleId: [ res.data.roleId, [Validators.required]],
@@ -217,30 +210,32 @@ export class AddNewStaffComponent implements OnInit {
 
     // 新增员工
     submit(){
-        let self = this;
+      let self = this;
         for (const i in this.form.controls) {
             this.form.controls[ i ].markAsDirty();
             this.form.controls[ i ].updateValueAndValidity();
         }
       if (this.form.invalid) return;
       this.submitting = true;
-        let storeId = this.form.controls.belongType.value === 'STORE'? this.form.controls.storeId.value : '';
-        let password = this.passwordPre === this.form.controls.password.value? '' : this.form.controls.password.value;
-        let params = {
-            staffName: this.form.controls.staffName.value,
-            belongType: this.form.controls.belongType.value,
-            contactPhone: this.form.controls.phone.value,
-            password: password,
-            roleId: this.form.controls.roleId.value,
-            portrait: this.picId,
-            staffId: this.staffId,
-            storeId:storeId,
-        };
-        if(this.staffId){//修改
-            this.editStaff(params);
-        }else{//新增
-            this.creatStaff(params);
-        }
+      let storeId = this.form.controls.belongType.value === 'STORE'? this.form.controls.storeId.value : '';
+      let passwordValue = this.form.controls.password.value;
+      let password = passwordValue.substring(passwordValue.length - 3) === '...'? this.passwordPre : this.form.controls.password.value;
+      let params = {
+          staffName: this.form.controls.staffName.value,
+          belongType: this.form.controls.belongType.value,
+          contactPhone: this.form.controls.phone.value,
+          password: password,
+          roleId: this.form.controls.roleId.value,
+          portrait: this.picId,
+          staffId: this.staffId,
+          storeId:storeId,
+          timestamp: new Date().getTime()
+      };
+      if(this.staffId){//修改
+          this.editStaff(params);
+      }else{//新增
+          this.creatStaff(params);
+      }
     }
 
     // 创建员工
@@ -250,10 +245,8 @@ export class AddNewStaffComponent implements OnInit {
             (res: any) => {
               self.submitting = false;
               if (res.success) {
-                    setTimeout(() => {
-                        self.msg.success(`员工创建成功`);
-                        self.router.navigate(['/manage/staff/list']);
-                    }, 1000);
+                  self.msg.success(`员工创建成功`);
+                  self.router.navigate(['/manage/staff/list']);
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -274,10 +267,8 @@ export class AddNewStaffComponent implements OnInit {
             (res: any) => {
               self.submitting = false;
               if (res.success) {
-                    setTimeout(() => {
-                        self.msg.success(`改修员工信息成功`);
-                        self.router.navigate(['/manage/staff/list']);
-                    }, 1000);
+                    self.msg.success(`改修员工信息成功`);
+                    self.router.navigate(['/manage/staff/list']);
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -289,6 +280,36 @@ export class AddNewStaffComponent implements OnInit {
                 this.msg.warning(error)
             }
         );
+    }
+
+    //门店初始化
+    getStoresInfor() {
+      let self = this;
+      let data = {
+        moduleId: this.moduleId,
+        timestamp: new Date().getTime()
+      };
+      this.manageService.selectStores(data).subscribe(
+        (res: any) => {
+          if (res.success) {
+            let storeList = res.data.items;
+            this.storeList = res.data.items;
+            let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+              JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+            this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
+            this.storeId = UserInfo.staffType === "MERCHANT"? '' : storeList[0].storeId;
+            this.staffRolesHttp();// 员工角色请求
+          } else {
+            this.modalSrv.error({
+              nzTitle: '温馨提示',
+              nzContent: res.errorInfo
+            });
+          }
+        },
+        error => {
+          this.msg.warning(error);
+        }
+      );
     }
 
 }

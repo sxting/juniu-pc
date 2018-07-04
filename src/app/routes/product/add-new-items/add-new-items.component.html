@@ -1,7 +1,8 @@
-<page-header [title]="'新增服务项目'">
+<page-header [title]="'新增服务产品'">
   服务项目为收银时选择的店内项目，比如“剪发、足底”等需要人服务的、非实物商品。
 </page-header>
 <nz-card [nzBordered]="false">
+  <jn-stores-transfor [moduleId]="moduleId" (storeListPush)="storeListPush($event)" (allStoresNumPush)="getAllStoresNum($event)"></jn-stores-transfor>
   <form nz-form [formGroup]="form" (ngSubmit)="submit()">
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="categoryInfor">项目类型</nz-form-label>
@@ -16,7 +17,7 @@
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="productName">项目名称</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <input nz-input formControlName="productName" id="productName" placeholder="请输入商品名称">
+        <input nz-input formControlName="productName" autocomplete="off" maxlength="20" id="productName" placeholder="请输入项目名称">
         <nz-form-explain class=errorTips *ngIf="form.get('productName').dirty && form.get('productName').errors">请输入项目名称</nz-form-explain>
       </nz-form-control>
     </nz-form-item>
@@ -30,7 +31,7 @@
         </em>
       </nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <input maxlength="10" nz-input formControlName="productNo" id="productNo" placeholder="请输入1-10位商品编号">
+        <input maxlength="6" nz-input formControlName="productNo" autocomplete="off" id="productNo" placeholder="请输入1-6位商品编号">
         <nz-form-explain class="errorTips"  *ngIf="form.get('productNo').dirty && form.get('productNo').errors">商品编号只能为数字</nz-form-explain>
       </nz-form-control>
     </nz-form-item>
@@ -51,10 +52,12 @@
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="currentPrice">售价(元)</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <input nz-input formControlName="currentPrice" id="currentPrice" placeholder="请输入项目价格">
+        <input nz-input formControlName="currentPrice" autocomplete="off" maxlength="11" id="currentPrice" placeholder="请输入项目价格">
         <ng-container *ngIf="currentPrice.dirty || currentPrice.touched">
           <nz-form-explain class="errorTips" *ngIf="currentPrice.errors?.required">服务项目售价不可为空</nz-form-explain>
           <nz-form-explain class="errorTips" *ngIf="currentPrice.errors?.pattern">服务项目售价只能是整数或者带有两位小数的数字</nz-form-explain>
+          <nz-form-explain class="errorTips" *ngIf="currentPrice.errors?.max">服务项目售价范围“0.01-99999999.99”</nz-form-explain>
+          <nz-form-explain class="errorTips" *ngIf="currentPrice.errors?.min">服务项目售价范围“0.01-99999999.99”</nz-form-explain>
         </ng-container>
       </nz-form-control>
     </nz-form-item>
@@ -63,6 +66,9 @@
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
         <nz-radio-group formControlName="storeType">
           <label nz-radio *ngFor="let item of storeStatus"  [nzValue]="item.value" (click)="onSelectAlertBtn(alertStore, '门店', item.value)">{{item.name}}</label>
+          <ng-container>
+            <nz-form-explain class="errorTips" *ngIf="selectStoresIds === '' && ifShow">请至少选择一个门店</nz-form-explain>
+          </ng-container>
         </nz-radio-group>
       </nz-form-control>
     </nz-form-item>
@@ -88,7 +94,7 @@
     <ul class="add_content">
       <li class="clearfix" *ngFor="let list of addNewCommodityType;let types = index">
         <span>{{types+1}}</span>
-        <input nz-input class="" type="text" placeholder="请输入分类名称" maxlength="20" [value]="list.categoryName" (change)="addDescriptions($event.target.value, types)" />
+        <input nz-input class="" type="text" placeholder="请输入分类名称" maxlength="10" [value]="list.categoryName" (change)="addDescriptions($event.target.value, types)" />
         <span class="add_btns" (click)="deleteCategoryClick(types,list.categoryId)">删除</span>
       </li>
       <li class="btns-add-new">

@@ -1,41 +1,58 @@
-import { Component, OnInit } from '@angular/core';
-import { _HttpClient } from '@delon/theme';
-import { MarketingService } from "../shared/marketing.service";
-import { LocalStorageService } from "@shared/service/localstorage-service";
-import { USER_INFO } from '@shared/define/juniu-define';
-import { NzModalService } from "ng-zorro-antd";
+import {Component, OnInit} from '@angular/core';
+import {_HttpClient} from '@delon/theme';
+import {MarketingService} from "../shared/marketing.service";
+import {LocalStorageService} from "@shared/service/localstorage-service";
+import {USER_INFO} from '@shared/define/juniu-define';
+import {NzModalService} from "ng-zorro-antd";
+import {ActivatedRoute} from "@angular/router";
 declare var echarts: any;
 
 @Component({
-  selector: 'app-marketing-effect-count',
-  templateUrl: './marketing-effect-count.component.html',
-  styleUrls: ['./marketing-effect-count.component.less']
+    selector: 'app-marketing-effect-count',
+    templateUrl: './marketing-effect-count.component.html',
+    styleUrls: ['./marketing-effect-count.component.less']
 })
 export class MarketingEffectCountComponent implements OnInit {
 
     options1: any = [
-        { value: 'ALL', label: '全部' },
-        { value: 'MONEY', label: '代金券' },
-        { value: 'DISCOUNT', label: '折扣券' },
-        { value: 'GIFT', label: '礼品券' }
+        {value: 'ALL', label: '全部'},
+        {value: 'MONEY', label: '代金券'},
+        {value: 'DISCOUNT', label: '折扣券'},
+        {value: 'GIFT', label: '礼品券'},
+        {value: 'SINGLE', label: '单品券'}
     ];
+    // options2: any = [
+    //     { value: 'ALL', label: '全部' },
+    //     { value: 'MEMBER', label: '会员营销' },
+    //     { value: 'SECOND', label: '二次营销' },
+    //     { value: 'WECHAT', label: '微信领劵' }
+    // ];
     options2: any = [
-        { value: 'ALL', label: '全部' },
-        { value: 'MEMBER', label: '会员营销' },
-        { value: 'SECOND', label: '二次营销' },
-        { value: 'WECHAT', label: '微信领劵' }
+        {value: 'ALL', label: '全部'},
+        {label: '持卡会员唤醒', value: 'AWAKENING'},
+        {label: '潜在会员转化', value: 'TRANSFORMATION'},
+        {label: '会员生日礼', value: 'BIRTHDAY_GIFT'},
+        {label: '会员节日礼', value: 'FESTIVAL_GIFT'},
+        {label: '新品促销', value: 'NEW_PROMOTION'},
+        {label: '指定项目促销', value: 'PRODUCT_PROMOTION'},
+        {label: '二次到店送礼', value: 'SECONDARY_GIFT'},
+        {label: '二次到店打折', value: 'SECONDARY_DISCOUNT'},
+        {label: '二次到店满减', value: 'SECONDARY_REDUCE'},
+    ];
+
+    options3: any = [
+        {value: 'ALL', label: '全部'},
+        {label: '节日主题活动', value: 'WECHAT_FESTIVAL_GIFT'},
+        {label: '新品促销', value: 'WECHAT_NEW_PROMOTION'},
+        {label: '指定项目促销', value: 'WECHAT_PRODUCT_PROMOTION'},
     ];
     empty: any = true;
-    storeOptions: any;
     statusFlag: number = 0;
     selectedOption1: any;
     selectedOption2: any;
-    selectedStore: any;
     type: any;
     showCreateOrder: boolean;
     pageIndex: any = 1;
-    resTrue: boolean = false;
-    tableThat: any = this;
     data: any = [];
     countTotal: any;
     storeId: any;
@@ -56,24 +73,33 @@ export class MarketingEffectCountComponent implements OnInit {
     fajuantu: any;
     hexiaotu: any;
 
+    moduleId: any = '';
+    type2: any = '';
 
-    constructor(
-        private marketingService: MarketingService,
-        private localStorageService: LocalStorageService,
-        private modalSrv: NzModalService
-    ) { }
+    constructor(private route: ActivatedRoute,
+                private marketingService: MarketingService,
+                private localStorageService: LocalStorageService,
+                private modalSrv: NzModalService) {
+    }
 
     ngOnInit() {
-        this.storeOptions = this.USER_INFO.stores ? this.USER_INFO.stores : [];
-        this.storeOptions.unshift({ storeName: '全部', storeId: 'ALL' });
+        this.moduleId = this.route.snapshot.params['menuId'];
+
+        if(this.moduleId == '90070203') {
+            this.type2 = 'WECHAT';
+            this.options2 = this.options3;
+        }
+
         this.selectedOption1 = this.options1[0];
         this.selectedOption2 = this.options2[0];
-        this.selectedStore = this.storeOptions[0];
+    }
+
+    storeChange(e: any) {
+        this.storeId = e.storeId;
         this.cardRepeatconfiglist(this.pageIndex);
     }
 
     console(selectedOption: any) {
-        console.log(selectedOption)
         if (selectedOption.value === 'ALL') {
             this.marketingType = '';
         } else {
@@ -81,6 +107,7 @@ export class MarketingEffectCountComponent implements OnInit {
         }
         this.cardRepeatconfiglist(this.pageIndex);
     }
+
     console2(selectedOption: any) {
         if (selectedOption.value === 'ALL') {
             this.couponDefType = '';
@@ -89,35 +116,30 @@ export class MarketingEffectCountComponent implements OnInit {
         }
         this.cardRepeatconfiglist(this.pageIndex);
     }
+
     onStatusClick(statusFlag: any, type: any) {
         this.statusFlag = statusFlag;
         this.type = type;
     }
-    storeChange(e: any) {
-        console.log(e);
-        if (e.storeId === 'ALL') {
-            this.storeId = '';
-        } else {
-            this.storeId = e.storeId;
-        }
-        this.cardRepeatconfiglist(this.pageIndex);
-    }
+
     paginate(event: any) {
         console.log(event);
         this.pageIndex = event;
         this.cardRepeatconfiglist(this.pageIndex);
     }
+
     cardRepeatconfiglist(pageIndex: any) {
-        var data = {
+        let data: any = {
             pageIndex: pageIndex,
             pageSize: 10,
             storeId: this.storeId,
             couponDefType: this.couponDefType,
-            marketingType: this.marketingType
+            scene: this.marketingType
+        };
+        if(this.type2 === 'WECHAT') {
+            data.marketingType = 'WECHAT';
         }
-        if (!this.marketingType) {
-            delete data.marketingType;
-        }
+
         if (!this.couponDefType) {
             delete data.couponDefType;
         }
@@ -126,6 +148,7 @@ export class MarketingEffectCountComponent implements OnInit {
         }
         this.configlistHttp(data);
     }
+
     configlistHttp(data: any) {
         let that = this;
         this.marketingService.effectList(data).subscribe(
@@ -148,6 +171,7 @@ export class MarketingEffectCountComponent implements OnInit {
             }
         );
     }
+
     effectDetailHttp(marketingId: any) {
         let that = this;
         this.marketingService.effectDetail(marketingId).subscribe(
@@ -178,14 +202,23 @@ export class MarketingEffectCountComponent implements OnInit {
             }
         );
     }
+
     onCloseCreateOrderBtnClick() {
         this.showCreateOrder = false;
     }
 
-    chakan(marketingId: any) {
-        this.showCreateOrder = true;
+    chakan(marketingId: any, tpl: any) {
+        // this.showCreateOrder = true;
+
+        this.modalSrv.create({
+          nzTitle: '查看活动效果',
+          nzContent: tpl,
+          nzWidth: '1040px',
+          nzFooter: null
+        });
         this.effectDetailHttp(marketingId);
     }
+
     firstEchart(data: any) {
         let dateArr = [], numArr = [];
         data.forEach(function (i: any, m: any) {
@@ -206,10 +239,8 @@ export class MarketingEffectCountComponent implements OnInit {
                 minInterval: 1,
                 scale: true
             },
-            yAxis: {
-
-            },
-            textStyle: { fontSize: 6 },
+            yAxis: {},
+            textStyle: {fontSize: 6},
             series: [{
                 name: '收益金额',
                 type: 'line',
@@ -220,6 +251,7 @@ export class MarketingEffectCountComponent implements OnInit {
         let myChart = echarts.init(document.getElementById('echart_first'));
         myChart.setOption(option);
     }
+
     secondEchart(data: any) {
         let dateArr = [], numArr = [];
         data.forEach(function (i: any, m: any) {
@@ -235,9 +267,7 @@ export class MarketingEffectCountComponent implements OnInit {
             xAxis: {
                 data: dateArr
             },
-            yAxis: {
-
-            },
+            yAxis: {},
             series: [{
                 name: '发劵量',
                 type: 'line',
@@ -248,6 +278,7 @@ export class MarketingEffectCountComponent implements OnInit {
         let myChart = echarts.init(document.getElementById('echart_second'));
         myChart.setOption(option);
     }
+
     thirdEchart(data: any) {
         let dateArr = [], numArr = [];
         data.forEach(function (i: any, m: any) {
@@ -262,9 +293,7 @@ export class MarketingEffectCountComponent implements OnInit {
             xAxis: {
                 data: dateArr
             },
-            yAxis: {
-
-            },
+            yAxis: {},
             series: [{
                 name: '核销量',
                 type: 'line',
