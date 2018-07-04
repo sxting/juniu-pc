@@ -14,7 +14,7 @@ import { throwIfAlreadyLoaded } from '@core/module-import-guard';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { AlainThemeModule } from '@delon/theme';
 import { DelonABCModule, ReuseTabService, ReuseTabStrategy } from '@delon/abc';
-import { DelonAuthModule } from '@delon/auth';
+import {DA_STORE_TOKEN, DelonAuthModule, SessionStorageStore} from '@delon/auth';
 import { DelonACLModule } from '@delon/acl';
 import { DelonCacheModule } from '@delon/cache';
 import { DelonUtilModule } from '@delon/util';
@@ -66,6 +66,7 @@ export class DelonModule {
     return {
       ngModule: DelonModule,
       providers: [
+        { provide: DA_STORE_TOKEN, useClass: SessionStorageStore },
         // TIPS：若不需要路由复用需要移除以下代码及模板`<reuse-tab></reuse-tab>`
         {
           provide: RouteReuseStrategy,
