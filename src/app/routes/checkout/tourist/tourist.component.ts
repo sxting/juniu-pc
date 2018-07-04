@@ -21,7 +21,7 @@ declare var swal: any;
 export class TouristComponent implements OnInit {
     storeId: any;
     changeType: boolean = true;//收银开卡切换
-    vipsearch: string = '17600332672';//vip搜索框
+    vipsearch: string ;//vip搜索框
     renlian: boolean = true;//人脸识别
     isVerb: boolean = false;//是否抹零
     isVerb2: boolean = false;
