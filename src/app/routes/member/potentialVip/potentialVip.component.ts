@@ -152,7 +152,7 @@ export class PotentialVipComponent {
                             element.customerSourceName = '桔牛'
                         } else if (element.customerSource === 'KOUBEI') {
                             element.customerSourceName = '口碑'
-                        } else if (element.customerSource === 'WECHART') {
+                        } else if (element.customerSource === 'WECHAT') {
                             element.customerSourceName = '微信'
                         }
                     });
