@@ -504,20 +504,24 @@ export class AddKoubeiProductComponent implements OnInit {
 
     //编辑,转换购买须知及其详细内容的数据
     editChangeData(object: any, transfor: any) {
-        object.forEach((element: any, index: number) => {
-            let group: any = {
-                title: element.title,
-                details: []
-            };
-            let list: any;
+      object.forEach((element: any, index: number) => {
+          let group: any = {
+              title: element.title,
+              details: []
+          };
+          let list: any;
+          if(element.details && element.details.length > 0){
             for (let i = 0; i < element.details.length; i++) {
-                list = {
-                    item: element.details[i]
-                };
-                group.details.push(list);
+              list = {
+                item: element.details[i]
+              };
+              group.details.push(list);
             }
-            transfor.push(group);
-        });
+          }else{
+            group.details.push({ item: '' });
+          }
+          transfor.push(group);
+      });
     }
 
     //转换后台数据
@@ -815,6 +819,7 @@ export class AddKoubeiProductComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     this.loading = false;
+                    console.log(res.data);
                     let categorysName = res.data.categoryName && res.data.categoryName != "" && res.data.categoryName !== null ? res.data.categoryName.split('－') : [];
                     let expiryDay = res.data.validityPeriodType == 'FIXED' ? 360 : res.data.expiryDay;
                     let validityPeriodType = res.data.validityPeriodType;
