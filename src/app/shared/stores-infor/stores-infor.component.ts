@@ -66,7 +66,9 @@ export class StoresInforComponent implements OnInit {
   ngOnInit() {
     let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
       JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
-    this.ifStoresAll = UserInfo.staffType === "MERCHANT"? true : false;
+    if(UserInfo.staffType === 'STORE'){
+      this.ifStoresAll = false;
+    }
     this.getStoresInfor();//门店选择
   }
 

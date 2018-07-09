@@ -788,23 +788,23 @@ export class AddKoubeiProductComponent implements OnInit {
         let bizType = 'item';
         this.spinBoolean = true;
         this.koubeiService.uploadImageWithBase64(data, bizType, syncAlipay).subscribe(
-            (res: any) => {
-                this.loading = false;
-                this.spinBoolean = false;
-                if (res.success) {
-                    this.isVisibleImg = false;
-                    this.tbCover = res.data.pictureId;
-                    this.imagePathTb = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.tbCover}/resize_${250}_${250}/mode_fill`;
-                } else {
-                    this.modalSrv.error({
-                        nzTitle: '温馨提示',
-                        nzContent: res.errorInfo
-                    });
-                }
-            },
-            error => {
-                this.msg.warning(error);
-            })
+          (res: any) => {
+              this.loading = false;
+              this.spinBoolean = false;
+              if (res.success) {
+                  this.isVisibleImg = false;
+                  this.tbCover = res.data.pictureId;
+                  this.imagePathTb = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.tbCover}/resize_${250}_${250}/mode_fill`;
+              } else {
+                  this.modalSrv.error({
+                      nzTitle: '温馨提示',
+                      nzContent: res.errorInfo
+                  });
+              }
+          },
+          error => {
+              this.msg.warning(error);
+          })
     }
 
     /** 获取口碑商品详情 */
