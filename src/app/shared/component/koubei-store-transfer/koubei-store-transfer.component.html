@@ -1,0 +1,63 @@
+
+<!--多选穿梭框-->
+<div class="reserve-record-alert">
+    <!--左边-->
+    <div class="list">
+        <p class="head_store clearfix">
+            <span class="fl select-all" (click)="selectAllShops(ifSelectAll)">
+                <input type="checkbox" [checked]="ifSelectAll" style="margin-right: 8px"/>
+                <span>全选</span>
+            </span>
+            全部{{allName}}
+        </p>
+        <div class="show_all_stores">
+            <div class="city-list" *ngFor="let province of cityStoreList; let provinceIndex=index">
+                <!--省-->
+                <div class="select_all_btn">
+                    <input class="select_all_input" type="checkbox" [checked]="province.change"  (click)="onSelectAllProvinceStoresInputClick(provinceIndex, province.change)"/>
+                    <span class="city">{{province.provinceName}}</span>
+                </div>
+              <!--城市-->
+                <ul class="shop_names" style="margin-top: 0;">
+                    <li *ngFor="let city of province.cityArr; let cityIndex=index">
+                        <input type="checkbox" [checked]="city.change" (click)="onSelectAllCityInputClick(provinceIndex, cityIndex, city.change)" />
+                        <span>{{city.cityName}}</span>
+                        <!--门店-->
+                        <ul class="shop_names" style="margin-top: 0;">
+                          <li *ngFor="let store of city.stores; let storeIndex=index">
+                            <input type="checkbox" [checked]="store.change" (click)="onSelectStoreInputClick(provinceIndex, cityIndex, storeIndex)" />
+                            <span>{{store.shopName}}</span>
+                          </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!--右边-->
+    <div class="list">
+        <p class="head_store">已选{{allName}}</p>
+        <div class="show_all_stores">
+            <div  *ngFor="let province of cityStoreList">
+                <div class="city-list bbn" *ngIf="province.checked == true">
+                    <!--城市-->
+                    <div class="select_all_btn">
+                        <span class="city">{{province.provinceName}}</span>
+                    </div>
+                    <!--门店-->
+                    <ul class="shop_names">
+                        <li *ngFor="let city of province.cityArr">
+                            <span *ngIf="city.checked == true">{{city.cityName}}</span>
+                            <ul class="shop_names" style="margin-top: 0;">
+                              <li *ngFor="let store of city.stores">
+                                <span *ngIf="store.checked == true">{{store.shopName}}</span>
+                              </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
