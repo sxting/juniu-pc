@@ -1404,6 +1404,7 @@ export class TouristComponent implements OnInit {
                                     i.vipCard = i.vipCardList[n];
                                 }
                             }
+                            if(i.vipCard1) i.vipCard = i.vipCard1;
                         }
                     }
                     //把每个商品筛选出来的最优会员卡汇集到一个数组里
@@ -1642,6 +1643,7 @@ export class TouristComponent implements OnInit {
             this.xfList[ind].vipCard = false;
         } else {
             this.xfList[ind].vipCard = data;
+            this.xfList[ind].vipCard1 = data;
         }
         this.totolMoneyFun(true);
     }
