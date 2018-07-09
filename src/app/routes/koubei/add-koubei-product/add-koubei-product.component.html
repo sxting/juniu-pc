@@ -10,7 +10,8 @@
 <form nz-form [formGroup]="form">
     <!--基本信息-->
     <nz-card [nzBordered]="false" class="sales-card">
-        <h2><span class="line"></span>基本信息</h2>
+        <h2>
+            <span class="line"></span>基本信息</h2>
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="productName">商品名称</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
@@ -20,11 +21,14 @@
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzFor="currentPrice" nzRequired>原价<span>／</span>现价(元)</nz-form-label>
+            <nz-form-label nzXs="24" nzSm="7" nzFor="currentPrice" nzRequired>原价
+                <span>／</span>现价(元)</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input maxlength="11" nz-input formControlName="originalPrice" style="width: 100px;" autocomplete="off" id="originalPrice" placeholder="原价">
+                <input maxlength="11" nz-input formControlName="originalPrice" style="width: 100px;" autocomplete="off" id="originalPrice"
+                    placeholder="原价">
                 <em style="color: #333;margin-right: 8px;">/</em>
-                <input maxlength="11" nz-input formControlName="currentPrice" style="width: 100px;" id="currentPrice" autocomplete="off" placeholder="现价" (change)="changeCurrentPrice()">
+                <input maxlength="11" nz-input formControlName="currentPrice" style="width: 100px;" id="currentPrice" autocomplete="off"
+                    placeholder="现价" (change)="changeCurrentPrice()">
                 <ng-container *ngIf="currentPrice.dirty || currentPrice.touched">
                     <nz-form-explain class="errorTips" *ngIf="currentPrice.errors?.required">商品现价不可为空</nz-form-explain>
                     <nz-form-explain class="errorTips" *ngIf="currentPrice.errors?.pattern">商品现价只能是整数或者带有两位小数的数字</nz-form-explain>
@@ -43,8 +47,7 @@
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7" nzFor="categoryName">商品分类</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <nz-cascader [nzPlaceHolder]="'请选择商品分类'" formControlName="categoryName" [nzOptions]="koubeiItemCategorys"
-                             (nzSelect)="onSelectionChange($event)"></nz-cascader>
+                <nz-cascader [nzPlaceHolder]="'请选择商品分类'" formControlName="categoryName" [nzOptions]="koubeiItemCategorys" (nzSelect)="onSelectionChange($event)"></nz-cascader>
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
@@ -54,12 +57,15 @@
                     <div class="img-box">
                         <img class="upload-img" src="./assets/img/upload.png">
                         <input type="file" accept="image" (change)="uploadImage($event,'cover',0)">
-                        <input formControlName="picId" style="visibility: hidden"/>
+                        <input formControlName="picId" style="visibility: hidden" />
+                        <nz-spin *ngIf="spinBoolean" style="height: 102px;
+            line-height: 102px;
+            text-align: center;" [nzSize]="'large'"></nz-spin>
                         <img class="image" [src]="imagePath" *ngIf="imagePath">
                         <i *ngIf="imagePath" class="iconfont icon-deleternormal" (click)="deleteImage(0,'cover')"></i>
                     </div>
                 </div>
-                <nz-form-explain class="errorTips"  *ngIf="form.get('picId').dirty && form.get('picId').errors">请上传商品首图</nz-form-explain>
+                <nz-form-explain class="errorTips" *ngIf="form.get('picId').dirty && form.get('picId').errors">请上传商品首图</nz-form-explain>
                 <nz-form-explain class="tips-text">首图尺寸不能大于5M，建议宽高比4:3。</nz-form-explain>
             </nz-form-control>
         </nz-form-item>
@@ -70,6 +76,9 @@
                     <li class="img-box">
                         <img class="upload-img" src="./assets/img/upload.png" (click)="uploadTmallHomePic()">
                         <img class="image" [src]="imagePathTb" *ngIf="imagePathTb">
+                        <nz-spin *ngIf="spinBoolean" style="height: 102px;
+            line-height: 102px;
+            text-align: center;" [nzSize]="'large'"></nz-spin>
                         <i *ngIf="imagePathTb" class="iconfont icon-deleternormal" (click)="deleteImage(0,'tmall')"></i>
                     </li>
                 </ul>
@@ -85,6 +94,9 @@
                         <img class="upload-img" src="./assets/img/upload.png">
                         <input type="file" accept="image" (change)="uploadImage($event,'images',i)">
                         <img class="image" src="{{image.src}}" *ngIf="image.src">
+                        <nz-spin *ngIf="spinBoolean" style="height: 102px;
+            line-height: 102px;
+            text-align: center;" [nzSize]="'large'"></nz-spin>
                         <i *ngIf="image.showDelete" class="iconfont icon-deleternormal" (click)="deleteImage(i,'images')"></i>
                     </li>
                 </ul>
@@ -94,18 +106,19 @@
     </nz-card>
     <!--详细信息-->
     <nz-card [nzBordered]="false" class="sales-card">
-        <h2><span class="line"></span>详细信息</h2>
+        <h2>
+            <span class="line"></span>详细信息</h2>
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7" nzFor="goal">详细内容</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
                 <div class="right-block fl descriptions">
                     <form class="descriptions_form" *ngFor="let list of descriptions;let i = index">
                         <input nz-input maxlength="15" class="juniu_input" [value]="list.title" (change)="getTitledata(i,$event.target.value,'descriptions')"
-                               placeholder="请输入标题，最多输入15个字">
+                            placeholder="请输入标题，最多输入15个字">
                         <div class="details_list_box">
                             <div class="form_parent" *ngFor="let detail of list.details;let detailIndex = index">
                                 <textarea nz-input name="details" maxlength="100" class="desc_textarea" [value]="detail.item" (change)="getDetaildata(i,detailIndex,$event.target.value,'descriptions')"
-                                                  placeholder="请输入内容，最多输入100个字，更多内容点“添加更多”"></textarea>
+                                    placeholder="请输入内容，最多输入100个字，更多内容点“添加更多”"></textarea>
                                 <p class="btns-box">
                                     <span class="descriptions_add_btn descriptions_btns" (click)="addLine(i,'descriptions')">添加更多</span>
                                     <span class="descriptions_minus_btn descriptions_btns" (click)="deleteline(i,detailIndex,'descriptions')">删除</span>
@@ -126,11 +139,11 @@
                 <div class="right-block fl descriptions">
                     <form class="descriptions_form" *ngFor="let list of buyerNotes;let j = index">
                         <input nz-input maxlength="15" class="juniu_input" [value]="list.title" (change)="getTitledata(j,$event.target.value,'buyerNotes')"
-                               placeholder="请输入标题，最多输入15个字">
+                            placeholder="请输入标题，最多输入15个字">
                         <div class="details_list_box">
                             <div class="form_parent" *ngFor="let detail of list.details;let noteIndex =index">
                                 <textarea nz-input name="details" maxlength="100" class="desc_textarea" [value]="detail.item" (change)="getDetaildata(j,noteIndex,$event.target.value,'buyerNotes')"
-                                          placeholder="请输入内容，最多输入100个字，更多内容点“添加更多”"></textarea>
+                                    placeholder="请输入内容，最多输入100个字，更多内容点“添加更多”"></textarea>
                                 <p class="btns-box">
                                     <span class="descriptions_add_btn descriptions_btns" (click)="addLine(j,'buyerNotes')">添加更多</span>
                                     <span class="descriptions_minus_btn descriptions_btns" (click)="deleteline(j,noteIndex,'buyerNotes')">删除</span>
@@ -148,7 +161,8 @@
     </nz-card>
     <!--商品属性-->
     <nz-card [nzBordered]="false" class="sales-card">
-        <h2><span class="line"></span>商品属性</h2>
+        <h2>
+            <span class="line"></span>商品属性</h2>
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="stock">库存</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
@@ -164,8 +178,9 @@
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
                 <!--新增选择-->
                 <nz-radio-group formControlName="verifyFrequency" *ngIf="!koubeiProductId">
-                    <label nz-radio  *ngFor="let item of validityPeriodArr" [nzValue]="item.type" (click)="changeVerifyFrequency(item.type)">{{item.typeName}}</label>
-                    <input style="width: 150px;" *ngIf="form.value.verifyFrequency === 'multi'" nz-input formControlName="verifyEnableTimes" placeholder="2-50之间的整数">
+                    <label nz-radio *ngFor="let item of validityPeriodArr" [nzValue]="item.type" (click)="changeVerifyFrequency(item.type)">{{item.typeName}}</label>
+                    <input style="width: 150px;" *ngIf="form.value.verifyFrequency === 'multi'" nz-input formControlName="verifyEnableTimes"
+                        placeholder="2-50之间的整数">
                     <ng-container *ngIf="form.value.verifyFrequency === 'multi'&& verifyEnableTimes.dirty || verifyEnableTimes.touched">
                         <nz-form-explain class="errorTips" *ngIf="verifyEnableTimes.errors?.required">请填写多次核销次数。</nz-form-explain>
                         <nz-form-explain class="errorTips" *ngIf="verifyEnableTimes.errors?.pattern">核销次数只能是正整数</nz-form-explain>
@@ -191,11 +206,12 @@
                 </nz-select>
                 <div class="clearfix" *ngIf="form.value.validityPeriodType == 'RELATIVE'">
                     自购买之日起
-                    <input nz-input style="width: 60px" onkeyup="this.value=this.value.replace(/\D/g,'')" type="text" maxlength="3" formControlName="expiryDay" placeholder="360"> 天内可使用
+                    <input nz-input style="width: 60px" onkeyup="this.value=this.value.replace(/\D/g,'')" type="text" maxlength="3" formControlName="expiryDay"
+                        placeholder="360"> 天内可使用
                     <span class="text-thing" style="color: #999999;font-size: 12px;">输入范围7-360天</span>
                 </div>
                 <div class="clearfix" *ngIf="form.value.validityPeriodType == 'FIXED'">
-                    <nz-range-picker [nzDisabledDate]="disabledDate" formControlName="dateRange" nzShowTime ></nz-range-picker>
+                    <nz-range-picker [nzDisabledDate]="disabledDate" formControlName="dateRange" nzShowTime></nz-range-picker>
                 </div>
                 <ng-container *ngIf="form.value.validityPeriodType == 'RELATIVE'&& expiryDay.dirty || expiryDay.touched">
                     <nz-form-explain class="errorTips" *ngIf="expiryDay.errors?.required">请填写使用有效期。</nz-form-explain>
@@ -204,7 +220,7 @@
                     <nz-form-explain class="errorTips" *ngIf="expiryDay.errors?.max">使用有效期最多360天</nz-form-explain>
                 </ng-container>
                 <ng-container *ngIf="form.value.validityPeriodType == ''">
-                  <nz-form-explain class="errorTips">请选择使用有效期类型。</nz-form-explain>
+                    <nz-form-explain class="errorTips">请选择使用有效期类型。</nz-form-explain>
                 </ng-container>
             </nz-form-control>
         </nz-form-item>
@@ -219,7 +235,8 @@
 </form>
 <!--上下架状态-->
 <nz-card [nzBordered]="false" class="sales-card">
-    <h2><span class="line"></span>上下架状态</h2>
+    <h2>
+        <span class="line"></span>上下架状态</h2>
     <nz-form-item>
         <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="status">上下架状态</nz-form-label>
         <nz-form-control nzXs="24" nzSm="12" nzMd="10">
@@ -231,23 +248,23 @@
     <nz-form-item>
         <nz-form-label nzXs="24" nzSm="7" nzFor="putawayDate">上架时间</nz-form-label>
         <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-          <nz-date-picker [nzDisabledDate]="disabledStartDate" [nzDisabled]="disabled" nzShowTime nzFormat="yyyy-MM-dd HH:mm:ss"
-                          [(ngModel)]="putawayDate" nzPlaceholder="请选择上架时间" (ngModelChange)="onStartChange($event)" ></nz-date-picker>
+            <nz-date-picker [nzDisabledDate]="disabledStartDate" [nzDisabled]="disabled" nzShowTime nzFormat="yyyy-MM-dd HH:mm:ss" [(ngModel)]="putawayDate"
+                nzPlaceholder="请选择上架时间" (ngModelChange)="onStartChange($event)"></nz-date-picker>
             <nz-form-explain class="tips-text">上架时间一旦生效,不能修改。</nz-form-explain>
         </nz-form-control>
     </nz-form-item>
     <nz-form-item>
         <nz-form-label nzXs="24" nzSm="7" nzFor="soldOutDate">定时下架</nz-form-label>
         <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-          <nz-date-picker [nzDisabledDate]="disabledEndDate" nzShowTime nzFormat="yyyy-MM-dd HH:mm:ss"
-                          [(ngModel)]="soldOutDate" nzPlaceholder="请选择上架时间"></nz-date-picker>
+            <nz-date-picker [nzDisabledDate]="disabledEndDate" nzShowTime nzFormat="yyyy-MM-dd HH:mm:ss" [(ngModel)]="soldOutDate" nzPlaceholder="请选择上架时间"></nz-date-picker>
             <nz-form-explain class="tips-text">默认无自动下架时间，可不填。</nz-form-explain>
         </nz-form-control>
     </nz-form-item>
 </nz-card>
 <!--门店-->
 <nz-card [nzBordered]="false" class="sales-card">
-    <h2><span class="line"></span>使用门店</h2>
+    <h2>
+        <span class="line"></span>使用门店</h2>
     <nz-form-item>
         <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="storesChangeNum">选择口碑门店</nz-form-label>
         <nz-form-control nzXs="24" nzSm="12" nzMd="10">
@@ -257,7 +274,7 @@
                 <span class="select-store-btn" (click)="onSelectStoreBtnClick(alertStore)">选择门店</span>
             </div>
             <ng-container>
-              <nz-form-explain class="errorTips" *ngIf="selectStoresIds === '' && ifShowStoreErrorTips">请至少选择一个门店</nz-form-explain>
+                <nz-form-explain class="errorTips" *ngIf="selectStoresIds === '' && ifShowStoreErrorTips">请至少选择一个门店</nz-form-explain>
             </ng-container>
         </nz-form-control>
     </nz-form-item>
@@ -275,26 +292,26 @@
 </ng-template>
 
 <!-- 口碑客 -->
-<nz-modal [(nzVisible)]="isVisible" nzWidth ="800"  nzTitle="关联口碑账号" nzOkText="确定" (nzOnOk)="handleOk()" (nzOnCancel)="handleCancel('koubeike')">
-  <div class="reserve-record-alert" style="height: 400px;">
-    <iframe class="all-iframe" id="koubeikeFrame" [src]="trustedUrl" frameborder="0" scrolling="auto" height="100%" width="100%"></iframe>
-  </div>
+<nz-modal [(nzVisible)]="isVisible" nzWidth="800" nzTitle="关联口碑账号" nzOkText="确定" (nzOnOk)="handleOk()" (nzOnCancel)="handleCancel('koubeike')">
+    <div class="reserve-record-alert" style="height: 400px;">
+        <iframe class="all-iframe" id="koubeikeFrame" [src]="trustedUrl" frameborder="0" scrolling="auto" height="100%" width="100%"></iframe>
+    </div>
 </nz-modal>
 
 
 <!--选择入淘首图的弹框-->
-<nz-modal [(nzVisible)]="isVisibleImg" nzWidth ="500" [nzFooter]="null"  nzTitle="选择入淘首图" nzOkText="确定"  (nzOnCancel)="handleCancel('rutao')">
-  <!--修改卡面背景-->
-  <nz-form-text class="btn-photo-clip">
-    <span class="btn-img">点击上传入淘首图</span>
-    <input type="file" id="file" accept="image" />
-  </nz-form-text>
-  <div class="clip-img-box">
-    <div id="clipArea"></div>
-  </div>
-  <p class="btn-box clearfix">
-    <button class="ant-btn ng-star-inserted ant-btn-primary" type="primary" id="clipBtn">
-      <span>确定</span>
-    </button>
-  </p>
+<nz-modal [(nzVisible)]="isVisibleImg" nzWidth="500" [nzFooter]="null" nzTitle="选择入淘首图" nzOkText="确定" (nzOnCancel)="handleCancel('rutao')">
+    <!--修改卡面背景-->
+    <nz-form-text class="btn-photo-clip">
+        <span class="btn-img">点击上传入淘首图</span>
+        <input type="file" id="file" accept="image" />
+    </nz-form-text>
+    <div class="clip-img-box">
+        <div id="clipArea"></div>
+    </div>
+    <p class="btn-box clearfix">
+        <button class="ant-btn ng-star-inserted ant-btn-primary" type="primary" id="clipBtn">
+            <span>确定</span>
+        </button>
+    </p>
 </nz-modal>

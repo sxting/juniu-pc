@@ -24,7 +24,7 @@ export class PayWayStep4Component implements OnInit {
     moduleId: any = '';
 
     loading: boolean = false;
-
+    spinBoolean: boolean = false;
     constructor(
         public item: TransferService,
         private fb: FormBuilder,
@@ -95,9 +95,10 @@ export class PayWayStep4Component implements OnInit {
         } else {
             formData.append('picType', '3'); //组织机构证件照
         }
-
+        this.spinBoolean = true;
         this.setingsService.uploadPic(formData).subscribe(
             (res: any) => {
+                this.spinBoolean = false;
                 if(res.success) {
                     let data = res.data;
                     let result = {

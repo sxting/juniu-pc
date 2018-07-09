@@ -127,7 +127,7 @@
                 <td>{{item.bizTypeName}}</td>
                 <td>{{item.payTypeName}}</td>
                 <td>{{item.genderName}}</td>
-                <td>{{item.money / 100}}</td>
+                <td>{{item.paidMoney / 100}}</td>
             </tr>
         </tbody>
 
@@ -240,13 +240,13 @@
             </div>
         </div>
         <div>
-            <div class="addStaffBox-main-left">售价</div>
+            <div class="addStaffBox-main-left">实际支付金额</div>
             <div class="addStaffBox-main-right">
                 {{pincardInfo?.price/100}}
             </div>
         </div>
         <div>
-            <div class="addStaffBox-main-left">累计消费金额</div>
+            <div class="addStaffBox-main-left">累计消费金额(无折扣)</div>
             <div class="addStaffBox-main-right">
                 {{pincardInfo?.consumeMoney/100}}
             </div>

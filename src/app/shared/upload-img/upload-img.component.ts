@@ -30,6 +30,8 @@ export class UploadImageComponent implements OnInit, OnChanges {
   isClear: boolean = false;
   @Input()
   syncAlipay: string = '';
+
+  spinBoolean :boolean =  false;
   /**
    * 图片数组
    * @type {Array}
@@ -149,15 +151,20 @@ export class UploadImageComponent implements OnInit, OnChanges {
       });
     } else {
       if (file) {
+        this.spinBoolean = true;
         this.uploadService.postWithFile(file, self.bizType, self.syncAlipay, self.imageScalingRulesJson).then((result: any) => {
-          self.uploadImageResult = result;
-          if (self.uploadImageResult) {
-            self.imageArray[index].imageId = self.uploadImageResult.pictureId;
-            self.imageArray[index].src = Config.OSS_IMAGE_URL
-              + `${self.uploadImageResult.pictureId}/resize_80_60/mode_fill`;
-            self.imageArray[index].showDelete = false;
-            self.img.emit(this.imageArray);
+          if(result){
+            self.uploadImageResult = result;
+            if (self.uploadImageResult) {
+              self.imageArray[index].imageId = self.uploadImageResult.pictureId;
+              self.imageArray[index].src = Config.OSS_IMAGE_URL
+                + `${self.uploadImageResult.pictureId}/resize_80_60/mode_fill`;
+              self.imageArray[index].showDelete = false;
+              self.img.emit(this.imageArray);
+            }
           }
+          this.spinBoolean = false;
+          
         });
       }
     }

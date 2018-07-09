@@ -4,8 +4,12 @@
         <nz-form-control [nzSpan]="19">
             <div class="step4-img-box">
                 <img class="upload-img" src="./assets/img/upload.png">
+                <div class="example" *ngIf="spinBoolean">
+                    <nz-spin [nzSize]="'large'"></nz-spin>
+                </div>
                 <input type="file" accept="image" formControlName="image_id1" (change)="uploadImage($event, 1)">
                 <img class="image" [src]="item.imagePath1" *ngIf="item.imagePath1">
+
             </div>
         </nz-form-control>
     </nz-form-item>
@@ -15,6 +19,9 @@
         <nz-form-control [nzSpan]="19">
             <div class="step4-img-box">
                 <img class="upload-img" src="./assets/img/upload.png">
+                <div class="example" *ngIf="spinBoolean">
+                    <nz-spin [nzSize]="'large'"></nz-spin>
+                </div>
                 <input type="file" accept="image" formControlName="image_id2" (change)="uploadImage($event, 2)">
                 <img class="image" [src]="item.imagePath2" *ngIf="item.imagePath2">
             </div>
@@ -26,6 +33,9 @@
         <nz-form-control [nzSpan]="19">
             <div class="step4-img-box">
                 <img class="upload-img" src="./assets/img/upload.png">
+                <div class="example" *ngIf="spinBoolean">
+                    <nz-spin [nzSize]="'large'"></nz-spin>
+                </div>
                 <input type="file" accept="image" formControlName="image_id3" (change)="uploadImage($event, 3)">
                 <img class="image" [src]="item.imagePath3" *ngIf="item.imagePath3">
             </div>
@@ -37,12 +47,18 @@
         <nz-form-control [nzSpan]="19">
             <div class="step4-img-box img4-box">
                 <img class="upload-img" src="./assets/img/upload-zm.png">
+                <div class="example" *ngIf="spinBoolean">
+                    <nz-spin [nzSize]="'large'"></nz-spin>
+                </div>
                 <input type="file" accept="image" formControlName="image_id4" (change)="uploadImage($event, 4)">
                 <img class="image" [src]="item.imagePath4" (click)="onImgClick(alertBigImg, item.image_id4, item.imagePath4)">
                 <i class="icon-magnifier-add"></i>
             </div>
             <div class="step4-img-box img4-box">
                 <img class="upload-img" src="./assets/img/upload-back.png">
+                <div class="example" *ngIf="spinBoolean">
+                    <nz-spin [nzSize]="'large'"></nz-spin>
+                </div>
                 <input type="file" accept="image" formControlName="image_id5" (change)="uploadImage($event, 5)">
                 <img class="image" [src]="item.imagePath5" (click)="onImgClick(alertBigImg, item.image_id5, item.imagePath5)">
                 <i class="icon-magnifier-add"></i>
@@ -55,12 +71,18 @@
         <nz-form-control [nzSpan]="19">
             <div class="step4-img-box img4-box">
                 <img class="upload-img" src="./assets/img/upload-zm.png">
+                <div class="example" *ngIf="spinBoolean">
+                    <nz-spin [nzSize]="'large'"></nz-spin>
+                </div>
                 <input type="file" accept="image" formControlName="image_id6" (change)="uploadImage($event, 6)">
                 <img class="image" [src]="item.imagePath6" (click)="onImgClick(alertBigImg, item.image_id6, item.imagePath6)">
                 <i class="icon-magnifier-add"></i>
             </div>
             <div class="step4-img-box img4-box">
                 <img class="upload-img" src="./assets/img/upload-back.png">
+                <div class="example" *ngIf="spinBoolean">
+                    <nz-spin [nzSize]="'large'"></nz-spin>
+                </div>
                 <input type="file" accept="image" formControlName="image_id7" (change)="uploadImage($event, 7)">
                 <img class="image" [src]="item.imagePath7" (click)="onImgClick(alertBigImg, item.image_id7, item.imagePath7)">
                 <i class="icon-magnifier-add"></i>
@@ -82,7 +104,6 @@
 </ng-template>
 
 <div style="opacity: 0; width: 0; height: 0">
-  <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false"
-                   (storeIdOutput)="onSelectStoreChange($event)">
-  </jn-stores-infor>
+    <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false" (storeIdOutput)="onSelectStoreChange($event)">
+    </jn-stores-infor>
 </div>
