@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { _HttpClient , TitleService} from '@delon/theme';
+import { _HttpClient, TitleService } from '@delon/theme';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -11,9 +11,9 @@ import { UploadService } from '@shared/upload-img';
 import NP from 'number-precision'
 
 @Component({
-  selector: 'app-add-new-product',
-  templateUrl: './add-new-product.component.html',
-  styleUrls: [ './add-new-product.component.less' ],
+    selector: 'app-add-new-product',
+    templateUrl: './add-new-product.component.html',
+    styleUrls: ['./add-new-product.component.less'],
 })
 export class AddNewProductComponent implements OnInit {
     constructor(
@@ -33,12 +33,12 @@ export class AddNewProductComponent implements OnInit {
     form: FormGroup;
     loading: boolean = false;
     submitting = false;
-    categoryList: any[] = [ ];
+    categoryList: any[] = [];
     categoryName: string = '';//商品分类名称
     addNewCommodityType: any;
     productId: string = '';//商品ID
-    ItemsStatus: any = [{ name: '上架', value: '1'}, { name: '下架', value: '0'},];//上下架状态
-    storeStatus: any = [{ name: '全部门店(默认)', value: 'ALL'},{ name: '自定义', value: 'CUSTOMIZE'}];
+    ItemsStatus: any = [{ name: '上架', value: '1' }, { name: '下架', value: '0' },];//上下架状态
+    storeStatus: any = [{ name: '全部门店(默认)', value: 'ALL' }, { name: '自定义', value: 'CUSTOMIZE' }];
     storeId: string = '';//查看门店登录还是商家登陆
     merchantId: string = '';
     //上传图片的时候
@@ -51,7 +51,7 @@ export class AddNewProductComponent implements OnInit {
     allStoresNum: any;//所有门店的数量
     moduleId: string;
     ifShow: boolean = false;//门店错误提示
-
+    spinBoolean: boolean = false;
     get categoryInfor() { return this.form.controls.categoryInfor; }
     get currentPrice() { return this.form.controls['currentPrice']; }
     get stock() { return this.form.controls['stock']; }
@@ -59,76 +59,76 @@ export class AddNewProductComponent implements OnInit {
     ngOnInit() {
 
         let self = this;
-        this.moduleId = this.route.snapshot.params['menuId']? this.route.snapshot.params['menuId'] : '';//门店
+        this.moduleId = this.route.snapshot.params['menuId'] ? this.route.snapshot.params['menuId'] : '';//门店
         this.productId = this.route.snapshot.params['productId'] ? this.route.snapshot.params['productId'] : FunctionUtil.getUrlString('productId');
 
         this.formData = {
-            categoryInfor: [ null, [ Validators.required ] ],
-            productName:[ null, [ Validators.required ] ],
-            stock:[ null, [ Validators.required, Validators.pattern(`[0-9]+`)] ],
-            currentPrice: [null, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.min(1 * 0.01),  Validators.max(11111111.11 * 9)])],
-            productNo: [ null, [ Validators.pattern(`[0-9]+`)] ],
-            status: [self.ItemsStatus[0].value, [ Validators.required  ] ],
-            storeType: [ self.storeStatus[0].value, [ Validators.required ] ],
+            categoryInfor: [null, [Validators.required]],
+            productName: [null, [Validators.required]],
+            stock: [null, [Validators.required, Validators.pattern(`[0-9]+`)]],
+            currentPrice: [null, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.min(1 * 0.01), Validators.max(11111111.11 * 9)])],
+            productNo: [null, [Validators.pattern(`[0-9]+`)]],
+            status: [self.ItemsStatus[0].value, [Validators.required]],
+            storeType: [self.storeStatus[0].value, [Validators.required]],
         };
         this.form = this.fb.group(self.formData);
         this.getCategoryListInfor();//获取商品分类信息
     }
 
     //获取门店数据
-    storeListPush(event){
-      this.cityStoreList = event.storeList? event.storeList : [];
-      let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
-        JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
-      this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
-      this.storeId = UserInfo.staffType === "MERCHANT"? '' : this.cityStoreList[0].storeId;
+    storeListPush(event) {
+        this.cityStoreList = event.storeList ? event.storeList : [];
+        let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+            JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+        this.merchantId = UserInfo.merchantId ? UserInfo.merchantId : '';
+        this.storeId = UserInfo.staffType === "MERCHANT" ? '' : this.cityStoreList[0].storeId;
 
-      if(this.productId){
-        this.getProductDetailInfor();//查看商品详情
-      }else {
-        for (let i = 0; i < this.cityStoreList.length; i++) {
-          for (let j = 0; j < this.cityStoreList[i].stores.length; j++) {
-            if (this.cityStoreList[i].stores[j].change == true) {
-              this.selectStoresIds += ',' + this.cityStoreList[i].stores[j].storeId
+        if (this.productId) {
+            this.getProductDetailInfor();//查看商品详情
+        } else {
+            for (let i = 0; i < this.cityStoreList.length; i++) {
+                for (let j = 0; j < this.cityStoreList[i].stores.length; j++) {
+                    if (this.cityStoreList[i].stores[j].change == true) {
+                        this.selectStoresIds += ',' + this.cityStoreList[i].stores[j].storeId
+                    }
+                }
             }
-          }
+            if (this.selectStoresIds) {
+                this.selectStoresIds = this.selectStoresIds.substring(1);
+                this.storesChangeNum = this.selectStoresIds.split(',').length;
+            }
+            this.ifShow = this.selectStoresIds === '' ? true : false;
         }
-        if (this.selectStoresIds) {
-          this.selectStoresIds = this.selectStoresIds.substring(1);
-          this.storesChangeNum = this.selectStoresIds.split(',').length;
-        }
-        this.ifShow = this.selectStoresIds === ''? true : false;
-      }
     }
 
     //获取门店总数量
-    getAllStoresNum(event){
-      this.allStoresNum = event.allStoresNum? event.allStoresNum : 0;
+    getAllStoresNum(event) {
+        this.allStoresNum = event.allStoresNum ? event.allStoresNum : 0;
     }
 
-   //选择弹框
-    onSelectAlertBtn(tpl: any, text: string, type: string){
+    //选择弹框
+    onSelectAlertBtn(tpl: any, text: string, type: string) {
         let self = this;
-        if(type === 'CUSTOMIZE'){
+        if (type === 'CUSTOMIZE') {
             this.modalSrv.create({
-                nzTitle: '选择'+ text,
+                nzTitle: '选择' + text,
                 nzContent: tpl,
                 nzWidth: '800px',
                 nzCancelText: null,
                 nzOkText: '保存',
-                nzOnOk: function(){
-                  console.log(self.selectStoresIds);
-                  self.ifShow = self.selectStoresIds === ''? true : false;
+                nzOnOk: function () {
+                    console.log(self.selectStoresIds);
+                    self.ifShow = self.selectStoresIds === '' ? true : false;
                 }
             });
-        }else {
+        } else {
             this.changeAllData();
         }
     }
 
     //获取到门店ID
-    getSelectStoresIds(event){
-      this.selectStoresIds = event.staffIds? event.staffIds : '';
+    getSelectStoresIds(event) {
+        this.selectStoresIds = event.staffIds ? event.staffIds : '';
     }
 
     //增加商品分类信息
@@ -149,10 +149,10 @@ export class AddNewProductComponent implements OnInit {
     // 添加新的商品分类管理
     addNewProductTypesClick() {
         let index = this.addNewCommodityType.length - 1;
-        if(this.addNewCommodityType.length !=0 && this.addNewCommodityType[index].categoryName == ''){
+        if (this.addNewCommodityType.length != 0 && this.addNewCommodityType[index].categoryName == '') {
             this.msg.warning('请先填写该商品分类后再添加!');
             return;
-        }else {
+        } else {
             this.addNewCommodityType.push({ categoryName: '', categoryId: '', type: 'GOODS', merchantId: this.merchantId });
         }
     }
@@ -161,7 +161,7 @@ export class AddNewProductComponent implements OnInit {
     }
 
     //删除分类信息
-    deleteCategoryClick(index: number, categoryId: string){
+    deleteCategoryClick(index: number, categoryId: string) {
         if (categoryId) {
             let Params = {
                 categoryId: categoryId
@@ -174,7 +174,7 @@ export class AddNewProductComponent implements OnInit {
     }
 
     //获取到所有的门店ID及其num
-    changeAllData(){
+    changeAllData() {
         // 初始化
         this.allStoresNum = 0;
         this.storesChangeNum = 0;
@@ -205,7 +205,7 @@ export class AddNewProductComponent implements OnInit {
             this.selectStoresIds = this.selectStoresIds.substring(1);
             this.allStoresNum = this.selectStoresIds.split(',').length;
         }
-        this.ifShow = this.selectStoresIds === ''? true : false;
+        this.ifShow = this.selectStoresIds === '' ? true : false;
     }
 
     /*************************  Http请求开始  ********************************/
@@ -245,13 +245,13 @@ export class AddNewProductComponent implements OnInit {
                     console.log(res.data);
                     this.loading = false;
                     this.categoryList = res.data;
-                    if(res.data.length != 0){
+                    if (res.data.length != 0) {
                         res.data.forEach(function (item: any) {
                             item.type = 'GOODS';
                             item.merchantId = self.merchantId;
                         });
                     }
-                    this.formData.categoryInfor = this.categoryList[0]? this.categoryList[0].categoryId +','+ this.categoryList[0].categoryName : '';
+                    this.formData.categoryInfor = this.categoryList[0] ? this.categoryList[0].categoryId + ',' + this.categoryList[0].categoryName : '';
                     this.form = this.fb.group(self.formData);
                     this.addNewCommodityType = res.data;
                 } else {
@@ -302,11 +302,15 @@ export class AddNewProductComponent implements OnInit {
         event = event ? event : window.event;
         var file = event.srcElement ? event.srcElement.files : event.target.files; if (file) {
             this.loading = true;
+            this.spinBoolean = true;
             this.uploadService.postWithFile(file, 'item', 'F').then((result: any) => {
-                this.loading = false;
-                let width = 104, height = 104;
-                this.picId = result.pictureId;
-                this.imagePath = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.picId}/resize_${width}_${height}/mode_fill`;
+                this.spinBoolean = false;
+                if (result) {
+                    this.loading = false;
+                    let width = 104, height = 104;
+                    this.picId = result.pictureId;
+                    this.imagePath = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.picId}/resize_${width}_${height}/mode_fill`;
+                }
             });
         }
     }
@@ -315,13 +319,13 @@ export class AddNewProductComponent implements OnInit {
      * @param index
      */
     deleteImage() {
-      this.picId = '';
-      this.imagePath = '';
+        this.picId = '';
+        this.imagePath = '';
     }
 
 
     //获取商品详情信息
-    getProductDetailInfor(){
+    getProductDetailInfor() {
         let self = this;
         let params = {
             productId: this.productId
@@ -330,23 +334,23 @@ export class AddNewProductComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     console.log(res.data);
-                    let categoryInfor = res.data.categoryId + ',' +  res.data.categoryName;
-                    let status = res.data.putaway === 1? this.ItemsStatus[0].value : this.ItemsStatus[1].value;
-                    let storeType = res.data.applyStoreType === 'CUSTOMIZE'? this.storeStatus[1].value : this.storeStatus[0].value;
+                    let categoryInfor = res.data.categoryId + ',' + res.data.categoryName;
+                    let status = res.data.putaway === 1 ? this.ItemsStatus[0].value : this.ItemsStatus[1].value;
+                    let storeType = res.data.applyStoreType === 'CUSTOMIZE' ? this.storeStatus[1].value : this.storeStatus[0].value;
                     this.formData = {
-                        categoryInfor: [ categoryInfor, [ Validators.required ] ],
-                        productName:[ res.data.productName, [ Validators.required ] ],
-                        stock:[ res.data.stock, [ Validators.required, Validators.pattern(`[0-9]+`)] ],
-                        currentPrice: [ res.data.currentPrice/100, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.min(1 * 0.01),  Validators.max(11111111.11 * 9)])],
-                        productNo: [ res.data.productNo, [ Validators.pattern(`[0-9]+`)] ],
-                        status: [ status, [ Validators.required  ] ],
-                        storeType: [ storeType, [ Validators.required ] ],
+                        categoryInfor: [categoryInfor, [Validators.required]],
+                        productName: [res.data.productName, [Validators.required]],
+                        stock: [res.data.stock, [Validators.required, Validators.pattern(`[0-9]+`)]],
+                        currentPrice: [res.data.currentPrice / 100, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.min(1 * 0.01), Validators.max(11111111.11 * 9)])],
+                        productNo: [res.data.productNo, [Validators.pattern(`[0-9]+`)]],
+                        status: [status, [Validators.required]],
+                        storeType: [storeType, [Validators.required]],
                     };
                     this.picId = res.data.picId;
                     this.imagePath = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.picId}/resize_${102}_${102}/mode_fill`;
                     this.form = this.fb.group(self.formData);
                     this.selectStoresIds = res.data.storeIds;
-                    let StoresIds = res.data.storeIds? res.data.storeIds.split(',') : '';
+                    let StoresIds = res.data.storeIds ? res.data.storeIds.split(',') : '';
                     this.getDataChange(this.cityStoreList, StoresIds);//转换后台拿过来的数据
                 } else {
                     this.modalSrv.error({
@@ -362,7 +366,7 @@ export class AddNewProductComponent implements OnInit {
     }
 
     //转换后台数据
-    getDataChange(staffListInfor: any, selectedStaffIds: any){
+    getDataChange(staffListInfor: any, selectedStaffIds: any) {
         staffListInfor.forEach(function (city: any) {
             city.change = false;
             city.checked = false;
@@ -400,17 +404,17 @@ export class AddNewProductComponent implements OnInit {
     }
 
     submit() {
-      let self = this;
+        let self = this;
         for (const i in this.form.controls) {
-            this.form.controls[ i ].markAsDirty();
-            this.form.controls[ i ].updateValueAndValidity();
+            this.form.controls[i].markAsDirty();
+            this.form.controls[i].updateValueAndValidity();
         }
         if (this.form.invalid) return;
         let categoryInfor = this.form.controls.categoryInfor.value;
         let params = {
             productName: this.form.controls.productName.value,
-            productId: this.productId? this.productId : '',
-            currentPrice: NP.round(Number(this.form.controls.currentPrice.value)*100,2),
+            productId: this.productId ? this.productId : '',
+            currentPrice: NP.round(Number(this.form.controls.currentPrice.value) * 100, 2),
             storeIds: this.selectStoresIds,
             storeId: this.storeId,
             merchantId: this.merchantId,
@@ -423,25 +427,25 @@ export class AddNewProductComponent implements OnInit {
             applyStoreType: this.form.controls.storeType.value,
             categoryType: 'GOODS'
         };
-        if(this.ifShow == false){
-          this.submitting = true;
-          this.productService.saveAddProductInfor(params).subscribe(
-            (res: any) => {
-              self.submitting = false;
-              if (res.success) {
-                self.msg.success(`提交成功`);
-                self.router.navigate(['/product/list', { menuId: self.moduleId}]);
-              } else {
-                this.modalSrv.error({
-                  nzTitle: '温馨提示',
-                  nzContent: res.errorInfo
-                });
-              }
-            },
-            (error) => {
-              this.msg.warning(error)
-            }
-          );
+        if (this.ifShow == false) {
+            this.submitting = true;
+            this.productService.saveAddProductInfor(params).subscribe(
+                (res: any) => {
+                    self.submitting = false;
+                    if (res.success) {
+                        self.msg.success(`提交成功`);
+                        self.router.navigate(['/product/list', { menuId: self.moduleId }]);
+                    } else {
+                        this.modalSrv.error({
+                            nzTitle: '温馨提示',
+                            nzContent: res.errorInfo
+                        });
+                    }
+                },
+                (error) => {
+                    this.msg.warning(error)
+                }
+            );
         }
     }
 }

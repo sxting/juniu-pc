@@ -40,6 +40,7 @@ export class UploadService {
             this.responseData = res['data'];
             resolve(this.responseData);
           } else {
+            resolve(false);
             this.modalSrv.error({
               nzTitle: '温馨提示',
               nzContent: res['errorInfo']

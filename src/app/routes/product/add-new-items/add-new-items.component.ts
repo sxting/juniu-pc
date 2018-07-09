@@ -52,7 +52,7 @@ export class AddNewItemsComponent implements OnInit {
     allStoresNum: any;//所有门店的数量
     moduleId: string;
     ifShow: boolean = false;//门店错误提示
-
+    spinBoolean: boolean = false;
     get categoryInfor() { return this.form.controls.categoryInfor; }
     get currentPrice() { return this.form.controls['currentPrice']; }
     get stock() { return this.form.controls['stock']; }
@@ -300,11 +300,16 @@ export class AddNewItemsComponent implements OnInit {
         event = event ? event : window.event;
         var file = event.srcElement ? event.srcElement.files : event.target.files; if (file) {
             this.loading = true;
+            this.spinBoolean = true;
             this.uploadService.postWithFile(file, 'item', 'F').then((result: any) => {
-                this.loading = false;
-                let width = 104, height = 104;
-                this.picId = result.pictureId;
-                this.imagePath = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.picId}/resize_${width}_${height}/mode_fill`;
+                this.spinBoolean = false;
+                if(result){
+                    this.loading = false;
+                    let width = 104, height = 104;
+                    this.picId = result.pictureId;
+                    this.imagePath = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.picId}/resize_${width}_${height}/mode_fill`;
+                }
+                
             });
         }
     }
