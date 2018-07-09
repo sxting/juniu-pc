@@ -21,7 +21,7 @@
                 <ul class="shop_names" style="margin-top: 0;">
                     <li *ngFor="let city of province.cityArr; let cityIndex=index">
                         <input type="checkbox" [checked]="city.change" (click)="onSelectAllCityInputClick(provinceIndex, cityIndex, city.change)" />
-                        <span>{{city.cityName}}</span>
+                        <span style="color: #000">{{city.cityName}}</span>
                         <!--门店-->
                         <ul class="shop_names" style="margin-top: 0;">
                           <li *ngFor="let store of city.stores; let storeIndex=index">
@@ -43,12 +43,12 @@
                 <div class="city-list bbn" *ngIf="province.checked == true">
                     <!--城市-->
                     <div class="select_all_btn">
-                        <span class="city">{{province.provinceName}}</span>
+                        <span class="city" style="color: #1a1a1a">{{province.provinceName}}</span>
                     </div>
                     <!--门店-->
                     <ul class="shop_names">
                         <li *ngFor="let city of province.cityArr">
-                            <span *ngIf="city.checked == true">{{city.cityName}}</span>
+                            <span *ngIf="city.checked == true" style="color: #000">{{city.cityName}}</span>
                             <ul class="shop_names" style="margin-top: 0;">
                               <li *ngFor="let store of city.stores">
                                 <span *ngIf="store.checked == true">{{store.shopName}}</span>
