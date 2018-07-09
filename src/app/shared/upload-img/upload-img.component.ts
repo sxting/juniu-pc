@@ -30,6 +30,8 @@ export class UploadImageComponent implements OnInit, OnChanges {
   isClear: boolean = false;
   @Input()
   syncAlipay: string = '';
+
+  spinBoolean :boolean =  false;
   /**
    * 图片数组
    * @type {Array}
@@ -149,7 +151,9 @@ export class UploadImageComponent implements OnInit, OnChanges {
       });
     } else {
       if (file) {
+        this.spinBoolean = true;
         this.uploadService.postWithFile(file, self.bizType, self.syncAlipay, self.imageScalingRulesJson).then((result: any) => {
+          this.spinBoolean = false;
           self.uploadImageResult = result;
           if (self.uploadImageResult) {
             self.imageArray[index].imageId = self.uploadImageResult.pictureId;
