@@ -1,1 +1,36 @@
-<page-header></page-header>
+<nz-card nzTitle="小程序" [nzBordered]="false" [nzBodyStyle]="{'height':'100%','overflow': 'hidden','margin':'30px','background':'#f8f8f8'}">
+    <div>
+        <h3>审核版本</h3>
+        <div >
+            <div nz-col nzSpan="4">
+                <div>版本号</div>
+                <div>v2342310</div>
+            </div>
+            <div nz-col nzSpan="16">
+                <nz-form-item>
+                    <nz-form-label style="display: inline-block">小程序名称</nz-form-label>
+                    <nz-form-control style="display: inline-block">
+                        桔牛体验店
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label style="display: inline-block">上传时间</nz-form-label>
+                    <nz-form-control style="display: inline-block">
+                        2018-05-10 17:05:30
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label style="display: inline-block">线上版本</nz-form-label>
+                    <nz-form-control style="display: inline-block">
+                        正在等待微信审核
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="4">
+                <div>状态</div>
+                <div>审核中</div>
+                <button class="buttons" nz-button nzType="primary" type="submit">解除授权</button>
+            </div>
+        </div>
+    </div>
+</nz-card>
