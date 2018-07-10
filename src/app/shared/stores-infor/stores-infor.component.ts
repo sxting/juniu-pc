@@ -2,6 +2,7 @@ import { _HttpClient } from '@delon/theme';
 import { Component, OnInit, AfterViewInit, AfterViewChecked, Input, Output, EventEmitter } from '@angular/core';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { StoresInforService } from '@shared/stores-infor/shared/stores-infor.service';
+import { LocalStorageService } from '@shared/service/localstorage-service';
 
 @Component({
   selector: 'jn-stores-infor',
@@ -14,6 +15,7 @@ export class StoresInforComponent implements OnInit {
     private msg: NzMessageService,
     private modalSrv: NzModalService,
     private storesInforService: StoresInforService,
+    private localStorageService: LocalStorageService
   ) { }
 
   @Input()
@@ -62,6 +64,11 @@ export class StoresInforComponent implements OnInit {
   public storeListPush = new EventEmitter(); //所有门店信息
 
   ngOnInit() {
+    let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+      JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+    if(UserInfo.staffType === 'STORE'){
+      this.ifStoresAll = false;
+    }
     this.getStoresInfor();//门店选择
   }
 

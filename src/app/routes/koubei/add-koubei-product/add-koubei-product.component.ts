@@ -99,55 +99,59 @@ export class AddKoubeiProductComponent implements OnInit {
         let storeList = JSON.parse(this.localStorageService.getLocalstorage('alipayShops')) ?
             JSON.parse(this.localStorageService.getLocalstorage('alipayShops')) : [];
         if (storeList) {
-            CITYLIST.forEach(function (i: any) {
-                storeList.forEach((ele: any, index: number, arr: any) => {
-                    if (i.i === ele.provinceId) {
-                        ele.cityName = i.n;
-                    }
-                });
+          CITYLIST.forEach(function (i: any) {
+            storeList.forEach((ele: any, index: number, arr: any) => {
+              if(i.i === ele.city){
+                ele.cityName = i.n;
+              }
+              if(i.i === ele.provinceId){
+                ele.provinceName = i.n;
+              }
             });
+          });
         }
         let cityNameSpaceArr = [{
             cityName: '',
-            provinceId: '',
+            cityId: '',
         }];
         cityNameSpaceArr.shift();
         for (let i = 0; i < storeList.length; i++) {
-            if (storeList[i].provinceId === '' || storeList[i].provinceId === null) {
+            if (storeList[i].city === '' || storeList[i].city === null) {
                 storeList[i].cityName = '其他';
-            } else if (storeList[i].provinceId !== '' && storeList[i].cityName === '') {
+            } else if (storeList[i].city !== '' && storeList[i].cityName === '') {
                 cityNameSpaceArr.push({
                     cityName: '',
-                    provinceId: storeList[i].provinceId,
+                    cityId: storeList[i].city,
                 });
             }
         }
         for (let i = 0; i < storeList.length; i++) {
             let ids = [];
             for (let j = 0; j < CITYLIST.length; j++) {
-                if (storeList[i].provinceId === CITYLIST[j].i) {
+                if (storeList[i].city === CITYLIST[j].i) {
                     ids.push(CITYLIST[j].i)
                 }
             }
             if (ids.length === 0) {
                 storeList[i].cityName = '其他';
-                storeList[i].provinceId = null;
+                storeList[i].city = null;
             }
         }
         for (let i = 0; i < cityNameSpaceArr.length; i++) {
             for (let j = 0; j < storeList.length; j++) {
-                if (cityNameSpaceArr[i].provinceId === storeList[j].provinceId && storeList[j].cityName !== '') {
+                if (cityNameSpaceArr[i].cityId === storeList[j].city && storeList[j].cityName !== '') {
                     cityNameSpaceArr[i].cityName = storeList[j].cityName;
                 }
             }
         }
         for (let i = 0; i < cityNameSpaceArr.length; i++) {
             for (let j = 0; j < storeList.length; j++) {
-                if (cityNameSpaceArr[i].provinceId === storeList[j].provinceId && storeList[j].cityName === '') {
+                if (cityNameSpaceArr[i].cityId === storeList[j].city && storeList[j].cityName === '') {
                     storeList[j].cityName = cityNameSpaceArr[i].cityName;
                 }
             }
         }
+        console.log(storeList);
         this.cityStoreList = this.getCityList(storeList);//将门店列表数据格式转换成按照城市分类
         this.changeAllData();//获取到所有的门店ID及其num
 
@@ -288,8 +292,8 @@ export class AddKoubeiProductComponent implements OnInit {
             nzWidth: '800px',
             nzCancelText: null,
             nzOkText: '保存',
-            nzOnOk: function () {
-                self.ifShowStoreErrorTips = self.selectStoresIds === '' ? true : false;
+            nzOnOk: function(){
+              self.ifShowStoreErrorTips = self.selectStoresIds === ''? true : false;
             }
         });
     }
@@ -379,63 +383,89 @@ export class AddKoubeiProductComponent implements OnInit {
         this.storesChangeNum = 0;
         this.selectStoresIds = '';
         this.cityStoreList.forEach(function (item: any) {
-            let arr = [];
-            item.change = true;
-            item.checked = true;
-            item.roleName = item.cityName;
-            item.stores.forEach(function (value: any) {
-                let list = {
-                    change: true,
-                    staffId: value.shopId,
-                    staffName: value.shopName
-                };
-                arr.push(list);
+          item.checked = true;
+          item.change = true;
+          item.cityArr.forEach(function (value: any) {
+            value.checked = true;
+            value.change = true;
+            value.stores.forEach(function (list: any) {
+              list.checked = true;
+              list.change = true;
             });
-            item.staffs = arr;
+          });
         });
+        console.log(this.cityStoreList);
         for (let i = 0; i < this.cityStoreList.length; i++) {
-            for (let j = 0; j < this.cityStoreList[i].staffs.length; j++) {
-                if (this.cityStoreList[i].staffs[j].change == true) {
-                    this.selectStoresIds += ',' + this.cityStoreList[i].staffs[j].staffId
-                }
+          for (let j = 0; j < this.cityStoreList[i].cityArr.length; j++) {
+            for (let n = 0; n < this.cityStoreList[i].cityArr[j].stores.length; n++) {
+              if (this.cityStoreList[i].cityArr[j].stores[n].checked == true) {
+                this.selectStoresIds += ',' + this.cityStoreList[i].cityArr[j].stores[n].shopId
+              }
             }
+          }
         }
-
         if (this.selectStoresIds) {
-            this.selectStoresIds = this.selectStoresIds.substring(1);
-            this.storesChangeNum = this.selectStoresIds.split(',').length;
-            this.allShopsNumber = this.selectStoresIds.split(',').length;
+          this.selectStoresIds = this.selectStoresIds.substring(1);
+          this.storesChangeNum = this.selectStoresIds.split(',').length;
+          this.allShopsNumber = this.selectStoresIds.split(',').length;
         }
         this.ifShowStoreErrorTips = this.selectStoresIds === '' ? true : false;
     }
 
     /** 将门店列表数据格式转换成按照城市分类 */
     getCityList(storeList: any) {
+        let provinceAllCodeArr = [];
         let cityAllCodeArr = [];
+        let provinceList = [];
+        let cityStoreList = [];
         for (let i = 0; i < storeList.length; i++) {
-            cityAllCodeArr.push(storeList[i].provinceId + '-' + storeList[i].cityName);
+          cityAllCodeArr.push(storeList[i].provinceId + '-' + storeList[i].provinceName + '-' + storeList[i].city + '-' + storeList[i].cityName);
+          provinceAllCodeArr.push(storeList[i].provinceId + '-' + storeList[i].provinceName);
         }
+        let provinceCodeArr = FunctionUtil.getNoRepeat(provinceAllCodeArr);
         let cityCodeArr = FunctionUtil.getNoRepeat(cityAllCodeArr);
-        let cityArr = [];
-        for (let i = 0; i < cityCodeArr.length; i++) {
-            cityArr.push({
-                cityCode: cityCodeArr[i].split('-')[0],
-                cityName: cityCodeArr[i].split('-')[1],
-                stores: [{}]
-            });
-            cityArr[i].stores.shift();
-        }
-        for (let i = 0; i < cityArr.length; i++) {
-            for (let j = 0; j < storeList.length; j++) {
-                if (JSON.stringify(storeList[j].provinceId) === cityArr[i].cityCode || storeList[j].provinceId === cityArr[i].cityCode) {
-                    cityArr[i].stores.push({
-                        shopId: storeList[j].shopId,
-                        shopName: storeList[j].shopName,
-                    });
-                }
+        provinceCodeArr.forEach(function( item: any ){
+          provinceList.push(
+            {
+              provinceId: item.split('-')[0],
+              provinceName: item.split('-')[1],
+              cityArr: []
             }
+          )
+        });
+        cityCodeArr.forEach(function( item: any ){
+          cityStoreList.push({
+              provinceId: item.split('-')[0],
+              provinceName: item.split('-')[1],
+              cityArr: [
+                {
+                  cityId: item.split('-')[2],
+                  cityName: item.split('-')[3],
+                  stores: []
+                }
+              ]
+          });
+        });
+        provinceList.forEach(function( item: any, index: number, array: any ){
+          for(let i = 0; i< cityStoreList.length; i++){
+            if(item.provinceId === cityStoreList[i].provinceId){
+              item.cityArr.push(cityStoreList[i].cityArr[0]);
+            }
+          }
+        });
+        for (let i = 0; i < provinceList.length; i++) {
+          for(let n = 0;n < provinceList[i].cityArr.length; n++){
+            for (let j = 0; j < storeList.length; j++) {
+              if (provinceList[i].cityArr[n].cityId === storeList[j].city) {
+                provinceList[i].cityArr[n].stores.push({
+                  shopId: storeList[j].shopId,
+                  shopName: storeList[j].shopName,
+                });
+              }
+            }
+          }
         }
-        return cityArr;
+        return provinceList;
     }
 
     /** 商品分类转换数据 */
@@ -474,58 +504,89 @@ export class AddKoubeiProductComponent implements OnInit {
 
     //编辑,转换购买须知及其详细内容的数据
     editChangeData(object: any, transfor: any) {
-        object.forEach((element: any, index: number) => {
-            let group: any = {
-                title: element.title,
-                details: []
-            };
-            let list: any;
+      object.forEach((element: any, index: number) => {
+          let group: any = {
+              title: element.title,
+              details: []
+          };
+          let list: any;
+          if(element.details && element.details.length > 0){
             for (let i = 0; i < element.details.length; i++) {
-                list = {
-                    item: element.details[i]
-                };
-                group.details.push(list);
+              list = {
+                item: element.details[i]
+              };
+              group.details.push(list);
             }
-            transfor.push(group);
-        });
+          }else{
+            group.details.push({ item: '' });
+          }
+          transfor.push(group);
+      });
     }
 
     //转换后台数据
-    getDataChange(staffListInfor: any, selectedStaffIds: any) {
-        staffListInfor.forEach(function (city: any) {
-            city.change = false;
-            city.checked = false;
-            city.staffs.forEach(function (staff: any) {
-                staff.change = false;
-            });
+    getDataChange(staffListInfor: any, selectedStaffIds: any){
+      console.log(selectedStaffIds);
+      for(let i = 0; i < staffListInfor.length; i++){
+        staffListInfor[i].change = false;
+        staffListInfor[i].checked = false;
+        staffListInfor[i].cityArr.forEach(function (city: any) {
+          city.change = false;
+          city.checked = false;
+          city.stores.forEach(function (store: any) {
+            store.change = false;
+            store.checked = false;
+          });
         });
-        /*初始化选中*/
-        selectedStaffIds.forEach(function (staffId: any) {
-            staffListInfor.forEach(function (city: any, j: number) {
-                city.staffs.forEach(function (staff: any, k: number) {
-                    if (staffId === staff.staffId) {
-                        staff.change = true;
-                    }
-                });
-            });
+      };
+      /*===初始化选中门店===*/
+      selectedStaffIds.forEach(function (storeId: any) {
+        staffListInfor.forEach(function (province: any, index: number) {
+          province.cityArr.forEach(function (city: any, count: number) {
+            city.stores.forEach(function( store: any ) {
+              if(store.shopId === storeId){
+                store.checked = true;
+                store.change = true;
+              }
+            })
+          });
         });
-        /*判断城市是否全选*/
-        staffListInfor.forEach(function (city: any, i: number) {
-            let storesChangeArr = [''];
-            city.staffs.forEach(function (store: any, j: number) {
-                if (store.change === true) {
-                    storesChangeArr.push(store.change);
-                }
-            });
-            if (storesChangeArr.length - 1 === city.staffs.length) {
-                city.change = true;
-                city.checked = true;
+      });
+      /*判断====省及其城市====是否全选*/
+      /********===== 判断城市 ====*******/
+      staffListInfor.forEach(function( item: any, index: number ){
+        item.cityArr.forEach(function( city: any,index: number ) {
+          let cityChangeArr = [];
+          for(let i = 0; i < city.stores.length; i++){
+            if(city.stores[i].change === true){
+              cityChangeArr.push(city.stores[i].shopId);
             }
-            if (storesChangeArr.length > 1) {
-                city.checked = true;
-            }
+          }
+          if(cityChangeArr.length === city.stores.length){
+            city.change = true;
+          }
+          city.checked = cityChangeArr.length > 0? true : false;
+        })
+      });
+      /******===== 判断省 ====*****/
+      staffListInfor.forEach(function( province: any ){
+        let provinceChangeArr = [];
+        let provinceCheckedArr = [];
+        province.cityArr.forEach(function( city: any, index: number ) {
+          if(city.checked === true){
+            provinceCheckedArr.push(city.cityId);
+          }
+          if(city.change === true){
+            provinceChangeArr.push(city.cityId);
+          }
         });
-        return staffListInfor;
+        if(provinceChangeArr.length === province.cityArr.length){
+          province.change = true;
+        }
+        province.checked = provinceCheckedArr.length > 0? true: false;
+      });
+      console.log(staffListInfor);
+      return staffListInfor;
     }
 
     /***************************购买须知和详细内容*****************************/
@@ -731,23 +792,23 @@ export class AddKoubeiProductComponent implements OnInit {
         let bizType = 'item';
         this.spinBoolean = true;
         this.koubeiService.uploadImageWithBase64(data, bizType, syncAlipay).subscribe(
-            (res: any) => {
-                this.loading = false;
-                this.spinBoolean = false;
-                if (res.success) {
-                    this.isVisibleImg = false;
-                    this.tbCover = res.data.pictureId;
-                    this.imagePathTb = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.tbCover}/resize_${250}_${250}/mode_fill`;
-                } else {
-                    this.modalSrv.error({
-                        nzTitle: '温馨提示',
-                        nzContent: res.errorInfo
-                    });
-                }
-            },
-            error => {
-                this.msg.warning(error);
-            })
+          (res: any) => {
+              this.loading = false;
+              this.spinBoolean = false;
+              if (res.success) {
+                  this.isVisibleImg = false;
+                  this.tbCover = res.data.pictureId;
+                  this.imagePathTb = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.tbCover}/resize_${250}_${250}/mode_fill`;
+              } else {
+                  this.modalSrv.error({
+                      nzTitle: '温馨提示',
+                      nzContent: res.errorInfo
+                  });
+              }
+          },
+          error => {
+              this.msg.warning(error);
+          })
     }
 
     /** 获取口碑商品详情 */
@@ -758,6 +819,7 @@ export class AddKoubeiProductComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     this.loading = false;
+                    console.log(res.data);
                     let categorysName = res.data.categoryName && res.data.categoryName != "" && res.data.categoryName !== null ? res.data.categoryName.split('－') : [];
                     let expiryDay = res.data.validityPeriodType == 'FIXED' ? 360 : res.data.expiryDay;
                     let validityPeriodType = res.data.validityPeriodType;

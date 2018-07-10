@@ -380,8 +380,8 @@ export class KoubeiProductListComponent implements OnInit {
         };
         this.koubeiService.deleteKoubeiProduct(data).subscribe(
             (res: any) => {
+                this.loading = false;
                 if (res.success) {
-                    this.loading = false;
                     this.msg.success(`商品删除成功`);
                     // 请求口碑商品列表
                     this.batchQuery.putaway = this.putaway;
@@ -408,10 +408,10 @@ export class KoubeiProductListComponent implements OnInit {
         this.loading = true;
         self.koubeiService.asyncItemFromKoubeiByPid(parmeList).subscribe(
             (res: any) => {
+                self.loading = false;
                 if (res.success) {
                     setTimeout(function () {
                         self.getKoubeiProductListInfor(self.batchQuery);
-                        self.loading = false;
                     }, 5000);
                 } else {
                     this.modalSrv.error({

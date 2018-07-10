@@ -35,6 +35,7 @@ import { StoresInforComponent } from '@shared/stores-infor/stores-infor.componen
 import { StoresTransforComponent } from '@shared/stores-transfor/stores-transfor.component';
 import { StoresTransforService } from '@shared/stores-transfor/shared/stores-transfor.service';
 import { KoubeiErrComponent } from '@shared/component/koubeiErr/koubeiErr.component';
+import { KoubeiStoreTransferComponent } from '@shared/component/koubei-store-transfer/koubei-store-transfer.component';
 
 const THIRDMODULES = [
   NgZorroAntdModule,
@@ -52,7 +53,8 @@ const JUNIUMODULES = [
   StoresInforComponent,
   StoreComponent,
   StoresTransforComponent,
-  KoubeiErrComponent
+  KoubeiErrComponent,
+  KoubeiStoreTransferComponent
 ];
 // endregion
 
