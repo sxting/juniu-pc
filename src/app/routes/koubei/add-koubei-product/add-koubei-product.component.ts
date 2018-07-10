@@ -151,7 +151,6 @@ export class AddKoubeiProductComponent implements OnInit {
                 }
             }
         }
-        console.log(storeList);
         this.cityStoreList = this.getCityList(storeList);//将门店列表数据格式转换成按照城市分类
         this.changeAllData();//获取到所有的门店ID及其num
 
@@ -186,7 +185,7 @@ export class AddKoubeiProductComponent implements OnInit {
             this.checkProductDetailInfor(batchQuery);
         }
         this.formData = {
-            productName: [null, [Validators.required, Validators.max(40)]],
+            productName: [null, [Validators.required]],
             originalPrice: [null, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)])],
             currentPrice: [null, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.max(10000 * 3)])],
             categoryName: [null, []],
@@ -237,7 +236,7 @@ export class AddKoubeiProductComponent implements OnInit {
 
         if (this.form.controls.verifyFrequency.value === 'simple' && this.form.controls.verifyEnableTimes.value == '') {
             this.form = this.fb.group({
-                productName: [productName, [Validators.required, Validators.max(40)]],
+                productName: [ productName, [ Validators.required ]],
                 originalPrice: [originalPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)])],
                 currentPrice: [currentPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.max(10000 * 3)])],
                 categoryName: [categoryName, []],
@@ -714,7 +713,7 @@ export class AddKoubeiProductComponent implements OnInit {
                         let verifyFrequency = this.form.controls.verifyFrequency.value;
 
                         this.form = this.fb.group({
-                            productName: [productName, [Validators.required, Validators.max(40)]],
+                            productName: [productName, [Validators.required]],
                             originalPrice: [originalPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)])],
                             currentPrice: [currentPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.max(10000 * 3)])],
                             categoryName: [categoryName, []],
@@ -906,7 +905,7 @@ export class AddKoubeiProductComponent implements OnInit {
                         }
                     }
                     this.formData = {
-                        productName: [res.data.productName, [Validators.required, Validators.max(40)]],
+                        productName: [res.data.productName, [Validators.required]],
                         originalPrice: [originalPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)])],
                         currentPrice: [currentPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.max(10000 * 3)])],
                         categoryName: [categorysName, []],
