@@ -157,14 +157,9 @@ export class KoubeiProductListComponent implements OnInit {
     }
 
     //口碑客推广
-    extension(tpl: any,itemId:string){
+    extension(itemId:string){
         let self = this;
-        this.modalSrv.create({
-            nzTitle: '推广至口碑客',
-            nzContent: tpl,
-            nzWidth: '800px',
-            nzFooter: null,
-        });
+        self.koubeikeifShow = true;
         if(this.merchantLogin){//商家登录
             console.log("商家登录");
             this.srcUrl = "https://koubeike.alipay.com/main.htm#/promote/config/baobei?itemId=" + itemId;
@@ -176,7 +171,6 @@ export class KoubeiProductListComponent implements OnInit {
             this.trustedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.srcUrl);
         }
         if(this.srcUrl) {
-            this.koubeikeifShow = true;
             //监听消息反馈
             window.addEventListener('message',function(event) {
                 var kbkRe = JSON.parse(event.data);
@@ -184,25 +178,25 @@ export class KoubeiProductListComponent implements OnInit {
                     if (kbkRe.resultStatus === 'failed') {
                         // 宝贝校验失败
                         self.koubeikeifShow = false;
-                        FunctionUtil.errorAlter(kbkRe.resultMsg);
+                        self.msg.warning(kbkRe.resultMsg);
                     }
                 }
                 if (kbkRe.action === 'configCommission') {
                     if (kbkRe.resultStatus === 'succeed') {
                         // 签约成功
                         self.koubeikeifShow = false;
-                        FunctionUtil.errorAlter('设置成功');
+                        self.msg.warning('设置成功');
                     } else if (kbkRe.resultStatus === 'failed') {
                         // 签约失败
                         self.koubeikeifShow = false;
-                        FunctionUtil.errorAlter(kbkRe.resultMsg);  // 失败具体信息
+                        self.msg.warning(kbkRe.resultMsg);  // 失败具体信息
                     } else if (kbkRe.resultStatus === 'canceled') {
                         // 用户取消
                         self.koubeikeifShow = false;
                     } else {
                         // 异常情况
                         self.koubeikeifShow = false;
-                        FunctionUtil.errorAlter(kbkRe.resultMsg || '请求出错');
+                        self.msg.warning(kbkRe.resultMsg || '请求出错');
                     }
                 }
             },false);
@@ -316,7 +310,7 @@ export class KoubeiProductListComponent implements OnInit {
                 }
             },
             error => {
-                FunctionUtil.errorAlter(error);
+              self.msg.warning(error);
             }
         );
     }
@@ -341,7 +335,7 @@ export class KoubeiProductListComponent implements OnInit {
                 }
             },
             error => {
-                FunctionUtil.errorAlter(error);
+              self.msg.warning(error);
             }
         );
     }
@@ -366,7 +360,7 @@ export class KoubeiProductListComponent implements OnInit {
                 }
             },
             error => {
-                FunctionUtil.errorAlter(error);
+              self.msg.warning(error);
             }
         )
     }
@@ -394,7 +388,7 @@ export class KoubeiProductListComponent implements OnInit {
                 }
             },
             error => {
-                FunctionUtil.errorAlter(error);
+              self.msg.warning(error);
             }
         )
     }
@@ -421,7 +415,7 @@ export class KoubeiProductListComponent implements OnInit {
                 }
             },
             error => {
-                FunctionUtil.errorAlter(error);
+              self.msg.warning(error);
             }
         );
     }

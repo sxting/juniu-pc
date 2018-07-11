@@ -102,11 +102,11 @@
     </div>
 </nz-card>
 <!--口碑客设置弹框-->
-<ng-template #koubeike>
-    <div class="reserve-record-alert">
+<nz-modal [(nzVisible)]="koubeikeifShow" nzWidth ="800" [nzFooter]="null"  nzTitle="推广至口碑客" (nzOnCancel)="handleCancel()">
+  <div class="reserve-record-alert">
         <iframe class="all-iframe" id="koubeikeFrame" [src]="trustedUrl" frameborder="0" scrolling="auto" height="100%" width="100%"></iframe>
     </div>
-</ng-template>
+</nz-modal>
 
 <!--关联口碑账号-->
 <nz-modal [(nzVisible)]="isVisible" nzWidth ="800" [nzFooter]="null"  nzTitle="关联口碑账号" nzOkText="确定" nzCancelText="取消" (nzOnCancel)="handleCancel()">
