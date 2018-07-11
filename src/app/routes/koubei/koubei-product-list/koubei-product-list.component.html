@@ -84,7 +84,7 @@
                 <span (click)="operationProduct(i,item.koubeiProductId,putaway)">{{putaway == '1'? '下架':'上架'}}</span>
                 <p class="koubeike" *ngIf="putaway === '1'">
                     <span class="iconfont icon-line1"></span>
-                    <span (click)="extension(koubeike,item.alipayItemId)">去推广</span>
+                    <span (click)="extension(item.alipayItemId)">去推广</span>
                 </p>
                 <p class="delete" *ngIf="putaway === '0'">
                     <span class="iconfont icon-line1"></span>

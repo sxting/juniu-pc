@@ -584,7 +584,6 @@ export class AddKoubeiProductComponent implements OnInit {
         }
         province.checked = provinceCheckedArr.length > 0? true: false;
       });
-      console.log(staffListInfor);
       return staffListInfor;
     }
 
