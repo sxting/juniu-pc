@@ -292,12 +292,11 @@
 </ng-template>
 
 <!-- 口碑客 -->
-<nz-modal [(nzVisible)]="isVisible" nzWidth="800" nzTitle="关联口碑账号" nzOkText="确定" (nzOnOk)="handleOk()" (nzOnCancel)="handleCancel('koubeike')">
+<nz-modal [(nzVisible)]="isVisible" nzWidth="800" [nzFooter]="null" nzTitle="关联口碑账号" (nzOnOk)="handleOk()" (nzOnCancel)="handleCancel('koubeike')">
     <div class="reserve-record-alert" style="height: 400px;">
         <iframe class="all-iframe" id="koubeikeFrame" [src]="trustedUrl" frameborder="0" scrolling="auto" height="100%" width="100%"></iframe>
     </div>
 </nz-modal>
-
 
 <!--选择入淘首图的弹框-->
 <nz-modal [(nzVisible)]="isVisibleImg" nzWidth="500" [nzFooter]="null" nzTitle="选择入淘首图" nzOkText="确定" (nzOnCancel)="handleCancel('rutao')">

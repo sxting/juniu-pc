@@ -584,7 +584,6 @@ export class AddKoubeiProductComponent implements OnInit {
         }
         province.checked = provinceCheckedArr.length > 0? true: false;
       });
-      console.log(staffListInfor);
       return staffListInfor;
     }
 
@@ -1024,6 +1023,7 @@ export class AddKoubeiProductComponent implements OnInit {
                         // 宝贝校验失败
                         self.isVisible = false;
                         self.msg.warning(kbkRe.resultMsg);
+                        self.router.navigate(['/koubei/product/list']);
                     }
                 }
                 if (kbkRe.action === 'configCommission') {
@@ -1043,6 +1043,7 @@ export class AddKoubeiProductComponent implements OnInit {
                         self.isVisible = false;
                         self.msg.warning(kbkRe.resultMsg || '请求出错');
                     }
+                    self.router.navigate(['/koubei/product/list']);
                 }
             }, false);
         }
