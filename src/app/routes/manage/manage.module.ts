@@ -22,6 +22,7 @@ import { ManageService } from './shared/manage.service';
 import { WxStoreComponent } from './wxStore/wxStore.component';
 import { MatchingkoubeiComponent } from './matchingkoubei/matchingkoubei.component';
 import { KoubeiGLComponent } from './koubeiGL/koubeiGL.component';
+import { WechatTypeComponent } from './wechatType/wechatType.component';
 
 
 
@@ -42,6 +43,7 @@ import { KoubeiGLComponent } from './koubeiGL/koubeiGL.component';
         SmsNotificationsComponent,
         AddSchedulingRulesComponent,
         StaffSchedulingListComponent,
+        WechatTypeComponent,
         StaffCommissionListComponent,
         WxStoreComponent,
         MatchingkoubeiComponent,
