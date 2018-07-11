@@ -80,7 +80,7 @@ export class CardholdersVipComponent {
         private memberService: MemberService) {
         let that = this;
         this.moduleId = this.route.snapshot.params['menuId'];
-        this.customerlistHttp();
+        // this.customerlistHttp();
         // var goEasy = new GoEasy({
         //     appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
         // });
