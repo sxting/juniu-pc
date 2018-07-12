@@ -1,7 +1,7 @@
 <g2-card>
     <nz-tabset>
         <nz-tab nzTitle="扫码核销">
-            <div class="member-top-middle">
+            <div class="member-top-middle" *ngIf="!fangkuai">
                 <!-- <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false" [ifStoresAuth]="true" (storeIdOutput)="selectStoreInfo($event.storeId)"></jn-stores-infor> -->
 
                 <nz-form-item>
@@ -39,7 +39,7 @@
                 class="input pay-code-input">
         </nz-tab>
         <nz-tab nzTitle="手动核销">
-            <div class="member-top-middle" *ngIf="checkoutShow">
+            <div class="member-top-middle" *ngIf="!fangkuai">
                 <nz-form-item>
                     <nz-form-label style="display: inline-block">选择门店</nz-form-label>
                     <nz-form-control style="display: inline-block">
@@ -50,7 +50,7 @@
                     </nz-form-control>
                 </nz-form-item>
             </div>
-            <div class="member-top-middle">
+            <div class="member-top-middle" *ngIf="!fangkuai">
                 <span style="margin-right:24px;">核销码:</span>
                 <input type="text" id="tauthCode" nz-input [(ngModel)]="tauthCode" placeholder="请输入顾客核销码">
             </div>
