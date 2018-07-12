@@ -10,7 +10,7 @@ import { _HttpClient } from '@delon/theme';
 @Injectable()
 export class KoubeiService {
   constructor(
-      private http: _HttpClient
+    private http: _HttpClient
   ) { }
 
   api1 = Config.API + 'reserve'; //预约
@@ -268,172 +268,173 @@ export class KoubeiService {
       });
   }
 
-    // 口碑核销对账
-    koubeiProductVouchersList(Params: any) {
-        let apiUrl = Config.API + 'order/koubei/vouchers.json';
-        let params = FunctionUtil.obectToURLSearchParams(Params);
-        return this.http.get(apiUrl, Params)
-            .map((response: Response) => response)
-            .catch(error => {
-                return Observable.throw(error);
-            });
-    }
-    // 口碑核销查询
-    koubeiProductVouchersticket(Params: any) {
-        let apiUrl = Config.API + 'order/koubei/ticket.json';
-        let params = FunctionUtil.obectToURLSearchParams(Params);
-        return this.http.get(apiUrl, Params)
-            .map((response: Response) => response)
-            .catch(error => {
-                return Observable.throw(error);
-            });
-    }
-    ///order/koubei/queryTickect.json?shopId=&ticketNo=，·
-    koubeiProductVouchersqueryTickect(Params: any) {
-        let apiUrl = Config.API + 'order/koubei/queryTickect.json';
-        let params = FunctionUtil.obectToURLSearchParams(Params);
-        return this.http.get(apiUrl,Params)
-            .map((response: Response) => response)
-            .catch(error => {
-                return Observable.throw(error);
-            });
-    }
+  // 口碑核销对账
+  koubeiProductVouchersList(Params: any) {
+    let apiUrl = Config.API + 'order/koubei/vouchers.json';
+    let params = FunctionUtil.obectToURLSearchParams(Params);
+    return this.http.get(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+  // 口碑核销查询
+  koubeiProductVouchersticket(Params: any, type: any) {
+    let apiUrl1 = Config.API + 'order/koubei/ticket.json';
+    let apiUrl = Config.API + 'order/koubei/queryTicketCode.json'
+    let params = FunctionUtil.obectToURLSearchParams(Params);
+    return this.http.get(type === 'koubei' ? apiUrl : apiUrl1, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+  ///order/koubei/queryTickect.json?shopId=&ticketNo=，·
+  koubeiProductVouchersqueryTickect(Params: any) {
+    let apiUrl = Config.API + 'order/koubei/queryTickect.json';
+    let params = FunctionUtil.obectToURLSearchParams(Params);
+    return this.http.get(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
 
-    //==========================分割线口碑商品=====================================>
+  //==========================分割线口碑商品=====================================>
 
-    //获取到口碑商品列表
-    getKoubeiProductListInfor(params: any) {
-        let apiUrl = Config.API + 'product/koubeiProduct/page.json';
-        return this.http.get(apiUrl,  params)
-            .map((response: Response) => response)
-            .catch(error => {
-                return Observable.throw(error);
-            });
-    }
+  //获取到口碑商品列表
+  getKoubeiProductListInfor(params: any) {
+    let apiUrl = Config.API + 'product/koubeiProduct/page.json';
+    return this.http.get(apiUrl, params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
 
-    //获取刷新的商品列表
-    asyncItemFromKoubeiByPid(params: any) {
-        let apiUrl = 'https://biz.juniuo.com/merchant/product/koubeiProduct/asyncItemFromKoubeiByPid.json';
-        return this.http.get(apiUrl, params)
-            .map((response: Response) => response)
-            .catch(error => {
-                return Observable.throw(error);
-            });
-    }
+  //获取刷新的商品列表
+  asyncItemFromKoubeiByPid(params: any) {
+    let apiUrl = 'https://biz.juniuo.com/merchant/product/koubeiProduct/asyncItemFromKoubeiByPid.json';
+    return this.http.get(apiUrl, params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
 
-    // 口碑商品下架
-    offlineKoubeiProductOperation(Params: any) {
-        let apiUrl = Config.API + 'product/koubeiProduct/offline.json';
-        return this.http.get(apiUrl,  Params)
-            .map((response: Response) => response)
-            .catch(error => {
-                return Observable.throw(error);
-            });
-    }
+  // 口碑商品下架
+  offlineKoubeiProductOperation(Params: any) {
+    let apiUrl = Config.API + 'product/koubeiProduct/offline.json';
+    return this.http.get(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
 
-    // 口碑商品上架
-    onlineKoubeiProductOperation(Params: any) {
-        let apiUrl = Config.API + 'product/koubeiProduct/online.json';
-        return this.http.get(apiUrl,  Params)
-            .map((response: Response) => response)
-            .catch(error => {
-                return Observable.throw(error);
-            });
-    }
+  // 口碑商品上架
+  onlineKoubeiProductOperation(Params: any) {
+    let apiUrl = Config.API + 'product/koubeiProduct/online.json';
+    return this.http.get(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
 
-    //口碑订单详情
-    koubeiProductOrderDetail(params: any) {
-        let apiUrl = Config.API + 'order/koubei/orderDetail.json';
-        return this.http.get(apiUrl, params)
-            .map((response: Response) => response)
-            .catch(error => {
-                return Observable.throw(error);
-            });
-    }
+  //口碑订单详情
+  koubeiProductOrderDetail(params: any) {
+    let apiUrl = Config.API + 'order/koubei/orderDetail.json';
+    return this.http.get(apiUrl, params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
 
-    // 口碑订单报表商品
-    reportProductItems(params: any) {
-        let apiUrl = Config.API + 'order/koubei/order/report/items.json';
-        return this.http.get(apiUrl,  params)
-            .map((response: Response) => response)
-            .catch(error => {
-                return Observable.throw(error);
-            });
-    }
+  // 口碑订单报表商品
+  reportProductItems(params: any) {
+    let apiUrl = Config.API + 'order/koubei/order/report/items.json';
+    return this.http.get(apiUrl, params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
 
-    // 口碑订单报表列表
-    productReportListInfor(params: any) {
-        let apiUrl = Config.API + 'order/koubei/order/report/list.json';
-        return this.http.get(apiUrl,  params)
-            .map((response: Response) => response)
-            .catch(error => {
-                return Observable.throw(error);
-            });
-    }
+  // 口碑订单报表列表
+  productReportListInfor(params: any) {
+    let apiUrl = Config.API + 'order/koubei/order/report/list.json';
+    return this.http.get(apiUrl, params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
 
-    // 口碑订单报表三种状态数量金额统计
-    reportStatisticsInfor(params: any) {
-        let apiUrl = Config.API + 'order/koubei/order/report/statistics.json';
-        return this.http.get(apiUrl,  params)
-            .map((response: Response) => response)
-            .catch(error => {
-                return Observable.throw(error);
-            });
-    }
+  // 口碑订单报表三种状态数量金额统计
+  reportStatisticsInfor(params: any) {
+    let apiUrl = Config.API + 'order/koubei/order/report/statistics.json';
+    return this.http.get(apiUrl, params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
 
 
-    // 口碑订单列表
-    getProductOrderList(params: any) {
-        let apiUrl = Config.API + 'order/koubei/orders.json';
-        return this.http.get(apiUrl,  params)
-            .map((response: Response) => response)
-            .catch(error => {
-                return Observable.throw(error);
-            });
-    }
+  // 口碑订单列表
+  getProductOrderList(params: any) {
+    let apiUrl = Config.API + 'order/koubei/orders.json';
+    return this.http.get(apiUrl, params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
 
-    // 口碑核销对账
-    getProductVouchersList(params: any) {
-        let apiUrl = Config.API + 'order/koubei/vouchers.json';
-        return this.http.get(apiUrl,  params )
-            .map((response: Response) => response)
-            .catch(error => {
-                return Observable.throw(error);
-            });
-    }
+  // 口碑核销对账
+  getProductVouchersList(params: any) {
+    let apiUrl = Config.API + 'order/koubei/vouchers.json';
+    return this.http.get(apiUrl, params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
 
-    // 发布口碑商品
-    saveKoubeiProductInfor(Params: any) {
-        let apiUrl = Config.API + 'product/koubeiProduct/save.json';
-        let params = FunctionUtil.obectToURLSearchParams(Params);
-        return this.http.post(apiUrl, Params)
-            .map((response: Response) => response)
-            .catch(error => {
-                return Observable.throw(error);
-            });
-    }
+  // 发布口碑商品
+  saveKoubeiProductInfor(Params: any) {
+    let apiUrl = Config.API + 'product/koubeiProduct/save.json';
+    let params = FunctionUtil.obectToURLSearchParams(Params);
+    return this.http.post(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
 
-    // 口碑商品查询详情
-    koubeiProductDetailInfor(Params: any) {
-        let apiUrl = Config.API + 'product/koubeiProduct/info.json';
-        return this.http.get(apiUrl, Params)
-            .map((response: Response) => response)
-            .catch(error => {
-                return Observable.throw(error);
-            });
-    }
+  // 口碑商品查询详情
+  koubeiProductDetailInfor(Params: any) {
+    let apiUrl = Config.API + 'product/koubeiProduct/info.json';
+    return this.http.get(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
 
-    //删除口碑商品
-    deleteKoubeiProduct(Params: any) {
-        let apiUrl = Config.API + 'product/koubeiProduct/koubeiProductDelete.json';
-        return this.http.get(apiUrl, Params)
-            .map((response: Response) => response)
-            .catch(error => {
-                return Observable.throw(error);
-            });
-    }
+  //删除口碑商品
+  deleteKoubeiProduct(Params: any) {
+    let apiUrl = Config.API + 'product/koubeiProduct/koubeiProductDelete.json';
+    return this.http.get(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
   //base64转图片
-  uploadImageWithBase64(data: any,bizType: string,syncAlipay: string) {
+  uploadImageWithBase64(data: any, bizType: string, syncAlipay: string) {
     let apiUrl = Config.API + `upload/uploadImageWithBase64.json?syncAlipay=${syncAlipay}&bizType=${bizType}`;
     let param = FunctionUtil.obectToURLSearchParams(data);
     return this.http.post(apiUrl, data)
@@ -442,13 +443,13 @@ export class KoubeiService {
         return Observable.throw(error);
       });
   }
-// 选择门店
-selectStores(data: any) {
-  let apiUrl = Config.API1 + 'account/merchant/store/select.json';
-  return this.http.get(apiUrl, data)
+  // 选择门店
+  selectStores(data: any) {
+    let apiUrl = Config.API1 + 'account/merchant/store/select.json';
+    return this.http.get(apiUrl, data)
       .map((response: Response) => response)
       .catch(error => {
-          return Observable.throw(error);
+        return Observable.throw(error);
       });
-}
+  }
 }
