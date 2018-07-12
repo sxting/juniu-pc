@@ -81,7 +81,7 @@ export class AddNewStaffComponent implements OnInit {
       this.formData = {
         staffName: [ staffName, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
         phone: [ phone, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
-        password: [ password, [Validators.required]],
+        password: [ password, [Validators.required, Validators.pattern(`^(?=.*\\d)(?=.*[a-z]).{6,50}$`)]],
         belongType: [ values, [Validators.required]],//门店员工职位
         storeId: [ storeId, [Validators.required]],
         roleId: [ roleId, [Validators.required]]
@@ -172,8 +172,7 @@ export class AddNewStaffComponent implements OnInit {
                 if (res.success) {
                     this.loading = false;
                     self.picId = res.data.portrait.imageId;//员工图像
-                    // self.imagePath = res.data.portrait.imageUrl;//员工图像地址
-                    this.imagePath = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.picId}/resize_${104}_${104}/mode_fill`;
+                    this.imagePath = self.picId? `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.picId}/resize_${104}_${104}/mode_fill` : '';
 
                     if(res.data.belongType === 'STORE'){
                       self.RolesListInfor = self.storeRoles;
@@ -189,7 +188,7 @@ export class AddNewStaffComponent implements OnInit {
                     self.formData = {
                         staffName: [ res.data.staffName, [Validators.required]],
                         phone: [ res.data.contactPhone, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
-                        password: [ password, [Validators.required]],
+                        password: [ password, [Validators.required, Validators.pattern(`^(?=.*\\d)(?=.*[a-z]).{6,50}$`)]],
                         belongType: [ res.data.belongType, [Validators.required]],//门店员工职位
                         storeId: [ storeId, [Validators.required]],
                         roleId: [ res.data.roleId, [Validators.required]],

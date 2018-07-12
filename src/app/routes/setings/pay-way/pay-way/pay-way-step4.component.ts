@@ -44,12 +44,13 @@ export class PayWayStep4Component implements OnInit {
             image_id5: [null, []],
             image_id6: [null, []],
             image_id7: [null, []],
+            image_id8: [null, []],
         });
 
         let data = this.item.itemData;
         if(this.item.itemData) {
             let width = 60, height = 60, height2 = 40;
-            this.item.image_id1 = data.merchantDetail.licensePhoto;
+            this.item.image_id1 = data.merchantDetail.licensePhoto.split(';')[0];
             this.item.imagePath1 = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.item.image_id1.split('.')[0]}/resize_${width}_${height}/mode_fill`;
 
             this.item.image_id3 = data.merchantDetail.mainPhoto;
@@ -59,6 +60,9 @@ export class PayWayStep4Component implements OnInit {
             this.item.imagePath6 = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.item.image_id6.split('.')[0]}/resize_${width}_${height2}/mode_fill`;
             this.item.image_id7 = data.merchantDetail.indentityPhoto.split(';')[1];
             this.item.imagePath7 = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.item.image_id7.split('.')[0]}/resize_${width}_${height2}/mode_fill`;
+
+          this.item.image_id8 = data.merchantDetail.licensePhoto.split(';')[1];
+          this.item.imagePath8 = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.item.image_id8.split('.')[0]}/resize_${width}_${height2}/mode_fill`;
 
             if(this.item.type === 'qiye') {
                 this.item.image_id2 = data.merchantDetail.protocolPhoto;
@@ -129,6 +133,9 @@ export class PayWayStep4Component implements OnInit {
                     } else if(number === 7) {
                         this.item.image_id7 = result.pictureId;
                         this.item.imagePath7 = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${image_id}/resize_${width}_${height2}/mode_fill`;
+                    } else if(number === 8) {
+                      this.item.image_id8 = result.pictureId;
+                      this.item.imagePath8 = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${image_id}/resize_${width}_${height2}/mode_fill`;
                     }
                 } else {
                     this.modalSrv.error({
@@ -172,7 +179,7 @@ export class PayWayStep4Component implements OnInit {
 
     _submitForm() {
         if(this.item.type === 'qiye') {
-            if(!this.item.image_id1 || !this.item.image_id2 || !this.item.image_id3 || !this.item.image_id6 || !this.item.image_id7) {
+            if(!this.item.image_id1 || !this.item.image_id2 || !this.item.image_id3 || !this.item.image_id6 || !this.item.image_id7 || !this.item.image_id8) {
                 this.modalSrv.error({
                     nzTitle: '温馨提示',
                     nzContent: '您还有照片没上传'
@@ -180,7 +187,7 @@ export class PayWayStep4Component implements OnInit {
                 return;
             }
         } else {
-            if(!this.item.image_id1 || !this.item.image_id3 || !this.item.image_id4 || !this.item.image_id5 || !this.item.image_id6 || !this.item.image_id7) {
+            if(!this.item.image_id1 || !this.item.image_id3 || !this.item.image_id4 || !this.item.image_id5 || !this.item.image_id6 || !this.item.image_id7 || !this.item.image_id8) {
                 this.modalSrv.error({
                     nzTitle: '温馨提示',
                     nzContent: '您还有照片没上传'
@@ -228,7 +235,7 @@ export class PayWayStep4Component implements OnInit {
                 indentityPhoto: `${this.item.image_id6};${this.item.image_id7}`, //*负责人证件照 调用图片上传 接口获取，多张 以;分割 ,
                 industrId: item['hangye_type'], //行业类型id , *
                 legalPerson: item['fuzer'], //企业法人 , ?
-                licensePhoto: this.item.image_id1, //营业执照 同上 , *
+                licensePhoto: `${this.item.image_id1};${this.item.image_id8}`, //营业执照 同上  + 信用截图, *
                 mainPhoto: this.item.image_id3, //门头照 同上 , *
                 merchantShortName: item['shanghu_jc'], //商户简称 , *
                 // orgPhoto: '', //组织机构代码照 银行卡 同上 ,
