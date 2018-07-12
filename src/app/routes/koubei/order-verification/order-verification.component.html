@@ -1,25 +1,9 @@
 <g2-card>
     <nz-tabset>
         <nz-tab nzTitle="扫码核销">
-            <div class="member-top-middle">
+            <div class="member-top-middle" *ngIf="!fangkuai">
                 <!-- <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false" [ifStoresAuth]="true" (storeIdOutput)="selectStoreInfo($event.storeId)"></jn-stores-infor> -->
 
-                <nz-form-item>
-                    <nz-form-label style="display: inline-block">选择门店</nz-form-label>
-                    <nz-form-control style="display: inline-block">
-                        <nz-select  [(ngModel)]="shopId" (ngModelChange)="selectStoreInfo($event)" style="width: 200px;" [nzPlaceHolder]="'请选择一个门店'"
-                            [nzShowSearch]="true">
-                            <nz-option *ngFor="let i of StoresInfo; let idx = index" [nzLabel]="i.shopName" [nzValue]="i.shopId"></nz-option>
-                        </nz-select>
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
-            <div class="sm-button {{checkoutShow?'sm-button2':''}} " (click)="scanPay()">扫描顾客核销码</div>
-            <div class="gai"></div>
-            <input type="text" nz-input id="authCode" [(ngModel)]="authCode" name="authCode" (ngModelChange)="goToSubmitOrder($event)" class="input pay-code-input">
-        </nz-tab>
-        <nz-tab nzTitle="手动核销">
-            <div class="member-top-middle" *ngIf="checkoutShow">
                 <nz-form-item>
                     <nz-form-label style="display: inline-block">选择门店</nz-form-label>
                     <nz-form-control style="display: inline-block">
@@ -30,11 +14,66 @@
                     </nz-form-control>
                 </nz-form-item>
             </div>
-            <div class="member-top-middle">
+            <div style="margin-left: 20px;width: 270px;" *ngIf="fangkuai">
+                <div class="fangkuaiBox">
+                    <div class="icon-yousanjiaogou_ic iconfont"></div>
+                    <div style="width:220px;overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space:nowrap;">{{fangkuaiData?.itemName}}</div>
+                    <div>￥:{{fangkuaiData?.currentPrice/100}}</div>
+                </div>
+                <div class="fangkuaiMain">
+                    <div>请选择本次核销数量</div>
+                    <div>
+                        <nz-input-number [(ngModel)]="quantity" [nzMin]="1" [nzMax]="fangkuaiData?.quantity" [nzStep]="1" [nzDisabled]="isDisabled"></nz-input-number>
+                    </div>
+                </div>
+                <div class="fangkuaiBottm">
+                    <button class="buttons" nz-button nzType="primary" type="submit" (click)="qrxiaofei()">确认消费</button>
+                    <button nz-button type="submit" style="margin-left:10px;" (click)="fkChane()">取消</button>
+                </div>
+            </div>
+            <div *ngIf="!fangkuai" class="sm-button {{checkoutShow?'sm-button2':''}} " (click)="scanPay()">扫描顾客核销码</div>
+            <div class="gai"></div>
+            <input type="text" nz-input id="authCode" [(ngModel)]="authCode" name="authCode" (ngModelChange)="goToSubmitOrder($event)"
+                class="input pay-code-input">
+        </nz-tab>
+        <nz-tab nzTitle="手动核销">
+            <div class="member-top-middle" *ngIf="!fangkuai">
+                <nz-form-item>
+                    <nz-form-label style="display: inline-block">选择门店</nz-form-label>
+                    <nz-form-control style="display: inline-block">
+                        <nz-select [(ngModel)]="shopId" (ngModelChange)="selectStoreInfo($event)" style="width: 200px;" [nzPlaceHolder]="'请选择一个门店'"
+                            [nzShowSearch]="true">
+                            <nz-option *ngFor="let i of StoresInfo; let idx = index" [nzLabel]="i.shopName" [nzValue]="i.shopId"></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div class="member-top-middle" *ngIf="!fangkuai">
                 <span style="margin-right:24px;">核销码:</span>
                 <input type="text" id="tauthCode" nz-input [(ngModel)]="tauthCode" placeholder="请输入顾客核销码">
             </div>
-            <div class="sm-button" (click)="goToSubmitOrder()">点击核销</div>
+            <div style="margin-left: 20px;width: 270px;" *ngIf="fangkuai">
+                <div class="fangkuaiBox">
+                    <div class="icon-yousanjiaogou_ic iconfont"></div>
+                    <div style="width:220px;overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space:nowrap;">{{fangkuaiData?.itemName}}</div>
+                    <div>￥:{{fangkuaiData?.currentPrice/100}}</div>
+                </div>
+                <div class="fangkuaiMain">
+                    <div>请选择本次核销数量</div>
+                    <div>
+                        <nz-input-number [(ngModel)]="quantity" [nzMin]="1" [nzMax]="fangkuaiData?.quantity" [nzStep]="1" [nzDisabled]="isDisabled"></nz-input-number>
+                    </div>
+                </div>
+                <div class="fangkuaiBottm">
+                    <button class="buttons" nz-button nzType="primary" type="submit" (click)="qrxiaofei()">确认消费</button>
+                    <button nz-button type="submit" style="margin-left:10px;" (click)="fkChane()">取消</button>
+                </div>
+            </div>
+            <div *ngIf="!fangkuai" class="sm-button" (click)="goToSubmitOrder()">点击核销</div>
         </nz-tab>
     </nz-tabset>
     <div class="manage-home-bottom">
@@ -48,6 +87,7 @@
                             <!-- <td>核销码</td> -->
                             <td>核销门店</td>
                             <td>核销商品</td>
+                            <td>核销份数</td>
                             <td>核销金额(元)</td>
                         </tr>
                     </thead>
@@ -56,6 +96,7 @@
                             <td>{{item.settleTime}}</td>
                             <td>{{item.settleStoreName}}</td>
                             <td>{{item.content}}</td>
+                            <td>{{item.useQuantity}}</td>
                             <td>{{item.amount/100}}</td>
                         </tr>
 
