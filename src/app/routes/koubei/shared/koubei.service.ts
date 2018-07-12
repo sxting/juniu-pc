@@ -289,6 +289,14 @@ export class KoubeiService {
         return Observable.throw(error);
       });
   }
+  orderKoubeiSettle(data){
+    let apiUrl = Config.API + '/order/koubei/settle.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
   ///order/koubei/queryTickect.json?shopId=&ticketNo=，·
   koubeiProductVouchersqueryTickect(Params: any) {
     let apiUrl = Config.API + 'order/koubei/queryTickect.json';

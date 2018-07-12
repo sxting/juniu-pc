@@ -36,10 +36,10 @@ export class OrderVerificationComponent implements OnInit {
   storeId: any = this.StoresInfo[0] ? this.StoresInfo[0].shopId : '';
   moduleId: any;
   shopId: any;
-  fangkuai : boolean = false;
-  ticketCode:any;
-  quantity :any =1;
-  fangkuaiData:any;
+  fangkuai: boolean = false;
+  ticketCode: any;
+  quantity: any = 1;
+  fangkuaiData: any;
   constructor(
     private koubeiService: KoubeiService,
     private localStorageService: LocalStorageService,
@@ -116,10 +116,13 @@ export class OrderVerificationComponent implements OnInit {
   /**扫码 */
   scanPay() {
     setTimeout('document.getElementById("authCode").focus();', 50);
-
+    let self = this;
     this.modalSrv.info({
       nzTitle: '扫描条形码中。。。。',
       nzOkText: '取消',
+      nzOnCancel: () => {
+        self.authCode = '';
+      }
     });
   }
   //口碑核销列表信息
@@ -140,7 +143,7 @@ export class OrderVerificationComponent implements OnInit {
       error => this.errorAlter(error)
     );
   }
-  fkChane(){
+  fkChane() {
     this.fangkuai = false;
   }
   //口碑核销查询
@@ -148,7 +151,7 @@ export class OrderVerificationComponent implements OnInit {
     let self = this;
     let div = document.getElementById('tauthCode');
     let div2 = document.getElementById('authCode');
-    if(type === 'koubei') self.ticketCode = data.ticketCode;
+    if (type === 'koubei') self.ticketCode = data.ticketCode;
     this.koubeiService.koubeiProductVouchersticket(data, type).subscribe(
       (res: any) => {
         self.authCode = '';
@@ -162,12 +165,13 @@ export class OrderVerificationComponent implements OnInit {
         if (res.success) {
           console.log(res.data);
           if (type === 'koubei') {
-            if(res.data.ticketStatus !== 'EFFECTIVE'){
+            if (res.data.ticketStatus !== 'EFFECTIVE') {
               this.modalSrv.error({
                 nzContent: res.data.ticketStatusDesc
               });
-            }else{
+            } else {
               this.fangkuai = true;
+              self.quantity = 1;
               this.fangkuaiData = res.data;
             }
           } else {
@@ -205,7 +209,6 @@ export class OrderVerificationComponent implements OnInit {
           //     '<div><span>核销商品:</span>' + res.itemName + '</div>' +
           //     '<div><span>核销金额:</span>' + res.price + '</div>'
           // });
-          console.log(res.data);
           let batchQuery = {
             pageIndex: 1,
             pageSize: 10
@@ -227,18 +230,20 @@ export class OrderVerificationComponent implements OnInit {
       nzContent: err
     });
   }
-  qrxiaofei(){
+  qrxiaofei() {
     let self = this;
     let data = {
-      shopId:self.storeId,
-      ticketCode : self.ticketCode,
-      quantity : self.quantity
+      shopId: self.storeId,
+      ticketCode: self.ticketCode,
+      quantity: self.quantity
     }
-    //https://biz.juniuo.com/merchant/order/koubei/settle.json?shopId=2016110300077000000019717987&ticketCode=019216088244&quantity=5
-    this.koubeiService.koubeiProductVouchersqueryTickect(data).subscribe(
+    this.koubeiService.orderKoubeiSettle(data).subscribe(
       (res: any) => {
         if (res.success) {
-          console.log(res.data);
+          this.modalSrv.success({
+            nzContent: '核销成功!'
+          });
+          this.fangkuai = false;
           let batchQuery = {
             pageIndex: 1,
             pageSize: 10

@@ -69,7 +69,7 @@
                     </div>
                 </div>
                 <div class="fangkuaiBottm">
-                    <button class="buttons" nz-button nzType="primary" type="submit">确认消费</button>
+                    <button class="buttons" nz-button nzType="primary" type="submit" (click)="qrxiaofei()">确认消费</button>
                     <button nz-button type="submit" style="margin-left:10px;" (click)="fkChane()">取消</button>
                 </div>
             </div>
@@ -87,6 +87,7 @@
                             <!-- <td>核销码</td> -->
                             <td>核销门店</td>
                             <td>核销商品</td>
+                            <td>核销份数</td>
                             <td>核销金额(元)</td>
                         </tr>
                     </thead>
@@ -95,6 +96,7 @@
                             <td>{{item.settleTime}}</td>
                             <td>{{item.settleStoreName}}</td>
                             <td>{{item.content}}</td>
+                            <td>{{item.useQuantity}}</td>
                             <td>{{item.amount/100}}</td>
                         </tr>
 
