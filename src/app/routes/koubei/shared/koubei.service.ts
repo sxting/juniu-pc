@@ -279,7 +279,7 @@ export class KoubeiService {
       });
   }
   // 口碑核销查询
-  koubeiProductVouchersticket(Params: any, type: any) {
+  koubeiProductVouchersticket(Params: any, type?: any) {
     let apiUrl1 = Config.API + 'order/koubei/ticket.json';
     let apiUrl = Config.API + 'order/koubei/queryTicketCode.json'
     let params = FunctionUtil.obectToURLSearchParams(Params);
