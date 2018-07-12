@@ -150,20 +150,30 @@
         <div class="orderpage_detail_list">
             <table class="">
                 <tbody *ngFor="let listInfor of orderDetailVouchers;let index = index">
-                <tr>
+                  <tr>
                     <td class="">商品名称</td>
                     <td class="" style="width:270px;">{{listInfor.productName}}</td>
                     <td class="">实收金额</td>
-                    <td class="" style="width:103px;">{{listInfor.amount/100}}</td>
+                    <td class="" style="width:103px;" colspan="2">{{listInfor.amount/100}}</td>
                     <td class="">核销状态</td>
-                    <td class="State_verification" style="width:80px;">{{listInfor.statusTransf}}</td>
-                </tr>
-                <tr>
+                    <td class="State_verification" colspan="2" style="width:80px;">{{listInfor.statusTransf}}</td>
+                  </tr>
+                  <tr>
                     <td class="voucher_time">核销时间</td>
-                    <td class="" style="width:270px;">{{listInfor.settleTime}}</td>
+                    <td class="" style="width:270px;">{{listInfor.settleTime?  listInfor.settleTime : '－'}}</td>
                     <td class="">核销门店</td>
-                    <td class="" colspan="3">{{listInfor.settleStoreName}}</td>
-                </tr>
+                    <td class="" colspan="5">{{listInfor.settleStoreName? listInfor.settleStoreName : '－'}}</td>
+                  </tr>
+                  <tr>
+                    <td class="">总核销数</td>
+                    <td class="">{{listInfor.ticketTotalCount}}</td>
+                    <td class="">剩余可核销数</td>
+                    <td class="" style="width: 100px;">{{listInfor.ticketEffectCount}}</td>
+                    <td class="">已核销数</td>
+                    <td class="State_verification" style="width:80px;">{{listInfor.ticketUsedCount}}</td>
+                    <td class="">已退款数</td>
+                    <td class="State_verification" style="width:80px;">{{listInfor.ticketRefundedCount}}</td>
+                  </tr>
                 </tbody>
             </table>
         </div>

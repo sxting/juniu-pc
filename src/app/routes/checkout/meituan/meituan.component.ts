@@ -268,9 +268,9 @@ export class MeituanComponent implements OnInit {
             this.errorAlter('请输入验券码'); return;
         }
         let data = {
-            storeId: this.storeId,
-            receiptCode: this.receiptCode
-        };
+        storeId: this.storeId,
+        receiptCode: this.receiptCode
+      };
         this.checkoutService.receiptPrepare(data).subscribe(
             (res: any) => {
                 if (res.success) {
