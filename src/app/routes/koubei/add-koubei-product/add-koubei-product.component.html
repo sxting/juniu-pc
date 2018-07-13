@@ -58,9 +58,7 @@
                         <img class="upload-img" src="./assets/img/upload.png">
                         <input type="file" accept="image" (change)="uploadImage($event,'cover',0)">
                         <input formControlName="picId" style="visibility: hidden" />
-                        <nz-spin *ngIf="spinBoolean" style="height: 102px;
-            line-height: 102px;
-            text-align: center;" [nzSize]="'large'"></nz-spin>
+                        <nz-spin *ngIf="spinBoolean" style="height: 102px;line-height: 102px;text-align: center;" [nzSize]="'large'"></nz-spin>
                         <img class="image" [src]="imagePath" *ngIf="imagePath">
                         <i *ngIf="imagePath" class="iconfont icon-deleternormal" (click)="deleteImage(0,'cover')"></i>
                     </div>

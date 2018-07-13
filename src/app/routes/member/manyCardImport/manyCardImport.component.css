@@ -44,3 +44,11 @@
 .nzPagination{
     float: right;
 }
+.buttons1{
+    margin: 10px;
+}
+.xzmb{
+    float: right;
+    cursor: pointer;
+    color: #ff7700;
+}

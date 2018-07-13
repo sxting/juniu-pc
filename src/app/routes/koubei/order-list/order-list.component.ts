@@ -166,6 +166,7 @@ export class OrderListComponent implements OnInit {
                     let storeId = this.storeId;
                     this.storeId = storeId;
                     self.countTotal = res.data.pageInfo.countTotal;
+                    console.log(self.countTotal);
 
                     res.data.orders.forEach((element: any, index: number, array: any) => {
                         if (element.status == 'PAY') {
@@ -218,6 +219,8 @@ export class OrderListComponent implements OnInit {
                     let storeId = this.storeId;
                     this.storeId = storeId;
                     self.countTotal = res.data.pageInfo.countTotal;
+                   console.log(self.countTotal);
+
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -266,7 +269,6 @@ export class OrderListComponent implements OnInit {
                         self.showTips = true;
                     }
                     self.orderDetailVouchers = res.data.vouchers;
-
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',

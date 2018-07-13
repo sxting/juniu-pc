@@ -16,6 +16,7 @@ export class ManyCardImportComponent {
     email: any;
     Total: any = 0
     submitting = false;
+    isVisible = true;
     columns: SimpleTableColumn[] = [
         { title: '导入时间', index: 'no' },
         { title: '导入文件', index: 'description' },
@@ -42,7 +43,16 @@ export class ManyCardImportComponent {
         const file = (e.target as HTMLInputElement).files[0];
         console.log(file)
     }
-    getData(e){
+    getData(e) {
         console.log(e)
+    }
+
+
+    handleCancel(): void {
+        console.log('Button cancel clicked!');
+        this.isVisible = false;
+    }
+    handleok(){
+        this.isVisible = true;
     }
 }
