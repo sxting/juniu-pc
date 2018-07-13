@@ -1,0 +1,109 @@
+<page-header></page-header>
+<div class="">
+    <div class="existing-main">
+        <div>
+            <div class="member-top-middle">
+                <li class="fl" style="margin-right:15px">
+                    <div class="fr" style="position:relative;">
+                        <span class="mr10 mr">订单查询</span>
+                        <input type="text" [(ngModel)]="pinTuanName" style="width:288px" placeholder="请输入订单号" />
+                        <span class="icon-sou iconfont" (click)="searchName('name')"></span>
+                    </div>
+                </li>
+
+                <li class="fl">
+                    <span class="mr10 fl title" style="margin-right:15px">下单时间</span>
+                    <nz-range-picker [(ngModel)]="dateRange" (ngModelChange)="onChange($event)" nzShowTime></nz-range-picker>
+                </li>
+
+                <div class="fr" style="position:relative;margin-top:10px;clear: both;float: left;">
+                    <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false" [ifStoresAuth]="true" (storeIdOutput)="selectStoreInfo($event.alipayShopId)"></jn-stores-infor>
+                </div>
+            </div>
+            <div class="existing-table" style="margin-top:60px;">
+                <table class="existingGroups-table">
+                    <thead>
+                        <tr>
+                            <td>序号</td>
+                            <td>下单时间</td>
+                            <td>订单编号</td>
+                            <td>商品名称</td>
+                            <td>订单状态</td>
+                            <td>订单金额(元)</td>
+                            <td (click)="chakanXQ(chakanxiangqing)">操作</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of resArr;let ind = index;">
+                            <td>{{item.groupNo}}</td>
+                            <td>{{item.openedTime}}</td>
+                            <td>{{item.peopleNumber}}人团</td>
+                            <td>{{item.pinTuanName}}</td>
+                            <td class="icon-sanjiao-bottom iconfont" (click)="ptxxClick(pintuanxinxi,ind,item.peopleNumber,item.groupNo,item.status)">{{item.status==='JOINING'?'拼团中':item.status==='FINISH'?'拼团成功':'拼团失败'}}</td>
+                            <td>{{item.totalAmount/100}}</td>
+                            <td>
+                                <span class="buttons" (click)="chakanXQ(chakanxiangqing)">查看详情</span>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="nzPaginationBox">
+                <nz-pagination class="nzPagination" [nzTotal]="countTotal" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!--查看详情-->
+<ng-template #chakanxiangqing>
+    <h3 class="flex-1 text-lg borderLeft">订单详情</h3>
+    <div class="orderpage_detail_list">
+        <table>
+            <tr class="ui-grid-row">
+                <td class="">订单编号</td>
+                <td class="" style="width:350px;">{{pinTuanOrderDetailObj?.groupNo}}</td>
+                <td class="">订单状态</td>
+                <td class="trans-status" style="width:350px;">{{pinTuanOrderDetailObj?.orderStatus==='JOINING'?'拼团中':pinTuanOrderDetailObj?.orderStatus==='FINISH'?'拼团成功':'拼团失败'}}</td>
+            </tr>
+            <tr>
+                <td class="">下单时间</td>
+                <td class="" style="width:220px;">{{pinTuanOrderDetailObj?.openedTime}}</td>
+                <td class="">商品数量</td>
+                <td class="" style="width:220px;">{{pinTuanOrderDetailObj?.peopleNumber}}</td>
+            </tr>
+            <tr>
+                <td class="">购买门店</td>
+                <td class="" style="width:220px;">{{pinTuanOrderDetailObj?.sellerStoreName}}</td>
+                <td class="">订单金额</td>
+                <td class="" style="width:220px;">{{pinTuanOrderDetailObj?.orderAmount/100}}</td>
+            </tr>
+            <tr>
+                <td class="">订单备注</td>
+                <td class="" colspan="3" >-</td>
+            </tr>
+        </table>
+    </div>
+
+    <h3 class="flex-1 text-lg borderLeft" style="margin-top:20px;">核销信息</h3>
+    <div class="orderpage_detail_list">
+        <table>
+            <tr class="ui-grid-row">
+                <td class="">商品名称</td>
+                <td class="" >{{pinTuanOrderDetailObj?.groupNo}}</td>
+                <td class="">商品价格</td>
+                <td class="trans-status" style="width:200px;" ></td>
+                <td class="">核销状态</td>
+                <td class="trans-status" style="width:200px;"></td>
+            </tr>
+            <tr>
+                <td class="">核销时间</td>
+                <td class="" style="width:220px;">{{pinTuanOrderDetailObj?.openedTime}}</td>
+                <td class="">核销门店</td>
+                <td class="" colspan="3" >{{pinTuanOrderDetailObj?.peopleNumber}}</td>
+            </tr>
+        </table>
+    </div>
+</ng-template>

@@ -22,6 +22,7 @@ import { WxStoreComponent } from './wxStore/wxStore.component';
 import { MatchingkoubeiComponent } from './matchingkoubei/matchingkoubei.component';
 import { KoubeiGLComponent } from './koubeiGL/koubeiGL.component';
 import { WechatTypeComponent } from './wechatType/wechatType.component';
+import { WechatOrderComponent } from './wechatOrder/wechatOrder.component';
 
 
 const routes: Routes = [
@@ -32,6 +33,7 @@ const routes: Routes = [
     { path: 'koubeiStore', component: KoubeiStoreComponent },
     { path: 'wechatStore', component: WechatStoreComponent },
     { path: 'wechatType', component: WechatTypeComponent },
+    { path: 'wechatOrder', component: WechatOrderComponent },
     { path: 'management', component: ManagementComponent },
     { path: 'management/addManagement', component: AddManagementComponent },
     { path: 'staff/list', component: StaffListComponent },

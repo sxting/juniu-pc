@@ -1,0 +1,645 @@
+@import 'node_modules/@delon/theme/styles/default';
+@primary-color:#ff7700;
+.main_wrap {
+    font-family: PingFangSC-Regular;
+    position: absolute;
+    top: 56px;
+    right: 20px;
+    bottom: 0;
+    left: 260px;
+    z-index: 1;
+}
+
+* {
+    box-sizing: content-box !important;
+}
+
+.position {
+    height: 40px;
+    line-height: 40px;
+}
+
+.position span {
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    line-height: 40px;
+    color: #1A1A1A;
+}
+
+.position span:last-of-type {
+    color: @primary-color;
+}
+
+.existing-main {
+    padding-top: 20px;
+    width: 98%;
+    height: 100%;
+    background: #fff;
+    overflow-x: auto;
+    padding-left: 20px;
+}
+
+.btns_switch {
+    padding-left: 20px;
+    background-color: #fff;
+    margin-top: -1px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    position: relative;
+}
+
+.btns_switch li {
+    font-family: PingFangSC-Regular;
+    font-size: 16px;
+    color: #222222;
+    line-height: 50px;
+    width: 90px;
+    float: left;
+    margin-left: 20px;
+    text-align: center;
+}
+
+.btns_switch li:first-of-type {
+    margin-left: 0px;
+}
+
+.btns_switch li.btns_active {
+    color: @primary-color;
+    border-bottom: 2px solid @primary-color;
+}
+
+.member-top-middle {
+    height: 30px;
+    line-height: 30px;
+    margin-bottom: 35px;
+}
+
+/* .member-top-middle>span {
+    margin-right: 10px;
+} */
+
+.member-top-middle>select {
+    width: 374px;
+    height: 28px;
+    padding-left: 10px;
+}
+
+.existing-table {
+    margin-top: 30px;
+}
+
+.clearfix {
+    position: relative;
+}
+
+.existing-button {
+    display: flex;
+    position: absolute;
+    right: 20px;
+    top: 0;
+}
+
+.existing-button>div {
+    width: 80px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #1A1A1A;
+}
+
+.existing-button>div:nth-of-type(1) {
+    border-radius: 100px 0 0 100px;
+    border: 1px solid #e5e5e5;
+}
+
+.existing-button>div:nth-of-type(2) {
+    border-radius: 0 100px 100px 0;
+    border: 1px solid #e5e5e5;
+}
+
+.existing-button-color {
+    background: @primary-color;
+    color: #fff !important;
+}
+
+.alert-order-msg {
+    top: 80px !important;
+    padding-right: 20px !important;
+    padding-top: 20px;
+}
+
+
+/*分类弹框*/
+
+.content-title {
+    font-family: 'PingFangSC-Medium';
+    font-size: 16px;
+    color: #333333;
+    height: 16px;
+    padding-left: 10px;
+    line-height: 16px;
+    /* border-left: 4px solid @primary-color; */
+    margin-bottom: 20px;
+}
+
+.alert-order-msg-bg .alert-order-msg {
+    width: 500px;
+    /* height: 510px; */
+    margin-left: -500px;
+}
+
+.alert-order-msg-main {
+    padding-left: 50px;
+}
+
+.alert-order-msg-main>div {
+    display: flex;
+    margin-top: 30px;
+}
+
+.addStaffBox-main-left {
+    width: 76px;
+    text-align: right;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #666666;
+    line-height: 24px;
+    height: 24px;
+    margin-right: 20px;
+}
+
+.alert-order-msg-main>div .nameinput {
+    width: 228px;
+    height: 24px;
+    padding-left: 6px;
+}
+
+.alert-create-box-main {
+    width: 300px;
+    /* height: 360px; */
+    margin: 10px auto 0;
+}
+
+.btn-box .commit-btn {
+    display: inline-block;
+    margin-left: 130px;
+    margin-right: 20px;
+    color: #ffffff;
+    background-color: @primary-color;
+}
+
+.btn-box .cancel-btn {
+    display: inline-block;
+}
+
+.cancel-btn,
+.commit-btn {
+    width: 80px;
+    height: 30px;
+    border: 1px solid @primary-color;
+    color: @primary-color;
+    line-height: 30px;
+    text-align: center;
+    font-family: 'PingFangSC-Regular';
+    font-size: 14px;
+    margin: 20px auto;
+    background-color: #fff;
+    display: block;
+    border-radius: 4px;
+}
+
+.alert-create-box-main table {
+    border: 1px solid #e5e5e5;
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+    text-align: center;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #666666;
+    margin-top: 20px;
+}
+
+.alert-create-box-main table td,
+.alert-create-box-main table tr {
+    border: 1px solid #e5e5e5;
+    height: 30px;
+    line-height: 30px;
+}
+
+.alert-create-box-main table input {
+    border: none;
+}
+
+.alert-create-box-main table td:first-of-type {
+    background: #f2f2f2;
+}
+
+.tablebtn td {
+    background: #fff !important;
+    cursor: pointer;
+}
+
+.tablebtn td:last-of-type {
+    color: @primary-color;
+}
+
+.right-select {
+    height: 28px;
+    border: 1px solid #E5E5E5;
+    background-color: #fff;
+    outline: none;
+    font-size: 14px;
+    color: #1A1A1A;
+    width: 85%;
+    float: right;
+}
+
+.selectBox {
+    height: 30px;
+    line-height: 30px;
+    margin-top: 10px;
+    text-align: left;
+}
+
+.cardNameBox {
+    height: 30px;
+    line-height: 30px;
+    text-align: left;
+}
+
+.cardNameBox input {
+    width: 80%;
+    float: right;
+    height: 30px;
+}
+
+.tableBigBox {
+    height: 270px;
+    overflow-y: auto;
+    width: 310px;
+}
+
+.alert-order-msg {
+    height: 360px;
+}
+.existingGroups-table{
+    width: 100%;
+    text-align: center;    
+}
+.existingGroups-table tr{
+    height: 40px;
+    line-height: 40px;
+}
+.existingGroups-table thead tr{
+    background: #f2f2f2;
+}
+.buttons{
+    cursor: pointer;
+    color: @primary-color;
+    margin-right: 10px;
+}
+.icon-sanjiao-bottom::before{
+    content:"";
+}
+.icon-sanjiao-bottom::after{
+    content:"\e608";
+}
+.icon-sanjiao-bottom{
+    cursor: pointer;
+    font-size: 14px !important;
+}
+.serchinput{
+    width: 375px;
+    height: 26px;
+    border-radius: 5px;
+    padding-left: 10px;
+    border: 1px solid #d9d9d9;
+}
+
+.hexiaoduizhang{
+    position: absolute;
+    right: 30px;
+    top: 10px;
+    text-align: center;
+    width: 120px;
+    height: 30px;
+    line-height: 30px;
+    background: @primary-color;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.content_juniu .marketing_means {
+    background-color: #fff;
+    padding: 30px 20px;
+}
+
+.content_juniu .marketing_means .search_input,
+.search_something {
+    width: 100%;
+    font-size: 0;
+    word-spacing: 0;
+}
+
+.content_juniu .marketing_means .search_input li {
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #1A1A1A;
+    line-height: 28px;
+    position: relative
+}
+
+.content_juniu .marketing_means .search_input li .title {
+    display: inline-block;
+    width: 60px;
+    text-align: center;
+}
+
+.content_juniu .marketing_means .search_something li input {
+    width: 364px;
+    height: 28px;
+    line-height: 28px;
+    border: 1px solid #E5E5E5;
+    border-radius: 2px;
+    padding: 0 10px;
+    font-size: 14px;
+    color: #1A1A1A;
+}
+
+.content_juniu .marketing_means .search_something li .icon-sou {
+    font-size: 20px;
+    color: #ccc;
+    position: absolute;
+    top: 50%;
+    margin-top: -14px;
+    right: 5px;
+    z-index: 200;
+    font-weight: 700;
+    cursor: pointer
+}
+
+.content_juniu .marketing_means .search_something .release span {
+    display: inline-block;
+    width: 100px;
+    height: 30px;
+    background: @primary-color;
+    border-radius: 4px;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #FFFFFF;
+    line-height: 30px;
+    text-align: center;
+    -webkit-font-smoothing: antialiased;
+    cursor: pointer
+}
+
+.mr10 {
+    margin-right: 14px
+}
+
+.content_juniu .marketing_means .search_input li select {
+    width: 384px;
+    height: 30px;
+    line-height: 30px;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #1A1A1A;
+    background-color: #fff;
+    border: 1px solid #E5E5E5;
+}
+
+@media screen and (max-width: 1175px) {
+    .content_juniu .marketing_means .search_input {
+        text-align: center;
+    }
+    .content_juniu .marketing_means .search_input li {
+        float: none;
+        margin-bottom: 20px;
+        position: relative;
+        line-height: 30px;
+        height: 30px;
+        text-align: center;
+    }
+    .content_juniu .marketing_means .search_something li .icon-sou {
+        font-size: 20px;
+        color: #ccc;
+        position: absolute;
+        top: 50%;
+        margin-top: -14px;
+        right: 50%;
+        margin-right: -220px;
+        z-index: 200;
+        font-weight: 700;
+        cursor: pointer
+    }
+}
+/*分类弹框*/
+
+.alert-order-msg-bg .content-title {
+    font-family: 'PingFangSC-Medium';
+    font-size: 16px;
+    color: #333333;
+    height: 60px;
+    line-height: 60px;
+}
+
+.alert-order-msg-bg .content-title span {
+    display: inline-block;
+    width: 4px;
+    height: 16px;
+    background-color: @primary-color;
+    margin-right: 10px;
+    transform: translateY(2px);
+}
+
+.alert-order-msg-bg .alert-order-msg {
+    width: 700px;
+    height: auto;
+    padding: 0 20px 20px;
+    margin-left: -370px;
+}
+
+.orderpage_detail_list table {
+    border-spacing: 0;
+    border: solid #D9D9D9;
+    border-width: 1px 0px 0px 1px;
+    padding: 0;
+}
+
+.orderpage_detail_list tr td {
+    line-height: 38px;
+    height: 38px;
+    border: solid #D9D9D9;
+    border-width: 0px 1px 1px 0px;
+    text-align: center;
+    padding: 0;
+}
+
+.orderpage_detail_list tr td:nth-child(2n-1) {
+    color: #999999;
+    background-color: #F4F4F4;
+    width: 150px;
+}
+
+body .ng-pristine .ui-inputtext {
+    background: #ffffff;
+    padding: 0 0.75em!important;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    -moz-border-radius: 0.25em;
+    -webkit-border-radius: 0.25em;
+    border-radius: 0.25em;
+    font-size: 1em;
+    color: #55595c;
+    line-height: 28px!important;
+}
+
+.ant-table{
+    overflow: inherit !important;
+}
+/*table表格*/
+
+.ant-table-thead>tr>th,
+.ant-table-tbody>tr>td {
+    padding: 10px 15px;
+    word-break: break-all;
+    color: #222;
+    font-size: 14px;
+    text-align: center;
+    font-weight: 400;
+}
+
+.ant-table-placeholder {
+    color: #222;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.ant-table-tbody>tr:hover {
+    background: #FAFAFA;
+}
+
+.ant-table-tbody>tr>th {
+    padding: 10px 20px;
+    background-color: #f7f7f7;
+    font-size: 14px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.ant-table-tbody>tr>td {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.ant-table-tbody>tr>td.operation {
+    cursor: pointer;
+}
+
+.ant-table-tbody>tr>td.operation>span:first-child {
+    color: @primary-color;
+}
+
+.ant-table-tbody>tr>td.operation>span:nth-of-type(2) {
+    color: #E5E5E5;
+}
+
+.btn-check {
+    width: 60px;
+    height: 30px;
+    display: inline-block;
+    text-align: center;
+    border: 1px solid @primary-color;
+    border-radius: 4px;
+    line-height: 30px;
+    color: @primary-color;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.color {
+    color: @primary-color!important;
+}
+
+.alert-order-msg-bg .detailInforAlert {
+    top: 50%;
+    margin-top: -232px;
+    height: 464px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.orderpage_detail_list {
+    overflow-y: auto !important;
+}
+.fl .buttons{
+    background: @primary-color;
+    color: #fff;
+    border-radius: 5px;
+    display: inline-block;
+    width: 100px;
+    height: 30px;
+    line-height: 30px;
+
+}
+.ptxxtable{
+    width: 100%;
+    text-align: center;
+}
+.ptxxtable thead tr {
+    height: 40px;
+    line-height: 40px;
+    background: #f2f2f2;
+}
+.ptxxtable tbody tr {
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 1px solid #f2f2f2;
+}
+.hexiaoXQ{
+    position: absolute;
+    top: -1px;
+}
+.hexiaoXQ thead tr{
+    background: #f2f2f2 !important;
+    color:#999 !important;
+}
+.hexiaoXQ  td{
+    width: 100px !important;
+    line-height: 0 !important;  
+}
+.hexiaoXQ tbody td{
+    background: #fff !important;
+    color: #000 !important;      
+}
+.icon-sou {
+    font-size: 20px;
+    color: #ccc;
+    position: absolute;
+    top: 50%;
+    margin-top: -14px;
+    right: 5px;
+    z-index: 1000;
+    font-weight: 700;
+}
+.fr input{
+    padding-left: 10px;
+    border-radius: 5px;
+    border: 1px solid #d9d9d9;
+}
+.yituikuan{
+    color: #999 !important;
+}
+.nzPaginationBox{
+    margin: 20px;
+    overflow: hidden;
+}
+.nzPagination{
+    float: right;
+}
