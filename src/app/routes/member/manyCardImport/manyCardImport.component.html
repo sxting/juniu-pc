@@ -1,19 +1,26 @@
 <page-header></page-header>
 <div class="memberAnalysis-top ">
-    <h3 class="flex-1 text-lg borderLeft">批量导入</h3>
+    <h3 class="flex-1 text-lg borderLeft">批量导入 <span class="xzmb iconfont icon-xiazai" (click)="handleok()">下载模版</span></h3>
     <div class="addStaffBox-main">
         <div class="">
             <div class="addStaffBox-main-left ">选择门店</div>
             <div class="addStaffBox-main-right">
-                <nz-select  style="width:240px;" (ngModelChange)="selectStoreInfo($event)" [nzPlaceHolder]="'请选择一个门店'"
-                    [nzShowSearch]="true">
+                <nz-select style="width:240px;" (ngModelChange)="selectStoreInfo($event)" [nzPlaceHolder]="'请选择一个门店'" [nzShowSearch]="true">
                     <nz-option [nzLabel]="'请选择一个门店'" [nzValue]="'ALL'">
                     </nz-option>
                     <nz-option *ngFor="let item of storeList" [nzLabel]="item.storeName" [nzValue]="item">
                     </nz-option>
                 </nz-select>
-                <!-- <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth" (storeListPush)="storeListPush($event)"
-      (storeIdOutput)="getStoreId($event)"></jn-stores-infor> -->
+            </div>
+        </div>
+
+        <div class="">
+            <div class="addStaffBox-main-left ">选择类型</div>
+            <div class="addStaffBox-main-right">
+                <nz-select style="width:240px;" (ngModelChange)="selectStoreInfo($event)" [nzPlaceHolder]="'请选择一个卡类型'" [nzShowSearch]="true">
+                    <nz-option *ngFor="let item of storeList" [nzLabel]="item.storeName" [nzValue]="item">
+                    </nz-option>
+                </nz-select>
             </div>
         </div>
         <div>
@@ -28,7 +35,7 @@
 
     <div style="margin-top:50px;">
         <h3 class="flex-1 text-lg borderLeft">导入记录</h3>
-        <simple-table #st [columns]="columns" [data]="data" >
+        <simple-table #st [columns]="columns" [data]="data">
             <ng-template>
                 <ng-template st-row="status" let-i>
                     <nz-badge [nzStatus]="i.statusType" [nzText]="i.statusText"></nz-badge>
@@ -40,3 +47,31 @@
         </div>
     </div>
 </div>
+
+<nz-modal [(nzVisible)]="isVisible" nzWidth="800" nzTitle="导入流程" (nzOnCancel)="handleCancel()" (nzOnOk)="handleCancel()">
+    <nz-steps>
+        <nz-step nzTitle="下载模版" nzStatus="finish" nzIcon="iconfont icon-xzmb"></nz-step>
+        <nz-step nzTitle="输入对应数据" nzStatus="finish" nzIcon="iconfont icon-srsj"></nz-step>
+        <nz-step nzTitle="上传数据" nzStatus="finish" nzIcon="iconfont icon-scsj "></nz-step>
+        <nz-step nzTitle="导入完成" nzStatus="finish" nzIcon="iconfont icon-drwc"></nz-step>
+    </nz-steps>
+
+
+    <div style="margin-top:40px;">
+        <h3>备注</h3>
+        <p>1.批量导入前下载模版并核对数据，确定数据无误后可上传。</p>
+        <p>2.请核对手机号是否重复，若重复导入后系统默认为同一会员的会员卡。</p>
+        <p>3.导入失败后，可下载表格，错误数据以标记，可修改并重新上传</p>
+        <h3 style="margin-top:40px;">导入错误类型:</h3>
+        <p>1.上传数据的文件表头与提供模版的表头不统一。</p>
+        <p>2.上传数据的文件列表必填项为空。</p>
+        <p>3.会员卡号是否重复。</p>
+        <p>4.会员卡卡号相同，卡类型不同</p>
+    </div>
+    <div style="margin-top:20px;">
+        <button class="buttons1" nz-button nzType="primary" type="submit">点击下载储值卡模版</button>
+        <button class="buttons1" nz-button nzType="primary" type="submit">点击下载折扣卡模版</button>
+        <button class="buttons1" nz-button nzType="primary" type="submit">点击下载计次卡模版</button>
+        <button class="buttons1" nz-button nzType="primary" type="submit">点击下载期限卡模版</button>
+    </div>
+</nz-modal>
