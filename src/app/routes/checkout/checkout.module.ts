@@ -9,6 +9,7 @@ import { MemberService } from '../member/shared/member.service';
 import { KoubeiComponent } from './koubei/koubei.component';
 import { MeituanComponent } from './meituan/meituan.component';
 import { KoubeiModule } from '../koubei/koubei.module';
+import { WechatComponent } from './wechat/wechat.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { KoubeiModule } from '../koubei/koubei.module';
     declarations: [
         TouristComponent,
         KoubeiComponent,
-        MeituanComponent
+        MeituanComponent,
+        WechatComponent
     ],
     providers: [CheckoutService,MemberService],
 })
