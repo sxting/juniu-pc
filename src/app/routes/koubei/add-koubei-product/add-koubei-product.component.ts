@@ -283,7 +283,7 @@ export class AddKoubeiProductComponent implements OnInit {
 
     //选择门店
     onSelectStoreBtnClick(tpl: any) {
-        let self = this;
+      let self = this;
         this.modalSrv.create({
             nzTitle: '选择口碑门店',
             nzContent: tpl,
@@ -292,6 +292,7 @@ export class AddKoubeiProductComponent implements OnInit {
             nzCancelText: null,
             nzOkText: '保存',
             nzOnOk: function(){
+              console.log(self.selectStoresIds);
               self.ifShowStoreErrorTips = self.selectStoresIds === ''? true : false;
             }
         });
@@ -299,7 +300,11 @@ export class AddKoubeiProductComponent implements OnInit {
 
     //获取到门店ID
     getSelectStoresIds(event) {
+        console.log(event.staffIds);
+
         this.selectStoresIds = event.staffIds ? event.staffIds : '';
+        console.log(this.selectStoresIds);
+
         this.ifShowStoreErrorTips = this.selectStoresIds === '' ? true : false;
     }
 
@@ -922,7 +927,8 @@ export class AddKoubeiProductComponent implements OnInit {
 
                     /******* 匹配选中的门店 *********/
                     let applyStoreIds = res.data.storeIds ? res.data.storeIds.split(',') : [];
-                    this.getDataChange(this.cityStoreList, applyStoreIds);//转换后台拿过来的数据
+                    this.cityStoreList = this.getDataChange(this.cityStoreList, applyStoreIds);//转换后台拿过来的数据
+
                     this.selectStoresIds = res.data.storeIds;
                     this.storesChangeNum = applyStoreIds.length;
                 } else {
@@ -1112,27 +1118,25 @@ export class AddKoubeiProductComponent implements OnInit {
                 (res: any) => {
                     self.submitting = false;
                     if (res.success) {
-                        setTimeout(() => {
-                            self.msg.success(`提交成功`);
-                            if (self.koubeiProductId) {
-                                self.router.navigate(['/koubei/product/list']);
-                            } else {
-                                let itemId = res.data;
-                                self.modalSrv.warning({
-                                    nzTitle: '商品创建成功',
-                                    nzContent: '想帮商家极速获客？马上设置口碑客分佣推广！',
-                                    nzOkText: '去设置',
-                                    nzMaskClosable: false,
-                                    nzCancelText: '取消',
-                                    nzOnOk: function () {
-                                        self.extension(itemId);
-                                    },
-                                    nzOnCancel: function (itemId) {
-                                        self.router.navigate(['/koubei/product/list']);
-                                    }
-                                });
-                            }
-                        }, 1000);
+                      self.msg.success(`提交成功`);
+                      if (self.koubeiProductId) {
+                        self.router.navigate(['/koubei/product/list']);
+                      } else {
+                        let itemId = res.data;
+                        self.modalSrv.warning({
+                          nzTitle: '商品创建成功',
+                          nzContent: '想帮商家极速获客？马上设置口碑客分佣推广！',
+                          nzOkText: '去设置',
+                          nzMaskClosable: false,
+                          nzCancelText: '取消',
+                          nzOnOk: function () {
+                            self.extension(itemId);
+                          },
+                          nzOnCancel: function (itemId) {
+                            self.router.navigate(['/koubei/product/list']);
+                          }
+                        });
+                      }
                     } else {
                         this.modalSrv.error({
                             nzTitle: '温馨提示',

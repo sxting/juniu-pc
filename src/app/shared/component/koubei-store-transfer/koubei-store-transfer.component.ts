@@ -40,6 +40,7 @@ export class KoubeiStoreTransferComponent implements OnInit {
     selectNum: number;//记录选中的数量
 
     ngOnInit() {
+        console.log(this.cityStoreList);
         let storeIds: any = '';
         for (let i = 0; i < this.cityStoreList.length; i++) {
           for (let j = 0; j < this.cityStoreList[i].cityArr.length; j++) {
@@ -192,7 +193,6 @@ export class KoubeiStoreTransferComponent implements OnInit {
     /***通过全选按钮,改变所有的门店选这种状态***/
     changeAllStroesStatus(event: boolean) {
         let staffIds = '';
-        this.staffIds.emit({staffIds: staffIds});
         for (let i = 0; i < this.cityStoreList.length; i++) {
           this.cityStoreList[i].change = event ? true : false;
           this.cityStoreList[i].checked = event ? true : false;
@@ -203,7 +203,7 @@ export class KoubeiStoreTransferComponent implements OnInit {
               this.cityStoreList[i].cityArr[j].stores[n].change = event ? true : false;
               this.cityStoreList[i].cityArr[j].stores[n].checked = event ? true : false;
               if (event) {//全选中
-                staffIds += ',' + this.cityStoreList[i].cityArr[j].stores[n].staffId;
+                staffIds += ',' + this.cityStoreList[i].cityArr[j].stores[n].shopId;
               } else {
                 staffIds = '';
               }
@@ -216,9 +216,9 @@ export class KoubeiStoreTransferComponent implements OnInit {
             this.selectStaffNum.emit({selectStaffNum: selectStaffNum});
             this.selectNum = selectStaffNum;//记录选中的数量
             this.staffIds.emit({staffIds: staffIdsInfor});
-            console.log(staffIdsInfor);
         }else {
             this.msg.warning('请勾选,不可为空');
+            this.staffIds.emit({staffIds: ''});
             this.selectStaffNum.emit({selectStaffNum: 0});
         }
     }

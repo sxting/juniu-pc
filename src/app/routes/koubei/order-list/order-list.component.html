@@ -77,6 +77,7 @@
     </nz-table>
     <div class="nzPaginationBox">
         <nz-pagination class="nzPagination" [nzTotal]="countTotal" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
+        <p class="countTotal">总共: {{countTotal}}条</p>
     </div>
 </nz-card>
 
@@ -112,6 +113,7 @@
     </nz-table>
     <div class="nzPaginationBox">
         <nz-pagination class="nzPagination" [nzTotal]="countTotal" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
+        <p class="countTotal">总共: {{countTotal}}条</p>
     </div>
 </nz-card>
 
