@@ -1118,27 +1118,25 @@ export class AddKoubeiProductComponent implements OnInit {
                 (res: any) => {
                     self.submitting = false;
                     if (res.success) {
-                        setTimeout(() => {
-                            self.msg.success(`提交成功`);
-                            if (self.koubeiProductId) {
-                                self.router.navigate(['/koubei/product/list']);
-                            } else {
-                                let itemId = res.data;
-                                self.modalSrv.warning({
-                                    nzTitle: '商品创建成功',
-                                    nzContent: '想帮商家极速获客？马上设置口碑客分佣推广！',
-                                    nzOkText: '去设置',
-                                    nzMaskClosable: false,
-                                    nzCancelText: '取消',
-                                    nzOnOk: function () {
-                                        self.extension(itemId);
-                                    },
-                                    nzOnCancel: function (itemId) {
-                                        self.router.navigate(['/koubei/product/list']);
-                                    }
-                                });
-                            }
-                        }, 1000);
+                      self.msg.success(`提交成功`);
+                      if (self.koubeiProductId) {
+                        self.router.navigate(['/koubei/product/list']);
+                      } else {
+                        let itemId = res.data;
+                        self.modalSrv.warning({
+                          nzTitle: '商品创建成功',
+                          nzContent: '想帮商家极速获客？马上设置口碑客分佣推广！',
+                          nzOkText: '去设置',
+                          nzMaskClosable: false,
+                          nzCancelText: '取消',
+                          nzOnOk: function () {
+                            self.extension(itemId);
+                          },
+                          nzOnCancel: function (itemId) {
+                            self.router.navigate(['/koubei/product/list']);
+                          }
+                        });
+                      }
                     } else {
                         this.modalSrv.error({
                             nzTitle: '温馨提示',
