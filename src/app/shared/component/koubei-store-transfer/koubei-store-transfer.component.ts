@@ -210,7 +210,6 @@ export class KoubeiStoreTransferComponent implements OnInit {
             }
           }
         }
-        console.log(staffIds);
         if (staffIds) {
             let staffIdsInfor = staffIds ? staffIds.substring(1) : '';
             let selectStaffNum = staffIds ? staffIds.substring(1).split(',').length : 0;
@@ -219,6 +218,7 @@ export class KoubeiStoreTransferComponent implements OnInit {
             this.staffIds.emit({staffIds: staffIdsInfor});
         }else {
             this.msg.warning('请勾选,不可为空');
+            this.staffIds.emit({staffIds: ''});
             this.selectStaffNum.emit({selectStaffNum: 0});
         }
     }

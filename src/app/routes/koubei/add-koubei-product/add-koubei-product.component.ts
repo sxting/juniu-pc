@@ -292,6 +292,7 @@ export class AddKoubeiProductComponent implements OnInit {
             nzCancelText: null,
             nzOkText: '保存',
             nzOnOk: function(){
+              console.log(self.selectStoresIds);
               self.ifShowStoreErrorTips = self.selectStoresIds === ''? true : false;
             }
         });
@@ -299,7 +300,11 @@ export class AddKoubeiProductComponent implements OnInit {
 
     //获取到门店ID
     getSelectStoresIds(event) {
+        console.log(event.staffIds);
+
         this.selectStoresIds = event.staffIds ? event.staffIds : '';
+        console.log(this.selectStoresIds);
+
         this.ifShowStoreErrorTips = this.selectStoresIds === '' ? true : false;
     }
 
