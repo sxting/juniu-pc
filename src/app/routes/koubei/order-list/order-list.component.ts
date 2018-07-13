@@ -269,7 +269,6 @@ export class OrderListComponent implements OnInit {
                         self.showTips = true;
                     }
                     self.orderDetailVouchers = res.data.vouchers;
-
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
