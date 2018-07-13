@@ -283,7 +283,7 @@ export class AddKoubeiProductComponent implements OnInit {
 
     //选择门店
     onSelectStoreBtnClick(tpl: any) {
-        let self = this;
+      let self = this;
         this.modalSrv.create({
             nzTitle: '选择口碑门店',
             nzContent: tpl,
@@ -922,7 +922,8 @@ export class AddKoubeiProductComponent implements OnInit {
 
                     /******* 匹配选中的门店 *********/
                     let applyStoreIds = res.data.storeIds ? res.data.storeIds.split(',') : [];
-                    this.getDataChange(this.cityStoreList, applyStoreIds);//转换后台拿过来的数据
+                    this.cityStoreList = this.getDataChange(this.cityStoreList, applyStoreIds);//转换后台拿过来的数据
+
                     this.selectStoresIds = res.data.storeIds;
                     this.storesChangeNum = applyStoreIds.length;
                 } else {
