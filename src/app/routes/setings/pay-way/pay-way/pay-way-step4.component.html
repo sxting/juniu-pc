@@ -4,12 +4,11 @@
         <nz-form-control [nzSpan]="19">
             <div class="step4-img-box">
                 <img class="upload-img" src="./assets/img/upload.png">
-                <div class="example" *ngIf="spinBoolean">
+                <div class="example" *ngIf="spinBoolean && activeIndex === 1">
                     <nz-spin [nzSize]="'large'"></nz-spin>
                 </div>
                 <input type="file" accept="image" formControlName="image_id1" (change)="uploadImage($event, 1)">
                 <img class="image" [src]="item.imagePath1" *ngIf="item.imagePath1">
-
             </div>
         </nz-form-control>
     </nz-form-item>
@@ -19,7 +18,7 @@
         <nz-form-control [nzSpan]="19">
             <div class="step4-img-box">
                 <img class="upload-img" src="./assets/img/upload.png">
-                <div class="example" *ngIf="spinBoolean">
+                <div class="example" *ngIf="spinBoolean && activeIndex === 2">
                     <nz-spin [nzSize]="'large'"></nz-spin>
                 </div>
                 <input type="file" accept="image" formControlName="image_id2" (change)="uploadImage($event, 2)">
@@ -33,7 +32,7 @@
         <nz-form-control [nzSpan]="19">
             <div class="step4-img-box">
                 <img class="upload-img" src="./assets/img/upload.png">
-                <div class="example" *ngIf="spinBoolean">
+                <div class="example" *ngIf="spinBoolean && activeIndex === 3">
                     <nz-spin [nzSize]="'large'"></nz-spin>
                 </div>
                 <input type="file" accept="image" formControlName="image_id3" (change)="uploadImage($event, 3)">
@@ -47,7 +46,7 @@
         <nz-form-control [nzSpan]="19">
             <div class="step4-img-box img4-box">
                 <img class="upload-img" src="./assets/img/upload-zm.png">
-                <div class="example" *ngIf="spinBoolean">
+                <div class="example" *ngIf="spinBoolean && activeIndex === 4">
                     <nz-spin [nzSize]="'large'"></nz-spin>
                 </div>
                 <input type="file" accept="image" formControlName="image_id4" (change)="uploadImage($event, 4)">
@@ -56,7 +55,7 @@
             </div>
             <div class="step4-img-box img4-box">
                 <img class="upload-img" src="./assets/img/upload-back.png">
-                <div class="example" *ngIf="spinBoolean">
+                <div class="example" *ngIf="spinBoolean && activeIndex === 5">
                     <nz-spin [nzSize]="'large'"></nz-spin>
                 </div>
                 <input type="file" accept="image" formControlName="image_id5" (change)="uploadImage($event, 5)">
@@ -71,7 +70,7 @@
         <nz-form-control [nzSpan]="19">
             <div class="step4-img-box img4-box">
                 <img class="upload-img" src="./assets/img/upload-zm.png">
-                <div class="example" *ngIf="spinBoolean">
+                <div class="example" *ngIf="spinBoolean && activeIndex === 6">
                     <nz-spin [nzSize]="'large'"></nz-spin>
                 </div>
                 <input type="file" accept="image" formControlName="image_id6" (change)="uploadImage($event, 6)">
@@ -80,7 +79,7 @@
             </div>
             <div class="step4-img-box img4-box">
                 <img class="upload-img" src="./assets/img/upload-back.png">
-                <div class="example" *ngIf="spinBoolean">
+                <div class="example" *ngIf="spinBoolean && activeIndex === 7">
                     <nz-spin [nzSize]="'large'"></nz-spin>
                 </div>
                 <input type="file" accept="image" formControlName="image_id7" (change)="uploadImage($event, 7)">
@@ -95,7 +94,7 @@
     <nz-form-control [nzSpan]="19">
       <div class="step4-img-box">
         <img class="upload-img" src="./assets/img/upload.png">
-        <div class="example" *ngIf="spinBoolean">
+        <div class="example" *ngIf="spinBoolean && activeIndex === 8">
           <nz-spin [nzSize]="'large'"></nz-spin>
         </div>
         <input type="file" accept="image" formControlName="image_id8" (change)="uploadImage($event, 8)">
