@@ -136,6 +136,14 @@ export class TouristComponent implements OnInit {
     pageInfoNum: any = 10;
     pageIndex: any = 1;
     gdboolean: boolean = false;
+
+
+
+    customer_phone: any;
+    customer_name: any;
+    customer_gender: any;
+    customer_remarks: any;
+    customer_date: any;
     constructor(
         public msg: NzMessageService,
         private localStorageService: LocalStorageService,
@@ -1672,5 +1680,64 @@ export class TouristComponent implements OnInit {
         //         })
         //     })
         // })
+    }
+    memberChange(tpl: any) {
+        this.customer_phone = this.memberInfo.phone;
+        this.customer_name = this.memberInfo.customerName;
+        this.customer_gender = this.memberInfo.gender;
+        this.customer_remarks = this.memberInfo.remarks;
+        this.customer_date = new Date(this.memberInfo.birthday);
+        this.customerId = this.memberInfo.customerId;
+        this.modalSrv.create({
+            nzTitle: '会员信息修改',
+            nzContent: tpl,
+            // nzWidth: '50%',
+            nzOnOk: () => {
+                this.updateCustomerHttp();
+            }
+        });
+    }
+    formatDateTime2(date: any, type: any) {
+        let year = date.getFullYear();
+        let month = date.getMonth() + 1;
+        let day = date.getDate();
+        return year + '-' + (month.toString().length > 1 ? month : ('0' + month)) + '-' + (day.toString().length > 1 ? day : ('0' + day)) + (type === 'start' ? ' 00:00:00' : ' 23:59:59');
+    }
+    updateCustomerHttp() {
+        let that = this;
+        let data = {
+            customerId: that.customerId,
+            gender: that.customer_gender,
+            phone: that.customer_phone,
+            customerName: that.customer_name,
+            birthday: that.formatDateTime2(that.customer_date, 'start'),
+            storeId: that.storeId,
+            remarks: that.customer_remarks
+        }
+        if (!data.customerName) {
+            this.errorAlter('请填写会员姓名');
+        } else if (!data.phone) {
+            this.errorAlter('请填写会员手机号');
+        } else if (!data.phone) {
+            this.errorAlter('请填写手机号');
+        } else {
+            this.memberService.updateCustomer(data).subscribe(
+                (res: any) => {
+                    if (res.success) {
+                        this.modalSrv.closeAll();
+                        this.modalSrv.success({
+                            nzContent: '修改成功'
+                        });
+                        this.searchMemberCard(true);
+                    } else {
+                        this.errorAlter(res.errorInfo);
+                    }
+                },
+                error => {
+                    this.errorAlter(error);
+                }
+            );
+        }
+
     }
 }
