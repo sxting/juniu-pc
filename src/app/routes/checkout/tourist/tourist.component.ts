@@ -21,7 +21,7 @@ declare var swal: any;
 export class TouristComponent implements OnInit {
     storeId: any;
     changeType: boolean = true;//收银开卡切换
-    vipsearch: string ;//vip搜索框
+    vipsearch: string;//vip搜索框
     renlian: boolean = true;//人脸识别
     isVerb: boolean = false;//是否抹零
     isVerb2: boolean = false;
@@ -59,6 +59,7 @@ export class TouristComponent implements OnInit {
     store: any;
     isVisible = false;
     visible: any = false;
+    gdindx: any;
     cardTabs = [
         {
             type: "储值卡",
@@ -134,6 +135,7 @@ export class TouristComponent implements OnInit {
     shopBoolean: boolean = false;
     pageInfoNum: any = 10;
     pageIndex: any = 1;
+    gdboolean: boolean = false;
     constructor(
         public msg: NzMessageService,
         private localStorageService: LocalStorageService,
@@ -264,7 +266,7 @@ export class TouristComponent implements OnInit {
                     else if (i.vipCard.card.type === "REBATE") { i.totoleMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), NP.divide(i.vipCard.card.rebate, 10), i.num); }
                     else if (i.vipCard.card.type === "STORED") { i.totoleMoney = NP.times(NP.divide(i.discount, 100), NP.times(NP.divide(i.currentPrice, 100), 100), i.num) }
 
-                    i.totoleMoney  =  NP.divide(i.totoleMoney ,100)
+                    i.totoleMoney = NP.divide(i.totoleMoney, 100)
                     that.totolMoney = NP.round(NP.plus(that.totolMoney, NP.divide(i.vipMoney, 100)), 2);
                     that.isVerbMoney = Math.floor(that.totolMoney);
                     that.vipBoolean = true;
@@ -414,9 +416,9 @@ export class TouristComponent implements OnInit {
         this.xfList[index].num = 0;
         this.xfList[index].discount = 100;
         this.xfList.forEach(function (i: any) {
-            that.allproducks.forEach(function(m:any){
-                m.productList.forEach(function(n:any){
-                    if(n.productId === i.productId){
+            that.allproducks.forEach(function (m: any) {
+                m.productList.forEach(function (n: any) {
+                    if (n.productId === i.productId) {
                         n.currentPrice = n.currentPrice1;
                     }
                 })
@@ -427,7 +429,7 @@ export class TouristComponent implements OnInit {
         // this.changeFun();
         // this.xfList[index].currentPrice = this.xfList[index].currentPrice1;
 
-        
+
         this.totolMoneyFun();
     }
 
@@ -817,10 +819,10 @@ export class TouristComponent implements OnInit {
             create.originMoney = create.money;
         } else {
             if (this.xfList && this.xfList.length > 0) {
-                create.money = NP.times(that.createMoney , 100);
+                create.money = NP.times(that.createMoney, 100);
                 create.originMoney = create.money;
             } else {
-                create.money = NP.times(this.inputValue , 100);
+                create.money = NP.times(this.inputValue, 100);
             }
 
         }
@@ -857,6 +859,9 @@ export class TouristComponent implements OnInit {
                         this.modalSrv.success({
                             nzContent: '收款成功'
                         })
+                        if (this.gdboolean) {
+                            this.guadanSC(this.gdindx);
+                        }
                         this.vipXqFun();
                         // this.searchMemberCard(true);
                     }
@@ -946,7 +951,7 @@ export class TouristComponent implements OnInit {
                     (res: any) => {
                         if (res.success) {
                             this.vipXqFun();
-                            
+
                             if (res.data && res.data.length === 0) self.errorAlter('未查询到该会员');
                             self.vipData = res.data;
                             self.changeFun();
@@ -954,6 +959,7 @@ export class TouristComponent implements OnInit {
                             if (type) this.vipDataRadio(0);
 
                             if (gd) {
+                                this.gdindx = gdindx;
                                 this.xfList = this.guadanList[gdindx].xfList;
                                 this.totolMoneyFun();
                             }
@@ -1351,6 +1357,9 @@ export class TouristComponent implements OnInit {
                     })
                     this.vipXqFun();
                     this.searchMemberCard(true);
+                    if (this.gdboolean) {
+                        this.guadanSC(this.gdindx);
+                    }
                 } else {
                     this.errorAlter(res.errorInfo)
                 }
@@ -1404,7 +1413,7 @@ export class TouristComponent implements OnInit {
                                     i.vipCard = i.vipCardList[n];
                                 }
                             }
-                            if(i.vipCard1) i.vipCard = i.vipCard1;
+                            if (i.vipCard1) i.vipCard = i.vipCard1;
                         }
                     }
                     //把每个商品筛选出来的最优会员卡汇集到一个数组里
@@ -1489,6 +1498,7 @@ export class TouristComponent implements OnInit {
         this.modalSrv.closeAll();
         this.guadanList = this.localStorageService.getLocalstorage(GUADAN) ? JSON.parse(this.localStorageService.getLocalstorage(GUADAN)) : [];
         this.vipsearch = this.guadanList[index].vip.phone;
+        this.gdboolean = true;
         this.searchMemberCard(true, true, index);
 
         // this.memberInfo = this.shopyinList[index].vip;
@@ -1500,6 +1510,7 @@ export class TouristComponent implements OnInit {
     }
     guadanListFun(trl: any) {
         this.guadanList = this.localStorageService.getLocalstorage(GUADAN) ? JSON.parse(this.localStorageService.getLocalstorage(GUADAN)) : [];
+        this.gdboolean = false;
         this.modalSrv.create({
             nzTitle: '挂单记录',
             nzContent: trl,
