@@ -1505,7 +1505,7 @@ export class TouristComponent implements OnInit {
     }
     guadanSC(index: any) {
         let that = this;
-        this.guadanList = this.guadanList.splice(index, 1);
+        this.guadanList.splice(index, 1);
         this.localStorageService.setLocalstorage(GUADAN, JSON.stringify(that.guadanList))
     }
     guadanListFun(trl: any) {
