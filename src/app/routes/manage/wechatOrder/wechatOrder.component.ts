@@ -10,10 +10,18 @@ import { TemplateRef } from '@angular/core';
     styleUrls: ['./wechatOrder.component.less']
 })
 export class WechatOrderComponent {
-    storeId:any;
-    moduleId:any;
-    countTotal:any=10;
-    constructor(public msg: NzMessageService,private route: ActivatedRoute,private modalSrv: NzModalService, private http: _HttpClient) {
+    storeId: any;
+    moduleId: any;
+    countTotal: any = 10;
+
+    pinTuanName: any;
+    dateRange: any;
+    resArr: any;
+    searchName: any;
+    onChange: any;
+    paginate: any;
+
+    constructor(public msg: NzMessageService, private route: ActivatedRoute, private modalSrv: NzModalService, private http: _HttpClient) {
         this.moduleId = this.route.snapshot.params['menuId'];
     }
     selectStoreInfo(e: any) {
