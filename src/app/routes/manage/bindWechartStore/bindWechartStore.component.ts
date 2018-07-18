@@ -32,7 +32,9 @@ export class BindWechartStoreComponent {
     like = false;
     storeId: any;
     dislike = false;
-
+    isVisible = false;
+    haha: any;
+    addevent: any;
     constructor(public msg: NzMessageService,
         private localStorageService: LocalStorageService,
         private modalSrv: NzModalService,
@@ -57,16 +59,25 @@ export class BindWechartStoreComponent {
         this.srcUrl = '//w.juniuo.com/auth/platform/wxcfc323d79f4a89bf/wxapp_' + userinfo.merchantId + '/jump.htm';
         this.trustedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.srcUrl);
 
-        const modal = this.modalSrv.create({
-            nzTitle: '关联小程序',
-            nzContent: tpl,
-            nzWidth: '80%',
-            nzFooter: null
-        });
+        // const modal = this.modalSrv.create({
+        //     nzTitle: '关联小程序',
+        //     nzContent: tpl,
+        //     nzWidth: '80%',
+        //     nzFooter: null,
+        //     nzOnCancel: () => {
+        //         modal.destroy()
+        //         self.srcUrl = '';
+        //     }
+        // });
+        let frame = document.getElementById('koubeikeFrame');
+        if(frame) frame.remove();
+        self.isVisible = true;
+        let div = document.getElementById('iframeBox');
+        self.createIframe(div, self.srcUrl);
         if (this.srcUrl) {
             let that = this;
             //监听消息反馈
-            window.addEventListener('message', function (e) {
+            self.haha = window.addEventListener('message', self.addevent = function (e) {
                 if (typeof (e.data.success) !== 'undefined') {
                     if (e.data.success === true) {
                         // self.errorAlter('授权成功');
@@ -75,11 +86,12 @@ export class BindWechartStoreComponent {
                         } else {
                             self.router.navigate(['/manage/storeList', { menuId: '901001' }]);
                         }
-                        modal.destroy()
+                        self.isVisible = false;
                     } else {
                         self.errorAlter(e.data.errorInfo);
-                        modal.destroy()
+                        self.isVisible = false;
                     }
+                    window.removeEventListener('message', that.addevent)
                 }
             }, false);
         }
@@ -88,10 +100,41 @@ export class BindWechartStoreComponent {
     gotoWeChat() {
         window.open('https://mp.weixin.qq.com/')
     }
+    handleCancel(): void {
+        window.removeEventListener('message', this.addevent)
+        let frame = document.getElementById('koubeikeFrame');
+        frame.remove();
+        this.isVisible = false;
+    }
     errorAlter(err: any) {
         this.modalSrv.error({
             nzTitle: '温馨提示',
             nzContent: err
         });
     }
+
+    /**
+ * 动态创建iframe
+ * @param dom 创建iframe的容器，即在dom中创建iframe。dom可以是div、span或者其他标签。
+ * @param src iframe中打开的网页路径
+ * @param onload iframe加载完后触发该事件，可以为空
+ * @return 返回创建的iframe对象
+*/
+    createIframe(dom, src) {
+        //在document中创建iframe
+        var iframe = document.createElement("iframe");
+        iframe.setAttribute('id', 'koubeikeFrame')
+        //设置iframe的样式
+        iframe.style.width = '100%';
+        iframe.style.height = '600px';
+        iframe.style.margin = '0';
+        iframe.style.padding = '0';
+        iframe.style.overflow = 'hidden';
+        iframe.style.border = 'none';
+        iframe.src = src;
+        //把iframe加载到dom下面
+        dom.appendChild(iframe);
+        return iframe;
+    }
+
 }

@@ -35,3 +35,10 @@
 <ng-template #modalContent>
     <iframe class="all-iframe" id="koubeikeFrame" [src]="trustedUrl" frameborder="0" scrolling="auto" height="600" width="100%"></iframe>
 </ng-template>
+
+<nz-modal [(nzVisible)]="isVisible" nzWidth="80%" nzTitle="关联小程序" (nzOnCancel)="handleCancel()" (nzOnOk)="handleCancel()">
+    <div id="iframeBox">
+
+    </div>
+    <!-- <iframe class="all-iframe" id="koubeikeFrame" [src]="trustedUrl" frameborder="0" scrolling="auto" height="600" width="100%"></iframe> -->
+</nz-modal>
