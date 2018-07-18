@@ -282,7 +282,7 @@ export class ManageService {
   }
   wxStatus2(data: any) {
     let apiUrl = 'https://w.juniuo.com/wxapp/checkAuth.json';
-    return this.http.get( apiUrl, data).map((response: Response) => response).catch(error => {
+    return this.http.get(apiUrl, data).map((response: Response) => response).catch(error => {
       return Observable.throw(error);
     });
   }
@@ -867,6 +867,16 @@ export class ManageService {
   listCardConfigByIsWxShow(data: any) {
     let apiUrl = Config.API + 'member/config/wxStoreTypes.json';
     return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+  //
+
+  listWxappTemplates() {
+    let apiUrl = Config.API + '/marketing/wxapp/listWxappTemplates.json';
+    return this.http.get(apiUrl)
       .map((response: Response) => response)
       .catch(error => {
         return Observable.throw(error);

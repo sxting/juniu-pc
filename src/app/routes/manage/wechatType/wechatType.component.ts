@@ -1,6 +1,7 @@
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Component } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
+import { ManageService } from '../shared/manage.service';
 
 @Component({
     selector: 'app-wechatType',
@@ -10,7 +11,34 @@ import { _HttpClient } from '@delon/theme';
 export class WechatTypeComponent {
 
 
-    constructor(public msg: NzMessageService, private http: _HttpClient) {
-        
+    constructor(public msg: NzMessageService, private modalSrv: NzModalService, private manageService: ManageService, private http: _HttpClient) {
+        this.wxStatusHttp();
     }
+
+
+    //wxStatus
+    wxStatusHttp() {
+        this.manageService.listWxappTemplates().subscribe(
+            (res: any) => {
+                if (res.success) {
+                    console.log(res.data);
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => {
+                this.errorAlert(error);
+            }
+        );
+    }
+    errorAlert(err) {
+        this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: err
+        });
+    }
+
 }
