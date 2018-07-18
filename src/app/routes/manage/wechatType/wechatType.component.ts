@@ -9,7 +9,7 @@ import { ManageService } from '../shared/manage.service';
     styleUrls: ['./wechatType.component.less']
 })
 export class WechatTypeComponent {
-
+    typeArr:any;
 
     constructor(public msg: NzMessageService, private modalSrv: NzModalService, private manageService: ManageService, private http: _HttpClient) {
         this.wxStatusHttp();
@@ -21,7 +21,7 @@ export class WechatTypeComponent {
         this.manageService.listWxappTemplates().subscribe(
             (res: any) => {
                 if (res.success) {
-                    console.log(res.data);
+                    this.typeArr = res.data;
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
