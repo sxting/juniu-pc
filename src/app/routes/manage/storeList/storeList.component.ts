@@ -146,12 +146,16 @@ export class StoreListComponent {
         });
     }
     storeTypeFun(type: any, boolean: any, e: any, branchName: any) {
-        if (type === 'weixin' && this.checkAuthBoolean) {
-            // this.router.navigate(['/manage/storeList/wxStore', { storeId: e }]);
-            this.menuRouteHttp('901001B01');
-        } else if (!boolean && type === 'weixin') {
-            this.menuRouteHttp('901001B01');
-            // this.router.navigate(['/manage/bindWechartStore', { storeId: e }]);
+        // if (type === 'weixin' && this.checkAuthBoolean) {
+        //     // this.router.navigate(['/manage/storeList/wxStore', { storeId: e }]);
+        //     this.menuRouteHttp('901001B01');
+        // } else if (!boolean && type === 'weixin') {
+        //     this.menuRouteHttp('901001B01');
+        //     // this.router.navigate(['/manage/bindWechartStore', { storeId: e }]);
+        // }
+        if(type === 'weixin'){
+            let id = '901001B01_'+e
+            this.menuRouteHttp(id);
         }
         if (boolean && type === 'zhifubao') {
             // this.router.navigate(['/manage/koubeiStore', { storeId: e }]);
