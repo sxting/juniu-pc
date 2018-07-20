@@ -504,9 +504,9 @@ export class CraftsmanManageComponent implements OnInit {
             delete data.staffId;
             delete data.craftsmanInfo.alipayCraftsmanId;
         }
-        this.koubeiService.editCraftsman(data).subscribe(
+      this.submitting = false;
+      this.koubeiService.editCraftsman(data).subscribe(
             (res: any) => {
-                this.submitting = false;
                 if(res.success) {
                     this.staffId = '';
                     this.nickName = '';
