@@ -13,7 +13,7 @@
                 <div class="icon-duihao iconfont" *ngFor="let obj of item.functionList">{{obj}}</div>
             </div>
 
-            <button class="buttons" nz-button nzType="primary" type="submit">{{item.versionName}}</button>
+            <button class="buttons" nz-button nzType="primary" type="submit" (click)="checkFun(item)">{{item.versionName}}</button>
         </li>
     </ul>
 </nz-card>

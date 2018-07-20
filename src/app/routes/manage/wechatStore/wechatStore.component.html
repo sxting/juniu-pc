@@ -1,36 +1,57 @@
 <nz-card nzTitle="小程序" style="overflow:hidden" [nzBordered]="false" [nzBodyStyle]="{'height':'100%','overflow': 'hidden','margin':'30px','background':'#f8f8f8'}">
     <div>
-        <h1>审核版本</h1>
-        <div >
-            <div nz-col nzSpan="6">
-                <div>版本号</div>
-                <div style="margin:20px 0">v2342310</div>
-            </div>
-            <div nz-col nzSpan="14">
+        <h1>线上版本</h1>
+        <div style="overflow: hidden;position: relative;">
+            <div nz-col nzSpan="20">
                 <nz-form-item>
                     <nz-form-label style="display: inline-block">小程序名称</nz-form-label>
                     <nz-form-control style="display: inline-block">
-                        桔牛体验店
+                        {{statusData.wxappName}}
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
-                    <nz-form-label style="display: inline-block">上传时间</nz-form-label>
+                    <nz-form-label style="display: inline-block">授权时间</nz-form-label>
                     <nz-form-control style="display: inline-block">
-                        2018-05-10 17:05:30
+                        {{statusData.createTime}}
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
-                    <nz-form-label style="display: inline-block">线上版本</nz-form-label>
+                    <nz-form-label style="display: inline-block">版本号</nz-form-label>
                     <nz-form-control style="display: inline-block">
-                        正在等待微信审核
+                        {{statusData.currentVersion}}
                     </nz-form-control>
                 </nz-form-item>
             </div>
             <div nz-col nzSpan="4">
-                <div>状态</div>
-                <div style="margin:20px 0">审核中</div>
-                <button class="buttons" nz-button nzType="primary" type="submit">解除授权</button>
+                <button class="buttons" nz-button nzType="primary" (click)="jiechu()" type="submit">解除授权</button>
+            </div>
+            <div style="position: absolute;
+            bottom: 0;
+            right: 0;">
+                <a (click)="gotoList()">点击去配置门店展示信息 > ></a>
             </div>
         </div>
     </div>
+</nz-card>
+<nz-card nzTitle="近十条审核记录" style="overflow:hidden" [nzBordered]="false" [nzBodyStyle]="{'height':'100%','overflow': 'hidden'}">
+    <nz-table [nzNoResult]="'没有数据'"[nzShowPagination]="false" [nzData]="statusData.recoreds">
+        <thead>
+            <tr>
+                <th>版本号</th>
+                <th>提交审核时间</th>
+                <th>审核状态</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of statusData.recoreds;let ind = index;">
+                <td>{{item.auditVersion}}</td>
+                <td>{{item.submitTime}}</td>
+                <td *ngIf="item.status !== 'faild'">{{item.statusName}}</td>
+                <td style="cursor: pointer;" *ngIf="item.status === 'faild'" (click)="queryAuditReasonFun(item.recordId)">{{item.statusName}}
+                    <span  class="icon-tishi iconfont"></span>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+
 </nz-card>

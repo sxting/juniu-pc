@@ -70,11 +70,12 @@ export class BindWechartStoreComponent {
                 if (typeof (e.data.success) !== 'undefined') {
                     if (e.data.success === true) {
                         // self.errorAlter('授权成功');
-                        if (self.storeId) {
-                            self.router.navigate(['/manage/storeList/wxStore', { storeId: self.storeId }]);
-                        }else{
-                            self.router.navigate(['/manage/storeList', { menuId: '901001' }]);
-                        }
+                        self.router.navigate(['/manage/wechatType']);
+                        // if (self.storeId) {
+                        //     self.router.navigate(['/manage/storeList/wxStore', { storeId: self.storeId }]);
+                        // }else{
+                        //     self.router.navigate(['/manage/storeList', { menuId: '901001' }]);
+                        // }
                         modal.destroy()
                     } else {
                         self.errorAlter('授权失败');

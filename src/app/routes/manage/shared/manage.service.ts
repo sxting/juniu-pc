@@ -882,4 +882,31 @@ export class ManageService {
         return Observable.throw(error);
       });
   }
+
+  chooseTpl(data) {
+    let apiUrl = Config.API + '/marketing/wxapp/chooseTpl.json';
+    return this.http.post(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  wxappStatus(data) {
+    let apiUrl = Config.API + '/marketing/wxapp/status.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  queryAuditReason(data) {
+    let apiUrl = Config.API + '/marketing/wxapp/queryAuditReason.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
 }
