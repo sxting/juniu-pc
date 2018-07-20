@@ -56,9 +56,9 @@
                 <div class="pics_box clearfix">
                     <div class="img-box">
                         <img class="upload-img" src="./assets/img/upload.png">
-                        <input type="file" accept="image" (change)="uploadImage($event,'cover',0)">
+                        <input type="file" accept="image" (change)="uploadImage($event,'cover',5)">
                         <input formControlName="picId" style="visibility: hidden" />
-                        <nz-spin *ngIf="spinBoolean" style="height: 102px;line-height: 102px;text-align: center;" [nzSize]="'large'"></nz-spin>
+                        <nz-spin *ngIf="spinBoolean && activeIndex === 5" style="height: 102px;line-height: 102px;text-align: center;" [nzSize]="'large'"></nz-spin>
                         <img class="image" [src]="imagePath" *ngIf="imagePath">
                         <i *ngIf="imagePath" class="iconfont icon-deleternormal" (click)="deleteImage(0,'cover')"></i>
                     </div>
@@ -72,9 +72,9 @@
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
                 <ul class="pics_box clearfix">
                     <li class="img-box">
-                        <img class="upload-img" src="./assets/img/upload.png" (click)="uploadTmallHomePic()">
+                        <img class="upload-img" src="./assets/img/upload.png" (click)="uploadTmallHomePic(6)">
                         <img class="image" [src]="imagePathTb" *ngIf="imagePathTb">
-                        <nz-spin *ngIf="spinBoolean" style="height: 102px;
+                        <nz-spin *ngIf="spinBoolean && activeIndex === 6" style="height: 102px;
             line-height: 102px;
             text-align: center;" [nzSize]="'large'"></nz-spin>
                         <i *ngIf="imagePathTb" class="iconfont icon-deleternormal" (click)="deleteImage(0,'tmall')"></i>
@@ -92,7 +92,7 @@
                         <img class="upload-img" src="./assets/img/upload.png">
                         <input type="file" accept="image" (change)="uploadImage($event,'images',i)">
                         <img class="image" src="{{image.src}}" *ngIf="image.src">
-                        <nz-spin *ngIf="spinBoolean" style="height: 102px;
+                        <nz-spin *ngIf="spinBoolean && activeIndex === i" style="height: 102px;
             line-height: 102px;
             text-align: center;" [nzSize]="'large'"></nz-spin>
                         <i *ngIf="image.showDelete" class="iconfont icon-deleternormal" (click)="deleteImage(i,'images')"></i>
