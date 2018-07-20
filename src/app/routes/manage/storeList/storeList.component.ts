@@ -21,7 +21,7 @@ export class StoreListComponent {
     branchName: any;
     userInfo = this.localStorageService.getLocalstorage(USER_INFO) ?
         JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)) : '';
-    checkAuthBoolean:boolean = false;
+    checkAuthBoolean: boolean = false;
     constructor(
         public msg: NzMessageService,
         private modalSrv: NzModalService,
@@ -126,7 +126,7 @@ export class StoreListComponent {
         this.manageService.wxStatus2(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    this.checkAuthBoolean = res.data.wxappAuth?true:false;
+                    this.checkAuthBoolean = res.data.wxappAuth ? true : false;
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -146,15 +146,51 @@ export class StoreListComponent {
         });
     }
     storeTypeFun(type: any, boolean: any, e: any, branchName: any) {
-        if ( type === 'weixin' &&this.checkAuthBoolean) {
-            this.router.navigate(['/manage/storeList/wxStore', { storeId: e }]);
+        if (type === 'weixin' && this.checkAuthBoolean) {
+            // this.router.navigate(['/manage/storeList/wxStore', { storeId: e }]);
+            this.menuRouteHttp('901001B01');
         } else if (!boolean && type === 'weixin') {
-            this.router.navigate(['/manage/bindWechartStore', { storeId: e }]);
+            this.menuRouteHttp('901001B01');
+            // this.router.navigate(['/manage/bindWechartStore', { storeId: e }]);
         }
         if (boolean && type === 'zhifubao') {
             // this.router.navigate(['/manage/koubeiStore', { storeId: e }]);
         } else if (!boolean && type === 'zhifubao') {
             this.router.navigate(['/manage/bindKoubeiStore', { storeId: e, branchName: branchName }]);
+        }
+    }
+
+    menuRouteHttp(menuId: any) {
+        if (typeof (menuId) === 'string' && Number(menuId) + '' !== 'NaN') {
+            this.manageService.menuRoute({ menuId: menuId, timestamp: new Date().getTime() }).subscribe(
+                (res: any) => {
+                    if (res.success) {
+                        if (res.data.eventType === 'ROUTE') {
+                            if (res.data.eventRoute) {
+                                this.router.navigateByUrl(res.data.eventRoute + ';menuId=' + menuId);
+                            }
+                        } else if (res.data.eventType === 'NONE') {
+
+                        } else if (res.data.eventType === 'API') {
+
+                        } else if (res.data.eventType === 'REDIRECT') {
+                            let href = res.data.eventRoute;
+                            window.open(href);
+                        }
+                        if (res.data.eventMsg) {
+                            this.errorAlert(res.data.eventMsg);
+                        }
+                    } else {
+                        this.modalSrv.error({
+                            nzTitle: '温馨提示',
+                            nzContent: res.errorInfo
+                        });
+                    }
+                },
+                (error) => {
+                    this.modalSrv.warning(error)
+                }
+            );
         }
     }
 }

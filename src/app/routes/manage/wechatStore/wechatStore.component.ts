@@ -13,7 +13,7 @@ import { USER_INFO } from '@shared/define/juniu-define';
 })
 export class WechatStoreComponent {
     merchantId: any;
-    statusData:any;
+    statusData: any;
     constructor(private router: Router, public msg: NzMessageService, private localStorageService: LocalStorageService, private modalSrv: NzModalService,
         private manageService: ManageService, private http: _HttpClient) {
         this.merchantId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['merchantId'];
@@ -28,10 +28,10 @@ export class WechatStoreComponent {
             (res: any) => {
                 if (res.success) {
                     this.statusData = res.data;
-                    this.statusData.recoreds.forEach(function (i:any) {
-                        if(i.status ==='auditing') i.statusName ='审核中';
-                        if(i.status ==='faild') i.statusName ='审核失败';
-                        if(i.status ==='passed') i.statusName ='审核成功';
+                    this.statusData.recoreds.forEach(function (i: any) {
+                        if (i.status === 'auditing') i.statusName = '审核中';
+                        if (i.status === 'faild') i.statusName = '审核失败';
+                        if (i.status === 'passed') i.statusName = '审核成功';
                     })
                     // this.router.navigate(['/manage/wechatStore']);
                 } else {
@@ -46,10 +46,10 @@ export class WechatStoreComponent {
             }
         );
     }
-    gotoList(){
-        this.router.navigate(['/manage/storeList']);
+    gotoList() {
+        this.router.navigate(['/manage/storeList', { menuId: '901001' }]);
     }
-    queryAuditReasonFun(e:any){
+    queryAuditReasonFun(e: any) {
         let data = {
             recordId: e
         }
@@ -72,10 +72,10 @@ export class WechatStoreComponent {
             }
         );
     }
-    jiechu(){
+    jiechu() {
         this.modalSrv.info({
             nzTitle: '温馨提示',
-            nzContent: ''
+            nzContent: '暂不可解除小程序的授权，请联系桔牛客服010-80441899解决'
         });
     }
     errorAlert(err) {
