@@ -6,7 +6,7 @@
                 <li class="fl" style="margin-right:15px">
                     <div class="fr" style="position:relative;">
                         <span class="mr10 mr">订单查询</span>
-                        <input type="text" [(ngModel)]="pinTuanName" style="width:288px" placeholder="请输入订单号" />
+                        <input type="text" [(ngModel)]="pinTuanName" (ngModelChange)="orderFun($event)" style="width:288px" placeholder="请输入订单号" />
                         <span class="icon-sou iconfont" (click)="searchName('name')"></span>
                     </div>
                 </li>
@@ -17,7 +17,7 @@
                 </li>
 
                 <div class="fr" style="position:relative;margin-top:10px;clear: both;float: left;">
-                    <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false" [ifStoresAuth]="true" (storeIdOutput)="selectStoreInfo($event.alipayShopId)"></jn-stores-infor>
+                    <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false"  (storeIdOutput)="selectStoreInfo($event)"></jn-stores-infor>
                 </div>
             </div>
             <div class="existing-table" style="margin-top:60px;">
@@ -30,11 +30,11 @@
                             <td>商品名称</td>
                             <td>订单状态</td>
                             <td>订单金额(元)</td>
-                            <td (click)="chakanXQ(chakanxiangqing)">操作</td>
+                            <td>操作</td>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let item of resArr;let ind = index;">
+                        <tr *ngFor="let item of wxorderListData;let ind = index;">
                             <td>{{item.groupNo}}</td>
                             <td>{{item.openedTime}}</td>
                             <td>{{item.peopleNumber}}人团</td>
@@ -42,7 +42,7 @@
                             <td class="icon-sanjiao-bottom iconfont" (click)="ptxxClick(pintuanxinxi,ind,item.peopleNumber,item.groupNo,item.status)">{{item.status==='JOINING'?'拼团中':item.status==='FINISH'?'拼团成功':'拼团失败'}}</td>
                             <td>{{item.totalAmount/100}}</td>
                             <td>
-                                <span class="buttons" (click)="chakanXQ(chakanxiangqing)">查看详情</span>
+                                <span class="buttons" (click)="getwxorderDetail(item.orderId)">查看详情</span>
                             </td>
 
                         </tr>

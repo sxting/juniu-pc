@@ -327,4 +327,23 @@ export class CheckoutService {
                 return Observable.throw(error);
             });
     }
+    
+    //描述:核销小程序购买的商品的核销码
+    wxorderConsumeVoucher(data: any) {
+        let apiUrl = Config.API + 'order/wxorder/consumeVoucher.json';
+        return this.http.post(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    //核销历史  order/wxorder/voucher/list.json
+    voucherList(data: any) {
+        let apiUrl = Config.API + 'order/wxorder/voucher/list.json';
+        return this.http.get(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
 }

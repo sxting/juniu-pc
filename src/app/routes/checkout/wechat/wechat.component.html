@@ -1,17 +1,16 @@
 <g2-card>
     <nz-tabset>
-        <nz-tab nzTitle="扫码核销">
+        <nz-tab nzTitle="扫码核销" (nzClick)="tabclick()">
             <div class="member-top-middle">
-                <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false" [ifStoresAuth]="true" (storeIdOutput)="selectStoreInfo($event.alipayShopId)"></jn-stores-infor>
+                <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false" (storeIdOutput)="selectStoreInfo($event)"></jn-stores-infor>
             </div>
             <div class="member-top-middle">
                 <nz-form-item>
                     <nz-form-label style="float:left;">选择技师</nz-form-label>
                     <nz-form-control style="float:left;width: 300px;">
                         <div nz-col nzSpan="17">
-                            <nz-select [(ngModel)]="store" (ngModelChange)="selectStoreInfo($event)" style="width:200px;" [nzPlaceHolder]="'请选择一个技师'"
-                                [nzShowSearch]="true">
-                                <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.branchName" [nzValue]="i"></nz-option>
+                            <nz-select [(ngModel)]="store" (ngModelChange)="selectStaff($event)" style="width:200px;" [nzPlaceHolder]="'请选择一个技师'" [nzShowSearch]="true">
+                                <nz-option *ngFor="let i of staffGroupData; let idx = index" [nzLabel]="i.staffName" [nzValue]="i.staffId"></nz-option>
                             </nz-select>
                         </div>
                         <div nz-col nzSpan="7">
@@ -30,9 +29,8 @@
                 <nz-form-item>
                     <nz-form-label style="display: inline-block">选择小工</nz-form-label>
                     <nz-form-control style="display: inline-block">
-                        <nz-select [(ngModel)]="store" (ngModelChange)="selectStoreInfo($event)" style="width: 300px;" [nzPlaceHolder]="'请选择一个小工'"
-                            [nzShowSearch]="true">
-                            <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.branchName" [nzValue]="i"></nz-option>
+                        <nz-select [(ngModel)]="store" (ngModelChange)="selectCoolie($event)" style="width: 300px;" [nzPlaceHolder]="'请选择一个小工'" [nzShowSearch]="true">
+                            <nz-option *ngFor="let i of staffGroupData; let idx = index" [nzLabel]="i.staffName" [nzValue]="i.staffId"></nz-option>
                         </nz-select>
                     </nz-form-control>
                 </nz-form-item>
@@ -42,9 +40,9 @@
             <input type="text" nz-input id="authCode" [(ngModel)]="authCode" name="authCode" (ngModelChange)="goToSubmitOrder($event)"
                 class="input pay-code-input">
         </nz-tab>
-        <nz-tab nzTitle="手动核销">
+        <nz-tab nzTitle="手动核销" (nzClick)="tabclick()">
             <div class="member-top-middle">
-                <jn-stores-infor [ifStoresAll]="false" [ifStoresAuth]="true" [moduleId]="moduleId" (storeIdOutput)="selectStoreInfo($event.alipayShopId)"></jn-stores-infor>
+                <jn-stores-infor [ifStoresAll]="false" [moduleId]="moduleId" (storeIdOutput)="selectStoreInfo($event)"></jn-stores-infor>
             </div>
             <div class="member-top-middle">
                 <span style="margin-right:10px;">核销券码:</span>
@@ -100,17 +98,17 @@
                             <td>核销金额(元)</td>
                         </tr>
                     </thead>
-                    <tbody *ngIf="dataShow">
-                        <tr *ngFor="let item of listData">
-                            <td>{{item.settleTime}}</td>
-                            <td>{{item.settleStoreName}}</td>
-                            <td>{{item.aaa}}</td>
-                            <td>{{item.content}}</td>
-                            <td>{{item.amount/100}}</td>
+                    <tbody *ngIf="voucherData.length>0">
+                        <tr *ngFor="let item of voucherData">
+                            <td>{{item.usedDate}}</td>
+                            <td>{{item.usedStoreName}}</td>
+                            <td>{{item.voucherType}}</td>
+                            <td>{{item.productName}}</td>
+                            <td>{{item.price/100}}</td>
                         </tr>
 
                     </tbody>
-                    <tr *ngIf="!dataShow">
+                    <tr *ngIf="voucherData.length === 0">
                         <td colspan="5">暂无数据</td>
                     </tr>
                 </table>
