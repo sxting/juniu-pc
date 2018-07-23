@@ -62,6 +62,8 @@ export class AddKoubeiProductComponent implements OnInit {
     imageArray: any[] = [{ imageId: '', src: '', showDelete: false }];
     editOff: boolean = true;//删除图片的开关
     isVisibleImg: boolean = false;//是否重新选择图片
+    spinBoolean: boolean = false;
+    activeIndex: any;//查看图片loading
 
     // 门店相关的
     cityStoreList: any;  // 数据格式转换过的门店列表
@@ -70,7 +72,8 @@ export class AddKoubeiProductComponent implements OnInit {
     allShopsNumber: number;//所有的门店数量
     ifShowStoreErrorTips: boolean = false;
     ifShowPriceContrast: boolean = true;//价格对比
-    spinBoolean: boolean = false;
+
+
     get currentPrice() { return this.form.controls['currentPrice']; }
     get originalPrice() { return this.form.controls['originalPrice']; }
     get verifyEnableTimes() { return this.form.controls['verifyEnableTimes']; }
@@ -695,6 +698,8 @@ export class AddKoubeiProductComponent implements OnInit {
         var file = event.srcElement ? event.srcElement.files : event.target.files; if (file) {
             this.loading = true;
             this.spinBoolean = true;
+            this.activeIndex = index;
+            console.log(index);
             this.uploadService.postWithFile(file, 'item', 'T').then((result: any) => {
                 this.loading = false;
                 this.spinBoolean = false;
@@ -734,7 +739,6 @@ export class AddKoubeiProductComponent implements OnInit {
                     } else {//商品图片
                         this.uploadImageResult = result;
                         this.imageArray[index].imageId = this.uploadImageResult.pictureId;
-                        let pictureSuffix = '.' + result.pictureSuffix;
                         this.imageArray[index].src = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.imageArray[index].imageId}/resize_${78}_${58}/mode_fill`;
                         this.imageArray[index].showDelete = true;
 
@@ -755,7 +759,7 @@ export class AddKoubeiProductComponent implements OnInit {
     }
 
     /*上传入淘首图 ***/
-    uploadTmallHomePic() {
+    uploadTmallHomePic(index: number) {
         let self = this;
         this.isVisibleImg = true;
         setTimeout(function () {
@@ -776,7 +780,7 @@ export class AddKoubeiProductComponent implements OnInit {
                     if (!dataURL) {
                         self.msg.warning('请上传图片');
                     } else {
-                        self.uploadImageWithBase64Http(dataURL);
+                        self.uploadImageWithBase64Http(dataURL,index);
                     }
                 },
                 fail: function (msg) {
@@ -787,13 +791,14 @@ export class AddKoubeiProductComponent implements OnInit {
     }
 
     /**上传图片***/
-    uploadImageWithBase64Http(base64Image) {
+    uploadImageWithBase64Http(base64Image: any, index: number) {
         let data = {
             base64Image: base64Image
         };
         let syncAlipay = 'T';
         let bizType = 'item';
         this.spinBoolean = true;
+        this.activeIndex = index;
         this.koubeiService.uploadImageWithBase64(data, bizType, syncAlipay).subscribe(
           (res: any) => {
               this.loading = false;
@@ -1037,6 +1042,7 @@ export class AddKoubeiProductComponent implements OnInit {
                         // 签约成功
                         self.isVisible = false;
                         self.msg.warning('设置成功');
+                        return;
                     } else if (kbkRe.resultStatus === 'failed') {
                         // 签约失败
                         self.isVisible = false;

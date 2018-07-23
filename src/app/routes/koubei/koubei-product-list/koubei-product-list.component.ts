@@ -189,6 +189,7 @@ export class KoubeiProductListComponent implements OnInit {
                         // 签约成功
                         self.koubeikeifShow = false;
                         self.msg.warning('设置成功');
+                        return;
                     } else if (kbkRe.resultStatus === 'failed') {
                         // 签约失败
                         self.koubeikeifShow = false;
