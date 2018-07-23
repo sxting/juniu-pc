@@ -21,7 +21,7 @@ export class AdministrationComponent implements OnInit {
     phone: any = '16619811357';
     oldcode: any = '';
     newcode: any = '';
-    imgUrl: string = Config.API + 'account/manage/aliAuthorizationQRCode.img' +
+    imgUrl: string = Config.API1 + 'account/merchant/manage/aliAuthorizationQRCode.img' +
         `?token=${this.localStorageService.getLocalstorage(APP_TOKEN)}`;
     imgQrcodeUrl: string = Config.API1 + 'account/merchant/manage/aliAuthorizationQRCode.img' +
         `?token=${this.localStorageService.getLocalstorage(APP_TOKEN)}`;

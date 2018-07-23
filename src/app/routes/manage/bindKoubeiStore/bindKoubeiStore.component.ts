@@ -20,8 +20,8 @@ export class BindKoubeiStoreComponent {
     dislike = false;
     storeId: any;
     branchName: any;
-    imgQrcodeUrl: string = Config.API + 'account/manage/aliAuthorizationQRCode.img' +
-      `?token=${this.localStorageService.getLocalstorage(APP_TOKEN)}`;
+    imgQrcodeUrl: string = Config.API1 + 'account/merchant/manage/aliAuthorizationQRCode.img' +
+    `?token=${this.localStorageService.getLocalstorage(APP_TOKEN)}`;
     userInfo = this.localStorageService.getLocalstorage(USER_INFO) ?
         JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)) : '';
     constructor(public msg: NzMessageService,
