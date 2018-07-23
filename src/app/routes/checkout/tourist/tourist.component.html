@@ -161,7 +161,9 @@
                       </div>
                       <div nz-col nzSpan="10">
                         <div nz-col nzSpan="14" class="textAline">实 价</div>
-                        <div nz-col nzSpan="8" class="colorRed"> <input nz-input type="number" style="width:90px;"  [(ngModel)]="item.totoleMoney1" (ngModelChange)="shijiaChange($event,ind)"></div>
+                        <div nz-col nzSpan="8" class="colorRed">
+                          <input nz-input type="number" style="width:90px;" [(ngModel)]="item.totoleMoney1" (ngModelChange)="shijiaChange($event,ind)">
+                        </div>
                       </div>
                     </div>
 
@@ -184,9 +186,10 @@
                           <span>暂无选择会员卡</span>
                         </div>
                       </div>
-                      <div nz-col nzSpan="10"><span *ngIf="item.vipCard" nz-col nzSpan="9" >-{{item.totoleMoney}}</span> 
-                        <div nz-col nzSpan="15" >
-                          <nz-popover  [nzTitle]="'选择会员卡'" [(nzVisible)]="visible" [nzTrigger]="'click'" [nzPlacement]="'bottomRight'">
+                      <div nz-col nzSpan="10">
+                        <span *ngIf="item.vipCard" nz-col nzSpan="9">-{{item.totoleMoney}}</span>
+                        <div nz-col nzSpan="15">
+                          <nz-popover [nzTitle]="'选择会员卡'" [(nzVisible)]="visible" [nzTrigger]="'click'" [nzPlacement]="'bottomRight'">
                             <button nz-button nz-popover>点击选择</button>
                             <ng-template #nzTemplate>
                               <div style="    height: 200px;
@@ -202,7 +205,7 @@
                                     <span *ngIf="vipcard.card.type === 'METERING'">次</span>
                                     <!-- <span *ngIf="item.card.type === 'TIMES'">天</span> -->
                                   </p>
-  
+
                                   <p class="cardMoney" *ngIf="vipcard.card.type === 'TIMES'">有效期至 ： {{vipcard.card.validity}}
                                   </p>
                                   <div class="icon-success iconfont" *ngIf="item.vipCard&&vipcard.card.cardId === item.vipCard.card.cardId"></div>
@@ -211,7 +214,7 @@
                             </ng-template>
                           </nz-popover>
                         </div>
-                        
+
                       </div>
                     </div>
                   </div>
@@ -511,7 +514,9 @@
 <ng-template #VipXQ>
   <div class="VipXQ">
     <div class="vipxinx">
-      <h3 class="flex-1 text-lg borderLeft">{{memberInfo?.customerName}}</h3>
+      <h3 class="flex-1 text-lg borderLeft">{{memberInfo?.customerName}}
+        <button class="buttons" nz-button nzSize="small" type="submit" style="margin-left:20px;color:#ff7700;border:1px solid #ff7700;" (click)="memberChange(modalContent2)">编辑</button>
+      </h3>
       <div>
         <div nz-col nzSpan="12">
           <div nz-col nzSpan="6">性别:</div>
@@ -762,4 +767,67 @@
   </div>
 </ng-template>
 
+
+<ng-template #modalContent2>
+  <div class="addStaffBox-main">
+    <div>
+      <nz-form-item class="formItem ">
+        <div class="lineHeight50 formItemBorder">
+          <nz-form-label style="text-align:left;" nzSpan="6">会员手机号</nz-form-label>
+          <nz-form-control nzSpan="18">
+            <nz-input-number [(ngModel)]="customer_phone" [nzMin]="0" [nzMax]="19999999999" style="width:153px;" placeholder="请输入会员手机号"
+              [nzStep]="1"></nz-input-number>
+          </nz-form-control>
+        </div>
+      </nz-form-item>
+    </div>
+    <div>
+      <nz-form-item class="formItem ">
+        <div class="lineHeight50 formItemBorder">
+          <nz-form-label style="text-align:left;" nzSpan="6">会员姓名</nz-form-label>
+          <nz-form-control nzSpan="18">
+            <input nz-input placeholder="请输入会员姓名" style="width:153px;" maxlength="10" [(ngModel)]="customer_name">
+          </nz-form-control>
+        </div>
+      </nz-form-item>
+    </div>
+    <div>
+      <nz-form-item class="formItem ">
+        <div class="lineHeight50 formItemBorder">
+          <nz-form-label style="text-align:left;" nzSpan="6">性别</nz-form-label>
+          <nz-form-control nzSpan="18">
+            <nz-radio-group [(ngModel)]="customer_gender">
+              <label nz-radio [nzValue]="1">
+                <span>男</span>
+              </label>
+              <label nz-radio [nzValue]="0">
+                <span>女</span>
+              </label>
+            </nz-radio-group>
+          </nz-form-control>
+        </div>
+      </nz-form-item>
+    </div>
+    <div>
+      <nz-form-item class="formItem ">
+        <div class="lineHeight50 formItemBorder">
+          <nz-form-label style="text-align:left;" nzSpan="6">生日</nz-form-label>
+          <nz-form-control nzSpan="18">
+            <nz-date-picker [(ngModel)]="customer_date" (ngModelChange)="onChange($event)"></nz-date-picker>
+          </nz-form-control>
+        </div>
+      </nz-form-item>
+    </div>
+    <div>
+      <nz-form-item class="formItem ">
+        <div class="lineHeight50 formItemBorder">
+          <nz-form-label style="text-align:left;" nzSpan="6">备注</nz-form-label>
+          <nz-form-control nzSpan="18">
+            <input nz-input placeholder="请输入会员备注" style="width:153px;" maxlength="10" [(ngModel)]="customer_remarks">
+          </nz-form-control>
+        </div>
+      </nz-form-item>
+    </div>
+  </div>
+</ng-template>
 <!-- <nz-spin></nz-spin> -->

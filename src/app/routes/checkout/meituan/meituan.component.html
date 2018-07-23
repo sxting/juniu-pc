@@ -14,7 +14,7 @@
             <input type="text" nz-input placeholder="请输入团购券序列号" [(ngModel)]="receiptCode">
         </div>
 
-        <input nz-input class="hidden"  type="text" id="qrCode" [(ngModel)]="qrCode" name="qrCode" (ngModelChange)="scanPrepare()">
+        <input nz-input class="hidden"  type="text" id="qrCode" [(ngModel)]="qrCode" name="qrCode" (ngModelChange)="scanPrepare($event)">
 
         <div class="saoma-btn">
             <span *ngIf="type === 'saoma'" (click)="onClickBtnClick('saoma')">扫码验券</span>

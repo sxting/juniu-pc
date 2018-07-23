@@ -95,7 +95,7 @@
         <nz-form-label nzSpan="5" nzRequired nzFor="service_tel">客服电话</nz-form-label>
         <nz-form-control nzSpan="16">
             <nz-input-group nzCompact>
-                <input nz-input formControlName="service_tel" placeholder="请输入客服电话">
+                <input maxlength="15" nz-input formControlName="service_tel" placeholder="请输入客服电话">
             </nz-input-group>
             <ng-container *ngIf="service_tel.dirty">
                 <nz-form-explain class="error-color" *ngIf="service_tel.errors?.required">请输入客服电话</nz-form-explain>

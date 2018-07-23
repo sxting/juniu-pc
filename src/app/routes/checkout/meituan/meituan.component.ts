@@ -143,11 +143,15 @@ export class MeituanComponent implements OnInit {
         if (type === 'saoma') { //扫码验券
             this.qrCode = '';
             let self = this;
+            setTimeout('document.getElementById("qrCode").focus();', 50);
             this.modalSrv.info({
                 nzTitle: '扫描条形码中。。。。',
                 nzOkText: '取消',
+                nzOnCancel: () => {
+                    self.qrCode = '';
+                }
             });
-            document.getElementById("qrCode").focus()
+            // document.getElementById("qrCode").focus()
         }
         else { //输码验券
             this.receiptPrepare();
@@ -238,11 +242,8 @@ export class MeituanComponent implements OnInit {
     }
 
     //扫码验券校验
-    scanPrepare() {
-
-        // this.qrCode = 'd7Recb5OOcxI%2BuUc3ScnSA%3D%3D@066414';
-
-        if (this.qrCode.length >= 37) {
+    scanPrepare(event) {
+        if (event && event.length >= 10) {
             this.modalSrv.closeAll();
             let data = {
                 storeId: this.storeId,
@@ -250,6 +251,7 @@ export class MeituanComponent implements OnInit {
             };
             this.checkoutService.scanPrepare(data).subscribe(
                 (res: any) => {
+                    this.qrCode = '';
                     if (res.success) {
                         this.deal = res.data.data[0];
                         this.isClick = true;
@@ -268,9 +270,9 @@ export class MeituanComponent implements OnInit {
             this.errorAlter('请输入验券码'); return;
         }
         let data = {
-        storeId: this.storeId,
-        receiptCode: this.receiptCode
-      };
+            storeId: this.storeId,
+            receiptCode: this.receiptCode
+        };
         this.checkoutService.receiptPrepare(data).subscribe(
             (res: any) => {
                 if (res.success) {
