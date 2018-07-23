@@ -50,7 +50,7 @@
         <div class="sub-title">
             <span></span>验券记录</div>
 
-        <nz-table [nzNoResult]="'没有数据'" #nzTable>
+        <nz-table [nzNoResult]="'没有数据'" [nzShowPagination]="false" [nzData]="recordList" #nzTable>
             <thead nz-thead>
                 <tr>
                     <th nz-th *ngFor="let item of theadName">

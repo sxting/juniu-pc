@@ -147,9 +147,9 @@ export class MeituanComponent implements OnInit {
             this.modalSrv.info({
                 nzTitle: '扫描条形码中。。。。',
                 nzOkText: '取消',
-                nzOnCancel: () => {
-                    self.qrCode = '';
-                }
+                // nzOnCancel: () => {
+                //     self.qrCode = '';
+                // }
             });
             // document.getElementById("qrCode").focus()
         }
@@ -244,6 +244,7 @@ export class MeituanComponent implements OnInit {
     //扫码验券校验
     scanPrepare(event) {
         if (event && event.length >= 10) {
+            this.qrCode = event;
             this.modalSrv.closeAll();
             let data = {
                 storeId: this.storeId,
@@ -251,7 +252,6 @@ export class MeituanComponent implements OnInit {
             };
             this.checkoutService.scanPrepare(data).subscribe(
                 (res: any) => {
-                    this.qrCode = '';
                     if (res.success) {
                         this.deal = res.data.data[0];
                         this.isClick = true;
