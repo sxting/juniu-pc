@@ -920,7 +920,7 @@ export class ManageService {
   }
   //描述:小程序订单详情
   wxorderDetail(data: any) {
-    let apiUrl = Config.API + 'order/wxorder/detail.com';
+    let apiUrl = Config.API + 'order/wxorder/detail.json';
     return this.http.get(apiUrl, data)
       .map((response: Response) => response)
       .catch(error => {

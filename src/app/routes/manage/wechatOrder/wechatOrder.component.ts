@@ -43,15 +43,6 @@ export class WechatOrderComponent {
         this.end = this.formatDateTime(result[1], 'end');
         this.getWxorderList();
     }
-    chakanXQ(tpl: TemplateRef<{}>) {
-        this.modalSrv.create({
-            nzTitle: '查看详情',
-            nzContent: tpl,
-            nzWidth: '1050px',
-            nzOnOk: () => {
-            }
-        });
-    }
     paginate(e) {
         this.pageNo = e;
         this.getWxorderList();
@@ -85,7 +76,8 @@ export class WechatOrderComponent {
         this.manageService.wxorderList(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    this.wxorderListData = res.data;
+                    this.wxorderListData = res.data.content;
+                    this.countTotal = res.data.totalElements;
                 } else {
                     this.errorAlter(res.errorInfo)
                 }
@@ -94,7 +86,7 @@ export class WechatOrderComponent {
             error => this.errorAlter(error)
         );
     }
-    getwxorderDetail(e) {
+    getwxorderDetail(e,tpl: TemplateRef<{}>) {
         let data = {
             orderId: e
         }
@@ -102,6 +94,13 @@ export class WechatOrderComponent {
             (res: any) => {
                 if (res.success) {
                     this.detailData = res.data;
+                    this.modalSrv.create({
+                        nzTitle: '查看详情',
+                        nzContent: tpl,
+                        nzWidth: '1050px',
+                        nzOnOk: () => {
+                        }
+                    });
                 } else {
                     this.errorAlter(res.errorInfo)
                 }
