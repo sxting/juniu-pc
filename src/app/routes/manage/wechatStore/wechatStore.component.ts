@@ -28,11 +28,13 @@ export class WechatStoreComponent {
             (res: any) => {
                 if (res.success) {
                     this.statusData = res.data;
-                    this.statusData.recoreds.forEach(function (i: any) {
-                        if (i.status === 'auditing') i.statusName = '审核中';
-                        if (i.status === 'faild') i.statusName = '审核失败';
-                        if (i.status === 'passed') i.statusName = '审核成功';
-                    })
+                    if (this.statusData&&this.statusData.recoreds&&this.statusData.recoreds.length>0) {
+                        this.statusData.recoreds.forEach(function (i: any) {
+                            if (i.status === 'auditing') i.statusName = '审核中';
+                            if (i.status === 'faild') i.statusName = '审核失败';
+                            if (i.status === 'passed') i.statusName = '审核成功';
+                        })
+                    }
                     // this.router.navigate(['/manage/wechatStore']);
                 } else {
                     this.modalSrv.error({
