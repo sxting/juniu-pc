@@ -18,8 +18,6 @@ export class WechatOrderComponent {
     pinTuanName: any;
     dateRange: any;
     resArr: any;
-    searchName: any;
-
     pageNo: any = 1;
     orderId: any;
     end: any;
@@ -34,8 +32,11 @@ export class WechatOrderComponent {
         this.storeId = e.storeId;
         this.getWxorderList()
     }
-    orderFun(event: any) {
+    orderFun(event?: any) {
         this.orderId = event;
+
+    }
+    searchName() {
         this.getWxorderList();
     }
     onChange(result: Date): void {
@@ -86,7 +87,7 @@ export class WechatOrderComponent {
             error => this.errorAlter(error)
         );
     }
-    getwxorderDetail(e,tpl: TemplateRef<{}>) {
+    getwxorderDetail(e, tpl: TemplateRef<{}>) {
         let data = {
             orderId: e
         }
