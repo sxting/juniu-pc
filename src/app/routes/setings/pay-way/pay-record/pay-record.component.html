@@ -15,8 +15,8 @@
         <!--审核通过显示-->
         <div class="setted" *ngIf="status == '1'">
             <p class="color-000">已设置</p>
-            <p>微信支付费率：{{statusData.wechatRate/10}}%</p>
-            <p>支付宝支付费率：{{statusData.alipaysRate/10}}%</p>
+            <!--<p>微信支付费率：{{statusData.wechatRate/10}}%</p>-->
+            <!--<p>支付宝支付费率：{{statusData.alipaysRate/10}}%</p>-->
             <button nz-button [disabled]="!haveData" class="fix-btn" (click)="goPayWay()">点击修改</button>
         </div>
     </nz-card>
