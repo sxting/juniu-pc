@@ -9,7 +9,7 @@
                     <nz-form-label style="float:left;">选择技师</nz-form-label>
                     <nz-form-control style="float:left;width: 300px;">
                         <div nz-col nzSpan="17">
-                            <nz-select [(ngModel)]="store" (ngModelChange)="selectStaff($event)" style="width:200px;" [nzPlaceHolder]="'请选择一个技师'" [nzShowSearch]="true">
+                            <nz-select [(ngModel)]="staffId" (ngModelChange)="selectStaff($event)" style="width:200px;" [nzPlaceHolder]="'请选择一个技师'" [nzShowSearch]="true">
                                 <nz-option *ngFor="let i of staffGroupData; let idx = index" [nzLabel]="i.staffName" [nzValue]="i.staffId"></nz-option>
                             </nz-select>
                         </div>
@@ -29,7 +29,7 @@
                 <nz-form-item>
                     <nz-form-label style="display: inline-block">选择小工</nz-form-label>
                     <nz-form-control style="display: inline-block">
-                        <nz-select [(ngModel)]="store" (ngModelChange)="selectCoolie($event)" style="width: 300px;" [nzPlaceHolder]="'请选择一个小工'" [nzShowSearch]="true">
+                        <nz-select [(ngModel)]="coolie" (ngModelChange)="selectCoolie($event)" style="width: 300px;" [nzPlaceHolder]="'请选择一个小工'" [nzShowSearch]="true">
                             <nz-option *ngFor="let i of staffGroupData; let idx = index" [nzLabel]="i.staffName" [nzValue]="i.staffId"></nz-option>
                         </nz-select>
                     </nz-form-control>
@@ -53,9 +53,8 @@
                     <nz-form-label style="float:left;">选择技师</nz-form-label>
                     <nz-form-control style="float:left;width: 300px;">
                         <div nz-col nzSpan="17">
-                            <nz-select [(ngModel)]="store" (ngModelChange)="selectStoreInfo($event)" style="width:200px;" [nzPlaceHolder]="'请选择一个技师'"
-                                [nzShowSearch]="true">
-                                <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.branchName" [nzValue]="i"></nz-option>
+                            <nz-select [(ngModel)]="staffId" (ngModelChange)="selectStaff($event)" style="width:200px;" [nzPlaceHolder]="'请选择一个技师'" [nzShowSearch]="true">
+                                <nz-option *ngFor="let i of staffGroupData; let idx = index" [nzLabel]="i.staffName" [nzValue]="i.staffId"></nz-option>
                             </nz-select>
                         </div>
                         <div nz-col nzSpan="7">
@@ -74,9 +73,8 @@
                 <nz-form-item>
                     <nz-form-label style="display: inline-block">选择小工</nz-form-label>
                     <nz-form-control style="display: inline-block">
-                        <nz-select [(ngModel)]="store" (ngModelChange)="selectStoreInfo($event)" style="width: 300px;" [nzPlaceHolder]="'请选择一个小工'"
-                            [nzShowSearch]="true">
-                            <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.branchName" [nzValue]="i"></nz-option>
+                        <nz-select [(ngModel)]="coolie" (ngModelChange)="selectCoolie($event)" style="width: 300px;" [nzPlaceHolder]="'请选择一个小工'" [nzShowSearch]="true">
+                            <nz-option *ngFor="let i of staffGroupData; let idx = index" [nzLabel]="i.staffName" [nzValue]="i.staffId"></nz-option>
                         </nz-select>
                     </nz-form-control>
                 </nz-form-item>
