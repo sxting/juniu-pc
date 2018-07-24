@@ -66,7 +66,8 @@
                     <td>{{item.number}}</td>
                     <td>{{item.amount}}</td>
                     <td class="revoke" *ngIf="item.canReverser" (click)="onItemCancelClick(item.consumedId)">撤销</td>
-                    <td class="has-revoke" *ngIf="!item.canReverser">已撤销</td>
+                    <td class="has-revoke" *ngIf="!item.canReverser&&item.status ==='CONSUMED'" >撤销</td>
+                    <td class="has-revoke" *ngIf="!item.canReverser&&item.status !=='CONSUMED'">已撤销</td>
                 </tr>
             </tbody>
         </nz-table>
