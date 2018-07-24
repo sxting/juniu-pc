@@ -165,7 +165,7 @@ export class StoreListComponent {
     }
 
     menuRouteHttp(menuId: any) {
-        if (typeof (menuId) === 'string' && Number(menuId) + '' !== 'NaN') {
+        if (typeof (menuId) === 'string' ) {
             this.manageService.menuRoute({ menuId: menuId, timestamp: new Date().getTime() }).subscribe(
                 (res: any) => {
                     if (res.success) {
