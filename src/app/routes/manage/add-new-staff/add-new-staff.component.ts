@@ -7,6 +7,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LocalStorageService} from "@shared/service/localstorage-service";
 import { FunctionUtil } from "@shared/funtion/funtion-util";
 import { UploadService } from "@shared/upload-img/shared/upload.service";
+import { Config } from '@shared/config/env.config';
 
 @Component({
   selector: 'app-add-new-staff',
@@ -98,7 +99,7 @@ export class AddNewStaffComponent implements OnInit {
                 this.loading = false;
                 let width = 104, height = 104;
                 this.picId = result.pictureId;
-                this.imagePath = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.picId}/resize_${width}_${height}/mode_fill`;
+                this.imagePath = Config.OSS_IMAGE_URL+`${this.picId}/resize_${width}_${height}/mode_fill`;
             });
         }
     }
@@ -172,7 +173,7 @@ export class AddNewStaffComponent implements OnInit {
                 if (res.success) {
                     this.loading = false;
                     self.picId = res.data.portrait.imageId;//员工图像
-                    this.imagePath = self.picId? `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.picId}/resize_${104}_${104}/mode_fill` : '';
+                    this.imagePath = self.picId? Config.OSS_IMAGE_URL+`${this.picId}/resize_${104}_${104}/mode_fill` : '';
 
                     if(res.data.belongType === 'STORE'){
                       self.RolesListInfor = self.storeRoles;

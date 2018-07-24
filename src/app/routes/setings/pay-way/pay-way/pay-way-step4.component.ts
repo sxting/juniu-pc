@@ -7,6 +7,7 @@ import { NzModalService } from 'ng-zorro-antd';
 import { SetingsService } from '../../shared/setings.service';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { ActivatedRoute } from '@angular/router';
+import { Config } from '@shared/config/env.config';
 
 @Component({
   selector: 'app-pay-way-step4',
@@ -54,27 +55,27 @@ export class PayWayStep4Component implements OnInit {
     if (this.item.itemData) {
       let width = 60, height = 60, height2 = 40;
       this.item.image_id1 = data.merchantDetail.licensePhoto.split(';')[0];
-      this.item.imagePath1 = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.item.image_id1.split('.')[0]}/resize_${width}_${height}/mode_fill`;
+      this.item.imagePath1 = Config.OSS_IMAGE_URL+`${this.item.image_id1.split('.')[0]}/resize_${width}_${height}/mode_fill`;
 
       this.item.image_id3 = data.merchantDetail.mainPhoto;
-      this.item.imagePath3 = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.item.image_id3.split('.')[0]}/resize_${width}_${height}/mode_fill`;
+      this.item.imagePath3 = Config.OSS_IMAGE_URL+`${this.item.image_id3.split('.')[0]}/resize_${width}_${height}/mode_fill`;
 
       this.item.image_id6 = data.merchantDetail.indentityPhoto.split(';')[0];
-      this.item.imagePath6 = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.item.image_id6.split('.')[0]}/resize_${width}_${height2}/mode_fill`;
+      this.item.imagePath6 = Config.OSS_IMAGE_URL+`${this.item.image_id6.split('.')[0]}/resize_${width}_${height2}/mode_fill`;
       this.item.image_id7 = data.merchantDetail.indentityPhoto.split(';')[1];
-      this.item.imagePath7 = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.item.image_id7.split('.')[0]}/resize_${width}_${height2}/mode_fill`;
+      this.item.imagePath7 = Config.OSS_IMAGE_URL+`${this.item.image_id7.split('.')[0]}/resize_${width}_${height2}/mode_fill`;
 
       this.item.image_id8 = data.merchantDetail.licensePhoto.split(';')[1];
-      this.item.imagePath8 = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.item.image_id8.split('.')[0]}/resize_${width}_${height2}/mode_fill`;
+      this.item.imagePath8 = Config.OSS_IMAGE_URL+`${this.item.image_id8.split('.')[0]}/resize_${width}_${height2}/mode_fill`;
 
       if (this.item.type === 'qiye') {
         this.item.image_id2 = data.merchantDetail.protocolPhoto;
-        this.item.imagePath2 = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.item.image_id2.split('.')[0]}/resize_${width}_${height}/mode_fill`;
+        this.item.imagePath2 = Config.OSS_IMAGE_URL+`${this.item.image_id2.split('.')[0]}/resize_${width}_${height}/mode_fill`;
       } else {
         this.item.image_id4 = data.merchantDetail.protocolPhoto.split(';')[0];
-        this.item.imagePath4 = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.item.image_id4.split('.')[0]}/resize_${width}_${height2}/mode_fill`;
+        this.item.imagePath4 = Config.OSS_IMAGE_URL+`${this.item.image_id4.split('.')[0]}/resize_${width}_${height2}/mode_fill`;
         this.item.image_id5 = data.merchantDetail.protocolPhoto.split(';')[1];
-        this.item.imagePath5 = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.item.image_id5.split('.')[0]}/resize_${width}_${height2}/mode_fill`;
+        this.item.imagePath5 = Config.OSS_IMAGE_URL+`${this.item.image_id5.split('.')[0]}/resize_${width}_${height2}/mode_fill`;
       }
     }
   }
@@ -111,28 +112,28 @@ export class PayWayStep4Component implements OnInit {
         let image_id = result.pictureId;
         if (number === 1) {
           this.item.image_id1 = result.pictureId;
-          this.item.imagePath1 = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${image_id}/resize_${width}_${height}/mode_fill`;
+          this.item.imagePath1 = Config.OSS_IMAGE_URL+`${image_id}/resize_${width}_${height}/mode_fill`;
         } else if (number === 2) {
           this.item.image_id2 = result.pictureId;
-          this.item.imagePath2 = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${image_id}/resize_${width}_${height}/mode_fill`;
+          this.item.imagePath2 = Config.OSS_IMAGE_URL+`${image_id}/resize_${width}_${height}/mode_fill`;
         } else if (number === 3) {
           this.item.image_id3 = result.pictureId;
-          this.item.imagePath3 = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${image_id}/resize_${width}_${height}/mode_fill`;
+          this.item.imagePath3 = Config.OSS_IMAGE_URL+`${image_id}/resize_${width}_${height}/mode_fill`;
         } else if (number === 4) {
           this.item.image_id4 = result.pictureId;
-          this.item.imagePath4 = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${image_id}/resize_${width}_${height2}/mode_fill`;
+          this.item.imagePath4 = Config.OSS_IMAGE_URL+`${image_id}/resize_${width}_${height2}/mode_fill`;
         } else if (number === 5) {
           this.item.image_id5 = result.pictureId;
-          this.item.imagePath5 = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${image_id}/resize_${width}_${height2}/mode_fill`;
+          this.item.imagePath5 = Config.OSS_IMAGE_URL+`${image_id}/resize_${width}_${height2}/mode_fill`;
         } else if (number === 6) {
           this.item.image_id6 = result.pictureId;
-          this.item.imagePath6 = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${image_id}/resize_${width}_${height2}/mode_fill`;
+          this.item.imagePath6 = Config.OSS_IMAGE_URL+`${image_id}/resize_${width}_${height2}/mode_fill`;
         } else if (number === 7) {
           this.item.image_id7 = result.pictureId;
-          this.item.imagePath7 = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${image_id}/resize_${width}_${height2}/mode_fill`;
+          this.item.imagePath7 = Config.OSS_IMAGE_URL+`${image_id}/resize_${width}_${height2}/mode_fill`;
         } else if (number === 8) {
           this.item.image_id8 = result.pictureId;
-          this.item.imagePath8 = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${image_id}/resize_${width}_${height2}/mode_fill`;
+          this.item.imagePath8 = Config.OSS_IMAGE_URL+`${image_id}/resize_${width}_${height2}/mode_fill`;
         }
       }
     });
@@ -142,7 +143,7 @@ export class PayWayStep4Component implements OnInit {
   onImgClick(tpl: any, id: any, path: any) {
     console.log(id);
     if (id) {
-      this.bigImgPath = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${id.split('.')[0]}/resize_200_140/mode_fill`;
+      this.bigImgPath = Config.OSS_IMAGE_URL+`${id.split('.')[0]}/resize_200_140/mode_fill`;
     } else {
       this.bigImgPath = path;
     }

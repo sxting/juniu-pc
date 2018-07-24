@@ -5,6 +5,7 @@ import { OrderService } from "@shared/component/reserve/shared/order.service";
 import { LocalStorageService } from "@shared/service/localstorage-service";
 import { NzModalService } from "ng-zorro-antd";
 import {FunctionUtil} from "@shared/funtion/funtion-util";
+import { Config } from '@shared/config/env.config';
 
 @Component({
   selector: 'app-craftsman-leave',
@@ -263,7 +264,7 @@ export class CraftsmanLeaveComponent implements OnInit {
                             if(/^(http:\/\/)/.test(craftsman1.headPortrait) || /^(https:\/\/)/.test(craftsman1.headPortrait)) {
 
                             } else {
-                                craftsman1.headPortrait = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${craftsman1.headPortrait}/resize_50_50/mode_fill`;
+                                craftsman1.headPortrait = Config.OSS_IMAGE_URL+`${craftsman1.headPortrait}/resize_50_50/mode_fill`;
                             }
                         } else {
                             craftsman1.headPortrait = '';

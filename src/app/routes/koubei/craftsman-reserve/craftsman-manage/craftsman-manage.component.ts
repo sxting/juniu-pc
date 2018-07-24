@@ -11,6 +11,7 @@ import {FunctionUtil} from "@shared/funtion/funtion-util";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
 import {StoresInforService} from "@shared/stores-infor/shared/stores-infor.service";
+import { Config } from '@shared/config/env.config';
 
 @Component({
   selector: 'app-craftsman-manage',
@@ -476,7 +477,7 @@ export class CraftsmanManageComponent implements OnInit {
             this.imageId = this.uploadImageResult.pictureId;
             let pictureSuffix = '.' + result.pictureSuffix;
             let width = 78, height = 58;
-            this.imagePath = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.imageId}/resize_${width}_${height}/mode_fill`;
+            this.imagePath = Config.OSS_IMAGE_URL+`${this.imageId}/resize_${width}_${height}/mode_fill`;
         });
     }
 
@@ -552,7 +553,7 @@ export class CraftsmanManageComponent implements OnInit {
                     this.nickName = res.data.nickName;
                     this.staffName = res.data.staffName;
                     this.imageId = res.data.headPortraitId;
-                    this.imagePath = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.imageId}/resize_${width}_${height}/mode_fill`;
+                    this.imagePath = Config.OSS_IMAGE_URL+`${this.imageId}/resize_${width}_${height}/mode_fill`;
                     this.phone = res.data.phone;
                     this.staffStoreId = res.data.storeId;
                     this.account = res.data.account;  //口碑账号

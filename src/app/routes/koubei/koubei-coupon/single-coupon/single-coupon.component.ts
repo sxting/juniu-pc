@@ -9,6 +9,7 @@ import {ALIPAY_SHOPS, CITYLIST} from "@shared/define/juniu-define";
 import {NzModalService} from "ng-zorro-antd";
 import {FunctionUtil} from "@shared/funtion/funtion-util";
 import {Title} from "@angular/platform-browser";
+import { Config } from '@shared/config/env.config';
 
 @Component({
   selector: 'app-single-coupon',
@@ -199,8 +200,8 @@ export class SingleCouponComponent implements OnInit {
                     this.useType = res.data.marketingInfo.receiveType;
                     this.imageId = res.data.voucherInfos[0].voucherLogo.logoId;
                     let width = 78, height = 58;
-                    this.imagePath = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.imageId}/resize_${width}_${height}/mode_fill`;
-                    this.logoUrl= `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.imageId}/resize_${width}_${height}/mode_fill`;
+                    this.imagePath = Config.OSS_IMAGE_URL+`${this.imageId}/resize_${width}_${height}/mode_fill`;
+                    this.logoUrl= Config.OSS_IMAGE_URL+`${this.imageId}/resize_${width}_${height}/mode_fill`;
 
                     this.marketingType = res.data.marketingInfo.marketingType;
                     this.voucherId = res.data.voucherInfos[0].voucherId;
@@ -404,7 +405,7 @@ export class SingleCouponComponent implements OnInit {
             this.imageId = this.uploadImageResult.pictureId;
             let pictureSuffix = '.' + result.pictureSuffix;
             let width = 78, height = 58;
-            this.imagePath = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.imageId}/resize_${width}_${height}/mode_fill`;
+            this.imagePath = Config.OSS_IMAGE_URL+`${this.imageId}/resize_${width}_${height}/mode_fill`;
         });
     }
 

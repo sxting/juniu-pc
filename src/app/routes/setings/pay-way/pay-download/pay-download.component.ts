@@ -80,7 +80,7 @@ export class PayDownloadComponent implements OnInit {
       this.imageId = this.uploadImageResult.pictureId;
       let pictureSuffix = '.' + result.pictureSuffix;
       let width = 78, height = 58;
-      this.imagePath = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.imageId}/resize_${width}_${height}/mode_fill`;
+      this.imagePath = Config.OSS_IMAGE_URL+`${this.imageId}/resize_${width}_${height}/mode_fill`;
       this.imgPath = `${Config.API}finance/store/download/qronline.do?storeId=${this.storeId}&logoId=${this.imageId}&color=${this.color}`;
     });
   }
