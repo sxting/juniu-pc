@@ -3,21 +3,21 @@
         <h1>线上版本</h1>
         <div style="overflow: hidden;position: relative;">
             <div nz-col nzSpan="20">
-                <nz-form-item>
-                    <nz-form-label style="display: inline-block">小程序名称</nz-form-label>
-                    <nz-form-control style="display: inline-block">
+                <nz-form-item style="margin-bottom:0;text-align:left;">
+                    <nz-form-label nzXs="24" nzSm="3">小程序名称</nz-form-label>
+                    <nz-form-control nzXs="24" nzSm="21">
                         {{statusData?.wxappName}}
                     </nz-form-control>
                 </nz-form-item>
-                <nz-form-item>
-                    <nz-form-label style="display: inline-block">授权时间</nz-form-label>
-                    <nz-form-control style="display: inline-block">
+                <nz-form-item style="margin-bottom:0;text-align:left;">
+                    <nz-form-label nzXs="24" nzSm="3">授权时间</nz-form-label>
+                    <nz-form-control nzXs="24" nzSm="21">
                         {{statusData?.createTime}}
                     </nz-form-control>
                 </nz-form-item>
-                <nz-form-item>
-                    <nz-form-label style="display: inline-block">版本号</nz-form-label>
-                    <nz-form-control style="display: inline-block">
+                <nz-form-item style="margin-bottom:0;text-align:left;">
+                    <nz-form-label nzXs="24" nzSm="3">版本号</nz-form-label>
+                    <nz-form-control nzXs="24" nzSm="21">
                         {{statusData?.currentVersion}}
                     </nz-form-control>
                 </nz-form-item>
@@ -34,7 +34,7 @@
     </div>
 </nz-card>
 <nz-card nzTitle="近10条审核记录" style="overflow:hidden" [nzBordered]="false" [nzBodyStyle]="{'height':'100%','overflow': 'hidden'}">
-    <nz-table [nzNoResult]="'没有数据'"[nzShowPagination]="false" [nzData]="statusData?.recoreds">
+    <nz-table [nzNoResult]="'没有数据'" [nzShowPagination]="false" [nzData]="statusData?.recoreds">
         <thead>
             <tr>
                 <th>版本号</th>
@@ -48,7 +48,7 @@
                 <td>{{item.submitTime}}</td>
                 <td *ngIf="item.status !== 'faild'">{{item.statusName}}</td>
                 <td style="cursor: pointer;" *ngIf="item.status === 'faild'" (click)="queryAuditReasonFun(item.recordId)">{{item.statusName}}
-                    <span  class="icon-tishi iconfont"></span>
+                    <span class="icon-tishi iconfont"></span>
                 </td>
             </tr>
         </tbody>
