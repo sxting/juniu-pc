@@ -37,7 +37,7 @@
             </div>
             <div class="sm-button {{checkoutShow?'sm-button2':''}} " (click)="scanPay()">扫描顾客核销码</div>
             <!-- <div class="gai"></div> -->
-            <input type="text" nz-input id="authCode" [(ngModel)]="authCode" name="authCode" (ngModelChange)="goToSubmitOrder($event)"
+            <input type="text" nz-input id="authCode" [(ngModel)]="authCode" maxlength="16" name="authCode" (ngModelChange)="goToSubmitOrder($event)"
                 class="input pay-code-input">
         </nz-tab>
         <nz-tab nzTitle="手动核销" (nzClick)="tabclick()">
@@ -46,7 +46,7 @@
             </div>
             <div class="member-top-middle">
                 <span style="margin-right:10px;">核销券码:</span>
-                <input type="text" id="tauthCode" style="width:300px;" nz-input [(ngModel)]="tauthCode" placeholder="请输入顾客核销码">
+                <input type="text" id="tauthCode" style="width:300px;" maxlength="16" nz-input [(ngModel)]="tauthCode" placeholder="请输入顾客核销码">
             </div>
             <div class="member-top-middle">
                 <nz-form-item>

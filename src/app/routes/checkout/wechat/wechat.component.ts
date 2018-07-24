@@ -65,7 +65,7 @@ export class WechatComponent {
         let self = this;
         let div = document.getElementById('tauthCode');
         let div2 = document.getElementById('authCode');
-        if (event && event.length === 16) {
+        if (event && event.length >= 16) {
             div2.setAttribute('disabled', 'disabled');
             this.modalSrv.closeAll();
             let data = {
@@ -78,7 +78,7 @@ export class WechatComponent {
             }
             self.wxorderConsumeVoucherHttp(data);
         }
-        if (self.tauthCode.length === 16) {
+        if (self.tauthCode.length >= 16) {
             div.setAttribute('disabled', 'disabled');
             let data = {
                 assign: this.checkbox ? 1 : 0,
