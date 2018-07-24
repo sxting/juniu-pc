@@ -1,0 +1,10 @@
+.icon-tishi::before{
+    content:"";
+}
+.icon-tishi::after{
+    content:"\e669";
+}
+.icon-tishi{
+    cursor: pointer;
+    color: red;
+}

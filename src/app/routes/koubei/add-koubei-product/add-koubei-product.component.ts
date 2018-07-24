@@ -12,6 +12,7 @@ import { FunctionUtil } from '@shared/funtion/funtion-util';
 import * as differenceInDays from 'date-fns/difference_in_days';
 declare var PhotoClip: any;
 import NP from 'number-precision'
+import { Config } from '@shared/config/env.config';
 
 
 @Component({
@@ -707,7 +708,7 @@ export class AddKoubeiProductComponent implements OnInit {
                     let width = 104, height = 104;
                     if (type === 'cover') {//商品首图
                         this.picId = result.pictureId;
-                        this.imagePath = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.picId}/resize_${width}_${height}/mode_fill`;
+                        this.imagePath = Config.OSS_IMAGE_URL+`${this.picId}/resize_${width}_${height}/mode_fill`;
                         let productName = this.form.controls.productName.value;
                         let originalPrice = this.form.controls.originalPrice.value;
                         let currentPrice = this.form.controls.currentPrice.value;
@@ -739,7 +740,8 @@ export class AddKoubeiProductComponent implements OnInit {
                     } else {//商品图片
                         this.uploadImageResult = result;
                         this.imageArray[index].imageId = this.uploadImageResult.pictureId;
-                        this.imageArray[index].src = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.imageArray[index].imageId}/resize_${78}_${58}/mode_fill`;
+                        let pictureSuffix = '.' + result.pictureSuffix;
+                        this.imageArray[index].src = Config.OSS_IMAGE_URL+`${this.imageArray[index].imageId}/resize_${78}_${58}/mode_fill`;
                         this.imageArray[index].showDelete = true;
 
                         if (this.imageArray.length <= 4) {
@@ -806,7 +808,7 @@ export class AddKoubeiProductComponent implements OnInit {
               if (res.success) {
                   this.isVisibleImg = false;
                   this.tbCover = res.data.pictureId;
-                  this.imagePathTb = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.tbCover}/resize_${250}_${250}/mode_fill`;
+                  this.imagePathTb = Config.OSS_IMAGE_URL+`${this.tbCover}/resize_${250}_${250}/mode_fill`;
               } else {
                   this.modalSrv.error({
                       nzTitle: '温馨提示',
@@ -853,11 +855,11 @@ export class AddKoubeiProductComponent implements OnInit {
                     //商品首图
                     self.picId = res.data.picId;//首图ID
                     let picUrlFirst = res.data.picUrl ? res.data.picUrl : '';
-                    self.imagePath = picUrlFirst.substring(0, 4) === 'http' ? picUrlFirst : `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${res.data.picUrl}/resize_${102}_${102}/mode_fill`;
+                    self.imagePath = picUrlFirst.substring(0, 4) === 'http' ? picUrlFirst : Config.OSS_IMAGE_URL+`${res.data.picUrl}/resize_${102}_${102}/mode_fill`;
 
                     //入淘首图
                     self.tbCover = res.data.tbCover;
-                    self.imagePathTb = res.data.tbCover ? `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${self.tbCover}/resize_${102}_${102}/mode_fill` : '';
+                    self.imagePathTb = res.data.tbCover ? Config.OSS_IMAGE_URL+`${self.tbCover}/resize_${102}_${102}/mode_fill` : '';
 
                     //商品图片
                     let imageArray: any[] = [];
@@ -866,7 +868,7 @@ export class AddKoubeiProductComponent implements OnInit {
                         imagesPics.forEach((element: any, index: number) => {
                             let imgList = {
                                 imageId: element.id,
-                                src: element.url.substring(0, 4) === 'http' ? element.url : `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${element.url}/resize_${78}_${58}/mode_fill`,
+                                src: element.url.substring(0, 4) === 'http' ? element.url : Config.OSS_IMAGE_URL+`${element.url}/resize_${78}_${58}/mode_fill`,
                                 showDelete: true
                             };
                             imageArray.push(imgList);

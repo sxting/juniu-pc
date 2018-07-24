@@ -9,6 +9,7 @@ import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { CITYLIST } from '@shared/define/juniu-define';
 import { UploadService } from '@shared/upload-img';
 import NP from 'number-precision'
+import { Config } from '@shared/config/env.config';
 
 @Component({
     selector: 'app-add-new-product',
@@ -309,7 +310,7 @@ export class AddNewProductComponent implements OnInit {
                     this.loading = false;
                     let width = 104, height = 104;
                     this.picId = result.pictureId;
-                    this.imagePath = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.picId}/resize_${width}_${height}/mode_fill`;
+                    this.imagePath = Config.OSS_IMAGE_URL+`${this.picId}/resize_${width}_${height}/mode_fill`;
                 }
             });
         }
@@ -347,7 +348,7 @@ export class AddNewProductComponent implements OnInit {
                         storeType: [storeType, [Validators.required]],
                     };
                     this.picId = res.data.picId;
-                    this.imagePath = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.picId}/resize_${102}_${102}/mode_fill`;
+                    this.imagePath = Config.OSS_IMAGE_URL+`${this.picId}/resize_${102}_${102}/mode_fill`;
                     this.form = this.fb.group(self.formData);
                     this.selectStoresIds = res.data.storeIds;
                     let StoresIds = res.data.storeIds ? res.data.storeIds.split(',') : '';

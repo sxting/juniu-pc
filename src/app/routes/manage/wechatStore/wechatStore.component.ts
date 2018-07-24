@@ -1,6 +1,10 @@
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Component } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
+import { LocalStorageService } from '@shared/service/localstorage-service';
+import { ManageService } from '../shared/manage.service';
+import { Router } from '@angular/router';
+import { USER_INFO } from '@shared/define/juniu-define';
 
 @Component({
     selector: 'app-wechatStore',
@@ -8,27 +12,78 @@ import { _HttpClient } from '@delon/theme';
     styleUrls: ['./wechatStore.component.css']
 })
 export class WechatStoreComponent {
+    merchantId: any;
+    statusData: any;
+    constructor(private router: Router, public msg: NzMessageService, private localStorageService: LocalStorageService, private modalSrv: NzModalService,
+        private manageService: ManageService, private http: _HttpClient) {
+        this.merchantId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['merchantId'];
+        this.checkFun();
+    }
 
-    data = [];
-    smallData = [];
-
-    todoData: any[] = [
-        { completed: true, avatar: '1', name: '苏先生', content: `请告诉我，我应该说点什么好？` },
-        { completed: false, avatar: '2', name: 'はなさき', content: `ハルカソラトキヘダツヒカリ` },
-        { completed: false, avatar: '3', name: 'cipchk', content: `this world was never meant for one as beautiful as you.` },
-        { completed: false, avatar: '4', name: 'Kent', content: `my heart is beating with hers` },
-        { completed: false, avatar: '5', name: 'Are you', content: `They always said that I love beautiful girl than my friends` },
-        { completed: false, avatar: '6', name: 'Forever', content: `Walking through green fields ，sunshine in my eyes.` }
-    ];
-
-    like = false;
-
-    dislike = false;
-
-    constructor(public msg: NzMessageService, private http: _HttpClient) {
-        this.http.get('/chart/visit').subscribe((res: any[]) => {
-            this.data = res;
-            this.smallData = res.slice(0, 6);
+    checkFun() {
+        let data = {
+            merchantId: this.merchantId
+        }
+        this.manageService.wxappStatus(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.statusData = res.data;
+                    if (this.statusData&&this.statusData.recoreds&&this.statusData.recoreds.length>0) {
+                        this.statusData.recoreds.forEach(function (i: any) {
+                            if (i.status === 'auditing') i.statusName = '审核中';
+                            if (i.status === 'faild') i.statusName = '审核失败';
+                            if (i.status === 'passed') i.statusName = '审核成功';
+                        })
+                    }
+                    // this.router.navigate(['/manage/wechatStore']);
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => {
+                this.errorAlert(error);
+            }
+        );
+    }
+    gotoList() {
+        this.router.navigate(['/manage/storeList', { menuId: '901001' }]);
+    }
+    queryAuditReasonFun(e: any) {
+        let data = {
+            recordId: e
+        }
+        this.manageService.queryAuditReason(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.modalSrv.error({
+                        nzTitle: '失败原因',
+                        nzContent: res.data
+                    });
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => {
+                this.errorAlert(error);
+            }
+        );
+    }
+    jiechu() {
+        this.modalSrv.info({
+            nzTitle: '温馨提示',
+            nzContent: '暂不可解除小程序的授权，请联系桔牛客服010-80441899解决'
+        });
+    }
+    errorAlert(err) {
+        this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: err
         });
     }
 }

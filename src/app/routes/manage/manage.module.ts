@@ -23,6 +23,7 @@ import { WxStoreComponent } from './wxStore/wxStore.component';
 import { MatchingkoubeiComponent } from './matchingkoubei/matchingkoubei.component';
 import { KoubeiGLComponent } from './koubeiGL/koubeiGL.component';
 import { WechatTypeComponent } from './wechatType/wechatType.component';
+import { WechatOrderComponent } from './wechatOrder/wechatOrder.component';
 
 
 
@@ -47,6 +48,7 @@ import { WechatTypeComponent } from './wechatType/wechatType.component';
         StaffCommissionListComponent,
         WxStoreComponent,
         MatchingkoubeiComponent,
+        WechatOrderComponent,
         RuleSettingComponent,
         KoubeiGLComponent
     ],

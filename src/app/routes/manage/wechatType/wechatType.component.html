@@ -1,23 +1,19 @@
 <nz-card nzTitle="小程序版本选择" style="overflow:hidden" [nzBordered]="false" [nzBodyStyle]="{'height':'100%','overflow': 'hidden','margin':'30px'}">
     <ul>
-        <li class="item-box">
+        <li class="item-box" *ngFor="let item of typeArr">
             <div class="itemHeadBox">
                 <div class="itemHead">
                     <div nz-col nzSpan="7" class="jiantou jiantou1"></div>
-                    <div nz-col nzSpan="10" style="text-align:center">通用版</div>
+                    <div nz-col nzSpan="10" style="text-align:center">{{item.versionName}}</div>
                     <div nz-col nzSpan="7" class="jiantou"></div>
                 </div>
             </div>
             <div class="itemImg"></div>
             <div class="itemBody">
-                <div class="icon-duihao iconfont">商品展示及购买</div>
-                <div class="icon-duihao iconfont">多种预约方式</div>
-                <div class="icon-duihao iconfont">会员开卡、充值、查看消费记录</div>
-                <div class="icon-duihao iconfont">各类营销玩法：拼图、秒杀、大转盘</div>
-                <div class="icon-duihao iconfont">店铺及手艺人信息展示</div>
+                <div class="icon-duihao iconfont" *ngFor="let obj of item.functionList">{{obj}}</div>
             </div>
 
-            <button class="buttons" nz-button nzType="primary" type="submit">免费版</button>
+            <button class="buttons" nz-button nzType="primary" type="submit" (click)="checkFun(item)">{{item.versionName}}</button>
         </li>
     </ul>
 </nz-card>

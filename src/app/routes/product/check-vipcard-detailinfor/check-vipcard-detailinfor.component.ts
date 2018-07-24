@@ -6,6 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { ProductService } from '../shared/product.service';
+import { Config } from '@shared/config/env.config';
 declare var PhotoClip: any;
 
 @Component({
@@ -351,7 +352,7 @@ export class CheckVipcardDetailinforComponent implements OnInit {
             if (res.success) {
                 this.isVisible = false;
                 this.backgroundId = res.data.pictureId;
-                this.backGroundImg = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.backgroundId}/resize_${250}_${150}/mode_fill`;
+                this.backGroundImg = Config.OSS_IMAGE_URL+`${this.backgroundId}/resize_${250}_${150}/mode_fill`;
             } else {
                 this.modalSrv.error({
                     nzTitle: '温馨提示',
@@ -416,7 +417,7 @@ export class CheckVipcardDetailinforComponent implements OnInit {
                     this.rebate = res.data.rules[0].rebate;
                     this.balance = res.data.rules[0].balance;//储值卡和计次卡
                     this.backgroundId = res.data.background;
-                    this.backGroundImg = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.backgroundId}/resize_${250}_${150}/mode_fill`;
+                    this.backGroundImg = Config.OSS_IMAGE_URL+`${this.backgroundId}/resize_${250}_${150}/mode_fill`;
                     this.applyStoreNames = res.data.rules[0].applyStoreNames;
                     this.applyProductNames = res.data.rules[0].applyProductNames;
 

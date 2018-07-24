@@ -7,6 +7,7 @@ import {STORES_INFO, ALIPAY_SHOPS} from "@shared/define/juniu-define";
 import {LocalStorageService} from "@shared/service/localstorage-service";
 import {NzModalService} from "ng-zorro-antd";
 import {StoresInforService} from "@shared/stores-infor/shared/stores-infor.service";
+import { Config } from '@shared/config/env.config';
 declare var swal: any;
 
 @Component({
@@ -1032,7 +1033,7 @@ export class ReserveComponent implements OnInit, AfterViewInit, AfterViewChecked
                                         craftsman2.avatar = craftsman1.headPortrait;
                                         // craftsman2.avatar = craftsman1.headPortrait.split('.png')[0] + '_78x58.png'
                                     } else {
-                                        craftsman2.avatar = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${craftsman1.headPortrait}/resize_50_50/mode_fill`
+                                        craftsman2.avatar = Config.OSS_IMAGE_URL+`${craftsman1.headPortrait}/resize_50_50/mode_fill`
                                     }
                                 } else {
                                     craftsman2.avatar = '';

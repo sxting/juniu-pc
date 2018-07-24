@@ -1,0 +1,116 @@
+<g2-card>
+    <nz-tabset>
+        <nz-tab nzTitle="扫码核销" (nzClick)="tabclick()">
+            <div class="member-top-middle">
+                <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false" (storeIdOutput)="selectStoreInfo($event)"></jn-stores-infor>
+            </div>
+            <div class="member-top-middle">
+                <nz-form-item>
+                    <nz-form-label style="float:left;">选择技师</nz-form-label>
+                    <nz-form-control style="float:left;width: 300px;">
+                        <div nz-col nzSpan="17">
+                            <nz-select [(ngModel)]="staffId" (ngModelChange)="selectStaff($event)" style="width:200px;" [nzPlaceHolder]="'请选择一个技师'" [nzShowSearch]="true">
+                                <nz-option *ngFor="let i of staffGroupData; let idx = index" [nzLabel]="i.staffName" [nzValue]="i.staffId"></nz-option>
+                            </nz-select>
+                        </div>
+                        <div nz-col nzSpan="7">
+                            <nz-form-item>
+                                <nz-form-label style="display: inline-block">指定技师</nz-form-label>
+                                <nz-form-control style="display: inline-block;width:10px;">
+                                    <input type="checkbox" [(ngModel)]="checkbox">
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div class="member-top-middle">
+                <nz-form-item>
+                    <nz-form-label style="display: inline-block">选择小工</nz-form-label>
+                    <nz-form-control style="display: inline-block">
+                        <nz-select [(ngModel)]="coolie" (ngModelChange)="selectCoolie($event)" style="width: 300px;" [nzPlaceHolder]="'请选择一个小工'" [nzShowSearch]="true">
+                            <nz-option *ngFor="let i of staffGroupData; let idx = index" [nzLabel]="i.staffName" [nzValue]="i.staffId"></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div class="sm-button {{checkoutShow?'sm-button2':''}} " (click)="scanPay()">扫描顾客核销码</div>
+            <!-- <div class="gai"></div> -->
+            <input type="text" nz-input id="authCode" [(ngModel)]="authCode" maxlength="16" name="authCode" (ngModelChange)="goToSubmitOrder($event)"
+                class="input pay-code-input">
+        </nz-tab>
+        <nz-tab nzTitle="手动核销" (nzClick)="tabclick()">
+            <div class="member-top-middle">
+                <jn-stores-infor [ifStoresAll]="false" [moduleId]="moduleId" (storeIdOutput)="selectStoreInfo($event)"></jn-stores-infor>
+            </div>
+            <div class="member-top-middle">
+                <span style="margin-right:10px;">核销券码:</span>
+                <input type="text" id="tauthCode" style="width:300px;" maxlength="16" nz-input [(ngModel)]="tauthCode" placeholder="请输入顾客核销码">
+            </div>
+            <div class="member-top-middle">
+                <nz-form-item>
+                    <nz-form-label style="float:left;">选择技师</nz-form-label>
+                    <nz-form-control style="float:left;width: 300px;">
+                        <div nz-col nzSpan="17">
+                            <nz-select [(ngModel)]="staffId" (ngModelChange)="selectStaff($event)" style="width:200px;" [nzPlaceHolder]="'请选择一个技师'" [nzShowSearch]="true">
+                                <nz-option *ngFor="let i of staffGroupData; let idx = index" [nzLabel]="i.staffName" [nzValue]="i.staffId"></nz-option>
+                            </nz-select>
+                        </div>
+                        <div nz-col nzSpan="7">
+                            <nz-form-item>
+                                <nz-form-label style="display: inline-block">指定技师</nz-form-label>
+                                <nz-form-control style="display: inline-block;width:10px;">
+                                    <input type="checkbox" [(ngModel)]="checkbox">
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div class="member-top-middle">
+                <nz-form-item>
+                    <nz-form-label style="display: inline-block">选择小工</nz-form-label>
+                    <nz-form-control style="display: inline-block">
+                        <nz-select [(ngModel)]="coolie" (ngModelChange)="selectCoolie($event)" style="width: 300px;" [nzPlaceHolder]="'请选择一个小工'" [nzShowSearch]="true">
+                            <nz-option *ngFor="let i of staffGroupData; let idx = index" [nzLabel]="i.staffName" [nzValue]="i.staffId"></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div class="sm-button" (click)="goToSubmitOrder()">点击核销</div>
+        </nz-tab>
+    </nz-tabset>
+    <div class="manage-home-bottom">
+        <div class="manage-title">近10条核销记录</div>
+        <div class="manage-home-bottom-main">
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <td>核销时间</td>
+                            <td>核销门店</td>
+                            <td>核销类型</td>
+                            <td>核销商品</td>
+                            <td>核销金额(元)</td>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="voucherData.length>0">
+                        <tr *ngFor="let item of voucherData">
+                            <td>{{item.usedDate}}</td>
+                            <td>{{item.usedStoreName}}</td>
+                            <td>{{item.voucherType}}</td>
+                            <td>{{item.productName}}</td>
+                            <td>{{item.price/100}}</td>
+                        </tr>
+
+                    </tbody>
+                    <tr *ngIf="voucherData.length === 0">
+                        <td colspan="5">暂无数据</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</g2-card>

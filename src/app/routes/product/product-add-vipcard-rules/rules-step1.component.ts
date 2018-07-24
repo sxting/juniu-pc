@@ -4,6 +4,7 @@ import { RulesTransferService } from "./rules-transfer.service";
 import { UploadService } from '@shared/upload-img';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ProductService } from '../shared/product.service';
+import { Config } from '@shared/config/env.config';
 declare var PhotoClip: any;
 
 
@@ -95,7 +96,7 @@ export class RulesStep1Component implements OnInit {
             this.isVisible = false;
             let width = 104, height = 104;
             this.picId = res.data.pictureId;
-            this.imagePath = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.picId}/resize_${width}_${height}/mode_fill`;
+            this.imagePath = Config.OSS_IMAGE_URL+`${this.picId}/resize_${width}_${height}/mode_fill`;
 
             this.formData.cardConfigName = cardConfigName;
             this.formData.cardType = cardType;

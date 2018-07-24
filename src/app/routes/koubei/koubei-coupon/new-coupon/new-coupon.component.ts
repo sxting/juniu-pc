@@ -9,6 +9,7 @@ import { ALIPAY_SHOPS, CITYLIST } from "@shared/define/juniu-define";
 import { NzModalService } from "ng-zorro-antd";
 import {FunctionUtil} from "@shared/funtion/funtion-util";
 import {Title} from "@angular/platform-browser";
+import { Config } from '@shared/config/env.config';
 
 @Component({
   selector: 'app-new-coupon',
@@ -192,8 +193,8 @@ export class NewCouponComponent implements OnInit {
                     this.totalNumber = res.data.marketingInfo.budgetTotal;
                     this.autoRenewal = res.data.marketingInfo.autoDelayFlag === 'Y' ? true : false;
                     this.imageId = res.data.voucherInfos[0].voucherLogo.logoId;
-                    this.imagePath = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.imageId}/resize_${width}_${height}/mode_fill`;
-                    this.logoUrl= `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.imageId}/resize_${width}_${height}/mode_fill`;
+                    this.imagePath = Config.OSS_IMAGE_URL+`${this.imageId}/resize_${width}_${height}/mode_fill`;
+                    this.logoUrl= Config.OSS_IMAGE_URL+`${this.imageId}/resize_${width}_${height}/mode_fill`;
 
                     /*领取限制*/
                     this.perCouponNumber = res.data.marketingInfo.userWinCount;
@@ -376,7 +377,7 @@ export class NewCouponComponent implements OnInit {
             // console.log(result);
             this.imageId = this.uploadImageResult.pictureId;
             let width = 78, height = 58;
-            this.imagePath = `https://oss.juniuo.com/juniuo-pic/picture/juniuo/${this.imageId}/resize_${width}_${height}/mode_fill`;
+            this.imagePath = Config.OSS_IMAGE_URL+`${this.imageId}/resize_${width}_${height}/mode_fill`;
         });
     }
 

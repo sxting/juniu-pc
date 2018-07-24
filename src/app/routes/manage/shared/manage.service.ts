@@ -282,7 +282,7 @@ export class ManageService {
   }
   wxStatus2(data: any) {
     let apiUrl = 'https://w.juniuo.com/wxapp/checkAuth.json';
-    return this.http.get( apiUrl, data).map((response: Response) => response).catch(error => {
+    return this.http.get(apiUrl, data).map((response: Response) => response).catch(error => {
       return Observable.throw(error);
     });
   }
@@ -866,6 +866,61 @@ export class ManageService {
   //查找要展示的会员卡规则
   listCardConfigByIsWxShow(data: any) {
     let apiUrl = Config.API + 'member/config/wxStoreTypes.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+  //
+
+  listWxappTemplates() {
+    let apiUrl = Config.API + '/marketing/wxapp/listWxappTemplates.json';
+    return this.http.get(apiUrl)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  chooseTpl(data) {
+    let apiUrl = Config.API + '/marketing/wxapp/chooseTpl.json';
+    return this.http.post(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  wxappStatus(data) {
+    let apiUrl = Config.API + '/marketing/wxapp/status.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  queryAuditReason(data) {
+    let apiUrl = Config.API + '/marketing/wxapp/queryAuditReason.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+  //描述:小程序订单列表
+  wxorderList(data: any) {
+    let apiUrl = Config.API + 'order/wxorder/list.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+  //描述:小程序订单详情
+  wxorderDetail(data: any) {
+    let apiUrl = Config.API + 'order/wxorder/detail.json';
     return this.http.get(apiUrl, data)
       .map((response: Response) => response)
       .catch(error => {
