@@ -276,9 +276,9 @@
             </ng-container>
         </nz-form-control>
     </nz-form-item>
-    <nz-form-item (click)="submit()">
+    <nz-form-item >
         <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
-            <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">提交</button>
+            <button nz-button nzType="primary" type="submit" [nzLoading]="submitting" (click)="submit()">提交</button>
         </nz-form-control>
     </nz-form-item>
 </nz-card>
