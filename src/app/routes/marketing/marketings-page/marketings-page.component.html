@@ -82,7 +82,7 @@
         </nz-form-item>
 
         <nz-form-item [class.dis-none]="paramsId == '03' || paramsId == '04'">
-            <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="activity_name">活动日期</nz-form-label>
+            <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="active_date">活动日期</nz-form-label>
             <nz-form-control nzXs="24" nzSm="15" nzMd="15">
                 <nz-range-picker [nzDisabled]="marketingStatus === 'RUNING' || marketingStatus === 'STOP'" [nzFormat]="'yyyy-MM-dd'" formControlName="active_date" [nzDisabledDate]="disabledDate"></nz-range-picker>
             </nz-form-control>
