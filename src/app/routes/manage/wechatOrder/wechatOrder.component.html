@@ -85,7 +85,7 @@
             </tr>
             <tr>
                 <td class="">订单备注</td>
-                <td class="" colspan="3">-</td>
+                <td class="" colspan="3">{{detailData.memo ? detailData.memo : '-'}}</td>
             </tr>
         </table>
     </div>
@@ -100,7 +100,7 @@
                     <td class="">商品价格</td>
                     <td class="trans-status" style="width:200px;">{{item.price/100}}</td>
                     <td class="">核销状态</td>
-                    <td class="trans-status" style="width:200px;">{{item.voucherStatus}}</td>
+                    <td class="trans-status" style="width:200px;">{{item.voucherStatusName}}</td>
                 </tr>
                 <tr>
                     <td class="">核销时间</td>
