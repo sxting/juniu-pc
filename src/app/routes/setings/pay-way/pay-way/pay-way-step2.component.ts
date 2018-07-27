@@ -60,6 +60,7 @@ export class PayWayStep2Component implements OnInit {
     get tel() { return this.form.controls['tel']; }
     get email() { return this.form.controls['email']; }
     get service_tel() { return this.form.controls['service_tel']; }
+    get yingyezz_name() { return this.form.controls['yingyezz_name']; }
 
     formInit() {
         let data = this.item.itemData;
@@ -73,6 +74,7 @@ export class PayWayStep2Component implements OnInit {
             console.log(this.shanghuAddress);
             this.form = this.fb.group({
                 hangye_type: [data.merchantDetail.industrId + '', Validators.required],
+                yingyezz_name: [data.merchantName + '', Validators.required],
                 yingyezz_code: [data.merchantDetail.businessLicense, Validators.required],
                 shanghu_jc: [data.merchantDetail.merchantShortName, Validators.required],
                 shanghu_address: [this.shanghuAddress, Validators.required],
@@ -86,6 +88,7 @@ export class PayWayStep2Component implements OnInit {
         } else {
             this.form = this.fb.group({
                 hangye_type: ['', Validators.required],
+                yingyezz_name: ['', Validators.required],
                 yingyezz_code: ['', Validators.required],
                 shanghu_jc: ['', Validators.required],
                 shanghu_address: [null, Validators.required],

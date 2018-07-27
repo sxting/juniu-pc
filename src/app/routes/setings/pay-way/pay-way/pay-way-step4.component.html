@@ -89,20 +89,21 @@
         </nz-form-control>
     </nz-form-item>
 
-  <nz-form-item class="form-item">
-    <nz-form-label class="lh-62" nzSpan="5" nzRequired>企业信用信息公示系统截图</nz-form-label>
-    <nz-form-control [nzSpan]="19">
-      <div class="step4-img-box">
-        <img class="upload-img" src="./assets/img/upload.png">
-        <div class="example" *ngIf="spinBoolean && activeIndex === 8">
-          <nz-spin [nzSize]="'large'"></nz-spin>
-        </div>
-        <input type="file" accept="image" formControlName="image_id8" (change)="uploadImage($event, 8)">
-        <img class="image" [src]="item.imagePath8" *ngIf="item.imagePath8">
-      </div>
-      <div class="img8-tip">企业信用信息公示系统截图，查询地址：<a target="_blank" href="http://www.gsxt.gov.cn/index.html">http://www.gsxt.gov.cn/index.html</a></div>
-    </nz-form-control>
-  </nz-form-item>
+    <nz-form-item class="form-item">
+        <nz-form-label class="lh-62" nzSpan="5" nzRequired>企业信用信息公示系统截图</nz-form-label>
+        <nz-form-control [nzSpan]="19">
+            <div class="step4-img-box img4-box">
+              <img class="upload-img" src="./assets/img/upload.png">
+              <div class="example" *ngIf="spinBoolean && activeIndex === 8">
+                <nz-spin [nzSize]="'large'"></nz-spin>
+              </div>
+              <input type="file" accept="image" formControlName="image_id8" (change)="uploadImage($event, 8)">
+              <img class="image" [src]="item.imagePath8" (click)="onImgClick(alertBigImg, item.image_id8, item.imagePath8)">
+              <i class="icon-magnifier-add"></i>
+            </div>
+            <div class="img8-tip">企业信用信息公示系统截图，查询地址：<a target="_blank" href="http://www.gsxt.gov.cn/index.html">http://www.gsxt.gov.cn/index.html</a></div>
+        </nz-form-control>
+    </nz-form-item>
 
   <nz-form-item>
         <nz-form-control [nzSpan]="19" [nzOffset]="5">
