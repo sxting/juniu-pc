@@ -30,6 +30,7 @@
                             <td>商品名称</td>
                             <td>订单状态</td>
                             <td>订单金额(元)</td>
+                            <td>实付金额(元)</td>
                             <td>操作</td>
                         </tr>
                     </thead>
@@ -43,6 +44,7 @@
                                 white-space: nowrap;width:200px;    margin: 0 auto;">{{item.productInfo}}</div>
                             </td>
                             <td>{{item.statusName}}</td>
+                            <td>{{item.money/100}}</td>
                             <td>{{item.paidMoney/100}}</td>
                             <td>
                                 <span class="buttons" (click)="getwxorderDetail(item.orderId,chakanxiangqing)">查看详情</span>
@@ -81,7 +83,7 @@
                 <td class="">购买门店</td>
                 <td class="" style="width:220px;">{{detailData?.storeName}}</td>
                 <td class="">订单金额</td>
-                <td class="" style="width:220px;">{{detailData?.paidMoney/100}}</td>
+                <td class="" style="width:220px;">{{detailData?.money/100}}</td>
             </tr>
             <tr>
                 <td class="">订单备注</td>
