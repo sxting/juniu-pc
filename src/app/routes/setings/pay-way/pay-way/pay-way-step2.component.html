@@ -9,6 +9,15 @@
         </nz-form-control>
     </nz-form-item>
     <nz-form-item>
+      <nz-form-label nzSpan="5" nzRequired nzFor="yingyezz_name">营业执照名称</nz-form-label>
+      <nz-form-control nzSpan="16">
+        <nz-input-group nzCompact>
+          <input nz-input formControlName="yingyezz_name" placeholder="请输入营业执照名称">
+        </nz-input-group>
+        <nz-form-explain class="error-color" *ngIf="yingyezz_name.dirty && yingyezz_name.errors">请输入正确的营业执照名称</nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
         <nz-form-label nzSpan="5" nzRequired nzFor="yingyezz_code">营业执照编码</nz-form-label>
         <nz-form-control nzSpan="16">
             <nz-input-group nzCompact>

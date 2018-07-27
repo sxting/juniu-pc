@@ -184,6 +184,7 @@ export class PayWayStep4Component implements OnInit {
     let item = this.item;
     console.dir(item);
     let data: any = {
+      merchantName: item['yingyezz_name'],
       // activateStatus: '',
       // activateStatusRemark: '',
       // examineStatus: '',

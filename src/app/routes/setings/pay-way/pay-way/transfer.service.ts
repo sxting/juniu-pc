@@ -28,7 +28,7 @@ export class TransferService {
     image_id6: string;
     imagePath7: string = '/assets/img/sfz_back.jpg';
     image_id7: string;
-    imagePath8: string;
+    imagePath8: string = '/assets/img/qyxyxxjt.png';
     image_id8: string;
 
     again() {
