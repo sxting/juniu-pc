@@ -106,9 +106,9 @@
                 </tr>
                 <tr>
                     <td class="">核销时间</td>
-                    <td class="" style="width:220px;">{{item.dateCreated}}</td>
+                    <td class="" style="width:220px;">{{item?.usedDate?item?.usedDate:''}}</td>
                     <td class="">核销门店</td>
-                    <td class="" colspan="3">{{detailData?.storeName}}</td>
+                    <td class="" colspan="3">{{item?.usedStoreName}}</td>
                 </tr>
             </table>
         </div>
