@@ -1,0 +1,68 @@
+<page-header></page-header>
+<div>
+    <div class="existing-main">
+        <div class="member-top-middle">
+            <span>拼团类型</span>
+            <!-- <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth" (storeListPush)="storeListPush($event)"
+      (storeIdOutput)="getStoreId($event)"></jn-stores-infor> -->
+            <nz-select style="width: 386px;margin-right:50px;" [(ngModel)]="selectedOption" (ngModelChange)="selectStoreInfo($event)"
+                [nzPlaceHolder]="'全部拼团'" [nzShowSearch]="true">
+                <nz-option [nzLabel]="'全部'" [nzValue]="'all'">
+                </nz-option>
+                <nz-option *ngFor="let item of peopleNumbers" [nzLabel]="item + '人团'" [nzValue]="item">
+                </nz-option>
+            </nz-select>
+            <span>活动执行日期</span>
+            <!-- <nz-date-picker style="width: 138px;" [(ngModel)]="_startTime" (ngModelChange)="_startTime=$event;_startValueChange($event)"
+                nzShowTime></nz-date-picker> -->
+                <nz-range-picker  (ngModelChange)="onChange($event)" nzShowTime></nz-range-picker>
+            <!-- <nz-datepicker style="width: 138px;" (ngModelChange)="_startTime=$event;_startValueChange($event)"
+                [ngModel]="_startTime" [nzDisabledDate]="_disabledStartDate1" [nzFormat]="'YYYY-MM-DD'" [nzPlaceHolder]="'开始时间'"></nz-datepicker>
+            <nz-datepicker style="width: 138px;" (ngModelChange)="_endTime=$event;_endValueChange($event)"
+                [ngModel]="_endTime" [nzDisabledDate]="_disabledEndDate2" [nzFormat]="'YYYY-MM-DD'" [nzPlaceHolder]="'截止时间'"></nz-datepicker> -->
+            <!-- <select (change)="selectStoreInfo($event.target.value)">
+                <option *ngIf="storeShow" [value]="ALL">请选择一个门店</option>
+                <option *ngFor="let item of StoresInfo" [value]="item.storeId">{{item.storeName}}</option>
+            </select> -->
+        </div>
+        <ul class="btns_switch clearfix">
+            <li [class.btns_active]="statusFlag == 0" (click)="onStatusClick(0)">进行中</li>
+            <li [class.btns_active]="statusFlag == 1" (click)="onStatusClick(1)">未开始</li>
+            <li [class.btns_active]="statusFlag == 2" (click)="onStatusClick(2)">已结束</li>
+
+        </ul>
+
+        <div class="existing-table">
+            <table class="existingGroups-table">
+                <thead>
+                    <tr>
+                        <td>拼团类型</td>
+                        <td>活动名称</td>
+                        <td>活动起止时间</td>
+                        <td>拼团价(元)</td>
+                        <td>操作</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of resArr">
+                        <td>{{item.peopleNumber}}人团</td>
+                        <td>{{item.pinTuanName}}</td>
+                        <td>{{item.startTime}}--{{item.endTime}}</td>
+                        <td>{{item.amount/100}}</td>
+                        <td>
+                            <span class="buttons" (click)="chankanXQ(item.pinTuanId)">{{statusFlag===1?'编辑':'查看详情'}}</span>
+                            <span class="buttons" *ngIf="statusFlag===1" (click)="pintuanStartHttp(item.pinTuanId)">立即开始</span>
+                            <span class="buttons" *ngIf="statusFlag!==2" (click)="caozuo(item.pinTuanId)">{{statusFlag===1?'下架':'结束拼团'}}</span>
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="nzPaginationBox">
+            <nz-pagination class="nzPagination" [nzTotal]="countTotal" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
+        </div>
+        <!-- <p-paginator rows="10" (onPageChange)="paginate($event)" totalRecords="{{countTotal}}"></p-paginator> -->
+    </div>
+
+</div>
