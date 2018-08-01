@@ -230,37 +230,37 @@ export class CraftsmanManageComponent implements OnInit {
             this.form.controls[ i ].markAsDirty();
             this.form.controls[ i ].updateValueAndValidity();
         }
-        // if (this.form.invalid) return;
+        if (this.form.invalid) return;
         this.submitting = true;
 
-        // if(!this.imageId) {
-        //     this.modalSrv.error({
-        //         nzTitle: '温馨提示',
-        //         nzContent: '请上传头像'
-        //     });
-        //     return false;
-        // }
-        // if(!this.staffStoreId) {
-        //     this.modalSrv.error({
-        //         nzTitle: '温馨提示',
-        //         nzContent: '请选择所属门店'
-        //     });
-        //     return false;
-        // }
-        // if(!this.careerBegin) {
-        //     this.modalSrv.error({
-        //         nzTitle: '温馨提示',
-        //         nzContent: '请选择从业起始时间'
-        //     });
-        //     return false;
-        // }
-        // if(!this.careers) {
-        //     this.modalSrv.error({
-        //         nzTitle: '温馨提示',
-        //         nzContent: '请选择职业'
-        //     });
-        //     return false;
-        // }
+        if(!this.imageId) {
+            this.modalSrv.error({
+                nzTitle: '温馨提示',
+                nzContent: '请上传头像'
+            });
+            return false;
+        }
+        if(!this.staffStoreId) {
+            this.modalSrv.error({
+                nzTitle: '温馨提示',
+                nzContent: '请选择所属门店'
+            });
+            return false;
+        }
+        if(!this.careerBegin) {
+            this.modalSrv.error({
+                nzTitle: '温馨提示',
+                nzContent: '请选择从业起始时间'
+            });
+            return false;
+        }
+        if(!this.careers) {
+            this.modalSrv.error({
+                nzTitle: '温馨提示',
+                nzContent: '请选择职业'
+            });
+            return false;
+        }
 
 
         this.nickName = this.form.value.nick_name;
