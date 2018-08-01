@@ -188,7 +188,7 @@ export class OrderGroupsComponent implements OnInit {
                         orderNo: groupNo,
                         token: token
                     }
-    
+
                     that.koubeiService.pintuanRefund(data).subscribe(
                         (res: any) => {
                             if (res.success) {
@@ -208,7 +208,7 @@ export class OrderGroupsComponent implements OnInit {
                         error => this.errorAlter(error)
                     )
                 }
-              });
+            });
         }
     }
     //订单详情
@@ -312,7 +312,8 @@ export class OrderGroupsComponent implements OnInit {
     }
 
     paginateVouchers(e: any) {
-
+        this.pageIndex1 = e;
+        this.voucherListHttp()
     }
     voucherListHttp() {
         let data = {
