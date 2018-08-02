@@ -87,6 +87,8 @@ export class WxreleaseGroupsComponent implements OnInit {
     interval$: any;
     interval$2: any;
     status;
+
+    radioValue:any;
     constructor(
         private wechatService: WechatService,
         private router: Router,
@@ -153,8 +155,8 @@ export class WxreleaseGroupsComponent implements OnInit {
                 pinTuanId: this.pinTuanId,
                 pinTuanName: this.pinTuanName.value,
                 timeLimit: this.timeLimit.value,
-                originalPrice:  NP.times(this.originalPrice.value ,100),
-                presentPrice: NP.times(this.presentPrice.value , 100),
+                originalPrice: NP.times(this.originalPrice.value, 100),
+                presentPrice: NP.times(this.presentPrice.value, 100),
                 peopleNumber: this.ctrsBoo ? this.peopleNumber.value : this.peopleNumber2,
                 inventory: this.inventory.value,
                 startTime: this.startTime,
@@ -450,8 +452,8 @@ export class WxreleaseGroupsComponent implements OnInit {
                     let self = this;
                     let pinTuanName = res.data.pinTuanName ? res.data.pinTuanName : null;
                     let timeLimit = res.data.timeLimit ? res.data.timeLimit : null;
-                    let originalPrice = res.data.originalPrice ? NP.divide(res.data.originalPrice , 100) : null;
-                    let presentPrice = res.data.presentPrice ? NP.divide(res.data.presentPrice , 100) : null;
+                    let originalPrice = res.data.originalPrice ? NP.divide(res.data.originalPrice, 100) : null;
+                    let presentPrice = res.data.presentPrice ? NP.divide(res.data.presentPrice, 100) : null;
                     let peopleNumber = res.data.peopleNumber ? res.data.peopleNumber : null;
                     let inventory = res.data.inventory ? res.data.inventory : null;
                     let mock = res.data.mock ? res.data.mock : false;
@@ -855,6 +857,17 @@ export class WxreleaseGroupsComponent implements OnInit {
         this.modalSrv.error({
             nzTitle: '温馨提示',
             nzContent: err
+        });
+    }
+
+    checkProduct(tpl: TemplateRef<{}>) {
+        this.modalSrv.create({
+            nzTitle: '选择商品',
+            nzContent: tpl,
+            nzWidth: '600px',
+            nzOnOk: () => {
+                console.log(this.radioValue)
+            }
         });
     }
 }
