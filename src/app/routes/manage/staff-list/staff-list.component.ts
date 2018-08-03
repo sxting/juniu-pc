@@ -162,11 +162,12 @@ export class StaffListComponent implements OnInit {
                     if(res.data.items.length > 0){
                       res.data.items.forEach(function (item: any) {
                         let storeName = '';
-                        if(item.pushChannel.length > 0){
-                          for(let i = 0; i < item.pushChannel.length; i++){
-                            item.hasSms = item.pushChannel[i] === 'SMS'? true : false;
-                            item.hasWechat = item.pushChannel[i] === 'WECHAT_PUB'? true : false;
-                          }
+                        if(item.pushChannel.length === 2){
+                          item.hasWechat = true;
+                          item.hasSms = true;
+                        }else if(item.pushChannel.length === 1){
+                          item.hasWechat = item.pushChannel[0] === 'WECHAT_PUB'? true : false;
+                          item.hasSms = item.pushChannel[0] === "SMS"? true : false;
                         }else {
                           item.hasSms = false;
                           item.hasWechat = false;
@@ -184,6 +185,7 @@ export class StaffListComponent implements OnInit {
                       });
                     }
                     that.staffListInfos = res.data.items;
+                    console.log(that.staffListInfos);
                     that.countTotal = res.data.page.countTotal;
                 } else {
                     this.modalSrv.error({

@@ -532,11 +532,10 @@ export class RuleSettingComponent implements OnInit {
       if (this.form.invalid) return;
 
       if(this.form.controls.type.value === 'RATE'){
-        this.checkRate = this.form.controls.assignRate.value == '' || this.form.controls.assignRate.value == null|| this.form.controls.normalRate.value == '' || this.form.controls.normalRate.value == null? false : true;
+        this.checkRate = this.form.controls.assignRate.value? true : false;
       }else {
-        this.checkRate = this.form.controls.deductMoney.value == '' || this.form.controls.deductMoney.value == null? false : true;
+        this.checkRate = this.form.controls.deductMoney.value? true : false;
       }
-
       if((!this.ifShowErrorTipsProduct || !this.ifShowErrorTipsCard || !this.ifShowErrorTipsSevice) && this.checkRate && !this.ifShowErrorStaffTips){
         if(this.deductRuleId){//编辑修改
           this.editStaffingRules(dataInfor);
