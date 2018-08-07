@@ -156,6 +156,14 @@ export class PayWayStep3Component implements OnInit {
         }
         if (this.form.invalid) return;
 
+        if(this.form.value.kaihuren != this.item['fuzer']) {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: '开户人必须为营业执照法人'
+          });
+          return;
+        }
+
         this.item = Object.assign(this.item, this.form.value);
 
         console.log(this.item);
