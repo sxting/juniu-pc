@@ -29,6 +29,7 @@ export class GroupListComponent implements OnInit {
   status: any = 'STARTED';
   peopleNumbers: any;
   selectedOption: any;
+  activityName:any;
   constructor(
     private wechatService: WechatService,
     private modalSrv: NzModalService,
@@ -68,19 +69,21 @@ export class GroupListComponent implements OnInit {
   }
   listHttp() {
     let data = {
-      peopleNumber: this.peopleNumber,
-      startTime: this.startTime,
-      endTime: this.endTime,
-      pageIndex: this.pageIndex,
+      activityName: this.activityName,
+      queryStartDate: this.startTime,
+      queryEndDate: this.endTime,
+      pageNo: this.pageIndex,
       pageSize: this.pageSize,
-      status: this.status
+      status: this.status,
+      platform:'WECHAT_SP',
+      timestamp : new Date().getTime()
     }
-    if (!data.startTime && !data.endTime) {
-      delete data.startTime;
-      delete data.endTime;
+    if (!data.queryStartDate && !data.queryEndDate) {
+      delete data.queryStartDate;
+      delete data.queryEndDate;
     }
-    if (!data.peopleNumber) {
-      delete data.peopleNumber;
+    if (!data.activityName) {
+      delete data.activityName;
     }
     if (!data.status) {
       delete data.status;
@@ -88,9 +91,8 @@ export class GroupListComponent implements OnInit {
     this.wechatService.pintuanList(data).subscribe(
       (res: any) => {
         if (res.success) {
-          this.peopleNumbers = res.data.peopleNumbers;
-          this.resArr = res.data.items;
-          this.countTotal = res.data.pageInfo.countTotal;
+          this.resArr = res.data.elements;
+          this.countTotal = res.data.totalPage;
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',
@@ -102,10 +104,14 @@ export class GroupListComponent implements OnInit {
       error => this.errorAlter(error)
     )
   }
-  chankanXQ(pinTuanId: any) {
-    this.router.navigate(['/koubei/groups/releaseGroups', { pinTuanId: pinTuanId, status: this.statusFlag }]);
+  search(){
+    this.pageIndex= 1 ;
+    this.listHttp();
   }
-  pintuanStartHttp(pinTuanId: any) {
+  chankanXQ(activityId: any) {
+    this.router.navigate(['/wechat/wxreleaseGroups', { pinTuanId: activityId, status: this.statusFlag }]);
+  }
+  pintuanStartHttp(activityId: any) {
 
     let that = this;
     this.modalSrv.confirm({
@@ -113,7 +119,8 @@ export class GroupListComponent implements OnInit {
       nzContent: '确认立即上架后，系统将自动系统默认把活动开始时间改为当前时间，是否确认此操作!',
       nzOnOk: () => {
         let data = {
-          pinTuanId: pinTuanId
+          activityId: activityId,
+          timestamp : new Date().getTime()
         }
         that.wechatService.pintuanStart(data).subscribe(
           (res: any) => {
@@ -163,7 +170,7 @@ export class GroupListComponent implements OnInit {
         if (res.success) {
           this.modalSrv.success({
             nzTitle: '成功!',
-            nzContent: '这个活动已经开始.'
+            nzContent: '这个活动已经结束.'
           });
           this.listHttp();
         } else {

@@ -10,10 +10,12 @@ import { _HttpClient } from '@delon/theme';
 
 @Injectable()
 export class WechatService {
+    api: any = 'http://192.168.199.21:8080/'
     constructor(private http: _HttpClient, private modalSrv: NzModalService) { }
     // 开始拼团活动
     pintuanStart(Params: any) {
-        let apiUrl = Config.API1 + 'pintuan-service/merchant/pintuan/start.json';
+        // let apiUrl = Config.API1 + '/merchant/activity/start.json';
+        let apiUrl = this.api + '/merchant/activity/start.json';
         let params = FunctionUtil.obectToURLSearchParams(Params);
         return this.http.get(apiUrl, Params)
             .map((response: Response) => response)
@@ -23,7 +25,8 @@ export class WechatService {
     }
     //停止拼团
     pintuanStop(Params: any) {
-        let apiUrl = Config.API1 + 'pintuan-service/merchant/pintuan/stop.json';
+        // let apiUrl = Config.API1 + '/merchant/activity/stop.json';
+        let apiUrl = this.api + '/merchant/activity/stop.json';
         let params = FunctionUtil.obectToURLSearchParams(Params);
         return this.http.get(apiUrl, Params)
             .map((response: Response) => response)
@@ -63,7 +66,9 @@ export class WechatService {
     }
     //现有拼团列表
     pintuanList(Params: any) {
-        let apiUrl = Config.API1 + 'pintuan-service//merchant/pintuan/list.json';
+        // let apiUrl = Config.API1 + '/merchant/activity/batchQuery.json';
+        let apiUrl = this.api + '/merchant/activity/batchQuery.json';
+
         let params = FunctionUtil.obectToURLSearchParams(Params);
         return this.http.get(apiUrl, Params)
             .map((response: Response) => response)
@@ -123,7 +128,7 @@ export class WechatService {
     }
     //拼团详情
     groupsDetail(Params?: any) {
-        let apiUrl = Config.API1 + 'pintuan-service/merchant/pintuan/detail.json';
+        let apiUrl = this.api + '/merchant/activity/detail.json';
         if (Params) {
             let params = FunctionUtil.obectToURLSearchParams(Params);
             return this.http.get(apiUrl, Params)
@@ -143,9 +148,9 @@ export class WechatService {
     groupsRelease(Params: any, status: any) {
         let apiUrl;
         if (status === '1') {
-            apiUrl = Config.API1 + 'pintuan-service/merchant/pintuan/modify.json';
+            apiUrl = this.api + '/merchant/activity/modify.json';
         } else {
-            apiUrl = Config.API1 + 'pintuan-service/merchant/pintuan/release.json';
+            apiUrl = this.api + '/merchant/activity/create.json';
         }
         ///merchant/pintuan/modify.json
         return this.http.post(apiUrl, Params)
