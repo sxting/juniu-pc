@@ -85,8 +85,14 @@ export class KoubeiProductListComponent implements OnInit {
             JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
         this.alipayPid = UserInfo.alipayPid;
         this.ifAlipayPidShow = this.alipayPid === '' || this.alipayPid === null ? false : true;
+
         // 请求口碑商品列表
-        this.getKoubeiProductListInfor(this.batchQuery);
+        if(this.ifAlipayPidShow){
+          this.refreshProductList();
+        }else{
+          this.getKoubeiProductListInfor(this.batchQuery);
+        }
+
         //检查商家登陆还是服务商登陆
         if(UserInfo.alipayOperatorType){
             if(UserInfo.alipayOperatorType == 'MERCHANT'||UserInfo.alipayOperatorType == 'MER_STAFF'){//商家
