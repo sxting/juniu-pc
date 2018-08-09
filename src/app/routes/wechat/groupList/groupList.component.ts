@@ -29,7 +29,7 @@ export class GroupListComponent implements OnInit {
   status: any = 'STARTED';
   peopleNumbers: any;
   selectedOption: any;
-  activityName:any;
+  activityName: any;
   constructor(
     private wechatService: WechatService,
     private modalSrv: NzModalService,
@@ -66,6 +66,8 @@ export class GroupListComponent implements OnInit {
   onChange(result: Date): void {
     this.startTime = this.formatDateTime(result[0], 'start');
     this.endTime = this.formatDateTime(result[1], 'end');
+    this.pageIndex = 1;
+    this.listHttp();
   }
   listHttp() {
     let data = {
@@ -75,12 +77,16 @@ export class GroupListComponent implements OnInit {
       pageNo: this.pageIndex,
       pageSize: this.pageSize,
       status: this.status,
-      platform:'WECHAT_SP',
-      timestamp : new Date().getTime()
+      peopleCount: this.peopleNumber,
+      platform: 'WECHAT_SP',
+      timestamp: new Date().getTime()
     }
     if (!data.queryStartDate && !data.queryEndDate) {
       delete data.queryStartDate;
       delete data.queryEndDate;
+    }
+    if (!data.peopleCount) {
+      delete data.peopleCount;
     }
     if (!data.activityName) {
       delete data.activityName;
@@ -93,6 +99,7 @@ export class GroupListComponent implements OnInit {
         if (res.success) {
           this.resArr = res.data.elements;
           this.countTotal = res.data.totalPage;
+          this.peopleNumbers = res.data.peopleCounts
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',
@@ -104,8 +111,8 @@ export class GroupListComponent implements OnInit {
       error => this.errorAlter(error)
     )
   }
-  search(){
-    this.pageIndex= 1 ;
+  search() {
+    this.pageIndex = 1;
     this.listHttp();
   }
   chankanXQ(activityId: any) {
@@ -120,7 +127,7 @@ export class GroupListComponent implements OnInit {
       nzOnOk: () => {
         let data = {
           activityId: activityId,
-          timestamp : new Date().getTime()
+          timestamp: new Date().getTime()
         }
         that.wechatService.pintuanStart(data).subscribe(
           (res: any) => {
@@ -205,12 +212,7 @@ export class GroupListComponent implements OnInit {
     let year = date.getFullYear();
     let month = date.getMonth() + 1;
     let day = date.getDate();
-    if (type === 'start') {
-      return year + '-' + (month.toString().length > 1 ? month : ('0' + month)) + '-' + (day.toString().length > 1 ? day : ('0' + day)) + ' 00:00:00';
-    }
-    if (type === 'end') {
-      return year + '-' + (month.toString().length > 1 ? month : ('0' + month)) + '-' + (day.toString().length > 1 ? day : ('0' + day)) + ' 23:59:59';
-    }
+    return year + '-' + (month.toString().length > 1 ? month : ('0' + month)) + '-' + (day.toString().length > 1 ? day : ('0' + day));
   }
   errorAlter(err: any) {
     this.modalSrv.error({

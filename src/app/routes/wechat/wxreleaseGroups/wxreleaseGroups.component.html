@@ -3,7 +3,7 @@
     <div class="desc" style="color: rgba(0, 0, 0, 0.85);margin-left: 0px;">老带新利器，发布拼团活动，通过邀请参与拼团的方式激活老用户同时拉新</div>
 </div>
 <nz-card nzTitle="基本信息" [nzBordered]="false" [nzBodyStyle]="{'padding.px': 12}">
-    <form nz-form [formGroup]="form" >
+    <form nz-form [formGroup]="form">
         <nz-form-item>
             <nz-form-label nzXs="24" nzFor="pinTuanName" nzSm="7" nzRequired>活动名称</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="8">
@@ -27,7 +27,9 @@
                 <nz-input-group nzSize="large" *ngIf="!shopboolean">
                     <button class="buttons" (click)="checkProduct(product)" nz-button>选择商品</button>
                 </nz-input-group>
-                <div class="radioBox" *ngIf="radioValue">{{radioValue.productNo}} <span></span> {{radioValue.productName}}</div><span *ngIf="radioValue" (click)="radioBottomFun()" class="radioBottom">删除</span>
+                <div class="radioBox" *ngIf="radioValue">{{radioValue.productNo}}
+                    <span></span> {{radioValue.productName}}</div>
+                <span *ngIf="radioValue" (click)="radioBottomFun()" class="radioBottom">删除</span>
                 <p class="product-tip">请选择参与砍价的商品，一旦发布，活动期间该商品不可修改</p>
             </nz-form-control>
         </nz-form-item>
@@ -55,6 +57,17 @@
                             <input type="radio" *ngIf="!canMofidy" disabled (click)="ctrsFun(item.num)" name="ctrs"> {{canMofidy?'':item.text}}
                         </span>
                         <input nz-input formControlName="peopleNumber" type="number" onkeyup="if(value>100)value=100;if(value<2)value=2;" [style.display]="ctrsBoo ? 'block' : 'none'">
+
+
+                        <!-- <nz-radio-group formControlName="peopleNumber" (ngModelChange)="ctrsFun($event)" >
+                            <label nz-radio [nzValue]="2">2</label>
+                            <label nz-radio [nzValue]="3">3</label>
+                            <label nz-radio [nzValue]="4">4</label>
+                            <label nz-radio [nzValue]="'zdy'">
+                                自定义
+                                <input type="text" nz-input *ngIf="ctrsBoo" style="width: 100px; float:inherit !important;height: 24px;">
+                            </label>
+                        </nz-radio-group> -->
                     </div>
                 </nz-input-group>
                 <p class="product-tip">规定时间内拼团达到指定人数，则拼团成功，否则拼团失败且立即退款</p>
@@ -141,13 +154,13 @@
             <nz-form-item>
                 <nz-form-label nzXs="24" nzFor="time" nzSm="7">活动日期</nz-form-label>
                 <nz-form-control nzXs="24" nzSm="12" nzMd="8">
-                    <nz-range-picker formControlName="time" nzShowTime></nz-range-picker>
+                    <nz-range-picker formControlName="time"></nz-range-picker>
                 </nz-form-control>
             </nz-form-item>
             <nz-form-item>
                 <nz-form-label nzXs="24" nzFor="time2" nzSm="7">核销截止日期</nz-form-label>
                 <nz-form-control nzXs="24" nzSm="12" nzMd="8">
-                    <nz-date-picker formControlName="time2" (ngModelChange)="endValueChange($event)" nzShowTime></nz-date-picker>
+                    <nz-date-picker formControlName="time2" (ngModelChange)="endValueChange($event)"></nz-date-picker>
                     <p class="product-tip">核销截止日期不能早于活动结束日期</p>
                 </nz-form-control>
             </nz-form-item>

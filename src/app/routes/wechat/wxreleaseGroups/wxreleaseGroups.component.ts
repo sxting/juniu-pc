@@ -101,8 +101,7 @@ export class WxreleaseGroupsComponent implements OnInit {
         private modalSrv: NzModalService,
         private route: ActivatedRoute,
     ) {
-        this.formReset();
-        this.getAllbuySearchHttp();
+
     }
     formReset() {
         this.form = this.fb.group({
@@ -191,7 +190,7 @@ export class WxreleaseGroupsComponent implements OnInit {
                     settleStartDate: this.startTime,
                     settleEndDate: this.validateEndTime,
                     storeIds: this.selectStoresIds.split(','),
-                    activityNotes: descriptions,
+                    activityNotes: buyerNotes,
                     enableMock: this.mock.value,
                     platform: 'WECHAT_SP',
                     picColl: this.picIds.split(','),
@@ -251,18 +250,18 @@ export class WxreleaseGroupsComponent implements OnInit {
     ngOnInit() {
         this.pinTuanId = this.route.snapshot.params['pinTuanId'];
         this.statusFlag = this.route.snapshot.params['status'];
-
         this.status = this.route.snapshot.params['status'];
-
-        if (this.pinTuanId) {
-            this.groupsDetailhttp(this.pinTuanId);
-        }
+        this.formReset();
+        this.getAllbuySearchHttp();
     }
     getAllbuySearchHttp() {
         this.wechatService.getAllbuySearch().subscribe(
             (res: any) => {
                 if (res.success) {
                     this.allProduct = res.data;
+                    if (this.pinTuanId) {
+                        this.groupsDetailhttp(this.pinTuanId);
+                    }
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -274,6 +273,7 @@ export class WxreleaseGroupsComponent implements OnInit {
         )
     }
     ctrsFun(num: any) {
+        console.log(num)
         if (num === 'zdy') {
             this.ctrsBoo = true;
         } else {
@@ -282,7 +282,8 @@ export class WxreleaseGroupsComponent implements OnInit {
             this.ctrsBoo = false;
         }
     }
-    cityNameFun() {
+    cityNameFun(choiseStoreIdList?: any) {
+
         let storeList = this.cityList;
         if (storeList) {
             CITYLIST.forEach(function (i: any) {
@@ -346,11 +347,49 @@ export class WxreleaseGroupsComponent implements OnInit {
                 this.allStoresIds += ',' + this.cityStoreList[i].stores[j].storeId;
             }
         }
-        if (this.selectStoresIds) {
+        if (this.selectStoresIds && !choiseStoreIdList) {
             this.selectStoresIds = this.selectStoresIds.substring(1);
             this.storesChangeNum = this.selectStoresIds.split(',').length;
             this.allShopsNumber = this.selectStoresIds.split(',').length;
         }
+
+        if (choiseStoreIdList) {
+            let self = this;
+            self.cityStoreList.forEach(function (city: any) {
+                city.change = false;
+                city.checked = false;
+                city.stores.forEach(function (store: any) {
+                    store.change = false;
+                });
+            });
+            /*初始化选中的门店*/
+            choiseStoreIdList.forEach(function (storeId: any, i: number) {
+                self.cityStoreList.forEach(function (city: any, j: number) {
+                    city.stores.forEach(function (store: any, k: number) {
+                        if (storeId === store.storeId) {
+                            store.change = true;
+                        }
+                    });
+                });
+            });
+            /*判断城市是否全选*/
+            self.cityStoreList.forEach(function (city: any, i: number) {
+                let storesChangeArr = [''];
+                city.stores.forEach(function (store: any, j: number) {
+                    if (store.change === true) {
+                        storesChangeArr.push(store.change);
+                    }
+                });
+                if (storesChangeArr.length - 1 === city.stores.length) {
+                    city.change = true;
+                    city.checked = true;
+                }
+                if (storesChangeArr.length > 1) {
+                    city.checked = true;
+                }
+            });
+        }
+
         this.shopboolean = true;
     }
     // 详细内容标题
@@ -486,7 +525,7 @@ export class WxreleaseGroupsComponent implements OnInit {
         let data;
         if (pinTuanId) {
             data = {
-                pinTuanId: pinTuanId
+                activityId: pinTuanId
             }
         } else {
             data;
@@ -496,21 +535,23 @@ export class WxreleaseGroupsComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     let self = this;
-                    let pinTuanName = res.data.pinTuanName ? res.data.pinTuanName : null;
+                    let pinTuanName = res.data.activityName ? res.data.activityName : null;
                     let timeLimit = res.data.timeLimit ? res.data.timeLimit : null;
-                    let originalPrice = res.data.originalPrice ? NP.divide(res.data.originalPrice, 100) : null;
-                    let presentPrice = res.data.presentPrice ? NP.divide(res.data.presentPrice, 100) : null;
-                    let peopleNumber = res.data.peopleNumber ? res.data.peopleNumber : null;
-                    let inventory = res.data.inventory ? res.data.inventory : null;
-                    let mock = res.data.mock ? res.data.mock : false;
+                    let originalPrice = res.data.product[0].originalPrice ? NP.divide(res.data.product[0].originalPrice, 100) : null;
+                    let presentPrice = res.data.product[0].activityPrice ? NP.divide(res.data.product[0].activityPrice, 100) : null;
+                    let peopleNumber = res.data.peopleCount ? res.data.peopleCount * 1 : null;
+                    if (peopleNumber > 4) this.ctrsFun('zdy')
+                    else this.ctrsFun(peopleNumber);
+                    let inventory = res.data.product[0].inventory ? res.data.product[0].inventory : null;
+                    let mock = res.data.enableMock === 'F' ? false : true;
                     let time = [];
-                    this._startTime = new Date(res.data.startTime);
-                    this._endTime = new Date(res.data.endTime);
+                    this._startTime = new Date(res.data.activityStartDate);
+                    this._endTime = new Date(res.data.activityEndDate);
                     time.push(this._startTime);
                     time.push(this._endTime);
-                    this.validateEndTime = res.data.validateEndTime;
+                    this.validateEndTime = res.data.settleEndDate;
 
-                    this._validateEndTime = new Date(res.data.validateEndTime);
+                    this._validateEndTime = new Date(res.data.settleEndDate);
                     this.form = this.fb.group({
                         pinTuanName: [pinTuanName, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
                         inventory: [inventory, [Validators.required, Validators.pattern(/^[1-9]\d*$/), Validators.minLength(1), Validators.maxLength(8)]],
@@ -523,8 +564,8 @@ export class WxreleaseGroupsComponent implements OnInit {
                         mock: [mock]
                     });
                     this.canMofidy = res.data.canMofidy;
-                    this.startTime = res.data.startTime;
-                    this.endTime = res.data.endTime;
+                    this.startTime = res.data.activityStartDate;
+                    this.endTime = res.data.activityEndDate;
 
                     let pictureDetails;
                     if (res.data.images) {
@@ -533,62 +574,31 @@ export class WxreleaseGroupsComponent implements OnInit {
                     self.pictureDetails = pictureDetails;
                     // this.storeIds = res.storeIds;
 
+
+                    this.allProduct.forEach(function (i: any) {
+                        i.productList.forEach(function (n: any) {
+                            if (n.productId === res.data.product[0].productId) {
+                                self.radioValue = n;
+                            }
+                        })
+                    })
                     /*门店选择*/
                     let choiseStoreIdList = res.data.storeIds;
                     self.storesChangeNum = choiseStoreIdList.length;
                     self.selectStoresIds = choiseStoreIdList.join(',');
-                    self.cityStoreList.forEach(function (city: any) {
-                        city.change = false;
-                        city.checked = false;
-                        city.stores.forEach(function (store: any) {
-                            store.change = false;
-                        });
-                    });
-                    /*初始化选中的门店*/
-                    choiseStoreIdList.forEach(function (storeId: any, i: number) {
-                        self.cityStoreList.forEach(function (city: any, j: number) {
-                            city.stores.forEach(function (store: any, k: number) {
-                                if (storeId === store.storeId) {
-                                    store.change = true;
-                                }
-                            });
-                        });
-                    });
-                    /*判断城市是否全选*/
-                    self.cityStoreList.forEach(function (city: any, i: number) {
-                        let storesChangeArr = [''];
-                        city.stores.forEach(function (store: any, j: number) {
-                            if (store.change === true) {
-                                storesChangeArr.push(store.change);
-                            }
-                        });
-                        if (storesChangeArr.length - 1 === city.stores.length) {
-                            city.change = true;
-                            city.checked = true;
-                        }
-                        if (storesChangeArr.length > 1) {
-                            city.checked = true;
-                        }
-                    });
+                    this.productStoreHttp(res.data.product[0].productId, choiseStoreIdList)
+
 
                     this.ifSelectAll = this.storesChangeNum == this.allShopsNumber ? true : false;//查看是否选中全选按钮
                     let descriptions: any = [];
                     let buyerNotes: any = [];
-                    let transforBuyerNotes: any = [];
                     let transforDescriptions: any = [];
-                    if (res.data.buyerNotes.length > 0) {
-                        buyerNotes = res.data.buyerNotes;
-                        self.editChangeData(buyerNotes, transforBuyerNotes);
-                    } else {
-                        transforBuyerNotes = self.buyerNotes;
-                    }
-                    if (res.descriptions.length > 0) {
-                        descriptions = res.data.descriptions;
+                    if (res.data.activityNotes.length > 0) {
+                        descriptions = res.data.activityNotes;
                         self.editChangeData(descriptions, transforDescriptions);
                     } else {
                         transforDescriptions = self.descriptions;
                     }
-                    self.buyerNotes = transforBuyerNotes;
                     self.descriptions = transforDescriptions;
                     // this.mock = res.mock;
                 } else {
@@ -929,7 +939,7 @@ export class WxreleaseGroupsComponent implements OnInit {
         this.storesChangeNum = 0;
         this.allShopsNumber = 0;
     }
-    productStoreHttp(productId: any) {
+    productStoreHttp(productId: any, choiseStoreIdList?: any) {
         let data = {
             productId: productId
         }
@@ -937,7 +947,7 @@ export class WxreleaseGroupsComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     this.cityList = res.data;
-                    this.cityNameFun();
+                    this.cityNameFun(choiseStoreIdList);
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
