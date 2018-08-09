@@ -46,7 +46,7 @@ export class WechatService {
     }
     //拼团效果列表
     effectList(Params: any) {
-        let apiUrl = Config.API1 + 'pintuan-service/merchant/pintuan/effect/list.json';
+        let apiUrl = this.api + '/merchant/activity/effect/batchQuery.json';
         let params = FunctionUtil.obectToURLSearchParams(Params);
         return this.http.get(apiUrl, Params)
             .map((response: Response) => response)
@@ -56,7 +56,7 @@ export class WechatService {
     }
     //拼团效果详情
     effectDetail(Params: any) {
-        let apiUrl = Config.API1 + 'pintuan-service/merchant/pintuan/effect/detail.json';
+        let apiUrl = this.api + '/merchant/activity/effect/detail.json';
         let params = FunctionUtil.obectToURLSearchParams(Params);
         return this.http.get(apiUrl, Params)
             .map((response: Response) => response)

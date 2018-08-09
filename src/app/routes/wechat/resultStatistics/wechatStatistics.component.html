@@ -21,16 +21,16 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let item of resData">
-                                <td>{{item.pinTuanName}}</td>
-                                <td>{{item.openedGroupNumber}}</td>
-                                <td>{{item.finishGroupNumber}}</td>
+                                <td>{{item.activityName}}</td>
+                                <td>{{item.openedGroupCount}}</td>
+                                <td>{{item.finishGroupCount}}</td>
                                 <td>{{item.chentuanlv}}%</td>
-                                <td>{{item.buyNumber}}</td>
-                                <td>{{item.settleNumber}}</td>
+                                <td>{{item.buyCount}}</td>
+                                <td>{{item.settleAmount}}</td>
                                 <td>{{item.hexiaolv}}%</td>
-                                <td>{{item.amount/100}}元</td>
+                                <td>{{item.settleAmount/100}}元</td>
                                 <td>
-                                    <span class="buttons" (click)="chakan(xiaoguotu,item.pinTuanId)">查看详情</span>
+                                    <span class="buttons" (click)="chakan(xiaoguotu,item.activityId)">查看详情</span>
                                     <!-- <span class="buttons" (click)="chakan(item.pinTuanId)">导出Excel</span> -->
                                 </td>
 

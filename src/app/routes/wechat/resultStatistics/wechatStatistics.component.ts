@@ -55,23 +55,24 @@ export class WechatStatisticsComponent implements OnInit {
     }
     effectListHttp() {
         let data = {
-            pageIndex: this.pageIndex,
-            pageSize: this.pageSize
+            pageNo: this.pageIndex,
+            pageSize: this.pageSize,
+            platform:'WECHAT_SP'
         }
 
         this.wechatService.effectList(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     if (res.data.items) {
-                        res.data.items.forEach(function (i: any) {
-                            i.hexiaolv = i.buyNumber === 0 ? 0 : ((i.settleNumber / i.buyNumber).toFixed(4));
-                            i.chentuanlv = i.openedGroupNumber === 0 ? 0 : ((i.finishGroupNumber / i.openedGroupNumber).toFixed(4));
+                        res.data.elements.forEach(function (i: any) {
+                            i.hexiaolv = i.buyCount === 0 ? 0 : ((i.settleCount / i.buyCount).toFixed(4));
+                            i.chentuanlv = i.openedGroupCount === 0 ? 0 : ((i.finishGroupCount / i.openedGroupCount).toFixed(4));
                             i.hexiaolv = i.hexiaolv * 100;
                             i.chentuanlv = i.chentuanlv * 100;
                         })
-                        this.resData = res.data.items;
+                        this.resData = res.data.elements;
                     }
-                    this.countTotal = res.data.pageInfo.countTotal;
+                    this.countTotal = res.data.totalPage;
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -84,13 +85,13 @@ export class WechatStatisticsComponent implements OnInit {
     }
     effectDetailHttp(pinTuanId: any) {
         let data = {
-            pinTuanId: pinTuanId,
+            activityId: pinTuanId,
         }
         this.wechatService.effectDetail(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     this.xiaoguoRes = res.data;
-                    this.xiaoguoRes.hexiaolv = this.xiaoguoRes.todayGroupNumber === 0 ? 0 : ((this.xiaoguoRes.totalSettleNumber / this.xiaoguoRes.todayGroupNumber).toFixed(4));
+                    this.xiaoguoRes.hexiaolv = this.xiaoguoRes.todayGroupCount === 0 ? 0 : ((this.xiaoguoRes.todaySettleCount / this.xiaoguoRes.todayGroupCount).toFixed(4));
                     this.xiaoguoRes.hexiaolv = this.xiaoguoRes.hexiaolv * 100;
                     this.Echart(res.data.amountView, 'echart_first', '收益金额', '#333');
                     this.Echart(res.data.groupView, 'echart_second', '团单成功率', '#333');
