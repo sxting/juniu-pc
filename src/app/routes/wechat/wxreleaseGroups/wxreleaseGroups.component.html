@@ -3,7 +3,7 @@
     <div class="desc" style="color: rgba(0, 0, 0, 0.85);margin-left: 0px;">老带新利器，发布拼团活动，通过邀请参与拼团的方式激活老用户同时拉新</div>
 </div>
 <nz-card nzTitle="基本信息" [nzBordered]="false" [nzBodyStyle]="{'padding.px': 12}">
-    <form nz-form [formGroup]="form" (ngSubmit)="submit()">
+    <form nz-form [formGroup]="form" >
         <nz-form-item>
             <nz-form-label nzXs="24" nzFor="pinTuanName" nzSm="7" nzRequired>活动名称</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="8">
@@ -24,9 +24,10 @@
         <nz-form-item>
             <nz-form-label nzXs="24" nzFor="inventory" nzSm="7" nzRequired>选择商品</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="8">
-                <nz-input-group nzSize="large">
+                <nz-input-group nzSize="large" *ngIf="!shopboolean">
                     <button class="buttons" (click)="checkProduct(product)" nz-button>选择商品</button>
                 </nz-input-group>
+                <div class="radioBox" *ngIf="radioValue">{{radioValue.productNo}} <span></span> {{radioValue.productName}}</div><span *ngIf="radioValue" (click)="radioBottomFun()" class="radioBottom">删除</span>
                 <p class="product-tip">请选择参与砍价的商品，一旦发布，活动期间该商品不可修改</p>
             </nz-form-control>
         </nz-form-item>
@@ -94,7 +95,7 @@
                 <nz-form-label nzXs="24" nzFor="presentPrice" nzSm="7">商品详情</nz-form-label>
                 <nz-form-control nzXs="24" nzSm="12" nzMd="12">
                     <juniu-upload-img [image]="pictureDetails" [uploadNum]="5" [syncAlipay]="syncAlipay" [bizType]="'shop'" [isClear]="isClear"
-                        (img)="getPictureDetails($event)"></juniu-upload-img>
+                        (img)="getPictureDetails2($event)"></juniu-upload-img>
                     <p class="product-tip">最多上传5张图片，推荐尺寸750*360，jpg/png/bmp格式。</p>
                 </nz-form-control>
             </nz-form-item>
@@ -160,8 +161,8 @@
                     <p class="product-tip">开启模拟成团后，若在规定时间之前未拼团成功，系统自动匹配虚拟顾客参与拼团，使得该拼团成功</p>
                 </nz-form-control>
             </nz-form-item>
-            <nz-form-item>
-                <nz-form-label nzXs="24" nzSm="7">选择口碑门店</nz-form-label>
+            <nz-form-item *ngIf="shopboolean">
+                <nz-form-label nzXs="24" nzSm="7">选择门店</nz-form-label>
                 <nz-form-control nzXs="24" nzSm="12" nzMd="8">
                     <span>{{storesChangeNum || 0}} 家门店</span>
                     <span class="space"></span>
@@ -174,7 +175,7 @@
             <nz-col [nzSpan]="7"> </nz-col>
 
             <nz-col [nzSpan]="12" *ngIf="canMofidy">
-                <button class="buttons" nz-button nzType="primary" [nzLoading]="submitting" type="submit">保存并发布</button>
+                <button class="buttons" nz-button nzType="primary" (click)="submit()" [nzLoading]="submitting" type="submit">保存并发布</button>
                 <button class="buttons" nz-button (click)="return()">返回</button>
             </nz-col>
 
@@ -182,22 +183,17 @@
     </form>
 </nz-card>
 <ng-template #product>
-    <div class="product">
+    <div class="product" style="height: 400px;overflow-y: auto;">
         <p>可选商品</p>
         <div class="productBox">
-            <nz-radio-group [(ngModel)]="radioValue">
-                <div>剪发</div>
-                <div class="productLabel">
-                    <label nz-radio [ngStyle]="style" nzValue="A">Option A</label>
-                    <label nz-radio [ngStyle]="style" nzValue="B">Option B</label>
-                    <label nz-radio [ngStyle]="style" nzValue="C">Option C</label>
+            <nz-radio-group [(ngModel)]="radioValue" (ngModelChange)="radioFun()">
+                <div *ngFor="let item of allProduct">
+                    <div>{{item.categoryName}}</div>
+                    <div class="productLabel">
+                        <label nz-radio [ngStyle]="style" *ngFor="let haha of item.productList" [nzValue]="haha">{{haha.productName}}</label>
+                    </div>
                 </div>
-                <div>剪发2</div>
-                <div class="productLabel">
-                    <label nz-radio [ngStyle]="style" nzValue="A">Option A</label>
-                    <label nz-radio [ngStyle]="style" nzValue="B">Option B</label>
-                    <label nz-radio [ngStyle]="style" nzValue="C">Option C</label>
-                </div>
+
             </nz-radio-group>
         </div>
     </div>
@@ -211,7 +207,7 @@
                         <input type="checkbox" [checked]="ifSelectAll" />
                         <span>全选</span>
                     </span>
-                    全部口碑门店
+                    全部门店
                 </p>
                 <div class="show_all_stores">
                     <div class="city-list" *ngFor="let city of cityStoreList; let cityIndex=index">
@@ -232,7 +228,7 @@
                 </div>
             </li>
             <li class="list">
-                <p class="head_store">已选口碑门店</p>
+                <p class="head_store">已选门店</p>
                 <div class="selected_stores">
                     <div class="city-list bbn" *ngFor="let city of cityStoreList">
                         <div *ngIf="city.checked == true">

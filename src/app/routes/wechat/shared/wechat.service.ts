@@ -10,7 +10,7 @@ import { _HttpClient } from '@delon/theme';
 
 @Injectable()
 export class WechatService {
-    api: any = 'http://192.168.199.21:8080/'
+    api: any = 'http://192.168.199.26:8080/'
     constructor(private http: _HttpClient, private modalSrv: NzModalService) { }
     // 开始拼团活动
     pintuanStart(Params: any) {
@@ -154,6 +154,24 @@ export class WechatService {
         }
         ///merchant/pintuan/modify.json
         return this.http.post(apiUrl, Params)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    //获取全部商品规则
+    getAllbuySearch() {
+        let apiUrl = Config.API + '/product/product/buySearch.json';
+        return this.http.get(apiUrl)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    //商品查门店  
+    productStore(data) {
+        let apiUrl = Config.API + 'product/product/productStore.json';
+        return this.http.get(apiUrl,data)
             .map((response: Response) => response)
             .catch(error => {
                 return Observable.throw(error);

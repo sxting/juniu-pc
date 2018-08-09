@@ -27,6 +27,7 @@ declare var swal: any;
 export class WxreleaseGroupsComponent implements OnInit {
     isEdit: boolean;
     showPics: any = [];
+    showPics2: any = [];
     ctArr: any = [{ num: 3, text: '3人' }, { num: 4, text: '4人' }, { num: 'zdy', text: '自定义' }];
     ctrsBoo: boolean = false;
     showStoreSelect: boolean = false;
@@ -37,6 +38,7 @@ export class WxreleaseGroupsComponent implements OnInit {
     pictureDetails: any;
     syncAlipay: string = 'F';
     isClear: boolean = false;
+    cityList: any;
     //表单
     pinTuanId: any;//拼团id
     // pinTuanName: any;//活动名称
@@ -49,7 +51,8 @@ export class WxreleaseGroupsComponent implements OnInit {
     endTime: any; //截止时间
     validateEndTime: any; //核销截止时间
     picIds: any = ''; //图片列表
-    shopIds: any;// 商家列表
+    picIds2: any = ''; //活动列表
+    storeIds: any;// 商家列表
     buyerNotes: any[] = [{ title: '', details: [{ item: '' }] }];//购买须知
     descriptions: any[] = [{ title: '', details: [{ item: '' }] }];//详细内容
     // mock: any = false; //模拟拼团
@@ -87,8 +90,9 @@ export class WxreleaseGroupsComponent implements OnInit {
     interval$: any;
     interval$2: any;
     status;
-
-    radioValue:any;
+    allProduct: any;
+    radioValue: any;
+    shopboolean: any = false;;
     constructor(
         private wechatService: WechatService,
         private router: Router,
@@ -98,6 +102,7 @@ export class WxreleaseGroupsComponent implements OnInit {
         private route: ActivatedRoute,
     ) {
         this.formReset();
+        this.getAllbuySearchHttp();
     }
     formReset() {
         this.form = this.fb.group({
@@ -119,114 +124,155 @@ export class WxreleaseGroupsComponent implements OnInit {
             this.form.controls[i].markAsDirty();
             this.form.controls[i].updateValueAndValidity();
         }
-        if (this.pinTuanName.invalid || this.inventory.invalid || this.peopleNumber.invalid
-            || this.timeLimit.invalid || this.originalPrice.invalid || this.presentPrice.invalid) return;
+        if (!this.radioValue) this.errorAlter('请选择商品');
         else {
-            let that = this;
-            let picId = '';
-            that.picIds = '';
-            if (this.showPics.length > 0) {
-                this.showPics.forEach((item: any, index: number) => {
-                    if (item.imageId) {
-                        if (!that.picIds) {
-                            that.picIds += item.imageId;
-                        } else {
-                            that.picIds += ',' + item.imageId;
+            if (this.pinTuanName.invalid || this.inventory.invalid || this.peopleNumber.invalid
+                || this.timeLimit.invalid || this.originalPrice.invalid || this.presentPrice.invalid) return;
+            else {
+                let that = this;
+                let picId = '';
+                that.picIds = '';
+                that.picIds2 = '';
+                if (this.showPics.length > 0) {
+                    this.showPics.forEach((item: any, index: number) => {
+                        if (item.imageId) {
+                            if (!that.picIds) {
+                                that.picIds += item.imageId;
+                            } else {
+                                that.picIds += ',' + item.imageId;
+                            }
                         }
-                    }
-                });
-            } else if (that.pictureDetails) {
+                    });
+                } else if (that.pictureDetails) {
 
-                that.pictureDetails.forEach(function (item: any) {
-                    if (!that.picIds) {
-                        that.picIds += item.pictureId;
-                    } else {
-                        that.picIds += ',' + item.pictureId;
-                    }
-                })
-            }
-            let buyerNotes: any = [];//购买须知
-            let descriptions: any = [];//详情
-            this.changeDataDetail(this.descriptions, descriptions);
-            this.changeDataDetail(this.buyerNotes, buyerNotes);
-            this.startTime = this.formatDateTime(this.form.value.time[0], 'start');
-            this.endTime = this.formatDateTime(this.form.value.time[1], 'end');
-            let data = {
-                pinTuanId: this.pinTuanId,
-                pinTuanName: this.pinTuanName.value,
-                timeLimit: this.timeLimit.value,
-                originalPrice: NP.times(this.originalPrice.value, 100),
-                presentPrice: NP.times(this.presentPrice.value, 100),
-                peopleNumber: this.ctrsBoo ? this.peopleNumber.value : this.peopleNumber2,
-                inventory: this.inventory.value,
-                startTime: this.startTime,
-                endTime: this.endTime,
-                validateEndTime: this.validateEndTime,
-                picIds: this.picIds.split(','),
-                shopIds: this.selectStoresIds.split(','),
-                buyerNotes: buyerNotes,
-                descriptions: descriptions,
-                mock: this.mock.value
-            }
-            console.log(data);
-            // else if (this.checkKeyword(data.pinTuanName)) {
-            //     let word = this.checkKeyword(data.pinTuanName);
-            //     this.errorAlter('活动名称不能有违禁词"' + word + '"请修改!');
-            //     return;
-            // }
-            if (data.descriptions.length === 1 && !data.descriptions[0].title) {
-                delete data.descriptions;
-            }
-            if (data.buyerNotes.length === 1 && !data.buyerNotes[0].title) {
-                delete data.buyerNotes;
-            }
-            if (!data.pinTuanId) {
-                delete data.pinTuanId;
-            }
-            if (!data.timeLimit) {
-                delete data.timeLimit;
-            }
-            if (data.peopleNumber > data.inventory) {
-                this.errorAlter('参团人数不能大于库存量');
-            }
-            else if (data.originalPrice < data.presentPrice) {
-                this.errorAlter('拼团价不能大于原价');
-            } else if (!data.shopIds) {
-                this.errorAlter('请选择门店');
-            } else {
-                this.submitting = true;
-                this.wechatService.groupsRelease(data, this.statusFlag).subscribe(
-                    (res: any) => {
-                        if (res.success) {
-                            this.router.navigate(['/koubei/groups/existingGroups']);
-                            this.submitting = false;
+                    that.pictureDetails.forEach(function (item: any) {
+                        if (!that.picIds) {
+                            that.picIds += item.pictureId;
                         } else {
-                            this.submitting = false;
-                            this.modalSrv.error({
-                                nzTitle: '温馨提示',
-                                nzContent: res.errorInfo
-                            });
+                            that.picIds += ',' + item.pictureId;
                         }
-                    },
-                    error => this.errorAlter(error)
-                )
+                    })
+                }
+
+                if (this.showPics2.length > 0) {
+                    this.showPics2.forEach((item: any, index: number) => {
+                        if (item.imageId) {
+                            if (!that.picIds2) {
+                                that.picIds2 += item.imageId;
+                            } else {
+                                that.picIds2 += ',' + item.imageId;
+                            }
+                        }
+                    });
+                }
+                // else if (that.pictureDetails) {
+
+                //     that.pictureDetails.forEach(function (item: any) {
+                //         if (!that.picIds) {
+                //             that.picIds += item.pictureId;
+                //         } else {
+                //             that.picIds += ',' + item.pictureId;
+                //         }
+                //     })
+                // }
+                let buyerNotes: any = [];//购买须知
+                let descriptions: any = [];//详情
+                this.changeDataDetail(this.descriptions, descriptions);
+                this.changeDataDetail(this.buyerNotes, buyerNotes);
+                this.startTime = this.formatDateTime(this.form.value.time[0], 'start');
+                this.endTime = this.formatDateTime(this.form.value.time[1], 'end');
+                let data = {
+                    activityId: this.pinTuanId,
+                    activityName: this.pinTuanName.value,
+                    timeLimit: this.timeLimit.value,
+                    peopleCount: this.ctrsBoo ? this.peopleNumber.value : this.peopleNumber2,
+                    activityStartDate: this.startTime,
+                    activityEndDate: this.endTime,
+                    settleStartDate: this.startTime,
+                    settleEndDate: this.validateEndTime,
+                    storeIds: this.selectStoresIds.split(','),
+                    activityNotes: descriptions,
+                    enableMock: this.mock.value,
+                    platform: 'WECHAT_SP',
+                    picColl: this.picIds.split(','),
+                    products: [{
+                        activityPrice: NP.times(this.presentPrice.value, 100),
+                        inventory: this.inventory.value,
+                        originalPrice: NP.times(this.originalPrice.value, 100),
+                        picIds: that.picIds2.split(','),
+                        productId: this.radioValue.productId,
+                        productName: this.radioValue.productName
+                    }]
+                }
+                console.log(data);
+                // else if (this.checkKeyword(data.pinTuanName)) {
+                //     let word = this.checkKeyword(data.pinTuanName);
+                //     this.errorAlter('活动名称不能有违禁词"' + word + '"请修改!');
+                //     return;
+                // }
+                if (data.activityNotes.length === 1 && !data.activityNotes[0].title) {
+                    delete data.activityNotes;
+                }
+                if (!data.activityId) {
+                    delete data.activityId;
+                }
+                if (!data.timeLimit) {
+                    delete data.timeLimit;
+                }
+                if (data.peopleCount > data.products[0].inventory) {
+                    this.errorAlter('参团人数不能大于库存量');
+                }
+                else if (data.products[0].originalPrice < data.products[0].activityPrice) {
+                    this.errorAlter('拼团价不能大于原价');
+                } else if (!data.storeIds) {
+                    this.errorAlter('请选择门店');
+                } else {
+                    this.submitting = true;
+                    this.wechatService.groupsRelease(data, this.statusFlag).subscribe(
+                        (res: any) => {
+                            if (res.success) {
+                                this.router.navigate(['/wechat/groupList']);
+                                this.submitting = false;
+                            } else {
+                                this.submitting = false;
+                                this.modalSrv.error({
+                                    nzTitle: '温馨提示',
+                                    nzContent: res.errorInfo
+                                });
+                            }
+                        },
+                        error => this.errorAlter(error)
+                    )
+                }
             }
         }
+
     }
     ngOnInit() {
-        let storeList = JSON.parse(localStorage.getItem(ALIPAY_SHOPS)) ?
-            JSON.parse(localStorage.getItem(ALIPAY_SHOPS)) : [];
-        console.log(storeList)
         this.pinTuanId = this.route.snapshot.params['pinTuanId'];
         this.statusFlag = this.route.snapshot.params['status'];
 
         this.status = this.route.snapshot.params['status'];
-        this.cityNameFun();
+
         if (this.pinTuanId) {
             this.groupsDetailhttp(this.pinTuanId);
         }
     }
-
+    getAllbuySearchHttp() {
+        this.wechatService.getAllbuySearch().subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.allProduct = res.data;
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => this.errorAlter(error)
+        )
+    }
     ctrsFun(num: any) {
         if (num === 'zdy') {
             this.ctrsBoo = true;
@@ -237,12 +283,11 @@ export class WxreleaseGroupsComponent implements OnInit {
         }
     }
     cityNameFun() {
-        let storeList = JSON.parse(this.localStorageService.getLocalstorage(ALIPAY_SHOPS)) ?
-            JSON.parse(this.localStorageService.getLocalstorage(ALIPAY_SHOPS)) : [];
+        let storeList = this.cityList;
         if (storeList) {
             CITYLIST.forEach(function (i: any) {
                 storeList.forEach((ele: any, index: number, arr: any) => {
-                    if (i.i === ele.cityId) {
+                    if (i.i === ele.cityCode) {
                         ele.cityName = i.n;
                     }
                 });
@@ -250,41 +295,41 @@ export class WxreleaseGroupsComponent implements OnInit {
         }
         let cityNameSpaceArr = [{
             cityName: '',
-            cityId: '',
+            cityCode: '',
         }];
         cityNameSpaceArr.shift();
         for (let i = 0; i < storeList.length; i++) {
-            if (storeList[i].cityId === '' || storeList[i].cityId === null) {
+            if (storeList[i].cityCode === '' || storeList[i].cityCode === null) {
                 storeList[i].cityName = '其他';
-            } else if (storeList[i].cityId !== '' && storeList[i].cityName === '') {
+            } else if (storeList[i].cityCode !== '' && storeList[i].cityName === '') {
                 cityNameSpaceArr.push({
                     cityName: '',
-                    cityId: storeList[i].cityId,
+                    cityCode: storeList[i].cityCode,
                 });
             }
         }
         for (let i = 0; i < storeList.length; i++) {
             let ids = [];
             for (let j = 0; j < CITYLIST.length; j++) {
-                if (storeList[i].cityId === CITYLIST[j].i) {
+                if (storeList[i].cityCode === CITYLIST[j].i) {
                     ids.push(CITYLIST[j].i)
                 }
             }
             if (ids.length === 0) {
                 storeList[i].cityName = '其他';
-                storeList[i].cityId = null;
+                storeList[i].cityCode = null;
             }
         }
         for (let i = 0; i < cityNameSpaceArr.length; i++) {
             for (let j = 0; j < storeList.length; j++) {
-                if (cityNameSpaceArr[i].cityId === storeList[j].cityId && storeList[j].cityName !== '') {
+                if (cityNameSpaceArr[i].cityCode === storeList[j].cityCode && storeList[j].cityName !== '') {
                     cityNameSpaceArr[i].cityName = storeList[j].cityName;
                 }
             }
         }
         for (let i = 0; i < cityNameSpaceArr.length; i++) {
             for (let j = 0; j < storeList.length; j++) {
-                if (cityNameSpaceArr[i].cityId === storeList[j].cityId && storeList[j].cityName === '') {
+                if (cityNameSpaceArr[i].cityCode === storeList[j].cityCode && storeList[j].cityName === '') {
                     storeList[j].cityName = cityNameSpaceArr[i].cityName;
                 }
             }
@@ -296,9 +341,9 @@ export class WxreleaseGroupsComponent implements OnInit {
         for (let i = 0; i < this.cityStoreList.length; i++) {
             for (let j = 0; j < this.cityStoreList[i].stores.length; j++) {
                 if (this.cityStoreList[i].stores[j].change === true) {
-                    this.selectStoresIds += ',' + this.cityStoreList[i].stores[j].shopId;
+                    this.selectStoresIds += ',' + this.cityStoreList[i].stores[j].storeId;
                 }
-                this.allStoresIds += ',' + this.cityStoreList[i].stores[j].shopId;
+                this.allStoresIds += ',' + this.cityStoreList[i].stores[j].storeId;
             }
         }
         if (this.selectStoresIds) {
@@ -306,6 +351,7 @@ export class WxreleaseGroupsComponent implements OnInit {
             this.storesChangeNum = this.selectStoresIds.split(',').length;
             this.allShopsNumber = this.selectStoresIds.split(',').length;
         }
+        this.shopboolean = true;
     }
     // 详细内容标题
     getDescriptData(index: number, event: any) {
@@ -485,10 +531,10 @@ export class WxreleaseGroupsComponent implements OnInit {
                         pictureDetails = res.data.images.length > 0 ? res.images : '';
                     }
                     self.pictureDetails = pictureDetails;
-                    // this.shopIds = res.shopIds;
+                    // this.storeIds = res.storeIds;
 
                     /*门店选择*/
-                    let choiseStoreIdList = res.data.shopIds;
+                    let choiseStoreIdList = res.data.storeIds;
                     self.storesChangeNum = choiseStoreIdList.length;
                     self.selectStoresIds = choiseStoreIdList.join(',');
                     self.cityStoreList.forEach(function (city: any) {
@@ -499,10 +545,10 @@ export class WxreleaseGroupsComponent implements OnInit {
                         });
                     });
                     /*初始化选中的门店*/
-                    choiseStoreIdList.forEach(function (shopId: any, i: number) {
+                    choiseStoreIdList.forEach(function (storeId: any, i: number) {
                         self.cityStoreList.forEach(function (city: any, j: number) {
                             city.stores.forEach(function (store: any, k: number) {
-                                if (shopId === store.shopId) {
+                                if (storeId === store.storeId) {
                                     store.change = true;
                                 }
                             });
@@ -622,7 +668,7 @@ export class WxreleaseGroupsComponent implements OnInit {
         for (let i = 0; i < this.cityStoreList.length; i++) {
             for (let j = 0; j < this.cityStoreList[i].stores.length; j++) {
                 if (this.cityStoreList[i].stores[j].change == true) {
-                    this.selectStoresIds += ',' + this.cityStoreList[i].stores[j].shopId
+                    this.selectStoresIds += ',' + this.cityStoreList[i].stores[j].storeId
                 }
             }
         }
@@ -658,7 +704,7 @@ export class WxreleaseGroupsComponent implements OnInit {
         for (let i = 0; i < this.cityStoreList.length; i++) {
             for (let j = 0; j < this.cityStoreList[i].stores.length; j++) {
                 if (this.cityStoreList[i].stores[j].change === true) {
-                    this.selectStoresIds += ',' + this.cityStoreList[i].stores[j].shopId;
+                    this.selectStoresIds += ',' + this.cityStoreList[i].stores[j].storeId;
                 }
             }
         }
@@ -694,7 +740,7 @@ export class WxreleaseGroupsComponent implements OnInit {
     getCityList(storeList: any) {
         let cityAllCodeArr = [];
         for (let i = 0; i < storeList.length; i++) {
-            cityAllCodeArr.push(storeList[i].cityId + '-' + storeList[i].cityName);
+            cityAllCodeArr.push(storeList[i].cityCode + '-' + storeList[i].cityName);
         }
         let cityCodeArr = FunctionUtil.getNoRepeat(cityAllCodeArr);
         let cityArr = [];
@@ -710,10 +756,10 @@ export class WxreleaseGroupsComponent implements OnInit {
         }
         for (let i = 0; i < cityArr.length; i++) {
             for (let j = 0; j < storeList.length; j++) {
-                if (JSON.stringify(storeList[j].cityId) === cityArr[i].cityCode || storeList[j].cityId === cityArr[i].cityCode) {
+                if (JSON.stringify(storeList[j].cityCode) === cityArr[i].cityCode || storeList[j].cityCode === cityArr[i].cityCode) {
                     cityArr[i].stores.push({
-                        shopId: storeList[j].shopId,
-                        shopName: storeList[j].shopName,
+                        storeId: storeList[j].storeId,
+                        shopName: storeList[j].branchName,
                         change: true
                     });
                 }
@@ -735,7 +781,7 @@ export class WxreleaseGroupsComponent implements OnInit {
                 this.cityStoreList[i].stores[j].change = event ? true : false;
                 this.cityStoreList[i].stores[j].checked = event ? true : false;
                 if (event) {//全选中
-                    this.selectStoresIds += ',' + this.cityStoreList[i].stores[j].shopId;
+                    this.selectStoresIds += ',' + this.cityStoreList[i].stores[j].storeId;
                 } else {
                     this.selectStoresIds = '';
                 }
@@ -755,6 +801,10 @@ export class WxreleaseGroupsComponent implements OnInit {
         // this.shopEdit.pictureDetails = [];
         this.showPics = event;
     }
+    getPictureDetails2(event: any) {
+        let that = this;
+        this.showPics2 = event;
+    }
     submitData() {
 
 
@@ -765,16 +815,14 @@ export class WxreleaseGroupsComponent implements OnInit {
         let year = date.getFullYear();
         let month = date.getMonth() + 1;
         let day = date.getDate();
-        if (type === 'start') {
-            return year + '-' + (month.toString().length > 1 ? month : ('0' + month)) + '-' + (day.toString().length > 1 ? day : ('0' + day)) + ' 00:00:00';
-        }
-        if (type === 'end') {
-            return year + '-' + (month.toString().length > 1 ? month : ('0' + month)) + '-' + (day.toString().length > 1 ? day : ('0' + day)) + ' 23:59:59';
-        }
+        return year + '-' + (month.toString().length > 1 ? month : ('0' + month)) + '-' + (day.toString().length > 1 ? day : ('0' + day));
+        // if (type === 'end') {
+        //     return year + '-' + (month.toString().length > 1 ? month : ('0' + month)) + '-' + (day.toString().length > 1 ? day : ('0' + day)) + ' 23:59:59';
+        // }
     }
     /**
-   * 校验购买须知及其详细内容
-   **/
+    * 校验购买须知及其详细内容
+    **/
     checkoutTaoCanData(obj: any) {
         let flag = true;
         var pattern = /^[0-9]\d*$/;
@@ -869,5 +917,35 @@ export class WxreleaseGroupsComponent implements OnInit {
                 console.log(this.radioValue)
             }
         });
+    }
+    radioFun() {
+        this.productStoreHttp(this.radioValue.productId);
+        this.modalSrv.closeAll();
+    }
+    radioBottomFun() {
+        this.radioValue = '';
+        this.shopboolean = false;
+        this.selectStoresIds = '';
+        this.storesChangeNum = 0;
+        this.allShopsNumber = 0;
+    }
+    productStoreHttp(productId: any) {
+        let data = {
+            productId: productId
+        }
+        this.wechatService.productStore(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.cityList = res.data;
+                    this.cityNameFun();
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => this.errorAlter(error)
+        )
     }
 }
