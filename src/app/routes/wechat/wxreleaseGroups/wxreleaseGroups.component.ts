@@ -28,7 +28,7 @@ export class WxreleaseGroupsComponent implements OnInit {
     isEdit: boolean;
     showPics: any = [];
     showPics2: any = [];
-    ctArr: any = [{ num: 3, text: '3人' }, { num: 4, text: '4人' }, { num: 'zdy', text: '自定义' }];
+    ctArr: any = [{ num: 3, text: '3人', checked: false }, { num: 4, text: '4人', checked: false }, { num: 'zdy', text: '自定义', checked: false }];
     ctrsBoo: boolean = false;
     showStoreSelect: boolean = false;
     canMofidy: boolean = true;
@@ -92,7 +92,9 @@ export class WxreleaseGroupsComponent implements OnInit {
     status;
     allProduct: any;
     radioValue: any;
-    shopboolean: any = false;;
+    shopboolean: any = false;
+
+    radiocheck = true;
     constructor(
         private wechatService: WechatService,
         private router: Router,
@@ -540,8 +542,16 @@ export class WxreleaseGroupsComponent implements OnInit {
                     let originalPrice = res.data.product[0].originalPrice ? NP.divide(res.data.product[0].originalPrice, 100) : null;
                     let presentPrice = res.data.product[0].activityPrice ? NP.divide(res.data.product[0].activityPrice, 100) : null;
                     let peopleNumber = res.data.peopleCount ? res.data.peopleCount * 1 : null;
-                    if (peopleNumber > 4) this.ctrsFun('zdy')
-                    else this.ctrsFun(peopleNumber);
+                    this.radiocheck = false;
+                    if (peopleNumber > 4) {
+                        this.ctrsFun('zdy')
+                        this.ctArr[2].checked  = true;
+                    } else {
+                        this.ctrsFun(peopleNumber);
+                        if (peopleNumber === 2) this.ctArr[0].checked = true;
+                        if (peopleNumber === 3) this.ctArr[1].checked  = true;
+                        if (peopleNumber === 4) this.radiocheck = true;
+                    }
                     let inventory = res.data.product[0].inventory ? res.data.product[0].inventory : null;
                     let mock = res.data.enableMock === 'F' ? false : true;
                     let time = [];

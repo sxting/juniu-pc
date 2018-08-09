@@ -49,12 +49,12 @@
                 <nz-input-group nzSize="large">
                     <div style="margin-top:10px;">
                         <span class="ctSpan">
-                            <input type="radio" *ngIf="canMofidy" (click)="ctrsFun(2)" checked name="ctrs">
-                            <input type="radio" *ngIf="!canMofidy" disabled (click)="ctrsFun(2)" checked name="ctrs"> 2 人
+                            <input type="radio" class="radioChecked radioChecked2" id="" *ngIf="canMofidy" (click)="ctrsFun(2)" [checked]="radiocheck" name="ctrs">
+                            <input type="radio" class="radioChecked radioChecked2" *ngIf="!canMofidy" disabled (click)="ctrsFun(2)" [checked]="radiocheck"  name="ctrs"> 2 人
                         </span>
-                        <span class="ctSpan" *ngFor="let item of ctArr">
-                            <input type="radio" *ngIf="canMofidy" (click)="ctrsFun(item.num)" name="ctrs"> {{canMofidy?item.text:''}}
-                            <input type="radio" *ngIf="!canMofidy" disabled (click)="ctrsFun(item.num)" name="ctrs"> {{canMofidy?'':item.text}}
+                        <span class="ctSpan" *ngFor="let item of ctArr;let ind =index;">
+                            <input type="radio" class="radioChecked {{'radioChecked'+item.num}}" *ngIf="canMofidy" [checked]="item.checked" (click)="ctrsFun(item.num)" name="ctrs"> {{canMofidy?item.text:''}}
+                            <input type="radio" class="radioChecked {{'radioChecked'+item.num}}" *ngIf="!canMofidy" [checked]="item.checked" disabled (click)="ctrsFun(item.num)" name="ctrs"> {{canMofidy?'':item.text}}
                         </span>
                         <input nz-input formControlName="peopleNumber" type="number" onkeyup="if(value>100)value=100;if(value<2)value=2;" [style.display]="ctrsBoo ? 'block' : 'none'">
 
