@@ -266,33 +266,34 @@ export class WechatOrderGroupComponent implements OnInit {
     //订单列表
     orderListHttp() {
         let data = {
-            pinTuanName: this.pinTuanName,
+            activityName: this.pinTuanName,
             startTime: this.startTime,
             endTime: this.endTime,
             orderNo: this.orderNo1,
-            status: this.status1,
-            pageIndex: this.pageIndex,
+            groupStatus: this.status1,
+            pageNo: this.pageIndex,
+            platform:'WECHAT_SP',
             pageSize: this.pageSize
         }
         if (!data.startTime && !data.endTime) {
             delete data.startTime;
             delete data.endTime;
         }
-        if (!data.pinTuanName) {
-            delete data.pinTuanName;
+        if (!data.activityName) {
+            delete data.activityName;
         }
         if (!data.orderNo) {
             delete data.orderNo;
         }
-        if (!data.status) {
-            delete data.status;
+        if (!data.groupStatus) {
+            delete data.groupStatus;
         }
 
         this.wechatService.orderList(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    this.resArr = res.data.items;
-                    this.countTotal = res.data.pageInfo.countTotal;
+                    this.resArr = res.data.elements;
+                    this.countTotal = res.data.totalSize;
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -308,7 +309,7 @@ export class WechatOrderGroupComponent implements OnInit {
         let year = date.getFullYear();
         let month = date.getMonth() + 1;
         let day = date.getDate();
-        return year + '-' + (month.toString().length > 1 ? month : ('0' + month)) + '-' + (day.toString().length > 1 ? day : ('0' + day)) + (type === 'start' ? ' 00:00:00' : ' 23:59:59');
+        return year + '-' + (month.toString().length > 1 ? month : ('0' + month)) + '-' + (day.toString().length > 1 ? day : ('0' + day)) ;
     }
 
     paginateVouchers(e: any) {

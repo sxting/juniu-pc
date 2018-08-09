@@ -170,7 +170,8 @@ export class GroupListComponent implements OnInit {
   }
   pintuanStopHttp(pinTuanId: any) {
     let data = {
-      pinTuanId: pinTuanId
+      activityId: pinTuanId,
+      timestamp: new Date().getTime()
     }
     this.wechatService.pintuanStop(data).subscribe(
       (res: any) => {

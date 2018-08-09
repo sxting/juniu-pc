@@ -7,7 +7,7 @@
             <li [class.btns_active]="statusFlag == 1" (click)="onStatusClick(1)">拼团成功</li>
             <li [class.btns_active]="statusFlag == 2" (click)="onStatusClick(2)">拼团中</li>
             <li [class.btns_active]="statusFlag == 3" (click)="onStatusClick(3)">拼团失败</li>
-            <div class="hexiaoduizhang" (click)="checkingKoubeiProductList()">核销对账</div>
+            <!-- <div class="hexiaoduizhang" (click)="checkingKoubeiProductList()">核销对账</div> -->
         </ul>
         <div *ngIf="!switchExcelBtns">
             <div class="member-top-middle">
