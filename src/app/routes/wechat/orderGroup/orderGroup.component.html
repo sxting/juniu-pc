@@ -63,11 +63,10 @@
                 <nz-pagination class="nzPagination" [nzTotal]="countTotal" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
             </div>
         </div>
-        <div *ngIf="switchExcelBtns">
+        <!-- <div *ngIf="switchExcelBtns">
             <div class="member-top-middle">
                 <ul class="btns_switch clearfix back_koubei">
                     <li class="fl">
-                        <!-- <span class="buttons" (click)="exportExcel()">导出Excel</span> -->
                     </li>
                     <li class="fl">
                         <span class="buttons" (click)="comeBack()">返回</span>
@@ -76,21 +75,12 @@
 
                 <li class="fl">
                     <span class="mr10 fl title" style="margin-right:15px">核销时间</span>
-                    <!-- <nz-datepicker style="width: 138px;" (ngModelChange)="_startTime1=$event;_startValueChange1($event)" [ngModel]="_startTime1"
-                        [nzDisabledDate]="_disabledStartDate" [nzFormat]="'YYYY-MM-DD'" [nzPlaceHolder]="'开始时间'"></nz-datepicker>
-                    <nz-datepicker style="width: 138px;" (ngModelChange)="_endTime1=$event;_endValueChange1($event)" [ngModel]="_endTime1" [nzDisabledDate]="_disabledEndDate"
-                        [nzFormat]="'YYYY-MM-DD'" [nzPlaceHolder]="'截止时间'"></nz-datepicker> -->
+            
                         <nz-range-picker [(ngModel)]="dateRange2" (ngModelChange)="onChange2($event)" nzShowTime></nz-range-picker>
                 </li>
                 <li class="fl">
                     <span>选择门店</span>
-                    <!-- <nz-select style="width: 386px;margin-right:50px;" [(ngModel)]="selectedOption" (ngModelChange)="selectStoreInfo($event)"
-                        [nzPlaceHolder]="'请选择'" [nzShowSearch]="true">
-                        <nz-option *ngFor="let item of StoresInfo" [nzLabel]="item.storeName" [nzValue]="item.storeId">
-                        </nz-option>
-                    </nz-select> -->
-                    <!-- <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth" (storeListPush)="storeListPush($event)"
-      (storeIdOutput)="getStoreId($event)"></jn-stores-infor> -->
+            
                     <nz-select style="width: 386px;margin-right:50px;" [(ngModel)]="selectedStore" (ngModelChange)="selectStore()" [nzPlaceHolder]="'请选择一个门店'"
                         [nzShowSearch]="true">
                         <nz-option *ngFor="let list of storeList;let j = index" [nzLabel]="list.shopName" [nzValue]="list.shopId">
@@ -147,7 +137,7 @@
                     </div>
                 </div>
             </section>
-        </div>
+        </div> -->
     </div>
 
 </div>
@@ -161,7 +151,7 @@
                 <td class="">团单编号</td>
                 <td class="" style="width:350px;">{{pinTuanOrderDetailObj?.groupNo}}</td>
                 <td class="">订单状态</td>
-                <td class="trans-status" style="width:350px;">{{pinTuanOrderDetailObj?.orderStatus==='JOINING'?'拼团中':pinTuanOrderDetailObj?.orderStatus==='FINISH'?'拼团成功':'拼团失败'}}</td>
+                <td class="trans-status" style="width:350px;">{{pinTuanOrderDetailObj?.groupStatus==='JOINING'?'拼团中':pinTuanOrderDetailObj?.groupStatus==='FINISH'?'拼团成功':'拼团失败'}}</td>
             </tr>
             <tr>
                 <td class="">下单时间</td>

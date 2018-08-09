@@ -222,31 +222,32 @@ export class WechatOrderGroupComponent implements OnInit {
             }
         });
         let data = {
-            orderNo: orderNo,
+            groupNo: orderNo,
+            platform:'WECHAT_SP'
         }
 
         this.wechatService.pinTuanOrderDetail(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     this.pinTuanOrderDetailObj = res.data;
-                    this.hexiaoXQarr = res.data.items;
+                    this.hexiaoXQarr = res.data.vouchers;
                     let shangpinNum = 0;
                     let hexiaoNum = 0;
                     this.hexiaoXQarr.forEach(function (i: any) {
                         // if (i.status === 'PRE_PAYMENT') {
                         //   i.statusName = '未支付'
                         // }
-                        if (i.status === 'VALID') {
+                        if (i.orderStatus === 'VALID') {
                             i.statusName = '未使用'
                         }
-                        if (i.status === 'SETTLE') {
+                        if (i.orderStatus === 'SETTLE') {
                             i.statusName = '已核销'
                             hexiaoNum += 1;
                         }
-                        if (i.status === 'REFUND') {
+                        if (i.orderStatus === 'REFUND') {
                             i.statusName = '已退款'
                         }
-                        if (i.status === 'PAY_TIMEOUT') {
+                        if (i.orderStatus === 'PAY_TIMEOUT') {
                             i.statusName = '已失效'
                         }
                     })

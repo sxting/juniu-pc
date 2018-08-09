@@ -108,7 +108,7 @@ export class WechatService {
     }
     //订单详情
     pinTuanOrderDetail(Params: any) {
-        let apiUrl = Config.API1 + 'pintuan-service/merchant/pintuan/order/orderDetail.json';
+        let apiUrl = this.api + '/merchant/activity/order/detail.json';
         let params = FunctionUtil.obectToURLSearchParams(Params);
         return this.http.get(apiUrl, Params)
             .map((response: Response) => response)
