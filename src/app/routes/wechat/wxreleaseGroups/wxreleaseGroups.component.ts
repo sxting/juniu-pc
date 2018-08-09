@@ -36,6 +36,7 @@ export class WxreleaseGroupsComponent implements OnInit {
     _endTime: any;
     _validateEndTime: any;
     pictureDetails: any;
+    pictureDetails2: any;
     syncAlipay: string = 'F';
     isClear: boolean = false;
     cityList: any;
@@ -165,17 +166,16 @@ export class WxreleaseGroupsComponent implements OnInit {
                             }
                         }
                     });
-                }
-                // else if (that.pictureDetails) {
+                } else if (that.pictureDetails2) {
 
-                //     that.pictureDetails.forEach(function (item: any) {
-                //         if (!that.picIds) {
-                //             that.picIds += item.pictureId;
-                //         } else {
-                //             that.picIds += ',' + item.pictureId;
-                //         }
-                //     })
-                // }
+                    that.pictureDetails2.forEach(function (item: any) {
+                        if (!that.picIds) {
+                            that.picIds2 += item.pictureId;
+                        } else {
+                            that.picIds2 += ',' + item.pictureId;
+                        }
+                    })
+                }
                 let buyerNotes: any = [];//购买须知
                 let descriptions: any = [];//详情
                 this.changeDataDetail(this.descriptions, descriptions);
@@ -545,11 +545,11 @@ export class WxreleaseGroupsComponent implements OnInit {
                     this.radiocheck = false;
                     if (peopleNumber > 4) {
                         this.ctrsFun('zdy')
-                        this.ctArr[2].checked  = true;
+                        this.ctArr[2].checked = true;
                     } else {
                         this.ctrsFun(peopleNumber);
                         if (peopleNumber === 2) this.ctArr[0].checked = true;
-                        if (peopleNumber === 3) this.ctArr[1].checked  = true;
+                        if (peopleNumber === 3) this.ctArr[1].checked = true;
                         if (peopleNumber === 4) this.radiocheck = true;
                     }
                     let inventory = res.data.product[0].inventory ? res.data.product[0].inventory : null;
@@ -577,11 +577,16 @@ export class WxreleaseGroupsComponent implements OnInit {
                     this.startTime = res.data.activityStartDate;
                     this.endTime = res.data.activityEndDate;
 
-                    let pictureDetails;
+                    let pictureDetails, pictureDetails2;
                     if (res.data.images) {
                         pictureDetails = res.data.images.length > 0 ? res.images : '';
                     }
                     self.pictureDetails = pictureDetails;
+
+                    if (res.data.product[0].images) {
+                        pictureDetails2 = res.data.product[0].images.length > 0 ? res.images : '';
+                    }
+                    self.pictureDetails2 = pictureDetails2;
                     // this.storeIds = res.storeIds;
 
 
