@@ -593,13 +593,19 @@ export class WxreleaseGroupsComponent implements OnInit {
                     let descriptions: any = [];
                     let buyerNotes: any = [];
                     let transforDescriptions: any = [];
+                    // if (res.data.buyerNotes.length > 0) {
+                    //     buyerNotes = res.data.buyerNotes;
+                    //     self.editChangeData(buyerNotes, transforBuyerNotes);
+                    // } else {
+                    //     transforBuyerNotes = self.buyerNotes;
+                    // }
                     if (res.data.activityNotes.length > 0) {
-                        descriptions = res.data.activityNotes;
-                        self.editChangeData(descriptions, transforDescriptions);
+                        buyerNotes = res.data.activityNotes;
+                        self.editChangeData(buyerNotes, transforDescriptions);
                     } else {
                         transforDescriptions = self.descriptions;
                     }
-                    self.descriptions = transforDescriptions;
+                    self.buyerNotes = transforDescriptions;
                     // this.mock = res.mock;
                 } else {
                     this.modalSrv.error({
