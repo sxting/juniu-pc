@@ -520,7 +520,7 @@ export class WxreleaseGroupsComponent implements OnInit {
     }
 
     return() {
-        this.router.navigate(['/koubei/groups/existingGroups']);
+        this.router.navigate(['/wechat/groupList']);
     }
     //拼团详情
     groupsDetailhttp(pinTuanId?: any) {
@@ -573,7 +573,7 @@ export class WxreleaseGroupsComponent implements OnInit {
                         time2: [this._validateEndTime],
                         mock: [mock]
                     });
-                    this.canMofidy = res.data.canMofidy;
+                    this.canMofidy = res.data.canModify;
                     this.startTime = res.data.activityStartDate;
                     this.endTime = res.data.activityEndDate;
 
