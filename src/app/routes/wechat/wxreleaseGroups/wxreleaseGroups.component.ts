@@ -579,12 +579,12 @@ export class WxreleaseGroupsComponent implements OnInit {
 
                     let pictureDetails, pictureDetails2;
                     if (res.data.images) {
-                        pictureDetails = res.data.images.length > 0 ? res.images : '';
+                        pictureDetails = res.data.images.length > 0 ? res.data.images : '';
                     }
                     self.pictureDetails = pictureDetails;
 
                     if (res.data.product[0].images) {
-                        pictureDetails2 = res.data.product[0].images.length > 0 ? res.images : '';
+                        pictureDetails2 = res.data.product[0].images.length > 0 ?  res.data.product[0].images : '';
                     }
                     self.pictureDetails2 = pictureDetails2;
                     // this.storeIds = res.storeIds;
