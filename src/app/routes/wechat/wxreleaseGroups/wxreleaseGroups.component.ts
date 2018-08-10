@@ -193,7 +193,7 @@ export class WxreleaseGroupsComponent implements OnInit {
                     settleEndDate: this.validateEndTime,
                     storeIds: this.selectStoresIds.split(','),
                     activityNotes: buyerNotes,
-                    enableMock: this.mock.value,
+                    enableMock: this.mock.value ? 'T' : 'F',
                     platform: 'WECHAT_SP',
                     picColl: this.picIds.split(','),
                     products: [{

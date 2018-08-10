@@ -57,13 +57,13 @@ export class WechatStatisticsComponent implements OnInit {
         let data = {
             pageNo: this.pageIndex,
             pageSize: this.pageSize,
-            platform:'WECHAT_SP'
+            platform: 'WECHAT_SP'
         }
 
         this.wechatService.effectList(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    if (res.data.items) {
+                    if (res.data.elements) {
                         res.data.elements.forEach(function (i: any) {
                             i.hexiaolv = i.buyCount === 0 ? 0 : ((i.settleCount / i.buyCount).toFixed(4));
                             i.chentuanlv = i.openedGroupCount === 0 ? 0 : ((i.finishGroupCount / i.openedGroupCount).toFixed(4));
@@ -115,10 +115,10 @@ export class WechatStatisticsComponent implements OnInit {
                 numArr.push(i.amount / 100);
             }
             if (div === 'echart_second') {
-                numArr.push(i.totalGroupNumber === 0 ? 0 : (i.finishGroupNumber / i.totalGroupNumber).toFixed(2));
+                numArr.push(i.totalGroupCount === 0 ? 0 : (i.finishGroupCount / i.totalGroupCount).toFixed(2));
             }
             if (div === 'echart_third') {
-                numArr.push(i.number);
+                numArr.push(i.count);
             }
         })
         let that = this;
