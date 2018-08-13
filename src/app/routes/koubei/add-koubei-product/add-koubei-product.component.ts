@@ -353,10 +353,9 @@ export class AddKoubeiProductComponent implements OnInit {
     //校验核销开始时间
     disabledDate = (current: Date): boolean => {
         if (this.putawayDate && (this.putawayDate.getTime() >= new Date().getTime())) {
-          console.log(0);
+          console.log(this.putawayDate);
           return differenceInDays(current, this.putawayDate) < 0;
         } else {
-          console.log(1);
           return differenceInDays(current, new Date()) < 0;
         }
     };
