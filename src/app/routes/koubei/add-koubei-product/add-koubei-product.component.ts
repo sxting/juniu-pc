@@ -27,7 +27,7 @@ export class AddKoubeiProductComponent implements OnInit {
     formData: any;
     categoryId: string = '';//分类信息ID
     submitting = false;
-    today = new Date(new Date().getTime() - 12 * 60 * 60 * 1000); //提前一周 ==开始时间
+    today = new Date(); // 开始时间
     koubeiItemCategorys: any;//口碑分类信息
     num: number = 0;
     ifcopy: boolean = false;//查看是否是复制进来的
@@ -353,9 +353,11 @@ export class AddKoubeiProductComponent implements OnInit {
     //校验核销开始时间
     disabledDate = (current: Date): boolean => {
         if (this.putawayDate && (this.putawayDate.getTime() >= new Date().getTime())) {
-            return differenceInDays(current, this.putawayDate) < 0;
+          console.log(0);
+          return differenceInDays(current, this.putawayDate) < 0;
         } else {
-            return differenceInDays(current, this.today) <= 0;
+          console.log(1);
+          return differenceInDays(current, this.today) < 0;
         }
     };
 
