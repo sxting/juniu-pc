@@ -357,7 +357,7 @@ export class AddKoubeiProductComponent implements OnInit {
           return differenceInDays(current, this.putawayDate) < 0;
         } else {
           console.log(1);
-          return differenceInDays(current, this.today) < 0;
+          return differenceInDays(current, new Date()) < 0;
         }
     };
 
