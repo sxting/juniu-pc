@@ -98,7 +98,7 @@ export class GroupListComponent implements OnInit {
       (res: any) => {
         if (res.success) {
           this.resArr = res.data.elements;
-          this.countTotal = res.data.totalPage;
+          this.countTotal = res.data.totalSize;
           this.peopleNumbers = res.data.peopleCounts
         } else {
           this.modalSrv.error({

@@ -11,7 +11,7 @@
                 </nz-option>
             </nz-select>
             <span>活动执行日期</span>
-            <nz-range-picker (ngModelChange)="onChange($event)" nzShowTime></nz-range-picker>
+            <nz-range-picker (nzOnOk)="onChange($event)" nzShowTime></nz-range-picker>
             <p style="margin-top:20px;"></p>
             <span>活动名称</span>
             <div style="width: 343px;display:inline-block;" class="wxgroupList">
