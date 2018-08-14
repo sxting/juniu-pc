@@ -220,6 +220,9 @@ export class WxreleaseGroupsComponent implements OnInit {
                 if (!data.timeLimit) {
                     data.timeLimit = 24;
                 }
+                // if (data.peopleCount < 2 || data.peopleCount > 99) {
+                //     this.errorAlter('拼团人数在2-99之间');
+                // }
                 if (data.peopleCount > data.products[0].inventory) {
                     this.errorAlter('参团人数不能大于库存量');
                 }
@@ -584,7 +587,7 @@ export class WxreleaseGroupsComponent implements OnInit {
                     self.pictureDetails = pictureDetails;
 
                     if (res.data.product[0].images) {
-                        pictureDetails2 = res.data.product[0].images.length > 0 ?  res.data.product[0].images : '';
+                        pictureDetails2 = res.data.product[0].images.length > 0 ? res.data.product[0].images : '';
                     }
                     self.pictureDetails2 = pictureDetails2;
                     // this.storeIds = res.storeIds;
