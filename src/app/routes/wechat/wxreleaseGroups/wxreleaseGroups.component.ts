@@ -220,9 +220,9 @@ export class WxreleaseGroupsComponent implements OnInit {
                 if (!data.timeLimit) {
                     data.timeLimit = 24;
                 }
-                // if (data.peopleCount < 2 || data.peopleCount > 99) {
-                //     this.errorAlter('拼团人数在2-99之间');
-                // }
+                if (!data.storeIds) {
+                    this.errorAlter('请选择门店');
+                }
                 if (data.peopleCount > data.products[0].inventory) {
                     this.errorAlter('参团人数不能大于库存量');
                 }
