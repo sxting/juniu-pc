@@ -218,7 +218,7 @@ export class WxreleaseGroupsComponent implements OnInit {
                     delete data.activityId;
                 }
                 if (!data.timeLimit) {
-                    delete data.timeLimit;
+                    data.timeLimit = 24;
                 }
                 if (data.peopleCount > data.products[0].inventory) {
                     this.errorAlter('参团人数不能大于库存量');
