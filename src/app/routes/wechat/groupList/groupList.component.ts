@@ -124,6 +124,9 @@ export class GroupListComponent implements OnInit {
   chankanXQ(activityId: any) {
     this.router.navigate(['/wechat/wxreleaseGroups', { pinTuanId: activityId, status: this.statusFlag }]);
   }
+  xzgroup() {
+    this.router.navigate(['/wechat/wxreleaseGroups']);
+  }
   pintuanStartHttp(activityId: any) {
 
     let that = this;

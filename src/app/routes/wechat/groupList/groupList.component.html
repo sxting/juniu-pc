@@ -15,11 +15,13 @@
             <p style="margin-top:20px;"></p>
             <span>活动名称</span>
             <div style="width: 343px;display:inline-block;" class="wxgroupList">
-                <nz-input-group nzSuffixIcon="anticon anticon-search"   (click)="search()">
-                    <input [(ngModel)]="activityName"  nz-input maxlength="20" placeholder="请输入活动名称">
+                <nz-input-group nzSuffixIcon="anticon anticon-search" (click)="search()">
+                    <input [(ngModel)]="activityName" nz-input maxlength="20" placeholder="请输入活动名称">
                 </nz-input-group>
             </div>
-            
+            <div style="margin: 20px;">
+                <button (click)="xzgroup()" nzType="primary" nz-button>新增拼团活动</button>
+            </div>
 
         </div>
         <ul class="btns_switch clearfix">
