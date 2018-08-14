@@ -481,8 +481,8 @@ export class WxreleaseGroupsComponent implements OnInit {
      * @param index
      */
     addGroupDescription(index: number) {
-        if (this.descriptions.length >= 10) {
-            this.errorAlter('您最多只能添加10组!!');
+        if (this.descriptions.length >= 5) {
+            this.errorAlter('您最多只能添加5组!!');
         } else {
             this.descriptions.push({
                 title: '',
@@ -491,8 +491,8 @@ export class WxreleaseGroupsComponent implements OnInit {
         }
     }
     addGroupBuynote() {
-        if (this.buyerNotes.length >= 10) {
-            this.errorAlter('您最多只能添加10组!!');
+        if (this.buyerNotes.length >= 5) {
+            this.errorAlter('您最多只能添加5组!!');
         } else {
             this.buyerNotes.push({
                 title: '',
