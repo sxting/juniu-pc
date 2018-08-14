@@ -30,6 +30,7 @@ export class GroupListComponent implements OnInit {
   peopleNumbers: any;
   selectedOption: any;
   activityName: any;
+  rangepicker: any;
   constructor(
     private wechatService: WechatService,
     private modalSrv: NzModalService,
@@ -63,9 +64,14 @@ export class GroupListComponent implements OnInit {
     this.pageIndex = e;
     this.listHttp();
   }
-  onChange(result: Date): void {
-    this.startTime = this.formatDateTime(result[0], 'start');
-    this.endTime = this.formatDateTime(result[1], 'end');
+  onChange(result: any): void {
+    if (result.length > 0) {
+      this.startTime = this.formatDateTime(result[0], 'start');
+      this.endTime = this.formatDateTime(result[1], 'end');
+    } else {
+      this.startTime = '';
+      this.endTime = '';
+    }
     this.pageIndex = 1;
     this.listHttp();
   }
