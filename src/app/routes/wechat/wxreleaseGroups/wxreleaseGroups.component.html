@@ -56,7 +56,7 @@
                             <input type="radio" class="radioChecked {{'radioChecked'+item.num}}" *ngIf="canMofidy" [checked]="item.checked" (click)="ctrsFun(item.num)" name="ctrs"> {{canMofidy?item.text:''}}
                             <input type="radio" class="radioChecked {{'radioChecked'+item.num}}" *ngIf="!canMofidy" [checked]="item.checked" disabled (click)="ctrsFun(item.num)" name="ctrs"> {{canMofidy?'':item.text}}
                         </span>
-                        <input nz-input formControlName="peopleNumber" type="number" onkeyup="if(value>100)value=99;if(value<2)value=2;" [style.display]="ctrsBoo ? 'block' : 'none'">
+                        <input nz-input formControlName="peopleNumber" type="text" onkeyup="if(value>100)value=99;if(value<2)value=2;" [style.display]="ctrsBoo ? 'block' : 'none'">
 
 
                         <!-- <nz-radio-group formControlName="peopleNumber" (ngModelChange)="ctrsFun($event)" >
@@ -88,7 +88,7 @@
             <nz-form-label nzXs="24" nzFor="originalPrice" nzSm="7" nzRequired>原价</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="8">
                 <nz-input-group nzSize="large">
-                    <input nz-input type="number" formControlName="originalPrice" maxlength="8" placeholder="请输入项目原价">
+                    <input nz-input type="text" onkeyup="if(value>99999)value=99999;if(value<0)value=0.01;" formControlName="originalPrice" maxlength="8" placeholder="请输入项目原价">
                 </nz-input-group>
                 <nz-form-explain *ngIf="originalPrice.dirty && originalPrice.errors">原价格式书写有误</nz-form-explain>
             </nz-form-control>
@@ -96,8 +96,8 @@
         <nz-form-item>
             <nz-form-label nzXs="24" nzFor="presentPrice" nzSm="7" nzRequired>拼团价 </nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="8">
-                <nz-input-group nzSize="large">
-                    <input nz-input type="number" formControlName="presentPrice" maxlength="8" placeholder="请输入项目拼团价">
+                <nz-input-group nzSize="text">
+                    <input nz-input type="text" onkeyup="if(value>99999)value=99999;if(value<0)value=0.01;" formControlName="presentPrice" maxlength="8" placeholder="请输入项目拼团价">
                 </nz-input-group>
                 <nz-form-explain *ngIf="presentPrice.dirty && presentPrice.errors">拼团价格式书写有误</nz-form-explain>
             </nz-form-control>
