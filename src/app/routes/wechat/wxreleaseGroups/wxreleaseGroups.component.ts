@@ -674,8 +674,13 @@ export class WxreleaseGroupsComponent implements OnInit {
         this.endTime = this.formatDateTime(e, 'end');
     }
     endValueChange(e: any) {
-        this._validateEndTime = e;
-        this.validateEndTime = this.formatDateTime(e, 'end');
+        if (e) {
+            this._validateEndTime = e;
+            this.validateEndTime = this.formatDateTime(e, 'end');
+        } else {
+            this.validateEndTime = '';
+            this._validateEndTime = '';
+        }
     }
     /*点击选择门店显示选择门店*/
     onSelectStoreBtnClick(tpl: TemplateRef<{}>, ) {
