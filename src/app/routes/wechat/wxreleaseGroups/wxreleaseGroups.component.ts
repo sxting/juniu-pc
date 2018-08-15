@@ -180,8 +180,14 @@ export class WxreleaseGroupsComponent implements OnInit {
                 let descriptions: any = [];//详情
                 this.changeDataDetail(this.descriptions, descriptions);
                 this.changeDataDetail(this.buyerNotes, buyerNotes);
-                this.startTime = this.formatDateTime(this.form.value.time[0], 'start');
-                this.endTime = this.formatDateTime(this.form.value.time[1], 'end');
+                if (this.form.value.time[0] && this.form.value.time[1]) {
+                    this.startTime = this.formatDateTime(this.form.value.time[0], 'start');
+                    this.endTime = this.formatDateTime(this.form.value.time[1], 'end');
+                } else {
+                    this.startTime = '';
+                    this.endTime = '';
+                }
+
                 let data = {
                     activityId: this.pinTuanId,
                     activityName: this.pinTuanName.value,
@@ -213,6 +219,7 @@ export class WxreleaseGroupsComponent implements OnInit {
                 // else if (data.storeIds.length === 0) {
                 //     this.errorAlter('请选择门店');
                 // } 
+
                 if (data.activityNotes.length === 1 && !data.activityNotes[0].title) {
                     delete data.activityNotes;
                 }
@@ -222,7 +229,10 @@ export class WxreleaseGroupsComponent implements OnInit {
                 if (!data.timeLimit) {
                     data.timeLimit = 24;
                 }
-                if (data.peopleCount > data.products[0].inventory) {
+                if (!data.activityStartDate || !data.activityEndDate) {
+                    this.errorAlter('请选择活动日期');
+                }
+                else if (data.peopleCount > data.products[0].inventory) {
                     this.errorAlter('参团人数不能大于库存量');
                 }
                 else if (data.products[0].originalPrice < data.products[0].activityPrice) {
