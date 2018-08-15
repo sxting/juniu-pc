@@ -133,8 +133,8 @@ export class WxreleaseGroupsComponent implements OnInit {
             else {
                 let that = this;
                 let picId = '';
-                that.picIds = '';
-                that.picIds2 = '';
+                that.picIds;
+                that.picIds2;
                 if (this.showPics.length > 0) {
                     this.showPics.forEach((item: any, index: number) => {
                         if (item.imageId) {
@@ -149,9 +149,9 @@ export class WxreleaseGroupsComponent implements OnInit {
 
                     that.pictureDetails.forEach(function (item: any) {
                         if (!that.picIds) {
-                            that.picIds += item.pictureId;
+                            that.picIds += item.imageId;
                         } else {
-                            that.picIds += ',' + item.pictureId;
+                            that.picIds += ',' + item.imageId;
                         }
                     })
                 }
@@ -169,10 +169,10 @@ export class WxreleaseGroupsComponent implements OnInit {
                 } else if (that.pictureDetails2) {
 
                     that.pictureDetails2.forEach(function (item: any) {
-                        if (!that.picIds) {
-                            that.picIds2 += item.pictureId;
+                        if (!that.picIds2) {
+                            that.picIds2 += item.imageId;
                         } else {
-                            that.picIds2 += ',' + item.pictureId;
+                            that.picIds2 += ',' + item.imageId;
                         }
                     })
                 }
