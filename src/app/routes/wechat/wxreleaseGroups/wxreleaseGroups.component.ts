@@ -558,9 +558,9 @@ export class WxreleaseGroupsComponent implements OnInit {
                         this.ctArr[2].checked = true;
                     } else {
                         this.ctrsFun(peopleNumber);
-                        if (peopleNumber === 2) this.ctArr[0].checked = true;
-                        if (peopleNumber === 3) this.ctArr[1].checked = true;
-                        if (peopleNumber === 4) this.radiocheck = true;
+                        if (peopleNumber === 2) this.radiocheck = true;
+                        if (peopleNumber === 3) this.ctArr[0].checked = true;
+                        if (peopleNumber === 4) this.ctArr[1].checked = true;
                     }
                     let inventory = res.data.product[0].inventory ? res.data.product[0].inventory : null;
                     let mock = res.data.enableMock === 'F' ? false : true;
