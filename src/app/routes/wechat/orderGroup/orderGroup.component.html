@@ -1,0 +1,296 @@
+<page-header></page-header>
+<div class="">
+    <div class="existing-main">
+
+        <ul class="btns_switch clearfix" *ngIf="!switchExcelBtns">
+            <li [class.btns_active]="statusFlag == 0" (click)="onStatusClick(0)">全部订单</li>
+            <li [class.btns_active]="statusFlag == 1" (click)="onStatusClick(1)">拼团成功</li>
+            <li [class.btns_active]="statusFlag == 2" (click)="onStatusClick(2)">拼团中</li>
+            <li [class.btns_active]="statusFlag == 3" (click)="onStatusClick(3)">拼团失败</li>
+            <!-- <div class="hexiaoduizhang" (click)="checkingKoubeiProductList()">核销对账</div> -->
+        </ul>
+        <div *ngIf="!switchExcelBtns">
+            <div class="member-top-middle">
+                <li class="fl" style="margin-right:15px">
+                    <div class="fr" style="position:relative;">
+                        <span class="mr10 mr">活动名称</span>
+                        <input type="text" [(ngModel)]="pinTuanName" style="width:342px" placeholder="请输入活动名称" />
+                        <span class="icon-sou iconfont" (click)="searchName('name')"></span>
+                    </div>
+                </li>
+
+                <li class="fl">
+                    <span class="mr10 fl title" style="margin-right:15px">{{timeText}}时间</span>
+                    <nz-range-picker [(ngModel)]="dateRange" (ngModelChange)="onChange($event)" nzShowTime></nz-range-picker>
+                </li>
+
+                <div class="fr" style="position:relative;margin-top:10px;clear: both;float: left;">
+                    <span class="mr10 mr">团单查询</span>
+                    <input type="text" [(ngModel)]="orderNo1" style="width:342px" placeholder="请输入团单/订单号" />
+                    <span class="icon-sou iconfont" (click)="searchName('id')"></span>
+                </div>
+            </div>
+            <div class="existing-table" style="margin-top:60px;">
+                <table class="existingGroups-table">
+                    <thead>
+                        <tr>
+                            <td>团单编号</td>
+                            <td>开团时间</td>
+                            <td>拼团类型</td>
+                            <td>活动名称</td>
+                            <td>团单状态</td>
+                            <td>团单金额(元)</td>
+                            <td>操作</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of resArr;let ind = index;">
+                            <td>{{item.groupNo}}</td>
+                            <td>{{item.openedTime}}</td>
+                            <td>{{item.peopleNumber}}人团</td>
+                            <td>{{item.pinTuanName}}</td>
+                            <td class="icon-sanjiao-bottom iconfont" (click)="ptxxClick(pintuanxinxi,ind,item.peopleNumber,item.groupNo,item.status)">{{item.status==='JOINING'?'拼团中':item.status==='FINISH'?'拼团成功':'拼团失败'}}</td>
+                            <td>{{item.totalAmount/100}}</td>
+                            <td>
+                                <span class="buttons" (click)="chakanXQ(chakanxiangqing,item.groupNo)">查看详情</span>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="nzPaginationBox">
+                <nz-pagination class="nzPagination" [nzTotal]="countTotal" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
+            </div>
+        </div>
+        <!-- <div *ngIf="switchExcelBtns">
+            <div class="member-top-middle">
+                <ul class="btns_switch clearfix back_koubei">
+                    <li class="fl">
+                    </li>
+                    <li class="fl">
+                        <span class="buttons" (click)="comeBack()">返回</span>
+                    </li>
+                </ul>
+
+                <li class="fl">
+                    <span class="mr10 fl title" style="margin-right:15px">核销时间</span>
+            
+                        <nz-range-picker [(ngModel)]="dateRange2" (ngModelChange)="onChange2($event)" nzShowTime></nz-range-picker>
+                </li>
+                <li class="fl">
+                    <span>选择门店</span>
+            
+                    <nz-select style="width: 386px;margin-right:50px;" [(ngModel)]="selectedStore" (ngModelChange)="selectStore()" [nzPlaceHolder]="'请选择一个门店'"
+                        [nzShowSearch]="true">
+                        <nz-option *ngFor="let list of storeList;let j = index" [nzLabel]="list.shopName" [nzValue]="list.shopId">
+                        </nz-option>
+                    </nz-select>
+                </li>
+            </div>
+            <section class="content_juniu mt20" style="clear:both">
+
+                <div class="marketing_means">
+                    <div class="chou-bottom table_data clearfix">
+                        <nz-table [nzNoResult]="'没有数据'" [nzShowPagination]="false" [nzData]="koubeiProductVouchersListInfor" #nzTable>
+                            <thead nz-thead class="ui-grid-thead">
+                                <tr>
+                                    <th nz-th style="text-align: center;">
+                                        <span>序号</span>
+                                    </th>
+                                    <th nz-th style="text-align: center;">
+                                        <span>核销时间</span>
+                                    </th>
+                                    <th nz-th style="text-align: center;">
+                                        <span>核销码</span>
+                                    </th>
+                                    <th nz-th style="text-align: center;">
+                                        <span>核销门店</span>
+                                    </th>
+                                    <th nz-th style="text-align: center;">
+                                        <span>活动名称</span>
+                                    </th>
+                                    <th nz-th style="text-align: center;">
+                                        <span>实收金额</span>
+                                    </th>
+                                    <th nz-th style="text-align: center;">
+                                        <span>操作</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody nz-tbody class="ui-grid-tbody">
+                                <tr nz-tbody-tr *ngFor="let item of koubeiProductVouchersListInfor;let j = index">
+                                    <td nz-td>{{j+1}}</td>
+                                    <td nz-td>{{item.settleTime}}</td>
+                                    <td nz-td>{{item.code}}</td>
+                                    <td nz-td>{{item.settleShopName}}</td>
+                                    <td nz-td>{{item.pinTuanName}}</td>
+                                    <td nz-td>{{item.amount/100}}</td>
+                                    <td nz-td class="operation">
+                                        <span (click)="checkingProductDetailInfor(HXdingdanxiangqing,item.orderNo)">查看</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                        <nz-pagination style="float: right;padding: 10px 0 30px;" (nzPageIndexClickChange)="paginateVouchers($event)" nzShowTotal
+                            [nzPageSize]="pageSize" [nzPageIndex]="pageIndex1" [nzTotal]="countTotal1"></nz-pagination>
+                    </div>
+                </div>
+            </section>
+        </div> -->
+    </div>
+
+</div>
+
+<!--查看详情-->
+<ng-template #chakanxiangqing>
+    <h3 class="flex-1 text-lg borderLeft">订单详情</h3>
+    <div class="orderpage_detail_list">
+        <table>
+            <tr class="ui-grid-row">
+                <td class="">团单编号</td>
+                <td class="" style="width:350px;">{{pinTuanOrderDetailObj?.groupNo}}</td>
+                <td class="">订单状态</td>
+                <td class="trans-status" style="width:350px;">{{pinTuanOrderDetailObj?.groupStatus==='JOINING'?'拼团中':pinTuanOrderDetailObj?.groupStatus==='FINISH'?'拼团成功':'拼团失败'}}</td>
+            </tr>
+            <tr>
+                <td class="">下单时间</td>
+                <td class="" style="width:220px;">{{pinTuanOrderDetailObj?.openedTime}}</td>
+                <td class="">商品数量</td>
+                <td class="" style="width:220px;">{{pinTuanOrderDetailObj?.peopleNumber}}</td>
+            </tr>
+            <tr>
+                <td class="">购买门店</td>
+                <td class="" style="width:220px;">{{pinTuanOrderDetailObj?.sellerStoreName}}</td>
+                <td class="">订单金额</td>
+                <td class="" style="width:220px;">{{pinTuanOrderDetailObj?.orderAmount/100}}</td>
+            </tr>
+        </table>
+    </div>
+
+    <h3 class="flex-1 text-lg borderLeft" style="margin-top:20px;">核销信息</h3>
+    <p *ngIf="showTips" style="text-align: center;">暂无核销信息</p>
+    <div class="orderpage_detail_list">
+        <table>
+            <tbody>
+                <tr>
+                    <td class="">商品名称</td>
+                    <td class="" style="width:180px;">{{pinTuanOrderDetailObj?.pinTuanName}}</td>
+                    <td class="">商品数量</td>
+                    <td class="" style="width:180px;" colspan="2">{{pinTuanOrderDetailObj?.shangpinNum}}</td>
+                    <td class="">已核销(数)</td>
+                    <td class="State_verification" colspan="2" style="width:180px;">{{pinTuanOrderDetailObj?.hexiaoNum}}</td>
+                </tr>
+                <tr>
+                    <td class="voucher_time" style="height:150px;">核销信息</td>
+                    <td class="voucher_time" colspan="6" style="position:relative;overflow-y: auto;">
+                        <table class="hexiaoXQ" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <td>订单号</td>
+                                    <td>手机号</td>
+                                    <td>核销码</td>
+                                    <td>核销状态</td>
+                                    <td>核销时间</td>
+                                    <td>核销门店</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of hexiaoXQarr">
+                                    <td>{{item.orderNo}}</td>
+                                    <td>{{item.phone}}</td>
+                                    <td>{{item.code}}</td>
+                                    <td>{{item.statusName}}</td>
+                                    <td style="width:130px !important">{{item.settleTime}}</td>
+                                    <td style="    width: 150px !important;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;">{{item.settleStoreName}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+</ng-template>
+<!--核销订单详情-->
+<ng-template #HXdingdanxiangqing>
+    <div class="content-title">
+        <span></span>订单详情</div>
+    <div class="orderpage_detail_list">
+        <table>
+            <tr class="ui-grid-row">
+                <td class="">订单编号</td>
+                <td class="" style="width:200px;">{{voucherDetailObj?.orderNo}}</td>
+                <td class="">订单状态</td>
+                <td class="trans-status" style="width:200px;">{{voucherDetailObj?.statusName}}</td>
+            </tr>
+            <tr>
+                <td class="">下单时间</td>
+                <td class="" style="width:220px;">{{voucherDetailObj?.orderTime}}</td>
+                <td class="">商品数量</td>
+                <td class="" style="width:220px;">{{voucherDetailObj?.peopleNumber}}</td>
+            </tr>
+            <tr>
+                <td class="">购买门店</td>
+                <td class="" style="width:220px;">{{voucherDetailObj?.sellerShopName}}</td>
+                <td class="">订单金额</td>
+                <td class="" style="width:220px;">{{voucherDetailObj?.totalAmount/100}}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="content-title">
+        <span></span>核销信息</div>
+    <p *ngIf="showTips" style="text-align: center;">暂无核销信息</p>
+    <div class="orderpage_detail_list">
+        <table *ngFor="let item of voucherDetailObj?.traces">
+            <tbody>
+                <tr>
+                    <td class="">商品名称</td>
+                    <td class="" style="width:150px;">{{item.pinTuanName}}</td>
+                    <td class="">收款金额</td>
+                    <td class="" style="width:103px;" colspan="2">{{item.amount/100}}</td>
+                    <td class="">核销状态</td>
+                    <td class="State_verification" colspan="2" style="width:80px;">{{item.statusName}}</td>
+                </tr>
+                <tr>
+                    <td class="voucher_time" style="height:40px;">核销时间</td>
+                    <td class="voucher_time">{{item.settleTime}}</td>
+                    <td class="voucher_time">核销码</td>
+                    <td class="voucher_time" colspan="4">{{item.code}}</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+</ng-template>
+<!--拼团信息-->
+<ng-template #pintuanxinxi>
+    <table class="ptxxtable">
+        <thead>
+            <tr>
+                <td>编号</td>
+                <td>姓名</td>
+                <td>手机号</td>
+                <td>参团类型</td>
+                <td>开/参团时间</td>
+                <td>支付状态</td>
+                <td *ngIf="tkstatus==='FINISH'">操作</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of orderArr">
+                <td>{{item.orderNo}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.phone}}</td>
+                <td>{{item.peopleNumber}}人团</td>
+                <td>{{item.joinTime}}</td>
+                <td>{{item.statusName}}</td>
+                <td *ngIf="tkstatus==='FINISH'" class="buttons {{item.status==='REFUND'?'yituikuan':''}}" (click)="tuikuan(item.orderNo,item.status)">退款</td>
+            </tr>
+        </tbody>
+    </table>
+</ng-template>
