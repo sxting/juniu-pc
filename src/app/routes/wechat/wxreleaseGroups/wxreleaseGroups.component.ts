@@ -205,12 +205,14 @@ export class WxreleaseGroupsComponent implements OnInit {
                         productName: this.radioValue.productName
                     }]
                 }
-                console.log(data);
                 // else if (this.checkKeyword(data.pinTuanName)) {
                 //     let word = this.checkKeyword(data.pinTuanName);
                 //     this.errorAlter('活动名称不能有违禁词"' + word + '"请修改!');
                 //     return;
                 // }
+                // else if (data.storeIds.length === 0) {
+                //     this.errorAlter('请选择门店');
+                // } 
                 if (data.activityNotes.length === 1 && !data.activityNotes[0].title) {
                     delete data.activityNotes;
                 }
@@ -220,16 +222,11 @@ export class WxreleaseGroupsComponent implements OnInit {
                 if (!data.timeLimit) {
                     data.timeLimit = 24;
                 }
-                if (!data.storeIds) {
-                    this.errorAlter('请选择门店');
-                }
                 if (data.peopleCount > data.products[0].inventory) {
                     this.errorAlter('参团人数不能大于库存量');
                 }
                 else if (data.products[0].originalPrice < data.products[0].activityPrice) {
                     this.errorAlter('拼团价不能大于原价');
-                } else if (!data.storeIds) {
-                    this.errorAlter('请选择门店');
                 } else {
                     this.submitting = true;
                     this.wechatService.groupsRelease(data, this.statusFlag).subscribe(
@@ -446,15 +443,15 @@ export class WxreleaseGroupsComponent implements OnInit {
     // 增加一行详细内容
     addLineDecripDetail(index: number) {
         console.log(this.descriptions[index].details.length);
-        if (this.descriptions[index].details.length >= 10) {
-            this.errorAlter('您最多只能添加10组!!');
+        if (this.descriptions[index].details.length >= 5) {
+            this.errorAlter('您最多只能添加5组!!');
         } else {
             this.descriptions[index].details.push({ item: '' });
         }
     }
     addLineNoteDetail(index: number) {
-        if (this.buyerNotes[index].details.length >= 10) {
-            this.errorAlter('您最多只能添加10组!!');
+        if (this.buyerNotes[index].details.length >= 5) {
+            this.errorAlter('您最多只能添加5组!!');
         } else {
             this.buyerNotes[index].details.push({ item: '' });
         }
@@ -687,7 +684,7 @@ export class WxreleaseGroupsComponent implements OnInit {
             nzContent: tpl,
             nzWidth: '850px',
             nzOnOk: () => {
-                this.onStoreSaveClick();
+                return this.onStoreSaveClick();
             }
         });
         // this.selectStoresIds = '';
@@ -710,11 +707,13 @@ export class WxreleaseGroupsComponent implements OnInit {
             this.selectStoresIds = this.selectStoresIds.substring(1);
             this.storesChangeNum = this.selectStoresIds.split(',').length;
         }
+        this.showStoreSelect = false;
         if (!this.selectStoresIds) {
             this.errorAlter('请勾选门店');
-            return;
+            return false;
+        } else {
+            return true;
         }
-        this.showStoreSelect = false;
     }
     /*门店全选或者取消全选*/
     onSelectAllStoresInputClick(cityIndex: number, change: boolean) {
