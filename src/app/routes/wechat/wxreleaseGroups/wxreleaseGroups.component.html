@@ -10,7 +10,7 @@
                 <nz-input-group nzSize="large">
                     <input nz-input formControlName="pinTuanName" maxlength="20" placeholder="请输入活动名称，20个字以内">
                 </nz-input-group>
-                <nz-form-explain *ngIf="pinTuanName.dirty && pinTuanName.errors">活动名称字数不能少于两位</nz-form-explain>
+                <nz-form-explain style="color: red;" *ngIf="pinTuanName.dirty && pinTuanName.errors">活动名称字数不能少于两位</nz-form-explain>
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
@@ -40,7 +40,7 @@
                     <input nz-input formControlName="inventory" maxlength="8" placeholder="请设定商品库存">
                 </nz-input-group>
                 <p class="product-tip">选择实体商品后，设定的活动库存需小于实体商品设定库存并实时扣减</p>
-                <nz-form-explain *ngIf="inventory.dirty && inventory.errors">请输入正确的库存数量(库存为正整数)</nz-form-explain>
+                <nz-form-explain style="color: red;" *ngIf="inventory.dirty && inventory.errors">请输入正确的库存数量(库存为正整数)</nz-form-explain>
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
@@ -71,7 +71,7 @@
                     </div>
                 </nz-input-group>
                 <p class="product-tip">规定时间内拼团达到指定人数，则拼团成功，否则拼团失败且立即退款</p>
-                <nz-form-explain *ngIf="peopleNumber.dirty && peopleNumber.errors">请填写正确的拼团人数(正整数)</nz-form-explain>
+                <nz-form-explain style="color: red;" *ngIf="peopleNumber.dirty && peopleNumber.errors">请填写正确的拼团人数(正整数)</nz-form-explain>
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
@@ -81,7 +81,7 @@
                     <input nz-input formControlName="timeLimit" maxlength="2" placeholder="请输入限购时间">
                 </nz-input-group>
                 <p class="product-tip">可设定成团时长，团购限时不能超过24小时，默认选择24小时成团</p>
-                <nz-form-explain *ngIf="timeLimit.dirty && timeLimit.errors">限时时间在1-24之间</nz-form-explain>
+                <nz-form-explain style="color: red;" *ngIf="timeLimit.dirty && timeLimit.errors">限时时间在1-24之间</nz-form-explain>
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
@@ -90,7 +90,7 @@
                 <nz-input-group nzSize="large">
                     <input nz-input type="text" onkeyup="if(value>99999)value=99999;if(value<0)value=0.01;" formControlName="originalPrice" maxlength="8" placeholder="请输入项目原价">
                 </nz-input-group>
-                <nz-form-explain *ngIf="originalPrice.dirty && originalPrice.errors">原价格式书写有误</nz-form-explain>
+                <nz-form-explain style="color: red;" *ngIf="originalPrice.dirty && originalPrice.errors">原价格式书写有误</nz-form-explain>
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
@@ -99,7 +99,7 @@
                 <nz-input-group nzSize="text">
                     <input nz-input type="text" onkeyup="if(value>99999)value=99999;if(value<0)value=0.01;" formControlName="presentPrice" maxlength="8" placeholder="请输入项目拼团价">
                 </nz-input-group>
-                <nz-form-explain *ngIf="presentPrice.dirty && presentPrice.errors">拼团价格式书写有误</nz-form-explain>
+                <nz-form-explain style="color: red;" *ngIf="presentPrice.dirty && presentPrice.errors">拼团价格式书写有误</nz-form-explain>
             </nz-form-control>
         </nz-form-item>
         <nz-card nzTitle="详细信息" [nzBordered]="false" [nzBodyStyle]="{'padding.px': 12}">
