@@ -323,6 +323,7 @@ export class WechatOrderGroupComponent implements OnInit {
         this.wechatService.pintuanRefund(data).subscribe(
             (res: any) => {
                 if (res.success) {
+                    this.modalSrv.closeAll();
                     this.modalSrv.success({
                         nzContent: '退款成功'
                     });

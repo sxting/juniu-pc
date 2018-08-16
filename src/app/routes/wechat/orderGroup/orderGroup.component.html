@@ -194,9 +194,8 @@
                                     <td>{{item.settleTime}}</td>
                                     <td>{{item.settleStoreName}}</td>
                                     <td>
-                                        <span (click)="pintuanRefundHttp(item.orderNo)" *ngIf="item.groupStatus==='FINISH' && item.orderStatus==='PAID' && item.settleStatus==='VALID'" class="buttons">退款</span>
-                                        <span  *ngIf="!(item.groupStatus==='FINISH' && item.orderStatus==='PAID' && item.settleStatus==='VALID')" class="buttons2">退款</span>
-                                        
+                                        <span (click)="pintuanRefundHttp(item.orderNo)" *ngIf="item.enableRefund" class="buttons">退款</span>
+                                        <span  *ngIf="!item.enableRefund" class="buttons2">退款</span>
                                     </td>
                                 </tr>
                             </tbody>
