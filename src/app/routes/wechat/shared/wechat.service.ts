@@ -118,7 +118,7 @@ export class WechatService {
     }
     //退款
     pintuanRefund(Params: any) {
-        let apiUrl = Config.API1 + 'pintuan-service/consumer/pintuan/refund.json';
+        let apiUrl =  this.api + '/merchant/activity/order/refund.json';
         let params = FunctionUtil.obectToURLSearchParams(Params);
         return this.http.get(apiUrl, Params)
             .map((response: Response) => response)

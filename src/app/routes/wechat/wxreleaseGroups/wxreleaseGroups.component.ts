@@ -126,6 +126,7 @@ export class WxreleaseGroupsComponent implements OnInit {
             this.form.controls[i].markAsDirty();
             this.form.controls[i].updateValueAndValidity();
         }
+        
         if (!this.radioValue) this.errorAlter('请选择商品');
         else {
             if (this.pinTuanName.invalid || this.inventory.invalid || this.peopleNumber.invalid
@@ -211,6 +212,7 @@ export class WxreleaseGroupsComponent implements OnInit {
                         productName: this.radioValue.productName
                     }]
                 }
+                
                 // else if (this.checkKeyword(data.pinTuanName)) {
                 //     let word = this.checkKeyword(data.pinTuanName);
                 //     this.errorAlter('活动名称不能有违禁词"' + word + '"请修改!');
@@ -229,7 +231,9 @@ export class WxreleaseGroupsComponent implements OnInit {
                 if (!data.timeLimit) {
                     data.timeLimit = 24;
                 }
-                if (!data.activityStartDate || !data.activityEndDate) {
+                if((new Date(data.settleEndDate).getTime()-new Date(data.activityStartDate).getTime())>(180*24*60*60*1000)){
+                    this.errorAlter('核销截止日期与活动开始日期相差不能大于180天，否则无法退款！');
+                }else if (!data.activityStartDate || !data.activityEndDate) {
                     this.errorAlter('请选择活动日期');
                 }
                 else if (data.peopleCount > data.products[0].inventory) {
@@ -686,7 +690,7 @@ export class WxreleaseGroupsComponent implements OnInit {
     endValueChange(e: any) {
         if (e) {
             this._validateEndTime = e;
-            this.validateEndTime = this.formatDateTime(e, 'end');
+            this.validateEndTime = this.formatDateTime(e, 'end'); 
         } else {
             this.validateEndTime = '';
             this._validateEndTime = '';

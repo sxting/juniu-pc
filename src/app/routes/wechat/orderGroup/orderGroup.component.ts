@@ -237,18 +237,26 @@ export class WechatOrderGroupComponent implements OnInit {
                         // if (i.status === 'PRE_PAYMENT') {
                         //   i.statusName = '未支付'
                         // }
-                        if (i.orderStatus === 'VALID') {
-                            i.statusName = '未使用'
+                        if (i.orderStatus === 'PAID') {
+                            i.statusName = '已支付'
                         }
-                        if (i.orderStatus === 'SETTLE') {
-                            i.statusName = '已核销'
-                            hexiaoNum += 1;
+                        if (i.orderStatus === 'CANCEL') {
+                            i.statusName = '支付取消'
                         }
-                        if (i.orderStatus === 'REFUND') {
-                            i.statusName = '已退款'
+                        if (i.orderStatus === 'PAYMENT_TIMEOUT') {
+                            i.statusName = '支付超时'
                         }
-                        if (i.orderStatus === 'PAY_TIMEOUT') {
-                            i.statusName = '已失效'
+                        if (i.settleStatus === 'VALID') {
+                            i.statusName2 = '未使用'
+                        }
+                        if (i.settleStatus === 'SETTLE') {
+                            i.statusName2 = '已核销'
+                        }
+                        if (i.settleStatus === 'REFUND') {
+                            i.statusName2 = '已退款'
+                        }
+                        if (i.settleStatus === 'EXPIRE_REFUND') {
+                            i.statusName2 = '过期自动退款'
                         }
                     })
                     this.pinTuanOrderDetailObj.hexiaoNum = hexiaoNum;
@@ -295,6 +303,29 @@ export class WechatOrderGroupComponent implements OnInit {
                 if (res.success) {
                     this.resArr = res.data.elements;
                     this.countTotal = res.data.totalSize;
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+
+            },
+            error => this.errorAlter(error)
+        )
+    }
+
+    //退款
+    pintuanRefundHttp(orderNo) {
+        let data = {
+            orderNo: orderNo
+        }
+        this.wechatService.pintuanRefund(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.modalSrv.success({
+                        nzContent: '退款成功'
+                    });
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
