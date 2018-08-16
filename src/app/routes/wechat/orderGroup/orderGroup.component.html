@@ -47,9 +47,9 @@
                         <tr *ngFor="let item of resArr;let ind = index;">
                             <td>{{item.groupNo}}</td>
                             <td>{{item.openedTime}}</td>
-                            <td>{{item.peopleNumber}}人团</td>
-                            <td>{{item.pinTuanName}}</td>
-                            <td class="icon-sanjiao-bottom iconfont" (click)="ptxxClick(pintuanxinxi,ind,item.peopleNumber,item.groupNo,item.status)">{{item.status==='JOINING'?'拼团中':item.status==='FINISH'?'拼团成功':'拼团失败'}}</td>
+                            <td>{{item.peopleCount}}人团</td>
+                            <td>{{item.activityName}}</td>
+                            <td >{{item.groupStatus==='JOINING'?'拼团中':item.groupStatus==='FINISH'?'拼团成功':'拼团失败'}}</td>
                             <td>{{item.totalAmount/100}}</td>
                             <td>
                                 <span class="buttons" (click)="chakanXQ(chakanxiangqing,item.groupNo)">查看详情</span>
@@ -144,32 +144,32 @@
 
 <!--查看详情-->
 <ng-template #chakanxiangqing>
-    <h3 class="flex-1 text-lg borderLeft">订单详情</h3>
+    <h3 class="flex-1 text-lg borderLeft">团单详情</h3>
     <div class="orderpage_detail_list">
         <table>
             <tr class="ui-grid-row">
                 <td class="">团单编号</td>
                 <td class="" style="width:350px;">{{pinTuanOrderDetailObj?.groupNo}}</td>
-                <td class="">订单状态</td>
+                <td class="">团单状态</td>
                 <td class="trans-status" style="width:350px;">{{pinTuanOrderDetailObj?.groupStatus==='JOINING'?'拼团中':pinTuanOrderDetailObj?.groupStatus==='FINISH'?'拼团成功':'拼团失败'}}</td>
             </tr>
             <tr>
                 <td class="">下单时间</td>
                 <td class="" style="width:220px;">{{pinTuanOrderDetailObj?.openedTime}}</td>
-                <td class="">商品数量</td>
-                <td class="" style="width:220px;">{{pinTuanOrderDetailObj?.peopleNumber}}</td>
+                <td class="">成团人数</td>
+                <td class="" style="width:220px;">{{pinTuanOrderDetailObj?.peopleCount}}</td>
             </tr>
             <tr>
                 <td class="">购买门店</td>
                 <td class="" style="width:220px;">{{pinTuanOrderDetailObj?.sellerStoreName}}</td>
-                <td class="">订单金额</td>
+                <td class="">团单金额</td>
                 <td class="" style="width:220px;">{{pinTuanOrderDetailObj?.orderAmount/100}}</td>
             </tr>
         </table>
     </div>
 
-    <h3 class="flex-1 text-lg borderLeft" style="margin-top:20px;">核销信息</h3>
-    <p *ngIf="showTips" style="text-align: center;">暂无核销信息</p>
+    <h3 class="flex-1 text-lg borderLeft" style="margin-top:20px;">订单信息</h3>
+    <p *ngIf="showTips" style="text-align: center;">暂无订单信息</p>
     <div class="orderpage_detail_list">
         <table>
             <tbody>
