@@ -66,9 +66,15 @@ export class WechatOrderGroupComponent implements OnInit {
             JSON.parse(this.localStorageService.getLocalstorage(ALIPAY_SHOPS)) : [];
     }
 
-    onChange(result: Date): void {
-        this.startTime = this.formatDateTime(result[0], 'start');
-        this.endTime = this.formatDateTime(result[1], 'end');
+    onChange(result: any): void {
+        if (result.length > 0) {
+            this.startTime = this.formatDateTime(result[0], 'start');
+            this.endTime = this.formatDateTime(result[1], 'end');
+        } else {
+            this.startTime = '';
+            this.endTime = '';
+        }
+        this.pageIndex = 1;
         this.orderListHttp();
     }
     onChange2(result: Date): void {
@@ -223,7 +229,7 @@ export class WechatOrderGroupComponent implements OnInit {
         });
         let data = {
             groupNo: orderNo,
-            platform:'WECHAT_SP'
+            platform: 'WECHAT_SP'
         }
 
         this.wechatService.pinTuanOrderDetail(data).subscribe(
@@ -281,7 +287,7 @@ export class WechatOrderGroupComponent implements OnInit {
             orderNo: this.orderNo1,
             groupStatus: this.status1,
             pageNo: this.pageIndex,
-            platform:'WECHAT_SP',
+            platform: 'WECHAT_SP',
             pageSize: this.pageSize
         }
         if (!data.startTime && !data.endTime) {
@@ -342,7 +348,7 @@ export class WechatOrderGroupComponent implements OnInit {
         let year = date.getFullYear();
         let month = date.getMonth() + 1;
         let day = date.getDate();
-        return year + '-' + (month.toString().length > 1 ? month : ('0' + month)) + '-' + (day.toString().length > 1 ? day : ('0' + day)) ;
+        return year + '-' + (month.toString().length > 1 ? month : ('0' + month)) + '-' + (day.toString().length > 1 ? day : ('0' + day));
     }
 
     paginateVouchers(e: any) {
