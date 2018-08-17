@@ -114,6 +114,7 @@ export class WechatOrderGroupComponent implements OnInit {
         if (statusFlag === 3) {
             this.status1 = 'CANCLE';
         }
+        this.pageIndex = 1;
         this.orderListHttp();
     }
     // 导出Excel
