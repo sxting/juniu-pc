@@ -72,7 +72,7 @@ export class WechatStatisticsComponent implements OnInit {
                         })
                         this.resData = res.data.elements;
                     }
-                    this.countTotal = res.data.totalPage;
+                    this.countTotal = res.data.totalSize;
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
