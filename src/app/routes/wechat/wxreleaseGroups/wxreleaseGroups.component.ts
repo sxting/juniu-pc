@@ -236,7 +236,7 @@ export class WxreleaseGroupsComponent implements OnInit {
                 }else if (!data.activityStartDate || !data.activityEndDate) {
                     this.errorAlter('请选择活动日期');
                 }
-                else if (data.peopleCount > data.products[0].inventory) {
+                else if (data.peopleCount*1 > data.products[0].inventory*1) {
                     this.errorAlter('参团人数不能大于库存量');
                 }
                 else if (data.products[0].originalPrice < data.products[0].activityPrice) {
