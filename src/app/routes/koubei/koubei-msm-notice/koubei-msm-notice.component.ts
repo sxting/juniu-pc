@@ -42,6 +42,10 @@ export class KoubeiMsmNoticeComponent implements OnInit, OnChanges, OnDestroy {
     reserveRemind: boolean = false;
     reserveSuccess: boolean = false;
     reserveRefuse: boolean = false;
+    SMS_20160001_boolean: boolean = false;
+    SMS_20160002_boolean: boolean = false;
+    SMS_20160003_boolean: boolean = false;
+    SMS_20160004_boolean: boolean = false;
     dateRange: any;
     dataNote: any;
     radioValue: any;
