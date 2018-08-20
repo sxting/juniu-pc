@@ -56,7 +56,7 @@
                             <input type="radio" class="radioChecked {{'radioChecked'+item.num}}" *ngIf="canMofidy" [checked]="item.checked" (click)="ctrsFun(item.num)" name="ctrs"> {{canMofidy?item.text:''}}
                             <input type="radio" class="radioChecked {{'radioChecked'+item.num}}" *ngIf="!canMofidy" [checked]="item.checked" disabled (click)="ctrsFun(item.num)" name="ctrs"> {{canMofidy?'':item.text}}
                         </span>
-                        <input nz-input formControlName="peopleNumber" type="text"  [style.display]="ctrsBoo ? 'block' : 'none'">
+                        <input nz-input formControlName="peopleNumber" type="number"   [style.display]="ctrsBoo ? 'block' : 'none'">
 
 
                         <!-- <nz-radio-group formControlName="peopleNumber" (ngModelChange)="ctrsFun($event)" >
@@ -71,7 +71,7 @@
                     </div>
                 </nz-input-group>
                 <p class="product-tip">规定时间内拼团达到指定人数，则拼团成功，否则拼团失败且立即退款</p>
-                <nz-form-explain style="color: red;" *ngIf="peopleNumber.dirty && peopleNumber.errors">请填写正确的拼团人数(正整数)</nz-form-explain>
+                <!-- <nz-form-explain style="color: red;" *ngIf="peopleNumber.dirty && peopleNumber.errors">请填写正确的拼团人数(正整数)</nz-form-explain> -->
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>

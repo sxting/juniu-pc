@@ -110,7 +110,7 @@ export class WxreleaseGroupsComponent implements OnInit {
         this.form = this.fb.group({
             pinTuanName: [null, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
             inventory: [null, [Validators.required, Validators.pattern(/^[1-9]\d*$/), Validators.minLength(1), Validators.maxLength(8)]],
-            peopleNumber: [null, [Validators.pattern(/^[1-9]\d*$/), Validators.minLength(1), Validators.maxLength(8)]],
+            peopleNumber: [null],
             timeLimit: [null, [Validators.pattern(/^[1-9]\d*$/), Validators.max(24), Validators.min(1)]],
             originalPrice: [null, [Validators.required, Validators.pattern(/^[0-9]+(.[0-9]{1,2})?$/), Validators.max(99999999), Validators.min(0.01)]],
             presentPrice: [null, [Validators.required, Validators.pattern(/^[0-9]+(.[0-9]{1,2})?$/), Validators.max(99999999), Validators.min(0.01)]],
@@ -188,7 +188,7 @@ export class WxreleaseGroupsComponent implements OnInit {
                     this.startTime = '';
                     this.endTime = '';
                 }
-
+                
                 let data = {
                     activityId: this.pinTuanId,
                     activityName: this.pinTuanName.value,
@@ -289,12 +289,11 @@ export class WxreleaseGroupsComponent implements OnInit {
         )
     }
     ctrsFun(num: any) {
-        console.log(num)
         if (num === 'zdy') {
             this.ctrsBoo = true;
         } else {
             this.peopleNumber2 = num;
-
+           
             this.ctrsBoo = false;
         }
     }

@@ -40,6 +40,12 @@ export class MsmNoticeComponent implements OnInit, OnChanges, OnDestroy {
     reserveRemind: boolean = false;
     reserveSuccess: boolean = false;
     reserveRefuse: boolean = false;
+
+    SMS_20160001_boolean: boolean = false;
+    SMS_20160002_boolean: boolean = false;
+    SMS_20160003_boolean: boolean = false;
+    SMS_20160004_boolean: boolean = false;
+
     dateRange: any;
     dataNote: any;
     radioValue: any;
@@ -170,6 +176,10 @@ export class MsmNoticeComponent implements OnInit, OnChanges, OnDestroy {
                         if (res.data.configList.indexOf('RESERVE_TO_MERCHANT') > -1) this.reserveRemind = true;
                         if (res.data.configList.indexOf('RESERVE_SUCCESS_CUSTOMER') > -1) this.reserveSuccess = true;
                         if (res.data.configList.indexOf('RESERVE_REFUSE_CUSTOMER') > -1) this.reserveRefuse = true;
+                        if (res.data.configList.indexOf('PIN_TUAN_GROUP_SUCCESS') > -1) this.SMS_20160001_boolean = true;
+                        if (res.data.configList.indexOf('PIN_TUAN_GROUP_FAILED') > -1) this.SMS_20160002_boolean = true;
+                        if (res.data.configList.indexOf('PIN_TUAN_BUY_SUCCESS') > -1) this.SMS_20160003_boolean = true;
+                        if (res.data.configList.indexOf('PIN_TUAN_REFUND') > -1) this.SMS_20160004_boolean = true;
                     }
                 } else {
                     this.modalSrv.error({

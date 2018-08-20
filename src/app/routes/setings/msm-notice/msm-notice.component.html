@@ -37,7 +37,7 @@
 
 
 <div nz-row [nzGutter]="24" class="pt-lg">
-  <div nz-col nzXs="24" nzSm="24" nzLg="24" nzLg="12" class="mb-lg">
+  <div nz-col nzXs="24" nzSm="24" nzLg="24" nzLg="8" class="mb-lg">
     <nz-card nzTitle="会员消费通知" [nzBordered]="false">
       <div>
         开卡通知
@@ -78,7 +78,7 @@
       </div>
     </nz-card>
   </div>
-  <div nz-col nzXs="24" nzSm="24" nzLg="24" nzLg="12">
+  <div nz-col nzXs="24" nzSm="24" nzLg="24" nzLg="8">
     <nz-card nzTitle="顾客预约通知" [nzBordered]="false">
       <div>
         <div>
@@ -121,34 +121,62 @@
       </div>
     </nz-card>
   </div>
-  <!-- <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8" style="background:#fff;">
+  <div nz-col nzXs="24" nzSm="24" nzLg="24" nzLg="8">
     <nz-card nzTitle="营销短信通知" [nzBordered]="false">
       <div>
-        <p>开卡通知
-          <nz-switch [ngModel]="false">
+        <div>
+          拼团成功
+          <nz-switch [ngModel]="SMS_20160001_boolean" (ngModelChange)="configFun('PIN_TUAN_GROUP_SUCCESS')">
             <span checked>开</span>
             <span unchecked>关</span>
           </nz-switch>
-        </p>
+          <div class="shadowBox shadowBox1">
+            <div class="icon-up iconfont iconLeft"></div>
+            <p>恭喜，您的拼团<活动名称>已拼团成功，拼团核销码：XXXX，您可出示此码给收银员，请在“个人中心－拼团”中查看订单。</p>
+          </div>
+        </div>
       </div>
       <div>
-        <p>充值通知
-          <nz-switch [ngModel]="false">
+        <div>
+          拼团失败
+          <nz-switch [ngModel]="SMS_20160002_boolean" (ngModelChange)="configFun('PIN_TUAN_GROUP_FAILED')">
             <span checked>开</span>
             <span unchecked>关</span>
           </nz-switch>
-        </p>
+          <div class="shadowBox shadowBox1">
+            <div class="icon-up iconfont iconLeft"></div>
+            <p>您好，您的拼团<活动名称>未能拼成，您可选择其它拼团项目，支付款项将原路返回，请查收核对。</p>
+          </div>
+        </div>
       </div>
       <div>
-        <p>扣卡通知
-          <nz-switch [ngModel]="false">
+        <div>
+          购买成功
+          <nz-switch [ngModel]="SMS_20160003_boolean" (ngModelChange)="configFun('PIN_TUAN_BUY_SUCCESS')">
             <span checked>开</span>
             <span unchecked>关</span>
           </nz-switch>
-        </p>
+          <div class="shadowBox shadowBox1">
+            <div class="icon-up iconfont iconLeft"></div>
+            <p>您好，您的拼团<活动名称>购买成功，赶快邀请好友参与拼团吧.</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div>
+          退款通知
+          <nz-switch [ngModel]="SMS_20160004_boolean" (ngModelChange)="configFun('PIN_TUAN_REFUND')">
+            <span checked>开</span>
+            <span unchecked>关</span>
+          </nz-switch>
+          <div class="shadowBox shadowBox1">
+            <div class="icon-up iconfont iconLeft"></div>
+            <p>您好，您的拼团<活动名称>已退款，金额xx元，感谢您的惠顾，欢迎下次光临。</p>
+          </div>
+        </div>
       </div>
     </nz-card>
-  </div> -->
+  </div>
 </div>
 
 
