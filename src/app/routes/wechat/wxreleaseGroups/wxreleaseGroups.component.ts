@@ -134,8 +134,8 @@ export class WxreleaseGroupsComponent implements OnInit {
             else {
                 let that = this;
                 let picId = '';
-                that.picIds;
-                that.picIds2;
+                that.picIds = '';
+                that.picIds2 = '';
                 if (this.showPics.length > 0) {
                     this.showPics.forEach((item: any, index: number) => {
                         if (item.imageId) {
