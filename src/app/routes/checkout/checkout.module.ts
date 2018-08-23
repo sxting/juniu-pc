@@ -10,6 +10,8 @@ import { KoubeiComponent } from './koubei/koubei.component';
 import { MeituanComponent } from './meituan/meituan.component';
 import { KoubeiModule } from '../koubei/koubei.module';
 import { WechatComponent } from './wechat/wechat.component';
+import { WechatTichengListComponent } from './wechatTichengList/wechatTichengList.component';
+import { WechatTichengComponent } from './wechatTicheng/wechatTicheng.component';
 
 
 @NgModule({
@@ -18,7 +20,9 @@ import { WechatComponent } from './wechat/wechat.component';
         TouristComponent,
         KoubeiComponent,
         MeituanComponent,
-        WechatComponent
+        WechatComponent,
+        WechatTichengListComponent,
+        WechatTichengComponent
     ],
     providers: [CheckoutService,MemberService],
 })
