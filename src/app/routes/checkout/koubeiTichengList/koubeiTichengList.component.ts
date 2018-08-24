@@ -8,12 +8,12 @@ import { FunctionUtil } from '@shared/funtion/funtion-util';
 
 
 @Component({
-    selector: 'app-wechatTicheng',
-    templateUrl: './wechatTicheng.component.html',
-    styleUrls: ['./wechatTicheng.component.less']
+    selector: 'app-koubeiTichengList',
+    templateUrl: './koubeiTichengList.component.html',
+    styleUrls: ['./koubeiTichengList.component.less']
 })
-export class WechatTichengComponent implements OnInit {
-
+export class KoubeiTichengListComponent implements OnInit {
+    theadName: any = ['编号', '提成规则名称', '规则详情', '包含商品数', '包含员工数', '操作'];
     constructor(
         private http: _HttpClient,
         private modalSrv: NzModalService,
@@ -27,5 +27,7 @@ export class WechatTichengComponent implements OnInit {
 
     }
 
-
+    addNewCommissionRules(){
+        this.router.navigate(['/checkout/meituanTicheng']);
+    }
 }

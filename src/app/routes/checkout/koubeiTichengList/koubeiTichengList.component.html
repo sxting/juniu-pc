@@ -1,5 +1,5 @@
-<page-header [title]="''">
-    设置员工服务各项目和开卡的提成规则；设置规则后，在收银时选择相应的员工，即可实时计算员工的绩效。
+<page-header [title]="'口碑核销提成设置'">
+    将口碑商品与线下员工建立提成关系，在核销口碑商品时计算员工绩效。
 </page-header>
 
 <nz-card [nzBordered]="false">
@@ -9,14 +9,6 @@
                 <span>新增提成规则</span>
             </button>
         </div>
-        <form nz-form [nzLayout]="'inline'" class="search__form" style="width: 70%">
-            <nz-row>
-                <nz-col nzMd="8" nzSm="24">
-                  <jn-stores-infor style="position: absolute;right: 0px;" [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth"
-                                   (storeListPush)="storeListPush($event)" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
-                </nz-col>
-            </nz-row>
-        </form>
     </div>
     <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="commissionListInfor">
         <thead nz-thead class="ui-grid-thead">

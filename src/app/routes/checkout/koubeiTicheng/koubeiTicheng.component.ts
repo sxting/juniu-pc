@@ -8,11 +8,11 @@ import { FunctionUtil } from '@shared/funtion/funtion-util';
 
 
 @Component({
-    selector: 'app-wechatTichengList',
-    templateUrl: './wechatTichengList.component.html',
-    styleUrls: ['./wechatTichengList.component.less']
+    selector: 'app-koubeiTicheng',
+    templateUrl: './koubeiTicheng.component.html',
+    styleUrls: ['./koubeiTicheng.component.less']
 })
-export class WechatTichengListComponent implements OnInit {
+export class KoubeiTichengComponent implements OnInit {
 
     constructor(
         private http: _HttpClient,
