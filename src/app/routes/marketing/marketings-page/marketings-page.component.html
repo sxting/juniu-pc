@@ -1,446 +1,506 @@
 <div class="content__title ad-ph">
-    <nz-breadcrumb>
-        <nz-breadcrumb-item>主页</nz-breadcrumb-item>
-        <nz-breadcrumb-item>营销</nz-breadcrumb-item>
-        <nz-breadcrumb-item>{{pageHeader1}}</nz-breadcrumb-item>
-        <nz-breadcrumb-item>{{pageHeader2}}</nz-breadcrumb-item>
-    </nz-breadcrumb>
-    <h1 class="title ng-star-inserted">{{pageHeader2}}</h1>
-    <div class="row">
-        <div class="desc">{{pageDesc}}</div>
-    </div>
+  <nz-breadcrumb>
+    <nz-breadcrumb-item>主页</nz-breadcrumb-item>
+    <nz-breadcrumb-item>营销</nz-breadcrumb-item>
+    <nz-breadcrumb-item>{{pageHeader1}}</nz-breadcrumb-item>
+    <nz-breadcrumb-item>{{pageHeader2}}</nz-breadcrumb-item>
+  </nz-breadcrumb>
+  <h1 class="title ng-star-inserted">{{pageHeader2}}</h1>
+  <div class="row">
+    <div class="desc">{{pageDesc}}</div>
+  </div>
 </div>
 
 <nz-card [nzBordered]="false">
-    <form nz-form [formGroup]="form" (ngSubmit)="submit()">
-        <nz-form-item *ngIf="paramsIdNumber <= 6">
-            <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="activity_obj_days">活动对象</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="15" nzMd="16">
-                <div *ngIf="paramsId == '01' || paramsId == '02'">最近
-                    <input class="width-auto" nz-input formControlName="activity_obj_days"
-                           placeholder="请输入天数" (change)="onLastTimeInputChange()">
-                    <span *ngIf="paramsId == '01'">天内未到店消费过的持卡会员</span>
-                    <span *ngIf="paramsId == '02'">天内未到店消费过的潜在会员</span>
-                </div>
-                <div *ngIf="paramsId == '03'">过生日的会员</div>
-                <div *ngIf="paramsId == '04' || paramsId == '05' || paramsId == '06'">
-                    <input type="radio" name="activityObj" [checked]="memberType == 'ALL'" (click)="onActivityObjClick('ALL')">全部会员
-                    <input type="radio" name="activityObj" [checked]="memberType == 'CARD'" (click)="onActivityObjClick('CARD')">持卡会员
-                    <input type="radio" name="activityObj" [checked]="memberType == 'CUSTOMER'" (click)="onActivityObjClick('CUSTOMER')">潜在会员
-                </div>
-                <ng-container *ngIf="activity_obj_days.dirty">
-                    <nz-form-explain class="error-color" *ngIf="activity_obj_days.errors?.required">请输入天数</nz-form-explain>
-                    <nz-form-explain class="error-color" *ngIf="activity_obj_days.errors?.pattern">天数只能是正整数</nz-form-explain>
-                </ng-container>
-            </nz-form-control>
-        </nz-form-item>
+  <form nz-form [formGroup]="form" (ngSubmit)="submit()">
+    <nz-form-item *ngIf="paramsIdNumber <= 6">
+      <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="activity_obj_days">活动对象</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="15" nzMd="16">
+        <div *ngIf="paramsId === '001'">
+          <span class="click-span" (click)="onSelectLevelClick()">选择层级</span>
+        </div>
+        <div *ngIf="paramsId === '002'">
+          <span class="click-span">选择标签</span>
+        </div>
+        <div *ngIf="paramsId === '003'">
+          <span class="click-span">选择会员</span>
+        </div>
+        <div *ngIf="paramsId == '01' || paramsId == '02'">最近
+          <input class="width-auto" nz-input formControlName="activity_obj_days"
+                 placeholder="请输入天数" (change)="onLastTimeInputChange()">
+          <span *ngIf="paramsId == '01'">天内未到店消费过的持卡会员</span>
+          <span *ngIf="paramsId == '02'">天内未到店消费过的潜在会员</span>
+        </div>
+        <div *ngIf="paramsId == '03'">过生日的会员</div>
+        <div *ngIf="paramsId == '04' || paramsId == '05' || paramsId == '06'">
+          <input type="radio" name="activityObj" [checked]="memberType == 'ALL'" (click)="onActivityObjClick('ALL')">全部会员
+          <input type="radio" name="activityObj" [checked]="memberType == 'CARD'" (click)="onActivityObjClick('CARD')">持卡会员
+          <input type="radio" name="activityObj" [checked]="memberType == 'CUSTOMER'"
+                 (click)="onActivityObjClick('CUSTOMER')">潜在会员
+        </div>
+        <ng-container *ngIf="activity_obj_days.dirty">
+          <nz-form-explain class="error-color" *ngIf="activity_obj_days.errors?.required">请输入天数</nz-form-explain>
+          <nz-form-explain class="error-color" *ngIf="activity_obj_days.errors?.pattern">天数只能是正整数</nz-form-explain>
+        </ng-container>
+      </nz-form-control>
+    </nz-form-item>
 
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="activity_name">活动名称</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="15" nzMd="15">
-                <input nz-input formControlName="activity_name" placeholder="请输入活动名称" maxlength="20">
-                <nz-form-explain class="error-color" *ngIf="form.get('activity_name').dirty && form.get('activity_name').errors">请输入活动名称</nz-form-explain>
-            </nz-form-control>
-        </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="activity_name">活动名称</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="15" nzMd="15">
+        <input nz-input formControlName="activity_name" placeholder="请输入活动名称" maxlength="20">
+        <nz-form-explain class="error-color"
+                         *ngIf="form.get('activity_name').dirty && form.get('activity_name').errors">请输入活动名称
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
 
-        <nz-form-item *ngIf="paramsId == '03' || paramsId == '04'">
-            <nz-form-label nzXs="24" nzSm="5" nzRequired>活动开关</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="15" nzMd="15">
-                <nz-switch formControlName="activity_on_off"></nz-switch>
-                <span *ngIf="paramsId == '03'">系统自动给过生日的会员发送短信和优惠券</span>
-                <span *ngIf="paramsId == '04'">系统会在相应的节日自动发送短信和优惠券</span>
-            </nz-form-control>
-        </nz-form-item>
+    <nz-form-item *ngIf="paramsId == '03' || paramsId == '04'">
+      <nz-form-label nzXs="24" nzSm="5" nzRequired>活动开关</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="15" nzMd="15">
+        <nz-switch formControlName="activity_on_off"></nz-switch>
+        <span *ngIf="paramsId == '03'">系统自动给过生日的会员发送短信和优惠券</span>
+        <span *ngIf="paramsId == '04'">系统会在相应的节日自动发送短信和优惠券</span>
+      </nz-form-control>
+    </nz-form-item>
 
-        <nz-form-item *ngIf="paramsId == '03'">
-            <nz-form-label nzXs="24" nzSm="5" nzRequired>发送时间</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="15" nzMd="15">
-                <div class="no-wrap">
-                    <input type="radio" name="sendTime" [checked]="sendTimeToday" (click)="onSendTimeClick(true)">当天发送
-                    <input type="radio" name="sendTime" [checked]="!sendTimeToday" (click)="onSendTimeClick(false)">提前
-                    <div class="dis-inb"><input class="width-auto" nz-input formControlName="send_time_day" placeholder="请输入天数"> 天发送</div>
-                    <ng-container *ngIf="(send_time_day.dirty || send_time_day.touched) && !sendTimeToday">
-                        <nz-form-explain class="error-color" style="margin-left: 120px;" *ngIf="send_time_day.errors?.required">请输入提前发送天数</nz-form-explain>
-                        <nz-form-explain class="error-color" style="margin-left: 120px;" *ngIf="send_time_day.errors?.pattern">提前发送天数只能是正整数</nz-form-explain>
-                    </ng-container>
-                </div>
-            </nz-form-control>
-        </nz-form-item>
+    <nz-form-item *ngIf="paramsId == '03'">
+      <nz-form-label nzXs="24" nzSm="5" nzRequired>发送时间</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="15" nzMd="15">
+        <div class="no-wrap">
+          <input type="radio" name="sendTime" [checked]="sendTimeToday" (click)="onSendTimeClick(true)">当天发送
+          <input type="radio" name="sendTime" [checked]="!sendTimeToday" (click)="onSendTimeClick(false)">提前
+          <div class="dis-inb"><input class="width-auto" nz-input formControlName="send_time_day" placeholder="请输入天数">
+            天发送
+          </div>
+          <ng-container *ngIf="(send_time_day.dirty || send_time_day.touched) && !sendTimeToday">
+            <nz-form-explain class="error-color" style="margin-left: 120px;" *ngIf="send_time_day.errors?.required">
+              请输入提前发送天数
+            </nz-form-explain>
+            <nz-form-explain class="error-color" style="margin-left: 120px;" *ngIf="send_time_day.errors?.pattern">
+              提前发送天数只能是正整数
+            </nz-form-explain>
+          </ng-container>
+        </div>
+      </nz-form-control>
+    </nz-form-item>
 
-        <nz-form-item [class.dis-none]="paramsId == '03' || paramsId == '11' || paramsId == '12' || paramsId == '13'">
-            <nz-form-label nzXs="24" nzSm="5" nzRequired>发送时间</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="15" nzMd="15">
-                <nz-date-picker [nzShowToday]="false" [nzDisabled]="marketingStatus === 'RUNING' || marketingStatus === 'STOP'" [nzFormat]="'yyyy-MM-dd'"
-                                formControlName="sms_send_date" [nzDisabledDate]="disabledDate"></nz-date-picker>
-                <nz-time-picker [nzDisabled]="marketingStatus === 'RUNING' || marketingStatus === 'STOP'"
-                                [class.dis-none]="paramsId == '04'" [nzFormat]="'HH:00'" style="margin-left: 10px"
-                                formControlName="sms_send_time" [nzAllowEmpty]="false">
-                </nz-time-picker>
-                <!--<span class="jn-color" *ngIf="paramsId == '04' || paramsId == '11'">法定节假日</span>-->
-                <nz-form-explain class="error-color" *ngIf="(sms_send_time.errors || sms_send_date.errors) && sms_send_time.dirty">请选择发送时间</nz-form-explain>
-            </nz-form-control>
-        </nz-form-item>
+    <nz-form-item [class.dis-none]="paramsId == '03' || paramsId == '11' || paramsId == '12' || paramsId == '13'">
+      <nz-form-label nzXs="24" nzSm="5" nzRequired>发送时间</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="15" nzMd="15">
+        <nz-date-picker [nzShowToday]="false" [nzDisabled]="marketingStatus === 'RUNING' || marketingStatus === 'STOP'"
+                        [nzFormat]="'yyyy-MM-dd'"
+                        formControlName="sms_send_date" [nzDisabledDate]="disabledDate"></nz-date-picker>
+        <nz-time-picker [nzDisabled]="marketingStatus === 'RUNING' || marketingStatus === 'STOP'"
+                        [class.dis-none]="paramsId == '04'" [nzFormat]="'HH:00'" style="margin-left: 10px"
+                        formControlName="sms_send_time" [nzAllowEmpty]="false">
+        </nz-time-picker>
+        <!--<span class="jn-color" *ngIf="paramsId == '04' || paramsId == '11'">法定节假日</span>-->
+        <nz-form-explain class="error-color"
+                         *ngIf="(sms_send_time.errors || sms_send_date.errors) && sms_send_time.dirty">请选择发送时间
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
 
-        <nz-form-item [class.dis-none]="paramsId == '03' || paramsId == '04'">
-            <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="active_date">活动日期</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="15" nzMd="15">
-                <nz-range-picker [nzDisabled]="marketingStatus === 'RUNING' || marketingStatus === 'STOP'" [nzFormat]="'yyyy-MM-dd'" formControlName="active_date" [nzDisabledDate]="disabledDate"></nz-range-picker>
-            </nz-form-control>
-        </nz-form-item>
+    <nz-form-item [class.dis-none]="paramsId == '03' || paramsId == '04'">
+      <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="active_date">活动日期</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="15" nzMd="15">
+        <nz-range-picker [nzDisabled]="marketingStatus === 'RUNING' || marketingStatus === 'STOP'"
+                         [nzFormat]="'yyyy-MM-dd'" formControlName="active_date"
+                         [nzDisabledDate]="disabledDate"></nz-range-picker>
+      </nz-form-control>
+    </nz-form-item>
 
-        <nz-form-item *ngIf="paramsId == '07' || paramsId == '08' || paramsId == '09'">
-            <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="send_menkan">发送门槛</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="15" nzMd="15">
-                <div class="no-wrap">
-                    消费满 <input class="width-auto" nz-input formControlName="send_menkan" placeholder="请输入金额"> 元发券
-                </div>
-                <ng-container *ngIf="send_menkan.dirty || send_menkan.touched">
-                    <nz-form-explain class="error-color" style="margin-left: 45px;" *ngIf="send_menkan.errors?.required">请输入发送门槛金额</nz-form-explain>
-                    <nz-form-explain class="error-color" style="margin-left: 45px;" *ngIf="send_menkan.errors?.pattern">发送门槛金额只能是正整数</nz-form-explain>
-                </ng-container>
-            </nz-form-control>
-        </nz-form-item>
+    <nz-form-item *ngIf="paramsId == '07' || paramsId == '08' || paramsId == '09'">
+      <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="send_menkan">发送门槛</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="15" nzMd="15">
+        <div class="no-wrap">
+          消费满 <input class="width-auto" nz-input formControlName="send_menkan" placeholder="请输入金额"> 元发券
+        </div>
+        <ng-container *ngIf="send_menkan.dirty || send_menkan.touched">
+          <nz-form-explain class="error-color" style="margin-left: 45px;" *ngIf="send_menkan.errors?.required">
+            请输入发送门槛金额
+          </nz-form-explain>
+          <nz-form-explain class="error-color" style="margin-left: 45px;" *ngIf="send_menkan.errors?.pattern">
+            发送门槛金额只能是正整数
+          </nz-form-explain>
+        </ng-container>
+      </nz-form-control>
+    </nz-form-item>
 
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="activity_name">活动门店</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="15" nzMd="15">
-                已选 {{storesChangeNum}} 家门店
-                <jn-store [isEdit]="isEdit" [cityStoreList]="cityStoreList"
-                          [getCalculateMemberNum]="true"
-                          [lastBuyTime]="lastBuyTime"
-                          [limitLastTime]="limitLastTime"
-                          [memberType]="memberType"
-                          (selectStoresIds)="getSelectStoresIds($event)"
-                          (selectStoresNames)="getSelectStoresNames($event)"
-                          (storesChangeNum)="getStoresChangeNum($event)"
-                          (calculateMemberNum)="getCalculateMemberNumber($event)"
-                          (needSendKey)="getNeedSendKey($event)"
-                          *ngIf="paramsIdNumber <= 6">
-                </jn-store>
-                <jn-store [isEdit]="isEdit" [cityStoreList]="cityStoreList"
-                          (selectStoresIds)="getSelectStoresIds($event)"
-                          (selectStoresNames)="getSelectStoresNames($event)"
-                          (storesChangeNum)="getStoresChangeNum($event)"
-                          *ngIf="paramsIdNumber > 6">
-                </jn-store>
-            </nz-form-control>
-        </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="activity_name">活动门店</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="15" nzMd="15">
+        已选 {{storesChangeNum}} 家门店
+        <jn-store [isEdit]="isEdit" [cityStoreList]="cityStoreList"
+                  [getCalculateMemberNum]="true"
+                  [lastBuyTime]="lastBuyTime"
+                  [limitLastTime]="limitLastTime"
+                  [memberType]="memberType"
+                  (selectStoresIds)="getSelectStoresIds($event)"
+                  (selectStoresNames)="getSelectStoresNames($event)"
+                  (storesChangeNum)="getStoresChangeNum($event)"
+                  (calculateMemberNum)="getCalculateMemberNumber($event)"
+                  (needSendKey)="getNeedSendKey($event)"
+                  *ngIf="paramsIdNumber <= 6">
+        </jn-store>
+        <jn-store [isEdit]="isEdit" [cityStoreList]="cityStoreList"
+                  (selectStoresIds)="getSelectStoresIds($event)"
+                  (selectStoresNames)="getSelectStoresNames($event)"
+                  (storesChangeNum)="getStoresChangeNum($event)"
+                  *ngIf="paramsIdNumber > 6">
+        </jn-store>
+      </nz-form-control>
+    </nz-form-item>
 
-        <nz-form-item [class.dis-none]="paramsIdNumber >= 11">
-            <nz-form-label nzXs="24" nzSm="5" nzFor="sms_content">短信内容</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="15" nzMd="15">
-                <textarea nz-input formControlName="sms_content" placeholder="请输入短信内容，不输入内容则默认不发送短信通知" value="{{smsInputValue}}" (change)="smsInputChange()"></textarea>
-                <nz-form-explain [class.dis-none]="paramsId == '07' || paramsId == '08' || paramsId == '09'">共需发送{{calculateMemberNum}}条短信</nz-form-explain>
-                <nz-form-explain>
-                    点击标签即可插入相应系统字段:
-                    <span class="click-color" *ngFor="let item of smsMark"><span (click)="onSmsMark(item)">{{item}}</span></span>
-                </nz-form-explain>
-            </nz-form-control>
-        </nz-form-item>
+    <nz-form-item [class.dis-none]="paramsIdNumber >= 11">
+      <nz-form-label nzXs="24" nzSm="5" nzFor="sms_content">短信内容</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="15" nzMd="15">
+        <textarea nz-input formControlName="sms_content" placeholder="请输入短信内容，不输入内容则默认不发送短信通知" value="{{smsInputValue}}"
+                  (change)="smsInputChange()"></textarea>
+        <nz-form-explain [class.dis-none]="paramsId == '07' || paramsId == '08' || paramsId == '09'">
+          共需发送{{calculateMemberNum}}条短信
+        </nz-form-explain>
+        <nz-form-explain>
+          点击标签即可插入相应系统字段:
+          <span class="click-color" *ngFor="let item of smsMark"><span (click)="onSmsMark(item)">{{item}}</span></span>
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
 
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="activity_name">发送优惠券</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="15" nzMd="15">
-                <div>
-                    <span class="jn-color pd-5" (click)="onCreateCouponClick(createCoupon)">创建优惠券</span>
-                    <span class="jn-color pd-5" (click)="onSelectCouponClick(selectCoupon)">选择已有优惠券</span>
-                </div>
-                <div class="coupon-box" *ngIf="coupon">
-                    <div class="coupon-left">
-                        <img src="/assets/img/xinpin.png" *ngIf="coupon.single == 1">
-                        <span class="coupon-circle-top"></span><span class="coupon-circle-bottom"></span>
-                        <span class="towline-lh" *ngIf="coupon.couponDefType == 'MONEY'"> {{coupon.couponDefAmount/100}}元 <br> 代金券</span>
-                        <span class="towline-lh" *ngIf="coupon.couponDefType == 'DISCOUNT'"> {{coupon.couponDefDiscount}}折 <br> 折扣券</span>
-                        <span *ngIf="coupon.couponDefType == 'GIFT'">礼品券</span>
-                    </div>
-                    <div class="coupon-right">
-                        <p>有效期：{{todayDay}}-{{coupon.validEndDate}}</p>
-                        <div [class.dis-none]="paramsId == '05' || paramsId == '12'">
-                            <p *ngIf="coupon.useLimitMoney >= 0">消费满{{coupon.useLimitMoney/100}}元可用</p>
-                            <p *ngIf="coupon.useLimitMoney == '-1'">无使用门槛</p>
-                        </div>
-                        <p *ngIf="paramsId == '05' || paramsId == '12'">使用范围：{{coupon.consumeLimitProductNames}}</p>
-                        <p *ngIf="coupon.couponDefType == 'GIFT'">礼品：{{coupon.couponDefProductName}}</p>
-                        <p [class.dis-none]="coupon.couponDefType == 'GIFT'">不可用时间：
-                            <span *ngIf="!coupon.disabledWeekDate">无限制</span>
-                            <span *ngIf="coupon.disabledWeekDate">
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="activity_name">发送优惠券</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="15" nzMd="15">
+        <div>
+          <span class="jn-color pd-5" (click)="onCreateCouponClick(createCoupon)">创建优惠券</span>
+          <span class="jn-color pd-5" (click)="onSelectCouponClick(selectCoupon)">选择已有优惠券</span>
+        </div>
+        <div class="coupon-box" *ngIf="coupon">
+          <div class="coupon-left">
+            <img src="/assets/img/xinpin.png" *ngIf="coupon.single == 1">
+            <span class="coupon-circle-top"></span><span class="coupon-circle-bottom"></span>
+            <span class="towline-lh"
+                  *ngIf="coupon.couponDefType == 'MONEY'"> {{coupon.couponDefAmount/100}}元 <br> 代金券</span>
+            <span class="towline-lh" *ngIf="coupon.couponDefType == 'DISCOUNT'"> {{coupon.couponDefDiscount}}折 <br> 折扣券</span>
+            <span *ngIf="coupon.couponDefType == 'GIFT'">礼品券</span>
+          </div>
+          <div class="coupon-right">
+            <p>有效期：{{todayDay}}-{{coupon.validEndDate}}</p>
+            <div [class.dis-none]="paramsId == '05' || paramsId == '12'">
+              <p *ngIf="coupon.useLimitMoney >= 0">消费满{{coupon.useLimitMoney/100}}元可用</p>
+              <p *ngIf="coupon.useLimitMoney == '-1'">无使用门槛</p>
+            </div>
+            <p *ngIf="paramsId == '05' || paramsId == '12'">使用范围：{{coupon.consumeLimitProductNames}}</p>
+            <p *ngIf="coupon.couponDefType == 'GIFT'">礼品：{{coupon.couponDefProductName}}</p>
+            <p [class.dis-none]="coupon.couponDefType == 'GIFT'">不可用时间：
+              <span *ngIf="!coupon.disabledWeekDate">无限制</span>
+              <span *ngIf="coupon.disabledWeekDate">
                                 {{selectedWeek1}}至{{selectedWeek2}}（{{unUseStartTime}}-{{unUseEndTime}}）
                             </span>
-                        </p>
-                    </div>
-                </div>
-            </nz-form-control>
-        </nz-form-item>
+            </p>
+          </div>
+        </div>
+      </nz-form-control>
+    </nz-form-item>
 
-        <nz-form-item>
-            <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 5 }">
-                <button nz-button nzType="primary" type="submit" [nzLoading]="submitting" [disabled]="marketingStatus === 'RUNING' || marketingStatus === 'STOP'">提交</button>
-            </nz-form-control>
-        </nz-form-item>
-    </form>
+    <nz-form-item>
+      <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 5 }">
+        <button nz-button nzType="primary" type="submit" [nzLoading]="submitting"
+                [disabled]="marketingStatus === 'RUNING' || marketingStatus === 'STOP'">提交
+        </button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
 </nz-card>
 
 <!--创建优惠券-->
 <ng-template #createCoupon>
-    <div nz-row [nzGutter]="24">
-        <div nz-col nzXs="9" nzSm="10" nzMd="14" nzLg="15">
-            <form nz-form [formGroup]="form2" (ngSubmit)="submitCouponCreate()">
-                <nz-form-item>
-                    <nz-form-label nzXs="24" nzSm="5" nzRequired>券类型</nz-form-label>
-                    <nz-form-control nzXs="24" nzSm="15" nzMd="15">
-                        <span class="btn" [class.btn-focus]="couponType === '2'" [class.dis-none]="paramsId == '07' || paramsId == '08'" (click)="onCouponTypeClick('2')">代金券</span>
-                        <span class="btn" [class.btn-focus]="couponType === '3'" [class.dis-none]="paramsId == '07' || paramsId == '09'" (click)="onCouponTypeClick('3')">折扣券</span>
-                        <span class="btn" [class.btn-focus]="couponType === '4'" [class.dis-none]="paramsId == '08' || paramsId == '09'" (click)="onCouponTypeClick('4')">礼品券</span>
-                    </nz-form-control>
-                </nz-form-item>
+  <div nz-row [nzGutter]="24">
+    <div nz-col nzXs="9" nzSm="10" nzMd="14" nzLg="15">
+      <form nz-form [formGroup]="form2" (ngSubmit)="submitCouponCreate()">
+        <nz-form-item>
+          <nz-form-label nzXs="24" nzSm="5" nzRequired>券类型</nz-form-label>
+          <nz-form-control nzXs="24" nzSm="15" nzMd="15">
+            <span class="btn" [class.btn-focus]="couponType === '2'"
+                  [class.dis-none]="paramsId == '07' || paramsId == '08'" (click)="onCouponTypeClick('2')">代金券</span>
+            <span class="btn" [class.btn-focus]="couponType === '3'"
+                  [class.dis-none]="paramsId == '07' || paramsId == '09'" (click)="onCouponTypeClick('3')">折扣券</span>
+            <span class="btn" [class.btn-focus]="couponType === '4'"
+                  [class.dis-none]="paramsId == '08' || paramsId == '09'" (click)="onCouponTypeClick('4')">礼品券</span>
+          </nz-form-control>
+        </nz-form-item>
 
-                <nz-form-item>
-                    <nz-form-label nzXs="24" nzSm="5" nzRequired>使用范围</nz-form-label>
-                    <nz-form-control nzXs="24" nzSm="15" nzMd="15">
-                        <div class="no-wrap">
+        <nz-form-item>
+          <nz-form-label nzXs="24" nzSm="5" nzRequired>使用范围</nz-form-label>
+          <nz-form-control nzXs="24" nzSm="15" nzMd="15">
+            <div class="no-wrap">
                             <span class="btn" [class.btn-focus]="useRange === '2'"
                                   [class.dis-none]="paramsId == '05' || paramsId == '06' || paramsId == '12' || paramsId == '13'"
                                   (click)="onUseRangeClick('2')">全场通用</span>
-                            <span class="btn" [class.btn-focus]="useRange === '3'"
-                                  [class.dis-none]="paramsId == '07' || paramsId == '05' || paramsId == '12'"
-                                  (click)="onUseRangeClick('3', productListAlert)">指定商品使用</span>
-                            <!--<span class="jn-color"-->
-                                  <!--*ngIf="paramsId == '06' || paramsId == '13'"-->
-                                  <!--(click)="onUseRangeClick('3', productListAlert)">选择可使用商品</span>-->
-                            <nz-select style="width: 200px;" nzShowSearch nzPlaceHolder="选择可使用商品"
-                                       formControlName="selected_product"
-                                       (ngModelChange)="selectedProductChange($event)"
-                                       *ngIf="paramsId == '05' || paramsId == '12'">
-                                <nz-option *ngFor="let product of giftProductList" nzLabel="{{product.productName}}" [nzValue]="product"></nz-option>
-                            </nz-select>
-                            <ng-container *ngIf="(paramsId == '05' || paramsId == '12') && selected_product.dirty">
-                                <nz-form-explain class="error-color" *ngIf="selected_product.errors">请选择可使用商品</nz-form-explain>
-                            </ng-container>
-                        </div>
-                        <p *ngIf="useRange === '3'">
-                            <span [class.dis-none]="paramsId == '05' || paramsId == '12'">已选{{productIdsCount}}个商品</span>
-                            <!--<span *ngIf="paramsId == '05' || paramsId == '12'">已选商品: 某某某商品</span>-->
-                        </p>
-                    </nz-form-control>
-                </nz-form-item>
-
-                <nz-form-item [class.dis-none]="paramsId == '07' || paramsId == '08'" *ngIf="couponType === '2'">
-                    <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="coupon_face_money">券面额</nz-form-label>
-                    <nz-form-control nzXs="24" nzSm="15" nzMd="15">
-                        <div class="no-wrap">
-                            <input class="width-auto" nz-input formControlName="coupon_face_money" placeholder="请输入代金券面额" (change)="couponFaceMoneyChange()"> 元
-                            <ng-container *ngIf="coupon_face_money.dirty">
-                                <nz-form-explain class="error-color" *ngIf="coupon_face_money.errors?.required">请输入代金券面额</nz-form-explain>
-                                <nz-form-explain class="error-color" *ngIf="coupon_face_money.errors?.pattern">券面额只能是正整数</nz-form-explain>
-                            </ng-container>
-                        </div>
-                    </nz-form-control>
-                </nz-form-item>
-
-                <nz-form-item *ngIf="paramsId == '07' || couponType === '4'">
-                    <nz-form-label nzXs="24" nzSm="5" nzRequired>选择礼品</nz-form-label>
-                    <nz-form-control nzXs="24" nzSm="15" nzMd="15">
-                        <nz-select formControlName="gift_product_name" nzPlaceHolder="请选择一个商品/项目作为礼品" (ngModelChange)="onSelectGiftChange($event)">
-                            <nz-option *ngFor="let item of giftProductList" [nzLabel]="item.productName" [nzValue]="item"></nz-option>
-                        </nz-select>
-                        <nz-form-explain class="error-color" *ngIf="gift_product_name.dirty && gift_product_name.errors">请选择礼品</nz-form-explain>
-                    </nz-form-control>
-                </nz-form-item>
-
-                <nz-form-item *ngIf="paramsId == '08' || couponType === '3'">
-                    <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="coupon_zhekou">券折扣</nz-form-label>
-                    <nz-form-control nzXs="24" nzSm="15" nzMd="15">
-                        <div class="no-wrap">
-                            <input class="width-auto" nz-input
-                                   formControlName="coupon_zhekou" placeholder="折扣范围0.1-9.9"
-                                   (change)="couponZhekouChange()"> 折
-                        </div>
-                        <ng-container *ngIf="coupon_zhekou.dirty || coupon_zhekou.touched">
-                            <nz-form-explain class="error-color" *ngIf="coupon_zhekou.errors?.required">请输入折扣范围</nz-form-explain>
-                            <nz-form-explain class="error-color" *ngIf="coupon_zhekou.errors?.pattern">折扣范围0.1-9.9</nz-form-explain>
-                        </ng-container>
-                    </nz-form-control>
-                </nz-form-item>
-
-                <nz-form-item>
-                    <nz-form-label nzXs="24" nzSm="5" nzRequired>使用门槛</nz-form-label>
-                    <nz-form-control nzXs="24" nzSm="15" nzMd="15">
-                        <div class="no-wrap">
-                            <input type="radio" name="useMenkan" [checked]="!useMenkan" (click)="onUseMenkanClick(false)">无门槛
-                            <input type="radio" name="useMenkan" [checked]="useMenkan" (click)="onUseMenkanClick(true)">消费满
-                            <div class="dis-inb">
-                                <input class="width-auto" nz-input formControlName="use_menkan_money"
-                                       placeholder="请输入金额" (change)="useMenkanChange()"> 元可使用
-                            </div>
-                            <ng-container *ngIf="(use_menkan_money.dirty || use_menkan_money.touched) && useMenkan">
-                                <nz-form-explain class="error-color" style="margin-left: 120px;" *ngIf="use_menkan_money.errors?.required">请输入使用门槛金额</nz-form-explain>
-                                <nz-form-explain class="error-color" style="margin-left: 120px;" *ngIf="use_menkan_money.errors?.pattern">使用门槛金额只能是正整数</nz-form-explain>
-                            </ng-container>
-                        </div>
-                    </nz-form-control>
-                </nz-form-item>
-
-                <nz-form-item>
-                    <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="coupon_use_validity">使用有效期</nz-form-label>
-                    <nz-form-control nzXs="24" nzSm="15" nzMd="15">
-                        <div class="no-wrap">
-                            领取后
-                            <input class="width-auto" nz-input formControlName="coupon_use_validity"
-                                   placeholder="请输入天数" (change)="couponUseValidityChange()">天内可使用
-                            <ng-container *ngIf="coupon_use_validity.dirty">
-                                <nz-form-explain class="error-color" style="margin-left: 45px;" *ngIf="coupon_use_validity.errors?.required">请输入天数</nz-form-explain>
-                                <nz-form-explain class="error-color" style="margin-left: 45px;" *ngIf="coupon_use_validity.errors?.pattern">使用有效期只能是正整数</nz-form-explain>
-                            </ng-container>
-                        </div>
-                    </nz-form-control>
-                </nz-form-item>
-
-                <nz-form-item>
-                    <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="">不可用时间</nz-form-label>
-                    <nz-form-control nzXs="24" nzSm="15" nzMd="15">
-                        <input type="radio" name="unUseTime" [checked]="!unUseTime" (click)="onUnUseTimeClick(false)">无限制
-                        <input type="radio" name="unUseTime" [checked]="unUseTime" (click)="onUnUseTimeClick(true)">设定不可用时段
-                        <div class="no-wrap" *ngIf="unUseTime">
-                            <nz-select style="width: 80px;" formControlName="selected_week1" (ngModelChange)="onSelectWeek1Change($event)">
-                                <nz-option *ngFor="let item of initWeekData1" [nzLabel]="item.name" [nzValue]="item"></nz-option>
-                            </nz-select> 至
-                            <nz-select style="width: 80px; margin-right: 10px" formControlName="selected_week2" (ngModelChange)="onSelectWeek2Change($event)">
-                                <nz-option *ngFor="let item of initWeekData2" [nzLabel]="item.name" [nzValue]="item"></nz-option>
-                            </nz-select>
-                            <nz-time-picker [nzFormat]="'HH:mm'" formControlName="un_use_start_time" [nzAllowEmpty]="false" (ngModelChange)="onCouponTime1Change($event)"></nz-time-picker>
-                            至
-                            <nz-time-picker [nzFormat]="'HH:mm'" formControlName="un_use_end_time" [nzAllowEmpty]="false" (ngModelChange)="onCouponTime2Change($event)"></nz-time-picker>
-                        </div>
-                    </nz-form-control>
-                </nz-form-item>
-
-                <nz-form-item>
-                    <nz-form-label nzXs="24" nzSm="5" nzFor="coupon_note">券备注</nz-form-label>
-                    <nz-form-control nzXs="24" nzSm="15" nzMd="15">
-                        <textarea nz-input formControlName="coupon_note" placeholder="请输入备注"></textarea>
-                    </nz-form-control>
-                </nz-form-item>
-
-                <nz-form-item>
-                    <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 5 }">
-                        <button nz-button nzType="primary" type="submit" [nzLoading]="submitting2">保存</button>
-                    </nz-form-control>
-                </nz-form-item>
-            </form>
-        </div>
-        <div nz-col nzXs="15" nzSm="14" nzMd="10" nzLg="9">
-            <div class="coupon-box">
-                <!--2代金券 3折扣券 4礼品券-->
-                <div class="coupon-left">
-                    <span class="coupon-circle-top"></span><span class="coupon-circle-bottom"></span>
-                    <span class="towline-lh" *ngIf="couponType == '2'"> {{couponFaceMoney}}元 <br> 代金券</span>
-                    <span class="towline-lh" *ngIf="couponType == '3'"> {{couponZhekou}}折 <br> 折扣券</span>
-                    <span *ngIf="couponType == '4'">礼品券</span>
-                </div>
-
-                <div class="coupon-right">
-                    <p>有效期：{{todayDay}}-{{couponUseEndDay}}</p>
-                    <!--<div [class.dis-none]="paramsId == '07' || paramsId == '05' || paramsId == '12'">-->
-                    <div [class.dis-none]="paramsId == '05' || paramsId == '12'">
-                        <p *ngIf="useMenkan">消费满{{useMenkanMoney}}元可用</p>
-                        <p *ngIf="!useMenkan">无使用门槛</p>
-                    </div>
-                    <!--<p *ngIf="paramsId == '07'">{{selectedGiftProduct}}</p>-->
-                    <p *ngIf="paramsId == '05' || paramsId == '12'">使用范围：{{selectedProductName}}</p>
-                    <p *ngIf="couponType == '4'">礼品：{{selectedGiftProduct}}</p>
-                    <!--<p [class.dis-none]="(paramsId == '05' || paramsId == '12') && couponType == '4'">不可用时间：-->
-                    <p [class.dis-none]="couponType == '4'">不可用时间：
-                        <span *ngIf="!unUseTime">无限制</span>
-                        <span *ngIf="unUseTime">{{selectedWeek1}}至{{selectedWeek2}}（{{unUseStartTime}}-{{unUseEndTime}}）</span>
-                    </p>
-                </div>
+              <span class="btn" [class.btn-focus]="useRange === '3'"
+                    [class.dis-none]="paramsId == '07' || paramsId == '05' || paramsId == '12'"
+                    (click)="onUseRangeClick('3', productListAlert)">指定商品使用</span>
+              <!--<span class="jn-color"-->
+              <!--*ngIf="paramsId == '06' || paramsId == '13'"-->
+              <!--(click)="onUseRangeClick('3', productListAlert)">选择可使用商品</span>-->
+              <nz-select style="width: 200px;" nzShowSearch nzPlaceHolder="选择可使用商品"
+                         formControlName="selected_product"
+                         (ngModelChange)="selectedProductChange($event)"
+                         *ngIf="paramsId == '05' || paramsId == '12'">
+                <nz-option *ngFor="let product of giftProductList" nzLabel="{{product.productName}}"
+                           [nzValue]="product"></nz-option>
+              </nz-select>
+              <ng-container *ngIf="(paramsId == '05' || paramsId == '12') && selected_product.dirty">
+                <nz-form-explain class="error-color" *ngIf="selected_product.errors">请选择可使用商品</nz-form-explain>
+              </ng-container>
             </div>
-        </div>
+            <p *ngIf="useRange === '3'">
+              <span [class.dis-none]="paramsId == '05' || paramsId == '12'">已选{{productIdsCount}}个商品</span>
+              <!--<span *ngIf="paramsId == '05' || paramsId == '12'">已选商品: 某某某商品</span>-->
+            </p>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item [class.dis-none]="paramsId == '07' || paramsId == '08'" *ngIf="couponType === '2'">
+          <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="coupon_face_money">券面额</nz-form-label>
+          <nz-form-control nzXs="24" nzSm="15" nzMd="15">
+            <div class="no-wrap">
+              <input class="width-auto" nz-input formControlName="coupon_face_money" placeholder="请输入代金券面额"
+                     (change)="couponFaceMoneyChange()"> 元
+              <ng-container *ngIf="coupon_face_money.dirty">
+                <nz-form-explain class="error-color" *ngIf="coupon_face_money.errors?.required">请输入代金券面额
+                </nz-form-explain>
+                <nz-form-explain class="error-color" *ngIf="coupon_face_money.errors?.pattern">券面额只能是正整数
+                </nz-form-explain>
+              </ng-container>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item *ngIf="paramsId == '07' || couponType === '4'">
+          <nz-form-label nzXs="24" nzSm="5" nzRequired>选择礼品</nz-form-label>
+          <nz-form-control nzXs="24" nzSm="15" nzMd="15">
+            <nz-select formControlName="gift_product_name" nzPlaceHolder="请选择一个商品/项目作为礼品"
+                       (ngModelChange)="onSelectGiftChange($event)">
+              <nz-option *ngFor="let item of giftProductList" [nzLabel]="item.productName" [nzValue]="item"></nz-option>
+            </nz-select>
+            <nz-form-explain class="error-color" *ngIf="gift_product_name.dirty && gift_product_name.errors">请选择礼品
+            </nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item *ngIf="paramsId == '08' || couponType === '3'">
+          <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="coupon_zhekou">券折扣</nz-form-label>
+          <nz-form-control nzXs="24" nzSm="15" nzMd="15">
+            <div class="no-wrap">
+              <input class="width-auto" nz-input
+                     formControlName="coupon_zhekou" placeholder="折扣范围0.1-9.9"
+                     (change)="couponZhekouChange()"> 折
+            </div>
+            <ng-container *ngIf="coupon_zhekou.dirty || coupon_zhekou.touched">
+              <nz-form-explain class="error-color" *ngIf="coupon_zhekou.errors?.required">请输入折扣范围</nz-form-explain>
+              <nz-form-explain class="error-color" *ngIf="coupon_zhekou.errors?.pattern">折扣范围0.1-9.9</nz-form-explain>
+            </ng-container>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label nzXs="24" nzSm="5" nzRequired>使用门槛</nz-form-label>
+          <nz-form-control nzXs="24" nzSm="15" nzMd="15">
+            <div class="no-wrap">
+              <input type="radio" name="useMenkan" [checked]="!useMenkan" (click)="onUseMenkanClick(false)">无门槛
+              <input type="radio" name="useMenkan" [checked]="useMenkan" (click)="onUseMenkanClick(true)">消费满
+              <div class="dis-inb">
+                <input class="width-auto" nz-input formControlName="use_menkan_money"
+                       placeholder="请输入金额" (change)="useMenkanChange()"> 元可使用
+              </div>
+              <ng-container *ngIf="(use_menkan_money.dirty || use_menkan_money.touched) && useMenkan">
+                <nz-form-explain class="error-color" style="margin-left: 120px;"
+                                 *ngIf="use_menkan_money.errors?.required">请输入使用门槛金额
+                </nz-form-explain>
+                <nz-form-explain class="error-color" style="margin-left: 120px;"
+                                 *ngIf="use_menkan_money.errors?.pattern">使用门槛金额只能是正整数
+                </nz-form-explain>
+              </ng-container>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="coupon_use_validity">使用有效期</nz-form-label>
+          <nz-form-control nzXs="24" nzSm="15" nzMd="15">
+            <div class="no-wrap">
+              领取后
+              <input class="width-auto" nz-input formControlName="coupon_use_validity"
+                     placeholder="请输入天数" (change)="couponUseValidityChange()">天内可使用
+              <ng-container *ngIf="coupon_use_validity.dirty">
+                <nz-form-explain class="error-color" style="margin-left: 45px;"
+                                 *ngIf="coupon_use_validity.errors?.required">请输入天数
+                </nz-form-explain>
+                <nz-form-explain class="error-color" style="margin-left: 45px;"
+                                 *ngIf="coupon_use_validity.errors?.pattern">使用有效期只能是正整数
+                </nz-form-explain>
+              </ng-container>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="">不可用时间</nz-form-label>
+          <nz-form-control nzXs="24" nzSm="15" nzMd="15">
+            <input type="radio" name="unUseTime" [checked]="!unUseTime" (click)="onUnUseTimeClick(false)">无限制
+            <input type="radio" name="unUseTime" [checked]="unUseTime" (click)="onUnUseTimeClick(true)">设定不可用时段
+            <div class="no-wrap" *ngIf="unUseTime">
+              <nz-select style="width: 80px;" formControlName="selected_week1"
+                         (ngModelChange)="onSelectWeek1Change($event)">
+                <nz-option *ngFor="let item of initWeekData1" [nzLabel]="item.name" [nzValue]="item"></nz-option>
+              </nz-select>
+              至
+              <nz-select style="width: 80px; margin-right: 10px" formControlName="selected_week2"
+                         (ngModelChange)="onSelectWeek2Change($event)">
+                <nz-option *ngFor="let item of initWeekData2" [nzLabel]="item.name" [nzValue]="item"></nz-option>
+              </nz-select>
+              <nz-time-picker [nzFormat]="'HH:mm'" formControlName="un_use_start_time" [nzAllowEmpty]="false"
+                              (ngModelChange)="onCouponTime1Change($event)"></nz-time-picker>
+              至
+              <nz-time-picker [nzFormat]="'HH:mm'" formControlName="un_use_end_time" [nzAllowEmpty]="false"
+                              (ngModelChange)="onCouponTime2Change($event)"></nz-time-picker>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label nzXs="24" nzSm="5" nzFor="coupon_note">券备注</nz-form-label>
+          <nz-form-control nzXs="24" nzSm="15" nzMd="15">
+            <textarea nz-input formControlName="coupon_note" placeholder="请输入备注"></textarea>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 5 }">
+            <button nz-button nzType="primary" type="submit" [nzLoading]="submitting2">保存</button>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
     </div>
+    <div nz-col nzXs="15" nzSm="14" nzMd="10" nzLg="9">
+      <div class="coupon-box">
+        <!--2代金券 3折扣券 4礼品券-->
+        <div class="coupon-left">
+          <span class="coupon-circle-top"></span><span class="coupon-circle-bottom"></span>
+          <span class="towline-lh" *ngIf="couponType == '2'"> {{couponFaceMoney}}元 <br> 代金券</span>
+          <span class="towline-lh" *ngIf="couponType == '3'"> {{couponZhekou}}折 <br> 折扣券</span>
+          <span *ngIf="couponType == '4'">礼品券</span>
+        </div>
+
+        <div class="coupon-right">
+          <p>有效期：{{todayDay}}-{{couponUseEndDay}}</p>
+          <!--<div [class.dis-none]="paramsId == '07' || paramsId == '05' || paramsId == '12'">-->
+          <div [class.dis-none]="paramsId == '05' || paramsId == '12'">
+            <p *ngIf="useMenkan">消费满{{useMenkanMoney}}元可用</p>
+            <p *ngIf="!useMenkan">无使用门槛</p>
+          </div>
+          <!--<p *ngIf="paramsId == '07'">{{selectedGiftProduct}}</p>-->
+          <p *ngIf="paramsId == '05' || paramsId == '12'">使用范围：{{selectedProductName}}</p>
+          <p *ngIf="couponType == '4'">礼品：{{selectedGiftProduct}}</p>
+          <!--<p [class.dis-none]="(paramsId == '05' || paramsId == '12') && couponType == '4'">不可用时间：-->
+          <p [class.dis-none]="couponType == '4'">不可用时间：
+            <span *ngIf="!unUseTime">无限制</span>
+            <span *ngIf="unUseTime">{{selectedWeek1}}至{{selectedWeek2}}（{{unUseStartTime}}-{{unUseEndTime}}）</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 </ng-template>
 
 <!--选择商品弹框-->
 <ng-template #productListAlert>
-    <div class="alert-order-msg1 stores">
-        <ul class="right-block store_lists">
-            <li class="list">
-                <p class="head_store">全部商品</p>
-                <div class="show_all_stores">
-                    <div class="city-list" *ngFor="let products of productList; let cityIndex=index">
-                        <!--城市-->
-                        <div class="select_all_btn">
-                            <input class="select_all_input" type="checkbox" [checked]="products.change" (click)="onSelectAllproductsInputClick(cityIndex, products.change)" />
-                            <span class="city">{{products.categoryName}}</span>
-                        </div>
-                        <!--门店-->
-                        <ul class="shop_names">
-                            <li *ngFor="let product of products.productList; let storeIndex=index">
-                                <input type="checkbox" [checked]="product.change" (click)="onSelectproductsInputClick(cityIndex, storeIndex)" />
-                                <span class="city">{{product.productName}}</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </li>
-            <li class="list">
-                <p class="head_store">已选商品</p>
-                <div class="selected_stores">
-                    <div class="city-list bbn" *ngFor="let products of productList">
-                        <div *ngIf="products.checked">
-                            <!--城市-->
-                            <div class="select_all_btn">
-                                <span class="city">{{products.categoryName}}</span>
-                            </div>
-                            <!--门店-->
-                            <ul class="shop_names">
-                                <li *ngFor="let product of products.productList">
-                                    <span *ngIf="product.change">{{product.productName}}</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </li>
-        </ul>
-    </div>
+  <div class="alert-order-msg1 stores">
+    <ul class="right-block store_lists">
+      <li class="list">
+        <p class="head_store">全部商品</p>
+        <div class="show_all_stores">
+          <div class="city-list" *ngFor="let products of productList; let cityIndex=index">
+            <!--城市-->
+            <div class="select_all_btn">
+              <input class="select_all_input" type="checkbox" [checked]="products.change"
+                     (click)="onSelectAllproductsInputClick(cityIndex, products.change)"/>
+              <span class="city">{{products.categoryName}}</span>
+            </div>
+            <!--门店-->
+            <ul class="shop_names">
+              <li *ngFor="let product of products.productList; let storeIndex=index">
+                <input type="checkbox" [checked]="product.change"
+                       (click)="onSelectproductsInputClick(cityIndex, storeIndex)"/>
+                <span class="city">{{product.productName}}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </li>
+      <li class="list">
+        <p class="head_store">已选商品</p>
+        <div class="selected_stores">
+          <div class="city-list bbn" *ngFor="let products of productList">
+            <div *ngIf="products.checked">
+              <!--城市-->
+              <div class="select_all_btn">
+                <span class="city">{{products.categoryName}}</span>
+              </div>
+              <!--门店-->
+              <ul class="shop_names">
+                <li *ngFor="let product of products.productList">
+                  <span *ngIf="product.change">{{product.productName}}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
 </ng-template>
 
 <!--选择已有优惠券-->
 <ng-template #selectCoupon>
-    <div>
-        <nz-radio-group [(ngModel)]="couponTypeTab" (ngModelChange)="couponTabClick()">
-            <label nz-radio-button nzValue="all" [nzDisabled]="paramsId == '05' || paramsId == '12' || paramsId == '07'">全部优惠券</label>
-            <label nz-radio-button nzValue="daijinquan" [nzDisabled]="paramsId == '05' || paramsId == '12' || paramsId == '07'">代金券</label>
-            <label nz-radio-button nzValue="zhekouquan" [nzDisabled]="paramsId == '05' || paramsId == '12' || paramsId == '07'">折扣券</label>
-            <label nz-radio-button nzValue="lipinquan" [nzDisabled]="paramsId == '05' || paramsId == '12'">礼品券</label>
-            <label nz-radio-button nzValue="danpinquan" [nzDisabled]="paramsId != '05' && paramsId != '12'">单品券</label>
-        </nz-radio-group>
-    </div>
-    <div>
-        <div class="coupon-box" *ngFor="let item of couponList" (click)="onCouponItemClick(item)">
-            <div class="coupon-left">
-                <span class="coupon-circle-top"></span><span class="coupon-circle-bottom"></span>
-                <span class="towline-lh" *ngIf="item.couponDefType == 'MONEY'"> {{item.couponDefAmount/100}}元 <br> 代金券</span>
-                <span class="towline-lh" *ngIf="item.couponDefType == 'DISCOUNT'"> {{item.couponDefDiscount}}折 <br> 折扣券</span>
-                <span *ngIf="item.couponDefType == 'GIFT'">礼品券</span>
-            </div>
-            <div class="coupon-right">
-                <p>有效期：{{todayDay}}-{{item.validEndDate}}</p>
-                <div [class.dis-none]="paramsId == '05' || paramsId == '12'">
-                    <p *ngIf="item.useLimitMoney >= 0">消费满{{item.useLimitMoney/100}}元可用</p>
-                    <p *ngIf="item.useLimitMoney == '-1'">无使用门槛</p>
-                </div>
-                <p *ngIf="paramsId == '05' || paramsId == '12'">使用范围：{{item.consumeLimitProductNames}}</p>
-                <p *ngIf="item.couponDefType == 'GIFT'">礼品：{{item.couponDefProductName}}</p>
-                <p [class.dis-none]="item.couponDefType == 'GIFT'">不可用时间：
-                    <span *ngIf="!item.disabledWeekDate">无限制</span>
-                    <span *ngIf="item.disabledWeekDate">
+  <div>
+    <nz-radio-group [(ngModel)]="couponTypeTab" (ngModelChange)="couponTabClick()">
+      <label nz-radio-button nzValue="all"
+             [nzDisabled]="paramsId == '05' || paramsId == '12' || paramsId == '07'">全部优惠券</label>
+      <label nz-radio-button nzValue="daijinquan"
+             [nzDisabled]="paramsId == '05' || paramsId == '12' || paramsId == '07'">代金券</label>
+      <label nz-radio-button nzValue="zhekouquan"
+             [nzDisabled]="paramsId == '05' || paramsId == '12' || paramsId == '07'">折扣券</label>
+      <label nz-radio-button nzValue="lipinquan" [nzDisabled]="paramsId == '05' || paramsId == '12'">礼品券</label>
+      <label nz-radio-button nzValue="danpinquan" [nzDisabled]="paramsId != '05' && paramsId != '12'">单品券</label>
+    </nz-radio-group>
+  </div>
+  <div>
+    <div class="coupon-box" *ngFor="let item of couponList" (click)="onCouponItemClick(item)">
+      <div class="coupon-left">
+        <span class="coupon-circle-top"></span><span class="coupon-circle-bottom"></span>
+        <span class="towline-lh" *ngIf="item.couponDefType == 'MONEY'"> {{item.couponDefAmount/100}}元 <br> 代金券</span>
+        <span class="towline-lh" *ngIf="item.couponDefType == 'DISCOUNT'"> {{item.couponDefDiscount}}折 <br> 折扣券</span>
+        <span *ngIf="item.couponDefType == 'GIFT'">礼品券</span>
+      </div>
+      <div class="coupon-right">
+        <p>有效期：{{todayDay}}-{{item.validEndDate}}</p>
+        <div [class.dis-none]="paramsId == '05' || paramsId == '12'">
+          <p *ngIf="item.useLimitMoney >= 0">消费满{{item.useLimitMoney/100}}元可用</p>
+          <p *ngIf="item.useLimitMoney == '-1'">无使用门槛</p>
+        </div>
+        <p *ngIf="paramsId == '05' || paramsId == '12'">使用范围：{{item.consumeLimitProductNames}}</p>
+        <p *ngIf="item.couponDefType == 'GIFT'">礼品：{{item.couponDefProductName}}</p>
+        <p [class.dis-none]="item.couponDefType == 'GIFT'">不可用时间：
+          <span *ngIf="!item.disabledWeekDate">无限制</span>
+          <span *ngIf="item.disabledWeekDate">
                         {{item.selectedWeek1}}至{{item.selectedWeek2}}（{{item.unUseStartTime}}-{{item.unUseEndTime}}）
                     </span>
-                </p>
-            </div>
-        </div>
+        </p>
+      </div>
     </div>
+  </div>
 </ng-template>
 
 <div style="opacity: 0; width: 0; height: 0">
