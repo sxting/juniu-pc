@@ -33,6 +33,19 @@
         </div>
     </div>
 </nz-card>
+<nz-card nzTitle="小程序码下载" style="overflow:hidden" [nzBordered]="false" [nzBodyStyle]="{'height':'100%','overflow': 'hidden','margin':'30px','background':'#f8f8f8'}">
+    <div style="overflow: hidden;position: relative;">
+        <div nz-col nzSpan="20">
+            <span style="margin-right:20px;font-size: 20px;">小程序码</span>
+            <span style="margin-right:20px;">颜色：黑色</span>
+            <span style="margin-right:20px;">边长：12cm</span>
+        </div>
+        <div nz-col nzSpan="4">
+            <button class="buttons" nz-button nzType="primary" (click)="jiechu()" type="submit">点击下载</button>
+        </div>
+    </div>
+
+</nz-card>
 <nz-card nzTitle="近10条审核记录" style="overflow:hidden" [nzBordered]="false" [nzBodyStyle]="{'height':'100%','overflow': 'hidden'}">
     <nz-table [nzNoResult]="'没有数据'" [nzShowPagination]="false" [nzData]="statusData?.recoreds">
         <thead>

@@ -8,6 +8,8 @@ import { MemberAnalysisComponent } from './memberAnalysis/memberAnalysis.compone
 import { CardDataExportComponent } from './cardDataExport/cardDataExport.component';
 import { OnlyCardImportComponent } from './onlyCardImport/onlyCardImport.component';
 import { ManyCardImportComponent } from './manyCardImport/manyCardImport.component';
+import { VipTittleListComponent } from './vipTittleList/vipTittleList.component';
+import { VipTittleComponent } from './vipTittle/vipTittle.component';
 
 
 const routes: Routes = [
@@ -18,6 +20,9 @@ const routes: Routes = [
     { path: 'cardDataExport', component: CardDataExportComponent },       
     { path: 'onlyCardImport', component: OnlyCardImportComponent },    
     { path: 'manyCardImport', component: ManyCardImportComponent },    
+    { path: 'vipTittleList', component: VipTittleListComponent },    
+    { path: 'vipTittle', component: VipTittleComponent },    
+    
        
         
 ];
