@@ -7,7 +7,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { UploadService } from '@shared/upload-img';
-import { CITYLIST, KOUBEI_ITEM_CATEGORYS } from '@shared/define/juniu-define';
+import { ALIPAY_SHOPS, CITYLIST, KOUBEI_ITEM_CATEGORYS } from '@shared/define/juniu-define';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import * as differenceInDays from 'date-fns/difference_in_days';
 declare var PhotoClip: any;
@@ -1096,7 +1096,12 @@ export class AddKoubeiProductComponent implements OnInit {
                 }
             });
             this.picIds = imageIdsArray.join(',');
-
+            let soldOutDate = '';
+            if(this.koubeiProductId && this.soldOutDate == null){
+              soldOutDate = '2050-09-01 00:00:00';
+            }else{
+              soldOutDate = this.soldOutDate ? FunctionUtil.changeDateToSeconds(this.soldOutDate) : ''
+            }
             let params = {
                 productName: this.form.controls.productName.value,
                 categoryName: categorysNameTran,
@@ -1116,14 +1121,14 @@ export class AddKoubeiProductComponent implements OnInit {
                 validityPeriodRangeFrom: this.form.controls.validityPeriodType.value == 'FIXED' && startDate ? startDate : '',
                 validityPeriodRangeTo: this.form.controls.validityPeriodType.value == 'FIXED' && endDate ? endDate : '',
                 putawayDate: this.putawayDate ? FunctionUtil.changeDateToSeconds(this.putawayDate) : '',
-                soldOutDate: this.soldOutDate ? FunctionUtil.changeDateToSeconds(this.soldOutDate) : '',
+                soldOutDate: soldOutDate,
                 putaway: this.status,
                 storeIds: this.selectStoresIds,
                 verifyFrequency: this.form.controls.verifyFrequency.value,
                 verifyEnableTimes: this.form.controls.verifyFrequency.value == 'simple' ? 1 : Number(this.form.controls.verifyEnableTimes.value)
             };
-            this.submitting = true;
-            this.koubeiService.saveKoubeiProductInfor(params).subscribe(
+            self.submitting = true;
+            self.koubeiService.saveKoubeiProductInfor(params).subscribe(
                 (res: any) => {
                     self.submitting = false;
                     if (res.success) {
@@ -1156,10 +1161,10 @@ export class AddKoubeiProductComponent implements OnInit {
                     }
                 },
                 error => {
+                    self.submitting = false;
                     this.msg.warning(error);
                 }
             );
         }
     }
-
 }

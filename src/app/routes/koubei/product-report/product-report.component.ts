@@ -122,11 +122,10 @@ export class ProductReportComponent implements OnInit {
     getData(){
         this.startDate  = FunctionUtil.changeDate(this.dateRange[0]);
         this.endDate = FunctionUtil.changeDate(this.dateRange[1]);
-        this.batchQuery.itemId = this.productId;
-        this.batchQuery.startDate = this.startDate;
         this.batchQuery.endDate = this.endDate;
-        //口碑订单报表三种状态数量金额统计
-        this.reportStatisticsInfor(this.batchQuery);
+        this.batchQuery.startDate = this.startDate;
+        //获取报表商品
+        this.reportProductItems(this.batchQuery);
     }
 
     // 切换分页码
@@ -149,6 +148,10 @@ export class ProductReportComponent implements OnInit {
                     this.loading = false;
                     self.productListInfor = res.data;
                     self.productId = self.productListInfor[0]?self.productListInfor[0].productId:'';//拿到商品的itemId
+
+                    //口碑订单报表三种状态数量金额统计
+                    this.batchQuery.itemId = this.productId;
+                    this.reportStatisticsInfor(this.batchQuery);
 
                 } else {
                     this.modalSrv.error({
