@@ -24,6 +24,7 @@ import { SoftBuyStep2Component } from "./software-buy/software-buy-step2.compone
 import { SoftBuyStep3Component } from "./software-buy/software-buy-step3.component";
 import { SoftBuyStep4Component } from "./software-buy/software-buy-step4.component";
 import { SoftwareBuyRecordComponent } from "./software-buy-record/software-buy-record.component";
+import { NameManageComponent } from "./name-manage/name-manage.component";
 
 const COMPONENT_NOROUNT = [
     PayWayStep1Component,
@@ -54,7 +55,8 @@ const COMPONENT_NOROUNT = [
     CloudPrinterComponent,
     PayDownloadComponent,
     PayRecordComponent,
-    VedioComponent
+    VedioComponent,
+    NameManageComponent
   ],
   exports: [MsmNoticeComponent],
   providers: [SetingsService, TransferService, SoftTransferService],

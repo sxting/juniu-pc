@@ -6,6 +6,9 @@ import { CrossShopComponent} from "./cross-shop/cross-shop.component";
 import { MonthReportComponent} from "./month-report/month-report.component";
 import { CommodityStatementComponent } from "./commodity-statement/commodity-statement.component";
 import { CustomerReportComponent } from "./customer-report/customer-report.component";
+import { vipConsumeReportComponent } from './vipconsume-report/vipconsume-report.component';
+import { revenueDetailReportComponent } from './revenue-detail/revenue-detail.component';
+import { profitReportComponent } from './profit-report/profit-report.component';
 
 const routes: Routes = [
     { path: 'revenue/report', component: RevenueReportComponent },
@@ -14,6 +17,10 @@ const routes: Routes = [
     { path: 'commission/report', component: CommissionReportComponent},
     { path: 'cross/shop/settlement', component: CrossShopComponent},
     { path: 'month/report', component: MonthReportComponent},
+    { path: 'vip/consume/report', component: vipConsumeReportComponent},
+    { path: 'revenue/detail/report', component: revenueDetailReportComponent},
+    { path: 'profit/report', component: profitReportComponent},
+
 ];
 
 @NgModule({

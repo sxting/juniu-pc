@@ -1,0 +1,76 @@
+@import 'node_modules/@delon/theme/styles/default';
+@primary-color:#ff7700;
+
+.item {
+  margin: 10px 0 30px;
+
+  .title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #000;
+  }
+  ul {
+
+  }
+  li {
+    p {
+
+    }
+    p:first-child {
+      background-color: #f3f3f3;
+      height: 30px;
+      line-height: 30px;
+      padding-left: 15px;
+      margin-top: 25px;
+
+      span {
+        font-size: 13px;
+      }
+      .sub-title {
+        font-weight: bold;
+        color: #000;
+        font-size: 14px;
+        padding: 0 5px;
+      }
+    }
+    p:last-child {
+      padding: 15px 0;
+
+      .label {
+        padding-left: 10px;
+      }
+      .name {
+        padding: 0 10px;
+      }
+      .fix-btn {
+        color: @primary-color;
+        padding: 0 10px;
+        margin-left: 20px;
+        cursor: pointer;
+      }
+      input {
+        width: 200px;
+        height: 35px;
+        line-height: 35px;
+        border: 1px solid #e5e5e5;
+        border-radius: 4px;
+        color: #333;
+        margin-left: 10px;
+        padding: 5px;
+        box-sizing: border-box;
+        outline: none;
+        margin-right: 10px;
+      }
+      .save-btn, .cancel-btn {
+        color: @primary-color;
+        margin: 0 10px;
+        padding: 5px;
+        cursor: pointer;
+      }
+      .cancel-btn {
+        color: @primary-color;
+      }
+    }
+
+  }
+}

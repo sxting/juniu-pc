@@ -1,0 +1,181 @@
+
+<div class="content__title ad-ph" style="padding-bottom: 16px;">
+  <nz-breadcrumb>
+    <nz-breadcrumb-item>报表</nz-breadcrumb-item>
+    <nz-breadcrumb-item>营收报表</nz-breadcrumb-item>
+    <nz-breadcrumb-item>营收报表详情</nz-breadcrumb-item>
+  </nz-breadcrumb>
+  <h3 class="title">营收报表详情</h3>
+</div>
+<div class="tabsetBox" >
+  <nz-tabset (nzSelectChange)="tabclick($event)">
+    <nz-tab *ngFor="let item of tabTitleName" nzTitle="{{item.name}}">
+    </nz-tab>
+  </nz-tabset>
+  <div class="btn-box">
+    <span class="ico-ecode icon-erweima iconfont" (click)="qrCodeShow()"></span>
+    <button nz-button (click)="exportExcel()" [nzType]="'primary'">
+      <span>导出Excel</span>
+    </button>
+    <!-- 二维码 -->
+    <div class="qrcode-box" *ngIf=" ">
+      <div class="qrcode" id="qrcode"></div>
+      <p class="code-text">微信扫描下方二维码 将此报表发送到手机查看</p>
+    </div>
+  </div>
+</div>
+<nz-card [nzBordered]="false">
+  <form nz-form [nzLayout]="'inline'" (ngSubmit)="getData()" class="search__form">
+    <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
+      <nz-col nzMd="8" nzSm="24" style="overflow: hidden;height: 56.5px;">
+        <nz-form-item >
+          <jn-stores-infor [className]="'class1'" [className2]="'class2'" [moduleId]="moduleId" (storeIdOutput)="getStoreId($event.storeId)"></jn-stores-infor>
+        </nz-form-item>
+      </nz-col>
+      <nz-col nzMd="8" nzSm="24">
+        <nz-form-item>
+          <nz-form-label nzFor="productId">选择日期</nz-form-label>
+          <nz-form-control>
+            <nz-range-picker (ngModelChange)="onDateChange($event)" nzShowTime></nz-range-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </nz-col>
+      <nz-col nzMd="8" nzSm="24" *ngIf="expandForm">
+        <nz-form-item style="height: 56.5px;">
+          <nz-form-label nzFor="money">订单状态</nz-form-label>
+          <nz-form-control>
+            <nz-select  style="width: 200px;" [(ngModel)]="storeId" (ngModelChange)="selectOrderStatus()" name="storeList"  [nzPlaceHolder]="'请选择订单状态'" [nzShowSearch]="true">
+              <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.storeName" [nzValue]="i.storeId"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </nz-col>
+      <nz-col nzMd="8" nzSm="24" *ngIf="expandForm">
+        <nz-form-item>
+          <nz-form-label nzFor="phone">搜 索</nz-form-label>
+          <nz-form-control>
+            <input nz-input  name="orderNo" placeholder="请输入订单编号搜索" id="orderNo">
+          </nz-form-control>
+        </nz-form-item>
+      </nz-col>
+      <nz-col [nzSpan]="expandForm ? 24 : 8" [class.text-right]="expandForm" style="width: 33.33%;">
+        <button nz-button type="submit" [nzType]="'primary'" [nzLoading]="loading">查询</button>
+        <button nz-button type="reset" (click)="getData()" class="mx-sm">重置</button>
+        <a (click)="expandForm=!expandForm">
+          {{expandForm ? '收起' : '展开'}}
+          <i class="anticon" [class.anticon-down]="!expandForm" [class.anticon-up]="expandForm"></i>
+        </a>
+      </nz-col>
+    </nz-row>
+  </form>
+  <!-- table -->
+  <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="reportOrderList">
+    <thead nz-thead class="ui-grid-thead">
+    <tr>
+      <th nz-th class="" *ngFor="let item of theadName;let i = index">{{item}}</th>
+    </tr>
+    </thead>
+    <tbody nz-tbody class="ui-grid-tbody">
+    <!--<tr nz-tbody-tr *ngFor="let item of reportOrderList; let i = index">-->
+      <!--<td style="color: #368ff7">1526442516236560284087</td>-->
+      <!--<td>2018-05-16 11:48:36</td>-->
+      <!--<td>微信</td>-->
+      <!--<td>桔牛体验店(健身馆)</td>-->
+      <!--<td>已支付</td>-->
+      <!--<td>50,000.00</td>-->
+      <!--<td style="color: #108EE9" (click)="checkDetailInfor(orderDetail,item.orderNo)">查看详情</td>-->
+    <!--</tr>-->
+    <tr nz-tbody-tr>
+      <td style="color: #108EE9">1526442516236560284087</td>
+      <td>2018-05-16 11:48:36</td>
+      <td>微信</td>
+      <td>桔牛体验店(健身馆)</td>
+      <td>
+        <span class=""></span>
+        已支付
+      </td>
+      <td>50,000.00</td>
+      <td style="color: #FF6600;cursor: pointer" (click)="checkDetailInfor(orderDetail,'22222222')">查看详情</td>
+    </tr>
+    </tbody>
+  </nz-table>
+  <div class="nzPaginationBox">
+    <nz-pagination class="nzPagination" style="float: right;padding: 20px 0" [nzTotal]="totalElements" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
+  </div>
+</nz-card>
+
+<!--查看详情-->
+<ng-template #orderDetail>
+  <div class="reserve-record-alert">
+    <div class="content-title"><span></span>订单详情</div>
+    <div class="orderpage_detail_list detail_list_bot">
+      <table>
+        <tr class="ui-grid-row">
+          <td class="">订单编号</td>
+          <td class="">1526442516236560284087</td>
+          <td class="">下单时间</td>
+          <td class="trans-status">2018-05-21 15:11:13</td>
+          <td class="">状态</td>
+          <td class="trans-status">已支付</td>
+        </tr>
+        <tr >
+          <td class="">交易号</td>
+          <td class="">201805213452809594831849</td>
+          <td class="">收款门店</td>
+          <td class="">桔牛体验店(健身馆)</td>
+          <td class="">支付方式</td>
+          <td class="">微信</td>
+        </tr>
+      </table>
+    </div>
+    <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false">
+      <thead nz-thead class="ui-grid-thead">
+      <tr>
+        <th nz-th class="" *ngFor="let item of theadAlertName;let i = index">{{item}}</th>
+      </tr>
+      </thead>
+      <tbody nz-tbody class="ui-grid-tbody">
+      <tr nz-tbody-tr>
+        <td style="color: #108EE9">1526442516236560284087</td>
+        <td>2018-05-16 11:48:36</td>
+        <td>微信</td>
+        <td>桔牛体验店(健身馆)</td>
+        <td>50,000.00</td>
+      </tr>
+      <tr nz-tbody-tr>
+        <td colspan="3" style="color: #000">总计</td>
+        <td>50</td>
+        <td>1000.00</td>
+      </tr>
+      </tbody>
+    </nz-table>
+    <div class="orderpage_detail_list_bottom detail_list_bot">
+      <table>
+        <tr class="ui-grid-row">
+          <td class="">优惠券</td>
+          <td class="">全场7折</td>
+          <td class="">优惠金额</td>
+          <td class="trans-status">50.00 元</td>
+          <td class="">实付金额</td>
+          <td class="trans-status">149.80 元</td>
+        </tr>
+        <tr >
+          <td class="">顾客姓名</td>
+          <td class="">张三</td>
+          <td class="">性别</td>
+          <td class="">男</td>
+          <td class="">手机号</td>
+          <td class="">152109283243</td>
+        </tr>
+        <tr >
+          <td class="">技师</td>
+          <td class="">明宇</td>
+          <td class="">是否指定</td>
+          <td class="">是</td>
+          <td class="">小工</td>
+          <td class="">小平</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</ng-template>

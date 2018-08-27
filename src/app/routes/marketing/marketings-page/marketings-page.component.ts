@@ -197,6 +197,20 @@ export class MarketingsPageComponent implements OnInit {
     }
   }
 
+  //选择层级
+  onSelectLevelClick(tpl: TemplateRef<{}>) {
+    this.getLevelList();
+    this.modalSrv.create({
+      nzTitle: '选择会员层级',
+      nzContent: tpl,
+      nzWidth: '920px',
+      nzOnOk: () => {
+
+      },
+      nzOnCancel: () => {},
+    });
+  }
+
     //活动对象
     onActivityObjClick(type: string) {
         this.memberType = type;
@@ -823,6 +837,11 @@ export class MarketingsPageComponent implements OnInit {
         )
     }
     /*编辑end*/
+
+  //  会员层级
+  getLevelList() {
+
+  }
 
     //获取会员数量
     getCalculateMemberNum() {
