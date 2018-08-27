@@ -103,16 +103,16 @@ export class AddKoubeiProductComponent implements OnInit {
         let storeList = JSON.parse(this.localStorageService.getLocalstorage('alipayShops')) ?
             JSON.parse(this.localStorageService.getLocalstorage('alipayShops')) : [];
         if (storeList) {
-          CITYLIST.forEach(function (i: any) {
-            storeList.forEach((ele: any, index: number, arr: any) => {
-              if(i.i === ele.city){
-                ele.cityName = i.n;
-              }
-              if(i.i === ele.provinceId){
-                ele.provinceName = i.n;
-              }
+            CITYLIST.forEach(function (i: any) {
+                storeList.forEach((ele: any, index: number, arr: any) => {
+                    if (i.i === ele.city) {
+                        ele.cityName = i.n;
+                    }
+                    if (i.i === ele.provinceId) {
+                        ele.provinceName = i.n;
+                    }
+                });
             });
-          });
         }
         let cityNameSpaceArr = [{
             cityName: '',
@@ -240,7 +240,7 @@ export class AddKoubeiProductComponent implements OnInit {
 
         if (this.form.controls.verifyFrequency.value === 'simple' && this.form.controls.verifyEnableTimes.value == '') {
             this.form = this.fb.group({
-                productName: [ productName, [ Validators.required ]],
+                productName: [productName, [Validators.required]],
                 originalPrice: [originalPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)])],
                 currentPrice: [currentPrice, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.max(10000 * 3)])],
                 categoryName: [categoryName, []],
@@ -287,7 +287,7 @@ export class AddKoubeiProductComponent implements OnInit {
 
     //选择门店
     onSelectStoreBtnClick(tpl: any) {
-      let self = this;
+        let self = this;
         this.modalSrv.create({
             nzTitle: '选择口碑门店',
             nzContent: tpl,
@@ -295,9 +295,9 @@ export class AddKoubeiProductComponent implements OnInit {
             nzWidth: '800px',
             nzCancelText: null,
             nzOkText: '保存',
-            nzOnOk: function(){
-              console.log(self.selectStoresIds);
-              self.ifShowStoreErrorTips = self.selectStoresIds === ''? true : false;
+            nzOnOk: function () {
+                console.log(self.selectStoresIds);
+                self.ifShowStoreErrorTips = self.selectStoresIds === '' ? true : false;
             }
         });
     }
@@ -353,10 +353,10 @@ export class AddKoubeiProductComponent implements OnInit {
     //校验核销开始时间
     disabledDate = (current: Date): boolean => {
         if (this.putawayDate && (this.putawayDate.getTime() >= new Date().getTime())) {
-          console.log(this.putawayDate);
-          return differenceInDays(current, this.putawayDate) < 0;
+            console.log(this.putawayDate);
+            return differenceInDays(current, this.putawayDate) < 0;
         } else {
-          return differenceInDays(current, new Date()) < 0;
+            return differenceInDays(current, new Date()) < 0;
         }
     };
 
@@ -392,31 +392,31 @@ export class AddKoubeiProductComponent implements OnInit {
         this.storesChangeNum = 0;
         this.selectStoresIds = '';
         this.cityStoreList.forEach(function (item: any) {
-          item.checked = true;
-          item.change = true;
-          item.cityArr.forEach(function (value: any) {
-            value.checked = true;
-            value.change = true;
-            value.stores.forEach(function (list: any) {
-              list.checked = true;
-              list.change = true;
+            item.checked = true;
+            item.change = true;
+            item.cityArr.forEach(function (value: any) {
+                value.checked = true;
+                value.change = true;
+                value.stores.forEach(function (list: any) {
+                    list.checked = true;
+                    list.change = true;
+                });
             });
-          });
         });
         console.log(this.cityStoreList);
         for (let i = 0; i < this.cityStoreList.length; i++) {
-          for (let j = 0; j < this.cityStoreList[i].cityArr.length; j++) {
-            for (let n = 0; n < this.cityStoreList[i].cityArr[j].stores.length; n++) {
-              if (this.cityStoreList[i].cityArr[j].stores[n].checked == true) {
-                this.selectStoresIds += ',' + this.cityStoreList[i].cityArr[j].stores[n].shopId
-              }
+            for (let j = 0; j < this.cityStoreList[i].cityArr.length; j++) {
+                for (let n = 0; n < this.cityStoreList[i].cityArr[j].stores.length; n++) {
+                    if (this.cityStoreList[i].cityArr[j].stores[n].checked == true) {
+                        this.selectStoresIds += ',' + this.cityStoreList[i].cityArr[j].stores[n].shopId
+                    }
+                }
             }
-          }
         }
         if (this.selectStoresIds) {
-          this.selectStoresIds = this.selectStoresIds.substring(1);
-          this.storesChangeNum = this.selectStoresIds.split(',').length;
-          this.allShopsNumber = this.selectStoresIds.split(',').length;
+            this.selectStoresIds = this.selectStoresIds.substring(1);
+            this.storesChangeNum = this.selectStoresIds.split(',').length;
+            this.allShopsNumber = this.selectStoresIds.split(',').length;
         }
         this.ifShowStoreErrorTips = this.selectStoresIds === '' ? true : false;
     }
@@ -428,51 +428,51 @@ export class AddKoubeiProductComponent implements OnInit {
         let provinceList = [];
         let cityStoreList = [];
         for (let i = 0; i < storeList.length; i++) {
-          cityAllCodeArr.push(storeList[i].provinceId + '-' + storeList[i].provinceName + '-' + storeList[i].city + '-' + storeList[i].cityName);
-          provinceAllCodeArr.push(storeList[i].provinceId + '-' + storeList[i].provinceName);
+            cityAllCodeArr.push(storeList[i].provinceId + '-' + storeList[i].provinceName + '-' + storeList[i].city + '-' + storeList[i].cityName);
+            provinceAllCodeArr.push(storeList[i].provinceId + '-' + storeList[i].provinceName);
         }
         let provinceCodeArr = FunctionUtil.getNoRepeat(provinceAllCodeArr);
         let cityCodeArr = FunctionUtil.getNoRepeat(cityAllCodeArr);
-        provinceCodeArr.forEach(function( item: any ){
-          provinceList.push(
-            {
-              provinceId: item.split('-')[0],
-              provinceName: item.split('-')[1],
-              cityArr: []
-            }
-          )
-        });
-        cityCodeArr.forEach(function( item: any ){
-          cityStoreList.push({
-              provinceId: item.split('-')[0],
-              provinceName: item.split('-')[1],
-              cityArr: [
+        provinceCodeArr.forEach(function (item: any) {
+            provinceList.push(
                 {
-                  cityId: item.split('-')[2],
-                  cityName: item.split('-')[3],
-                  stores: []
+                    provinceId: item.split('-')[0],
+                    provinceName: item.split('-')[1],
+                    cityArr: []
                 }
-              ]
-          });
+            )
         });
-        provinceList.forEach(function( item: any, index: number, array: any ){
-          for(let i = 0; i< cityStoreList.length; i++){
-            if(item.provinceId === cityStoreList[i].provinceId){
-              item.cityArr.push(cityStoreList[i].cityArr[0]);
+        cityCodeArr.forEach(function (item: any) {
+            cityStoreList.push({
+                provinceId: item.split('-')[0],
+                provinceName: item.split('-')[1],
+                cityArr: [
+                    {
+                        cityId: item.split('-')[2],
+                        cityName: item.split('-')[3],
+                        stores: []
+                    }
+                ]
+            });
+        });
+        provinceList.forEach(function (item: any, index: number, array: any) {
+            for (let i = 0; i < cityStoreList.length; i++) {
+                if (item.provinceId === cityStoreList[i].provinceId) {
+                    item.cityArr.push(cityStoreList[i].cityArr[0]);
+                }
             }
-          }
         });
         for (let i = 0; i < provinceList.length; i++) {
-          for(let n = 0;n < provinceList[i].cityArr.length; n++){
-            for (let j = 0; j < storeList.length; j++) {
-              if (provinceList[i].cityArr[n].cityId === storeList[j].city) {
-                provinceList[i].cityArr[n].stores.push({
-                  shopId: storeList[j].shopId,
-                  shopName: storeList[j].shopName,
-                });
-              }
+            for (let n = 0; n < provinceList[i].cityArr.length; n++) {
+                for (let j = 0; j < storeList.length; j++) {
+                    if (provinceList[i].cityArr[n].cityId === storeList[j].city) {
+                        provinceList[i].cityArr[n].stores.push({
+                            shopId: storeList[j].shopId,
+                            shopName: storeList[j].shopName,
+                        });
+                    }
+                }
             }
-          }
         }
         return provinceList;
     }
@@ -513,88 +513,88 @@ export class AddKoubeiProductComponent implements OnInit {
 
     //编辑,转换购买须知及其详细内容的数据
     editChangeData(object: any, transfor: any) {
-      object.forEach((element: any, index: number) => {
-          let group: any = {
-              title: element.title,
-              details: []
-          };
-          let list: any;
-          if(element.details && element.details.length > 0){
-            for (let i = 0; i < element.details.length; i++) {
-              list = {
-                item: element.details[i]
-              };
-              group.details.push(list);
+        object.forEach((element: any, index: number) => {
+            let group: any = {
+                title: element.title,
+                details: []
+            };
+            let list: any;
+            if (element.details && element.details.length > 0) {
+                for (let i = 0; i < element.details.length; i++) {
+                    list = {
+                        item: element.details[i]
+                    };
+                    group.details.push(list);
+                }
+            } else {
+                group.details.push({ item: '' });
             }
-          }else{
-            group.details.push({ item: '' });
-          }
-          transfor.push(group);
-      });
+            transfor.push(group);
+        });
     }
 
     //转换后台数据
-    getDataChange(staffListInfor: any, selectedStaffIds: any){
-      console.log(selectedStaffIds);
-      for(let i = 0; i < staffListInfor.length; i++){
-        staffListInfor[i].change = false;
-        staffListInfor[i].checked = false;
-        staffListInfor[i].cityArr.forEach(function (city: any) {
-          city.change = false;
-          city.checked = false;
-          city.stores.forEach(function (store: any) {
-            store.change = false;
-            store.checked = false;
-          });
+    getDataChange(staffListInfor: any, selectedStaffIds: any) {
+        console.log(selectedStaffIds);
+        for (let i = 0; i < staffListInfor.length; i++) {
+            staffListInfor[i].change = false;
+            staffListInfor[i].checked = false;
+            staffListInfor[i].cityArr.forEach(function (city: any) {
+                city.change = false;
+                city.checked = false;
+                city.stores.forEach(function (store: any) {
+                    store.change = false;
+                    store.checked = false;
+                });
+            });
+        };
+        /*===初始化选中门店===*/
+        selectedStaffIds.forEach(function (storeId: any) {
+            staffListInfor.forEach(function (province: any, index: number) {
+                province.cityArr.forEach(function (city: any, count: number) {
+                    city.stores.forEach(function (store: any) {
+                        if (store.shopId === storeId) {
+                            store.checked = true;
+                            store.change = true;
+                        }
+                    })
+                });
+            });
         });
-      };
-      /*===初始化选中门店===*/
-      selectedStaffIds.forEach(function (storeId: any) {
-        staffListInfor.forEach(function (province: any, index: number) {
-          province.cityArr.forEach(function (city: any, count: number) {
-            city.stores.forEach(function( store: any ) {
-              if(store.shopId === storeId){
-                store.checked = true;
-                store.change = true;
-              }
+        /*判断====省及其城市====是否全选*/
+        /********===== 判断城市 ====*******/
+        staffListInfor.forEach(function (item: any, index: number) {
+            item.cityArr.forEach(function (city: any, index: number) {
+                let cityChangeArr = [];
+                for (let i = 0; i < city.stores.length; i++) {
+                    if (city.stores[i].change === true) {
+                        cityChangeArr.push(city.stores[i].shopId);
+                    }
+                }
+                if (cityChangeArr.length === city.stores.length) {
+                    city.change = true;
+                }
+                city.checked = cityChangeArr.length > 0 ? true : false;
             })
-          });
         });
-      });
-      /*判断====省及其城市====是否全选*/
-      /********===== 判断城市 ====*******/
-      staffListInfor.forEach(function( item: any, index: number ){
-        item.cityArr.forEach(function( city: any,index: number ) {
-          let cityChangeArr = [];
-          for(let i = 0; i < city.stores.length; i++){
-            if(city.stores[i].change === true){
-              cityChangeArr.push(city.stores[i].shopId);
+        /******===== 判断省 ====*****/
+        staffListInfor.forEach(function (province: any) {
+            let provinceChangeArr = [];
+            let provinceCheckedArr = [];
+            province.cityArr.forEach(function (city: any, index: number) {
+                if (city.checked === true) {
+                    provinceCheckedArr.push(city.cityId);
+                }
+                if (city.change === true) {
+                    provinceChangeArr.push(city.cityId);
+                }
+            });
+            if (provinceChangeArr.length === province.cityArr.length) {
+                province.change = true;
             }
-          }
-          if(cityChangeArr.length === city.stores.length){
-            city.change = true;
-          }
-          city.checked = cityChangeArr.length > 0? true : false;
-        })
-      });
-      /******===== 判断省 ====*****/
-      staffListInfor.forEach(function( province: any ){
-        let provinceChangeArr = [];
-        let provinceCheckedArr = [];
-        province.cityArr.forEach(function( city: any, index: number ) {
-          if(city.checked === true){
-            provinceCheckedArr.push(city.cityId);
-          }
-          if(city.change === true){
-            provinceChangeArr.push(city.cityId);
-          }
+            province.checked = provinceCheckedArr.length > 0 ? true : false;
         });
-        if(provinceChangeArr.length === province.cityArr.length){
-          province.change = true;
-        }
-        province.checked = provinceCheckedArr.length > 0? true: false;
-      });
-      return staffListInfor;
+        return staffListInfor;
     }
 
     /***************************购买须知和详细内容*****************************/
@@ -709,7 +709,7 @@ export class AddKoubeiProductComponent implements OnInit {
                     let width = 104, height = 104;
                     if (type === 'cover') {//商品首图
                         this.picId = result.pictureId;
-                        this.imagePath = Config.OSS_IMAGE_URL+`${this.picId}/resize_${width}_${height}/mode_fill`;
+                        this.imagePath = Config.OSS_IMAGE_URL + `${this.picId}/resize_${width}_${height}/mode_fill`;
                         let productName = this.form.controls.productName.value;
                         let originalPrice = this.form.controls.originalPrice.value;
                         let currentPrice = this.form.controls.currentPrice.value;
@@ -742,7 +742,7 @@ export class AddKoubeiProductComponent implements OnInit {
                         this.uploadImageResult = result;
                         this.imageArray[index].imageId = this.uploadImageResult.pictureId;
                         let pictureSuffix = '.' + result.pictureSuffix;
-                        this.imageArray[index].src = Config.OSS_IMAGE_URL+`${this.imageArray[index].imageId}/resize_${78}_${58}/mode_fill`;
+                        this.imageArray[index].src = Config.OSS_IMAGE_URL + `${this.imageArray[index].imageId}/resize_${78}_${58}/mode_fill`;
                         this.imageArray[index].showDelete = true;
 
                         if (this.imageArray.length <= 4) {
@@ -783,7 +783,7 @@ export class AddKoubeiProductComponent implements OnInit {
                     if (!dataURL) {
                         self.msg.warning('请上传图片');
                     } else {
-                        self.uploadImageWithBase64Http(dataURL,index);
+                        self.uploadImageWithBase64Http(dataURL, index);
                     }
                 },
                 fail: function (msg) {
@@ -803,23 +803,23 @@ export class AddKoubeiProductComponent implements OnInit {
         this.spinBoolean = true;
         this.activeIndex = index;
         this.koubeiService.uploadImageWithBase64(data, bizType, syncAlipay).subscribe(
-          (res: any) => {
-              this.loading = false;
-              this.spinBoolean = false;
-              if (res.success) {
-                  this.isVisibleImg = false;
-                  this.tbCover = res.data.pictureId;
-                  this.imagePathTb = Config.OSS_IMAGE_URL+`${this.tbCover}/resize_${250}_${250}/mode_fill`;
-              } else {
-                  this.modalSrv.error({
-                      nzTitle: '温馨提示',
-                      nzContent: res.errorInfo
-                  });
-              }
-          },
-          error => {
-              this.msg.warning(error);
-          })
+            (res: any) => {
+                this.loading = false;
+                this.spinBoolean = false;
+                if (res.success) {
+                    this.isVisibleImg = false;
+                    this.tbCover = res.data.pictureId;
+                    this.imagePathTb = Config.OSS_IMAGE_URL + `${this.tbCover}/resize_${250}_${250}/mode_fill`;
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => {
+                this.msg.warning(error);
+            })
     }
 
     /** 获取口碑商品详情 */
@@ -856,11 +856,11 @@ export class AddKoubeiProductComponent implements OnInit {
                     //商品首图
                     self.picId = res.data.picId;//首图ID
                     let picUrlFirst = res.data.picUrl ? res.data.picUrl : '';
-                    self.imagePath = picUrlFirst.substring(0, 4) === 'http' ? picUrlFirst : Config.OSS_IMAGE_URL+`${res.data.picUrl}/resize_${102}_${102}/mode_fill`;
+                    self.imagePath = picUrlFirst.substring(0, 4) === 'http' ? picUrlFirst : Config.OSS_IMAGE_URL + `${res.data.picUrl}/resize_${102}_${102}/mode_fill`;
 
                     //入淘首图
                     self.tbCover = res.data.tbCover;
-                    self.imagePathTb = res.data.tbCover ? Config.OSS_IMAGE_URL+`${self.tbCover}/resize_${102}_${102}/mode_fill` : '';
+                    self.imagePathTb = res.data.tbCover ? Config.OSS_IMAGE_URL + `${self.tbCover}/resize_${102}_${102}/mode_fill` : '';
 
                     //商品图片
                     let imageArray: any[] = [];
@@ -869,7 +869,7 @@ export class AddKoubeiProductComponent implements OnInit {
                         imagesPics.forEach((element: any, index: number) => {
                             let imgList = {
                                 imageId: element.id,
-                                src: element.url.substring(0, 4) === 'http' ? element.url : Config.OSS_IMAGE_URL+`${element.url}/resize_${78}_${58}/mode_fill`,
+                                src: element.url.substring(0, 4) === 'http' ? element.url : Config.OSS_IMAGE_URL + `${element.url}/resize_${78}_${58}/mode_fill`,
                                 showDelete: true
                             };
                             imageArray.push(imgList);
@@ -1127,30 +1127,32 @@ export class AddKoubeiProductComponent implements OnInit {
                 (res: any) => {
                     self.submitting = false;
                     if (res.success) {
-                      self.msg.success(`提交成功`);
-                      if (self.koubeiProductId) {
-                        self.router.navigate(['/koubei/product/list']);
-                      } else {
-                        let itemId = res.data;
-                        self.modalSrv.warning({
-                          nzTitle: '商品创建成功',
-                          nzContent: '想帮商家极速获客？马上设置口碑客分佣推广！',
-                          nzOkText: '去设置',
-                          nzMaskClosable: false,
-                          nzCancelText: '取消',
-                          nzOnOk: function () {
-                            self.extension(itemId);
-                          },
-                          nzOnCancel: function (itemId) {
+                        self.msg.success(`提交成功`);
+                        if (self.koubeiProductId) {
                             self.router.navigate(['/koubei/product/list']);
-                          }
-                        });
-                      }
+                        } else {
+                            let itemId = res.data;
+                            self.modalSrv.warning({
+                                nzTitle: '商品创建成功',
+                                nzContent: '想帮商家极速获客？马上设置口碑客分佣推广！',
+                                nzOkText: '去设置',
+                                nzMaskClosable: false,
+                                nzCancelText: '取消',
+                                nzOnOk: function () {
+                                    self.extension(itemId);
+                                },
+                                nzOnCancel: function (itemId) {
+                                    self.router.navigate(['/koubei/product/list']);
+                                }
+                            });
+                        }
                     } else {
-                        this.modalSrv.error({
-                            nzTitle: '温馨提示',
-                            nzContent: res.errorInfo
-                        });
+                        if (!res.errorInfo2) {
+                            this.modalSrv.error({
+                                nzTitle: '温馨提示',
+                                nzContent: res.errorInfo
+                            });
+                        }
                     }
                 },
                 error => {

@@ -363,10 +363,12 @@ export class KoubeiProductListComponent implements OnInit {
                     this.getKoubeiProductListInfor(this.batchQuery);
 
                 } else {
-                    this.modalSrv.error({
-                        nzTitle: '温馨提示',
-                        nzContent: res.errorInfo
-                    });
+                    if (!res.errorInfo2) {
+                        this.modalSrv.error({
+                            nzTitle: '温馨提示',
+                            nzContent: res.errorInfo
+                        });
+                    }
                 }
             },
             error => {
