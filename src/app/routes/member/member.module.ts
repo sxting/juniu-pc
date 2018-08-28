@@ -11,6 +11,8 @@ import { MemberAnalysisComponent } from './memberAnalysis/memberAnalysis.compone
 import { CardDataExportComponent } from './cardDataExport/cardDataExport.component';
 import { OnlyCardImportComponent } from './onlyCardImport/onlyCardImport.component';
 import { ManyCardImportComponent } from './manyCardImport/manyCardImport.component';
+import { VipTittleListComponent } from './vipTittleList/vipTittleList.component';
+import { VipTittleComponent } from './vipTittle/vipTittle.component';
 
 @NgModule({
     imports: [SharedModule, MemberRoutingModule],
@@ -21,7 +23,9 @@ import { ManyCardImportComponent } from './manyCardImport/manyCardImport.compone
         MemberAnalysisComponent,
         CardDataExportComponent,
         OnlyCardImportComponent,
-        ManyCardImportComponent
+        ManyCardImportComponent,
+        VipTittleListComponent,
+        VipTittleComponent
     ],
     providers: [MemberService]
 })

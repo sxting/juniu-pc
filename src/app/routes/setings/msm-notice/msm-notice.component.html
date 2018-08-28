@@ -47,7 +47,7 @@
         </nz-switch>
         <div class="shadowBox">
           <div class="icon-up iconfont"></div>
-          <p>尊敬的XX会员，您已办理XX会员卡一张，卡内余额XX元，XX店感谢您的惠顾。</p>
+          <p>尊敬的XX会员，您已办理XX会员卡一张，卡内余额XX元，剩余有效期XX天，XX店感谢您的惠顾。</p>
         </div>
       </div>
       <div>
@@ -59,7 +59,7 @@
           </nz-switch>
           <div class="shadowBox">
             <div class="icon-up iconfont"></div>
-            <p>尊敬的XX会员，您已为XX会员卡充值XX元，卡内余额XX元，XX店感谢您的惠顾。</p>
+            <p>尊敬的XX会员，您已为XX会员卡充值XX元，卡内余额XX元，剩余有效期XX天，XX店感谢您的惠顾。</p>
           </div>
         </div>
       </div>
@@ -72,7 +72,20 @@
           </nz-switch>
           <div class="shadowBox">
             <div class="icon-up iconfont"></div>
-            <p>尊敬的XX会员，您的XX会员卡本次消费XX元，卡内余额XX元，XX店感谢您的惠顾。</p>
+            <p>尊敬的XX会员，您的XX会员卡本次消费XX元，卡内余额XX元，剩余有效期XX天，XX店感谢您的惠顾。</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div>
+          会员卡有效期通知
+          <nz-switch [ngModel]="consume" (ngModelChange)="configFun('NOTICE_CONSUME')">
+            <span checked>开</span>
+            <span unchecked>关</span>
+          </nz-switch>
+          <div class="shadowBox">
+            <div class="icon-up iconfont"></div>
+            <p>尊敬的XX会员，您的XX会员卡有效期还有30天，请尽快到店消费使用。</p>
           </div>
         </div>
       </div>
