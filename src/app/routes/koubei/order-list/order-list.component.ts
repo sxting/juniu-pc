@@ -111,7 +111,7 @@ export class OrderListComponent implements OnInit {
         this.pageIndex = event;
         if(this.switchHexiaoListBtns){//核销
             this.productVouchersListInfor();//核销对账列表
-        }else {onDateChange
+        }else {
             this.productOrderListInfor();//订单列表
         }
     }
