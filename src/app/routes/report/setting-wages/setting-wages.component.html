@@ -1,0 +1,46 @@
+<!--setting-wages.component-->
+
+<div class="content__title ad-ph" style="padding-bottom: 16px;">
+  <nz-breadcrumb>
+    <nz-breadcrumb-item>报表</nz-breadcrumb-item>
+    <nz-breadcrumb-item>利润报表</nz-breadcrumb-item>
+    <nz-breadcrumb-item>员工基本工资设定</nz-breadcrumb-item>
+  </nz-breadcrumb>
+  <h3 class="title">员工基本工资设定</h3>
+  <button nz-button class="btn-set" (click)="comeBackPreMenu()">返回上级菜单</button>
+</div>
+<!-- table 图表 -->
+<nz-card [nzBordered]="false" style="margin-bottom: 0!important;">
+  <div nz-form [nzLayout]="'inline'"  class="search__form">
+    <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
+      <nz-col nzMd="8" nzSm="24">
+        <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth"
+                         (storeListPush)="storeListPush($event)" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
+      </nz-col>
+    </nz-row>
+  </div>
+  <!--图表-->
+  <nz-table class="table-box" [nzNoResult]="'暂无数据'" #basicTable [nzShowPagination]="false" [nzData]="staffWagesInfor">
+    <thead nz-thead class="ui-grid-thead">
+      <tr class="thead-th">
+        <th style="text-align: left" nz-th class="">编号</th>
+        <th style="text-align: center" nz-th class="">员工姓名</th>
+        <th style="text-align: center" nz-th class="">职位</th>
+        <th style="text-align: right" nz-th class="" [title]="'基本工资修改后，只能在下个月生效'">基本工资</th>
+      </tr>
+    </thead>
+    <tbody nz-tbody class="ui-grid-tbody">
+      <tr nz-tbody-tr *ngFor="let item of staffWagesInfor;let i = index">
+        <td nz-td>{{i+1}}</td>
+        <td nz-td>{{item.staffName}}</td>
+        <td nz-td>{{item.staffCount}}</td>
+        <td nz-td>
+          <input nz-input onkeyup="this.value=this.value.replace(/\D/g,'')"  class="wages-input" [class.bd-inpt]="activeIndex === i" type="text" [ngModel]="item.staffWages" (focus)="focusinInput(i)" (blur)="blurInput()" (change)="changeStaffWages(item.staffId)" />
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+  <div class="nzPaginationBox">
+    <nz-pagination class="nzPagination" style="float: right;padding: 20px 0" [nzTotal]="totalElements" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
+  </div>
+</nz-card>

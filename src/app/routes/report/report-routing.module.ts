@@ -9,6 +9,11 @@ import { CustomerReportComponent } from "./customer-report/customer-report.compo
 import { vipConsumeReportComponent } from './vipconsume-report/vipconsume-report.component';
 import { revenueDetailReportComponent } from './revenue-detail/revenue-detail.component';
 import { profitReportComponent } from './profit-report/profit-report.component';
+import { staffWagesReportComponent } from './staff-wages/staff-wages.component';
+import { settingStaffWagesComponent } from './setting-wages/setting-wages.component';
+import { rentCostsComponent } from './rent-costs/rent-costs.component';
+import { productCostsComponent } from './product-cost/product-cost.component';
+import { platformMaidReportComponent } from './platform-maid/platform-maid.component';
 
 const routes: Routes = [
     { path: 'revenue/report', component: RevenueReportComponent },
@@ -20,7 +25,12 @@ const routes: Routes = [
     { path: 'vip/consume/report', component: vipConsumeReportComponent},
     { path: 'revenue/detail/report', component: revenueDetailReportComponent},
     { path: 'profit/report', component: profitReportComponent},
-
+    { path: 'staff/wages', component: staffWagesReportComponent},
+    { path: 'setting/staff/wages', component: settingStaffWagesComponent},
+    { path: 'rent/costs', component: rentCostsComponent},
+    { path: 'product/costs', component: productCostsComponent},
+    { path: 'platform/maid', component: platformMaidReportComponent},
+    { path: 'payment/channel/rate', component: platformMaidReportComponent}
 ];
 
 @NgModule({

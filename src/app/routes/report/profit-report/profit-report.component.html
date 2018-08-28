@@ -5,7 +5,7 @@
   </nz-breadcrumb>
   <h3 class="title">利润报表</h3>
 </div>
-<nz-card [nzBordered]="false" style="margin-bottom: 0!important;">
+<nz-card [nzBordered]="false">
   <div nz-form [nzLayout]="'inline'"  class="search__form">
     <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
       <nz-col nzMd="8" nzSm="24">
@@ -23,6 +23,57 @@
     </nz-row>
   </div>
 </nz-card>
+
+<!-- echart 图表 -->
+<div class="echart-box" nz-row [nzGutter]="24">
+  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="12">
+    <nz-card [nzBordered]="false" nzTitle="" [nzBodyStyle]="{'padding.px': 12}" style="height: 400px" class="sales-card">
+      <g2-card [title]="'总利润'" total="8,846" contentHeight="260" [bordered]="false" [action]="visitAction" >
+        <ng-template #visitAction>
+          <nz-tooltip [nzTitle]="'总利润：一段时间的总营收减去这段时间内的总成本'">
+            <i nz-tooltip class="anticon anticon-info-circle-o" style="font-size: 24px;"></i>
+          </nz-tooltip>
+        </ng-template>
+        <g2-mini-area line height="200" [data]="visitData"></g2-mini-area>
+      </g2-card>
+    </nz-card>
+  </div>
+  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="12">
+    <nz-card [nzBordered]="false" nzTitle="成本占比" [nzBodyStyle]="{'padding.px': 12}" style="height: 400px" class="sales-card">
+      <div class="title">
+        <nz-tabset (nzSelectChange)="changeEchartsTab($event)" [nzSelectedIndex]="index">
+          <nz-tab nzTitle="饼图"></nz-tab>
+          <nz-tab nzTitle="详情"></nz-tab>
+        </nz-tabset>
+      </div>
+      <g2-pie *ngIf="activeIndex === 0"
+              [hasLegend]="true"
+              title="总成本"
+              subTitle="总成本"
+              [total]="total"
+              [valueFormat]="format"
+              [data]="salesPieData"
+              height="294">
+      </g2-pie>
+      <div *ngIf="activeIndex !== 0" style="background: #fff;padding:25px 50px 37px;height: 303px;">
+        <div class="rank-list">
+          <ul>
+            <li *ngFor="let i of salesPieData; let idx = index">
+              <div>
+                <span class="icon spans" [ngClass]="{'active': idx < 3}">{{idx+1}}</span>
+                <span class="span1 spans">{{ i.x }}</span>
+                <span class="span2 spans">{{ i.y == 0? '暂未设置' : i.y }}</span>
+                <span class="span3 spans" [class.bg]="i.y === 0" (click)="checkDetailEchartInfor(i.type)">{{ i.y === 0? '点击设置' : '查看详情' }}</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <p class="tips-nothing" *ngIf="salesPieData.length === 0">暂无数据</p>
+    </nz-card>
+  </div>
+</div>
+
 <nz-card [nzBordered]="false">
   <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="reportProfitList">
     <thead nz-thead class="ui-grid-thead">
