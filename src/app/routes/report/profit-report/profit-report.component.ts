@@ -6,6 +6,9 @@ import { ReportService } from "../shared/report.service";
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { ActivatedRoute, Router } from '@angular/router';
+import { yuan } from '@delon/util';
+import * as format from 'date-fns/format';//测试用
+
 
 @Component({
   selector: 'app-profit-report',
@@ -32,6 +35,38 @@ export class profitReportComponent implements OnInit {
   pageSize: any = '10';//一页展示多少数据
   totalElements: any = 0;//商品总数  expandForm = false;//展开
   reportProfitList: any = [''];
+  activeIndex: any = 0;
+  salesPieData = [
+    {
+      x: '房租水电',
+      y: 0,
+      type: 'home'
+    },
+    {
+      x: '产品成本',
+      y: 32,
+      type: 'product'
+    },
+    {
+      x: '员工工资',
+      y: 55,
+      type: 'staff'
+    },
+    {
+      x: '平台抽佣',
+      y: 66,
+      type: 'paltform'
+    },
+    {
+      x: '支付费率',
+      y: 0,
+      type: 'pay'
+    }
+  ];
+  visitData: any[] = [];
+  salesPieDetailData: any = [];
+  total: string = '';
+  beginDay: any = new Date().getTime();//测试用
 
   constructor(
     private http: _HttpClient,
@@ -62,6 +97,17 @@ export class profitReportComponent implements OnInit {
     }
     this.ifStoresAll = userInfo.staffType === "MERCHANT"? true : false;
 
+    this.total = yuan(this.salesPieData.reduce((pre, now) => now.y + pre, 0));
+    for (let i = 0; i < 20; i += 1) {
+      this.visitData.push({
+        x: format(new Date( this.beginDay + (1000 * 60 * 60 * 24 * i)), 'YYYY-MM-DD'),
+        y: Math.floor(Math.random() * 100) + 10,
+      });
+    }
+  }
+
+  format(val: number) {
+    return yuan(val);
   }
 
   //门店id
@@ -79,6 +125,28 @@ export class profitReportComponent implements OnInit {
     this.dateRange = date;
     this.startTime = FunctionUtil.changeDateToSeconds(this.dateRange[0]);
     this.endTime = FunctionUtil.changeDateToSeconds(this.dateRange[1]);
+  }
+
+  // 切换tab按钮
+  changeEchartsTab(e: any){
+    this.activeIndex = e.index
+  }
+
+  // 点击echart按钮
+  checkDetailEchartInfor( type : string ){
+    if( type === 'home') {
+      this.router.navigate(['/report/rent/costs', { moduleId: this.moduleId }]);
+    }else if( type === 'staff' ){//员工工资
+      this.router.navigate(['/report/staff/wages', { moduleId: this.moduleId }]);
+    }else if( type === 'product' ){//产品成本
+      this.router.navigate(['/report/product/costs', { moduleId: this.moduleId }])
+    }else if( type === 'product' ){//产品成本
+      this.router.navigate(['/report/product/costs', { moduleId: this.moduleId }])
+    }else if( type === 'paltform'){
+      this.router.navigate(['/report/platform/maid', { moduleId: this.moduleId }])
+    }else{//支付通道费率
+      this.router.navigate(['/report/payment/channel/rate', { moduleId: this.moduleId }])
+    }
   }
 
   // 切换分页码

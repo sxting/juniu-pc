@@ -11,6 +11,12 @@ import { ReportService } from "./shared/report.service";
 import { vipConsumeReportComponent } from './vipconsume-report/vipconsume-report.component';
 import { revenueDetailReportComponent } from './revenue-detail/revenue-detail.component';
 import { profitReportComponent } from './profit-report/profit-report.component';
+import { staffWagesReportComponent } from './staff-wages/staff-wages.component';
+import { settingStaffWagesComponent } from './setting-wages/setting-wages.component';
+import { rentCostsComponent } from './rent-costs/rent-costs.component';
+import { productCostsComponent } from './product-cost/product-cost.component';
+import { platformMaidReportComponent } from './platform-maid/platform-maid.component';
+import { paymentChannelRateComponent } from './payment-channel-rate/payment-channel-rate.component';
 
 
 const COMPONENT_NOROUNT = [
@@ -26,7 +32,13 @@ const JUNIUO_NOROUNT = [
   vipConsumeReportComponent,
   MonthReportComponent,
   revenueDetailReportComponent,
-  profitReportComponent
+  profitReportComponent,
+  staffWagesReportComponent,
+  settingStaffWagesComponent,
+  rentCostsComponent,
+  productCostsComponent,
+  platformMaidReportComponent,
+  paymentChannelRateComponent
 ]
 
 @NgModule({
