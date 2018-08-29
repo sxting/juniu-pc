@@ -3,35 +3,64 @@
 </page-header>
 
 <nz-card [nzBordered]="false">
-    <form nz-form [formGroup]="form" (ngSubmit)="submit()">
+    <form nz-form >
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="ruleName">标签名称</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input nz-input formControlName="ruleName" maxlength="20" autocomplete="off" id="ruleName" placeholder="请输入标签名称">
-                <nz-form-explain class="errorTips" *ngIf="form.get('ruleName').dirty && form.get('ruleName').errors">请输入标签名称</nz-form-explain>
+                <input nz-input  maxlength="20" autocomplete="off" id="ruleName" placeholder="请输入标签名称">
             </nz-form-control>
         </nz-form-item>
-        <nz-form-item style="height: 110px;margin-bottom: 0;">
+        <nz-form-item style="margin-bottom: 0;">
             <nz-form-label nzXs="24" nzSm="7" nzFor="type">设定自动打标签的条件</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
                 <div>
-                    <span nzXs="24" nzSm="4">累计消费金额超过</span>
-                    <span nzXs="24" nzSm="16">
+                    <span nz-col nzSm="10">累计消费金额超过</span>
+                    <span nz-col nzSm="10">
                         <input nz-input maxlength="20" style="width:100px;" autocomplete="off" id="ruleName" placeholder="请输入金额">
                     </span>
-                    <span nzXs="24" nzSm="4">元</span>
+                    <span nz-col nzSm="4">元</span>
                 </div>
+                <div>
+                    <span nz-col nzSm="10">持卡张数超过</span>
+                    <span nz-col nzSm="10">
+                        <input nz-input maxlength="20" style="width:100px;" autocomplete="off" id="ruleName" placeholder="请输入张数">
+                    </span>
+                    <span nz-col nzSm="4">张</span>
+                </div>
+                <div>
+                    <span nz-col nzSm="10">月均消费水平在</span>
+                    <span nz-col nzSm="10">
+                        已选2个层级
+                    </span>
+                    <span nz-col nzSm="4">自定义</span>
+                </div>
+                <div>
+                    <span nz-col nzSm="10">消费频次在</span>
+                    <span nz-col nzSm="10">
+                        已选2个层级
+                    </span>
+                    <span nz-col nzSm="4">自定义</span>
+                </div>
+                <div>
+                    <span nz-col nzSm="10">最后一次到店时间</span>
+                    <span nz-col nzSm="10">
+                        已选2个层级
+                    </span>
+                    <span nz-col nzSm="4">自定义</span>
+                </div>
+                <p>注：以上条件非必填项，设定后若会员满足以上设定条件，将自动赋予会员该标签</p>
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
             <nz-form-label nzXs="24" nzSm="7">满足条件</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
                 <div class="right-block">
-
+                    以上设定条件需
+                    <nz-select style="width: 100px;">
+                        <nz-option>全部</nz-option>
+                    </nz-select>
+                    满足，才可给会员自动添加标签
                 </div>
-                <ng-container>
-                    <nz-form-explain class="errorTips" *ngIf="selectCardNumber === 0 && ifShowErrorTipsCard && allTips">请选择口碑商品</nz-form-explain>
-                </ng-container>
             </nz-form-control>
         </nz-form-item>
     </form>
