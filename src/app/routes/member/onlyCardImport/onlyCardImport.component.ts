@@ -105,10 +105,12 @@ export class OnlyCardImportComponent {
                     cardNum: this.cardNum
                 };
                 let text;
-                if (this.cardType === 'METERING') {
-                    text = '剩余次数'
-                } else {
-                    text = '卡内余额'
+                if (this.cardType !== 'TIMES') {
+                    if (this.cardType === 'METERING') {
+                        text = '剩余次数'
+                    } else {
+                        text = '卡内余额'
+                    }
                 }
                 this.checksumAssignment(text, this.cardType)
             },
@@ -163,7 +165,7 @@ export class OnlyCardImportComponent {
                 nzContent: "请选择卡规则!"
             });
             return;
-        } else if (this.balance === '' || this.balance === undefined) {
+        } else if  ( (this.balance === '' || this.balance === undefined) && this.cardType !== 'TIMES') {
             this.modalSrv.error({
                 nzTitle: '温馨提示',
                 nzContent: text + '不能为空!'
