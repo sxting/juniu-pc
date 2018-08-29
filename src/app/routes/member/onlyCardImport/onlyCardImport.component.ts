@@ -95,7 +95,7 @@ export class OnlyCardImportComponent {
             nzOnOk: () => {
                 this.data = {
                     storeId: this.storeId,
-                    balance: parseInt(this.balance + ''),
+                    balance: parseInt(this.balance + '') ,
                     cardConfigId: this.cardConfigId,
                     cardConfigRuleId: this.cardConfigRuleId,
                     cardType: this.cardType,
@@ -195,7 +195,7 @@ export class OnlyCardImportComponent {
             } else if (type === 'REBATE') {
                 this.balance = parseFloat(this.balance) * 100 + '';
             }
-            this.data.balance = parseInt(this.balance + '');
+            this.data.balance = parseInt(this.balance + '') || 0;
             this.data.cardConfigId = this.cardConfigId;
             this.data.cardConfigRuleId = this.cardConfigRuleId;
             this.data.cardType = this.cardType;
