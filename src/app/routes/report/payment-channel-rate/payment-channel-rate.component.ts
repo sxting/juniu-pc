@@ -41,6 +41,7 @@ export class paymentChannelRateComponent implements OnInit {
     }
   ];
   platformListInfor: any = [];
+  statusData: any;
   status: string = '3'; //审核中0   审核通过1   审核未通过2   3未申请
 
 
@@ -105,5 +106,19 @@ export class paymentChannelRateComponent implements OnInit {
     this.endTime = FunctionUtil.changeDateToSeconds(this.dateRange[1]);
   }
 
+  // 去设置
+  goPayWay(tpl: any, type: string,text: string){
+    let self = this;
+    this.modalSrv.create({
+      nzTitle:  text + '支付通道费率设置',
+      nzContent: tpl,
+      nzWidth: '600px',
+      nzCancelText: null,
+      nzOkText: '保存',
+      nzOnOk: function(){
+
+      }
+    });
+  }
 
 }

@@ -14,6 +14,7 @@ import { settingStaffWagesComponent } from './setting-wages/setting-wages.compon
 import { rentCostsComponent } from './rent-costs/rent-costs.component';
 import { productCostsComponent } from './product-cost/product-cost.component';
 import { platformMaidReportComponent } from './platform-maid/platform-maid.component';
+import { paymentChannelRateComponent } from './payment-channel-rate/payment-channel-rate.component';
 
 const routes: Routes = [
     { path: 'revenue/report', component: RevenueReportComponent },
@@ -30,7 +31,7 @@ const routes: Routes = [
     { path: 'rent/costs', component: rentCostsComponent},
     { path: 'product/costs', component: productCostsComponent},
     { path: 'platform/maid', component: platformMaidReportComponent},
-    { path: 'payment/channel/rate', component: platformMaidReportComponent}
+    { path: 'payment/channel/rate', component: paymentChannelRateComponent}
 ];
 
 @NgModule({

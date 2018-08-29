@@ -7,7 +7,6 @@ import { LocalStorageService } from '@shared/service/localstorage-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 
-
 @Component({
   selector: 'app-platform-maid',
   templateUrl: './platform-maid.component.html',
@@ -33,12 +32,12 @@ export class platformMaidReportComponent implements OnInit {
   ProductType: string;
   platformList: any = [
     {
-      name: '服务产品',
-      type: 'SERVICE'
+      name: '口碑',
+      type: 'KOUBEI'
     },
     {
-      name: '实物产品',
-      type: 'GOODS'
+      name: '美团点评',
+      type: 'MEITUAN'
     }
   ];
   platformListInfor: any = [];
@@ -106,5 +105,19 @@ export class platformMaidReportComponent implements OnInit {
     this.endTime = FunctionUtil.changeDateToSeconds(this.dateRange[1]);
   }
 
+  // 平台抽佣
+  goPayWay(tpl: any, type: string,text: string){
+    let self = this;
+    this.modalSrv.create({
+      nzTitle:  text + '抽佣比例设置',
+      nzContent: tpl,
+      nzWidth: '600px',
+      nzCancelText: null,
+      nzOkText: '保存',
+      nzOnOk: function(){
+
+      }
+    });
+  }
 
 }
