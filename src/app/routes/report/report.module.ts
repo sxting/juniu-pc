@@ -39,7 +39,7 @@ const JUNIUO_NOROUNT = [
   productCostsComponent,
   platformMaidReportComponent,
   paymentChannelRateComponent
-]
+];
 
 @NgModule({
   imports: [

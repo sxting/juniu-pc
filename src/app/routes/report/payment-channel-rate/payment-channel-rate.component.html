@@ -16,14 +16,13 @@
         <!--审核中和审核未通过以及未申请-->
         <div *ngIf="status != '1'">
           <p class="no-set">暂未设置</p>
-          <button nz-button (click)="goPayWay()">点击设置</button>
+          <button nz-button (click)="goPayWay(rateAlert,'WECHAT','微信')">点击设置</button>
         </div>
         <!--审核通过显示-->
         <div class="setted" *ngIf="status == '1'">
           <p class="color-000">已设置</p>
-          <!--<p>微信支付费率：{{statusData.wechatRate/10}}%</p>-->
-          <!--<p>支付宝支付费率：{{statusData.alipaysRate/10}}%</p>-->
-          <button nz-button [disabled]="!haveData" class="fix-btn" (click)="goPayWay()">点击修改</button>
+          <p>微信支付费率：{{statusData.wechatRate/10}}%</p>
+          <button nz-button [disabled]="!haveData" class="fix-btn" (click)="goPayWay(rateAlert,'WECHAT','微信')">点击修改</button>
         </div>
       </nz-card>
       <nz-card class="set-box">
@@ -31,14 +30,13 @@
         <!--审核中和审核未通过以及未申请-->
         <div *ngIf="status != '1'">
           <p class="no-set">暂未设置</p>
-          <button nz-button (click)="goPayWay()">点击设置</button>
+          <button nz-button (click)="goPayWay(rateAlert,'ALIPAY','支付宝')">点击设置</button>
         </div>
         <!--审核通过显示-->
         <div class="setted" *ngIf="status == '1'">
           <p class="color-000">已设置</p>
-          <!--<p>微信支付费率：{{statusData.wechatRate/10}}%</p>-->
-          <!--<p>支付宝支付费率：{{statusData.alipaysRate/10}}%</p>-->
-          <button nz-button [disabled]="!haveData" class="fix-btn" (click)="goPayWay()">点击修改</button>
+          <p>支付宝支付费率：{{statusData.alipaysRate/10}}%</p>
+          <button nz-button [disabled]="!haveData" class="fix-btn" (click)="goPayWay(rateAlert,'ALIPAY','支付宝')">点击修改</button>
         </div>
       </nz-card>
     </div>
@@ -89,3 +87,15 @@
     <nz-pagination class="nzPagination" style="float: right;padding: 20px 0" [nzTotal]="totalElements" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
   </div>
 </nz-card>
+
+<!-- 支付费率弹框 -->
+<ng-template #rateAlert>
+  <div class="maid-box">
+    <p>
+      <span>费率比例：</span>
+      <input nz-input class="maid-input" type="text" placeholder="请输入0.01-100的数字"/>
+      <span>%</span>
+    </p>
+    <p class="text mt10">＊当日修改，次日生效</p>
+  </div>
+</ng-template>
