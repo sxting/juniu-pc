@@ -953,7 +953,7 @@ export class TouristComponent implements OnInit {
         }
         let self = this;
         this.cardChangeBoolean = false;
-        if (this.vipsearch && (this.vipsearch.length === 0 || this.vipsearch.length >= 11 || (event&&event.length >= 11) )) {
+        if (this.vipsearch && (this.vipsearch.length === 0 || this.vipsearch.length >= 11 ||(!event&&this.vipsearch.length >= 0) ||(event&&event.length >= 11) )) {
             this.checkoutService
                 .findMemberCards(this.vipsearch, this.storeId)
                 .subscribe(
