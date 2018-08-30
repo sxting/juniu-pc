@@ -104,7 +104,7 @@
             <div class="addStaffBox-main-right">
                 <input onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
                     onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
-                    nz-input [(ngModel)]="effectivityDays" placeholder="请输入卡的剩余有效期" style="width:240px;">
+                    nz-input [(ngModel)]="effectivityDays" maxlength="4" placeholder="请输入卡的剩余有效期" style="width:240px;">
             </div>
         </div>
         <div>
