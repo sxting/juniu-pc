@@ -32,7 +32,7 @@
           </div> -->
           <div class="shouyinMiddle">
             <nz-input-group nzSearch style="width:280px;" [nzSuffix]="suffixIconButton1">
-              <input type="text" [(ngModel)]="vipsearch" *ngIf="hasAuth" nz-input placeholder="请输入手机号/姓名">
+              <input type="text" [(ngModel)]="vipsearch" (ngModelChange)="searchMemberCard($event)" *ngIf="hasAuth" nz-input placeholder="请输入手机号/姓名">
               <input type="text" [(ngModel)]="vipsearch" *ngIf="!hasAuth" disabled nz-input placeholder="请输入手机号/姓名">
             </nz-input-group>
             <ng-template #suffixIconButton1>
