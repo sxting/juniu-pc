@@ -65,11 +65,12 @@ export class rentCostsComponent implements OnInit {
     this.ifStoresAll = userInfo.staffType === "MERCHANT"? true : false;
   }
 
-
   //返回门店数据
   storeListPush(event: any){
     this.storeList = event.storeList? event.storeList : [];
   }
+
+
 
   //门店id
   getStoreId(event: any){
@@ -105,6 +106,7 @@ export class rentCostsComponent implements OnInit {
     this.reportDateChange = year+'-'+changemonth;
     this.batchQuery.yyyymm = this.reportDateChange;
     //获取商品报表信息
+
   }
 
   //  编辑
