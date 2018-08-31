@@ -111,7 +111,7 @@ export class vipConsumeReportComponent implements OnInit {
       }
     };
     var option = {
-      backgroundColor: '#eee',
+      backgroundColor: '#FFF',
       legend: {
         data: ['耗卡', '办卡'],
         align: 'left',
@@ -188,7 +188,6 @@ export class vipConsumeReportComponent implements OnInit {
     if (option && typeof option === "object") {
       myChart.setOption(option, true);
     }
-
   }
 }
 
