@@ -7,79 +7,70 @@
   </nz-breadcrumb>
   <h3 class="title">房租水电成本</h3>
   <p class="content-text">每月纪录门店的房租、水电、物业费、餐费等门店开销。</p>
-  <button nz-button class="btn-set" (click)="addRentCosts(rentAlert)">添加房租水电成本</button>
 </div>
 <!-- table 图表 -->
-<nz-card [nzBordered]="false" style="margin-bottom: 0!important;">
-  <div nz-form [nzLayout]="'inline'"  class="search__form">
-    <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
-      <nz-col nzMd="8" nzSm="24">
-        <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth"
-                         (storeListPush)="storeListPush($event)" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
-      </nz-col>
-    </nz-row>
-  </div>
-  <!--图表-->
-  <nz-table [nzNoResult]="'暂无数据'" #basicTable [nzShowPagination]="false" [nzData]="rentChargeListArr">
-    <thead nz-thead class="ui-grid-thead">
+<form nz-form [formGroup]="form" [nzLayout]="'vertical'">
+  <nz-card [nzBordered]="false" style="margin-bottom: 0!important;">
+    <div nz-form [nzLayout]="'inline'"  class="search__form">
+      <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
+        <nz-col nzMd="8" nzSm="24">
+          <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth"
+                           (storeListPush)="storeListPush($event)" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
+        </nz-col>
+      </nz-row>
+    </div>
+  </nz-card>
+  <nz-card [nzBordered]="false">
+    <nz-table formArrayName="items" [nzData]="items.value" [nzShowPagination]="false">
+      <thead>
       <tr>
         <th nz-th class="tal">月份</th>
         <th nz-th class="tac" *ngFor="let list of theadName">{{ list }}</th>
         <th nz-th class="tar">操作</th>
       </tr>
-    </thead>
-    <tbody nz-tbody class="ui-grid-tbody">
-      <tr nz-tbody-tr *ngFor="let item of rentChargeListArr;let i = index">
-        <td class="tal" nz-td>{{i+1}}</td>
-        <td class="tac" nz-td>{{item.staffName}}</td>
-        <td class="tac" nz-td>{{item.staffCount}}</td>
-        <td class="tac" nz-td>{{i+1}}</td>
-        <td class="tac" nz-td>{{item.staffName}}</td>
-        <td nz-td class="operation tar">
-          <span style="color: #ff7700" (click)="editRentCosts(rentAlert,item.staffId)">编辑</span>
-          <span style="color: #FF6600;margin-left: 10px" (click)="deleteRentCosts(item.staffId)">删除</span>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
+        <td>
+          <span *ngIf="editIndex!==i">{{items.value[i].name}}</span>
+          <span *ngIf="editIndex===i" nz-form-control>
+              <input nz-input formControlName="name" placeholder="请输入成员姓名">
+            </span>
+        </td>
+        <td>
+          <span *ngIf="editIndex!==i">{{items.value[i].workId}}</span>
+          <span *ngIf="editIndex===i" nz-form-control>
+              <input nz-input formControlName="workId" placeholder="请输入工号">
+            </span>
+        </td>
+        <td>
+          <span *ngIf="editIndex!==i">{{items.value[i].department}}</span>
+          <span *ngIf="editIndex===i" nz-form-control>
+              <input nz-input formControlName="department" placeholder="请输入所属部门">
+            </span>
+        </td>
+        <td>
+            <span *ngIf="editIndex!==i">
+              <a (click)="edit(i)">编辑</a>
+              <nz-divider nzType="vertical"></nz-divider>
+              <nz-popconfirm (nzOnConfirm)="del(i)" [nzTitle]="'是否要删除此行？'">
+                <a nz-popconfirm>删除</a>
+              </nz-popconfirm>
+            </span>
+          <span *ngIf="editIndex===i">
+              <a (click)="save(i)">保存</a>
+              <nz-divider nzType="vertical"></nz-divider>
+              <nz-popconfirm (nzOnConfirm)="cancel(i)" [nzTitle]="'是否要取消操作？'">
+                <a nz-popconfirm>取消</a>
+              </nz-popconfirm>
+            </span>
         </td>
       </tr>
-    </tbody>
-  </nz-table>
-  <div class="nzPaginationBox">
-    <nz-pagination class="nzPagination" style="float: right;padding: 20px 0" [nzTotal]="totalElements" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
-  </div>
-</nz-card>
-
-<!-- 支付费率弹框 -->
-<ng-template #rentAlert>
-  <nz-card [nzBordered]="false" class="sales-card">
-    <nz-form-item>
-      <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="stock">选择月份</nz-form-label>
-      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-          <nz-month-picker  nzPlaceholder="请选择月份" (ngModelChange)="reportDateAlert($event)" [nzAllowClear]="false"
-                            [nzFormat]="'YYYY-MM'" [(ngModel)]="reportDate"></nz-month-picker>
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-      <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="rentCosts">房租</nz-form-label>
-      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <input nz-input maxlength="40" [(ngModel)]="rentCostsData"  autocomplete="off" placeholder="请输入房租成本">
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-      <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="rentCosts">水电网</nz-form-label>
-      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <input nz-input maxlength="40" [(ngModel)]="rentCostsData" autocomplete="off" placeholder="请输入水电网成本">
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-      <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="rentCosts">物业</nz-form-label>
-      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <input nz-input maxlength="40" [(ngModel)]="rentCostsData"  autocomplete="off" placeholder="请输入物业成本">
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-      <nz-form-label nzXs="24" nzSm="7" nzFor="rentCosts">其他</nz-form-label>
-      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <input nz-input maxlength="40" [(ngModel)]="rentCostsData" autocomplete="off" placeholder="请输入其他">
-      </nz-form-control>
-    </nz-form-item>
+      </tbody>
+    </nz-table>
+    <button *ngIf="editIndex===-1" nz-button [nzType]="'dashed'" (click)="add()" class="ant-btn__block mt-md">
+      <i class="anticon anticon-plus"></i>
+      <span>新增成员</span>
+    </button>
   </nz-card>
-</ng-template>
+</form>

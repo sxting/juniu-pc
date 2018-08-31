@@ -21,9 +21,10 @@ export class revenueDetailReportComponent implements OnInit {
   loading = false;
   merchantId: string = '';
   tabTitleName: any = [
-    { name: '扫码枪', type: '1' },{ name: '现金', type: '2' },{ name: '银行卡', type: '3' },{ name: '收款码', type: '4' },
-    { name: '口碑核销', type: '5' },{ name: '美大验券', type: '6' },{ name: '小程序流水', type: '7' }
+    { name: '扫码枪', type: 'code' },{ name: '现金', type: 'cash' },{ name: '银行卡', type: 'bankcard' },{ name: '收款码', type: 'receiptcode' },
+    { name: '口碑核销', type: 'koubei' },{ name: '美大验券', type: 'meida' },{ name: '小程序流水', type: 'program' }
   ];
+  tabActiveType: string = '';
   theadName: any = ['订单编号', '操作时间', '支付方式', '收款门店', '订单状态', '金额', '操作'];//表头 '服务技师',先隐藏
   theadAlertName: any = ['商品分类', '商品名称', '单价', '数量(件)', '金额'];
   moduleId: any;
@@ -32,12 +33,12 @@ export class revenueDetailReportComponent implements OnInit {
   dateRange: Date = null;
   startTime: string = '';//转换字符串的时间
   endTime: string = '';//转换字符串的时间
-
   pageNo: any = 1;//页码
   pageSize: any = '10';//一页展示多少数据
   totalElements: any = 0;//商品总数  expandForm = false;//展开
   reportOrderList: any = [];//table数据
   expandForm: boolean = false;
+  showQrCode: boolean = false;
 
   constructor(
     private http: _HttpClient,
@@ -59,6 +60,9 @@ export class revenueDetailReportComponent implements OnInit {
   ngOnInit() {
 
     this.moduleId = this.route.snapshot.params['menuId'];
+    this.tabActiveType = this.route.snapshot.params['typeNo'];
+    console.log(this.tabActiveType);
+
     let userInfo;
     if (this.localStorageService.getLocalstorage('User-Info')) {
       userInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info'));
@@ -81,8 +85,8 @@ export class revenueDetailReportComponent implements OnInit {
   }
 
   // Tab切换
-  tabclick(e: any){
-    console.log(e);
+  tabclick(type: any){
+    this.tabActiveType = type;
   }
 
   //导出Excel
@@ -92,7 +96,7 @@ export class revenueDetailReportComponent implements OnInit {
 
   //展示二维码
   qrCodeShow(){
-
+    this.showQrCode = !this.showQrCode;
   }
 
   selectOrderStatus(){

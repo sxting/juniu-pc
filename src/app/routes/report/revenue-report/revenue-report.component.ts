@@ -5,6 +5,8 @@ import { ReportService } from "../shared/report.service";
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
+import { yuan } from '@delon/util';
+declare var echarts: any;
 import NP from 'number-precision'
 
 
@@ -20,27 +22,55 @@ export class RevenueReportComponent implements OnInit {
     loading = false;
     merchantId: string = '';
     yyyymm: any;//
-    date: string = '';//time
-    pageNo: any = 1;//页码
-    pageSize: any = '10';//一页展示多少数据
-    totalElements: any = 0;//商品总数
     theadName: any = ['时间', '类型', '项目名称', '金额'];//表头
-    reportOrderList: any[] = [];
-    kaikaPer:any;
-    kaikaPerNum: any;
-    chongzhiPer:any;
-    chongzhiPerNum: any;
-    sankePer:any;
-    sankePerNum: any;
-    todayIncomeItem: any;
-    yesterdayCompare: any;
-    todayIncomeItemDetail: any;
-    yesterdayCompareDetail: any;
-
+    dateRange: Date = null;
+    startTime: string = '';//转换字符串的时间
+    endTime: string = '';//转换字符串的时间
     moduleId: any;
     ifStoresAll: boolean = true;//是否有全部门店
     ifStoresAuth: boolean = false;//是否授权
-
+    salesPieData = [
+      {
+        x: '扫码枪',
+        y: 0,
+        type: 'code'
+      },
+      {
+        x: '现金',
+        y: 32,
+        type: 'cash'
+      },
+      {
+        x: '银行卡',
+        y: 55,
+        type: 'bankcard'
+      },
+      {
+        x: '收款码',
+        y: 66,
+        type: 'receiptcode'
+      },
+      {
+        x: '口碑核销',
+        y: 0,
+        type: 'koubei'
+      },
+      {
+        x: '美大验券',
+        y: 66,
+        type: 'meida'
+      },
+      {
+        x: '小程序流水',
+        y: 0,
+        type: 'program'
+      }
+    ];
+    visitData: any[] = [];
+    salesPieDetailData: any = [];
+    total: string = '';
+    activeIndex: any = 0;
+    channelType: string = '1';//渠道
 
     constructor(
         private http: _HttpClient,
@@ -57,25 +87,18 @@ export class RevenueReportComponent implements OnInit {
      **/
     batchQuery = {
         merchantId: this.merchantId,
-        date: this.date,
         storeId: this.storeId,
-        pageNo: this.pageNo,
-        pageSize: 10,
+        startTime: this.startTime,
+        endTime: this.endTime
     };
 
     ngOnInit() {
-
-        this.moduleId = this.route.snapshot.params['menuId'];
-        let year = new Date().getFullYear();        //获取当前年份(2位)
-        let month = new Date().getMonth()+1;       //获取当前月份(0-11,0代表1月)
-        let changemonth = month < 10 ? '0' + month : '' + month;
-        let day = new Date().getDate();        //获取当前日(1-31)
-        this.yyyymm = new Date(year+'-'+changemonth+'-'+day);
-        this.date = year+'-'+changemonth+'-'+day;
-        let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
-          JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
-        this.ifStoresAll = UserInfo.staffType === "MERCHANT"? true : false;
-
+      this.moduleId = this.route.snapshot.params['menuId'];
+      let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+        JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+      this.ifStoresAll = UserInfo.staffType === "MERCHANT"? true : false;
+      this.getRevenueEchart();
+      this.total = yuan(this.salesPieData.reduce((pre, now) => now.y + pre, 0));
     }
 
     //门店id
@@ -83,8 +106,6 @@ export class RevenueReportComponent implements OnInit {
       this.storeId = event.storeId? event.storeId : '';
       //获取到营收列表
       this.batchQuery.storeId = this.storeId;
-      this.batchQuery.date = this.date;
-      this.getCurrentIncomeHttp(this.batchQuery);
     }
 
     //返回门店数据
@@ -92,101 +113,94 @@ export class RevenueReportComponent implements OnInit {
       this.storeList = event.storeList? event.storeList : [];
     }
 
-    //选择日期
-    reportDateAlert(e: any) {
-      this.yyyymm = e;
-      let year = this.yyyymm.getFullYear();        //获取当前年份(2位)
-      let month = this.yyyymm.getMonth()+1;       //获取当前月份(0-11,0代表1月)
-      let changemonth = month < 10 ? '0' + month : '' + month;
-      let day = this.yyyymm.getDate();        //获取当前日(1-31)
-      let changeday = day < 10 ? '0' + day : '' + day;
-      this.date = year+'-'+changemonth+'-'+changeday;
-
-      this.batchQuery.date = this.date;
-      this.batchQuery.pageNo = 1;
-      //请求员工提成信息
-      this.getCurrentIncomeHttp(this.batchQuery);
-    }
-
-    //获取商品报表信息
-    getCurrentIncomeHttp(data: any) {
-        this.loading = true;
-        let that = this;
-        this.reportService.currentIncome(data).subscribe(
-            (res: any) => {
-                if (res.success) {
-                    that.loading = false;
-                    res.data.reportOrderList.forEach((element: any, index: number) => {
-                        if (element.bizType === 'OPENCARD') {
-                            element.bizTypeName = '开卡';
-                        }
-                        if (element.bizType === 'RECHARGE') {
-                            element.bizTypeName = '充值';
-                        }
-                        if (element.bizType === 'FIT') {
-                            element.bizTypeName = '散客';
-                        }
-                    });
-                    that.reportOrderList = res.data.reportOrderList;
-
-                    let allNum = 0;
-                    let bizTypeListArr = [{ name: 'OPENCARD', value: 0 }, { name: 'RECHARGE', value: 0 }, { name: 'FIT', value: 0 }];
-                    bizTypeListArr.forEach(function (n: any) {
-                        res.data.bizTypeList.forEach(function (i: any) {
-                            if (n.name === i.name) {
-                                n.value = i.value
-                            }
-                        })
-                    });
-                    bizTypeListArr.forEach(function (i: any) {
-                        allNum += i.value;
-                    });
-                    bizTypeListArr.forEach(function (item: any) {
-                        if (item.name === 'OPENCARD') {
-                            let num = item.value;
-                            console.log(allNum);
-                            that.kaikaPer =  allNum == 0? '-' : NP.round((num/allNum)*100,2)+'%';
-                            that.kaikaPerNum = allNum == 0? 0 : NP.round((num/allNum)*100,2);
-                        }
-                        if (item.name === 'RECHARGE') {
-                            let num = item.value;
-                            that.chongzhiPerNum = allNum == 0? 0 : NP.round((num/allNum)*100,2);
-                            that.chongzhiPer = allNum == 0? '-': NP.round((num/allNum)*100,2)+'%';
-                        }
-                        if (item.name === 'FIT') {
-                            let num = item.value;
-                            that.sankePerNum = allNum == 0? 0 : NP.round((num/allNum)*100,2);
-                            that.sankePer =  allNum == 0? '-' : NP.round((num/allNum)*100,2)+'%';
-                        }
-                    });
-                    that.todayIncomeItem = res.data.todayIncomeItem;
-                    that.yesterdayCompare = res.data.yesterdayCompare;
-                    that.todayIncomeItemDetail = that.todayIncomeItem.lastWeekCompare*100 < 0? NP.round(that.todayIncomeItem.lastWeekCompare*100*-1,2) : NP.round(that.todayIncomeItem.lastWeekCompare*100,2);
-                    that.yesterdayCompareDetail = that.todayIncomeItem.yesterdayCompare*100 < 0? NP.round(that.todayIncomeItem.yesterdayCompare*100*-1,2) : NP.round(that.todayIncomeItem.yesterdayCompare*100,2);
-
-                } else {
-                    this.modalSrv.error({
-                        nzTitle: '温馨提示',
-                        nzContent: res.errorInfo
-                    });
-                }
-            },
-            error => {
-                FunctionUtil.errorAlter(error);
-            }
-        );
-    }
-
     //选择门店
     selectStore() {
-        this.batchQuery.storeId = this.storeId;
-        this.getCurrentIncomeHttp(this.batchQuery);
+      this.batchQuery.storeId = this.storeId;
     }
 
-    // 切换分页码
-    paginate(event: any) {
-        this.pageNo = event;
-        this.batchQuery.pageNo = this.pageNo;
-        this.getCurrentIncomeHttp(this.batchQuery);
+    //选择日期
+    onDateChange(date: Date): void {
+      this.dateRange = date;
+      this.startTime = FunctionUtil.changeDateToSeconds(this.dateRange[0]);
+      this.endTime = FunctionUtil.changeDateToSeconds(this.dateRange[1]);
     }
+
+    // 切换tab按钮
+    changeEchartsTab(e: any){
+      this.activeIndex = e.index
+    }
+
+    // 点击echart按钮
+    checkDetailEchartInfor( typeNo: string ){
+      this.router.navigate(['/report/revenue/detail/report', { moduleId: this.moduleId,typeNo: typeNo }]);
+    }
+
+    // 线上线下echart图表
+    getRevenueEchart() {
+      let that = this;
+      let option = {
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          top: '10',
+          data: [
+            { name: '线下', textStyle: { color: '#4AB84E' } },
+            { name: '线上', textStyle: { color: '#E8470B' } }],
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '20',
+          top: '50',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data:[1,2,3,4,0,7,5]
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            name: '线下',
+            type: 'line',
+            stack: '总量',
+            data:[1,2,3,4,0,7,5],
+            itemStyle: {
+              normal: {
+                color: '#4AB84E',
+                lineStyle: {
+                  color: '#4AB84E'
+                }
+              }
+            },
+          },
+          {
+            name: '线上',
+            type: 'line',
+            stack: '总量',
+            data:[11,12,23,3,20,17,6],
+            itemStyle: {
+              normal: {
+                color: '#E8470B',
+                lineStyle: {
+                  color: '#E8470B'
+                }
+              }
+            },
+          }
+        ]
+      };
+      let myChart = echarts.init(document.getElementById('revenue-echart'));
+      myChart.setOption(option);
+    }
+
+    // 根据状态筛选
+    onStatusClick(){
+
+    }
+
 }

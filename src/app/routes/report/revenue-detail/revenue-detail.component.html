@@ -8,17 +8,17 @@
   <h3 class="title">营收报表详情</h3>
 </div>
 <div class="tabsetBox" >
-  <nz-tabset (nzSelectChange)="tabclick($event)">
-    <nz-tab *ngFor="let item of tabTitleName" nzTitle="{{item.name}}">
+  <nz-tabset>
+    <nz-tab [class.tab-active]="tabActiveType === item.type" (nzClick)="tabclick(item.type)"  *ngFor="let item of tabTitleName" nzTitle="{{item.name}}">
     </nz-tab>
   </nz-tabset>
   <div class="btn-box">
-    <span class="ico-ecode icon-erweima iconfont" (click)="qrCodeShow()"></span>
+    <span class="ico-ecode icon-erweima iconfont" (click)="qrCodeShow()" title="点击查看此报表二维码"></span>
     <button nz-button (click)="exportExcel()" [nzType]="'primary'">
       <span>导出Excel</span>
     </button>
     <!-- 二维码 -->
-    <div class="qrcode-box" *ngIf=" ">
+    <div class="qrcode-box" *ngIf="showQrCode">
       <div class="qrcode" id="qrcode"></div>
       <p class="code-text">微信扫描下方二维码 将此报表发送到手机查看</p>
     </div>
