@@ -206,7 +206,7 @@
                                     <!-- <span *ngIf="item.card.type === 'TIMES'">天</span> -->
                                   </p>
 
-                                  <p class="cardMoney" *ngIf="vipcard.card.type === 'TIMES'">有效期至 ： {{vipcard.card.validity}}
+                                  <p class="cardMoney" style="margin-top:5px;">有效期至 ： {{vipcard.card.validity}}
                                   </p>
                                   <div class="icon-success iconfont" *ngIf="item.vipCard&&vipcard.card.cardId === item.vipCard.card.cardId"></div>
                                 </div>
@@ -515,7 +515,8 @@
   <div class="VipXQ">
     <div class="vipxinx">
       <h3 class="flex-1 text-lg borderLeft">{{memberInfo?.customerName}}
-        <button class="buttons" nz-button nzSize="small" type="submit" style="margin-left:20px;color:#ff7700;border:1px solid #ff7700;" (click)="memberChange(modalContent2)">编辑</button>
+        <button class="buttons" nz-button nzSize="small" type="submit" style="margin-left:20px;color:#ff7700;border:1px solid #ff7700;"
+          (click)="memberChange(modalContent2)">编辑</button>
       </h3>
       <div>
         <div nz-col nzSpan="12">
@@ -549,65 +550,78 @@
       </div>
     </div>
     <div class="vipcard">
-      <h3 class="flex-1 text-lg borderLeft">会员卡</h3>
-
-      <div class="CardBigBox">
-        <div *ngFor="let item of yjcardList;let ind1 = index;" class="{{item.card.type}} ">
-          <p class="cardName">{{item.card.cardName}}</p>
-          <p class="cardMoney">卡余额：
-            <span *ngIf="item.card.type === 'REBATE'||item.card.type === 'STORED'" class="money">{{item.card.balance/100}}</span>
-            <span *ngIf="item.card.type === 'METERING'" class="money">{{item.card.balance}}</span>
-            <span *ngIf="item.card.type === 'REBATE'||item.card.type === 'STORED'">元</span>
-            <span *ngIf="item.card.type === 'METERING'">次</span>
-            <!-- <span *ngIf="item.card.type === 'TIMES'">天</span> -->
-          </p>
-        </div>
-      </div>
+      <h3 class="flex-1 text-lg borderLeft">会员标签</h3>
+      <div class="biaoqian">油性皮肤</div>
     </div>
-    <div class="vipcard">
-      <h3 class="flex-1 text-lg borderLeft">优惠券</h3>
-      <div class="youhuiBox">
-        <div *ngFor="let item of ticketList" class="youhui {{item.couponDefType}}">
-          <div>
-            <div *ngIf="item.couponDefType === 'MONEY'" style="width: 50px;">{{item.couponDefAmountByYuan}}元</div>
-            <div *ngIf="item.couponDefType === 'DISCOUNT'" style="width: 50px;">{{item.couponDefDiscount}}折</div>
-            <div style="width: 50px;">{{item.couponDefTypeName}}</div>
-          </div>
-          <div>
-            <div>{{item.couponDefName}}</div>
-            <div *ngIf="item.useLimitMoney<0&&item.consumeLimitProductIds.length===0">无限制</div>
-            <div *ngIf="item.consumeLimitProductIds.length>0?item.useLimitMoney>0:false">满{{item.useLimitMoney/100}}可用</div>
-            <div *ngIf="item.consumeLimitProductIds.length>0?item.useLimitMoney<0:false">部分商品可用</div>
-            <div>有效期：{{item.validDateEnd}}</div>
+    <nz-tabset>
+      <nz-tab nzTitle="卡券">
+        <div class="vipcard">
+          <h3 class="flex-1 text-lg borderLeft">会员卡</h3>
+
+          <div class="CardBigBox">
+            <div *ngFor="let item of yjcardList;let ind1 = index;" class="{{item.card.type}} ">
+              <p class="cardName">{{item.card.cardName}}</p>
+              <p class="cardMoney">卡余额：
+                <span *ngIf="item.card.type === 'REBATE'||item.card.type === 'STORED'" class="money">{{item.card.balance/100}}</span>
+                <span *ngIf="item.card.type === 'METERING'" class="money">{{item.card.balance}}</span>
+                <span *ngIf="item.card.type === 'REBATE'||item.card.type === 'STORED'">元</span>
+                <span *ngIf="item.card.type === 'METERING'">次</span>
+                <!-- <span *ngIf="item.card.type === 'TIMES'">天</span> -->
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="viplist">
-      <h3 class="flex-1 text-lg borderLeft">会员累计消费金额</h3>
-      <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="CustomerData">
-        <thead>
-          <tr>
-            <th>消费时间</th>
-            <th>方式</th>
-            <th>渠道</th>
-            <th>收款金额</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of CustomerData">
-            <td>{{item.juniuoModel.dateCreated}}</td>
-            <td>{{item.bizTypeName}}</td>
-            <td>{{item.payTypeName}}</td>
-            <td>{{item.money / 100}}</td>
-          </tr>
-        </tbody>
+        <div class="vipcard">
+          <h3 class="flex-1 text-lg borderLeft">优惠券</h3>
+          <div class="youhuiBox">
+            <div *ngFor="let item of ticketList" class="youhui {{item.couponDefType}}">
+              <div>
+                <div *ngIf="item.couponDefType === 'MONEY'" style="width: 50px;">{{item.couponDefAmountByYuan}}元</div>
+                <div *ngIf="item.couponDefType === 'DISCOUNT'" style="width: 50px;">{{item.couponDefDiscount}}折</div>
+                <div style="width: 50px;">{{item.couponDefTypeName}}</div>
+              </div>
+              <div>
+                <div>{{item.couponDefName}}</div>
+                <div *ngIf="item.useLimitMoney<0&&item.consumeLimitProductIds.length===0">无限制</div>
+                <div *ngIf="item.consumeLimitProductIds.length>0?item.useLimitMoney>0:false">满{{item.useLimitMoney/100}}可用</div>
+                <div *ngIf="item.consumeLimitProductIds.length>0?item.useLimitMoney<0:false">部分商品可用</div>
+                <div>有效期：{{item.validDateEnd}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nz-tab>
+      <nz-tab nzTitle="消费记录">
+        <div class="viplist">
+          <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="CustomerData">
+            <thead>
+              <tr>
+                <th>消费时间</th>
+                <th>消费项目</th>
+                <th>支付详情</th>
+                <th>服务技师</th>
+                <th>收款金额</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of CustomerData">
+                <td>{{item.juniuoModel.dateCreated}}</td>
+                <td>{{item.bizTypeName}}</td>
+                <td>{{item.payTypeName}}</td>
+                <td>{{item.operationUserName}}</td>
+                <td>{{item.money / 100}}</td>
+              </tr>
+            </tbody>
 
-      </nz-table>
-      <div class="nzPaginationBox">
-        <nz-pagination class="nzPagination" [nzTotal]="Total2" [nzPageSize]="5" (nzPageIndexChange)="getData2($event)"></nz-pagination>
-      </div>
-    </div>
+          </nz-table>
+          <div class="nzPaginationBox">
+            <nz-pagination class="nzPagination" [nzTotal]="Total2" [nzPageSize]="5" (nzPageIndexChange)="getData2($event)"></nz-pagination>
+          </div>
+        </div>
+      </nz-tab>
+    </nz-tabset>
+
+
   </div>
 </ng-template>
 <ng-template #jiesuanAlert>
@@ -693,6 +707,16 @@
       <nz-form-label style="text-align:left;" nzSpan="6">备注</nz-form-label>
       <nz-form-control nzSpan="18">
         <input type="text" maxlength="30" [(ngModel)]="remarks" nz-input>
+      </nz-form-control>
+    </div>
+  </nz-form-item>
+
+  <nz-form-item class="formItem ">
+    <div class="lineHeight50 formItemBorder">
+      <nz-form-label style="text-align:left;" nzSpan="6">选择会员标签</nz-form-label>
+      <nz-form-control nzSpan="18">
+        <div class="biaoqian" style="padding:0 5px;">油性皮肤</div>
+        <p style="font-size: 12px; color: #b7b7b7;">注：设定会员标签，便于管理及进行精准营销，最多可设置3个</p>
       </nz-form-control>
     </div>
   </nz-form-item>
