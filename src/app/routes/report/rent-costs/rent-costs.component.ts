@@ -26,8 +26,7 @@ export class rentCostsComponent implements OnInit {
   editObj = {};
   pageNo: any = 1;//页码
   pageSize: any = '10';//一页展示多少数据
-  totalElements: any = 0;//商品总数  expandForm = false;//展开
-  // // rentChargeListArr: any = [''];
+  totalElements: any = 0;//商品总数
 
   //#region get form fields
   get items() {
@@ -73,19 +72,19 @@ export class rentCostsComponent implements OnInit {
         key: '1',
         workId: '00001',
         name: 'John Brown',
-        department: 'New York No. 1 Lake Park',
+        department: '10000',
       },
       {
         key: '2',
         workId: '00002',
         name: 'Jim Green',
-        department: 'London No. 1 Lake Park',
+        department: '10000',
       },
       {
         key: '3',
         workId: '00003',
         name: 'Joe Black',
-        department: 'Sidney No. 1 Lake Park',
+        department: '10000',
       },
     ];
     userList.forEach(i => {
@@ -109,8 +108,16 @@ export class rentCostsComponent implements OnInit {
     this.edit(this.items.length - 1);
   }
 
-  del(index: number) {
-    this.items.removeAt(index);
+  deleteListInfor(id: number) {
+    this.modalSrv.warning({
+      nzTitle: '温馨提示',
+      nzContent: '删除此条数据会对利润计算产生影响,且删除后无法恢复？',
+      nzOkText: '确定',
+      nzCancelText: '取消',
+      nzOnOk: function () {
+        console.log(id);
+      }
+    });
   }
 
   edit(index: number) {
@@ -129,7 +136,7 @@ export class rentCostsComponent implements OnInit {
 
   cancel(index: number) {
     if (!this.items.at(index).value.key) {
-      this.del(index);
+      this.items.removeAt(index);
     } else {
       this.items.at(index).patchValue(this.editObj);
     }
@@ -146,33 +153,9 @@ export class rentCostsComponent implements OnInit {
     this.storeId = event.storeId? event.storeId : '';
   }
 
-  // //  编辑
-  // editRentCosts(tpl: any, id: string){
-  //   let self = this;
-  //   this.modalSrv.create({
-  //     nzTitle:  '设置本月水电成本',
-  //     nzContent: tpl,
-  //     nzWidth: '500px',
-  //     nzCancelText: null,
-  //     nzOkText: '保存',
-  //     nzOnOk: function(){
-  //
-  //     }
-  //   });
-  // }
-  //
-  // //  删除
-  // deleteRentCosts(id: string){
-  //   this.modalSrv.warning({
-  //     nzTitle: '温馨提示',
-  //     nzContent: '删除此条数据会对利润计算产生影响,且删除后无法恢复？',
-  //     nzOkText: '确定',
-  //     nzCancelText: '取消',
-  //     nzOnOk: function () {
-  //       console.log(id);
-  //     }
-  //   });
-  // }
-  //
+  // 切换分页码
+  paginate(event: any) {
+    this.pageNo = event;
+  }
 
 }

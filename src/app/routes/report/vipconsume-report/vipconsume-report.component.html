@@ -12,8 +12,8 @@
     <div nz-form [nzLayout]="'inline'" class="search__form">
       <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
         <nz-col nzMd="8" nzSm="24">
-          <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth"
-                           (storeListPush)="storeListPush($event)" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
+          <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" (storeListPush)="storeListPush($event)"
+                           (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
         </nz-col>
       </nz-row>
     </div>
@@ -72,7 +72,7 @@
       </nz-row>
     </div>
     <!-- echart图表 -->
-    <div class="echarts" id="brushSelected"></div>
+    <div class="echarts" id="container"></div>
   </nz-card>
 </section>
 

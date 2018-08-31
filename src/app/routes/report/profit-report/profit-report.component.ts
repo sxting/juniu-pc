@@ -8,6 +8,7 @@ import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { ActivatedRoute, Router } from '@angular/router';
 import { yuan } from '@delon/util';
 import * as format from 'date-fns/format';//测试用
+import * as differenceInDays from 'date-fns/difference_in_days';
 
 
 @Component({
@@ -16,7 +17,6 @@ import * as format from 'date-fns/format';//测试用
   styleUrls: ['./profit-report.component.less']
 })
 export class profitReportComponent implements OnInit {
-
 
   form: FormGroup;
   storeList: any[] = [];//门店列表
@@ -27,10 +27,9 @@ export class profitReportComponent implements OnInit {
   moduleId: any;
   ifStoresAll: boolean = true;//是否有全部门店
   ifStoresAuth: boolean = false;//是否授权
-  dateRange: Date = null;
+  dateRange: any;
   startTime: string = '';//转换字符串的时间
   endTime: string = '';//转换字符串的时间
-
   pageNo: any = 1;//页码
   pageSize: any = '10';//一页展示多少数据
   totalElements: any = 0;//商品总数  expandForm = false;//展开
@@ -83,7 +82,9 @@ export class profitReportComponent implements OnInit {
   batchQuery = {
     merchantId: this.merchantId,
     storeId: this.storeId,
-  };
+    endDate: this.endTime,
+    startDate: this.startTime
+};
 
   ngOnInit() {
 
@@ -96,7 +97,6 @@ export class profitReportComponent implements OnInit {
       this.merchantId = userInfo.merchantId;
     }
     this.ifStoresAll = userInfo.staffType === "MERCHANT"? true : false;
-
     this.total = yuan(this.salesPieData.reduce((pre, now) => now.y + pre, 0));
     for (let i = 0; i < 20; i += 1) {
       this.visitData.push({
@@ -104,6 +104,13 @@ export class profitReportComponent implements OnInit {
         y: Math.floor(Math.random() * 100) + 10,
       });
     }
+    let startDate = new Date(new Date().getTime() - 7*24*60*60*1000); //提前一周 ==开始时间
+    let endDate = new Date(new Date().getTime() - 24*60*60*1000); //今日 ==结束时
+    this.dateRange = [ startDate,endDate ];
+    this.startTime  = FunctionUtil.changeDate(startDate);
+    this.endTime = FunctionUtil.changeDate(endDate);
+    this.batchQuery.endDate = this.endTime;
+    this.batchQuery.startDate = this.startTime;
   }
 
   format(val: number) {
@@ -119,6 +126,14 @@ export class profitReportComponent implements OnInit {
   storeListPush(event: any){
     this.storeList = event.storeList? event.storeList : [];
   }
+
+  //校验核销开始时间
+  disabledDate = (current: Date): boolean => {
+    // let date = '2017-01-01 23:59:59';
+    let endDate = new Date(new Date().getTime() - 24*60*60*1000); //今日 ==结束时
+    // return differenceInDays(current, new Date(date)) < 0;
+    return differenceInDays(current, new Date()) >= 0;
+  };
 
   //选择日期
   onDateChange(date: Date): void {

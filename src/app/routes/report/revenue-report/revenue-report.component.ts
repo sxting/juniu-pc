@@ -5,6 +5,7 @@ import { ReportService } from "../shared/report.service";
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
+import * as differenceInDays from 'date-fns/difference_in_days';
 import { yuan } from '@delon/util';
 declare var echarts: any;
 import NP from 'number-precision'
@@ -23,7 +24,7 @@ export class RevenueReportComponent implements OnInit {
     merchantId: string = '';
     yyyymm: any;//
     theadName: any = ['时间', '类型', '项目名称', '金额'];//表头
-    dateRange: Date = null;
+    dateRange: any;
     startTime: string = '';//转换字符串的时间
     endTime: string = '';//转换字符串的时间
     moduleId: any;
@@ -94,6 +95,10 @@ export class RevenueReportComponent implements OnInit {
 
     ngOnInit() {
       this.moduleId = this.route.snapshot.params['menuId'];
+      let startDate = new Date(new Date().getTime() - 7*24*60*60*1000); //提前一周 ==开始时间
+      let endDate = new Date(new Date().getTime() - 24*60*60*1000); //今日 ==结束时
+      this.dateRange = [ startDate,endDate ];
+
       let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
         JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
       this.ifStoresAll = UserInfo.staffType === "MERCHANT"? true : false;
@@ -117,6 +122,14 @@ export class RevenueReportComponent implements OnInit {
     selectStore() {
       this.batchQuery.storeId = this.storeId;
     }
+
+    //校验核销开始时间
+    disabledDate = (current: Date): boolean => {
+      // let date = '2017-01-01 23:59:59';
+      let endDate = new Date(new Date().getTime() - 24*60*60*1000); //今日 ==结束时
+      // return differenceInDays(current, new Date(date)) < 0;
+      return differenceInDays(current, new Date()) >= 0;
+    };
 
     //选择日期
     onDateChange(date: Date): void {
