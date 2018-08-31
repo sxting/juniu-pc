@@ -118,12 +118,13 @@ export class DefaultInterceptor implements HttpInterceptor {
         // 允许统一对请求错误处理，这是因为一个请求若是业务上错误的情况下其HTTP请求的状态是200的情况下需要
         if (event instanceof HttpResponse && event.status === 200) {
           if (event['body']['errorInfo'] && event['body']['errorInfo'].indexOf('失败原因') > -1) {
+            let that = this;
+            event.body.errorInfo2 = true;
             this.modalSrv.create({
               nzTitle: '温馨提示',
               nzContent: event['body']['errorInfo'],
               nzOkText: '查看解决方案',
               nzOnCancel :()=>{
-                
               },
               nzOnOk: () => {
                 this.modalSrv.create({
@@ -150,13 +151,12 @@ export class DefaultInterceptor implements HttpInterceptor {
                   <p>2.pc端上传口碑商品时，商品名称不可为纯数字。</p>
                   <p>3.pc端上传口碑商品但未上架商品，在手机端上传商品时提示失败，请在pc端上架该商品。</p>
                   <h3 style="margin: 20px 0;">若以上方案还未能解决你的问题，请联系桔牛客服010-80441899</h3>`,
-                  nzOnOk: () => console.log('Click ok')
+                  nzOnOk: () => {}
                 });
               }
             });
-          } else {
-            return this.handleData(event);
           }
+          return this.handleData(event);
         } else {
           // 若一切都正常，则后续操作
           return of(event);

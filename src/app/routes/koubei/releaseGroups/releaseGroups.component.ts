@@ -172,7 +172,7 @@ export class ReleaseGroupsComponent implements OnInit {
             //     this.errorAlter('活动名称不能有违禁词"' + word + '"请修改!');
             //     return;
             // }
-            if (data.descriptions.length === 1 && !data.descriptions[0].title) {
+             if (data.descriptions.length === 1 && !data.descriptions[0].title) {
                 delete data.descriptions;
             }
             if (data.buyerNotes.length === 1 && !data.buyerNotes[0].title) {
@@ -184,7 +184,9 @@ export class ReleaseGroupsComponent implements OnInit {
             if (!data.timeLimit) {
                 delete data.timeLimit;
             }
-            if (data.peopleNumber > data.inventory) {
+            if((new Date(data.validateEndTime).getTime()-new Date(data.startTime).getTime())>(90*24*60*60*1000)){
+                this.errorAlter('核销截止日期与活动开始日期相差不能大于90天，否则无法退款！');
+            }else if (data.peopleNumber > data.inventory) {
                 this.errorAlter('参团人数不能大于库存量');
             }
             else if (data.originalPrice < data.presentPrice) {

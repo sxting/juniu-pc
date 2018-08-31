@@ -95,7 +95,7 @@ export class OnlyCardImportComponent {
             nzOnOk: () => {
                 this.data = {
                     storeId: this.storeId,
-                    balance: parseInt(this.balance + ''),
+                    balance: parseInt(this.balance + '') ,
                     cardConfigId: this.cardConfigId,
                     cardConfigRuleId: this.cardConfigRuleId,
                     cardType: this.cardType,
@@ -105,10 +105,12 @@ export class OnlyCardImportComponent {
                     cardNum: this.cardNum
                 };
                 let text;
-                if (this.cardType === 'METERING') {
-                    text = '剩余次数'
-                } else {
-                    text = '卡内余额'
+                if (this.cardType !== 'TIMES') {
+                    if (this.cardType === 'METERING') {
+                        text = '剩余次数'
+                    } else {
+                        text = '卡内余额'
+                    }
                 }
                 this.checksumAssignment(text, this.cardType)
             },
@@ -163,7 +165,7 @@ export class OnlyCardImportComponent {
                 nzContent: "请选择卡规则!"
             });
             return;
-        } else if (this.balance === '' || this.balance === undefined) {
+        } else if  ( (this.balance === '' || this.balance === undefined) && this.cardType !== 'TIMES') {
             this.modalSrv.error({
                 nzTitle: '温馨提示',
                 nzContent: text + '不能为空!'
@@ -193,7 +195,7 @@ export class OnlyCardImportComponent {
             } else if (type === 'REBATE') {
                 this.balance = parseFloat(this.balance) * 100 + '';
             }
-            this.data.balance = parseInt(this.balance + '');
+            this.data.balance = parseInt(this.balance + '') || 0;
             this.data.cardConfigId = this.cardConfigId;
             this.data.cardConfigRuleId = this.cardConfigRuleId;
             this.data.cardType = this.cardType;

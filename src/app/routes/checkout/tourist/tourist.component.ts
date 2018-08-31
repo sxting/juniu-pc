@@ -219,6 +219,7 @@ export class TouristComponent implements OnInit {
     selectStoreInfo(event: any) {
         this.storeId = event.storeId;
         this.hasAuth = event.hasAuth;
+        this.localStorageService.setLocalstorage('TOURISTSTORE', JSON.stringify(event))
         this.vipXqFun();
         this.changeFun();
     }
@@ -827,7 +828,7 @@ export class TouristComponent implements OnInit {
             create.originMoney = create.money;
         } else {
             if (this.xfList && this.xfList.length > 0) {
-                create.money =  NP.times(that.createMoney, 100);
+                create.money = NP.times(that.createMoney, 100);
                 create.originMoney = create.money;
             } else {
                 create.money = NP.times(this.inputValue, 100);
@@ -944,7 +945,7 @@ export class TouristComponent implements OnInit {
         );
     }
     /**搜索会员卡 */
-    searchMemberCard(type?: any, gd?: any, gdindx?: any) {
+    searchMemberCard(event?:any,type?: any, gd?: any, gdindx?: any) {
         if (!type) {
             this.yjcardList = [];
             this.vipCardList = [];
@@ -952,7 +953,7 @@ export class TouristComponent implements OnInit {
         }
         let self = this;
         this.cardChangeBoolean = false;
-        if (this.vipsearch && (this.vipsearch.length === 0 || this.vipsearch.length >= 11 || event)) {
+        if (this.vipsearch && (this.vipsearch.length === 0 || this.vipsearch.length >= 11 ||(!event&&this.vipsearch.length >= 0) ||(event&&event.length >= 11) )) {
             this.checkoutService
                 .findMemberCards(this.vipsearch, this.storeId)
                 .subscribe(
@@ -964,7 +965,7 @@ export class TouristComponent implements OnInit {
                             self.vipData = res.data;
                             self.changeFun();
                             if (self.vipData && self.vipData.length > 0) self.vipDataBoolean = true;
-                            if (type) this.vipDataRadio(0);
+                            if (type || self.vipData.length===1) this.vipDataRadio(0);
 
                             if (gd) {
                                 this.gdindx = gdindx;
@@ -1364,7 +1365,7 @@ export class TouristComponent implements OnInit {
                         nzContent: '收款成功'
                     })
                     this.vipXqFun();
-                    this.searchMemberCard(true);
+                    this.searchMemberCard('',true);
                     if (this.gdboolean) {
                         this.guadanSC(this.gdindx);
                     }
@@ -1507,7 +1508,7 @@ export class TouristComponent implements OnInit {
         this.guadanList = this.localStorageService.getLocalstorage(GUADAN) ? JSON.parse(this.localStorageService.getLocalstorage(GUADAN)) : [];
         this.vipsearch = this.guadanList[index].vip.phone;
         this.gdboolean = true;
-        this.searchMemberCard(true, true, index);
+        this.searchMemberCard('',true, true, index);
 
         // this.memberInfo = this.shopyinList[index].vip;
     }
@@ -1584,7 +1585,7 @@ export class TouristComponent implements OnInit {
                                         nzTitle: '退款成功'
                                     });
                                     obj.getOrderHistoryListHttp();
-                                    obj.searchMemberCard(true);
+                                    obj.searchMemberCard('',true);
                                 } else {
                                     obj.errorAlter(res.errorInfo)
                                 }
@@ -1638,9 +1639,24 @@ export class TouristComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     this.storeList = res.data.items;
-                    this.store = res.data.items[0];
-                    this.storeId = res.data.items[0].storeId;
-                    this.hasAuth = res.data.items[0].hasAuth;
+                    let TOURISTSTORE = this.localStorageService.getLocalstorage('TOURISTSTORE') ? JSON.parse(this.localStorageService.getLocalstorage('TOURISTSTORE')) : '';
+                    let storeIds = ''
+                    res.data.items.forEach(function (i: any) {
+                        storeIds += (i.storeId + ',')
+                    })
+                    if (TOURISTSTORE && storeIds.indexOf(TOURISTSTORE.storeId) > -1) {
+                        res.data.items.forEach(function(i:any){
+                            if(i.storeId === TOURISTSTORE.storeId){
+                                self.store = i;
+                                self.storeId = i.storeId;
+                                self.hasAuth = i.hasAuth;
+                            }
+                        })
+                    } else {
+                        self.store = res.data.items[0];
+                        self.storeId = res.data.items[0].storeId;
+                        self.hasAuth = res.data.items[0].hasAuth;
+                    }
                     this.changeFun();
                 } else {
                     this.modalSrv.error({
@@ -1728,7 +1744,7 @@ export class TouristComponent implements OnInit {
                         this.modalSrv.success({
                             nzContent: '修改成功'
                         });
-                        this.searchMemberCard(true);
+                        this.searchMemberCard('',true);
                     } else {
                         this.errorAlter(res.errorInfo);
                     }
