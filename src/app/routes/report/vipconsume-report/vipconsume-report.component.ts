@@ -33,10 +33,6 @@ export class vipConsumeReportComponent implements OnInit {
   reportDateChange: string = '';
   option = null;
 
-  xData: any[] = [];//echarts图表X轴
-  yData: any[] = [];//echarts图表Y轴
-
-
   constructor(
     private http: _HttpClient,
     public msg: NzMessageService,
