@@ -89,6 +89,7 @@ export class ProductReportComponent implements OnInit {
         this.status = type;
         // 口碑订单报表列表信息
         this.batchQuery.status = this.status;
+        this.batchQuery.itemId = this.productId;
         this.productReportListInfor(this.batchQuery);
     }
 
