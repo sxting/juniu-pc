@@ -124,6 +124,7 @@ export class ProductReportComponent implements OnInit {
         this.endDate = FunctionUtil.changeDate(this.dateRange[1]);
         this.batchQuery.endDate = this.endDate;
         this.batchQuery.startDate = this.startDate;
+        this.batchQuery.itemId = this.productId;
         //获取报表商品
         this.reportProductItems(this.batchQuery);
     }
