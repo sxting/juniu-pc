@@ -149,7 +149,7 @@ export class ProductReportComponent implements OnInit {
                 if (res.success) {
                     this.loading = false;
                     self.productListInfor = res.data;
-                    self.productId = self.productListInfor[0]?self.productListInfor[0].productId:'';//拿到商品的itemId
+                    // self.productId = self.productListInfor[0]?self.productListInfor[0].productId:'';//拿到商品的itemId
 
                     //口碑订单报表三种状态数量金额统计
                     this.batchQuery.itemId = this.productId;
