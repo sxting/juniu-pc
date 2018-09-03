@@ -25,6 +25,8 @@ import { SoftBuyStep3Component } from "./software-buy/software-buy-step3.compone
 import { SoftBuyStep4Component } from "./software-buy/software-buy-step4.component";
 import { SoftwareBuyRecordComponent } from "./software-buy-record/software-buy-record.component";
 import { NameManageComponent } from "./name-manage/name-manage.component";
+import { KoubeiHXYDComponent } from './koubeiHXYD/koubeiHXYD.component';
+import { MeituanHXYDComponent } from './meituanHXYD/meituanHXYD.component';
 
 const COMPONENT_NOROUNT = [
     PayWayStep1Component,
@@ -35,7 +37,9 @@ const COMPONENT_NOROUNT = [
     SoftBuyStep1Component,
     SoftBuyStep2Component,
     SoftBuyStep3Component,
-    SoftBuyStep4Component
+    SoftBuyStep4Component,
+    KoubeiHXYDComponent,
+    MeituanHXYDComponent
 ];
 
 @NgModule({

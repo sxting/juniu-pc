@@ -12,7 +12,8 @@ import { PayRecordComponent } from "./pay-way/pay-record/pay-record.component";
 import { VedioComponent } from './vedio/vedio.component';
 import { SoftwareBuyRecordComponent } from "./software-buy-record/software-buy-record.component";
 import { NameManageComponent } from "./name-manage/name-manage.component";
-
+import { KoubeiHXYDComponent } from './koubeiHXYD/koubeiHXYD.component';
+import { MeituanHXYDComponent } from './meituanHXYD/meituanHXYD.component';
 const routes: Routes = [
   { path: 'administration', component: AdministrationComponent },
   { path: 'hardware/install', component: HardwareInstallComponent },
@@ -26,6 +27,9 @@ const routes: Routes = [
   { path: 'hardware/vedio', component: VedioComponent },
   { path: 'hardware/install/CloudPrinter', component: CloudPrinterComponent },
   { path: 'name/manage', component: NameManageComponent },
+  { path: 'meituanHXYD', component: MeituanHXYDComponent },
+  { path: 'koubeiHXYD', component: KoubeiHXYDComponent },
+
 ];
 
 @NgModule({
