@@ -144,6 +144,10 @@ export class TouristComponent implements OnInit {
     customer_gender: any;
     customer_remarks: any;
     customer_date: any;
+
+
+    htmlModalVisible: boolean = false;
+    htmlModalData: any;
     constructor(
         public msg: NzMessageService,
         private localStorageService: LocalStorageService,
@@ -175,7 +179,9 @@ export class TouristComponent implements OnInit {
         this.cardStoreTypes();
         this.getStaffList();
     }
-
+    handleCancel() {
+        this.htmlModalVisible = false;
+    }
     //收银开卡切换
     change(e: any) {
         this.changeType = e.index === 0 ? true : false;
@@ -329,7 +335,7 @@ export class TouristComponent implements OnInit {
             // this.ticketListArrFun();
         } else {
             if (that.xfCardList) {
-                if (that.xfCardList.type === 'REBATE' && this.xyVip) {
+                if ( (that.xfCardList.type === 'REBATE'||that.xfCardList.type === 'STORED' )&& this.xyVip) {
                     this.vipCardmoney = this.REBATEValue;
                     this.isVerbVipCardmoney = Math.floor(this.REBATEValue);
                 } else {
@@ -865,9 +871,15 @@ export class TouristComponent implements OnInit {
                         })
                     } else {
                         this.modalSrv.closeAll()
-                        this.modalSrv.success({
-                            nzContent: '收款成功'
-                        })
+                        if (res.data === 'SUCCESS') {
+                            this.modalSrv.success({
+                                nzContent: '收款成功'
+                            })
+                        } else {
+                            this.htmlModalVisible = true;
+                            this.htmlModalData = res.data;
+                        }
+
                         if (this.gdboolean) {
                             this.guadanSC(this.gdindx);
                         }
@@ -945,7 +957,7 @@ export class TouristComponent implements OnInit {
         );
     }
     /**搜索会员卡 */
-    searchMemberCard(event?:any,type?: any, gd?: any, gdindx?: any) {
+    searchMemberCard(event?: any, type?: any, gd?: any, gdindx?: any) {
         if (!type) {
             this.yjcardList = [];
             this.vipCardList = [];
@@ -953,24 +965,27 @@ export class TouristComponent implements OnInit {
         }
         let self = this;
         this.cardChangeBoolean = false;
-        if (this.vipsearch && (this.vipsearch.length === 0 || this.vipsearch.length >= 11 ||(!event&&this.vipsearch.length >= 0) ||(event&&event.length >= 11) )) {
+        if (this.vipsearch && (this.vipsearch.length === 0 || this.vipsearch.length === 11 || (!event && this.vipsearch.length >= 0) || (event && event.length === 11))) {
             this.checkoutService
                 .findMemberCards(this.vipsearch, this.storeId)
                 .subscribe(
                     (res: any) => {
+                        this.vipXqFun();
                         if (res.success) {
-                            this.vipXqFun();
 
-                            if (res.data && res.data.length === 0) self.errorAlter('未查询到该会员');
+
                             self.vipData = res.data;
                             self.changeFun();
                             if (self.vipData && self.vipData.length > 0) self.vipDataBoolean = true;
-                            if (type || self.vipData.length===1) this.vipDataRadio(0);
+                            if (type || self.vipData.length === 1) this.vipDataRadio(0);
 
                             if (gd) {
                                 this.gdindx = gdindx;
                                 this.xfList = this.guadanList[gdindx].xfList;
                                 this.totolMoneyFun();
+                            }
+                            if (res.data && res.data.length === 0) {
+                                self.errorAlter('未查询到该会员')
                             }
                         } else {
                             self.errorAlter(res.errorInfo)
@@ -1365,7 +1380,7 @@ export class TouristComponent implements OnInit {
                         nzContent: '收款成功'
                     })
                     this.vipXqFun();
-                    this.searchMemberCard('',true);
+                    this.searchMemberCard('', true);
                     if (this.gdboolean) {
                         this.guadanSC(this.gdindx);
                     }
@@ -1508,7 +1523,7 @@ export class TouristComponent implements OnInit {
         this.guadanList = this.localStorageService.getLocalstorage(GUADAN) ? JSON.parse(this.localStorageService.getLocalstorage(GUADAN)) : [];
         this.vipsearch = this.guadanList[index].vip.phone;
         this.gdboolean = true;
-        this.searchMemberCard('',true, true, index);
+        this.searchMemberCard('', true, true, index);
 
         // this.memberInfo = this.shopyinList[index].vip;
     }
@@ -1585,7 +1600,7 @@ export class TouristComponent implements OnInit {
                                         nzTitle: '退款成功'
                                     });
                                     obj.getOrderHistoryListHttp();
-                                    obj.searchMemberCard('',true);
+                                    obj.searchMemberCard('', true);
                                 } else {
                                     obj.errorAlter(res.errorInfo)
                                 }
@@ -1645,8 +1660,8 @@ export class TouristComponent implements OnInit {
                         storeIds += (i.storeId + ',')
                     })
                     if (TOURISTSTORE && storeIds.indexOf(TOURISTSTORE.storeId) > -1) {
-                        res.data.items.forEach(function(i:any){
-                            if(i.storeId === TOURISTSTORE.storeId){
+                        res.data.items.forEach(function (i: any) {
+                            if (i.storeId === TOURISTSTORE.storeId) {
                                 self.store = i;
                                 self.storeId = i.storeId;
                                 self.hasAuth = i.hasAuth;
@@ -1744,7 +1759,7 @@ export class TouristComponent implements OnInit {
                         this.modalSrv.success({
                             nzContent: '修改成功'
                         });
-                        this.searchMemberCard('',true);
+                        this.searchMemberCard('', true);
                     } else {
                         this.errorAlter(res.errorInfo);
                     }
