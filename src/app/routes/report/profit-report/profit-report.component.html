@@ -16,14 +16,14 @@
         <nz-form-item>
           <nz-form-label nzFor="reportDate">选择日期</nz-form-label>
           <nz-form-control>
-            <nz-range-picker (ngModelChange)="onDateChange($event)" nzShowTime></nz-range-picker>
+            <nz-range-picker nzFormat="yyyy-MM-dd"  [nzDisabledDate]="disabledDate" (ngModelChange)="onDateChange($event)"
+                             [(ngModel)]="dateRange" nzShowTime></nz-range-picker>
           </nz-form-control>
         </nz-form-item>
       </nz-col>
     </nz-row>
   </div>
 </nz-card>
-
 <!-- echart 图表 -->
 <div class="echart-box" nz-row [nzGutter]="24">
   <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="12">
@@ -92,5 +92,6 @@
   </nz-table>
   <div class="nzPaginationBox">
     <nz-pagination class="nzPagination" style="float: right;padding: 20px 0" [nzTotal]="totalElements" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
+    <p class="countTotal">总共: {{totalElements}}条</p>
   </div>
 </nz-card>
