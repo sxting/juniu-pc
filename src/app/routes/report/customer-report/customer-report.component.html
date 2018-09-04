@@ -1,4 +1,3 @@
-
 <page-header [title]="'顾客报表'"></page-header>
 <nz-card [nzBordered]="false">
   <div nz-form [nzLayout]="'inline'" class="search__form">
@@ -17,49 +16,65 @@
       </nz-col>
     </nz-row>
   </div>
-  <!-- echart -->
-  <div nz-row [nzGutter]="24" class="gcard-box">
-    <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6" class="gcard">
-        <p class="chart-title">当日客流量</p>
-        <span class="chart-data">{{currentCount}}</span>
-        <div id="chart-left"></div>
-        <div class="tip-box">
-          <nz-tooltip [nzTitle]="'当日到店消费顾客总数'" [nzPlacement]="'right'">
-            <span nz-tooltip class="iconfont icon-wh"></span>
-          </nz-tooltip>
-        </div>
-    </div>
-    <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6" class="gcard">
-      <p class="chart-title">会员占比</p>
-      <span class="chart-data">{{memberPer}}</span>
-      <div id="chart-right"></div>
-      <div class="tip-box">
-        <nz-tooltip [nzTitle]="'当日到店顾客中会员占比'" [nzPlacement]="'right'">
-          <span nz-tooltip class="iconfont icon-wh"></span>
+  <div nz-col nzXs="24" nzSm="12">
+    <g2-card [title]="'当日客流量'" [total]="currentCount" contentHeight="46px" [action]="action1">
+      <ng-template #action1>
+        <nz-tooltip [nzTitle]="'当日到店消费顾客总数'">
+          <i nz-tooltip class="anticon anticon-info-circle-o"></i>
         </nz-tooltip>
-      </div>
-    </div>
+      </ng-template>
+      <g2-mini-area line height="46" [data]="visitDataArr"></g2-mini-area>
+    </g2-card>
   </div>
 </nz-card>
 
-<nz-card [nzBordered]="true">
-    <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="monthReportListInfor">
-        <thead nz-thead class="ui-grid-thead">
-            <tr>
-                <th nz-th class="" *ngFor="let item of theadName;let i = index">{{item}}</th>
-            </tr>
-        </thead>
-        <tbody nz-tbody class="ui-grid-tbody">
-            <tr nz-tbody-tr *ngFor="let item of monthReportListInfor; let i = index">
-                <td>{{item.payDate}}</td>
-                <td>{{item.customerName}}</td>
-                <!--<td>{{item.customerName}}</td>-->
-                <td>{{item.type}}</td>
-                <td>￥{{item.paidMoney/100}}</td>
-            </tr>
-        </tbody>
-    </nz-table>
-    <div class="nzPaginationBox">
-        <nz-pagination class="nzPagination" style="float: right;padding: 20px 0" [nzTotal]="totalElements" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
+<div nz-row nzXs="24" nzSm="12" class="card-box">
+  <nz-card [nzBordered]="false" class="pie-card card-list">
+    <div nz-row [nzGutter]="4" style="padding:16px 0">
+      <div class="tip-box">
+        <nz-tooltip [nzTitle]="'一段时间内会员消费占顾客消费总数的比例'" [nzPlacement]="'right'">
+          <span nz-tooltip class="iconfont icon-wh"></span>
+        </nz-tooltip>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <g2-pie
+          percent="28"
+          subTitle="会员占比"
+          [total]="memberPer"
+          height="120"></g2-pie>
+      </div>
     </div>
-</nz-card>
+  </nz-card>
+  <nz-card [nzBordered]="false" class="pie-card card-list">
+    <div nz-row [nzGutter]="4" style="padding:16px 0">
+      <div class="tip-box">
+        <nz-tooltip [nzTitle]="'老客消费占所有消费的比例'" [nzPlacement]="'right'">
+          <span nz-tooltip class="iconfont icon-wh"></span>
+        </nz-tooltip>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <g2-pie
+          percent="28"
+          subTitle="老客占比"
+          [total]="memberPer"
+          height="120"></g2-pie>
+      </div>
+    </div>
+  </nz-card>
+  <nz-card [nzBordered]="true" class="pie-card card-list">
+    <div nz-row [nzGutter]="4" style="padding:16px 0">
+      <div class="tip-box">
+        <nz-tooltip [nzTitle]="'女客消费占所有消费的比例'" [nzPlacement]="'right'">
+          <span nz-tooltip class="iconfont icon-wh"></span>
+        </nz-tooltip>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <g2-pie
+          percent="28"
+          subTitle="女客占比"
+          [total]="memberPer"
+          height="120"></g2-pie>
+      </div>
+    </div>
+  </nz-card>
+</div>
