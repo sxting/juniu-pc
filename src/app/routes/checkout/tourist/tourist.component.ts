@@ -704,7 +704,7 @@ export class TouristComponent implements OnInit {
 
         create.recordType = create.authCode ? 'COLLECT_MONEY' : 'RECORD';
 
-        if (this.ticket && this.changeType && that.xfList && that.xfList.length > 0) {
+        if (this.ticket && this.changeType && that.xfList && that.xfList.length > 0&&that.ticketCheck) {
             create.couponId = this.ticket.couponId;
         }
         if (this.memberInfo.cardNum) {
