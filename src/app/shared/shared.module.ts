@@ -22,6 +22,7 @@ import { WaterWaveComponent } from '@shared/component/waterWave/waterWave.compon
 import { SidebarNav2Component } from '@shared/component/sidebar-nav2/sidebar-nav2.component';
 import { SelectTransferComponent } from '@shared/select-transfer/select-transfer.component';
 import { StoreComponent } from "@shared/component/store/store.component";
+import { MarketingTransferComponent } from "@shared/component/marketing-transfer/marketing-transfer.component";
 
 // 桔牛service
 import { OrderService } from "@shared/component/reserve/shared/order.service";
@@ -54,7 +55,8 @@ const JUNIUMODULES = [
   StoreComponent,
   StoresTransforComponent,
   KoubeiErrComponent,
-  KoubeiStoreTransferComponent
+  KoubeiStoreTransferComponent,
+  MarketingTransferComponent
 ];
 // endregion
 

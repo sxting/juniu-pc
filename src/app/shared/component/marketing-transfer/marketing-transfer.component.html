@@ -1,0 +1,50 @@
+<!--选择按钮-->
+<span class="select-btn" (click)="onSelectBtnClick(selectAlert)">{{name}}</span>
+<!--弹框-->
+<ng-template #selectAlert>
+  <div class="reserve-record-alert">
+    <!--左边-->
+    <div class="list">
+      <p class="head_store clearfix">{{leftTitle}}</p>
+      <div *ngIf="paramsId === '003'" class="search-box">
+        查询会员： <input nz-input placeholder="请输入会员手机号" >
+      </div>
+      <div class="show_all_stores">
+        <div class="city-list" *ngFor="let city of dataList; let cityIndex=index">
+          <!--城市-->
+          <div class="select_all_btn">
+            <span class="city">{{city.roleName}}</span>
+          </div>
+          <!--门店-->
+          <ul class="shop_names">
+            <li *ngFor="let store of city.staffs; let storeIndex=index">
+              <input type="checkbox" [checked]="store.change" (click)="onSelectStoreInputClick(cityIndex, storeIndex)" />
+              <span>{{store.staffName}}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!--右边-->
+    <div class="list">
+      <p class="head_store">{{rightTitle}}</p>
+      <div class="show_all_stores">
+        <div  *ngFor="let city of dataList">
+          <div class="city-list bbn" *ngIf="city.checked == true">
+            <!--城市-->
+            <div class="select_all_btn">
+              <span class="city">{{city.roleName}}</span>
+            </div>
+            <!--门店-->
+            <ul class="shop_names">
+              <li *ngFor="let store of city.staffs">
+                <span *ngIf="store.change == true">{{store.staffName}}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
