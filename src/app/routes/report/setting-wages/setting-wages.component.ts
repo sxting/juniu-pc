@@ -22,37 +22,12 @@ export class settingStaffWagesComponent implements OnInit {
   loading = false;
   merchantId: string = '';
   moduleId: any;
-  ifStoresAll: boolean = true;//是否有全部门店
+  ifStoresAll: boolean = false;//是否有全部门店
   ifStoresAuth: boolean = false;//是否授权
   pageNo: any = 1;//页码
   pageSize: any = '10';//一页展示多少数据
   totalElements: any = 0;//商品总数  expandForm = false;//展开
-  staffWagesInfor: any = [
-    {
-      staffName: '张三',
-      staffCount: '总经理',
-      staffWages: '点击设置',
-      staffId: '111111'
-    },
-    {
-      staffName: '里斯',
-      staffCount: '运维',
-      staffWages: '6,000,00',
-      staffId: '222222'
-    },
-    {
-      staffName: '王麻子',
-      staffCount: '技术',
-      staffWages: '8,000,00',
-      staffId: '333333'
-    },
-    {
-      staffName: '笑哈哈',
-      staffCount: '销售',
-      staffWages: '3,000,00',
-      staffId: '4444444'
-    }
-  ];
+  setStaffWagesList: any = [];
   activeIndex: number;
 
   constructor(
@@ -72,19 +47,20 @@ export class settingStaffWagesComponent implements OnInit {
    */
   batchQuery = {
     storeId: this.storeId,
-    merchantId: this.merchantId,
+    pageNo: this.pageNo,
+    pageSize: this.pageSize
   };
 
   ngOnInit() {
     this.moduleId = this.route.snapshot.params['menuId'];
-    let userInfo;
-    if (this.localStorageService.getLocalstorage('User-Info')) {
-      userInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info'));
-    }
-    if (userInfo) {
-      this.merchantId = userInfo.merchantId;
-    }
-    this.ifStoresAll = userInfo.staffType === "MERCHANT"? true : false;
+    // let userInfo;
+    // if (this.localStorageService.getLocalstorage('User-Info')) {
+    //   userInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info'));
+    // }
+    // if (userInfo) {
+    //   this.merchantId = userInfo.merchantId;
+    // }
+
   }
 
   //返回门店数据
@@ -95,19 +71,22 @@ export class settingStaffWagesComponent implements OnInit {
   //门店id
   getStoreId(event: any){
     this.storeId = event.storeId? event.storeId : '';
+    this.batchQuery.storeId = this.storeId;
+    this.batchQuery.pageNo = 1;
+    this.settingStaffWagesList(this.batchQuery);//获取员工工资设置列表信息
   }
 
   // 切换分页码
   paginate(event: any) {
     this.pageNo = event;
+    this.batchQuery.pageNo = this.pageNo;
+    this.settingStaffWagesList(this.batchQuery);//获取员工工资设置列表信息
   }
 
   // 返回上级菜单
   comeBackPreMenu(){
     this.router.navigate(['/report/staff/wages', {  }]);
   }
-
-
 
   // 点击调整员工工资
   focusinInput(index: number){
@@ -121,4 +100,27 @@ export class settingStaffWagesComponent implements OnInit {
     console.log(id);
   }
 
+  // 获取员工工资成本列表信息
+  settingStaffWagesList(batchQuery: any){
+    let self = this;
+    this.loading = true;
+    this.reportService.settingStaffWagesList(batchQuery).subscribe(
+      (res: any) => {
+        self.loading = false;
+        if (res.success) {
+          console.log(res.data);
+          self.setStaffWagesList = res.data.items? res.data.items : [];
+          self.totalElements = res.data.pageInfo? res.data.pageInfo.countTotal : 0;
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      },
+      error => {
+        this.msg.warning(error);
+      }
+    );
+  }
 }

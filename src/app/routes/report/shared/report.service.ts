@@ -16,6 +16,9 @@ export class ReportService {
         private modalSrv: NzModalService
     ) { }
 
+
+    api1 = Config.API + 'finance';
+
     // 描述:pc表表首页 数据统计
     financeIndexUp(Params: any) {
         let apiUrl = Config.API + '/finance/pc/indexUp.json';
@@ -119,6 +122,28 @@ export class ReportService {
     // 选择门店
     selectStores(data: any){
       let apiUrl = Config.API1 + 'account/merchant/store/select.json';
+      return this.http.get(apiUrl,  data )
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
+
+    // ********=============== v2.1版本接口 ======================== ********  //
+
+    //  员工工资成本列表
+    staffWagesCost(data: any){
+      let apiUrl = this.api1 + '/profit/staffWagesCost.json';
+      return this.http.get(apiUrl,  data )
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
+
+    // 设置员工工资成本列表
+    settingStaffWagesList(data: any){
+      let apiUrl = this.api1 + '/profit/settingStaffWagesList.json';
       return this.http.get(apiUrl,  data )
         .map((response: Response) => response)
         .catch(error => {
