@@ -586,7 +586,7 @@ export class WxreleaseGroupsComponent implements OnInit {
                         time2: [this._validateEndTime],
                         mock: [mock]
                     });
-                    this.canMofidy = res.data.canModify;
+                    this.canMofidy = this.status ==='2'? true :res.data.canModify;
                     this.startTime = res.data.activityStartDate;
                     this.endTime = res.data.activityEndDate;
 
