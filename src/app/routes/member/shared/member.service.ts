@@ -530,4 +530,40 @@ export class MemberService {
             return Observable.throw(error);
         });
     }
+
+
+
+    /**
+     * 新增/修改标签
+     **/
+    saveTaglib(Params?: any) {
+        let apiUrl = Config.API + 'member/taglib/saveTaglib.json';
+        let params = FunctionUtil.obectToURLSearchParams(Params);
+        return this.http.post(apiUrl, Params)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    /**
+         * 删除标签
+         **/
+    delTaglib(Params?: any) {
+        let apiUrl = Config.API + 'member/taglib/delTaglib.json';
+        let params = FunctionUtil.obectToURLSearchParams(Params);
+        return this.http.post(apiUrl, Params)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    /**
+     * 全部标签
+     **/
+    queryTaglibs(data) {
+        let apiUrl = Config.API + 'member/taglib/queryTaglibs.json';
+        return this.http.get(apiUrl, data).map((response: Response) => response).catch(error => {
+            return Observable.throw(error);
+        });
+    }
 }

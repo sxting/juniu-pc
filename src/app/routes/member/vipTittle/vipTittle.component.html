@@ -3,14 +3,13 @@
 </page-header>
 
 <nz-card [nzBordered]="false">
-    <form nz-form >
-        <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="ruleName">标签名称</nz-form-label>
-            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                <input nz-input  maxlength="20" autocomplete="off" id="ruleName" placeholder="请输入标签名称">
-            </nz-form-control>
-        </nz-form-item>
-        <!-- <nz-form-item style="margin-bottom: 0;">
+    <nz-form-item>
+        <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="ruleName">标签名称</nz-form-label>
+        <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+            <input nz-input maxlength="20" autocomplete="off" id="ruleName" [(ngModel)]="tagName" placeholder="请输入标签名称">
+        </nz-form-control>
+    </nz-form-item>
+    <!-- <nz-form-item style="margin-bottom: 0;">
             <nz-form-label nzXs="24" nzSm="7" nzFor="type">设定自动打标签的条件</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
                 <div>
@@ -63,7 +62,13 @@
                 </div>
             </nz-form-control>
         </nz-form-item> -->
-    </form>
+
+    <nz-form-item>
+        <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
+            <button nz-button nzType="primary" type="submit" (click)="submit()" [nzLoading]="submitting">提交</button>
+          </nz-form-control>
+    </nz-form-item>
+
 </nz-card>
 
 <!--选择员工弹框-->
