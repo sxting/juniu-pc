@@ -329,7 +329,7 @@ export class TouristComponent implements OnInit {
             // this.ticketListArrFun();
         } else {
             if (that.xfCardList) {
-                if (that.xfCardList.type === 'REBATE' && this.xyVip) {
+                if ((that.xfCardList.type === 'REBATE') && this.xyVip) {
                     this.vipCardmoney = this.REBATEValue;
                     this.isVerbVipCardmoney = Math.floor(this.REBATEValue);
                 } else {
@@ -547,9 +547,12 @@ export class TouristComponent implements OnInit {
                         })
                     })
                 })
+                this.yjcardList.forEach(function (i: any) {
+                    i.click = false;
+                })
                 this.cardTypeListArr.list[index].rules[ruleIndex].click = !this.cardTypeListArr.list[index].rules[ruleIndex].click;
                 that.xfCardList = this.cardTypeListArr.list[index].rules[ruleIndex].click ? this.cardTypeListArr.list[index] : false;
-
+                that.xfCardList.CardTypeS= 'kaika';
                 that.xfCardList.ruleIndex = ruleIndex;
             }
             that.totolMoneyFun();
@@ -557,14 +560,23 @@ export class TouristComponent implements OnInit {
     }
     //充值会员卡
     VipcardPick(index: any) {
-        this.cardTabs.forEach(function (i: any) {
-            i.list.forEach(function (n: any) {
-                n.rules.forEach(function (m: any) {
-                    m.click = false;
+        if (this.yjcardList[index].card.type !== 'TIMES' && this.yjcardList[index].card.type !== 'METERING') {
+            this.cardTabs.forEach(function (i: any) {
+                i.list.forEach(function (n: any) {
+                    n.rules.forEach(function (m: any) {
+                        m.click = false;
+                    })
                 })
             })
-        })
-        this.CardConfigRuleFun(this.yjcardList[index].card.cardConfigRuleId, index);
+            this.yjcardList.forEach(function (i: any) {
+                i.click = false;
+            })
+            this.yjcardList[index].click = true;
+            this.CardConfigRuleFun(this.yjcardList[index].card.cardConfigRuleId, index);
+        }else{
+            this.msg.create('warning', `期限卡和计次卡暂不支持充值`);
+        }
+
     }
     //删除卡
     xfCloseCard(index: any) {
@@ -704,7 +716,7 @@ export class TouristComponent implements OnInit {
 
         create.recordType = create.authCode ? 'COLLECT_MONEY' : 'RECORD';
 
-        if (this.ticket && this.changeType && that.xfList && that.xfList.length > 0&&that.ticketCheck) {
+        if (this.ticket && this.changeType && that.xfList && that.xfList.length > 0 && that.ticketCheck) {
             create.couponId = this.ticket.couponId;
         }
         if (this.memberInfo.cardNum) {
@@ -953,17 +965,18 @@ export class TouristComponent implements OnInit {
         }
         let self = this;
         this.cardChangeBoolean = false;
-        if (this.vipsearch && (this.vipsearch.length === 0 || this.vipsearch.length >= 11 || (!event && this.vipsearch.length >= 0) || (event && event.length >= 11))) {
+        if (this.vipsearch && (this.vipsearch.length === 0 || this.vipsearch.length === 11 || (!event && this.vipsearch.length >= 0) || (event && event.length === 11))) {
             this.checkoutService
                 .findMemberCards(this.vipsearch, this.storeId)
                 .subscribe(
                     (res: any) => {
+                        this.vipXqFun();
                         if (res.success) {
-                            this.vipXqFun();
-
+                            
+                            self.changeFun();
                             if (res.data && res.data.length === 0) self.errorAlter('未查询到该会员');
                             self.vipData = res.data;
-                            self.changeFun();
+                            
                             if (self.vipData && self.vipData.length > 0) self.vipDataBoolean = true;
                             if (type || self.vipData.length === 1) this.vipDataRadio(0);
 
@@ -1344,6 +1357,7 @@ export class TouristComponent implements OnInit {
                         self.xfCardList = this.yjcardList[index].card;
                         self.xfCardList.rules = a;
                         self.xfCardList.ruleIndex = 0;
+                        self.xfCardList.CardTypeS= 'chongzhi';
                         self.totolMoneyFun();
                     } else {
                         self.errorAlter(res.errorInfo)
@@ -1364,6 +1378,7 @@ export class TouristComponent implements OnInit {
                     this.modalSrv.success({
                         nzContent: '收款成功'
                     })
+                    this.REBATEValue = 0;
                     this.vipXqFun();
                     this.searchMemberCard('', true);
                     if (this.gdboolean) {
