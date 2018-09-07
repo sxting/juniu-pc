@@ -20,6 +20,7 @@ export class ProductReportComponent implements OnInit {
     dateRange: any;
     startDate: string = '';
     endDate: string = '';
+    isFirst: boolean = true;
 
     productListInfor: any[] = [];//全部商品信息
     productReportformInfor: any;//商品报表信息
@@ -89,6 +90,7 @@ export class ProductReportComponent implements OnInit {
         this.status = type;
         // 口碑订单报表列表信息
         this.batchQuery.status = this.status;
+        this.batchQuery.itemId = this.productId;
         this.productReportListInfor(this.batchQuery);
     }
 
@@ -124,6 +126,7 @@ export class ProductReportComponent implements OnInit {
         this.endDate = FunctionUtil.changeDate(this.dateRange[1]);
         this.batchQuery.endDate = this.endDate;
         this.batchQuery.startDate = this.startDate;
+        this.batchQuery.itemId = this.productId;
         //获取报表商品
         this.reportProductItems(this.batchQuery);
     }
@@ -147,7 +150,7 @@ export class ProductReportComponent implements OnInit {
                 if (res.success) {
                     this.loading = false;
                     self.productListInfor = res.data;
-                    self.productId = self.productListInfor[0]?self.productListInfor[0].productId:'';//拿到商品的itemId
+                    if(self.isFirst) self.productId = self.productListInfor[0]?self.productListInfor[0].productId:'';//拿到商品的itemId
 
                     //口碑订单报表三种状态数量金额统计
                     this.batchQuery.itemId = this.productId;
@@ -159,6 +162,7 @@ export class ProductReportComponent implements OnInit {
                         nzContent: res.errorInfo
                     });
                 }
+                self.isFirst = false;
             },
             error => {
                 FunctionUtil.errorAlter(error);

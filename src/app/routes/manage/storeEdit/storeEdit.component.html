@@ -21,26 +21,32 @@
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7" nzFor="address">门店地址</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <nz-cascader [nzOptions]="cityArr" [(ngModel)]="values" maxlength="20" [nzPlaceHolder]="'请选择门店地址'" formControlName="address" id="address" (ngModelChange)="onChanges($event)">
+        <nz-cascader [nzOptions]="cityArr" [(ngModel)]="values" maxlength="20" [nzPlaceHolder]="'请选择门店地址'" formControlName="address"
+          id="address" (ngModelChange)="onChanges($event)">
         </nz-cascader>
       </nz-form-control>
     </nz-form-item>
-    <nz-form-item>
-      <nz-form-label nzXs="24" nzSm="7" nzFor="Alladdress">详细地址</nz-form-label>
-      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <div id="pickerBox">
-          <input nz-input id="pickerInput" maxlength="20" type="text"  placeholder="输入关键字选取地点" />
-          <div id="poiInfo"></div>
-        </div>
-      </nz-form-control>
-    </nz-form-item>
+
 
   </form>
 </nz-card>
-<nz-form-item style="background:#fff;margin-bottom:0 !important;">
-  <nz-form-label nzXs="24" nzSm="7">地图</nz-form-label>
+
+<nz-form-item style="background:#fff;margin-bottom:0px !important;">
+  <nz-form-label nzXs="24" nzSm="7">拖动地图选点</nz-form-label>
   <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-    <div id="container" class="map" tabindex="0"></div>
+    <div id="container" class="map" tabindex="0">
+      <div id="pickerBox">
+        <input id="pickerInput" placeholder="输入关键字选取地点" />
+        <div id="poiInfo"></div>
+      </div>
+    </div>
+    <p style="color:red;">该地图位置会显示在小程序门店中，请仔细选择</p>
+  </nz-form-control>
+</nz-form-item>
+<nz-form-item style="background:#fff;margin-bottom:0 !important;padding-top:10px;">
+  <nz-form-label nzXs="24" nzSm="7" nzFor="Alladdress">详细地址</nz-form-label>
+  <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+    <input nz-input  maxlength="20" [(ngModel)]="xxaddress" type="text" placeholder="输入详细地址" />
   </nz-form-control>
 </nz-form-item>
 <nz-form-item style="background:#fff;">

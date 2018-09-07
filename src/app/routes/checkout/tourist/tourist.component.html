@@ -334,8 +334,13 @@
               </button>
             </ng-template> -->
             <nz-input-group nzSearch style="width:280px;" [nzSuffix]="suffixIconButton1">
+<<<<<<< HEAD
               <input type="text" [(ngModel)]="vipsearch" (ngModelChange)="searchMemberCard($event)" *ngIf="hasAuth" nz-input placeholder="请输入手机号/姓名">
               <input type="text" [(ngModel)]="vipsearch" *ngIf="!hasAuth" disabled nz-input placeholder="请输入手机号/姓名">
+=======
+              <input type="text" [(ngModel)]="vipsearch" *ngIf="hasAuth" (ngModelChange)="searchMemberCard($event)" nz-input placeholder="请输入手机号/姓名">
+              <input type="text" [(ngModel)]="vipsearch" *ngIf="!hasAuth"  disabled nz-input placeholder="请输入手机号/姓名">
+>>>>>>> master
             </nz-input-group>
             <ng-template #suffixIconButton1>
               <button nz-button nzType="primary" *ngIf="hasAuth" (click)="searchMemberCard()" nzSearch>
@@ -356,7 +361,7 @@
             <div>
               <h3 *ngIf="memberInfo&&yjcardList&&yjcardList.length>0" class="flex-1 text-lg borderLeft">已购会员卡充值</h3>
               <div *ngIf="memberInfo&&yjcardList&&yjcardList.length>0" class="CardBigBox">
-                <div *ngFor="let item of yjcardList;let ind1 = index;" class="{{item.card.type}} ">
+                <div *ngFor="let item of yjcardList;let ind1 = index;" (click)="VipcardPick(ind1)" class="{{item.card.type}} ygVip">
                   <p class="cardName">{{item.card.cardName}}</p>
                   <p class="cardMoney" *ngIf="item.card.type !== 'TIMES'">卡余额：
                     <span class="money1">{{item.card.type === 'METERING'?item.card.balance:item.card.balance/100}}</span>
@@ -366,7 +371,8 @@
                   <p class="cardMoney" *ngIf="item.card.type === 'TIMES'">有效期至：
                     <span class="money1" style="font-size:14px !important;">{{item.card.validity}}</span>
                   </p>
-                  <div class="chongzhi" *ngIf="item.card.type !== 'TIMES'&&item.card.type !== 'METERING'" (click)="VipcardPick(ind1)">充值</div>
+                  <div class="icon-success iconfont" style="color:#fff;top:10px;right:10px;position: absolute;" *ngIf="item.card.type !== 'TIMES'&&item.card.type !== 'METERING'&&item.click"></div>
+                  <!-- <div class="chongzhi" *ngIf="" >充值</div> -->
                 </div>
               </div>
               <h3 class="flex-1 text-lg borderLeft">开通新会员卡</h3>
@@ -459,13 +465,17 @@
                     </div>
                     <div nz-col nzXs="24" nz-row nzType="flex" class="shopTypeBox">
                       <div nz-col nzSpan="12">
-                        <div nz-col nzSpan="12" class="textAline">充值</div>
+                        <div nz-col nzSpan="12" class="textAline" *ngIf="xfCardList.CardTypeS === 'chongzhi'">充值</div>
+                        <div nz-col nzSpan="12" class="textAline" *ngIf="xfCardList.CardTypeS === 'kaika'">售价</div>
                         <div nz-col nzSpan="12" *ngIf="!xyVip">
                           ¥{{xfCardList.rules[xfCardList.ruleIndex].price/100}}
                         </div>
-                        <div nz-col nzSpan="12" *ngIf="(xfCardList.type === 'REBATE'|| xfCardList.type === 'STORED')&&xyVip">
+                        <div nz-col nzSpan="12" *ngIf="xfCardList.type === 'STORED'&&xyVip">
+                          ¥{{xfCardList.rules[xfCardList.ruleIndex].price/100}}
+                        </div>
+                        <div nz-col nzSpan="12" *ngIf="(xfCardList.type === 'REBATE')&&xyVip">
                           <input nz-input style="width:200px" id="name" name="name" type="numeber" [(ngModel)]="REBATEValue" (ngModelChange)="REBATEValueFun($event)"
-                            placeholder="折扣卡充值金额">
+                            placeholder="充值金额">
                         </div>
                       </div>
                       <!-- <div nz-col nzSpan="10">
