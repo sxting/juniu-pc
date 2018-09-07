@@ -260,7 +260,7 @@ export class StoreEditComponent implements OnInit {
                     '地址': poi.address
                 };
             that.location = poi.location;
-            marker.setMap(map);
+            // marker.setMap(map);
             infoWindow.setMap(map);
 
             marker.setPosition(poi.location);
@@ -278,16 +278,16 @@ export class StoreEditComponent implements OnInit {
                 '详细地址': positionResult.nearestJunction
             };
             that.location = positionResult.position;
-            marker.setMap(map);
-            infoWindow.setMap(map);
-            console.log(positionResult.position);
-            marker.setPosition(positionResult.position);
+            // marker.setMap(map);
+            // infoWindow.setMap(map);
+            that.xxaddress = positionResult.nearestJunction;
+            // marker.setPosition(positionResult.address);
             infoWindow.setPosition(positionResult.position);
-            let str = JSON.stringify(info, null, 2)
-            let str1 = str.substr(1, str.length - 2);
+            // let str = JSON.stringify(info, null, 2)
+            // let str1 = str.substr(1, str.length - 2);
 
-            infoWindow.setContent('<pre>' + str1 + '</pre>');
-            infoWindow.open(map, marker.getPosition());
+            // infoWindow.setContent('<pre>' + str1 + '</pre>');
+            // infoWindow.open(map, marker.getPosition());
         });
         positionPicker.start();
 
