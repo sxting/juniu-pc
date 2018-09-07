@@ -547,12 +547,14 @@ export class TouristComponent implements OnInit {
                         })
                     })
                 })
-                this.yjcardList.forEach(function (i: any) {
-                    i.click = false;
-                })
+                if (this.yjcardList && this.yjcardList.length > 0) {
+                    this.yjcardList.forEach(function (i: any) {
+                        i.click = false;
+                    })
+                }
                 this.cardTypeListArr.list[index].rules[ruleIndex].click = !this.cardTypeListArr.list[index].rules[ruleIndex].click;
                 that.xfCardList = this.cardTypeListArr.list[index].rules[ruleIndex].click ? this.cardTypeListArr.list[index] : false;
-                that.xfCardList.CardTypeS= 'kaika';
+                that.xfCardList.CardTypeS = 'kaika';
                 that.xfCardList.ruleIndex = ruleIndex;
             }
             that.totolMoneyFun();
@@ -573,7 +575,7 @@ export class TouristComponent implements OnInit {
             })
             this.yjcardList[index].click = true;
             this.CardConfigRuleFun(this.yjcardList[index].card.cardConfigRuleId, index);
-        }else{
+        } else {
             this.msg.create('warning', `期限卡和计次卡暂不支持充值`);
         }
 
@@ -972,11 +974,11 @@ export class TouristComponent implements OnInit {
                     (res: any) => {
                         this.vipXqFun();
                         if (res.success) {
-                            
+
                             self.changeFun();
                             if (res.data && res.data.length === 0) self.errorAlter('未查询到该会员');
                             self.vipData = res.data;
-                            
+
                             if (self.vipData && self.vipData.length > 0) self.vipDataBoolean = true;
                             if (type || self.vipData.length === 1) this.vipDataRadio(0);
 
@@ -1357,7 +1359,7 @@ export class TouristComponent implements OnInit {
                         self.xfCardList = this.yjcardList[index].card;
                         self.xfCardList.rules = a;
                         self.xfCardList.ruleIndex = 0;
-                        self.xfCardList.CardTypeS= 'chongzhi';
+                        self.xfCardList.CardTypeS = 'chongzhi';
                         self.totolMoneyFun();
                     } else {
                         self.errorAlter(res.errorInfo)
