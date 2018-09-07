@@ -35,8 +35,7 @@
           <span class="select-num-span">已选{{selectNum}}个会员标签</span>
           <span class="click-span" (click)="onSelectLabelClick(labelAlert)">选择标签</span>
           <p class="select-span-box">
-            <span>油性皮肤</span>
-            <span>优质会员</span>
+            <span *ngFor="let item of labelsArr">{{item.name}}</span>
           </p>
         </div>
         <div *ngIf="paramsId === '003'">
