@@ -280,7 +280,7 @@ export class StoreEditComponent implements OnInit {
             that.location = positionResult.position;
             // marker.setMap(map);
             // infoWindow.setMap(map);
-            that.xxaddress = positionResult.nearestJunction;
+            that.xxaddress = positionResult.address;
             // marker.setPosition(positionResult.address);
             infoWindow.setPosition(positionResult.position);
             // let str = JSON.stringify(info, null, 2)
