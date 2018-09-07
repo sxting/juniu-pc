@@ -60,8 +60,6 @@ export class revenueDetailReportComponent implements OnInit {
   ngOnInit() {
 
     this.moduleId = this.route.snapshot.params['menuId'];
-    this.tabActiveType = this.route.snapshot.params['typeNo'];
-    console.log(this.tabActiveType);
 
     let userInfo;
     if (this.localStorageService.getLocalstorage('User-Info')) {
@@ -71,6 +69,9 @@ export class revenueDetailReportComponent implements OnInit {
       this.merchantId = userInfo.merchantId;
     }
     this.ifStoresAll = userInfo.staffType === "MERCHANT"? true : false;
+
+    this.tabActiveType = this.route.snapshot.params['typeNo'];
+    console.log(this.tabActiveType);
 
   }
 

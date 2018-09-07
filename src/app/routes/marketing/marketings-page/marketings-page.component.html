@@ -17,13 +17,41 @@
       <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="activity_obj_days">活动对象</nz-form-label>
       <nz-form-control nzXs="24" nzSm="15" nzMd="16">
         <div *ngIf="paramsId === '001'">
-          <span class="click-span" (click)="onSelectLevelClick()">选择层级</span>
+          <span class="select-num-span">已选{{selectNum}}个会员层级</span>
+          <jn-marketing-transfer *ngIf="(!isEdit) || marketingStatus === 'INIT'" [paramsId]="paramsId" [isEdit]="isEdit"
+                    [getCalculateMemberNum]="true"
+                    (selectIds)="getSelectIds($event)"
+                    (selectNames)="getSelectNames($event)"
+                    (selectNum)="getSelectNum($event)"
+                    (calculateMemberNum)="getCalculateMemberNumber($event)"
+                    (needSendKey)="getNeedSendKey($event)">
+          </jn-marketing-transfer>
+          <p class="select-span-box">
+            <span>月均消费金额（0~100）</span>
+            <span>月均消费金额（100~300）</span>
+          </p>
         </div>
         <div *ngIf="paramsId === '002'">
-          <span class="click-span">选择标签</span>
+          <span class="select-num-span">已选{{selectNum}}个会员标签</span>
+          <span class="click-span" (click)="onSelectLabelClick(labelAlert)">选择标签</span>
+          <p class="select-span-box">
+            <span *ngFor="let item of labelsArr">{{item.name}}</span>
+          </p>
         </div>
         <div *ngIf="paramsId === '003'">
-          <span class="click-span">选择会员</span>
+          <span class="select-num-span">已选{{selectNum}}个会员</span>
+          <jn-marketing-transfer *ngIf="(!isEdit) || marketingStatus === 'INIT'" [paramsId]="paramsId" [isEdit]="isEdit"
+                                 [getCalculateMemberNum]="true"
+                                 (selectIds)="getSelectIds($event)"
+                                 (selectNames)="getSelectNames($event)"
+                                 (selectNum)="getSelectNum($event)"
+                                 (calculateMemberNum)="getCalculateMemberNumber($event)"
+                                 (needSendKey)="getNeedSendKey($event)">
+          </jn-marketing-transfer>
+          <p class="select-span-box">
+            <span>15201375253</span>
+            <span>15201375233</span>
+          </p>
         </div>
         <div *ngIf="paramsId == '01' || paramsId == '02'">最近
           <input class="width-auto" nz-input formControlName="activity_obj_days"
@@ -85,7 +113,7 @@
       </nz-form-control>
     </nz-form-item>
 
-    <nz-form-item [class.dis-none]="paramsId == '03' || paramsId == '11' || paramsId == '12' || paramsId == '13'">
+    <nz-form-item [class.dis-none]="paramsId == '03' || paramsId == '11' || paramsId == '12' || paramsId == '13' || paramsId == '07' || paramsId == '08' || paramsId == '09'">
       <nz-form-label nzXs="24" nzSm="5" nzRequired>发送时间</nz-form-label>
       <nz-form-control nzXs="24" nzSm="15" nzMd="15">
         <nz-date-picker [nzShowToday]="false" [nzDisabled]="marketingStatus === 'RUNING' || marketingStatus === 'STOP'"
@@ -102,7 +130,7 @@
       </nz-form-control>
     </nz-form-item>
 
-    <nz-form-item [class.dis-none]="paramsId == '03' || paramsId == '04'">
+    <nz-form-item [class.dis-none]="paramsIdNumber <= 6">
       <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="active_date">活动日期</nz-form-label>
       <nz-form-control nzXs="24" nzSm="15" nzMd="15">
         <nz-range-picker [nzDisabled]="marketingStatus === 'RUNING' || marketingStatus === 'STOP'"
@@ -212,6 +240,13 @@
     </nz-form-item>
   </form>
 </nz-card>
+
+<ng-template #labelAlert>
+  <div class="label-item-box">
+    <span *ngFor="let item of labelList" [class.active]="labelIdsArr.indexOf(item.id) >= 0" (click)="onLabelItemClick(item)">{{item.name}}</span>
+  </div>
+  <p class="label-member-num">此标签下包含会员数： 200</p>
+</ng-template>
 
 <!--创建优惠券-->
 <ng-template #createCoupon>

@@ -1,5 +1,3 @@
-<!--setting-wages.component-->
-
 <div class="content__title ad-ph" style="padding-bottom: 16px;">
   <nz-breadcrumb>
     <nz-breadcrumb-item>报表</nz-breadcrumb-item>
@@ -9,6 +7,7 @@
   <h3 class="title">员工基本工资设定</h3>
   <button nz-button class="btn-set" (click)="comeBackPreMenu()">返回上级菜单</button>
 </div>
+
 <!-- table 图表 -->
 <nz-card [nzBordered]="false" style="margin-bottom: 0!important;">
   <div nz-form [nzLayout]="'inline'"  class="search__form">
@@ -20,17 +19,29 @@
     </nz-row>
   </div>
   <!--图表-->
-  <nz-table class="table-box" [nzNoResult]="'暂无数据'" #basicTable [nzShowPagination]="false" [nzData]="staffWagesInfor">
+  <nz-table class="table-box" [nzNoResult]="'暂无数据'" #basicTable [nzShowPagination]="false" [nzData]="setStaffWagesList">
     <thead nz-thead class="ui-grid-thead">
       <tr class="thead-th">
         <th style="text-align: left" nz-th class="">编号</th>
         <th style="text-align: center" nz-th class="">员工姓名</th>
         <th style="text-align: center" nz-th class="">职位</th>
-        <th style="text-align: right" nz-th class="" [title]="'基本工资修改后，只能在下个月生效'">基本工资</th>
+        <th style="text-align: right;position: relative" nz-th class="" [title]="'基本工资修改后，只能在下个月生效'">
+          基本工资
+          <div id="cdk-overlay-3" class="cdk-overlay-pane" dir="ltr" style="pointer-events: auto;width: 245px;right: 0;top: -36px;">
+            <div _ngcontent-c6="" class="ant-tooltip ng-trigger ng-trigger-fadeAnimation ng-tns-c6-3 ng-star-inserted ant-tooltip-placement-top" ng-reflect-klass="ant-tooltip" ng-reflect-ng-class="[object Object]" ng-reflect-ng-style="[object Object]" style="opacity: 1;">
+              <div _ngcontent-c6="" class="ant-tooltip-content">
+                <div _ngcontent-c6="" class="ant-tooltip-arrow" style="left: 83%;"></div>
+                <div _ngcontent-c6="" class="ant-tooltip-inner">
+                  <span _ngcontent-c6="" class="ng-tns-c6-3 ng-star-inserted" style="">基本工资修改后，只能在下个月生效</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </th>
       </tr>
     </thead>
     <tbody nz-tbody class="ui-grid-tbody">
-      <tr nz-tbody-tr *ngFor="let item of staffWagesInfor;let i = index">
+      <tr nz-tbody-tr *ngFor="let item of setStaffWagesList;let i = index">
         <td nz-td>{{i+1}}</td>
         <td nz-td>{{item.staffName}}</td>
         <td nz-td>{{item.staffCount}}</td>

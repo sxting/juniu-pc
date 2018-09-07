@@ -7,7 +7,7 @@
   </nz-breadcrumb>
   <h3 class="title">营收报表详情</h3>
 </div>
-<div class="tabsetBox" >
+<div class="tabsetBox">
   <nz-tabset>
     <nz-tab [class.tab-active]="tabActiveType === item.type" (nzClick)="tabclick(item.type)"  *ngFor="let item of tabTitleName" nzTitle="{{item.name}}">
     </nz-tab>

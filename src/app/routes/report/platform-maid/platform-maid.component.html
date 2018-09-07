@@ -38,7 +38,7 @@
         <!--审核中和审核未通过以及未申请-->
         <div class="fl set-btn-box" *ngIf="1">
           <p class="no-set">暂未设置</p>
-          <button nz-button (click)="goPayWay(maidAlert,'MEITUAN','美团点评')">点击设置</button>
+          <button nz-button style="margin-left: 25px;" (click)="goPayWay(maidAlert,'MEITUAN','美团点评')">点击设置</button>
         </div>
         <!--审核通过显示-->
         <div class="setted set-btn-box" *ngIf=" ">
@@ -47,6 +47,13 @@
           <button nz-button class="fix-btn" (click)="goPayWay(maidAlert,'MEITUAN','美团点评')">点击修改</button>
         </div>
       </nz-card>
+      <div class="text-informate">
+        <p>备注：</p>
+        <p>为保证正确核算成本，核销数据基于线下门店进行统计。</p>
+        <p>因此需要您的线下门店与平台门店具有匹配关系。</p>
+        <p>- 口碑门店匹配关系请到<span style="color:#ff6600">管理－门店</span>中查看；</p>
+        <p>- 美大门店在核销时已经存在匹配关系。</p>
+      </div>
     </div>
     <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
       <nz-col nzMd="8" nzSm="24">

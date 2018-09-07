@@ -1,4 +1,10 @@
-<page-header [title]="'跨店结算'"></page-header>
+<div class="content__title ad-ph" style="padding-bottom: 16px;position: relative">
+  <nz-breadcrumb>
+    <nz-breadcrumb-item>报表</nz-breadcrumb-item>
+    <nz-breadcrumb-item>跨店结算</nz-breadcrumb-item>
+  </nz-breadcrumb>
+  <h3 class="title">跨店结算</h3>
+</div>
 <nz-card [nzBordered]="false">
     <div nz-form [nzLayout]="'inline'" class="search__form">
         <nz-col nzMd="8" nzSm="24">
@@ -9,6 +15,14 @@
                 </nz-form-control>
             </nz-form-item>
         </nz-col>
+        <nz-radio-group [(ngModel)]="crossType" class="fr">
+          <label nz-radio-button [nzValue]="'1'" (click)="changeAlertTab()">
+            <span>转给其他店</span>
+          </label>
+          <label nz-radio-button [nzValue]="'0'" (click)="changeAlertTab()">
+            <span>其他店转入</span>
+          </label>
+        </nz-radio-group>
     </div>
 </nz-card>
 <!--图表-->
@@ -49,7 +63,11 @@
             <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
                 <nz-col nzMd="8" nzSm="24">
                   <nz-form-item>
-                    <jn-stores-infor  [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
+                    <nz-tabset class="tabset" (nzSelectChange)="changeAlertTab($event)">
+                      <nz-tab nzTitle="会员卡"></nz-tab>
+                      <nz-tab nzTitle="小程序购买"></nz-tab>
+                    </nz-tabset>
+                    <!--<jn-stores-infor  [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>-->
                   </nz-form-item>
                 </nz-col>
                 <nz-col nzMd="8" nzSm="24" class="fr">

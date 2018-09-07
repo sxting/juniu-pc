@@ -25,11 +25,11 @@ export class staffWagesReportComponent implements OnInit {
   merchantId: string = '';
   theadName: any = ['序号', '员工姓名', '月份', '基本工资','绩效提成', '总工资'];//表头 '服务技师',先隐藏
   moduleId: any;
-  ifStoresAll: boolean = true;//是否有全部门店
+  ifStoresAll: boolean = false;//是否有全部门店
   ifStoresAuth: boolean = false;//是否授权
   pageNo: any = 1;//页码
   pageSize: any = '10';//一页展示多少数据
-  reportDate: Date;//时间Date形式
+  reportDate: Date = new Date();//时间Date形式
   reportDateChange: string;//时间字符串形式的
   totalElements: any = 0;//商品总数  expandForm = false;//展开
   staffWagesInfor: any = [];
@@ -51,23 +51,25 @@ export class staffWagesReportComponent implements OnInit {
    */
   batchQuery = {
     storeId: this.storeId,
-    merchantId: this.merchantId,
-    yyyymm: this.reportDateChange
+    queryDate: this.reportDateChange,
+    pageNo: this.pageNo,
+    pageSize: this.pageSize
   };
 
   ngOnInit() {
 
     this.moduleId = this.route.snapshot.params['menuId'];
-    let userInfo;
-    if (this.localStorageService.getLocalstorage('User-Info')) {
-      userInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info'));
-    }
-    if (userInfo) {
-      this.merchantId = userInfo.merchantId;
-    }
-    this.ifStoresAll = userInfo.staffType === "MERCHANT"? true : false;
+    // let userInfo;
+    // if (this.localStorageService.getLocalstorage('User-Info')) {
+    //   userInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info'));
+    // }
+    // if (userInfo) {
+    //   this.merchantId = userInfo.merchantId;
+    // }
+    let month = this.reportDate.getMonth()+1;       //获取当前月份(0-11,0代表1月)
+    let changemonth = month < 10 ? '0' + month : '' + month;
+    this.reportDateChange = this.reportDate.getFullYear()+'-'+changemonth;
   }
-
 
   //返回门店数据
   storeListPush(event: any){
@@ -77,6 +79,12 @@ export class staffWagesReportComponent implements OnInit {
   //门店id
   getStoreId(event: any){
     this.storeId = event.storeId? event.storeId : '';
+    console.log(this.storeId);
+    this.batchQuery.storeId = this.storeId;
+    this.batchQuery.queryDate = this.reportDateChange;
+    this.batchQuery.pageNo = 1;
+    // 调用员工工资成本列表
+    this.staffWagesCost(this.batchQuery);
   }
 
   //选择日期
@@ -86,36 +94,60 @@ export class staffWagesReportComponent implements OnInit {
     let month = this.reportDate.getMonth()+1;       //获取当前月份(0-11,0代表1月)
     let changemonth = month < 10 ? '0' + month : '' + month;
     this.reportDateChange = year+'-'+changemonth;
-    this.batchQuery.yyyymm = this.reportDateChange;
+    this.batchQuery.queryDate = this.reportDateChange;
     //获取商品报表信息
-
+    this.batchQuery.pageNo = 1;
+    // 调用员工工资成本列表
+    this.staffWagesCost(this.batchQuery);
   }
 
   //导出Excel
   exportExcel() {
     let that = this;
-    let year = this.reportDate.getFullYear();        //获取当前年份(2位)
-    let monthStart = this.reportDate.getMonth()+1 < 10 ? '0' + (this.reportDate.getMonth()+1) : '' + (this.reportDate.getMonth()+1);//获取当前月份(0-11,0代表1月)
-    let monthEnd = this.reportDate.getMonth()+2 < 10 ? '0' + (this.reportDate.getMonth()+2) : '' + (this.reportDate.getMonth()+2);//获取当前月份(0-11,0代表1月)
-    let startDate = year+'-'+monthStart+'-01 00:00:00';
-    let endDate = year+'-'+monthEnd+'-01 00:00:00';
-
     let token = this.localStorageService.getLocalstorage(APP_TOKEN);
+    let dateMonth = this.reportDateChange;
     if (that.storeId) {
-      window.open(Config.API + `/order/ordersExcelDownLoad.excel?token=${token}&start=${startDate}&end=${endDate}&storeId=${that.storeId}`);
+      window.open(Config.API + `finance/profit/exportStaffWagesCost.excel?token=${token}&queryDate=${dateMonth}&storeId=${that.storeId}`);
     } else {
-      window.open(Config.API + `/order/ordersExcelDownLoad.excel?token=${token}&start=${startDate}&end=${endDate}`);
+      window.open(Config.API + `finance/profit/exportStaffWagesCost.excel?token=${token}&queryDate=${dateMonth}`);
     }
   }
 
   // 切换分页码
   paginate(event: any) {
     this.pageNo = event;
+    this.batchQuery.pageNo = this.pageNo;
+    // 调用员工工资成本列表
+    this.staffWagesCost(this.batchQuery);
   }
 
   //  员工工资设定
   staffWagesSetting(){
-    this.router.navigate(['/report/setting/staff/wages', {  }]);
+    this.router.navigate(['/report/setting/staff/wages', { moduleId: this.moduleId }]);
+  }
+
+  // 获取员工工资成本列表信息
+  staffWagesCost(batchQuery: any){
+    let self = this;
+    this.loading = true;
+    this.reportService.staffWagesCost(batchQuery).subscribe(
+      (res: any) => {
+        self.loading = false;
+        if (res.success) {
+          console.log(res.data.items);
+          self.staffWagesInfor = res.data.items? res.data.items : [];
+          self.totalElements = res.data.pageInfo? res.data.pageInfo.countTotal : 0;
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      },
+      error => {
+        this.msg.warning(error);
+      }
+    );
   }
 
 }

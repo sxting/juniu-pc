@@ -27,7 +27,7 @@
           <nz-tab nzTitle="详情"></nz-tab>
         </nz-tabset>
       </div>
-      <nz-radio-group [(ngModel)]="channelType" class="mr-md">
+      <nz-radio-group [(ngModel)]="channelType" class="mr-md" *ngIf="activeIndex === 0">
         <label nz-radio-button [nzValue]="'1'" (click)="onStatusClick()">
           <span>全部渠道</span>
         </label>
