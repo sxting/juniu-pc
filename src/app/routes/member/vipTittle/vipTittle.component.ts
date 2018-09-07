@@ -33,9 +33,25 @@ export class VipTittleComponent implements OnInit {
     ) { }
     ngOnInit() {
         this.tagId = this.route.snapshot.params['tagId'];
+        if (this.tagId) this.getTaglib();
     }
-    selectStoreInfo(event: any) {
-
+    getTaglib() {
+        let data = {
+            tagId: this.tagId
+        }
+        this.memberService.getTaglib(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    this.tagName = res.data.tagName;
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => this.errorAlter(error)
+        )
     }
     submit() {
         let data = {

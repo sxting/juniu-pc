@@ -558,10 +558,21 @@ export class MemberService {
             });
     }
     /**
-     * 全部标签
+     * 全部标签  
      **/
     queryTaglibs(data) {
         let apiUrl = Config.API + 'member/taglib/queryTaglibs.json';
+        return this.http.get(apiUrl, data).map((response: Response) => response).catch(error => {
+            return Observable.throw(error);
+        });
+    }
+
+
+    /**
+     * 查询标签  
+     **/
+    getTaglib(data) {
+        let apiUrl = Config.API + 'member/taglib/getTaglib.json';
         return this.http.get(apiUrl, data).map((response: Response) => response).catch(error => {
             return Observable.throw(error);
         });
