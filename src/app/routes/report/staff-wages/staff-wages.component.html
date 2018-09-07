@@ -40,10 +40,12 @@
     </thead>
     <tbody nz-tbody class="ui-grid-tbody">
     <tr nz-tbody-tr *ngFor="let item of staffWagesInfor;let i = index">
-      <!--<td nz-td>{{i+1}}</td>-->
-      <!--<td nz-td>{{item.staffName}}</td>-->
-      <!--<td nz-td>{{item.serviceCount}}</td>-->
-      <!--<td nz-td>{{item.assignRateStaffing}}</td>-->
+      <td nz-td>{{i+1}}</td>
+      <td nz-td>{{item.staffName}}</td>
+      <td nz-td>{{item.date}}</td>
+      <td nz-td>{{item.basicWages? item.basicWages/100 : '-'}}</td>
+      <td nz-td>{{item.performanceWages? item.performanceWages/100 : '-'}}</td>
+      <td nz-td>{{item.totalWages? item.totalWages/100 : '-'}}</td>
     </tr>
     </tbody>
   </nz-table>
