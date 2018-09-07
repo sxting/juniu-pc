@@ -44,18 +44,12 @@ export class PayDownloadComponent implements OnInit {
   ngOnInit() {
     this.merchantId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['merchantId'];
     this.moduleId = this.route.snapshot.params['menuId'];
-    this.downloadQronline();
   }
 
   onStoresChange(e) {
     this.storeId = e.storeId;
     this.downloadQronline();
   }
-
-  // onStoresChange() {
-  //   this.storeId = this.selectedOption;
-  //   this.downloadQronline();
-  // }
 
   colorChange() {
     if(this.color.length === 6) {
@@ -81,7 +75,7 @@ export class PayDownloadComponent implements OnInit {
       let pictureSuffix = '.' + result.pictureSuffix;
       let width = 78, height = 58;
       this.imagePath = Config.OSS_IMAGE_URL+`${this.imageId}/resize_${width}_${height}/mode_fill`;
-      this.imgPath = `${Config.API}finance/store/download/qronline.do?storeId=${this.storeId}&logoId=${this.imageId}&color=${this.color}`;
+      this.downloadQronline();
     });
   }
 
