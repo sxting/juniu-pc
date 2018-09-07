@@ -334,13 +334,8 @@
               </button>
             </ng-template> -->
             <nz-input-group nzSearch style="width:280px;" [nzSuffix]="suffixIconButton1">
-<<<<<<< HEAD
-              <input type="text" [(ngModel)]="vipsearch" (ngModelChange)="searchMemberCard($event)" *ngIf="hasAuth" nz-input placeholder="请输入手机号/姓名">
-              <input type="text" [(ngModel)]="vipsearch" *ngIf="!hasAuth" disabled nz-input placeholder="请输入手机号/姓名">
-=======
               <input type="text" [(ngModel)]="vipsearch" *ngIf="hasAuth" (ngModelChange)="searchMemberCard($event)" nz-input placeholder="请输入手机号/姓名">
               <input type="text" [(ngModel)]="vipsearch" *ngIf="!hasAuth"  disabled nz-input placeholder="请输入手机号/姓名">
->>>>>>> master
             </nz-input-group>
             <ng-template #suffixIconButton1>
               <button nz-button nzType="primary" *ngIf="hasAuth" (click)="searchMemberCard()" nzSearch>
