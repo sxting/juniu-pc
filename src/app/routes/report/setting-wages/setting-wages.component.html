@@ -25,7 +25,7 @@
         <th style="text-align: left" nz-th class="">编号</th>
         <th style="text-align: center" nz-th class="">员工姓名</th>
         <th style="text-align: center" nz-th class="">职位</th>
-        <th style="text-align: right;position: relative" nz-th class="" [title]="'基本工资修改后，只能在下个月生效'">
+        <th style="text-align: right;position: relative;width: 200px;" nz-th class="" [title]="'基本工资修改后，只能在下个月生效'">
           基本工资
           <div id="cdk-overlay-3" class="cdk-overlay-pane" dir="ltr" style="pointer-events: auto;width: 245px;right: 0;top: -36px;">
             <div _ngcontent-c6="" class="ant-tooltip ng-trigger ng-trigger-fadeAnimation ng-tns-c6-3 ng-star-inserted ant-tooltip-placement-top" ng-reflect-klass="ant-tooltip" ng-reflect-ng-class="[object Object]" ng-reflect-ng-style="[object Object]" style="opacity: 1;">
@@ -44,9 +44,11 @@
       <tr nz-tbody-tr *ngFor="let item of setStaffWagesList;let i = index">
         <td nz-td>{{i+1}}</td>
         <td nz-td>{{item.staffName}}</td>
-        <td nz-td>{{item.staffCount}}</td>
+        <td nz-td>{{item.roleName}}</td>
         <td nz-td>
-          <input nz-input onkeyup="this.value=this.value.replace(/\D/g,'')"  class="wages-input" [class.bd-inpt]="activeIndex === i" type="text" [ngModel]="item.staffWages" (focus)="focusinInput(i)" (blur)="blurInput()" (change)="changeStaffWages(item.staffId)" />
+          <input nz-input onkeyup="this.value=this.value.replace(/\D/g,'')"  class="wages-input" [class.bd-inpt]="activeIndex === i" type="text" [ngModel]="item.basicWages? item.basicWages/100 : '暂未设置'"
+                 (focus)="focusinInput(i)" (blur)="blurInput(item.basicWages)"
+                 (change)="changeStaffWages(item.staffId,item.storeId,item.basicWages)" placeholder="点击设置"/>
         </td>
       </tr>
     </tbody>

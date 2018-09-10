@@ -58,7 +58,7 @@ export class staffWagesReportComponent implements OnInit {
 
   ngOnInit() {
 
-    this.moduleId = this.route.snapshot.params['menuId'];
+    this.moduleId = this.route.snapshot.params['moduleId'];
     // let userInfo;
     // if (this.localStorageService.getLocalstorage('User-Info')) {
     //   userInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info'));

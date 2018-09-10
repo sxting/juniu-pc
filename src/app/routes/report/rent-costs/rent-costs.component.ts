@@ -5,6 +5,7 @@ import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ReportService } from "../shared/report.service";
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { ActivatedRoute, Router } from '@angular/router';
+import NP from 'number-precision'
 
 @Component({
   selector: 'app-rent-costs',
@@ -20,14 +21,13 @@ export class rentCostsComponent implements OnInit {
   merchantId: string = '';
   theadName: any = [ '房租', '水电网', '物业','其他' ];//表头
   moduleId: any;
-  ifStoresAll: boolean = true;//是否有全部门店
+  ifStoresAll: boolean = false;//是否有全部门店
   ifStoresAuth: boolean = false;//是否授权
   editIndex = -1;
   editObj = {};
   pageNo: any = 1;//页码
   pageSize: any = '10';//一页展示多少数据
   totalElements: any = 0;//商品总数
-
   //#region get form fields
   get items() {
     return this.form.controls.items as FormArray;
@@ -50,97 +50,26 @@ export class rentCostsComponent implements OnInit {
    */
   batchQuery = {
     storeId: this.storeId,
-    merchantId: this.merchantId,
+    pageNo: this.pageNo,
+    pageSize: this.pageSize
   };
 
   ngOnInit() {
-    this.moduleId = this.route.snapshot.params['menuId'];
-    let userInfo;
-    if (this.localStorageService.getLocalstorage('User-Info')) {
-      userInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info'));
-    }
-    if (userInfo) {
-      this.merchantId = userInfo.merchantId;
-    }
-    this.ifStoresAll = userInfo.staffType === "MERCHANT" ? true : false;
-
+    this.moduleId = this.route.snapshot.params['moduleId'];
     this.form = this.fb.group({
       items: this.fb.array([]),
-    });
-    const userList = [
-      {
-        key: '1',
-        workId: '00001',
-        name: 'John Brown',
-        department: '10000',
-      },
-      {
-        key: '2',
-        workId: '00002',
-        name: 'Jim Green',
-        department: '10000',
-      },
-      {
-        key: '3',
-        workId: '00003',
-        name: 'Joe Black',
-        department: '10000',
-      },
-    ];
-    userList.forEach(i => {
-      const field = this.createUser();
-      field.patchValue(i);
-      this.items.push(field);
     });
   }
 
   createUser(): FormGroup {
     return this.fb.group({
-      key: [null],
-      workId: [null, [Validators.required]],
-      name: [null, [Validators.required]],
-      department: [null, [Validators.required]],
+      costId: [null],
+      costDate: [null, [Validators.required]],
+      houseRent: [null, [Validators.required]],
+      hydropowerCost: [null, [Validators.required]],
+      otherCost: [null, [Validators.required]],
+      propertyCost: [null, [Validators.required]],
     });
-  }
-
-  add() {
-    this.items.push(this.createUser());
-    this.edit(this.items.length - 1);
-  }
-
-  deleteListInfor(id: number) {
-    this.modalSrv.warning({
-      nzTitle: '温馨提示',
-      nzContent: '删除此条数据会对利润计算产生影响,且删除后无法恢复？',
-      nzOkText: '确定',
-      nzCancelText: '取消',
-      nzOnOk: function () {
-        console.log(id);
-      }
-    });
-  }
-
-  edit(index: number) {
-    if (this.editIndex !== -1 && this.editObj) {
-      this.items.at(this.editIndex).patchValue(this.editObj);
-    }
-    this.editObj = { ...this.items.at(index).value };
-    this.editIndex = index;
-  }
-
-  save(index: number) {
-    this.items.at(index).markAsDirty();
-    if (this.items.at(index).invalid) return;
-    this.editIndex = -1;
-  }
-
-  cancel(index: number) {
-    if (!this.items.at(index).value.key) {
-      this.items.removeAt(index);
-    } else {
-      this.items.at(index).patchValue(this.editObj);
-    }
-    this.editIndex = -1;
   }
 
   //返回门店数据
@@ -151,11 +80,152 @@ export class rentCostsComponent implements OnInit {
   //门店id
   getStoreId(event: any){
     this.storeId = event.storeId? event.storeId : '';
+    this.batchQuery.storeId = this.storeId;
+    this.houseCostListInfor(this.batchQuery);//房屋水电成本的
+  }
+
+  // 删除房屋水电成本
+  deleteListInfor(id: number) {
+    let self = this;
+    this.modalSrv.warning({
+      nzTitle: '温馨提示',
+      nzContent: '删除此条数据会对利润计算产生影响,且删除后无法恢复？',
+      nzOkText: '确定',
+      nzCancelText: '取消',
+      nzOnOk: function () {
+        console.log(id);
+        let data = {
+          costId: id
+        };
+        self.deleteHouseCost(data);//删除房屋水电成本
+      }
+    });
+  }
+
+  //编辑的时候
+  edit(index: number) {
+    if (this.editIndex !== -1 && this.editObj) {
+      this.items.at(this.editIndex).patchValue(this.editObj);
+    }
+    this.editObj = { ...this.items.at(index).value };
+    this.editIndex = index;
+  }
+
+  // 保存的时候
+  save(index: number) {
+    this.items.at(index).markAsDirty();
+    if (this.items.at(index).invalid) return;
+    this.editIndex = -1;
+    let data = {
+      costId: this.items.at(index).value.costId,
+      houseRent: parseFloat(this.items.at(index).value.houseRent) * 100,
+      hydropowerCost: parseFloat(this.items.at(index).value.hydropowerCost) * 100,
+      propertyCost: parseFloat(this.items.at(index).value.propertyCost) * 100,
+      otherCost: parseFloat(this.items.at(index).value.otherCost) * 100
+    };
+    this.settingHouseCost(data);//设置房租水电成本
+  }
+
+  //点击取消
+  cancel(index: number) {
+    if (!this.items.at(index).value.costId) {//没有costId 就新增的 删除
+      this.items.removeAt(index);
+    } else {
+      this.items.at(index).patchValue(this.editObj);
+    }
+    this.editIndex = -1;
   }
 
   // 切换分页码
   paginate(event: any) {
     this.pageNo = event;
+    this.batchQuery.pageNo = this.pageNo;
+    this.houseCostListInfor(this.batchQuery);//房屋水电成本的
   }
 
+  // 房屋水电成本列表
+  houseCostListInfor(batchQuery: any){
+    let self = this;
+    this.loading = true;
+    this.reportService.houseCostListInfor(batchQuery).subscribe(
+      (res: any) => {
+        self.loading = false;
+        if (res.success) {
+          res.data.items.forEach(function(item: any) {
+            item.houseRent = item.houseRent/100;
+            item.hydropowerCost = item.hydropowerCost/100;
+            item.otherCost = item.otherCost/100;
+            item.propertyCost = item.propertyCost/100;
+          });
+          let userList = res.data.items? res.data.items : [];
+          this.form = this.fb.group({
+            items: this.fb.array([]),
+          });
+          userList.forEach(i => {
+            let field = this.createUser();
+            field.patchValue(i);
+            this.items.push(field);
+          });
+          self.totalElements = res.data.pageInfo? res.data.pageInfo.countTotal : 0;
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      },
+      error => {
+        this.msg.warning(error);
+      }
+    );
+  }
+
+  //设置房租水电成本
+  settingHouseCost(batchQuery: any){
+    let self = this;
+    this.loading = true;
+    this.reportService.settingHouseCost(batchQuery).subscribe(
+      (res: any) => {
+        self.loading = false;
+        if (res.success) {
+          this.batchQuery.storeId = this.storeId;
+          this.batchQuery.pageNo = 1;
+          this.houseCostListInfor(this.batchQuery);//房屋水电成本的
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      },
+      error => {
+        this.msg.warning(error);
+      }
+    );
+  }
+
+  //删除房租水电成本
+  deleteHouseCost(batchQuery: any){
+    let self = this;
+    this.loading = true;
+    this.reportService.deleteHouseCost(batchQuery).subscribe(
+      (res: any) => {
+        self.loading = false;
+        if (res.success) {
+          this.msg.success(`删除成功`);
+          this.batchQuery.storeId = this.storeId;
+          this.batchQuery.pageNo = 1;
+          this.houseCostListInfor(this.batchQuery);//房屋水电成本的
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      },
+      error => {
+        this.msg.warning(error);
+      }
+    );
+  }
 }

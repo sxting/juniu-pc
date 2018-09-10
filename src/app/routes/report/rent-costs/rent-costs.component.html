@@ -32,40 +32,37 @@
       <tbody class="tbady-ui">
         <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
         <td>
-          <span *ngIf="editIndex!==i">{{items.value[i].name}}</span>
-          <span *ngIf="editIndex===i" nz-form-control>
-              <input nz-input formControlName="name" placeholder="请输入月份">
-            </span>
+          <span style="width: 100px;display: inline-block">{{items.value[i].costDate}}</span>
         </td>
         <td>
-          <span *ngIf="editIndex!==i">{{items.value[i].name}}</span>
+          <span *ngIf="editIndex!==i">{{items.value[i].houseRent}}</span>
           <span *ngIf="editIndex===i" nz-form-control>
-            <input nz-input formControlName="name" placeholder="请输入房租费用">
+            <input nz-input formControlName="houseRent" placeholder="请输入房租">
           </span>
         </td>
         <td>
-          <span *ngIf="editIndex!==i">{{items.value[i].name}}</span>
+          <span *ngIf="editIndex!==i">{{items.value[i].hydropowerCost}}</span>
           <span *ngIf="editIndex===i" nz-form-control>
-            <input nz-input formControlName="name" placeholder="请输入水电网费用">
+            <input nz-input formControlName="hydropowerCost" placeholder="请输入水电网">
           </span>
         </td>
         <td>
-          <span *ngIf="editIndex!==i">{{items.value[i].workId}}</span>
+          <span *ngIf="editIndex!==i">{{items.value[i].propertyCost}}</span>
           <span *ngIf="editIndex===i" nz-form-control>
-            <input nz-input formControlName="workId" placeholder="请输入物业费用">
+            <input nz-input formControlName="propertyCost" placeholder="请输入物业">
           </span>
         </td>
         <td>
-          <span *ngIf="editIndex!==i">{{items.value[i].department}}</span>
+          <span *ngIf="editIndex!==i">{{items.value[i].otherCost}}</span>
           <span *ngIf="editIndex===i" nz-form-control>
-            <input nz-input formControlName="department" placeholder="请输入其他费用">
+            <input nz-input formControlName="otherCost" placeholder="请输入其他">
           </span>
         </td>
         <td>
           <span *ngIf="editIndex!==i">
             <a (click)="edit(i)">编辑</a>
             <nz-divider nzType="vertical"></nz-divider>
-            <nz-popconfirm (nzOnConfirm)="deleteListInfor(items.value[i].workId)" [nzTitle]="'是否要删除此行？'">
+            <nz-popconfirm (nzOnConfirm)="deleteListInfor(items.value[i].costId)" [nzTitle]="'是否要删除此行？'">
               <a nz-popconfirm>删除</a>
             </nz-popconfirm>
           </span>
@@ -80,10 +77,6 @@
       </tr>
       </tbody>
     </nz-table>
-    <button *ngIf="editIndex===-1" nz-button [nzType]="'dashed'" (click)="add()" class="ant-btn__block mt-md">
-      <i class="anticon anticon-plus"></i>
-      <span>新增房租水电成本</span>
-    </button>
     <div class="nzPaginationBox">
       <nz-pagination class="nzPagination" [nzTotal]="totalElements" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
       <p class="countTotal">总共: {{totalElements}}条</p>
