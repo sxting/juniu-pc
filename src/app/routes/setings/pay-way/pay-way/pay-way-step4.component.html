@@ -11,9 +11,10 @@
                 <img class="image" [src]="item.imagePath1" *ngIf="item.imagePath1">
             </div>
         </nz-form-control>
+        <nz-form-explain class="tips-text">请将营业执照拍摄完整，包括四角，以免影响审核。</nz-form-explain>
     </nz-form-item>
 
-    <nz-form-item class="form-item" *ngIf="item.type === 'qiye'">
+    <nz-form-item style="margin-top: 85px" class="form-item" *ngIf="item.type === 'qiye'">
         <nz-form-label class="lh-62" nzSpan="5" nzRequired>银行开户许可证</nz-form-label>
         <nz-form-control [nzSpan]="19">
             <div class="step4-img-box">

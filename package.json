@@ -13,7 +13,6 @@
   },
   "license": "MIT",
   "scripts": {
-    "precommit": "npm run lint-staged",
     "ng": "ng",
     "start": "ng serve -o",
     "build": "ng build --prod --build-optimizer",

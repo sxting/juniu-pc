@@ -131,6 +131,7 @@ export class MarketingsPageComponent implements OnInit {
     }
   ];
   labelIdsArr: any = [];
+  labelsArr: any = [];
 
   selectIds: string = '';
   selectNames: string = '';
@@ -217,14 +218,33 @@ export class MarketingsPageComponent implements OnInit {
 
     //选择标签
   onSelectLabelClick(tpl: any) {
+    let self = this;
     this.modalSrv.create({
       nzTitle: '选择会员标签',
       nzContent: tpl,
       nzWidth: '500px',
       nzOnOk: () => {
-
+        self.labelsArr = [];
+        self.labelList.forEach(function (item1: any, i: any) {
+          self.labelIdsArr.forEach(function (item2: any, i: any) {
+            if(item1.id === item2) {
+              self.labelsArr.push(item1)
+            }
+          })
+        });
+        self.selectNum = self.labelIdsArr.length;
       },
-      nzOnCancel: () => {},
+      nzOnCancel: () => {
+        self.labelIdsArr = [];
+        self.labelList.forEach(function (item1: any, i: any) {
+          self.labelsArr.forEach(function (item2: any) {
+            if(item1.id === item2.id) {
+              self.labelIdsArr.push(item2.id)
+            }
+          });
+        });
+        self.selectNum = self.labelIdsArr.length;
+      },
     });
   }
 

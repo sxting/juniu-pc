@@ -6,22 +6,22 @@
             </button>
         </div>
     </div>
-    <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="commissionListInfor">
+    <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="dataList">
         <thead nz-thead class="ui-grid-thead">
             <tr>
                 <th nz-th class="" *ngFor="let list of theadName">{{list}}</th>
             </tr>
         </thead>
         <tbody nz-tbody class="ui-grid-tbody">
-            <tr nz-tbody-tr *ngFor="let item of commissionListInfor;let i = index">
-                <td nz-td>{{i+1}}</td>
-                <td nz-td>{{item.ruleName}}</td>
-                <td nz-td>{{item.rulesDetail}}</td>
-                <td nz-td>{{item.staffCount}}</td>
+            <tr nz-tbody-tr *ngFor="let item of dataList;let i = index">
+                <td nz-td>{{item.tagId}}</td>
+                <td nz-td>{{item.tagName}}</td>
+                <td nz-td>{{item.customerNum}}</td>
+                <!-- <td nz-td>{{item.staffCount}}</td> -->
                 <td nz-td class="operation">
-                    <span (click)="editDetailInfor(item.deductRuleId)">编辑</span>
+                    <span (click)="editDetailInfor(item.tagId)">编辑</span>
                     <span class="iconfont icon-line1"></span>
-                    <span (click)="deleteCommissionInfor(item.deductRuleId)">删除</span>
+                    <span (click)="deleteCommissionInfor(item.tagId)">删除</span>
                 </td>
             </tr>
         </tbody>
