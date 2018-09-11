@@ -193,4 +193,34 @@ export class ReportService {
       });
   }
 
+  // 产品成本
+  productCost(data: any) {
+    let apiUrl = this.api1 + '/profit/productCost.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  // 获取营收报表信息
+  proportion(data: any) {
+    let apiUrl = this.api1 + '/pc/income/proportion.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  // 获取营收报表走势图
+  revenuetRend(data: any) {
+    let apiUrl = this.api1 + '/pc/income/trend.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
 }

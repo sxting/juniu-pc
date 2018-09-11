@@ -28,17 +28,17 @@
         </nz-tabset>
       </div>
       <nz-radio-group [(ngModel)]="channelType" class="mr-md" *ngIf="activeIndex === 0">
-        <label nz-radio-button [nzValue]="'1'" (click)="onStatusClick()">
+        <label nz-radio-button [nzValue]="'ALL'" (click)="onStatusClick()">
           <span>全部渠道</span>
         </label>
-        <label nz-radio-button [nzValue]="'2'" (click)="onStatusClick()">
+        <label nz-radio-button [nzValue]="'ONLINE'" (click)="onStatusClick()">
           <span>线上</span>
         </label>
-        <label nz-radio-button [nzValue]="'3'" (click)="onStatusClick()">
+        <label nz-radio-button [nzValue]="'OFFLINE'" (click)="onStatusClick()">
           <span>线下</span>
         </label>
       </nz-radio-group>
-      <g2-pie *ngIf="activeIndex === 0"
+      <g2-pie *ngIf="activeIndex === 0 && salesPieData.length > 0"
               [hasLegend]="true"
               title="总成本"
               subTitle="总成本"
@@ -46,7 +46,7 @@
               [data]="salesPieData"
               height="294">
       </g2-pie>
-      <div *ngIf="activeIndex !== 0" style="background: #fff;padding:25px 50px 37px;height: 303px;">
+      <div *ngIf="activeIndex !== 0 && salesPieData.length > 0" style="background: #fff;padding:25px 50px 37px;height: 300px;">
         <div class="rank-list">
           <ul>
             <li *ngFor="let i of salesPieData; let idx = index">

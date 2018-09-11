@@ -23,15 +23,15 @@ export class productCostsComponent implements OnInit {
   merchantId: string = '';
   theadName: any = ['产品类型', '产品名称', '单个售价', '单个成本','售卖数量', '总成本'];//表头
   moduleId: any;
-  ifStoresAll: boolean = true;//是否有全部门店
+  ifStoresAll: boolean = false;//是否有全部门店
   ifStoresAuth: boolean = false;//是否授权
   pageNo: any = 1;//页码
   pageSize: any = '10';//一页展示多少数据
   totalElements: any = 0;//商品总数  expandForm = false;//展开
-  dateRange: Date = null;
+  dateRange: any;
   startTime: string = '';//转换字符串的时间
   endTime: string = '';//转换字符串的时间
-  ProductType: string;
+  productType: string;
   productTypeLists: any = [
     {
       name: '服务产品',
@@ -61,22 +61,21 @@ export class productCostsComponent implements OnInit {
    */
   batchQuery = {
     storeId: this.storeId,
-    merchantId: this.merchantId,
+    startDate: this.startTime,
+    endDate: this.endTime,
+    productType: this.productType,
+    pageNo: this.pageNo,
+    pageSize: this.pageSize
   };
 
   ngOnInit() {
-
     this.moduleId = this.route.snapshot.params['menuId'];
-    let userInfo;
-    if (this.localStorageService.getLocalstorage('User-Info')) {
-      userInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info'));
-    }
-    if (userInfo) {
-      this.merchantId = userInfo.merchantId;
-    }
-    this.ifStoresAll = userInfo.staffType === "MERCHANT"? true : false;
+    let startDate = new Date(new Date().getTime() - 7*24*60*60*1000); //提前一周 ==开始时间
+    let endDate = new Date(new Date().getTime() - 24*60*60*1000); //今日 ==结束时
+    this.dateRange = [ startDate,endDate ];
+    this.startTime  = FunctionUtil.changeDate(startDate);
+    this.endTime = FunctionUtil.changeDate(endDate);
   }
-
 
   //返回门店数据
   storeListPush(event: any){
@@ -86,16 +85,26 @@ export class productCostsComponent implements OnInit {
   //门店id
   getStoreId(event: any){
     this.storeId = event.storeId? event.storeId : '';
+    this.batchQuery.storeId = this.storeId;
+    this.batchQuery.endDate = this.endTime;
+    this.batchQuery.startDate = this.startTime;
+    this.batchQuery.pageNo = 1;
+    this.batchQuery.productType = this.productType? this.productType : '';
+    this.settingStaffWagesList(this.batchQuery);//获取商品成本列表
   }
 
   //选择产品类型
   selectProductType(){
-    console.log(this.ProductType);
+    console.log(this.productType);
+    this.batchQuery.productType = this.productType;
+    this.settingStaffWagesList(this.batchQuery);//获取商品成本列表
   }
 
   // 切换分页码
   paginate(event: any) {
     this.pageNo = event;
+    this.batchQuery.pageNo = this.pageNo;
+    this.settingStaffWagesList(this.batchQuery);//获取商品成本列表
   }
 
   //选择日期
@@ -103,7 +112,45 @@ export class productCostsComponent implements OnInit {
     this.dateRange = date;
     this.startTime = FunctionUtil.changeDateToSeconds(this.dateRange[0]);
     this.endTime = FunctionUtil.changeDateToSeconds(this.dateRange[1]);
+    this.batchQuery.endDate = this.endTime;
+    this.batchQuery.startDate = this.startTime;
+    this.batchQuery.pageNo = 1;
+    this.settingStaffWagesList(this.batchQuery);//获取商品成本列表
   }
+
+  // get产品成本列表
+  settingStaffWagesList(batchQuery: any){
+    let self = this;
+    this.loading = true;
+    this.reportService.getStaffWagesList(batchQuery).subscribe(
+      (res: any) => {
+        self.loading = false;
+        if (res.success) {
+          console.log(res.data);
+          if(res.data.items){
+            res.data.items.forEach(function(item: any){
+              if(item.productType === 'SERVICE'){
+                item.productTypeText = '服务产品';
+              }else {
+                item.productTypeText = '实物产品';
+              }
+            });
+          };
+          this.productCostListInfor = res.data.items? res.data.items : [];
+          self.totalElements = res.data.pageInfo? res.data.pageInfo.countTotal : 0;
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      },
+      error => {
+        this.msg.warning(error);
+      }
+    );
+  }
+
 
 
 }

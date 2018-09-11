@@ -7,7 +7,6 @@
   <h3 class="title">员工基本工资设定</h3>
   <button nz-button class="btn-set" (click)="comeBackPreMenu()">返回上级菜单</button>
 </div>
-
 <!-- table 图表 -->
 <nz-card [nzBordered]="false" style="margin-bottom: 0!important;">
   <div nz-form [nzLayout]="'inline'"  class="search__form">
@@ -19,18 +18,20 @@
     </nz-row>
   </div>
   <!--图表-->
-  <nz-table class="table-box" [nzNoResult]="'暂无数据'" #basicTable [nzShowPagination]="false" [nzData]="setStaffWagesList">
-    <thead nz-thead class="ui-grid-thead">
-      <tr class="thead-th">
-        <th style="text-align: left" nz-th class="">编号</th>
-        <th style="text-align: center" nz-th class="">员工姓名</th>
-        <th style="text-align: center" nz-th class="">职位</th>
-        <th style="text-align: right;position: relative;width: 200px;" nz-th class="" [title]="'基本工资修改后，只能在下个月生效'">
+</nz-card>
+<!-- table 图表 -->
+<form nz-form [formGroup]="form" [nzLayout]="'vertical'">
+  <nz-card [nzBordered]="false">
+    <nz-table formArrayName="items" [nzData]="items.value" [nzShowPagination]="false">
+      <thead>
+      <tr>
+        <th nz-th class="tac" *ngFor="let list of theadName">{{ list }}</th>
+        <th nz-th class="tac" style="text-align: center;position: relative;width: 200px;" nz-th class="" [title]="'基本工资修改后，只能在下个月生效'">
           基本工资
           <div id="cdk-overlay-3" class="cdk-overlay-pane" dir="ltr" style="pointer-events: auto;width: 245px;right: 0;top: -36px;">
             <div _ngcontent-c6="" class="ant-tooltip ng-trigger ng-trigger-fadeAnimation ng-tns-c6-3 ng-star-inserted ant-tooltip-placement-top" ng-reflect-klass="ant-tooltip" ng-reflect-ng-class="[object Object]" ng-reflect-ng-style="[object Object]" style="opacity: 1;">
               <div _ngcontent-c6="" class="ant-tooltip-content">
-                <div _ngcontent-c6="" class="ant-tooltip-arrow" style="left: 83%;"></div>
+                <div _ngcontent-c6="" class="ant-tooltip-arrow" style="left: 60%;"></div>
                 <div _ngcontent-c6="" class="ant-tooltip-inner">
                   <span _ngcontent-c6="" class="ng-tns-c6-3 ng-star-inserted" style="">基本工资修改后，只能在下个月生效</span>
                 </div>
@@ -38,22 +39,40 @@
             </div>
           </div>
         </th>
+        <th nz-th class="tar">操作</th>
       </tr>
-    </thead>
-    <tbody nz-tbody class="ui-grid-tbody">
-      <tr nz-tbody-tr *ngFor="let item of setStaffWagesList;let i = index">
-        <td nz-td>{{i+1}}</td>
-        <td nz-td>{{item.staffName}}</td>
-        <td nz-td>{{item.roleName}}</td>
-        <td nz-td>
-          <input nz-input onkeyup="this.value=this.value.replace(/\D/g,'')"  class="wages-input" [class.bd-inpt]="activeIndex === i" type="text" [ngModel]="item.basicWages? item.basicWages/100 : '暂未设置'"
-                 (focus)="focusinInput(i)" (blur)="blurInput(item.basicWages)"
-                 (change)="changeStaffWages(item.staffId,item.storeId,item.basicWages)" placeholder="点击设置"/>
+      </thead>
+      <tbody class="tbady-ui">
+      <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
+        <td>
+          <span>{{i+1}}</span>
+        </td>
+        <td>
+          <span>{{items.value[i].staffName}}</span>
+        </td>
+        <td>
+          <span>{{items.value[i].roleName}}</span>
+        </td>
+        <td style="text-align: center">
+          <span *ngIf="editIndex!==i">{{items.value[i].basicWages}}</span>
+          <span *ngIf="editIndex===i" nz-form-control>
+            <input style="text-align: center" nz-input formControlName="basicWages" placeholder="请输入其他">
+          </span>
+        </td>
+        <td class="tar">
+          <span *ngIf="editIndex!==i">
+            <a (click)="edit(i)">编辑</a>
+          </span>
+          <span *ngIf="editIndex===i">
+            <a (click)="save(i)">保存</a>
+          </span>
         </td>
       </tr>
-    </tbody>
-  </nz-table>
-  <div class="nzPaginationBox">
-    <nz-pagination class="nzPagination" style="float: right;padding: 20px 0" [nzTotal]="totalElements" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
-  </div>
-</nz-card>
+      </tbody>
+    </nz-table>
+    <div class="nzPaginationBox">
+      <nz-pagination class="nzPagination" [nzTotal]="totalElements" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
+      <p class="countTotal">总共: {{totalElements}}条</p>
+    </div>
+  </nz-card>
+</form>

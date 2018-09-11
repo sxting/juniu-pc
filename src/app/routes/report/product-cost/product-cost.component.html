@@ -29,7 +29,7 @@
         <nz-form-item>
           <nz-form-label nzFor="storeId">产品类型</nz-form-label>
           <nz-form-control>
-            <nz-select  style="width: 200px;" [(ngModel)]="ProductType" (ngModelChange)="selectProductType()" [nzPlaceHolder]="'请选择产品类型'" [nzShowSearch]="true">
+            <nz-select  style="width: 200px;" [(ngModel)]="productType" (ngModelChange)="selectProductType()" [nzPlaceHolder]="'请选择产品类型'" [nzShowSearch]="true">
               <nz-option *ngFor="let item of productTypeLists; let idx = index" [nzLabel]="item.name" [nzValue]="item.type"></nz-option>
             </nz-select>
           </nz-form-control>
@@ -46,12 +46,12 @@
     </thead>
     <tbody nz-tbody class="ui-grid-tbody">
     <tr nz-tbody-tr *ngFor="let item of productCostListInfor;let i = index">
-      <td nz-td>{{i+1}}</td>
-      <td nz-td>{{item.staffName}}</td>
-      <td nz-td>{{item.staffCount}}</td>
-      <td nz-td>{{i+1}}</td>
-      <td nz-td>{{item.staffName}}</td>
-      <td nz-td class="operation-btn"></td>
+      <td nz-td>{{item.productTypeText}}</td>
+      <td nz-td>{{item.productName}}</td>
+      <td nz-td>{{item.unitPrice? item.unitPrice/100 : 0}}</td>
+      <td nz-td>{{item.unitCost? item.unitCost/100 : 0 }}</td>
+      <td nz-td>{{item.saleCount}}</td>
+      <td nz-td>{{item.totalCost? item.totalCost/100 : 0}}</td>
     </tr>
     </tbody>
   </nz-table>
