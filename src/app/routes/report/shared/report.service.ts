@@ -263,4 +263,25 @@ export class ReportService {
         return Observable.throw(error);
       });
   }
+
+  // 会员卡消耗报表-每日耗卡／办卡金额对比，受门店和月份变化控制
+  memberCardMonthUsed(data: any) {
+    let apiUrl = this.api1 + '/profit/memberCardMonthUsed.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  // 会员卡消耗报表-各种卡类型消耗情况，只受门店变化控制
+  memberCardTotalUsed(data: any) {
+    let apiUrl = this.api1 + '/profit/memberCardTotalUsed.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
 }

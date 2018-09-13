@@ -13,6 +13,7 @@ declare var echarts: any;
   styleUrls: ['./vipconsume-report.component.less']
 })
 export class vipConsumeReportComponent implements OnInit {
+
   loading = false;
   // 门店相关的参数
   storeList: any[] = [];
@@ -31,7 +32,6 @@ export class vipConsumeReportComponent implements OnInit {
   xAxisDate: any = [];
   reportDate: any = new Date();
   reportDateChange: string = '';
-  option = null;
 
   constructor(
     private http: _HttpClient,
@@ -44,18 +44,17 @@ export class vipConsumeReportComponent implements OnInit {
     private localStorageService: LocalStorageService
   ) { }
 
-
   /**
    * 请求口碑商品列表的请求体
    */
   batchQuery = {
     storeId: this.storeId,
-    merchantId: this.merchantId,
-    yyyymm: '2018-08'
+    month: this.reportDateChange
   };
 
   ngOnInit() {
 
+    let self = this;
     this.moduleId = this.route.snapshot.params['menuId'];
     let userInfo;
     if (this.localStorageService.getLocalstorage('User-Info')) {
@@ -65,6 +64,10 @@ export class vipConsumeReportComponent implements OnInit {
       this.merchantId = userInfo.merchantId;
     }
     this.ifStoresAll = userInfo.staffType === "MERCHANT"? true : false;
+
+    let month = this.reportDate.getMonth()+1;       //获取当前月份(0-11,0代表1月)
+    let changemonth = month < 10 ? '0' + month : '' + month;
+    this.reportDateChange = this.reportDate.getFullYear()+'-'+changemonth;
 
     // 图表
     for (var i = 0; i < 10; i++) {
@@ -76,10 +79,14 @@ export class vipConsumeReportComponent implements OnInit {
 
   //门店id
   getStoreId(event: any){
+    let self = this;
     this.storeId = event.storeId? event.storeId : '';
     //获取页面信息
     this.batchQuery.storeId = this.storeId;
-    this.echartsDataInfor(this.xAxisDate, this.data1, this.data2)
+    this.batchQuery.month = this.reportDateChange;
+    this.memberCardTotalUsed(this.batchQuery);//会员卡消耗报表-各种卡类型消耗情况
+    // this.memberCardMonthUsed(this.batchQuery);//会员卡消耗报表-每日耗卡／办卡金额对比
+    this.echartsDataInfor(self.xAxisDate, self.data1, self.data2)
   }
 
   //返回门店数据
@@ -94,6 +101,8 @@ export class vipConsumeReportComponent implements OnInit {
     let month = this.reportDate.getMonth()+1;       //获取当前月份(0-11,0代表1月)
     let changemonth = month < 10 ? '0' + month : '' + month;
     this.reportDateChange = year+'-'+changemonth;
+    this.batchQuery.month = this.reportDateChange;
+    this.memberCardMonthUsed(this.batchQuery);//会员卡消耗报表-每日耗卡／办卡金额对比
   }
 
   //echarts数据
@@ -169,16 +178,16 @@ export class vipConsumeReportComponent implements OnInit {
       },
       series: [
         {
-          name: 'bar',
+          name: '耗卡',
           type: 'bar',
           stack: 'one',
           itemStyle: itemStyle,
           data: data1
         },
         {
-          name: 'bar2',
+          name: '办卡',
           type: 'bar',
-          stack: 'one',
+          stack: 'two',
           itemStyle: itemStyle,
           data: data2
         }
@@ -188,6 +197,70 @@ export class vipConsumeReportComponent implements OnInit {
     if (option && typeof option === "object") {
       myChart.setOption(option, true);
     }
+  }
+
+  // 会员卡消耗报表-每日耗卡／办卡金额对比，受门店和月份变化控制
+  memberCardMonthUsed(batchQuery: any){
+    let self = this;
+    this.loading = true;
+    this.reportService.memberCardMonthUsed(batchQuery).subscribe(
+      (res: any) => {
+        self.loading = false;
+        if (res.success) {
+          console.log(res.data);
+
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      },
+      error => {
+        this.msg.warning(error);
+      }
+    );
+  }
+
+  // 会员卡消耗报表-各种卡类型消耗情况，只受门店变化控制
+  memberCardTotalUsed(batchQuery: any){
+    let self = this;
+    this.loading = true;
+    this.reportService.memberCardTotalUsed(batchQuery).subscribe(
+      (res: any) => {
+        self.loading = false;
+        if (res.success) {
+          console.log(res.data);
+          res.data.items.forEach(function(item: any){
+            if(item.cardType === 'STORED'){//储值卡
+              let usedAmount = res.data.usedAmount? parseFloat(res.data.usedAmount)/100 : 0;
+              let soldAmount = res.data.soldAmount? parseFloat(res.data.soldAmount)/100 : 0;
+              self.storedPerNum = usedAmount/soldAmount;
+              self.storedPerent = soldAmount;
+            }else if(item.cardType === 'METERING'){ //计次卡
+
+            }else {//折扣卡
+
+            }
+          })
+          // storedPerNum: any;
+          // storedPerent: any;
+          // rebatePerNum: any;
+          // rebatePercent: any;
+          // meteringPerNum: any;
+          // meteringPercent: any;
+
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      },
+      error => {
+        this.msg.warning(error);
+      }
+    );
   }
 }
 
