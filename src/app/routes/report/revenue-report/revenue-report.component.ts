@@ -6,9 +6,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import * as differenceInDays from 'date-fns/difference_in_days';
+import NP from 'number-precision'
 import { yuan } from '@delon/util';
 declare var echarts: any;
-import NP from 'number-precision'
 
 
 @Component({
@@ -30,51 +30,16 @@ export class RevenueReportComponent implements OnInit {
     moduleId: any;
     ifStoresAll: boolean = true;//是否有全部门店
     ifStoresAuth: boolean = false;//是否授权
-    salesPieData = [
-      {
-        x: '扫码枪',
-        y: 0,
-        type: 'code'
-      },
-      {
-        x: '现金',
-        y: 32,
-        type: 'cash'
-      },
-      {
-        x: '银行卡',
-        y: 55,
-        type: 'bankcard'
-      },
-      {
-        x: '收款码',
-        y: 66,
-        type: 'receiptcode'
-      },
-      {
-        x: '口碑核销',
-        y: 0,
-        type: 'koubei'
-      },
-      {
-        x: '美大验券',
-        y: 66,
-        type: 'meida'
-      },
-      {
-        x: '小程序流水',
-        y: 0,
-        type: 'program'
-      }
-    ];
+    salesPieData: any = [];
     visitData: any[] = [];
     salesPieDetailData: any = [];
     total: string = '';
     activeIndex: any = 0;
-    channelType: string = '1';//渠道
+    channelType: string = 'ALL';//渠道
 
     constructor(
         private http: _HttpClient,
+        public msg: NzMessageService,
         private modalSrv: NzModalService,
         private reportService: ReportService,
         private router: Router,
@@ -87,10 +52,10 @@ export class RevenueReportComponent implements OnInit {
      * 请求体
      **/
     batchQuery = {
-        merchantId: this.merchantId,
         storeId: this.storeId,
-        startTime: this.startTime,
-        endTime: this.endTime
+        type: this.channelType,
+        startDate: this.startTime,
+        endDate: this.endTime
     };
 
     ngOnInit() {
@@ -98,12 +63,11 @@ export class RevenueReportComponent implements OnInit {
       let startDate = new Date(new Date().getTime() - 7*24*60*60*1000); //提前一周 ==开始时间
       let endDate = new Date(new Date().getTime() - 24*60*60*1000); //今日 ==结束时
       this.dateRange = [ startDate,endDate ];
-
+      this.startTime  = FunctionUtil.changeDate(startDate);
+      this.endTime = FunctionUtil.changeDate(endDate);
       let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
         JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
       this.ifStoresAll = UserInfo.staffType === "MERCHANT"? true : false;
-      this.getRevenueEchart();
-      this.total = yuan(this.salesPieData.reduce((pre, now) => now.y + pre, 0));
     }
 
     //门店id
@@ -111,16 +75,15 @@ export class RevenueReportComponent implements OnInit {
       this.storeId = event.storeId? event.storeId : '';
       //获取到营收列表
       this.batchQuery.storeId = this.storeId;
+      this.batchQuery.endDate = this.endTime;
+      this.batchQuery.startDate = this.startTime;
+      this.getRevenueReportInfor(this.batchQuery);//营收报表-营收类别占比
+      this.revenuetRendInfor(this.batchQuery);//营收报表-营收报表走势图
     }
 
     //返回门店数据
     storeListPush(event: any){
       this.storeList = event.storeList? event.storeList : [];
-    }
-
-    //选择门店
-    selectStore() {
-      this.batchQuery.storeId = this.storeId;
     }
 
     //校验核销开始时间
@@ -149,8 +112,9 @@ export class RevenueReportComponent implements OnInit {
     }
 
     // 线上线下echart图表
-    getRevenueEchart() {
+    getRevenueEchart(xAxisData: any, yAxisOfflineData: any, yAxisOnlineData: any) {
       let that = this;
+      let myChart = echarts.init(document.getElementById('revenue-echart'));
       let option = {
         tooltip: {
           trigger: 'axis'
@@ -171,7 +135,7 @@ export class RevenueReportComponent implements OnInit {
         xAxis: {
           type: 'category',
           boundaryGap: false,
-          data:[1,2,3,4,0,7,5]
+          data: xAxisData
         },
         yAxis: {
           type: 'value'
@@ -181,7 +145,7 @@ export class RevenueReportComponent implements OnInit {
             name: '线下',
             type: 'line',
             stack: '总量',
-            data:[1,2,3,4,0,7,5],
+            data: yAxisOfflineData,
             itemStyle: {
               normal: {
                 color: '#4AB84E',
@@ -195,7 +159,7 @@ export class RevenueReportComponent implements OnInit {
             name: '线上',
             type: 'line',
             stack: '总量',
-            data:[11,12,23,3,20,17,6],
+            data: yAxisOnlineData,
             itemStyle: {
               normal: {
                 color: '#E8470B',
@@ -207,13 +171,75 @@ export class RevenueReportComponent implements OnInit {
           }
         ]
       };
-      let myChart = echarts.init(document.getElementById('revenue-echart'));
       myChart.setOption(option);
     }
 
     // 根据状态筛选
     onStatusClick(){
-
+      console.log(this.channelType);
+      this.batchQuery.type = this.channelType;
+      this.getRevenueReportInfor(this.batchQuery);//营收报表-营收类别占比
     }
 
+    // 获取营收类别占比
+    getRevenueReportInfor(batchQuery: any){
+      let self = this;
+      this.loading = true;
+      this.reportService.proportion(batchQuery).subscribe(
+        (res: any) => {
+          self.loading = false;
+          if (res.success) {
+            let salesPieArr = [];
+            res.data.forEach(function(item: any) {
+              salesPieArr.push({
+                x: item.a,
+                y: item.c/100,
+                type: item.a
+              });
+            });
+            self.salesPieData = salesPieArr;
+            this.total = yuan(salesPieArr.reduce((pre, now) => now.y + pre, 0));
+          } else {
+            this.modalSrv.error({
+              nzTitle: '温馨提示',
+              nzContent: res.errorInfo
+            });
+          }
+        },
+        error => {
+          this.msg.warning(error);
+        }
+      );
+    }
+
+    // 获取营收报表走势图
+    revenuetRendInfor(batchQuery: any){
+      let self = this;
+      this.loading = true;
+      this.reportService.revenuetRend(batchQuery).subscribe(
+        (res: any) => {
+          self.loading = false;
+          if (res.success) {
+            console.log(res.data);
+            let xAxisData = [];
+            let yAxisOfflineData = [];
+            let yAxisOnlineData = [];
+            res.data.forEach(function(element: any){
+              xAxisData.push(element.a.replace(/-/g, ".").substring(5));
+              yAxisOfflineData.push(Number(element.c)/100);
+              yAxisOnlineData.push(Number(element.b)/100);
+            });
+            self.getRevenueEchart(xAxisData,yAxisOfflineData,yAxisOnlineData);
+          } else {
+            this.modalSrv.error({
+              nzTitle: '温馨提示',
+              nzContent: res.errorInfo
+            });
+          }
+        },
+        error => {
+          this.msg.warning(error);
+        }
+      );
+    }
 }

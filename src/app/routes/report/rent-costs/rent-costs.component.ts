@@ -97,7 +97,7 @@ export class rentCostsComponent implements OnInit {
         let data = {
           costId: id
         };
-        // self.deleteHouseCost(data);//删除房屋水电成本
+        self.deleteHouseCost(data);//删除房屋水电成本
       }
     });
   }
