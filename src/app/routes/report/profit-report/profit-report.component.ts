@@ -39,6 +39,7 @@ export class profitReportComponent implements OnInit {
   visitData: any[] = [];
   salesPieDetailData: any = [];
   total: string = '';
+  index: any;
   beginDay: any = new Date().getTime();//测试用
 
   constructor(

@@ -20,6 +20,7 @@ export class VipTittleComponent implements OnInit {
     store: any;
     tagName: any;
     tagId: any;
+    submitting:any;
     constructor(
         private http: _HttpClient,
         private modalSrv: NzModalService,

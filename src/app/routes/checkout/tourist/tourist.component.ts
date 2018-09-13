@@ -904,6 +904,7 @@ export class TouristComponent implements OnInit {
                         })
                     } else {
                         this.modalSrv.closeAll()
+                        this.xfCardList = '';
                         if (res.data === 'SUCCESS') {
                             this.modalSrv.success({
                                 nzContent: '收款成功'
@@ -1419,6 +1420,7 @@ export class TouristComponent implements OnInit {
                     this.STOREDextraMoney = 0;
                     this.selectedValue1 = '';
                     this.selectedValue2 = '';
+                    this.xfCardList = '';
                     this.vipXqFun();
                     this.searchMemberCard('', true);
                     if (this.gdboolean) {
