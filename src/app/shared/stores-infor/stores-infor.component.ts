@@ -22,10 +22,14 @@ export class StoresInforComponent implements OnInit {
   public moduleId: string = '';
 
   storeList: any = [];
-  storeId: string = '';
   storeName: string = '';
-  alipayShopId: string = '';
   store: any;
+
+  @Input()
+  public storeId : string = '';
+
+  @Input()
+  public alipayShopId: string = '';
 
   @Input()
   widthNum: boolean = false;
@@ -119,13 +123,31 @@ export class StoresInforComponent implements OnInit {
             this.storeList = storeList;
             this.storeId = '';
             this.alipayShopId = '';
+            this.store = this.storeList[0];
           } else {
             this.storeList = storeList;
-            this.storeId = this.storeList[0] ? this.storeList[0].storeId : '';
-            this.storeName = this.storeList[0] ? this.storeList[0].branchName : '';
-            this.alipayShopId = this.storeList[0] ? this.storeList[0].alipayShopId : '';
+            if(this.alipayShop) {
+              if(this.alipayShopId) {
+                this.storeId = this.alipayShopId;
+                for(let i=0; i<this.storeList.length; i++) {
+                  if(this.alipayShopId == this.storeList[i].storeId) {
+                    this.store = this.storeList[i];
+                  }
+                }
+              } else {
+                this.store = this.storeList[0];
+                this.alipayShopId = this.storeList[0] ? this.storeList[0].alipayShopId : '';
+                this.storeName = this.storeList[0] ? this.storeList[0].branchName : '';
+                this.storeId = this.storeList[0] ? this.storeList[0].storeId : '';
+              }
+            }
+            else {
+              this.store = this.storeList[0];
+              this.storeId = this.storeList[0] ? this.storeList[0].storeId : '';
+              this.storeName = this.storeList[0] ? this.storeList[0].branchName : '';
+              this.alipayShopId = this.storeList[0] ? this.storeList[0].alipayShopId : '';
+            }
           }
-          this.store = this.storeList[0];
           this.storeListPush.emit({ storeList: self.storeList });
           this.storeIdOutput.emit({ storeId: self.storeId, storeName: this.storeName, alipayShopId: this.alipayShopId });
         } else {
