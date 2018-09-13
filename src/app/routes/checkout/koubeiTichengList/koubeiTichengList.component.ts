@@ -14,6 +14,10 @@ import { FunctionUtil } from '@shared/funtion/funtion-util';
 })
 export class KoubeiTichengListComponent implements OnInit {
     theadName: any = ['编号', '提成规则名称', '规则详情', '包含商品数', '包含员工数', '操作'];
+    commissionListInfor: any;
+    totalElements: any;
+    paginate: any;
+    
     constructor(
         private http: _HttpClient,
         private modalSrv: NzModalService,

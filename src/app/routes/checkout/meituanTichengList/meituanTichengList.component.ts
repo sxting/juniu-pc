@@ -21,6 +21,7 @@ export class MeituanTichengListComponent implements OnInit {
     storeListPush:any;
     getStoreId:any;
     paginate:any;
+    moduleId:any;
     
     constructor(
         private http: _HttpClient,
