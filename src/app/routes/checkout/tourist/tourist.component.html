@@ -572,7 +572,18 @@
       <div>
         <div nz-col nzSpan="12">
           <div nz-col nzSpan="6">备注:</div>
-          <div nz-col nzSpan="18">{{memberInfo?.remarks}}</div>
+          <div nz-col nzSpan="18" >
+            <nz-popover [nzTitle]="'备注'" [nzPlacement]="'bottom'">
+              <p style="width:100%;overflow: hidden;
+              text-overflow:ellipsis;
+              white-space: nowrap;cursor: pointer;" class="icon-jian iconfont" nz-popover>{{memberInfo?.remarks}}</p>
+              <ng-template #nzTemplate>
+                <div style="width:200px;overflow-wrap: break-word;">
+                  <p>{{memberInfo?.remarks}}</p>
+                </div>
+              </ng-template>
+            </nz-popover>
+          </div>
         </div>
         <div nz-col nzSpan="12">
           <div nz-col nzSpan="6">累计消费金额:</div>
@@ -734,10 +745,11 @@
     </div>
   </nz-form-item>
   <nz-form-item class="formItem ">
-    <div class="lineHeight50 formItemBorder">
+    <div class=" formItemBorder">
       <nz-form-label style="text-align:left;" nzSpan="6">备注</nz-form-label>
       <nz-form-control nzSpan="18">
-        <input type="text" maxlength="30" [(ngModel)]="remarks" nz-input>
+        <textarea name="" class="remarksText" cols="30" maxlength="200" rows="10" [(ngModel)]="remarks"></textarea>
+        <p style="font-size: 12px;">提示：会员备注最多可输入200个字！</p>
       </nz-form-control>
     </div>
   </nz-form-item>
@@ -875,10 +887,12 @@
     </div>
     <div>
       <nz-form-item class="formItem ">
-        <div class="lineHeight50 formItemBorder">
+        <div class=" formItemBorder">
           <nz-form-label style="text-align:left;" nzSpan="6">备注</nz-form-label>
           <nz-form-control nzSpan="18">
-            <input nz-input placeholder="请输入会员备注" style="width:153px;" maxlength="10" [(ngModel)]="customer_remarks">
+            <!-- <input nz-input  style="width:153px;" maxlength="10" [(ngModel)]="customer_remarks"> -->
+            <textarea name="" class="remarksText" cols="30" placeholder="请输入会员备注" maxlength="200" rows="10" [(ngModel)]="customer_remarks"></textarea>
+            <p style="font-size: 12px;">提示：会员备注最多可输入200个字！</p>
           </nz-form-control>
         </div>
       </nz-form-item>
