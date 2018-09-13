@@ -18,7 +18,15 @@ declare var swal: any;
 })
 
 export class PingjiaComponent implements OnInit {
-    arr:any =[1,2,3,4,5]
+    arr:any =[1,2,3,4,5];
+    moduleId:any;
+    selectedOption:any;
+    peopleNumbers:any;
+    countTotal:any;
+    onStoresChange:any;
+    selectStoreInfo:any;
+    paginate:any;
+    
   constructor(
     private wechatService: WechatService,
     private modalSrv: NzModalService,
