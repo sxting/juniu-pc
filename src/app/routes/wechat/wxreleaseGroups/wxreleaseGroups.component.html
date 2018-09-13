@@ -8,7 +8,7 @@
             <nz-form-label nzXs="24" nzFor="pinTuanName" nzSm="7" nzRequired>活动名称</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="8">
                 <nz-input-group nzSize="large">
-                    <input nz-input formControlName="pinTuanName" maxlength="20" placeholder="请输入活动名称，20个字以内">
+                    <input nz-input formControlName="pinTuanName"  maxlength="20" placeholder="请输入活动名称，20个字以内">
                 </nz-input-group>
                 <nz-form-explain style="color: red;" *ngIf="pinTuanName.dirty && pinTuanName.errors">活动名称字数不能少于两位</nz-form-explain>
             </nz-form-control>
@@ -18,7 +18,7 @@
             <nz-form-control nzXs="24" nzSm="12" nzMd="8">
                 <juniu-upload-img [image]="pictureDetails" [uploadNum]="3" [syncAlipay]="syncAlipay" [bizType]="'shop'" [isClear]="isClear"
                     (img)="getPictureDetails($event)"></juniu-upload-img>
-                <p class="product-tip">上传3张活动图片，推荐尺寸750*360，jpg/png/bmp格式。</p>
+                <p class="product-tip">上传3张活动图片，图片尺寸大于750*520，jpg/png/bmp格式。</p>
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
@@ -37,7 +37,7 @@
             <nz-form-label nzXs="24" nzFor="inventory" nzSm="7" nzRequired>库存</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="8">
                 <nz-input-group nzSize="large">
-                    <input nz-input formControlName="inventory" maxlength="8" placeholder="请设定商品库存">
+                    <input nz-input formControlName="inventory"  maxlength="8" placeholder="请设定商品库存">
                 </nz-input-group>
                 <p class="product-tip">选择实体商品后，设定的活动库存需小于实体商品设定库存并实时扣减</p>
                 <nz-form-explain style="color: red;" *ngIf="inventory.dirty && inventory.errors">请输入正确的库存数量(库存为正整数)</nz-form-explain>
@@ -49,12 +49,14 @@
                 <nz-input-group nzSize="large">
                     <div style="margin-top:10px;">
                         <span class="ctSpan">
-                            <input type="radio" class="radioChecked radioChecked2" id="" *ngIf="canMofidy" (click)="ctrsFun(2)" [checked]="radiocheck" name="ctrs">
-                            <input type="radio" class="radioChecked radioChecked2" *ngIf="!canMofidy" disabled (click)="ctrsFun(2)" [checked]="radiocheck"  name="ctrs"> 2 人
+                            <input type="radio" class="radioChecked radioChecked2" id=""  [disabled]="!canMofidy" (click)="ctrsFun(2)" [checked]="radiocheck" name="ctrs">
+                            <!-- <input type="radio" class="radioChecked radioChecked2" *ngIf="!canMofidy" disabled (click)="ctrsFun(2)" [checked]="radiocheck"  name="ctrs"> -->
+                             2 人
                         </span>
                         <span class="ctSpan" *ngFor="let item of ctArr;let ind =index;">
-                            <input type="radio" class="radioChecked {{'radioChecked'+item.num}}" *ngIf="canMofidy" [checked]="item.checked" (click)="ctrsFun(item.num)" name="ctrs"> {{canMofidy?item.text:''}}
-                            <input type="radio" class="radioChecked {{'radioChecked'+item.num}}" *ngIf="!canMofidy" [checked]="item.checked" disabled (click)="ctrsFun(item.num)" name="ctrs"> {{canMofidy?'':item.text}}
+                            <input type="radio" class="radioChecked {{'radioChecked'+item.num}}"  [checked]="item.checked" [disabled]="!canMofidy" (click)="ctrsFun(item.num)" name="ctrs"> {{canMofidy?item.text:''}}
+                            <!-- <input type="radio" class="radioChecked {{'radioChecked'+item.num}}" *ngIf="!canMofidy" [checked]="item.checked" [disabled] (click)="ctrsFun(item.num)" name="ctrs">  -->
+                            {{canMofidy?'':item.text}}
                         </span>
                         <input nz-input formControlName="peopleNumber" type="number"   [style.display]="ctrsBoo ? 'block' : 'none'">
 
@@ -78,7 +80,7 @@
             <nz-form-label nzXs="24" nzFor="timeLimit" nzSm="7">团购限时</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="8">
                 <nz-input-group nzSize="large">
-                    <input nz-input formControlName="timeLimit" maxlength="2" placeholder="请输入限购时间">
+                    <input nz-input formControlName="timeLimit" maxlength="2"  placeholder="请输入限购时间">
                 </nz-input-group>
                 <p class="product-tip">可设定成团时长，团购限时不能超过24小时，默认选择24小时成团</p>
                 <nz-form-explain style="color: red;" *ngIf="timeLimit.dirty && timeLimit.errors">限时时间在1-24之间</nz-form-explain>
@@ -88,7 +90,7 @@
             <nz-form-label nzXs="24" nzFor="originalPrice" nzSm="7" nzRequired>原价</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="8">
                 <nz-input-group nzSize="large">
-                    <input nz-input type="text" onkeyup="if(value>99999)value=99999;if(value<0)value=0.01;" formControlName="originalPrice" maxlength="8" placeholder="请输入项目原价">
+                    <input nz-input type="text" onkeyup="if(value>99999)value=99999;if(value<0)value=0.01;"  formControlName="originalPrice" maxlength="8" placeholder="请输入项目原价">
                 </nz-input-group>
                 <nz-form-explain style="color: red;" *ngIf="originalPrice.dirty && originalPrice.errors">原价格式书写有误</nz-form-explain>
             </nz-form-control>
@@ -97,7 +99,7 @@
             <nz-form-label nzXs="24" nzFor="presentPrice" nzSm="7" nzRequired>拼团价 </nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="8">
                 <nz-input-group nzSize="text">
-                    <input nz-input type="text" onkeyup="if(value>99999)value=99999;if(value<0)value=0.01;" formControlName="presentPrice" maxlength="8" placeholder="请输入项目拼团价">
+                    <input nz-input type="text" onkeyup="if(value>99999)value=99999;if(value<0)value=0.01;"  formControlName="presentPrice" maxlength="8" placeholder="请输入项目拼团价">
                 </nz-input-group>
                 <nz-form-explain style="color: red;" *ngIf="presentPrice.dirty && presentPrice.errors">拼团价格式书写有误</nz-form-explain>
             </nz-form-control>
@@ -122,16 +124,16 @@
                                     <li class="clearfix">
                                         <div class="right-block fl descriptions">
                                             <form class="descriptions_form" *ngFor="let list of buyerNotes;let j = index">
-                                                <input type="text" value="" maxlength="40" *ngIf="canMofidy" class="juniu_input" [value]="list.title" (change)="getnoteTitledata(j,$event.target.value)"
+                                                <input type="text" value="" maxlength="40" [disabled]="!canMofidy" class="juniu_input" [value]="list.title" (change)="getnoteTitledata(j,$event.target.value)"
                                                     placeholder="请输入标题，最多输入40个字">
-                                                <input type="text" value="" maxlength="40" *ngIf="!canMofidy" disabled class="juniu_input" [value]="list.title" (change)="getnoteTitledata(j,$event.target.value)"
-                                                    placeholder="请输入标题，最多输入40个字">
+                                                <!-- <input type="text" value="" maxlength="40" *ngIf="!canMofidy" disabled class="juniu_input" [value]="list.title" (change)="getnoteTitledata(j,$event.target.value)"
+                                                    placeholder="请输入标题，最多输入40个字"> -->
                                                 <div class="details_list_box">
                                                     <div class="form_parent" style="position:relative;" *ngFor="let detail of list.details;let noteIndex =index">
-                                                        <textarea type="text" name="details" maxlength="100" *ngIf="canMofidy" class="desc_textarea" [value]="detail.item" (change)="getnoteDetaildata(j,noteIndex,$event.target.value)"
+                                                        <textarea type="text" name="details" maxlength="100" [disabled]="!canMofidy" class="desc_textarea" [value]="detail.item" (change)="getnoteDetaildata(j,noteIndex,$event.target.value)"
                                                             placeholder="请输入内容，最多输入100个字，更多内容点“添加更多”"></textarea>
-                                                        <textarea type="text" name="details" maxlength="100" *ngIf="!canMofidy" disabled class="desc_textarea" [value]="detail.item"
-                                                            (change)="getnoteDetaildata(j,noteIndex,$event.target.value)" placeholder="请输入内容，最多输入100个字，更多内容点“添加更多”"></textarea>
+                                                        <!-- <textarea type="text" name="details" maxlength="100" *ngIf="!canMofidy" disabled class="desc_textarea" [value]="detail.item"
+                                                            (change)="getnoteDetaildata(j,noteIndex,$event.target.value)" placeholder="请输入内容，最多输入100个字，更多内容点“添加更多”"></textarea> -->
                                                         <span class="descriptions_add_btn descriptions_btns" (click)="addLineNoteDetail(j)">添加更多</span>
                                                         <span class="descriptions_minus_btn descriptions_btns" (click)="deleteNoteDetail(j,noteIndex)">删除</span>
                                                     </div>
@@ -154,13 +156,13 @@
             <nz-form-item>
                 <nz-form-label nzXs="24" nzFor="time" nzSm="7">活动日期</nz-form-label>
                 <nz-form-control nzXs="24" nzSm="12" nzMd="8">
-                    <nz-range-picker formControlName="time"></nz-range-picker>
+                    <nz-range-picker [nzDisabled]="!canMofidy" formControlName="time"></nz-range-picker>
                 </nz-form-control>
             </nz-form-item>
             <nz-form-item>
                 <nz-form-label nzXs="24" nzFor="time2" nzSm="7">核销截止日期</nz-form-label>
                 <nz-form-control nzXs="24" nzSm="12" nzMd="8">
-                    <nz-date-picker formControlName="time2" (ngModelChange)="endValueChange($event)"></nz-date-picker>
+                    <nz-date-picker [nzDisabled]="!canMofidy" formControlName="time2" (ngModelChange)="endValueChange($event)"></nz-date-picker>
                     <p class="product-tip">核销截止日期不能早于活动结束日期</p>
                 </nz-form-control>
             </nz-form-item>
@@ -187,7 +189,7 @@
         <nz-form-item>
             <nz-col [nzSpan]="7"> </nz-col>
 
-            <nz-col [nzSpan]="12" *ngIf="canMofidy">
+            <nz-col [nzSpan]="12" *ngIf="canMofidy ">
                 <button class="buttons" nz-button nzType="primary" (click)="submit()" [nzLoading]="submitting" type="submit">保存并发布</button>
                 <button class="buttons" nz-button (click)="return()">返回</button>
             </nz-col>

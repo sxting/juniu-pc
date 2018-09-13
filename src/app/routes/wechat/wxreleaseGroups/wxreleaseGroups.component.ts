@@ -126,7 +126,7 @@ export class WxreleaseGroupsComponent implements OnInit {
             this.form.controls[i].markAsDirty();
             this.form.controls[i].updateValueAndValidity();
         }
-        
+
         if (!this.radioValue) this.errorAlter('请选择商品');
         else {
             if (this.pinTuanName.invalid || this.inventory.invalid || this.peopleNumber.invalid
@@ -188,7 +188,7 @@ export class WxreleaseGroupsComponent implements OnInit {
                     this.startTime = '';
                     this.endTime = '';
                 }
-                
+
                 let data = {
                     activityId: this.pinTuanId,
                     activityName: this.pinTuanName.value,
@@ -212,7 +212,7 @@ export class WxreleaseGroupsComponent implements OnInit {
                         productName: this.radioValue.productName
                     }]
                 }
-                
+
                 // else if (this.checkKeyword(data.pinTuanName)) {
                 //     let word = this.checkKeyword(data.pinTuanName);
                 //     this.errorAlter('活动名称不能有违禁词"' + word + '"请修改!');
@@ -231,12 +231,12 @@ export class WxreleaseGroupsComponent implements OnInit {
                 if (!data.timeLimit) {
                     data.timeLimit = 24;
                 }
-                if((new Date(data.settleEndDate).getTime()-new Date(data.activityStartDate).getTime())>(180*24*60*60*1000)){
+                if ((new Date(data.settleEndDate).getTime() - new Date(data.activityStartDate).getTime()) > (180 * 24 * 60 * 60 * 1000)) {
                     this.errorAlter('核销截止日期与活动开始日期相差不能大于180天，否则无法退款！');
-                }else if (!data.activityStartDate || !data.activityEndDate) {
+                } else if (!data.activityStartDate || !data.activityEndDate) {
                     this.errorAlter('请选择活动日期');
                 }
-                else if (data.peopleCount*1 > data.products[0].inventory*1) {
+                else if (data.peopleCount * 1 > data.products[0].inventory * 1) {
                     this.errorAlter('参团人数不能大于库存量');
                 }
                 else if (data.products[0].originalPrice < data.products[0].activityPrice) {
@@ -293,7 +293,7 @@ export class WxreleaseGroupsComponent implements OnInit {
             this.ctrsBoo = true;
         } else {
             this.peopleNumber2 = num;
-           
+
             this.ctrsBoo = false;
         }
     }
@@ -575,18 +575,19 @@ export class WxreleaseGroupsComponent implements OnInit {
                     this.validateEndTime = res.data.settleEndDate;
 
                     this._validateEndTime = new Date(res.data.settleEndDate);
+
+                    this.canMofidy = this.status === '2' ? true : res.data.canModify;
                     this.form = this.fb.group({
-                        pinTuanName: [pinTuanName, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
-                        inventory: [inventory, [Validators.required, Validators.pattern(/^[1-9]\d*$/), Validators.minLength(1), Validators.maxLength(8)]],
-                        peopleNumber: [peopleNumber, [Validators.pattern(/^[1-9]\d*$/), Validators.minLength(1), Validators.maxLength(8)]],
-                        timeLimit: [timeLimit, [Validators.pattern(/^[1-9]\d*$/), Validators.max(24), Validators.min(1)]],
-                        originalPrice: [originalPrice, [Validators.required, Validators.pattern(/^[0-9]+(.[0-9]{1,2})?$/), Validators.max(99999999), Validators.min(0.01)]],
-                        presentPrice: [presentPrice, [Validators.required, Validators.pattern(/^[0-9]+(.[0-9]{1,2})?$/), Validators.max(99999999), Validators.min(0.01)]],
+                        pinTuanName: [{ value: pinTuanName, disabled: !this.canMofidy ? true : false }, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
+                        inventory: [{ value: inventory, disabled: !this.canMofidy ? true : false }, [Validators.required, Validators.pattern(/^[1-9]\d*$/), Validators.minLength(1), Validators.maxLength(8)]],
+                        peopleNumber: [{ value: peopleNumber, disabled: !this.canMofidy ? true : false }, [Validators.pattern(/^[1-9]\d*$/), Validators.minLength(1), Validators.maxLength(8)]],
+                        timeLimit: [{ value: timeLimit, disabled: !this.canMofidy ? true : false }, [Validators.pattern(/^[1-9]\d*$/), Validators.max(24), Validators.min(1)]],
+                        originalPrice: [{ value: originalPrice, disabled: !this.canMofidy ? true : false }, [Validators.required, Validators.pattern(/^[0-9]+(.[0-9]{1,2})?$/), Validators.max(99999999), Validators.min(0.01)]],
+                        presentPrice: [{ value: presentPrice, disabled: !this.canMofidy ? true : false }, [Validators.required, Validators.pattern(/^[0-9]+(.[0-9]{1,2})?$/), Validators.max(99999999), Validators.min(0.01)]],
                         time: [time],
                         time2: [this._validateEndTime],
                         mock: [mock]
                     });
-                    this.canMofidy = res.data.canModify;
                     this.startTime = res.data.activityStartDate;
                     this.endTime = res.data.activityEndDate;
 
@@ -689,7 +690,7 @@ export class WxreleaseGroupsComponent implements OnInit {
     endValueChange(e: any) {
         if (e) {
             this._validateEndTime = e;
-            this.validateEndTime = this.formatDateTime(e, 'end'); 
+            this.validateEndTime = this.formatDateTime(e, 'end');
         } else {
             this.validateEndTime = '';
             this._validateEndTime = '';
