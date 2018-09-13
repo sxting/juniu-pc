@@ -100,7 +100,7 @@ export class TouristComponent implements OnInit {
     xyVip: any = false;
     xyVipRules: any;
     selectedValue1: any;
-
+    selectedValue2:any;
     customerName: any;
     birthday: any = new Date();
     customerId: any;
@@ -762,6 +762,7 @@ export class TouristComponent implements OnInit {
                 orderItem = {
                     cardId: that.xfCardList.cardId,
                     staffId: that.selectedValue1,
+                    staff2Id:that.selectedValue2,
                     typeName: "cardOrderItem",
                 }
             } else {
@@ -776,6 +777,7 @@ export class TouristComponent implements OnInit {
                     price: that.xfCardList.rules[that.xfCardList.ruleIndex].price,
                     validate: that.xfCardList.rules[that.xfCardList.ruleIndex].validate,
                     staffId: that.selectedValue1,
+                    staff2Id:that.selectedValue2,
                     rebate: that.xfCardList.rules[that.xfCardList.ruleIndex].rebate,
                     storeId: that.storeId
                 }
@@ -1415,7 +1417,8 @@ export class TouristComponent implements OnInit {
                     this.REBATEValue = 0;
                     this.STOREDValue = 0;
                     this.STOREDextraMoney = 0;
-
+                    this.selectedValue1 = '';
+                    this.selectedValue2 = '';
                     this.vipXqFun();
                     this.searchMemberCard('', true);
                     if (this.gdboolean) {

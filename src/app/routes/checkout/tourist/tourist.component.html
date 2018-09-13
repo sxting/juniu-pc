@@ -459,6 +459,19 @@
                       </div>
                     </div>
                     <div nz-col nzXs="24" nz-row nzType="flex" class="shopTypeBox">
+                      <div nz-col nzSpan="12">
+                        <div nz-col nzSpan="10" class="textAline">小 工</div>
+                        <div nz-col nzSpan="12" class="colorRed">
+                          <nz-select style="width: 100px;" [(ngModel)]="selectedValue2" nzAllowClear nzPlaceHolder="选择小工">
+                            <nz-option *ngFor="let item of staffGroupData" nzValue="{{item.staffId}}" nzLabel="{{item.staffName}}"></nz-option>
+                          </nz-select>
+                        </div>
+                      </div>
+                      <div nz-col nzSpan="10">
+
+                      </div>
+                    </div>
+                    <div nz-col nzXs="24" nz-row nzType="flex" class="shopTypeBox">
                       <div nz-col nzSpan="12" *ngIf="xfCardList.type !== 'STORED'">
                         <div nz-col nzSpan="10" class="textAline" *ngIf="xfCardList.CardTypeS === 'chongzhi'">充值</div>
                         <div nz-col nzSpan="10" class="textAline" *ngIf="xfCardList.CardTypeS === 'kaika'">售价</div>
