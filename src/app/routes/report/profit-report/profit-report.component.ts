@@ -35,33 +35,7 @@ export class profitReportComponent implements OnInit {
   totalElements: any = 0;//商品总数  expandForm = false;//展开
   reportProfitList: any = [''];
   activeIndex: any = 0;
-  salesPieData = [
-    {
-      x: '房租水电',
-      y: 0,
-      type: 'home'
-    },
-    {
-      x: '产品成本',
-      y: 32,
-      type: 'product'
-    },
-    {
-      x: '员工工资',
-      y: 55,
-      type: 'staff'
-    },
-    {
-      x: '平台抽佣',
-      y: 66,
-      type: 'paltform'
-    },
-    {
-      x: '支付费率',
-      y: 0,
-      type: 'pay'
-    }
-  ];
+  salesPieData = [];//成本占比
   visitData: any[] = [];
   salesPieDetailData: any = [];
   total: string = '';
@@ -80,14 +54,14 @@ export class profitReportComponent implements OnInit {
   ) { }
 
   batchQuery = {
-    merchantId: this.merchantId,
     storeId: this.storeId,
     endDate: this.endTime,
-    startDate: this.startTime
-};
+    startDate: this.startTime,
+    pageNo: this.pageNo,
+    pageSize: this.pageSize
+  };
 
   ngOnInit() {
-
     this.moduleId = this.route.snapshot.params['menuId'];
     let userInfo;
     if (this.localStorageService.getLocalstorage('User-Info')) {
@@ -109,10 +83,8 @@ export class profitReportComponent implements OnInit {
     this.dateRange = [ startDate,endDate ];
     this.startTime  = FunctionUtil.changeDate(startDate);
     this.endTime = FunctionUtil.changeDate(endDate);
-    this.batchQuery.endDate = this.endTime;
-    this.batchQuery.startDate = this.startTime;
-  }
 
+  }
   format(val: number) {
     return yuan(val);
   }
@@ -120,6 +92,12 @@ export class profitReportComponent implements OnInit {
   //门店id
   getStoreId(event: any){
     this.storeId = event.storeId? event.storeId : '';
+    this.batchQuery.storeId = this.storeId;
+    this.batchQuery.endDate = this.endTime;
+    this.batchQuery.startDate = this.startTime;
+    this.batchQuery.pageNo = 1;
+    this.profitIndexList(this.batchQuery);//利润报表首页－列表信息
+    this.profitIndexView(this.batchQuery);//利润报表首页－首页图表
   }
 
   //返回门店数据
@@ -167,6 +145,70 @@ export class profitReportComponent implements OnInit {
   // 切换分页码
   paginate(event: any) {
     this.pageNo = event;
+    this.batchQuery.pageNo = this.pageNo;
+    this.profitIndexList(this.batchQuery);//利润报表首页－列表信息
   }
 
+  // 利润报表首页列表信息
+  profitIndexList(batchQuery: any){
+    let self = this;
+    this.loading = true;
+    this.reportService.profitIndexList(batchQuery).subscribe(
+      (res: any) => {
+        self.loading = false;
+        if (res.success) {
+          self.reportProfitList = res.data.items? res.data.items : [];
+          self.totalElements = res.data.pageInfo? res.data.pageInfo.countTotal : 0;
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      },
+      error => {
+        this.msg.warning(error);
+      }
+    );
+  }
+
+  // 利润报表首页图表
+  profitIndexView(batchQuery: any){
+    let self = this;
+    this.loading = true;
+    this.reportService.profitIndexView(batchQuery).subscribe(
+      (res: any) => {
+        self.loading = false;
+        if (res.success) {
+          console.log(res.data);
+          self.salesPieData = [
+            {
+              x: '房租水电',
+              y: res.data.houseCost? res.data.houseCost : 0,
+              type: 'home'
+            },
+            {
+              x: '产品成本',
+              y: res.data.productCost? res.data.productCost : 0,
+              type: 'product'
+            },
+            {
+              x: '员工工资',
+              y: res.data.staffWagesCost? res.data.staffWagesCost : 0,
+              type: 'staff'
+            }
+          ];
+
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      },
+      error => {
+        this.msg.warning(error);
+      }
+    );
+  }
 }

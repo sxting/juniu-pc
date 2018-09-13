@@ -25,18 +25,20 @@
   </div>
 </div>
 <nz-card [nzBordered]="false">
-  <form nz-form [nzLayout]="'inline'" (ngSubmit)="getData()" class="search__form">
+  <div nz-form [nzLayout]="'inline'" class="search__form">
     <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
       <nz-col nzMd="8" nzSm="24" style="overflow: hidden;height: 56.5px;">
         <nz-form-item >
-          <jn-stores-infor [className]="'class1'" [className2]="'class2'" [moduleId]="moduleId" (storeIdOutput)="getStoreId($event.storeId)"></jn-stores-infor>
+          <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth"
+                           (storeListPush)="storeListPush($event)" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
         </nz-form-item>
       </nz-col>
       <nz-col nzMd="8" nzSm="24">
         <nz-form-item>
           <nz-form-label nzFor="productId">选择日期</nz-form-label>
           <nz-form-control>
-            <nz-range-picker (ngModelChange)="onDateChange($event)" nzShowTime></nz-range-picker>
+            <nz-range-picker [nzDisabledDate]="disabledDate" [nzAllowClear]="false" nzFormat="yyyy-MM-dd"
+                             [(ngModel)]="dateRange" (ngModelChange)="onDateChange($event)" nzShowTime></nz-range-picker>
           </nz-form-control>
         </nz-form-item>
       </nz-col>
@@ -44,8 +46,8 @@
         <nz-form-item style="height: 56.5px;">
           <nz-form-label nzFor="money">订单状态</nz-form-label>
           <nz-form-control>
-            <nz-select  style="width: 200px;" [(ngModel)]="storeId" (ngModelChange)="selectOrderStatus()" name="storeList"  [nzPlaceHolder]="'请选择订单状态'" [nzShowSearch]="true">
-              <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.storeName" [nzValue]="i.storeId"></nz-option>
+            <nz-select  style="width: 200px;" [(ngModel)]="status" (ngModelChange)="selectOrderStatus()" name="statusList"  [nzPlaceHolder]="'请选择订单状态'" [nzShowSearch]="true">
+              <nz-option *ngFor="let i of statusList; let idx = index" [nzLabel]="i.statusName" [nzValue]="i.status"></nz-option>
             </nz-select>
           </nz-form-control>
         </nz-form-item>
@@ -54,49 +56,36 @@
         <nz-form-item>
           <nz-form-label nzFor="phone">搜 索</nz-form-label>
           <nz-form-control>
-            <input nz-input  name="orderNo" placeholder="请输入订单编号搜索" id="orderNo">
+            <input nz-input  name="orderNo"  [(ngModel)]="orderNo" placeholder="请输入订单编号搜索" id="orderNo">
           </nz-form-control>
         </nz-form-item>
       </nz-col>
       <nz-col [nzSpan]="expandForm ? 24 : 8" [class.text-right]="expandForm" style="width: 33.33%;">
-        <button nz-button type="submit" [nzType]="'primary'" [nzLoading]="loading">查询</button>
-        <button nz-button type="reset" (click)="getData()" class="mx-sm">重置</button>
+        <button nz-button type="submit" [nzType]="'primary'" [nzLoading]="loading" (click)="getData()">查询</button>
         <a (click)="expandForm=!expandForm">
           {{expandForm ? '收起' : '展开'}}
           <i class="anticon" [class.anticon-down]="!expandForm" [class.anticon-up]="expandForm"></i>
         </a>
       </nz-col>
     </nz-row>
-  </form>
+  </div>
   <!-- table -->
   <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="reportOrderList">
     <thead nz-thead class="ui-grid-thead">
-    <tr>
-      <th nz-th class="" *ngFor="let item of theadName;let i = index">{{item}}</th>
-    </tr>
+      <tr>
+        <th nz-th class="" *ngFor="let item of theadName;let i = index">{{item}}</th>
+      </tr>
     </thead>
     <tbody nz-tbody class="ui-grid-tbody">
-    <!--<tr nz-tbody-tr *ngFor="let item of reportOrderList; let i = index">-->
-      <!--<td style="color: #368ff7">1526442516236560284087</td>-->
-      <!--<td>2018-05-16 11:48:36</td>-->
-      <!--<td>微信</td>-->
-      <!--<td>桔牛体验店(健身馆)</td>-->
-      <!--<td>已支付</td>-->
-      <!--<td>50,000.00</td>-->
-      <!--<td style="color: #108EE9" (click)="checkDetailInfor(orderDetail,item.orderNo)">查看详情</td>-->
-    <!--</tr>-->
-    <tr nz-tbody-tr>
-      <td style="color: #108EE9">1526442516236560284087</td>
-      <td>2018-05-16 11:48:36</td>
-      <td>微信</td>
-      <td>桔牛体验店(健身馆)</td>
-      <td>
-        <span class=""></span>
-        已支付
-      </td>
-      <td>50,000.00</td>
-      <td style="color: #FF6600;cursor: pointer" (click)="checkDetailInfor(orderDetail,'22222222')">查看详情</td>
-    </tr>
+      <tr nz-tbody-tr *ngFor="let item of reportOrderList; let i = index">
+        <td style="color: #368ff7">{{item.orderNo}}</td>
+        <td>{{item.dateCreated}}</td>
+        <td>{{item.payTypeName}}</td>
+        <td>{{item.storeName}}</td>
+        <td>{{item.statusName}}</td>
+        <td>{{item.amount/100}}</td>
+        <td style="color: #108EE9;cursor: pointer" (click)="checkDetailInfor(orderDetail,item.orderNo,item.status)">查看详情</td>
+      </tr>
     </tbody>
   </nz-table>
   <div class="nzPaginationBox">
@@ -112,19 +101,25 @@
       <table>
         <tr class="ui-grid-row">
           <td class="">订单编号</td>
-          <td class="">1526442516236560284087</td>
+          <td class="">{{reportOrderDetail.orderId}}</td>
           <td class="">下单时间</td>
-          <td class="trans-status">2018-05-21 15:11:13</td>
+          <td class="trans-status">{{reportOrderDetail.payDate}}</td>
           <td class="">状态</td>
-          <td class="trans-status">已支付</td>
+          <td class="trans-status">{{reportOrderDetail.status == 'PAID'? '已支付' : '已退款'}}</td>
         </tr>
         <tr >
           <td class="">交易号</td>
           <td class="">201805213452809594831849</td>
           <td class="">收款门店</td>
-          <td class="">桔牛体验店(健身馆)</td>
+          <td class="">{{reportOrderDetail.storeName}}</td>
           <td class="">支付方式</td>
-          <td class="">微信</td>
+          <td class="">{{reportOrderDetail.payTypeName}}</td>
+        </tr>
+        <tr class="ui-grid-row" *ngIf="ifShow">
+          <td class="">退款单号</td>
+          <td class="">1526442516236560284087</td>
+          <td class="">退款时间</td>
+          <td class="trans-status">2018-05-21 15:11:13</td>
         </tr>
       </table>
     </div>
@@ -138,12 +133,13 @@
       <tr nz-tbody-tr>
         <td style="color: #108EE9">1526442516236560284087</td>
         <td>2018-05-16 11:48:36</td>
+        <td class="">明宇/小平</td>
         <td>微信</td>
         <td>桔牛体验店(健身馆)</td>
         <td>50,000.00</td>
       </tr>
       <tr nz-tbody-tr>
-        <td colspan="3" style="color: #000">总计</td>
+        <td colspan="4" style="color: #000">总计</td>
         <td>50</td>
         <td>1000.00</td>
       </tr>
@@ -162,18 +158,10 @@
         <tr >
           <td class="">顾客姓名</td>
           <td class="">张三</td>
-          <td class="">性别</td>
-          <td class="">男</td>
           <td class="">手机号</td>
           <td class="">152109283243</td>
-        </tr>
-        <tr >
-          <td class="">技师</td>
-          <td class="">明宇</td>
           <td class="">是否指定</td>
           <td class="">是</td>
-          <td class="">小工</td>
-          <td class="">小平</td>
         </tr>
       </table>
     </div>

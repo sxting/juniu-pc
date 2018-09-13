@@ -83,10 +83,10 @@
     </thead>
     <tbody nz-tbody class="ui-grid-tbody">
     <tr nz-tbody-tr *ngFor="let item of reportProfitList; let i = index">
-      <td style="color: #368ff7">2018-08-06</td>
-      <td>100,000.00</td>
-      <td>100,000.00</td>
-      <td>200,000.00</td>
+      <td style="color: #368ff7">{{item.date}}</td>
+      <td>{{item.revenue/100}}</td>
+      <td>{{item.cost/100}}</td>
+      <td>{{item.profit/100}}</td>
     </tr>
     </tbody>
   </nz-table>

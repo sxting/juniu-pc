@@ -19,6 +19,7 @@ export class ReportService {
 
 
   api1 = Config.API + 'finance';
+  api2 = Config.API + 'order';
 
   // 描述:pc表表首页 数据统计
   financeIndexUp(Params: any) {
@@ -133,6 +134,26 @@ export class ReportService {
 
   // ********=============== v2.1版本接口 ======================== ********  //
 
+  // 利润报表首页列表
+  profitIndexList(data: any) {
+    let apiUrl = this.api1 + '/profit/profitIndexList.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  // 利润报表首页图表
+  profitIndexView(data: any) {
+    let apiUrl = this.api1 + '/profit/profitIndexView.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
   //  员工工资成本列表
   staffWagesCost(data: any) {
     let apiUrl = this.api1 + '/profit/staffWagesCost.json';
@@ -205,7 +226,7 @@ export class ReportService {
 
   // 获取营收报表信息
   proportion(data: any) {
-    let apiUrl = this.api1 + '/pc/income/proportion.json';
+    let apiUrl = this.api2 + '/pc/income/proportion.json';
     return this.http.get(apiUrl, data)
       .map((response: Response) => response)
       .catch(error => {
@@ -215,7 +236,7 @@ export class ReportService {
 
   // 获取营收报表走势图
   revenuetRend(data: any) {
-    let apiUrl = this.api1 + '/pc/income/trend.json';
+    let apiUrl = this.api2 + '/pc/income/trend.json';
     return this.http.get(apiUrl, data)
       .map((response: Response) => response)
       .catch(error => {
@@ -223,4 +244,23 @@ export class ReportService {
       });
   }
 
+  // 营收报表订单列表
+  revenuetOrderList(data: any) {
+    let apiUrl = this.api2 + '/order/page.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  // 营收报表订单详情
+  revenuetOrderDetail(orderId: any) {
+    let apiUrl = this.api2 + '/order/' + orderId + '/detail.json';
+    return this.http.get(apiUrl)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
 }

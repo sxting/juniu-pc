@@ -10,7 +10,6 @@ import NP from 'number-precision'
 import { yuan } from '@delon/util';
 declare var echarts: any;
 
-
 @Component({
   selector: 'app-revenue-report',
   templateUrl: './revenue-report.component.html',
@@ -31,8 +30,6 @@ export class RevenueReportComponent implements OnInit {
     ifStoresAll: boolean = true;//是否有全部门店
     ifStoresAuth: boolean = false;//是否授权
     salesPieData: any = [];
-    visitData: any[] = [];
-    salesPieDetailData: any = [];
     total: string = '';
     activeIndex: any = 0;
     channelType: string = 'ALL';//渠道
@@ -63,8 +60,8 @@ export class RevenueReportComponent implements OnInit {
       let startDate = new Date(new Date().getTime() - 7*24*60*60*1000); //提前一周 ==开始时间
       let endDate = new Date(new Date().getTime() - 24*60*60*1000); //今日 ==结束时
       this.dateRange = [ startDate,endDate ];
-      this.startTime  = FunctionUtil.changeDate(startDate);
-      this.endTime = FunctionUtil.changeDate(endDate);
+      this.startTime  = FunctionUtil.changeDate(startDate) + ' 00:00:00';
+      this.endTime = FunctionUtil.changeDate(endDate) + ' 23:59:59';
       let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
         JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
       this.ifStoresAll = UserInfo.staffType === "MERCHANT"? true : false;
@@ -108,7 +105,7 @@ export class RevenueReportComponent implements OnInit {
 
     // 点击echart按钮
     checkDetailEchartInfor( typeNo: string ){
-      this.router.navigate(['/report/revenue/detail/report', { moduleId: this.moduleId,typeNo: typeNo }]);
+      this.router.navigate(['/report/revenue/detail/report', { moduleId: this.moduleId,typeNo: typeNo, startTime: this.startTime,endTime: this.endTime}]);
     }
 
     // 线上线下echart图表
@@ -190,10 +187,27 @@ export class RevenueReportComponent implements OnInit {
           self.loading = false;
           if (res.success) {
             let salesPieArr = [];
+            console.log(res.data);
             res.data.forEach(function(item: any) {
+              if(item.a === 'BARCODE'){
+                item.tabText = '扫码枪';
+              }else if(item.a === 'CASH'){
+                item.tabText = '现金';
+              }else if(item.a === 'BANK'){
+                item.tabText = '银行卡';
+              }else if(item.a === 'QRCODE'){
+                item.tabText = '付款码';
+              }else if(item.a === 'MINIPROGRAM'){
+                item.tabText = '小程序';
+              }else if(item.a === 'KOUBEI'){
+                item.tabText = '口碑核销';
+              }else {
+                item.tabText = '美大验券';
+              }
+              // BARCODE("扫码枪"),CASH("现金"),BANK("银行卡"),QRCODE("付款吗"),MINIPROGRAM("小程序"),KOUBEI("口碑核销"),MEIDA("美大验券");
               salesPieArr.push({
-                x: item.a,
-                y: item.c/100,
+                x: item.tabText,
+                y: item.b/100,
                 type: item.a
               });
             });
