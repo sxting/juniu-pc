@@ -5,6 +5,7 @@ import { ReportService } from "../shared/report.service";
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
+import NP from 'number-precision/src/index';
 declare var echarts: any;
 
 @Component({
@@ -231,11 +232,18 @@ export class vipConsumeReportComponent implements OnInit {
         self.loading = false;
         if (res.success) {
           console.log(res.data);
+          // if (item.name === 'FIT') {
+          //   let num = item.value;
+          //   that.sankePerNum = allNum == 0? 0 : NP.round((num/allNum)*100,2);
+          //   that.sankePer =  allNum == 0? '-' : NP.round((num/allNum)*100,2)+'%';
+          // }
+
           res.data.items.forEach(function(item: any){
             if(item.cardType === 'STORED'){//储值卡
               let usedAmount = res.data.usedAmount? parseFloat(res.data.usedAmount)/100 : 0;
               let soldAmount = res.data.soldAmount? parseFloat(res.data.soldAmount)/100 : 0;
-              self.storedPerNum = usedAmount/soldAmount;
+              // self.storedPerNum = soldAmount == 0? '0' : NP.round((usedAmount/soldAmount)*100,2)+'%';
+              self.storedPerNum = soldAmount == 0? '0' : (usedAmount/soldAmount)*100+'%';
               self.storedPerent = soldAmount;
             }else if(item.cardType === 'METERING'){ //计次卡
 
