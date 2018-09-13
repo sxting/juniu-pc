@@ -80,7 +80,7 @@
         <nz-form-item style="margin-top: 20px">
             <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="nick_name">昵称</nz-form-label>
             <nz-form-control nzXs="24" nzSm="17" nzMd="17">
-                <input nz-input formControlName="nick_name" maxlength="5" placeholder="请输入昵称，5个字以内">
+                <input nz-input formControlName="nick_name" maxlength="10" placeholder="请输入昵称，10个字以内">
                 <nz-form-explain class="error-color" *ngIf="nick_name.dirty &&nick_name.errors">请填写昵称</nz-form-explain>
             </nz-form-control>
         </nz-form-item>
