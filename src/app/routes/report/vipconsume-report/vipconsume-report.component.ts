@@ -5,7 +5,7 @@ import { ReportService } from "../shared/report.service";
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
-import NP from 'number-precision/src/index';
+import NP from 'number-precision'
 declare var echarts: any;
 
 @Component({
@@ -232,32 +232,24 @@ export class vipConsumeReportComponent implements OnInit {
         self.loading = false;
         if (res.success) {
           console.log(res.data);
-          // if (item.name === 'FIT') {
-          //   let num = item.value;
-          //   that.sankePerNum = allNum == 0? 0 : NP.round((num/allNum)*100,2);
-          //   that.sankePer =  allNum == 0? '-' : NP.round((num/allNum)*100,2)+'%';
-          // }
-
           res.data.items.forEach(function(item: any){
             if(item.cardType === 'STORED'){//储值卡
+              let usedAmountStored = res.data.usedAmount? parseFloat(res.data.usedAmount)/100 : 0;
+              let soldAmountStored = res.data.soldAmount? parseFloat(res.data.soldAmount)/100 : 0;
+              self.storedPerNum = soldAmountStored == 0? 0 : NP.round((usedAmountStored/soldAmountStored)*100,2);
+              self.storedPerent = soldAmountStored == 0? '0%' : NP.round((usedAmountStored/soldAmountStored)*100,2)+'%';
+            }else if(item.cardType === 'METERING'){ //计次卡
+              let usedAmountMetering = res.data.usedAmount? parseFloat(res.data.usedAmount)/100 : 0;
+              let soldAmountMetering = res.data.soldAmount? parseFloat(res.data.soldAmount)/100 : 0;
+              self.meteringPerNum = soldAmountMetering == 0? 0 : NP.round((usedAmountMetering/soldAmountMetering)*100,2);
+              self.meteringPercent = soldAmountMetering == 0? '0%' : NP.round((usedAmountMetering/soldAmountMetering)*100,2)+'%';
+            }else {//折扣卡
               let usedAmount = res.data.usedAmount? parseFloat(res.data.usedAmount)/100 : 0;
               let soldAmount = res.data.soldAmount? parseFloat(res.data.soldAmount)/100 : 0;
-              // self.storedPerNum = soldAmount == 0? '0' : NP.round((usedAmount/soldAmount)*100,2)+'%';
-              self.storedPerNum = soldAmount == 0? '0' : (usedAmount/soldAmount)*100+'%';
-              self.storedPerent = soldAmount;
-            }else if(item.cardType === 'METERING'){ //计次卡
-
-            }else {//折扣卡
-
+              self.rebatePerNum = soldAmount == 0? 0 : NP.round((usedAmount/soldAmount)*100,2);
+              self.rebatePercent = soldAmount == 0? '0%' : NP.round((usedAmount/soldAmount)*100,2)+'%';
             }
           })
-          // storedPerNum: any;
-          // storedPerent: any;
-          // rebatePerNum: any;
-          // rebatePercent: any;
-          // meteringPerNum: any;
-          // meteringPercent: any;
-
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',

@@ -19,10 +19,15 @@ export class CommodityStatementComponent implements OnInit {
     loading = false;
     merchantId: string = '';
 
-    countList: any  = [];//服务项目数量占比
-    moneyList: any  = [];//服务项目销售额占比
-    moneyListTotal: any = 0;
-    countListTotal: any = 0;
+    countListService: any  = [];//服务项目数量占比
+    moneyListService: any  = [];//服务项目销售额占比
+    moneyListTotalService: any = 0;
+    countListTotalService: any = 0;
+    countListGoods: any  = [];//实体产品数量占比
+    moneyListGoods: any  = [];//实体产品销售额占比
+    moneyListTotalGoods: any = 0;
+    countListTotalGoods: any = 0;
+
     date: any;//time
     yyyymmDate: Date;//选择的时间
     moduleId: any;
@@ -97,27 +102,49 @@ export class CommodityStatementComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     that.loading = false;
-                    let moneyList = [];
-                    res.data.moneyList.forEach((element: any, index: number) => {
+                    let moneyListService = [];
+                    res.data.SERVICE.moneyList.forEach((element: any, index: number) => {
                         let list = {
                             x: element.name.length > 8? element.name.substring(0,5) + '...' : element.name,
                             y: element.value/100
                         };
-                        moneyList.push(list);
+                      moneyListService.push(list);
                     });
-                    this.moneyList = moneyList;
-                    let countList = [];
-                    res.data.countList.forEach((element: any, index: number) => {
+                    this.moneyListService = moneyListService;
+                    let countListService = [];
+                    res.data.SERVICE.countList.forEach((element: any, index: number) => {
                         let item = {
                             x: element.name.length > 8? element.name.substring(0,5) + '...' : element.name,
                             y: element.value
                         };
-                        countList.push(item);
+                      countListService.push(item);
                     });
 
-                    this.countList = countList;
-                    if (this.moneyList) this.moneyListTotal = this.moneyList.reduce((pre, now) => now.y + pre, 0);
-                    if (this.countList) this.countListTotal = this.countList.reduce((pre, now) => now.y + pre, 0);
+                    this.countListService = countListService;
+                    if (this.moneyListService) this.moneyListTotalService = this.moneyListService.reduce((pre, now) => now.y + pre, 0);
+                    if (this.countListService) this.countListTotalService = this.countListService.reduce((pre, now) => now.y + pre, 0);
+
+                    let moneyListGoods = [];
+                    res.data.GOODS.moneyList.forEach((element: any, index: number) => {
+                      let list = {
+                        x: element.name.length > 8? element.name.substring(0,5) + '...' : element.name,
+                        y: element.value/100
+                      };
+                      moneyListGoods.push(list);
+                    });
+                    this.moneyListGoods = moneyListGoods;
+                    let countListGoods = [];
+                    res.data.GOODS.countList.forEach((element: any, index: number) => {
+                      let item = {
+                        x: element.name.length > 8? element.name.substring(0,5) + '...' : element.name,
+                        y: element.value
+                      };
+                      countListGoods.push(item);
+                    });
+
+                    this.countListGoods = countListGoods;
+                    if (this.moneyListGoods) this.moneyListTotalGoods = this.moneyListGoods.reduce((pre, now) => now.y + pre, 0);
+                    if (this.countListGoods) this.countListTotalGoods = this.countListGoods.reduce((pre, now) => now.y + pre, 0);
 
                 } else {
                     this.modalSrv.error({
