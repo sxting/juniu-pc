@@ -191,9 +191,6 @@ export class revenueDetailReportComponent implements OnInit {
       nzWidth: '800px',
       nzFooter: null,
     });
-    let params = {
-      orderNo: orderNo
-    };
     this.revenuetOrderDetail(orderNo);//订单详情页面数据
   }
 

@@ -255,8 +255,8 @@ export class ReportService {
   }
 
   // 营收报表订单详情
-  revenuetOrderDetail(orderId: any) {
-    let apiUrl = this.api2 + '/order/' + orderId + '/detail.json';
+  revenuetOrderDetail(data: any) {
+    let apiUrl = this.api2 + '/order/' + data + '/detail.json';
     return this.http.get(apiUrl)
       .map((response: Response) => response)
       .catch(error => {

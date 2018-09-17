@@ -111,7 +111,7 @@
       <table>
         <tr class="ui-grid-row" *ngIf="tabActiveType === 'BARCODE' || tabActiveType === 'CASH' || tabActiveType === 'QRCODE' || tabActiveType === 'BANK'">
           <td class="">订单编号</td>
-          <td class="">{{reportOrderDetail.orderId}}</td>
+          <td class="">{{reportOrderDetail?.orderId}}</td>
           <td class="">下单时间</td>
           <td class="trans-status">{{reportOrderDetail.juniuoModel.dateCreated}}</td>
           <td class="">状态</td>
@@ -123,9 +123,9 @@
           <td class="">交易号</td>
           <td class="">{{reportOrderDetail.transactionNo? reportOrderDetail.transactionNo : '-'}}</td>
           <td class="">收款门店</td>
-          <td class="">{{reportOrderDetail.storeName}}</td>
+          <td class="">{{reportOrderDetail?.storeName}}</td>
           <td class="">支付方式</td>
-          <td class="">{{reportOrderDetail.payTypeName}}</td>
+          <td class="">{{reportOrderDetail?.payTypeName}}</td>
         </tr>
         <tr class="ui-grid-row"  *ngIf="ifShow && (tabActiveType === 'BARCODE' || tabActiveType === 'CASH' || tabActiveType === 'QRCODE' || tabActiveType === 'BANK')">
           <td class="">退款单号</td>
@@ -150,11 +150,11 @@
         <!-- 小程序流水详情-->
         <tr class="ui-grid-row" *ngIf="tabActiveType === 'MINIPROGRAM'">
           <td class="">操作时间</td>
-          <td class="" style="width: 200px;">{{reportOrderDetail.juniuoModel.dateCreated}}</td>
+          <td class="" style="width: 200px;">{{reportOrderDetail?.juniuoModel.dateCreated}}</td>
           <td class="">操作类型</td>
           <td class="">{{reportOrderDetail.status == 'PAID'? '购买' : '退款'}}</td>
           <td class="">金额</td>
-          <td class="">{{reportOrderDetail.paidMoney/100}}元</td>
+          <td class="">{{reportOrderDetail?.paidMoney/100}}元</td>
         </tr>
       </table>
     </div>
