@@ -33,7 +33,7 @@ export class profitReportComponent implements OnInit {
   pageNo: any = 1;//页码
   pageSize: any = '10';//一页展示多少数据
   totalElements: any = 0;//商品总数  expandForm = false;//展开
-  reportProfitList: any = [''];
+  reportProfitList: any = [];
   activeIndex: any = 0;
   salesPieData = [];//成本占比
   visitData: any[] = [];
