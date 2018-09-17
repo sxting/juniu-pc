@@ -45,8 +45,8 @@ export class revenueDetailReportComponent implements OnInit {
   reportOrderDetail: any;
   expandForm: boolean = false;
   showQrCode: boolean = false;
-  orderNo: string;//订单号搜索
-  status: string;//订单状态查询
+  orderNo: string = '';//订单号搜索
+  status: string = '';//订单状态查询
   ifShow: boolean = false;
   orderItemDetail: any;//弹框详情的商品列表信息
   typeText: string = '';//弹框的title
@@ -146,6 +146,7 @@ export class revenueDetailReportComponent implements OnInit {
   exportExcel(){
     let self = this;
     let token = this.localStorageService.getLocalstorage(APP_TOKEN);
+    console.log(self.orderNo);
     if (self.merchantId) {
       window.open(Config.API + `order/order/export.excel?token=${token}&storeId=${self.storeId}&merchantId=${self.merchantId}&status=${self.status}&orderId=${self.orderNo}&sceneType=${self.tabActiveType}&startDate=${self.startTime}&endDate=${self.endTime}`);
     } else {
