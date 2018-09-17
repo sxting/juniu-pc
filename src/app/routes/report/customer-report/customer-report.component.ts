@@ -29,6 +29,8 @@ export class CustomerReportComponent implements OnInit {
     monthReportListInfor: any[] = [];//月报的信息列表
     currentCount: any = ''; //当日客流量
     memberPer: any = '';//会员占比
+    oldMemberPer: any = '';//老客户会员占比
+    MomenMemberPer: any = '';//女客户会员占比
     moduleId: any;
     ifStoresAll: boolean = true;//是否有全部门店
     ifStoresAuth: boolean = false;//是否授权
@@ -47,7 +49,6 @@ export class CustomerReportComponent implements OnInit {
     ) { }
 
     batchQuery = {
-      merchantId: this.merchantId,
       date: this.date,
       storeId: this.storeId,
       pageNo: this.pageNo,
@@ -55,7 +56,6 @@ export class CustomerReportComponent implements OnInit {
     };
 
     ngOnInit() {
-
         this.moduleId = this.route.snapshot.params['menuId'];
         let userInfo;
         if (this.localStorageService.getLocalstorage('User-Info')) {
@@ -65,15 +65,12 @@ export class CustomerReportComponent implements OnInit {
             this.merchantId = userInfo.merchantId;
         }
         this.ifStoresAll = userInfo.staffType === "MERCHANT"? true : false;
-
         let year = new Date().getFullYear();        //获取当前年份(2位)
         let month = new Date().getMonth()+1;       //获取当前月份(0-11,0代表1月)
         let changemonth = month < 10 ? '0' + month : '' + month;
         let day = new Date().getDate();        //获取当前日(1-31)
-
         this.yyyymmDate = new Date(year+'-'+changemonth+'-'+day);
         this.date = year+'-'+changemonth+'-'+day;
-
     }
 
     //门店id
@@ -111,10 +108,9 @@ export class CustomerReportComponent implements OnInit {
         this.reportService.getDayCustomer(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    console.log(res);
+                    console.log(res.data);
                     that.loading = false;
                     that.monthReportListInfor = res.data.customerVOList;
-
                     if(that.monthReportListInfor.length > 0){
                         that.monthReportListInfor.forEach(function (item: any) {
                             if(item.bizType === 'FIT') {
@@ -130,6 +126,8 @@ export class CustomerReportComponent implements OnInit {
                     }
                   this.currentCount = res.data.currentCount ? res.data.currentCount + '' : 0 + '';
                   this.memberPer = res.data.currentCount ? ((res.data.currentCount - res.data.currentFitCount) / res.data.currentCount * 100).toFixed(0) + '%' : 0 + '%';
+                  this.MomenMemberPer = res.data.currentWomanCount ? ((res.data.currentWomanCount - res.data.currentFitCount) / res.data.currentWomanCount * 100).toFixed(0) + '%' : 0 + '%';
+                  this.oldMemberPer = res.data.currentOldCount ? ((res.data.currentOldCount - res.data.currentFitCount) / res.data.currentOldCount * 100).toFixed(0) + '%' : 0 + '%';
                   that.totalElements = res.data.pageInfo.countTotal;
                   that.visitDataArr = [];//初始化
                   res.data.lastMonthVos.forEach(function (item: any) {
