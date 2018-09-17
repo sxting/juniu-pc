@@ -119,10 +119,10 @@ export class revenueDetailReportComponent implements OnInit {
 
   //校验核销开始时间
   disabledDate = (current: Date): boolean => {
-    // let date = '2017-01-01 23:59:59';
-    let endDate = new Date(new Date().getTime() - 24*60*60*1000); //今日 ==结束时
-    // return differenceInDays(current, new Date(date)) < 0;
-    return differenceInDays(current, new Date()) >= 0;
+    let date = '2017-01-01 23:59:59';
+    // // let endDate = new Date(new Date().getTime() - 24*60*60*1000); //今日 ==结束时
+    return differenceInDays(current, new Date(date)) < 0;
+    // return differenceInDays(current, new Date()) >= 0;
   };
 
   // Tab切换
@@ -150,8 +150,12 @@ export class revenueDetailReportComponent implements OnInit {
     this.showQrCode = !this.showQrCode;
   }
 
+  //选择订单状态
   selectOrderStatus(){
-
+    console.log(this.status);
+    this.batchQuery.status = this.status? this.status : '';
+    this.batchQuery.pageNo = 1;
+    this.revenuetOrderList(this.batchQuery);//营收报表订单详情页面
   }
 
   //查询条件筛选
