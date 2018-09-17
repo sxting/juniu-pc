@@ -7,6 +7,8 @@ import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as differenceInDays from 'date-fns/difference_in_days';
+import { Config } from '@shared/config/env.config';
+import { APP_TOKEN } from '@shared/define/juniu-define';
 
 
 @Component({
@@ -142,7 +144,13 @@ export class revenueDetailReportComponent implements OnInit {
 
   //导出Excel
   exportExcel(){
-
+    let self = this;
+    let token = this.localStorageService.getLocalstorage(APP_TOKEN);
+    if (self.merchantId) {
+      window.open(Config.API + `order/order/export.excel?token=${token}&storeId=${self.storeId}&merchantId=${self.merchantId}&status=${self.status}&orderId=${self.orderNo}&sceneType=${self.tabActiveType}&startDate=${self.startTime}&endDate=${self.endTime}`);
+    } else {
+      window.open(Config.API + `order/order/export.excel?token=${token}&storeId=${self.storeId}&status=${self.status}&orderId=${self.orderNo}&sceneType=${self.tabActiveType}&startDate=${self.startTime}&endDate=${self.endTime}`);
+    }
   }
 
   //展示二维码
