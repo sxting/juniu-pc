@@ -69,13 +69,6 @@ export class vipConsumeReportComponent implements OnInit {
     let month = this.reportDate.getMonth()+1;       //获取当前月份(0-11,0代表1月)
     let changemonth = month < 10 ? '0' + month : '' + month;
     this.reportDateChange = this.reportDate.getFullYear()+'-'+changemonth;
-
-    // 图表
-    for (var i = 0; i < 10; i++) {
-      this.xAxisDate.push('Class' + i);
-      this.data1.push((Math.random() * 2).toFixed(2));
-      this.data2.push(-Math.random().toFixed(2));
-    }
   }
 
   //门店id
@@ -86,8 +79,7 @@ export class vipConsumeReportComponent implements OnInit {
     this.batchQuery.storeId = this.storeId;
     this.batchQuery.month = this.reportDateChange;
     this.memberCardTotalUsed(this.batchQuery);//会员卡消耗报表-各种卡类型消耗情况
-    // this.memberCardMonthUsed(this.batchQuery);//会员卡消耗报表-每日耗卡／办卡金额对比
-    this.echartsDataInfor(self.xAxisDate, self.data1, self.data2)
+    this.memberCardMonthUsed(this.batchQuery);//会员卡消耗报表-每日耗卡／办卡金额对比
   }
 
   //返回门店数据
@@ -107,9 +99,8 @@ export class vipConsumeReportComponent implements OnInit {
   }
 
   //echarts数据
-  echartsDataInfor(xAxisDate: any,data1: any,data2: any){
-    var myChart = echarts.init(document.getElementById('container'));
-    var itemStyle = {
+  echartsDataInfor(object: any,xAxisDate: any,data1: any,data2: any){
+    let itemStyle = {
       normal: {
       },
       emphasis: {
@@ -120,7 +111,7 @@ export class vipConsumeReportComponent implements OnInit {
         shadowColor: 'rgba(0,0,0,0.5)'
       }
     };
-    var option = {
+    let option = {
       backgroundColor: '#FFF',
       legend: {
         data: ['耗卡', '办卡'],
@@ -194,9 +185,9 @@ export class vipConsumeReportComponent implements OnInit {
         }
       ]
     };
-    myChart.on('brushSelected');
+    object.on('brushSelected');
     if (option && typeof option === "object") {
-      myChart.setOption(option, true);
+      object.setOption(option, true);
     }
   }
 
@@ -208,8 +199,22 @@ export class vipConsumeReportComponent implements OnInit {
       (res: any) => {
         self.loading = false;
         if (res.success) {
-          console.log(res.data);
-
+          let xAxisDate = [];
+          let data1 = [];
+          let data2 = [];
+          res.data.items.forEach(function(item: any){
+            xAxisDate.push(item.date);
+            data1.push(item.usedAmount/100);//耗卡
+            data2.push(item.soldAmount/100);//办卡
+          });
+          this.xAxisDate = xAxisDate;
+          this.data1 = data1;
+          this.data2 = data2;
+          let myChart = echarts.init(document.getElementById('container'));
+          this.echartsDataInfor(myChart,self.xAxisDate, self.data1, self.data2);
+          console.log(this.xAxisDate);
+          console.log(this.data1);
+          console.log(this.data2);
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',

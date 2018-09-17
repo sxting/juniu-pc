@@ -28,7 +28,7 @@
 <div class="echart-box" nz-row [nzGutter]="24">
   <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="12">
     <nz-card [nzBordered]="false" nzTitle="" [nzBodyStyle]="{'padding.px': 12}" style="height: 400px" class="sales-card">
-      <g2-card [title]="'总利润'" total="8,846" contentHeight="260" [bordered]="false" [action]="visitAction" >
+      <g2-card [title]="'总利润'" [total]="totalProfit" contentHeight="260" [bordered]="false" [action]="visitAction" >
         <ng-template #visitAction>
           <nz-tooltip [nzTitle]="'总利润：一段时间的总营收减去这段时间内的总成本'">
             <i nz-tooltip class="anticon anticon-info-circle-o" style="font-size: 24px;"></i>

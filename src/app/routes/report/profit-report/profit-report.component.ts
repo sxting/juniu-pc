@@ -41,6 +41,7 @@ export class profitReportComponent implements OnInit {
   total: string = '';
   index: any;
   beginDay: any = new Date().getTime();//测试用
+  totalProfit: any = 0;//总的利润
 
   constructor(
     private http: _HttpClient,
@@ -72,13 +73,6 @@ export class profitReportComponent implements OnInit {
       this.merchantId = userInfo.merchantId;
     }
     this.ifStoresAll = userInfo.staffType === "MERCHANT"? true : false;
-    this.total = yuan(this.salesPieData.reduce((pre, now) => now.y + pre, 0));
-    for (let i = 0; i < 20; i += 1) {
-      this.visitData.push({
-        x: format(new Date( this.beginDay + (1000 * 60 * 60 * 24 * i)), 'YYYY-MM-DD'),
-        y: Math.floor(Math.random() * 100) + 10,
-      });
-    }
     let startDate = new Date(new Date().getTime() - 7*24*60*60*1000); //提前一周 ==开始时间
     let endDate = new Date(new Date().getTime() - 24*60*60*1000); //今日 ==结束时
     this.dateRange = [ startDate,endDate ];
@@ -98,6 +92,12 @@ export class profitReportComponent implements OnInit {
     this.batchQuery.startDate = this.startTime;
     this.batchQuery.pageNo = 1;
     this.profitIndexList(this.batchQuery);//利润报表首页－列表信息
+    let haha = {
+      storeId: this.storeId,
+      endDate: this.endTime,
+      startDate: this.startTime,
+    };
+    this.profitIndexList(haha);//利润报表首页－列表信息
     this.profitIndexView(this.batchQuery);//利润报表首页－首页图表
   }
 
@@ -160,6 +160,19 @@ export class profitReportComponent implements OnInit {
         if (res.success) {
           self.reportProfitList = res.data.items? res.data.items : [];
           self.totalElements = res.data.pageInfo? res.data.pageInfo.countTotal : 0;
+          //利润报表总的趋势图
+          let totalProfit = 0;
+          let visitData = [];
+          res.data.items.forEach(function(item: any){
+            totalProfit += item.profit/100;
+            visitData.push({
+                x: item.date,
+                y: item.profit/100
+            })
+          });
+          self.visitData = visitData;
+          self.totalProfit = totalProfit;
+          console.log(self.totalProfit);
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',
@@ -185,21 +198,21 @@ export class profitReportComponent implements OnInit {
           self.salesPieData = [
             {
               x: '房租水电',
-              y: res.data.houseCost? res.data.houseCost : 0,
+              y: res.data.houseCost? res.data.houseCost/100 : 0,
               type: 'home'
             },
             {
               x: '产品成本',
-              y: res.data.productCost? res.data.productCost : 0,
+              y: res.data.productCost? res.data.productCost/100 : 0,
               type: 'product'
             },
             {
               x: '员工工资',
-              y: res.data.staffWagesCost? res.data.staffWagesCost : 0,
+              y: res.data.staffWagesCost? res.data.staffWagesCost/100 : 0,
               type: 'staff'
             }
           ];
-
+          this.total = yuan(this.salesPieData.reduce((pre, now) => now.y + pre, 0));
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',
