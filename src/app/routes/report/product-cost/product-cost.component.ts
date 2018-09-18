@@ -8,14 +8,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import * as differenceInDays from 'date-fns/difference_in_days';
 
-
 @Component({
   selector: 'app-product-cost',
   templateUrl: './product-cost.component.html',
   styleUrls: ['./product-cost.component.less']
 })
 export class productCostsComponent implements OnInit {
-
 
   form: FormGroup;
   storeList: any[] = [];//门店列表
