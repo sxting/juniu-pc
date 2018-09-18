@@ -6,6 +6,7 @@ import { ReportService } from "../shared/report.service";
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
+import * as differenceInDays from 'date-fns/difference_in_days';
 
 
 @Component({
@@ -21,7 +22,7 @@ export class productCostsComponent implements OnInit {
   storeId: string;//门店ID
   loading = false;
   merchantId: string = '';
-  theadName: any = ['产品类型', '产品名称', '单个售价', '单个成本','售卖数量', '总成本'];//表头
+  theadName: any = ['产品类型', '产品名称','售卖数量', '总成本'];//表头 '单个售价', '单个成本'
   moduleId: any;
   ifStoresAll: boolean = false;//是否有全部门店
   ifStoresAuth: boolean = false;//是否授权
@@ -117,6 +118,14 @@ export class productCostsComponent implements OnInit {
     this.batchQuery.pageNo = 1;
     this.productCost(this.batchQuery);//获取商品成本列表
   }
+
+  //校验核销开始时间
+  disabledDate = (current: Date): boolean => {
+    // let date = '2017-01-01 23:59:59';
+    let endDate = new Date(new Date().getTime() - 24*60*60*1000); //今日 ==结束时
+    // return differenceInDays(current, new Date(date)) < 0;
+    return differenceInDays(current, new Date()) >= 0;
+  };
 
   // get产品成本列表
   productCost(batchQuery: any){
