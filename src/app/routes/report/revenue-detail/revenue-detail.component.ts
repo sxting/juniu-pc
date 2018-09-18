@@ -183,6 +183,7 @@ export class revenueDetailReportComponent implements OnInit {
     this.dateRange = date;
     this.startTime = FunctionUtil.changeDateToSeconds(this.dateRange[0]);
     this.endTime = FunctionUtil.changeDateToSeconds(this.dateRange[1]);
+
   }
 
   //查看每个的订单详情

@@ -59,8 +59,6 @@ export class profitReportComponent implements OnInit {
     storeId: this.storeId,
     endDate: this.endTime,
     startDate: this.startTime,
-    pageNo: this.pageNo,
-    pageSize: this.pageSize
   };
 
   ngOnInit() {
@@ -90,14 +88,7 @@ export class profitReportComponent implements OnInit {
     this.batchQuery.storeId = this.storeId;
     this.batchQuery.endDate = this.endTime;
     this.batchQuery.startDate = this.startTime;
-    this.batchQuery.pageNo = 1;
     this.profitIndexList(this.batchQuery);//利润报表首页－列表信息
-    let haha = {
-      storeId: this.storeId,
-      endDate: this.endTime,
-      startDate: this.startTime,
-    };
-    this.profitIndexList(haha);//利润报表首页－列表信息
     this.profitIndexView(this.batchQuery);//利润报表首页－首页图表
   }
 
@@ -119,6 +110,10 @@ export class profitReportComponent implements OnInit {
     this.dateRange = date;
     this.startTime = FunctionUtil.changeDateToSeconds(this.dateRange[0]);
     this.endTime = FunctionUtil.changeDateToSeconds(this.dateRange[1]);
+    this.batchQuery.endDate = this.endTime;
+    this.batchQuery.startDate = this.startTime;
+    this.profitIndexList(this.batchQuery);//利润报表首页－列表信息
+    this.profitIndexView(this.batchQuery);//利润报表首页－首页图表
   }
 
   // 切换tab按钮
@@ -144,11 +139,11 @@ export class profitReportComponent implements OnInit {
   }
 
   // 切换分页码
-  paginate(event: any) {
-    this.pageNo = event;
-    this.batchQuery.pageNo = this.pageNo;
-    this.profitIndexList(this.batchQuery);//利润报表首页－列表信息
-  }
+  // paginate(event: any) {
+  //   this.pageNo = event;
+  //   this.batchQuery.pageNo = this.pageNo;
+  //   this.profitIndexList(this.batchQuery);//利润报表首页－列表信息
+  // }
 
   // 利润报表首页列表信息
   profitIndexList(batchQuery: any){

@@ -57,15 +57,7 @@ export class staffWagesReportComponent implements OnInit {
   };
 
   ngOnInit() {
-
     this.moduleId = this.route.snapshot.params['moduleId'];
-    // let userInfo;
-    // if (this.localStorageService.getLocalstorage('User-Info')) {
-    //   userInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info'));
-    // }
-    // if (userInfo) {
-    //   this.merchantId = userInfo.merchantId;
-    // }
     let month = this.reportDate.getMonth()+1;       //获取当前月份(0-11,0代表1月)
     let changemonth = month < 10 ? '0' + month : '' + month;
     this.reportDateChange = this.reportDate.getFullYear()+'-'+changemonth;

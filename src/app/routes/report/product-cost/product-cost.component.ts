@@ -31,7 +31,7 @@ export class productCostsComponent implements OnInit {
   dateRange: any;
   startTime: string = '';//转换字符串的时间
   endTime: string = '';//转换字符串的时间
-  productType: string;
+  productType: string = 'SERVICE';
   productTypeLists: any = [
     {
       name: '服务产品',
@@ -90,21 +90,21 @@ export class productCostsComponent implements OnInit {
     this.batchQuery.startDate = this.startTime;
     this.batchQuery.pageNo = 1;
     this.batchQuery.productType = this.productType? this.productType : '';
-    this.settingStaffWagesList(this.batchQuery);//获取商品成本列表
+    this.productCost(this.batchQuery);//获取商品成本列表
   }
 
   //选择产品类型
   selectProductType(){
     console.log(this.productType);
     this.batchQuery.productType = this.productType;
-    this.settingStaffWagesList(this.batchQuery);//获取商品成本列表
+    this.productCost(this.batchQuery);//获取商品成本列表
   }
 
   // 切换分页码
   paginate(event: any) {
     this.pageNo = event;
     this.batchQuery.pageNo = this.pageNo;
-    this.settingStaffWagesList(this.batchQuery);//获取商品成本列表
+    this.productCost(this.batchQuery);//获取商品成本列表
   }
 
   //选择日期
@@ -115,14 +115,14 @@ export class productCostsComponent implements OnInit {
     this.batchQuery.endDate = this.endTime;
     this.batchQuery.startDate = this.startTime;
     this.batchQuery.pageNo = 1;
-    this.settingStaffWagesList(this.batchQuery);//获取商品成本列表
+    this.productCost(this.batchQuery);//获取商品成本列表
   }
 
   // get产品成本列表
-  settingStaffWagesList(batchQuery: any){
+  productCost(batchQuery: any){
     let self = this;
     this.loading = true;
-    this.reportService.getStaffWagesList(batchQuery).subscribe(
+    this.reportService.productCost(batchQuery).subscribe(
       (res: any) => {
         self.loading = false;
         if (res.success) {
