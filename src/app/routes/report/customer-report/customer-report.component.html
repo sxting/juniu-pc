@@ -38,7 +38,7 @@
       </div>
       <div nz-col [nzSpan]="12">
         <g2-pie
-          percent="28"
+          percent="memberPercent"
           subTitle="会员占比"
           [total]="memberPer"
           height="120"></g2-pie>
@@ -54,7 +54,7 @@
       </div>
       <div nz-col [nzSpan]="12">
         <g2-pie
-          percent="28"
+          [percent]="oldMemberPercent"
           subTitle="老客占比"
           [total]="oldMemberPer"
           height="120"></g2-pie>
@@ -70,7 +70,7 @@
       </div>
       <div nz-col [nzSpan]="12">
         <g2-pie
-          percent="28"
+          percent="MomenMemberPercent"
           subTitle="女客占比"
           [total]="MomenMemberPer"
           height="120"></g2-pie>

@@ -35,6 +35,9 @@ export class CustomerReportComponent implements OnInit {
     ifStoresAll: boolean = true;//是否有全部门店
     ifStoresAuth: boolean = false;//是否授权
     visitDataArr: any[] = [];
+    oldMemberPercent: any;
+    memberPercent: any;
+    MomenMemberPercent: any;
 
     constructor(
         private http: _HttpClient,
@@ -126,8 +129,11 @@ export class CustomerReportComponent implements OnInit {
                     }
                   this.currentCount = res.data.currentCount ? res.data.currentCount + '' : 0 + '';
                   this.memberPer = res.data.currentCount ? ((res.data.currentCount - res.data.currentFitCount) / res.data.currentCount * 100).toFixed(0) + '%' : 0 + '%';
+                  this.memberPercent = res.data.currentCount ? ((res.data.currentCount - res.data.currentFitCount) / res.data.currentCount * 100).toFixed(0) : 0;
                   this.MomenMemberPer = res.data.currentWomanCount ? ((res.data.currentWomanCount - res.data.currentFitCount) / res.data.currentWomanCount * 100).toFixed(0) + '%' : 0 + '%';
+                  this.MomenMemberPercent = res.data.currentWomanCount ? ((res.data.currentWomanCount - res.data.currentFitCount) / res.data.currentWomanCount * 100).toFixed(0) : 0;
                   this.oldMemberPer = res.data.currentOldCount ? ((res.data.currentOldCount - res.data.currentFitCount) / res.data.currentOldCount * 100).toFixed(0) + '%' : 0 + '%';
+                  this.oldMemberPercent = res.data.currentOldCount ? ((res.data.currentOldCount - res.data.currentFitCount) / res.data.currentOldCount * 100).toFixed(0) : 0;
                   that.totalElements = res.data.pageInfo.countTotal;
                   that.visitDataArr = [];//初始化
                   res.data.lastMonthVos.forEach(function (item: any) {
