@@ -134,11 +134,11 @@
           <td class="trans-status">{{reportOrderDetail.refundOrder? reportOrderDetail.refundOrder.juniuoModel.dateCreated : '-'}}</td>
         </tr>
         <!-- 口碑核销详情-->
-        <tr class="ui-grid-row" *ngIf="tabActiveType === 'KOUBEI'">
+        <tr class="ui-grid-row" *ngIf="reportOrderDetail && tabActiveType === 'KOUBEI'">
           <td class="">核销时间</td>
-          <td style="width: 200px;">2018-05-21 15:11:13</td>
+          <td style="width: 200px;">{{reportOrderDetail.usedDate}}</td>
           <td class="">核销门店</td>
-          <td class="">桔牛体验店(健身馆)</td>
+          <td class="">{{reportOrderDetail.usedStoreName}}</td>
         </tr>
         <!-- 美大验券详情-->
         <tr class="ui-grid-row" *ngIf="tabActiveType === 'MEIDA'">
@@ -175,7 +175,7 @@
         <tr nz-tbody-tr>
           <td style="color: #108EE9" *ngIf="tabActiveType === 'BARCODE' || tabActiveType === 'CASH' || tabActiveType === 'QRCODE' || tabActiveType === 'BANK'">{{orderItemDetail[0].categoryName}}</td>
           <td style="color: #108EE9" *ngIf="tabActiveType === 'MEIDA'">默认</td>
-          <td style="color: #108EE9" *ngIf="tabActiveType === 'KOUBEI'">默认</td>
+          <td style="color: #108EE9" *ngIf="tabActiveType === 'KOUBEI'">{{reportOrderDetail.voucherNo}}</td>
           <td>{{reportOrderDetail.body}}</td>
           <td class="">{{orderItemDetail[0].staffName? orderItemDetail[0].staffName : '-'}}／{{orderItemDetail[0].staff2Name? orderItemDetail[0].staff2Name : '-'}}</td>
           <td>{{orderItemDetail[0].price/100}}</td>

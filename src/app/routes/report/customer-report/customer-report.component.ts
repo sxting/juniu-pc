@@ -6,6 +6,7 @@ import { ReportService } from "../shared/report.service";
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { ActivatedRoute, Router } from '@angular/router';
+import NP from 'number-precision'
 
 
 @Component({
@@ -128,12 +129,15 @@ export class CustomerReportComponent implements OnInit {
                         });
                     }
                   this.currentCount = res.data.currentCount ? res.data.currentCount + '' : 0 + '';
-                  this.memberPer = res.data.currentCount ? ((res.data.currentCount - res.data.currentFitCount) / res.data.currentCount * 100).toFixed(0) + '%' : 0 + '%';
-                  this.memberPercent = res.data.currentCount ? ((res.data.currentCount - res.data.currentFitCount) / res.data.currentCount * 100).toFixed(0) : 0;
-                  this.MomenMemberPer = res.data.currentWomanCount ? ((res.data.currentWomanCount - res.data.currentFitCount) / res.data.currentWomanCount * 100).toFixed(0) + '%' : 0 + '%';
-                  this.MomenMemberPercent = res.data.currentWomanCount ? ((res.data.currentWomanCount - res.data.currentFitCount) / res.data.currentWomanCount * 100).toFixed(0) : 0;
-                  this.oldMemberPer = res.data.currentOldCount ? ((res.data.currentOldCount - res.data.currentFitCount) / res.data.currentOldCount * 100).toFixed(0) + '%' : 0 + '%';
-                  this.oldMemberPercent = res.data.currentOldCount ? ((res.data.currentOldCount - res.data.currentFitCount) / res.data.currentOldCount * 100).toFixed(0) : 0;
+                  this.memberPer = res.data.currentCount ? NP.round(((res.data.currentCount - res.data.currentFitCount) / res.data.currentCount)*100,2) + '%' : 0 + '%';
+                  this.memberPercent = res.data.currentCount ? NP.round(((res.data.currentCount - res.data.currentFitCount) / res.data.currentCount)*100,2) : 0;
+
+                  this.MomenMemberPer = res.data.currentWomanCount ? NP.round((res.data.currentWomanCount / res.data.currentCount)*100,2) + '%' : 0 + '%';
+                  this.MomenMemberPercent = res.data.currentWomanCount ? NP.round((res.data.currentWomanCount / res.data.currentCount)*100,2) : 0;
+
+                  this.oldMemberPer = res.data.currentOldCount ? NP.round((res.data.currentOldCount / res.data.currentCount)*100,2) + '%' : 0 + '%';
+                  this.oldMemberPercent = res.data.currentOldCount ? NP.round((res.data.currentOldCount / res.data.currentCount)*100,2) : 0;
+
                   that.totalElements = res.data.pageInfo.countTotal;
                   that.visitDataArr = [];//初始化
                   res.data.lastMonthVos.forEach(function (item: any) {

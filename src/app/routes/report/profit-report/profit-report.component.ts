@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { yuan } from '@delon/util';
 import * as format from 'date-fns/format';//测试用
 import * as differenceInDays from 'date-fns/difference_in_days';
+import NP from 'number-precision'
 
 
 @Component({
@@ -159,14 +160,14 @@ export class profitReportComponent implements OnInit {
           let totalProfit = 0;
           let visitData = [];
           res.data.items.forEach(function(item: any){
-            totalProfit += item.profit/100;
+            totalProfit += item.profit;
             visitData.push({
                 x: item.date,
-                y: item.profit/100
+                y:  NP.round(totalProfit/100,2)
             })
           });
           self.visitData = visitData;
-          self.totalProfit = totalProfit;
+          self.totalProfit = NP.round(totalProfit/100,2);
           console.log(self.totalProfit);
         } else {
           this.modalSrv.error({
