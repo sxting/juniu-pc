@@ -108,8 +108,8 @@ export class profitReportComponent implements OnInit {
   //选择日期
   onDateChange(date: Date): void {
     this.dateRange = date;
-    this.startTime = FunctionUtil.changeDateToSeconds(this.dateRange[0]);
-    this.endTime = FunctionUtil.changeDateToSeconds(this.dateRange[1]);
+    this.startTime = FunctionUtil.changeDate(this.dateRange[0]);
+    this.endTime = FunctionUtil.changeDate(this.dateRange[1]);
     this.batchQuery.endDate = this.endTime;
     this.batchQuery.startDate = this.startTime;
     this.profitIndexList(this.batchQuery);//利润报表首页－列表信息

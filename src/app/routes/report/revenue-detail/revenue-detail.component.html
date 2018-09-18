@@ -129,9 +129,9 @@
         </tr>
         <tr class="ui-grid-row"  *ngIf="ifShow && (tabActiveType === 'BARCODE' || tabActiveType === 'CASH' || tabActiveType === 'QRCODE' || tabActiveType === 'BANK')">
           <td class="">退款单号</td>
-          <td class="">1526442516236560284087</td>
+          <td class="">{{reportOrderDetail.refundOrder? reportOrderDetail.refundOrder.orderId : '-'}}</td>
           <td class="">退款时间</td>
-          <td class="trans-status">2018-05-21 15:11:13</td>
+          <td class="trans-status">{{reportOrderDetail.refundOrder? reportOrderDetail.refundOrder.juniuoModel.dateCreated : '-'}}</td>
         </tr>
         <!-- 口碑核销详情-->
         <tr class="ui-grid-row" *ngIf="tabActiveType === 'KOUBEI'">
@@ -173,7 +173,7 @@
       </thead>
       <tbody nz-tbody class="ui-grid-tbody" *ngIf="reportOrderDetail">
         <tr nz-tbody-tr>
-          <td style="color: #108EE9" *ngIf="tabActiveType === 'BARCODE' || tabActiveType === 'CASH' || tabActiveType === 'QRCODE' || tabActiveType === 'BANK'">默认</td>
+          <td style="color: #108EE9" *ngIf="tabActiveType === 'BARCODE' || tabActiveType === 'CASH' || tabActiveType === 'QRCODE' || tabActiveType === 'BANK'">{{orderItemDetail[0].categoryName}}</td>
           <td style="color: #108EE9" *ngIf="tabActiveType === 'MEIDA'">默认</td>
           <td style="color: #108EE9" *ngIf="tabActiveType === 'KOUBEI'">默认</td>
           <td>{{reportOrderDetail.body}}</td>
@@ -193,7 +193,7 @@
       <table>
         <tr class="ui-grid-row" *ngIf="reportOrderDetail && (tabActiveType === 'BARCODE' || tabActiveType === 'CASH' || tabActiveType === 'QRCODE' || tabActiveType === 'BANK')">
           <td class="">优惠券</td>
-          <td class="">{{reportOrderDetail.couponName? reportOrderDetail.couponName : '-'}}</td>
+          <td class="">{{reportOrderDetail.coupon.couponDefName? reportOrderDetail.coupon.couponDefName : '-'}}</td>
           <td class="">优惠金额</td>
           <td class="trans-status">{{reportOrderDetail.couponAmount/100}} 元</td>
           <td class="">实付金额</td>
