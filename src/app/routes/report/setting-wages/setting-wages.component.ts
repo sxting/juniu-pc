@@ -136,16 +136,14 @@ export class settingStaffWagesComponent implements OnInit {
         if (res.success) {
           console.log(res.data);
           self.setStaffWagesList = res.data.items? res.data.items : [];
-          if(self.setStaffWagesList.length === 0){
-            this.form = this.fb.group({
-              items: this.fb.array([]),
-            });
-            self.setStaffWagesList.forEach(i => {
-              let field = this.createUser();
-              field.patchValue(i);
-              this.items.push(field);
-            });
-          }
+          this.form = this.fb.group({
+            items: this.fb.array([]),
+          });
+          self.setStaffWagesList.forEach(i => {
+            let field = this.createUser();
+            field.patchValue(i);
+            this.items.push(field);
+          });
           self.totalElements = res.data.pageInfo? res.data.pageInfo.countTotal : 0;
         } else {
           this.modalSrv.error({
