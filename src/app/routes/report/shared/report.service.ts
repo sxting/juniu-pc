@@ -284,4 +284,53 @@ export class ReportService {
       });
   }
 
+  //口碑营收列表分页
+  koubeiVoucherListInfor(data: any) {
+    let apiUrl = this.api2 + '/koubei/voucher/page.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  //口碑营收详情
+  koubeiVoucherDetailInfor(data: any) {
+    let apiUrl = this.api2 + '/koubei/voucher/detail.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+  //美大验券营收列表分页
+  meidaVoucherListInfor(data: any) {
+    let apiUrl = this.api2 + '/meida/voucher/page.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  //美大验券营收详情
+  meidaVoucherDetailInfor(data: any) {
+    let apiUrl = this.api2 + '/meida/voucher/detail.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  //商品报表信息
+  getProductReportInfor(data: any) {
+    let apiUrl = this.api1 + '/profit/productReport.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
 }

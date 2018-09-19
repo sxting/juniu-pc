@@ -94,8 +94,8 @@ export class RevenueReportComponent implements OnInit {
     //选择日期
     onDateChange(date: Date): void {
       this.dateRange = date;
-      this.startTime = FunctionUtil.changeDateToSeconds(this.dateRange[0]);
-      this.endTime = FunctionUtil.changeDateToSeconds(this.dateRange[1]);
+      this.startTime = FunctionUtil.changeDate(this.dateRange[0]) + ' 00:00:00';
+      this.endTime = FunctionUtil.changeDate(this.dateRange[1]) + ' 23:59:59';
       this.batchQuery.endDate = this.endTime;
       this.batchQuery.startDate = this.startTime;
       this.getRevenueReportInfor(this.batchQuery);//营收报表-营收类别占比

@@ -10,7 +10,6 @@ import * as differenceInDays from 'date-fns/difference_in_days';
 import { Config } from '@shared/config/env.config';
 import { APP_TOKEN } from '@shared/define/juniu-define';
 
-
 @Component({
   selector: 'app-revenue-detail',
   templateUrl: './revenue-detail.component.html',
@@ -46,12 +45,14 @@ export class revenueDetailReportComponent implements OnInit {
   expandForm: boolean = false;
   showQrCode: boolean = false;
   orderNo: string = '';//订单号搜索
-  status: string = '';//订单状态查询
+  status: string = 'PAID';//订单状态查询
   ifShow: boolean = false;
   orderItemDetail: any;//弹框详情的商品列表信息
   typeText: string = '';//弹框的title
   totalNum: number = 0;//弹框详情总的数量
   totalMoney: number = 0;//弹框详情总的金额
+  orderTypeText: string = '订单编号';
+  orderTypeTitle: string = '';
 
   constructor(
     private http: _HttpClient,
@@ -65,11 +66,27 @@ export class revenueDetailReportComponent implements OnInit {
     private localStorageService: LocalStorageService
   ) { }
 
+  /**
+   * "扫码枪"),CASH("现金"),BANK("银行卡"),QRCODE("付款吗 请求体
+   ***/
   batchQuery = {
     storeId: this.storeId,
     status: this.status,
     orderId: this.orderNo,
     sceneType: this.tabActiveType,
+    startDate: this.startTime,
+    endDate: this.endTime,
+    pageNo: this.pageNo,
+    pageSize: this.pageSize
+  };
+
+  /**
+   * 口碑核销请求体
+   ***/
+  batchQueryKoubei = {
+    storeId: this.storeId,
+    status: this.status,
+    ticketCode: this.orderNo,
     startDate: this.startTime,
     endDate: this.endTime,
     pageNo: this.pageNo,
@@ -91,6 +108,17 @@ export class revenueDetailReportComponent implements OnInit {
     this.endTime = this.route.snapshot.params['endTime']; //今日 ==结束时
     this.dateRange = [ new Date(self.startTime),new Date(self.endTime) ];
     this.tabActiveType = this.route.snapshot.params['typeNo'];
+
+    if(self.tabActiveType === 'BARCODE' || self.tabActiveType === 'CASH' || self.tabActiveType === 'BANK' || self.tabActiveType === 'QRCODE'){
+      this.orderTypeText = '订单编号';
+      this.orderTypeTitle = '订单状态';
+    } else if(self.tabActiveType === 'KOUBEI'){
+      this.orderTypeText = '核销码';
+    } else if(self.tabActiveType === 'MINIPROGRAM'){
+      this.orderTypeTitle = '操作类型';
+    } else {
+      this.orderTypeText = '券码';
+    }
     console.log(this.tabActiveType);
     self.tabTitleName.forEach((element: any, index: number, array: any) => {
       if(element.type === self.tabActiveType){
@@ -103,15 +131,42 @@ export class revenueDetailReportComponent implements OnInit {
 
   //门店id
   getStoreId(event: any){
+    let self = this;
     this.storeId = event.storeId? event.storeId : '';
-    this.batchQuery.storeId = this.storeId;
-    this.batchQuery.status = this.status? this.status : '';
-    this.batchQuery.orderId = this.orderNo? this.orderNo : '';
+
+    /******************======   口碑  美大===========************/
+    this.batchQueryKoubei.pageNo = 1;
+    this.batchQueryKoubei.startDate = this.startTime;
+    this.batchQueryKoubei.endDate = this.endTime;
+    this.batchQueryKoubei.status = this.status? this.status : '';
+    this.batchQueryKoubei.ticketCode = this.orderNo? this.orderNo : '';
+    this.batchQueryKoubei.storeId = this.storeId? this.storeId : '';
+
+    /******************======   扫码 现金 银行等等 ===========************/
+    this.batchQuery.pageNo = 1;
     this.batchQuery.sceneType = this.tabActiveType;
     this.batchQuery.startDate = this.startTime;
     this.batchQuery.endDate = this.endTime;
-    this.batchQuery.pageNo = 1;
-    this.revenuetOrderList(this.batchQuery);//营收报表订单详情页面
+    this.batchQuery.status = this.status? this.status : '';
+    this.batchQuery.orderId = this.orderNo? this.orderNo : '';
+    this.batchQuery.storeId = this.storeId? this.storeId : '';
+
+    if(self.tabActiveType === 'BARCODE' || self.tabActiveType === 'CASH' || self.tabActiveType === 'BANK' || self.tabActiveType === 'QRCODE'){
+      this.orderTypeText = '订单编号';
+      this.orderTypeTitle = '订单状态';
+      this.revenuetOrderList(this.batchQuery);//营收报表订单详情页面
+
+    } else if(self.tabActiveType === 'KOUBEI'){
+      this.orderTypeText = '核销码';
+      this.koubeiVoucherListInfor(this.batchQueryKoubei);//口碑订单详情页面
+
+    } else if(self.tabActiveType === 'MINIPROGRAM'){
+      this.orderTypeTitle = '操作类型';
+
+    } else {
+      this.orderTypeText = '券码';
+      this.meidaVoucherListInfor(this.batchQueryKoubei);//美大订单页面
+    }
   }
 
   //返回门店数据
@@ -129,6 +184,7 @@ export class revenueDetailReportComponent implements OnInit {
 
   // Tab切换
   tabclick(index: any,type: any){
+    let self = this;
     this.tabActiveType = type;
     this.tabTitleName.forEach((element: any, index: number, array: any) => {
       if(element.type === this.tabActiveType){
@@ -137,21 +193,67 @@ export class revenueDetailReportComponent implements OnInit {
         element.value = false;
       }
     });
-    this.batchQuery.sceneType = this.tabActiveType;
+    /******************======   口碑  美大===========************/
+    this.batchQueryKoubei.pageNo = 1;
+    this.batchQueryKoubei.startDate = this.startTime;
+    this.batchQueryKoubei.endDate = this.endTime;
+    this.batchQueryKoubei.status = this.status? this.status : '';
+    this.batchQueryKoubei.ticketCode = this.orderNo? this.orderNo : '';
+    this.batchQueryKoubei.storeId = this.storeId? this.storeId : '';
+
+    /******************======   扫码 现金 银行等等 ===========************/
     this.batchQuery.pageNo = 1;
-    this.revenuetOrderList(this.batchQuery);//营收报表订单详情页面
+    this.batchQuery.sceneType = this.tabActiveType;
+    this.batchQuery.startDate = this.startTime;
+    this.batchQuery.endDate = this.endTime;
+    this.batchQuery.status = this.status? this.status : '';
+    this.batchQuery.orderId = this.orderNo? this.orderNo : '';
+    this.batchQuery.storeId = this.storeId? this.storeId : '';
+
+    if(self.tabActiveType === 'BARCODE' || self.tabActiveType === 'CASH' || self.tabActiveType === 'BANK' || self.tabActiveType === 'QRCODE'){
+      this.orderTypeText = '订单编号';
+      this.orderTypeTitle = '订单状态';
+      this.revenuetOrderList(this.batchQuery);//营收报表订单详情页面
+
+    } else if(self.tabActiveType === 'KOUBEI'){
+      this.orderTypeText = '核销码';
+      this.koubeiVoucherListInfor(this.batchQueryKoubei);//口碑订单详情页面
+
+    } else if(self.tabActiveType === 'MINIPROGRAM'){
+      this.orderTypeTitle = '操作类型';
+
+    } else {
+      this.orderTypeText = '券码';
+      this.meidaVoucherListInfor(this.batchQueryKoubei);//美大订单页面
+    }
   }
 
   //导出Excel
   exportExcel(){
     let self = this;
     let token = this.localStorageService.getLocalstorage(APP_TOKEN);
-    console.log(self.orderNo);
-    if (self.merchantId) {
-      window.open(Config.API + `order/order/export.excel?token=${token}&storeId=${self.storeId}&merchantId=${self.merchantId}&status=${self.status}&orderId=${self.orderNo}&sceneType=${self.tabActiveType}&startDate=${self.startTime}&endDate=${self.endTime}`);
+    if(self.tabActiveType === 'BARCODE' || self.tabActiveType === 'CASH' || self.tabActiveType === 'BANK' || self.tabActiveType === 'QRCODE'){
+      if (self.merchantId) {
+        window.open(Config.API + `order/order/export.excel?token=${token}&storeId=${self.storeId}&merchantId=${self.merchantId}&status=${self.status}&orderId=${self.orderNo}&sceneType=${self.tabActiveType}&startDate=${self.startTime}&endDate=${self.endTime}`);
+      } else {
+        window.open(Config.API + `order/order/export.excel?token=${token}&storeId=${self.storeId}&status=${self.status}&orderId=${self.orderNo}&sceneType=${self.tabActiveType}&startDate=${self.startTime}&endDate=${self.endTime}`);
+      }
+    } else if(self.tabActiveType === 'KOUBEI'){
+      if (self.merchantId) {
+        window.open(Config.API + `/koubei/voucher/export.excel?token=${token}&storeId=${self.storeId}&merchantId=${self.merchantId}&ticketCode=${self.orderNo}&startDate=${self.startTime}&endDate=${self.endTime}`);
+      } else {
+        window.open(Config.API + `/koubei/voucher/export.excel?token=${token}&storeId=${self.storeId}&ticketCode=${self.orderNo}&startDate=${self.startTime}&endDate=${self.endTime}`);
+      }
+    } else if(self.tabActiveType === 'MINIPROGRAM'){
+
     } else {
-      window.open(Config.API + `order/order/export.excel?token=${token}&storeId=${self.storeId}&status=${self.status}&orderId=${self.orderNo}&sceneType=${self.tabActiveType}&startDate=${self.startTime}&endDate=${self.endTime}`);
+      if (self.merchantId) {
+        window.open(Config.API + `/meida/voucher/export.excel?token=${token}&storeId=${self.storeId}&merchantId=${self.merchantId}&ticketCode=${self.orderNo}&startDate=${self.startTime}&endDate=${self.endTime}`);
+      } else {
+        window.open(Config.API + `/meida/voucher/export.excel?token=${token}&storeId=${self.storeId}&ticketCode=${self.orderNo}&startDate=${self.startTime}&endDate=${self.endTime}`);
+      }
     }
+
   }
 
   //展示二维码
@@ -181,23 +283,13 @@ export class revenueDetailReportComponent implements OnInit {
   //选择日期
   onDateChange(date: Date): void {
     this.dateRange = date;
-    this.startTime = FunctionUtil.changeDateToSeconds(this.dateRange[0]);
-    this.endTime = FunctionUtil.changeDateToSeconds(this.dateRange[1]);
-
+    this.startTime = FunctionUtil.changeDate(this.dateRange[0]) + ' 00:00:00';
+    this.endTime = FunctionUtil.changeDate(this.dateRange[1]) + ' 23:59:59';
   }
 
   //查看每个的订单详情
   checkDetailInfor(tpl: any,orderNo: string,status: string) {
     let self = this;
-    if(self.tabActiveType === 'BARCODE' || self.tabActiveType === 'CASH' || self.tabActiveType === 'BANK' || self.tabActiveType === 'QRCODE'){
-      this.typeText = '订单';
-    } else if(self.tabActiveType === 'MINIPROGRAM'){
-      this.typeText = '流水';
-    } else if(self.tabActiveType === 'KOUBEI'){
-      this.typeText = '核销';
-    } else {
-      this.typeText = '验券';
-    }
     this.ifShow = status === 'REFUND'? true : false;
     this.modalSrv.create({
       nzTitle: '',
@@ -205,7 +297,28 @@ export class revenueDetailReportComponent implements OnInit {
       nzWidth: '800px',
       nzFooter: null,
     });
-    this.revenuetOrderDetail(orderNo);//订单详情页面数据
+    if(self.tabActiveType === 'BARCODE' || self.tabActiveType === 'CASH' || self.tabActiveType === 'BANK' || self.tabActiveType === 'QRCODE'){
+      this.typeText = '订单';
+      this.revenuetOrderDetail(orderNo);//订单详情页面数据
+    } else if(self.tabActiveType === 'MINIPROGRAM'){
+      this.typeText = '流水';
+      // this.revenuetOrderDetail(orderNo);//订单详情页面数据
+
+    } else if(self.tabActiveType === 'KOUBEI'){
+      this.typeText = '核销';
+      let parameter = {
+        merchantId: this.merchantId,
+        storeId: this.storeId,
+        voucherNo: orderNo
+      };
+      this.koubeiVoucherDetailInfor(parameter);//订单详情页面数据
+    } else {
+      this.typeText = '验券';
+      let param = {
+        orderId: orderNo
+      };
+      this.meidaVoucherDetailInfor(param);//订单详情页面数据
+    }
   }
 
   // 切换分页码
@@ -239,6 +352,100 @@ export class revenueDetailReportComponent implements OnInit {
     );
   }
 
+  // 口碑核销订单列表页面
+  koubeiVoucherListInfor(batchQuery: any){
+    let self = this;
+    this.loading = true;
+    this.reportService.koubeiVoucherListInfor(batchQuery).subscribe(
+      (res: any) => {
+        self.loading = false;
+        if (res.success) {
+          console.log(res.data);
+          this.reportOrderList = res.data.list? res.data.list : [];
+          self.totalElements = res.data.countTotal;
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      },
+      error => {
+        this.msg.warning(error);
+      }
+    );
+  }
+
+  // 口碑核销详情
+  koubeiVoucherDetailInfor(batchQuery: any){
+    let self = this;
+    this.loading = true;
+    this.reportService.koubeiVoucherDetailInfor(batchQuery).subscribe(
+      (res: any) => {
+        self.loading = false;
+        if (res.success) {
+          console.log(res.data);
+
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      },
+      error => {
+        this.msg.warning(error);
+      }
+    );
+  }
+
+  // 美大验券列表页面
+  meidaVoucherListInfor(batchQuery: any){
+    let self = this;
+    this.loading = true;
+    this.reportService.meidaVoucherListInfor(batchQuery).subscribe(
+      (res: any) => {
+        self.loading = false;
+        if (res.success) {
+          console.log(res.data.content);
+          this.reportOrderList = res.data.list? res.data.list : [];
+          self.totalElements = res.data.countTotal;
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      },
+      error => {
+        this.msg.warning(error);
+      }
+    );
+  }
+
+  // 美大验券详情
+  meidaVoucherDetailInfor(batchQuery: any){
+    let self = this;
+    this.loading = true;
+    this.reportService.meidaVoucherDetailInfor(batchQuery).subscribe(
+      (res: any) => {
+        self.loading = false;
+        if (res.success) {
+          console.log(res.data.content);
+
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      },
+      error => {
+        this.msg.warning(error);
+      }
+    );
+  }
+
   // 获取营收报表订单详情页面
   revenuetOrderDetail(batchQuery: any){
     let self = this;
@@ -256,7 +463,6 @@ export class revenueDetailReportComponent implements OnInit {
             totalMoney += item.price/100 * totalNum;
           });
           self.orderItemDetail = res.data.orderItem;
-          console.log(self.orderItemDetail);
           self.reportOrderDetail = res.data;
           self.totalNum = totalNum;
           self.totalMoney = totalMoney;
