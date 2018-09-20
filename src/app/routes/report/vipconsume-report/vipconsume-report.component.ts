@@ -239,20 +239,20 @@ export class vipConsumeReportComponent implements OnInit {
           console.log(res.data);
           res.data.items.forEach(function(item: any){
             if(item.cardType === 'STORED'){//储值卡
-              let usedAmountStored = res.data.usedAmount? parseFloat(res.data.usedAmount)/100 : 0;
-              let soldAmountStored = res.data.soldAmount? parseFloat(res.data.soldAmount)/100 : 0;
-              self.storedPerNum = soldAmountStored == 0? 0 : NP.round((usedAmountStored/soldAmountStored)*100,2);
-              self.storedPerent = soldAmountStored == 0? '0%' : NP.round((usedAmountStored/soldAmountStored)*100,2)+'%';
+              let usedAmountStored = item.usedAmount? parseFloat(item.usedAmount) : 0;
+              let soldAmountStored = item.soldAmount? parseFloat(item.soldAmount) : 0;
+              self.storedPerNum = usedAmountStored == 0? 0 : NP.round((usedAmountStored/(usedAmountStored + soldAmountStored))*100,2);
+              self.storedPerent = usedAmountStored == 0? '0%' : NP.round((usedAmountStored/(usedAmountStored + soldAmountStored))*100,2)+'%';
             }else if(item.cardType === 'METERING'){ //计次卡
-              let usedAmountMetering = res.data.usedAmount? parseFloat(res.data.usedAmount)/100 : 0;
-              let soldAmountMetering = res.data.soldAmount? parseFloat(res.data.soldAmount)/100 : 0;
-              self.meteringPerNum = soldAmountMetering == 0? 0 : NP.round((usedAmountMetering/soldAmountMetering)*100,2);
-              self.meteringPercent = soldAmountMetering == 0? '0%' : NP.round((usedAmountMetering/soldAmountMetering)*100,2)+'%';
+              let usedAmountMetering = item.usedAmount? parseFloat(item.usedAmount) : 0;
+              let soldAmountMetering = item.soldAmount? parseFloat(item.soldAmount) : 0;
+              self.meteringPerNum = usedAmountMetering == 0? 0 : NP.round((usedAmountMetering/(soldAmountMetering + usedAmountMetering))*100,2);
+              self.meteringPercent = usedAmountMetering == 0? '0%' : NP.round((usedAmountMetering/(usedAmountMetering + soldAmountMetering))*100,2)+'%';
             }else {//折扣卡
-              let usedAmount = res.data.usedAmount? parseFloat(res.data.usedAmount)/100 : 0;
-              let soldAmount = res.data.soldAmount? parseFloat(res.data.soldAmount)/100 : 0;
-              self.rebatePerNum = soldAmount == 0? 0 : NP.round((usedAmount/soldAmount)*100,2);
-              self.rebatePercent = soldAmount == 0? '0%' : NP.round((usedAmount/soldAmount)*100,2)+'%';
+              let usedAmount = item.usedAmount? parseFloat(item.usedAmount) : 0;
+              let soldAmount = item.soldAmount? parseFloat(item.soldAmount) : 0;
+              self.rebatePerNum = usedAmount == 0? 0 : NP.round((usedAmount/(usedAmount + soldAmount))*100,2);
+              self.rebatePercent = usedAmount == 0? '0%' : NP.round((usedAmount/(usedAmount + soldAmount))*100,2)+'%';
             }
           })
         } else {
