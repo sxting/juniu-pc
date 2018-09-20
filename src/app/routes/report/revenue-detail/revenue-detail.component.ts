@@ -119,7 +119,6 @@ export class revenueDetailReportComponent implements OnInit {
     } else {
       this.orderTypeText = '券码';
     }
-    console.log(this.tabActiveType);
     self.tabTitleName.forEach((element: any, index: number, array: any) => {
       if(element.type === self.tabActiveType){
         element.value = true;
@@ -162,6 +161,7 @@ export class revenueDetailReportComponent implements OnInit {
 
     } else if(self.tabActiveType === 'MINIPROGRAM'){
       this.orderTypeTitle = '操作类型';
+      this.revenuetOrderList(this.batchQuery);//营收报表订单详情页面
 
     } else {
       this.orderTypeText = '券码';
@@ -176,10 +176,10 @@ export class revenueDetailReportComponent implements OnInit {
 
   //校验核销开始时间
   disabledDate = (current: Date): boolean => {
-    let date = '2017-01-01 23:59:59';
-    // // let endDate = new Date(new Date().getTime() - 24*60*60*1000); //今日 ==结束时
-    return differenceInDays(current, new Date(date)) < 0;
-    // return differenceInDays(current, new Date()) >= 0;
+    // let date = '2017-01-01 23:59:59';
+    let endDate = new Date(new Date().getTime() - 24*60*60*1000); //今日 ==结束时
+    // return differenceInDays(current, new Date(date)) < 0;
+    return differenceInDays(current, new Date()) >= 0;
   };
 
   // Tab切换
@@ -221,6 +221,7 @@ export class revenueDetailReportComponent implements OnInit {
 
     } else if(self.tabActiveType === 'MINIPROGRAM'){
       this.orderTypeTitle = '操作类型';
+      this.revenuetOrderList(this.batchQuery);//营收报表订单详情页面
 
     } else {
       this.orderTypeText = '券码';
@@ -232,7 +233,7 @@ export class revenueDetailReportComponent implements OnInit {
   exportExcel(){
     let self = this;
     let token = this.localStorageService.getLocalstorage(APP_TOKEN);
-    if(self.tabActiveType === 'BARCODE' || self.tabActiveType === 'CASH' || self.tabActiveType === 'BANK' || self.tabActiveType === 'QRCODE'){
+    if(self.tabActiveType === 'MINIPROGRAM' || self.tabActiveType === 'BARCODE' || self.tabActiveType === 'CASH' || self.tabActiveType === 'BANK' || self.tabActiveType === 'QRCODE'){
       if (self.merchantId) {
         window.open(Config.API + `order/order/export.excel?token=${token}&storeId=${self.storeId}&merchantId=${self.merchantId}&status=${self.status}&orderId=${self.orderNo}&sceneType=${self.tabActiveType}&startDate=${self.startTime}&endDate=${self.endTime}`);
       } else {
@@ -240,17 +241,15 @@ export class revenueDetailReportComponent implements OnInit {
       }
     } else if(self.tabActiveType === 'KOUBEI'){
       if (self.merchantId) {
-        window.open(Config.API + `/koubei/voucher/export.excel?token=${token}&storeId=${self.storeId}&merchantId=${self.merchantId}&ticketCode=${self.orderNo}&startDate=${self.startTime}&endDate=${self.endTime}`);
+        window.open(Config.API + `order/koubei/voucher/export.excel?token=${token}&storeId=${self.storeId}&merchantId=${self.merchantId}&ticketCode=${self.orderNo}&startDate=${self.startTime}&endDate=${self.endTime}`);
       } else {
-        window.open(Config.API + `/koubei/voucher/export.excel?token=${token}&storeId=${self.storeId}&ticketCode=${self.orderNo}&startDate=${self.startTime}&endDate=${self.endTime}`);
+        window.open(Config.API + `order/koubei/voucher/export.excel?token=${token}&storeId=${self.storeId}&ticketCode=${self.orderNo}&startDate=${self.startTime}&endDate=${self.endTime}`);
       }
-    } else if(self.tabActiveType === 'MINIPROGRAM'){
-
     } else {
       if (self.merchantId) {
-        window.open(Config.API + `/meida/voucher/export.excel?token=${token}&storeId=${self.storeId}&merchantId=${self.merchantId}&ticketCode=${self.orderNo}&startDate=${self.startTime}&endDate=${self.endTime}`);
+        window.open(Config.API + `order/meida/voucher/export.excel?token=${token}&storeId=${self.storeId}&merchantId=${self.merchantId}&ticketCode=${self.orderNo}&startDate=${self.startTime}&endDate=${self.endTime}`);
       } else {
-        window.open(Config.API + `/meida/voucher/export.excel?token=${token}&storeId=${self.storeId}&ticketCode=${self.orderNo}&startDate=${self.startTime}&endDate=${self.endTime}`);
+        window.open(Config.API + `order/meida/voucher/export.excel?token=${token}&storeId=${self.storeId}&ticketCode=${self.orderNo}&startDate=${self.startTime}&endDate=${self.endTime}`);
       }
     }
 
