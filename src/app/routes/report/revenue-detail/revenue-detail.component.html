@@ -224,27 +224,29 @@
           <th nz-th class="" *ngIf="tabActiveType === 'BARCODE' || tabActiveType === 'CASH' || tabActiveType === 'QRCODE' || tabActiveType === 'BANK'">商品分类</th>
           <th nz-th class="">商品名称</th>
           <th nz-th class="">技师／小工</th>
+          <th class="">是否指定</th>
           <th nz-th class="">单价(元)</th>
           <th nz-th class="">数量(件)</th>
           <th nz-th class="">金额(元)</th>
         </tr>
       </thead>
       <tbody nz-tbody class="ui-grid-tbody" *ngIf="reportOrderDetail">
-        <tr nz-tbody-tr>
-          <td style="color: #108EE9" *ngIf="tabActiveType === 'BARCODE' || tabActiveType === 'CASH' || tabActiveType === 'QRCODE' || tabActiveType === 'BANK'">{{orderItemDetail[0].categoryName}}</td>
+        <tr nz-tbody-tr *ngFor="let list of orderItemDetail">
+          <td style="color: #108EE9" *ngIf="tabActiveType === 'BARCODE' || tabActiveType === 'CASH' || tabActiveType === 'QRCODE' || tabActiveType === 'BANK'">{{list.categoryName? list.categoryName : '-'}}</td>
           <td style="color: #108EE9" *ngIf="tabActiveType === 'MEIDA'">默认</td>
-          <td style="color: #108EE9" *ngIf="tabActiveType === 'KOUBEI'">{{reportOrderDetail.voucherNo}}</td>
-          <td>{{reportOrderDetail.body}}</td>
-          <td class="">{{orderItemDetail[0].staffName? orderItemDetail[0].staffName : '-'}}／{{orderItemDetail[0].staff2Name? orderItemDetail[0].staff2Name : '-'}}</td>
-          <td>{{orderItemDetail[0].price/100}}</td>
-          <td>{{orderItemDetail[0].num? orderItemDetail[0].num : 1}}</td>
-          <td>{{(orderItemDetail[0].price/100) * (orderItemDetail[0].num? orderItemDetail[0].num : 1)}}</td>
+          <td style="color: #108EE9" *ngIf="tabActiveType === 'KOUBEI'">{{list.voucherNo}}</td>
+          <td>{{list.productName? list.productName:'-'}}</td>
+          <td class="">{{list.staffName? list.staffName : '-'}}／{{list.staff2Name? list.staff2Name : '-'}}</td>
+          <td class="">{{list.assign == 0? '否' : '是'}}</td>
+          <td>{{list.price/100}}</td>
+          <td>{{list.num? list.num : 1}}</td>
+          <td>{{(list.price/100) * (list.num? list.num : 1)}}</td>
         </tr>
-      <tr nz-tbody-tr *ngIf="tabActiveType === 'BARCODE' || tabActiveType === 'CASH' || tabActiveType === 'QRCODE' || tabActiveType === 'BANK'">
-        <td colspan="4" style="color: #000">总计</td>
-        <td>{{totalNum}}</td>
-        <td>{{totalMoney}}</td>
-      </tr>
+        <tr nz-tbody-tr *ngIf="tabActiveType === 'BARCODE' || tabActiveType === 'CASH' || tabActiveType === 'QRCODE' || tabActiveType === 'BANK'">
+          <td colspan="5" style="color: #000">总计</td>
+          <td>{{totalNum}}</td>
+          <td>{{totalMoney}}</td>
+        </tr>
       </tbody>
     </nz-table>
     <div class="orderpage_detail_list_bottom detail_list_bot" *ngIf="reportOrderDetail">
@@ -262,8 +264,6 @@
           <td class="">{{reportOrderDetail.customerName? reportOrderDetail.customerName : '-'}}</td>
           <td class="">手机号</td>
           <td class="">{{reportOrderDetail.phone}}</td>
-          <td class="">是否指定</td>
-          <td class="">{{orderItemDetail[0].assign == 0? '否' : '是'}}</td>
         </tr>
         <tr class="ui-grid-row"  *ngIf="reportOrderDetail && (tabActiveType === 'KOUBEI' || tabActiveType === 'MEIDA' || tabActiveType === 'MINIPROGRAM')">
           <td class="">订单编号</td>

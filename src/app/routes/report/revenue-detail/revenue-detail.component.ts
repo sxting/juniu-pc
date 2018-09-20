@@ -9,6 +9,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as differenceInDays from 'date-fns/difference_in_days';
 import { Config } from '@shared/config/env.config';
 import { APP_TOKEN } from '@shared/define/juniu-define';
+import NP from 'number-precision'
+
 
 @Component({
   selector: 'app-revenue-detail',
@@ -459,12 +461,12 @@ export class revenueDetailReportComponent implements OnInit {
           res.data.orderItem.forEach(function(item: any){
             item.num = item.num? item.num : 1;
             totalNum += item.num;
-            totalMoney += item.price/100 * totalNum;
+            totalMoney += item.price/100 * item.num;
           });
           self.orderItemDetail = res.data.orderItem;
           self.reportOrderDetail = res.data;
           self.totalNum = totalNum;
-          self.totalMoney = totalMoney;
+          self.totalMoney = NP.round(totalMoney,2);
           console.log(self.reportOrderDetail);
         } else {
           this.modalSrv.error({
