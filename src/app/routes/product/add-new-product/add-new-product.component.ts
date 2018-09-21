@@ -353,7 +353,7 @@ export class AddNewProductComponent implements OnInit {
                         storeType: [storeType, [Validators.required]],
                     };
                     this.picId = res.data.picId;
-                    this.imagePath = Config.OSS_IMAGE_URL+`${this.picId}/resize_${102}_${102}/mode_fill`;
+                    this.imagePath = res.data.picUrl? Config.OSS_IMAGE_URL+`${this.picId}/resize_${102}_${102}/mode_fill`: '';
                     this.form = this.fb.group(self.formData);
                     this.selectStoresIds = res.data.storeIds;
                     let StoresIds = res.data.storeIds ? res.data.storeIds.split(',') : '';
