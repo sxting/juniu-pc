@@ -68,12 +68,11 @@ export class productCostsComponent implements OnInit {
   };
 
   ngOnInit() {
+    let self = this;
     this.moduleId = this.route.snapshot.params['menuId'];
-    let startDate = new Date(new Date().getTime() - 7*24*60*60*1000); //提前一周 ==开始时间
-    let endDate = new Date(new Date().getTime() - 24*60*60*1000); //今日 ==结束时
-    this.dateRange = [ startDate,endDate ];
-    this.startTime  = FunctionUtil.changeDate(startDate);
-    this.endTime = FunctionUtil.changeDate(endDate);
+    this.startTime = this.route.snapshot.params['startTime']; //提前一周 ==开始时间
+    this.endTime = this.route.snapshot.params['endTime']; //今日 ==结束时
+    this.dateRange = [ new Date(self.startTime),new Date(self.endTime) ];
   }
 
   //返回门店数据

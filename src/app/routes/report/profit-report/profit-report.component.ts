@@ -7,10 +7,8 @@ import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { ActivatedRoute, Router } from '@angular/router';
 import { yuan } from '@delon/util';
-import * as format from 'date-fns/format';//测试用
 import * as differenceInDays from 'date-fns/difference_in_days';
 import NP from 'number-precision'
-
 
 @Component({
   selector: 'app-profit-report',
@@ -41,7 +39,6 @@ export class profitReportComponent implements OnInit {
   salesPieDetailData: any = [];
   total: string = '';
   index: any;
-  beginDay: any = new Date().getTime();//测试用
   totalProfit: any = 0;//总的利润
 
   constructor(
@@ -129,7 +126,7 @@ export class profitReportComponent implements OnInit {
     }else if( type === 'staff' ){//员工工资
       this.router.navigate(['/report/staff/wages', { moduleId: this.moduleId }]);
     }else if( type === 'product' ){//产品成本
-      this.router.navigate(['/report/product/costs', { moduleId: this.moduleId }])
+      this.router.navigate(['/report/product/costs', { moduleId: this.moduleId,startTime: this.startTime,endTime: this.endTime }])
     }else if( type === 'product' ){//产品成本
       this.router.navigate(['/report/product/costs', { moduleId: this.moduleId }])
     }else if( type === 'paltform'){
