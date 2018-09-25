@@ -70,6 +70,9 @@ export class productCostsComponent implements OnInit {
   ngOnInit() {
     let self = this;
     this.moduleId = this.route.snapshot.params['menuId'];
+    this.storeId = this.route.snapshot.params['storeId'];
+    console.log(this.storeId);
+
     this.startTime = this.route.snapshot.params['startTime']; //提前一周 ==开始时间
     this.endTime = this.route.snapshot.params['endTime']; //今日 ==结束时
     this.dateRange = [ new Date(self.startTime),new Date(self.endTime) ];

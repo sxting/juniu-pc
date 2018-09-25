@@ -109,7 +109,7 @@ export class RevenueReportComponent implements OnInit {
 
     // 点击echart按钮
     checkDetailEchartInfor( typeNo: string ){
-      this.router.navigate(['/report/revenue/detail/report', { moduleId: this.moduleId,typeNo: typeNo, startTime: this.startTime,endTime: this.endTime}]);
+      this.router.navigate(['/report/revenue/detail/report', { moduleId: this.moduleId,typeNo: typeNo, startTime: this.startTime,endTime: this.endTime,storeId: this.storeId }]);
     }
 
     // 线上线下echart图表

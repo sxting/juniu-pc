@@ -98,6 +98,8 @@ export class revenueDetailReportComponent implements OnInit {
   ngOnInit() {
     let self = this;
     this.moduleId = this.route.snapshot.params['menuId'];
+    this.storeId = this.route.snapshot.params['storeId'];
+
     let userInfo;
     if (this.localStorageService.getLocalstorage('User-Info')) {
       userInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info'));

@@ -40,6 +40,8 @@ export class profitReportComponent implements OnInit {
   total: string = '';
   index: any;
   totalProfit: any = 0;//总的利润
+  reportProfitListPage: any = [];
+  reportProfitListPageArr: any = [];//划分页码的数组
 
   constructor(
     private http: _HttpClient,
@@ -122,26 +124,36 @@ export class profitReportComponent implements OnInit {
   // 点击echart按钮
   checkDetailEchartInfor( type : string ){
     if( type === 'home') {
-      this.router.navigate(['/report/rent/costs', { moduleId: this.moduleId }]);
+      this.router.navigate(['/report/rent/costs', { moduleId: this.moduleId,storeId: this.storeId}]);
     }else if( type === 'staff' ){//员工工资
-      this.router.navigate(['/report/staff/wages', { moduleId: this.moduleId }]);
+      this.router.navigate(['/report/staff/wages', { moduleId: this.moduleId,storeId: this.storeId}]);
     }else if( type === 'product' ){//产品成本
-      this.router.navigate(['/report/product/costs', { moduleId: this.moduleId,startTime: this.startTime,endTime: this.endTime }])
+      this.router.navigate(['/report/product/costs', { moduleId: this.moduleId,startTime: this.startTime,endTime: this.endTime,storeId: this.storeId}])
     }else if( type === 'product' ){//产品成本
-      this.router.navigate(['/report/product/costs', { moduleId: this.moduleId }])
+      this.router.navigate(['/report/product/costs', { moduleId: this.moduleId,storeId: this.storeId }])
     }else if( type === 'paltform'){
-      this.router.navigate(['/report/platform/maid', { moduleId: this.moduleId }])
+      this.router.navigate(['/report/platform/maid', { moduleId: this.moduleId,storeId: this.storeId }])
     }else{//支付通道费率
-      this.router.navigate(['/report/payment/channel/rate', { moduleId: this.moduleId }])
+      this.router.navigate(['/report/payment/channel/rate', { moduleId: this.moduleId,storeId: this.storeId }])
     }
   }
 
   // 切换分页码
-  // paginate(event: any) {
-  //   this.pageNo = event;
-  //   this.batchQuery.pageNo = this.pageNo;
-  //   this.profitIndexList(this.batchQuery);//利润报表首页－列表信息
-  // }
+  paginate(event: any) {
+    let self = this;
+    this.pageNo = event;
+    let index = this.pageNo - 1;
+    self.reportProfitListPage = self.reportProfitListPageArr[index];
+  }
+
+  //划分数据
+  paginateChange(list: any){
+    let res = [];
+    for (var i = 0, len = list.length; i < len; i += 10) {
+      res.push(list.slice(i, i + 10));
+    }
+    return res;
+  }
 
   // 利润报表首页列表信息
   profitIndexList(batchQuery: any){
@@ -152,7 +164,11 @@ export class profitReportComponent implements OnInit {
         self.loading = false;
         if (res.success) {
           self.reportProfitList = res.data.items? res.data.items : [];
-          self.totalElements = res.data.pageInfo? res.data.pageInfo.countTotal : 0;
+          self.totalElements = res.data.items.length;
+          self.reportProfitListPageArr = self.paginateChange(self.reportProfitList);
+          self.reportProfitListPage = self.reportProfitListPageArr[0];
+          console.log(self.reportProfitListPageArr);
+
           //利润报表总的趋势图
           let totalProfit = 0;
           let visitData = [];
@@ -165,7 +181,6 @@ export class profitReportComponent implements OnInit {
           });
           self.visitData = visitData;
           self.totalProfit = NP.round(totalProfit/100,2);
-          console.log(self.totalProfit);
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',

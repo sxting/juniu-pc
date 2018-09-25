@@ -60,6 +60,8 @@ export class settingStaffWagesComponent implements OnInit {
 
   ngOnInit() {
     this.moduleId = this.route.snapshot.params['moduleId'];
+    this.storeId = this.route.snapshot.params['storeId'];
+
     this.form = this.fb.group({
       items: this.fb.array([]),
     });
