@@ -482,20 +482,20 @@
                           ¥{{xfCardList.rules[xfCardList.ruleIndex].price/100}}
                         </div> -->
                         <div nz-col nzSpan="12" *ngIf="(xfCardList.type === 'REBATE')&&xyVip">
-                          <input nz-input style="width:200px" id="name" name="name" type="numeber" [(ngModel)]="REBATEValue" (ngModelChange)="REBATEValueFun($event)"
+                          <input nz-input style="width:200px" id="name" name="name" type="numeber" maxlength="10" [(ngModel)]="REBATEValue" (ngModelChange)="REBATEValueFun($event)"
                             placeholder="充值金额">
                         </div>
                       </div>
                       <div nz-col nzSpan="24" *ngIf="xfCardList.CardTypeS === 'chongzhi'&&xfCardList.type === 'STORED'">
                         <div nz-col nzSpan="5" class="textAline" *ngIf="xfCardList.CardTypeS === 'chongzhi'&&xfCardList.type === 'STORED'">充值</div>
                         <div nz-col nzSpan="6" *ngIf="(xfCardList.type === 'STORED')&&xyVip">
-                          <input nz-input style="width:100px" id="name" name="name" type="numeber" [(ngModel)]="STOREDValue" (ngModelChange)="STOREDValueFun($event)"
+                          <input nz-input style="width:100px" id="name" name="name" type="numeber" maxlength="10" [(ngModel)]="STOREDValue" (ngModelChange)="STOREDValueFun($event)"
                             placeholder="充值金额">
                         </div>
 
                         <div nz-col nzSpan="6" class="textAline" *ngIf="xfCardList.CardTypeS === 'chongzhi'&&xfCardList.type === 'STORED'">赠送</div>
                         <div nz-col nzSpan="6" *ngIf="(xfCardList.type === 'STORED')&&xyVip">
-                          <input nz-input style="width:100px" id="name" name="name" type="numeber" [(ngModel)]="STOREDextraMoney" (ngModelChange)="STOREDextraMoneyFun($event)"
+                          <input nz-input style="width:100px" id="name" name="name" type="numeber" maxlength="10" [(ngModel)]="STOREDextraMoney" (ngModelChange)="STOREDextraMoneyFun($event)"
                             placeholder="赠送金额">
                         </div>
                       </div>
@@ -648,7 +648,7 @@
             <tbody>
               <tr *ngFor="let item of CustomerData">
                 <td>{{item.juniuoModel.dateCreated}}</td>
-                <td>{{item.bizTypeName}}</td>
+                <td>{{item.consumeProductNames}}</td>
                 <td>{{item.payTypeName}}</td>
                 <td>{{item.operationUserName}}</td>
                 <td>{{item.money / 100}}</td>
