@@ -255,12 +255,82 @@ export class ReportService {
   }
 
   // 营收报表订单详情
-  revenuetOrderDetail(orderId: any) {
-    let apiUrl = this.api2 + '/order/' + orderId + '/detail.json';
+  revenuetOrderDetail(data: any) {
+    let apiUrl = this.api2 + '/order/' + data + '/detail.json';
     return this.http.get(apiUrl)
       .map((response: Response) => response)
       .catch(error => {
         return Observable.throw(error);
       });
   }
+
+  // 会员卡消耗报表-每日耗卡／办卡金额对比，受门店和月份变化控制
+  memberCardMonthUsed(data: any) {
+    let apiUrl = this.api1 + '/profit/memberCardMonthUsed.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  // 会员卡消耗报表-各种卡类型消耗情况，只受门店变化控制
+  memberCardTotalUsed(data: any) {
+    let apiUrl = this.api1 + '/profit/memberCardTotalUsed.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  //口碑营收列表分页
+  koubeiVoucherListInfor(data: any) {
+    let apiUrl = this.api2 + '/koubei/voucher/page.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  //口碑营收详情
+  koubeiVoucherDetailInfor(data: any) {
+    let apiUrl = this.api2 + '/koubei/voucher/detail.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+  //美大验券营收列表分页
+  meidaVoucherListInfor(data: any) {
+    let apiUrl = this.api2 + '/meida/voucher/page.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  //美大验券营收详情
+  meidaVoucherDetailInfor(data: any) {
+    let apiUrl = this.api2 + '/meida/voucher/detail.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  //商品报表信息
+  getProductReportInfor(data: any) {
+    let apiUrl = this.api1 + '/profit/productReport.json';
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
 }

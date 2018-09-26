@@ -28,7 +28,7 @@
 <div class="echart-box" nz-row [nzGutter]="24">
   <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="12">
     <nz-card [nzBordered]="false" nzTitle="" [nzBodyStyle]="{'padding.px': 12}" style="height: 400px" class="sales-card">
-      <g2-card [title]="'总利润'" total="8,846" contentHeight="260" [bordered]="false" [action]="visitAction" >
+      <g2-card [title]="'总利润'" [total]="totalProfit" contentHeight="260" [bordered]="false" [action]="visitAction" >
         <ng-template #visitAction>
           <nz-tooltip [nzTitle]="'总利润：一段时间的总营收减去这段时间内的总成本'">
             <i nz-tooltip class="anticon anticon-info-circle-o" style="font-size: 24px;"></i>
@@ -50,6 +50,7 @@
               [hasLegend]="true"
               title="总成本"
               subTitle="总成本"
+              [lineWidth]="4"
               [total]="total"
               [valueFormat]="format"
               [data]="salesPieData"
@@ -75,14 +76,14 @@
 </div>
 
 <nz-card [nzBordered]="false">
-  <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="reportProfitList">
+  <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="reportProfitListPage">
     <thead nz-thead class="ui-grid-thead">
     <tr>
       <th nz-th class="" *ngFor="let item of theadName;let i = index">{{item}}</th>
     </tr>
     </thead>
     <tbody nz-tbody class="ui-grid-tbody">
-    <tr nz-tbody-tr *ngFor="let item of reportProfitList; let i = index">
+    <tr nz-tbody-tr *ngFor="let item of reportProfitListPage; let i = index">
       <td style="color: #368ff7">{{item.date}}</td>
       <td>{{item.revenue/100}}</td>
       <td>{{item.cost/100}}</td>

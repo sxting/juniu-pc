@@ -60,16 +60,11 @@ export class settingStaffWagesComponent implements OnInit {
 
   ngOnInit() {
     this.moduleId = this.route.snapshot.params['moduleId'];
+    this.storeId = this.route.snapshot.params['storeId'];
+
     this.form = this.fb.group({
       items: this.fb.array([]),
     });
-    // let userInfo;
-    // if (this.localStorageService.getLocalstorage('User-Info')) {
-    //   userInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info'));
-    // }
-    // if (userInfo) {
-    //   this.merchantId = userInfo.merchantId;
-    // }
   }
 
   createUser(): FormGroup {
@@ -143,28 +138,14 @@ export class settingStaffWagesComponent implements OnInit {
         if (res.success) {
           console.log(res.data);
           self.setStaffWagesList = res.data.items? res.data.items : [];
-          if(self.setStaffWagesList.length === 0){
-            let haha = [
-              {
-                basicWages: 0,
-                roleName: "店长",
-                staffId: "0000001",
-                staffName: "张三",
-                storeId: "66666666666",
-                storeName: "霍影店",
-                wagesMonth: "100000"
-              }
-            ];
-            self.setStaffWagesList = haha;
-            this.form = this.fb.group({
-              items: this.fb.array([]),
-            });
-            haha.forEach(i => {
-              let field = this.createUser();
-              field.patchValue(i);
-              this.items.push(field);
-            });
-          }
+          this.form = this.fb.group({
+            items: this.fb.array([]),
+          });
+          self.setStaffWagesList.forEach(i => {
+            let field = this.createUser();
+            field.patchValue(i);
+            this.items.push(field);
+          });
           self.totalElements = res.data.pageInfo? res.data.pageInfo.countTotal : 0;
         } else {
           this.modalSrv.error({
@@ -188,6 +169,7 @@ export class settingStaffWagesComponent implements OnInit {
         self.loading = false;
         if (res.success) {
           console.log(res.data);
+          this.msg.success(`修改员工工资成功`);
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',

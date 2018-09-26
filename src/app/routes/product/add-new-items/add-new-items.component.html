@@ -65,6 +65,17 @@
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7" nzFor="costPrice">项目成本(元)</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <input nz-input formControlName="costPrice" maxlength="11" autocomplete="off" id="costPrice" placeholder="请输入产品价格">
+        <ng-container *ngIf="costPrice.dirty || costPrice.touched">
+          <nz-form-explain class="errorTips" *ngIf="costPrice.errors?.pattern">服务项目成本只能是整数或者带有两位小数的数字</nz-form-explain>
+          <nz-form-explain class="errorTips" *ngIf="costPrice.errors?.max">服务项目成本范围“0.01-99999999.99”</nz-form-explain>
+          <nz-form-explain class="errorTips" *ngIf="costPrice.errors?.min">服务项目成本范围“0.01-99999999.99”</nz-form-explain>
+        </ng-container>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7" nzFor="storeType">适用门店</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
         <nz-radio-group formControlName="storeType">

@@ -7,9 +7,8 @@ import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { ActivatedRoute, Router } from '@angular/router';
 import { yuan } from '@delon/util';
-import * as format from 'date-fns/format';//测试用
 import * as differenceInDays from 'date-fns/difference_in_days';
-
+import NP from 'number-precision'
 
 @Component({
   selector: 'app-profit-report',
@@ -33,14 +32,16 @@ export class profitReportComponent implements OnInit {
   pageNo: any = 1;//页码
   pageSize: any = '10';//一页展示多少数据
   totalElements: any = 0;//商品总数  expandForm = false;//展开
-  reportProfitList: any = [''];
+  reportProfitList: any = [];
   activeIndex: any = 0;
   salesPieData = [];//成本占比
   visitData: any[] = [];
   salesPieDetailData: any = [];
   total: string = '';
   index: any;
-  beginDay: any = new Date().getTime();//测试用
+  totalProfit: any = 0;//总的利润
+  reportProfitListPage: any = [];
+  reportProfitListPageArr: any = [];//划分页码的数组
 
   constructor(
     private http: _HttpClient,
@@ -58,8 +59,6 @@ export class profitReportComponent implements OnInit {
     storeId: this.storeId,
     endDate: this.endTime,
     startDate: this.startTime,
-    pageNo: this.pageNo,
-    pageSize: this.pageSize
   };
 
   ngOnInit() {
@@ -72,13 +71,6 @@ export class profitReportComponent implements OnInit {
       this.merchantId = userInfo.merchantId;
     }
     this.ifStoresAll = userInfo.staffType === "MERCHANT"? true : false;
-    this.total = yuan(this.salesPieData.reduce((pre, now) => now.y + pre, 0));
-    for (let i = 0; i < 20; i += 1) {
-      this.visitData.push({
-        x: format(new Date( this.beginDay + (1000 * 60 * 60 * 24 * i)), 'YYYY-MM-DD'),
-        y: Math.floor(Math.random() * 100) + 10,
-      });
-    }
     let startDate = new Date(new Date().getTime() - 7*24*60*60*1000); //提前一周 ==开始时间
     let endDate = new Date(new Date().getTime() - 24*60*60*1000); //今日 ==结束时
     this.dateRange = [ startDate,endDate ];
@@ -96,7 +88,6 @@ export class profitReportComponent implements OnInit {
     this.batchQuery.storeId = this.storeId;
     this.batchQuery.endDate = this.endTime;
     this.batchQuery.startDate = this.startTime;
-    this.batchQuery.pageNo = 1;
     this.profitIndexList(this.batchQuery);//利润报表首页－列表信息
     this.profitIndexView(this.batchQuery);//利润报表首页－首页图表
   }
@@ -117,8 +108,12 @@ export class profitReportComponent implements OnInit {
   //选择日期
   onDateChange(date: Date): void {
     this.dateRange = date;
-    this.startTime = FunctionUtil.changeDateToSeconds(this.dateRange[0]);
-    this.endTime = FunctionUtil.changeDateToSeconds(this.dateRange[1]);
+    this.startTime = FunctionUtil.changeDate(this.dateRange[0]);
+    this.endTime = FunctionUtil.changeDate(this.dateRange[1]);
+    this.batchQuery.endDate = this.endTime;
+    this.batchQuery.startDate = this.startTime;
+    this.profitIndexList(this.batchQuery);//利润报表首页－列表信息
+    this.profitIndexView(this.batchQuery);//利润报表首页－首页图表
   }
 
   // 切换tab按钮
@@ -129,25 +124,35 @@ export class profitReportComponent implements OnInit {
   // 点击echart按钮
   checkDetailEchartInfor( type : string ){
     if( type === 'home') {
-      this.router.navigate(['/report/rent/costs', { moduleId: this.moduleId }]);
+      this.router.navigate(['/report/rent/costs', { moduleId: this.moduleId,storeId: this.storeId}]);
     }else if( type === 'staff' ){//员工工资
-      this.router.navigate(['/report/staff/wages', { moduleId: this.moduleId }]);
+      this.router.navigate(['/report/staff/wages', { moduleId: this.moduleId,storeId: this.storeId}]);
     }else if( type === 'product' ){//产品成本
-      this.router.navigate(['/report/product/costs', { moduleId: this.moduleId }])
+      this.router.navigate(['/report/product/costs', { moduleId: this.moduleId,startTime: this.startTime,endTime: this.endTime,storeId: this.storeId}])
     }else if( type === 'product' ){//产品成本
-      this.router.navigate(['/report/product/costs', { moduleId: this.moduleId }])
+      this.router.navigate(['/report/product/costs', { moduleId: this.moduleId,storeId: this.storeId }])
     }else if( type === 'paltform'){
-      this.router.navigate(['/report/platform/maid', { moduleId: this.moduleId }])
+      this.router.navigate(['/report/platform/maid', { moduleId: this.moduleId,storeId: this.storeId }])
     }else{//支付通道费率
-      this.router.navigate(['/report/payment/channel/rate', { moduleId: this.moduleId }])
+      this.router.navigate(['/report/payment/channel/rate', { moduleId: this.moduleId,storeId: this.storeId }])
     }
   }
 
   // 切换分页码
   paginate(event: any) {
+    let self = this;
     this.pageNo = event;
-    this.batchQuery.pageNo = this.pageNo;
-    this.profitIndexList(this.batchQuery);//利润报表首页－列表信息
+    let index = this.pageNo - 1;
+    self.reportProfitListPage = self.reportProfitListPageArr[index];
+  }
+
+  //划分数据
+  paginateChange(list: any){
+    let res = [];
+    for (var i = 0, len = list.length; i < len; i += 10) {
+      res.push(list.slice(i, i + 10));
+    }
+    return res;
   }
 
   // 利润报表首页列表信息
@@ -159,7 +164,23 @@ export class profitReportComponent implements OnInit {
         self.loading = false;
         if (res.success) {
           self.reportProfitList = res.data.items? res.data.items : [];
-          self.totalElements = res.data.pageInfo? res.data.pageInfo.countTotal : 0;
+          self.totalElements = res.data.items.length;
+          self.reportProfitListPageArr = self.paginateChange(self.reportProfitList);
+          self.reportProfitListPage = self.reportProfitListPageArr[0];
+          console.log(self.reportProfitListPageArr);
+
+          //利润报表总的趋势图
+          let totalProfit = 0;
+          let visitData = [];
+          res.data.items.forEach(function(item: any){
+            totalProfit += item.profit;
+            visitData.push({
+                x: item.date,
+                y:  NP.round(totalProfit/100,2)
+            })
+          });
+          self.visitData = visitData;
+          self.totalProfit = NP.round(totalProfit/100,2);
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',
@@ -185,21 +206,21 @@ export class profitReportComponent implements OnInit {
           self.salesPieData = [
             {
               x: '房租水电',
-              y: res.data.houseCost? res.data.houseCost : 0,
+              y: res.data.houseCost? res.data.houseCost/100 : 0,
               type: 'home'
             },
             {
               x: '产品成本',
-              y: res.data.productCost? res.data.productCost : 0,
+              y: res.data.productCost? res.data.productCost/100 : 0,
               type: 'product'
             },
             {
               x: '员工工资',
-              y: res.data.staffWagesCost? res.data.staffWagesCost : 0,
+              y: res.data.staffWagesCost? res.data.staffWagesCost/100 : 0,
               type: 'staff'
             }
           ];
-
+          this.total = yuan(this.salesPieData.reduce((pre, now) => now.y + pre, 0));
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',

@@ -57,15 +57,9 @@ export class staffWagesReportComponent implements OnInit {
   };
 
   ngOnInit() {
-
     this.moduleId = this.route.snapshot.params['moduleId'];
-    // let userInfo;
-    // if (this.localStorageService.getLocalstorage('User-Info')) {
-    //   userInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info'));
-    // }
-    // if (userInfo) {
-    //   this.merchantId = userInfo.merchantId;
-    // }
+    this.storeId = this.route.snapshot.params['storeId'];
+
     let month = this.reportDate.getMonth()+1;       //获取当前月份(0-11,0代表1月)
     let changemonth = month < 10 ? '0' + month : '' + month;
     this.reportDateChange = this.reportDate.getFullYear()+'-'+changemonth;
@@ -123,7 +117,7 @@ export class staffWagesReportComponent implements OnInit {
 
   //  员工工资设定
   staffWagesSetting(){
-    this.router.navigate(['/report/setting/staff/wages', { moduleId: this.moduleId }]);
+    this.router.navigate(['/report/setting/staff/wages', { moduleId: this.moduleId,storeId: this.storeId }]);
   }
 
   // 获取员工工资成本列表信息

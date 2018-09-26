@@ -1,5 +1,7 @@
 @import 'node_modules/@delon/theme/styles/default';
-
+.ad-pie .legend {
+  min-width: 220px!important;
+}
 :host ::ng-deep {
   .icon-group {
     transition: color 0.32s;
@@ -55,7 +57,7 @@
   position: absolute;
   right: 0;
   top: 13px;
-  z-index: 10000;
+  z-index: 10;
 }
 .icon {
   background-color: #4fa4fd;
@@ -100,3 +102,11 @@
 .rank-list li .span3.bg{
   color: #FF6600;
 }
+.tips-nothing{
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  padding: 50px 0;
+  color: #ff6600;
+}
+

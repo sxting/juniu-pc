@@ -22,10 +22,14 @@ export class StoresInforComponent implements OnInit {
   public moduleId: string = '';
 
   storeList: any = [];
-  storeId: string = '';
   storeName: string = '';
-  alipayShopId: string = '';
   store: any;
+
+  @Input()
+  public storeId : string = '';
+
+  @Input()
+  public alipayShopId: string = '';
 
   @Input()
   widthNum: boolean = false;
@@ -69,6 +73,7 @@ export class StoresInforComponent implements OnInit {
     if(UserInfo.staffType === 'STORE'){
       this.ifStoresAll = false;
     }
+    console.log(this.storeId);
     this.getStoresInfor();//门店选择
   }
 
@@ -107,6 +112,7 @@ export class StoresInforComponent implements OnInit {
             });
           }
           if (self.ifStoresAll) {//需要全部门店
+            console.log(0);
             let list = {
               storeId: '',
               branchName: '全部门店'
@@ -116,16 +122,54 @@ export class StoresInforComponent implements OnInit {
             } else {
               storeList.splice(0, 0, list);//给数组第一位插入值
             }
+            console.log(this.storeId);
+            if(this.storeId){
+              for(let i=0; i<storeList.length; i++) {
+                if(this.storeId == storeList[i].storeId) {
+                  this.store = storeList[i];
+                  this.storeName = storeList[i] ? storeList[i].branchName : '';
+                }
+              }
+            }else{
+              this.storeId = '';
+              this.alipayShopId = '';
+              this.storeName = storeList[0] ? storeList[0].branchName : '';
+              this.store = storeList[0];
+            }
             this.storeList = storeList;
-            this.storeId = '';
-            this.alipayShopId = '';
           } else {
             this.storeList = storeList;
-            this.storeId = this.storeList[0] ? this.storeList[0].storeId : '';
-            this.storeName = this.storeList[0] ? this.storeList[0].branchName : '';
-            this.alipayShopId = this.storeList[0] ? this.storeList[0].alipayShopId : '';
+            if(this.alipayShop) {
+              if(this.alipayShopId || this.storeId) {
+                this.storeId = this.alipayShopId;
+                for(let i=0; i<this.storeList.length; i++) {
+                  if(this.storeId == this.storeList[i].storeId) {
+                    this.store = this.storeList[i];
+                  }
+                }
+              } else {
+                this.store = this.storeList[0];
+                this.alipayShopId = this.storeList[0] ? this.storeList[0].alipayShopId : '';
+                this.storeName = this.storeList[0] ? this.storeList[0].branchName : '';
+                this.storeId = this.storeList[0] ? this.storeList[0].storeId : '';
+              }
+            }
+            else {
+              if(this.storeId){
+                for(let i=0; i<this.storeList.length; i++) {
+                  if(this.storeId == this.storeList[i].storeId) {
+                    this.store = this.storeList[i];
+                    this.storeName = this.storeList[i] ? this.storeList[i].branchName : '';
+                  }
+                }
+              }else{
+                this.store = this.storeList[0];
+                this.storeId = this.storeList[0] ? this.storeList[0].storeId : '';
+                this.storeName = this.storeList[0] ? this.storeList[0].branchName : '';
+              }
+              this.alipayShopId = this.storeList[0] ? this.storeList[0].alipayShopId : '';
+            }
           }
-          this.store = this.storeList[0];
           this.storeListPush.emit({ storeList: self.storeList });
           this.storeIdOutput.emit({ storeId: self.storeId, storeName: this.storeName, alipayShopId: this.alipayShopId });
         } else {

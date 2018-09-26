@@ -14,14 +14,17 @@
   <div nz-form [nzLayout]="'inline'"  class="search__form">
     <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
       <nz-col nzMd="8" nzSm="24">
-        <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth"
-                         (storeListPush)="storeListPush($event)" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
+        <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [storeId]="storeId"
+                         [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth"
+                         (storeListPush)="storeListPush($event)"
+                         (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
       </nz-col>
       <nz-col nzMd="8" nzSm="24">
         <nz-form-item>
           <nz-form-label nzFor="productId">选择日期</nz-form-label>
           <nz-form-control class="box-time-pick">
-            <nz-range-picker nzFormat="yyyy-MM-dd"  [(ngModel)]="dateRange" (ngModelChange)="onDateChange($event)" nzShowTime></nz-range-picker>
+            <nz-range-picker nzFormat="yyyy-MM-dd"  [(ngModel)]="dateRange" [nzDisabledDate]="disabledDate"
+                             (ngModelChange)="onDateChange($event)" nzShowTime></nz-range-picker>
           </nz-form-control>
         </nz-form-item>
       </nz-col>
@@ -47,9 +50,9 @@
     <tbody nz-tbody class="ui-grid-tbody">
     <tr nz-tbody-tr *ngFor="let item of productCostListInfor;let i = index">
       <td nz-td>{{item.productTypeText}}</td>
-      <td nz-td>{{item.productName}}</td>
-      <td nz-td>{{item.unitPrice? item.unitPrice/100 : 0}}</td>
-      <td nz-td>{{item.unitCost? item.unitCost/100 : 0 }}</td>
+      <td nz-td>{{item.productName? item.productName : '-'}}</td>
+      <!--<td nz-td>{{item.unitPrice? item.unitPrice/100 : 0}}</td>-->
+      <!--<td nz-td>{{item.unitCost? item.unitCost/100 : 0 }}</td>-->
       <td nz-td>{{item.saleCount}}</td>
       <td nz-td>{{item.totalCost? item.totalCost/100 : 0}}</td>
     </tr>

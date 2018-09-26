@@ -94,8 +94,12 @@ export class RevenueReportComponent implements OnInit {
     //选择日期
     onDateChange(date: Date): void {
       this.dateRange = date;
-      this.startTime = FunctionUtil.changeDateToSeconds(this.dateRange[0]);
-      this.endTime = FunctionUtil.changeDateToSeconds(this.dateRange[1]);
+      this.startTime = FunctionUtil.changeDate(this.dateRange[0]) + ' 00:00:00';
+      this.endTime = FunctionUtil.changeDate(this.dateRange[1]) + ' 23:59:59';
+      this.batchQuery.endDate = this.endTime;
+      this.batchQuery.startDate = this.startTime;
+      this.getRevenueReportInfor(this.batchQuery);//营收报表-营收类别占比
+      this.revenuetRendInfor(this.batchQuery);//营收报表-营收报表走势图
     }
 
     // 切换tab按钮
@@ -105,7 +109,7 @@ export class RevenueReportComponent implements OnInit {
 
     // 点击echart按钮
     checkDetailEchartInfor( typeNo: string ){
-      this.router.navigate(['/report/revenue/detail/report', { moduleId: this.moduleId,typeNo: typeNo, startTime: this.startTime,endTime: this.endTime}]);
+      this.router.navigate(['/report/revenue/detail/report', { moduleId: this.moduleId,typeNo: typeNo, startTime: this.startTime,endTime: this.endTime,storeId: this.storeId }]);
     }
 
     // 线上线下echart图表
