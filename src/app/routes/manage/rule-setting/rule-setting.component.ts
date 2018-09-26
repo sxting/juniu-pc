@@ -6,6 +6,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ManageService } from "../shared/manage.service";
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
+import NP from 'number-precision';
 
 @Component({
   selector: 'app-rule-setting',
@@ -242,9 +243,9 @@ export class RuleSettingComponent implements OnInit {
           (res: any) => {
               if (res.success) {
                 this.loading = false;
-                let deductMoney = res.data.type === 'MONEY'?  parseFloat(res.data.deductMoney)/100 : null;
-                let assignRate = res.data.type === 'RATE'?  parseFloat(res.data.assignRate)*100 : null;
-                let normalRate = res.data.type === 'RATE'?  parseFloat(res.data.normalRate)*100 : null;
+                let deductMoney = res.data.type === 'MONEY'?  NP.round(Number(res.data.deductMoney)/100,2): null
+                let assignRate = res.data.type === 'RATE'?  NP.round(Number(res.data.assignRate)*100,2): null;
+                let normalRate = res.data.type === 'RATE'?  NP.round(Number(res.data.normalRate)*100,2): null;
                 this.formData = {
                   ruleName: [ res.data.ruleName, [ Validators.maxLength(20)]],
                   assignRate: [ assignRate ,Validators.compose([ Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`)])],//指定技师
@@ -407,7 +408,6 @@ export class RuleSettingComponent implements OnInit {
           (res: any) => {
           if (res.success) {
               this.loading = false;
-
               res.data.forEach(function (item: any) {
                   let arr = [];
                   item.change = true;
@@ -464,7 +464,7 @@ export class RuleSettingComponent implements OnInit {
               self.submitting = false;
               if (res.success) {
                 self.msg.success(`创建成功`);
-                self.router.navigate(['/manage/staff/commission/list']);
+                self.router.navigate(['/manage/staff/commission/list', {storeId: this.storeId}]);
               } else {
                   this.modalSrv.error({
                       nzTitle: '温馨提示',
@@ -487,7 +487,7 @@ export class RuleSettingComponent implements OnInit {
         self.submitting = false;
         if (res.success) {
           self.msg.success(`修改成功`);
-          self.router.navigate(['/manage/staff/commission/list']);
+          self.router.navigate(['/manage/staff/commission/list', {storeId: this.storeId}]);
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',
