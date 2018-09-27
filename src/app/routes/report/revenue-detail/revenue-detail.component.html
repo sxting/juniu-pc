@@ -199,7 +199,7 @@
         </tr>
       </table>
     </div>
-    <nz-table [nzNoResult]="''" #basicTable [nzShowPagination]="false" [nzData]="orderItemDetail" *ngIf="tabActiveType === 'BARCODE' || tabActiveType === 'CASH' || tabActiveType === 'QRCODE' || tabActiveType === 'BANK'">
+    <nz-table [nzNoResult]="''" #basicTable [nzShowPagination]="false" [nzData]="orderItemDetail" *ngIf="tabActiveType === 'MINIPROGRAM' || tabActiveType === 'BARCODE' || tabActiveType === 'CASH' || tabActiveType === 'QRCODE' || tabActiveType === 'BANK'">
       <thead nz-thead class="ui-grid-thead">
         <tr>
           <th nz-th class="">商品分类</th>
