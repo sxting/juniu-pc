@@ -116,47 +116,29 @@
         <th nz-th class="" *ngIf="tabActiveType === 'MINIPROGRAM'">购买门店</th>
         <th nz-th class="" *ngIf="tabActiveType === 'KOUBEI' || tabActiveType === 'MEIDA'">收银员</th>
         <th nz-th class="" *ngIf="tabActiveType === 'MINIPROGRAM'">订单类型</th>
-        <th nz-th class="" *ngIf="tabActiveType === 'MINIPROGRAM'">操作类型</th>
         <th nz-th class="">金额</th>
         <th nz-th class="">操作</th>
       </tr>
     </thead>
     <tbody nz-tbody class="ui-grid-tbody">
     <tr nz-tbody-tr *ngFor="let item of reportOrderList; let i = index">
-      <td style="color: #368ff7" *ngIf="tabActiveType === 'KOUBEI'">{{item.voucherNo}}</td>
-      <td *ngIf="tabActiveType === 'KOUBEI'">{{item.usedDate}}</td>
+      <td style="color: #368ff7" *ngIf="tabActiveType === 'KOUBEI'|| tabActiveType === 'MEIDA'">{{item.voucherNo}}</td>
+      <td *ngIf="tabActiveType === 'KOUBEI'|| tabActiveType === 'MEIDA'">{{item.usedDate}}</td>
+      <td *ngIf="tabActiveType === 'MINIPROGRAM'">{{item.dateCreated}}</td>
       <td>{{item.body}}</td>
-      <td *ngIf="tabActiveType === 'KOUBEI'">{{item.usedStoreName}}</td>
-      <td class="" *ngIf="tabActiveType === 'KOUBEI' || tabActiveType === 'MEIDA'">{{item.operationName}}</td>
-      <!--<td>{{item.payTypeName}}</td>-->
-      <!--<td>{{item.storeName}}</td>-->
-      <!--<td class="panduan" style="font-size: 0">-->
-        <!--<span class="iconfont icon-dian" [class.paid]="item.status === 'PAID'"></span>-->
-        <!--<span style="font-size: 14px">{{item.statusName}}</span>-->
-      <!--</td>-->
+      <td *ngIf="tabActiveType === 'KOUBEI'|| tabActiveType === 'MEIDA'">{{item.usedStoreName}}</td>
+      <td class="" *ngIf="tabActiveType === 'KOUBEI' || tabActiveType === 'MEIDA'">{{item.operationName? item.operationName : '-'}}</td>
+      <td *ngIf="tabActiveType === 'MINIPROGRAM'">{{item.storeName}}</td>
+      <td *ngIf="tabActiveType === 'MINIPROGRAM'" class="panduan" style="font-size: 0">
+        <span class="iconfont icon-dian" [class.paid]="item.status === 'PAID'"></span>
+        <span style="font-size: 14px">{{item.statusName}}</span>
+      </td>
       <td>{{item.amount/100}}</td>
-      <td style="color: #108EE9;cursor: pointer" (click)="checkDetailInfor(orderDetail,item.orderNo,item.status)">查看详情</td>
+      <td style="color: #108EE9;cursor: pointer" *ngIf="tabActiveType === 'KOUBEI'|| tabActiveType === 'MEIDA'" (click)="checkDetailInfor(orderDetail,item.voucherNo,item.status)">查看详情</td>
+      <td style="color: #108EE9;cursor: pointer" *ngIf="tabActiveType === 'MINIPROGRAM'" (click)="checkDetailInfor(orderDetail,item.orderNo,item.status)">查看详情</td>
     </tr>
     </tbody>
   </nz-table>
-
-
-  <!--private String orderId;-->
-  <!--private Date orderDate;-->
-  <!--@ExcelColumn(value = "核销码",col = 1)-->
-  <!--private String voucherNo;-->
-  <!--@ExcelColumn(value = "核销时间",col = 2)-->
-  <!--private Date usedDate;-->
-  <!--@ExcelColumn(value = "商品名称",col = 3)-->
-  <!--private String body;//商品名称-->
-  <!--private String usedStoreId;-->
-  <!--@ExcelColumn(value = "核销门店",col = 4)-->
-  <!--private String usedStoreName;-->
-  <!--private String operationId;-->
-  <!--@ExcelColumn(value = "收银员",col = 5)-->
-  <!--private String operationName;-->
-  <!--@ExcelColumn(value = "金额",col = 6)-->
-  <!--private Long amount;-->
   <div class="nzPaginationBox">
     <nz-pagination class="nzPagination" style="float: right;padding: 20px 0" [nzTotal]="totalElements" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
   </div>

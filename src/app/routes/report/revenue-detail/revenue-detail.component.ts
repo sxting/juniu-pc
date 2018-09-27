@@ -274,13 +274,41 @@ export class revenueDetailReportComponent implements OnInit {
 
   //查询条件筛选
   getData(){
-    this.batchQuery.storeId = this.storeId;
-    this.batchQuery.status = this.status? this.status : '';
-    this.batchQuery.orderId = this.orderNo? this.orderNo : '';
+    let self = this;
+    /******************======   口碑  美大===========************/
+    this.batchQueryKoubei.pageNo = 1;
+    this.batchQueryKoubei.startDate = this.startTime;
+    this.batchQueryKoubei.endDate = this.endTime;
+    this.batchQueryKoubei.status = this.status? this.status : '';
+    this.batchQueryKoubei.ticketCode = this.orderNo? this.orderNo : '';
+    this.batchQueryKoubei.storeId = this.storeId? this.storeId : '';
+
+    /******************======   扫码 现金 银行等等 ===========************/
+    this.batchQuery.pageNo = 1;
     this.batchQuery.sceneType = this.tabActiveType;
     this.batchQuery.startDate = this.startTime;
     this.batchQuery.endDate = this.endTime;
-    this.revenuetOrderList(this.batchQuery);//营收报表订单详情页面
+    this.batchQuery.status = this.status? this.status : '';
+    this.batchQuery.orderId = this.orderNo? this.orderNo : '';
+    this.batchQuery.storeId = this.storeId? this.storeId : '';
+
+    if(self.tabActiveType === 'BARCODE' || self.tabActiveType === 'CASH' || self.tabActiveType === 'BANK' || self.tabActiveType === 'QRCODE'){
+      this.orderTypeText = '订单编号';
+      this.orderTypeTitle = '订单状态';
+      this.revenuetOrderList(this.batchQuery);//营收报表订单详情页面
+
+    } else if(self.tabActiveType === 'KOUBEI'){
+      this.orderTypeText = '核销码';
+      this.koubeiVoucherListInfor(this.batchQueryKoubei);//口碑订单详情页面
+
+    } else if(self.tabActiveType === 'MINIPROGRAM'){
+      this.orderTypeTitle = '操作类型';
+      this.revenuetOrderList(this.batchQuery);//营收报表订单详情页面
+
+    } else {
+      this.orderTypeText = '券码';
+      this.meidaVoucherListInfor(this.batchQueryKoubei);//美大订单页面
+    }
   }
 
   //选择日期
@@ -305,8 +333,7 @@ export class revenueDetailReportComponent implements OnInit {
       this.revenuetOrderDetail(orderNo);//订单详情页面数据
     } else if(self.tabActiveType === 'MINIPROGRAM'){
       this.typeText = '流水';
-      // this.revenuetOrderDetail(orderNo);//订单详情页面数据
-
+      this.revenuetOrderDetail(orderNo);//订单详情页面数据
     } else if(self.tabActiveType === 'KOUBEI'){
       this.typeText = '核销';
       let parameter = {
