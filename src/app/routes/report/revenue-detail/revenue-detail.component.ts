@@ -415,7 +415,7 @@ export class revenueDetailReportComponent implements OnInit {
         self.loading = false;
         if (res.success) {
           console.log(res.data);
-
+          self.reportOrderDetail = res.data? res.data : [];
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',
@@ -461,8 +461,7 @@ export class revenueDetailReportComponent implements OnInit {
       (res: any) => {
         self.loading = false;
         if (res.success) {
-          console.log(res.data.content);
-
+          self.reportOrderDetail = res.data? res.data : [];
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',
