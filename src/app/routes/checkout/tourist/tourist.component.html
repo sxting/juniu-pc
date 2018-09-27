@@ -572,7 +572,7 @@
       <div>
         <div nz-col nzSpan="12">
           <div nz-col nzSpan="6">备注:</div>
-          <div nz-col nzSpan="18" >
+          <div nz-col nzSpan="18">
             <nz-popover [nzTitle]="'备注'" [nzPlacement]="'bottom'">
               <p style="width:100%;overflow: hidden;
               text-overflow:ellipsis;
@@ -648,8 +648,24 @@
             <tbody>
               <tr *ngFor="let item of CustomerData">
                 <td>{{item.juniuoModel.dateCreated}}</td>
-                <td>{{item.bizTypeName}}</td>
-                <td>{{item.payTypeName}}</td>
+                <td>{{item.consumeProductNames}}</td>
+                <td>{{item.payTypeName}}
+                  <nz-popover [nzTitle]="'支付详情'"  [nzPlacement]="'bottom'" *ngIf="item.cardPaymentDetails&&item.cardPaymentDetails.length>0">
+                    <span style="cursor: pointer;" class="{{item.cardPaymentDetails&&item.cardPaymentDetails.length>0?'icon-ribao':''}} iconfont"
+                      nz-popover></span>
+                    <ng-template #nzTemplate>
+                      <div style="width:400px;overflow-wrap: break-word;">
+                        <p *ngFor="let v of item.cardPaymentDetails" style="display: flex;
+                        justify-content: space-around;">
+                          <span>{{v.name}}</span>
+                          <span *ngIf="v.paymentType ==='CARD'" class="iconfont {{v.detailType==='REBATE'?'icon-zhe':''}} {{v.detailType==='METERING'?'icon-ji':''}} {{v.detailType==='TIMES'?'icon-qi':''}} {{v.detailType==='STORED'?'icon-chu':''}}"></span>
+                          <span>-{{v.money/100}}元</span>
+                        </p>
+                      </div>
+                    </ng-template>
+                  </nz-popover>
+
+                </td>
                 <td>{{item.operationUserName}}</td>
                 <td>{{item.money / 100}}</td>
               </tr>
