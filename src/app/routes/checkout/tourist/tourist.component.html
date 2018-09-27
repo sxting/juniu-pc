@@ -659,7 +659,8 @@
                         justify-content: space-around;">
                           <span>{{v.name}}</span>
                           <span *ngIf="v.paymentType ==='CARD'" class="iconfont {{v.detailType==='REBATE'?'icon-zhe':''}} {{v.detailType==='METERING'?'icon-ji':''}} {{v.detailType==='TIMES'?'icon-qi':''}} {{v.detailType==='STORED'?'icon-chu':''}}"></span>
-                          <span>-{{v.money/100}}元</span>
+                          <span *ngIf="v.detailType==='REBATE'||v.detailType==='STORED'" >-{{v.money/100}}元</span>
+                          <span *ngIf="v.detailType==='METERING'" >-{{v.money}}次</span>
                         </p>
                       </div>
                     </ng-template>
