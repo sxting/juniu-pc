@@ -122,7 +122,7 @@
     </thead>
     <tbody nz-tbody class="ui-grid-tbody">
     <tr nz-tbody-tr *ngFor="let item of reportOrderList; let i = index">
-      <td style="color: #368ff7" *ngIf="tabActiveType === 'KOUBEI'|| tabActiveType === 'MEIDA'">{{item.voucherNo}}</td>
+      <td style="color: #368ff7" *ngIf="tabActiveType === 'KOUBEI'|| tabActiveType === 'MEIDA'">{{item.voucherNo? item.voucherNo : '-'}}</td>
       <td *ngIf="tabActiveType === 'KOUBEI'|| tabActiveType === 'MEIDA'">{{item.usedDate}}</td>
       <td *ngIf="tabActiveType === 'MINIPROGRAM'">{{item.dateCreated}}</td>
       <td>{{item.body}}</td>
@@ -134,8 +134,9 @@
         <span style="font-size: 14px">{{item.statusName}}</span>
       </td>
       <td>{{item.amount/100}}</td>
-      <td style="color: #108EE9;cursor: pointer" *ngIf="tabActiveType === 'KOUBEI'|| tabActiveType === 'MEIDA'" (click)="checkDetailInfor(orderDetail,item.voucherNo,item.status)">查看详情</td>
+      <td style="color: #108EE9;cursor: pointer" *ngIf="tabActiveType === 'MEIDA'" (click)="checkDetailInfor(orderDetail,item.voucherNo,item.status)">查看详情</td>
       <td style="color: #108EE9;cursor: pointer" *ngIf="tabActiveType === 'MINIPROGRAM'" (click)="checkDetailInfor(orderDetail,item.orderNo,item.status)">查看详情</td>
+      <td style="color: #108EE9;cursor: pointer" *ngIf="tabActiveType === 'KOUBEI'" (click)="checkDetailInfor(orderDetail,item.orderId,item.status)">查看详情</td>
     </tr>
     </tbody>
   </nz-table>
