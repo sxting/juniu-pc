@@ -6,7 +6,8 @@ import { ReportService } from "../shared/report.service";
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { ActivatedRoute, Router } from '@angular/router';
-declare var echarts: any;
+import NP from 'number-precision'
+
 
 @Component({
   selector: 'app-customer-report',
@@ -20,8 +21,6 @@ export class CustomerReportComponent implements OnInit {
     storeId: string;//门店ID
     loading = false;
     yyyymmDate: any;//选择月份的日期
-    visitData: any;
-    data: any;
     date: any;
     pageNo: any = 1;//页码
     pageSize: any = '10';//一页展示多少数据
@@ -31,9 +30,15 @@ export class CustomerReportComponent implements OnInit {
     monthReportListInfor: any[] = [];//月报的信息列表
     currentCount: any = ''; //当日客流量
     memberPer: any = '';//会员占比
+    oldMemberPer: any = '';//老客户会员占比
+    MomenMemberPer: any = '';//女客户会员占比
     moduleId: any;
     ifStoresAll: boolean = true;//是否有全部门店
     ifStoresAuth: boolean = false;//是否授权
+    visitDataArr: any[] = [];
+    oldMemberPercent: any;
+    memberPercent: any;
+    MomenMemberPercent: any;
 
     constructor(
         private http: _HttpClient,
@@ -48,7 +53,6 @@ export class CustomerReportComponent implements OnInit {
     ) { }
 
     batchQuery = {
-      merchantId: this.merchantId,
       date: this.date,
       storeId: this.storeId,
       pageNo: this.pageNo,
@@ -56,7 +60,6 @@ export class CustomerReportComponent implements OnInit {
     };
 
     ngOnInit() {
-
         this.moduleId = this.route.snapshot.params['menuId'];
         let userInfo;
         if (this.localStorageService.getLocalstorage('User-Info')) {
@@ -66,15 +69,12 @@ export class CustomerReportComponent implements OnInit {
             this.merchantId = userInfo.merchantId;
         }
         this.ifStoresAll = userInfo.staffType === "MERCHANT"? true : false;
-
         let year = new Date().getFullYear();        //获取当前年份(2位)
         let month = new Date().getMonth()+1;       //获取当前月份(0-11,0代表1月)
         let changemonth = month < 10 ? '0' + month : '' + month;
         let day = new Date().getDate();        //获取当前日(1-31)
-
         this.yyyymmDate = new Date(year+'-'+changemonth+'-'+day);
         this.date = year+'-'+changemonth+'-'+day;
-
     }
 
     //门店id
@@ -112,10 +112,9 @@ export class CustomerReportComponent implements OnInit {
         this.reportService.getDayCustomer(data).subscribe(
             (res: any) => {
                 if (res.success) {
-                    console.log(res);
+                    console.log(res.data);
                     that.loading = false;
                     that.monthReportListInfor = res.data.customerVOList;
-
                     if(that.monthReportListInfor.length > 0){
                         that.monthReportListInfor.forEach(function (item: any) {
                             if(item.bizType === 'FIT') {
@@ -130,22 +129,23 @@ export class CustomerReportComponent implements OnInit {
                         });
                     }
                   this.currentCount = res.data.currentCount ? res.data.currentCount + '' : 0 + '';
-                  this.memberPer = res.data.currentCount ? ((res.data.currentCount - res.data.currentFitCount) / res.data.currentCount * 100).toFixed(0) + '%' : 0 + '%';
+                  this.memberPer = res.data.currentCount ? NP.round(((res.data.currentCount - res.data.currentFitCount) / res.data.currentCount)*100,2) + '%' : 0 + '%';
+                  this.memberPercent = res.data.currentCount ? NP.round(((res.data.currentCount - res.data.currentFitCount) / res.data.currentCount)*100,2) : 0;
+
+                  this.MomenMemberPer = res.data.currentWomanCount ? NP.round((res.data.currentWomanCount / res.data.currentCount)*100,2) + '%' : 0 + '%';
+                  this.MomenMemberPercent = res.data.currentWomanCount ? NP.round((res.data.currentWomanCount / res.data.currentCount)*100,2) : 0;
+
+                  this.oldMemberPer = res.data.currentOldCount ? NP.round((res.data.currentOldCount / res.data.currentCount)*100,2) + '%' : 0 + '%';
+                  this.oldMemberPercent = res.data.currentOldCount ? NP.round((res.data.currentOldCount / res.data.currentCount)*100,2) : 0;
+
                   that.totalElements = res.data.pageInfo.countTotal;
-                    let dateArr = [];
-                    let valueArr = [];
-                    res.data.lastMonthVos.forEach(function (item: any) {
-                        dateArr.push(item.name.replace(/-/g, ".").substring(5));
-                        valueArr.push(item.value)
+                  that.visitDataArr = [];//初始化
+                  res.data.lastMonthVos.forEach(function (item: any) {
+                    that.visitDataArr.push({
+                      x: item.name.replace(/-/g, ".").substring(5),
+                      y:item.value
                     });
-                  let myChartLeft = echarts.init(document.getElementById('chart-left'));
-                  let myChartRight = echarts.init(document.getElementById('chart-right'));
-                  that.getLeftChart(myChartLeft, dateArr, valueArr);
-
-                  console.log(res.data.currentCount - res.data.currentFitCount);
-                  console.log(res.data.currentFitCount);
-
-                  that.getRightChart(myChartRight, res.data.currentCount-res.data.currentFitCount, res.data.currentFitCount);
+                  });
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -157,83 +157,6 @@ export class CustomerReportComponent implements OnInit {
                 FunctionUtil.errorAlter(error);
             }
         );
-    }
-
-    /*===echart图标信息====*/
-    getLeftChart(myChart: any, xData: any,yData: any){
-    var colors = ['#58C7DF', '#000', '#675bba'];
-    let option = {
-      color: colors,
-      tooltip: {
-        trigger: 'none',
-        axisPointer: {
-          type: 'cross'
-        }
-      },
-      grid: {
-        left: '2%',
-        right: '2%',
-        bottom: '6%',
-        top: '2%',
-        containLabel: true
-      },
-      xAxis: [
-        {
-          show: false,
-          type: 'category',
-          data: xData
-        }
-      ],
-      yAxis: [
-        {
-          show: false,
-          type: 'value'
-        }
-      ],
-      series: [
-        {
-          name: '',
-          type: 'line',
-          smooth: true,
-          data: yData,
-          itemStyle: { normal: { areaStyle: { type: 'default' } } },
-          color: ['#52a1f8']
-        }
-      ]
-    };
-    myChart.setOption(option);
-  }
-
-    getRightChart(myChart: any, v1: any, v2: any) {
-        let option = {
-            series: [
-                {
-                    name:'会员占比',
-                    type:'pie',
-                    radius: ['70%', '100%'],
-                    avoidLabelOverlap: false,
-                    showSymbol: false,
-                    silent: true, //禁止鼠标事件
-                    labelLine: {  //禁止显示线条
-                        normal: {
-                            show: false
-                        }
-                    },
-                    color: ['#2695f7', '#ccc'],
-                    data:[
-                        {
-                            value: v1,
-                            name:'会员',
-                        },
-                        {
-                            value: v2,
-                            name:'非会员',
-                        }
-                    ]
-                }
-            ]
-        };
-        myChart.setOption(option)
     }
 
     // 切换分页码

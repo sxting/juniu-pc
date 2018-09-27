@@ -56,6 +56,7 @@ export class AddNewItemsComponent implements OnInit {
     spinBoolean: boolean = false;
     get categoryInfor() { return this.form.controls.categoryInfor; }
     get currentPrice() { return this.form.controls['currentPrice']; }
+    get costPrice() { return this.form.controls['costPrice']; }
     get stock() { return this.form.controls['stock']; }
 
     ngOnInit() {
@@ -72,6 +73,7 @@ export class AddNewItemsComponent implements OnInit {
             categoryInfor: [ null, [ Validators.required ] ],
             productName:[ null, [ Validators.required ] ],
             currentPrice: [null, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.min(1 * 0.01),  Validators.max(11111111.11 * 9)])],
+            costPrice: [null, Validators.compose([Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.min(1 * 0.01), Validators.max(11111111.11 * 9)])],
             productNo: [ null, [ Validators.pattern(`[0-9]+`)] ],
             status: [self.ItemsStatus[0].value, [ Validators.required  ] ],
             storeType: [ self.storeStatus[0].value, [ Validators.required ] ],
@@ -336,10 +338,12 @@ export class AddNewItemsComponent implements OnInit {
                     let categoryInfor = res.data.categoryId + ',' +  res.data.categoryName;
                     let status = res.data.putaway === 1? this.ItemsStatus[0].value : this.ItemsStatus[1].value;
                     let storeType = res.data.applyStoreType === 'CUSTOMIZE'? this.storeStatus[1].value : this.storeStatus[0].value;
+                    let costPrice = res.data.costPrice?  res.data.costPrice/ 100 : null;
                     this.formData = {
                         categoryInfor: [ categoryInfor, [ Validators.required ] ],
                         productName:[ res.data.productName, [ Validators.required ] ],
                         currentPrice: [ res.data.currentPrice/100, Validators.compose([Validators.required, Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.min(1 * 0.01),  Validators.max(11111111.11 * 9)])],
+                        costPrice: [costPrice, Validators.compose([Validators.pattern(`^[0-9]+(.[0-9]{1,2})?$`), Validators.min(1 * 0.01), Validators.max(11111111.11 * 9)])],
                         productNo: [ res.data.productNo, [ Validators.pattern(`[0-9]+`)] ],
                         status: [ status, [ Validators.required  ] ],
                         storeType: [ storeType, [ Validators.required ] ],
@@ -413,6 +417,7 @@ export class AddNewItemsComponent implements OnInit {
             productName: this.form.controls.productName.value,
             productId: this.productId? this.productId : '',
             currentPrice: NP.round(Number(this.form.controls.currentPrice.value)*100,2),
+            costPrice: NP.round(Number(this.form.controls.costPrice.value) * 100, 2),
             storeIds: this.selectStoresIds,
             storeId: this.storeId,
             merchantId: this.merchantId,

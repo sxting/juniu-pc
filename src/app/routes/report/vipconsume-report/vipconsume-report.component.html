@@ -1,0 +1,83 @@
+<div class="content__title ad-ph" style="padding-bottom: 16px;">
+  <nz-breadcrumb>
+    <nz-breadcrumb-item>报表</nz-breadcrumb-item>
+    <nz-breadcrumb-item>会员卡报表</nz-breadcrumb-item>
+    <nz-breadcrumb-item>会员卡消耗报表</nz-breadcrumb-item>
+  </nz-breadcrumb>
+  <h3 class="title">会员卡消耗报表</h3>
+</div>
+<section class="page-content">
+  <!-- 选择门店 -->
+  <nz-card [nzBordered]="false">
+    <div nz-form [nzLayout]="'inline'" class="search__form">
+      <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
+        <nz-col nzMd="8" nzSm="24">
+          <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" (storeListPush)="storeListPush($event)"
+                           (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
+        </nz-col>
+      </nz-row>
+    </div>
+  </nz-card>
+  <!-- 各种卡类型消耗情况   nzXs="24" nzSm="24" nzLg="12"-->
+  <div nz-row [nzGutter]="24">
+    <div nz-col>
+      <nz-card nzTitle="各种卡类型消耗情况" [nzBordered]="false" class="pie-card">
+        <div nz-row [nzGutter]="4" style="padding:16px 0">
+          <div nz-col [nzSpan]="8">
+            <g2-pie [animate]="false"
+                    [percent]="storedPerNum"
+                    subTitle="储值卡"
+                    [total]="storedPerent"
+                    [height]="128"
+                    [lineWidth]="2"></g2-pie>
+          </div>
+          <div nz-col [nzSpan]="8">
+            <g2-pie [animate]="false"
+                    color="#5DDECF"
+                    [percent]="rebatePerNum"
+                    subTitle="折扣卡"
+                    [total]="rebatePercent"
+                    [height]="128"
+                    [lineWidth]="2"></g2-pie>
+          </div>
+          <div nz-col [nzSpan]="8">
+            <g2-pie [animate]="false"
+                    color="#2FC25B"
+                    [percent]="meteringPerNum"
+                    subTitle="计次卡"
+                    [total]="meteringPercent"
+                    [height]="128"
+                    [lineWidth]="2"></g2-pie>
+          </div>
+        </div>
+      </nz-card>
+    </div>
+  </div>
+  <!-- 每日耗卡／办卡金额对比 -->
+  <nz-card [nzBordered]="false" style="margin-bottom: 0!important;">
+    <div nz-form [nzLayout]="'inline'"  class="search__form title-staffing">
+      <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
+        <nz-col nzMd="8" nzSm="24">
+          <span class="line"></span>每日耗卡／办卡金额对比
+        </nz-col>
+        <nz-col nzMd="8" nzSm="24" class="fr">
+          <nz-form-item>
+            <nz-form-label nzFor="reportDate">选择月份</nz-form-label>
+            <nz-form-control>
+              <nz-month-picker  nzPlaceholder="选择月份" (ngModelChange)="reportDateAlert($event)" [nzAllowClear]="false"
+                                [nzFormat]="'YYYY-MM'" [(ngModel)]="reportDate"></nz-month-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </nz-col>
+      </nz-row>
+    </div>
+    <!-- echart图表 -->
+    <div class="echarts" id="container"></div>
+  </nz-card>
+</section>
+
+
+
+
+
+

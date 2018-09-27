@@ -1,0 +1,86 @@
+
+<div class="content__title ad-ph" style="padding-bottom: 16px;">
+  <nz-breadcrumb>
+    <nz-breadcrumb-item>报表</nz-breadcrumb-item>
+    <nz-breadcrumb-item>利润报表</nz-breadcrumb-item>
+    <nz-breadcrumb-item>房租水电成本</nz-breadcrumb-item>
+  </nz-breadcrumb>
+  <h3 class="title">房租水电成本</h3>
+  <p class="content-text">每月纪录门店的房租、水电、物业费、餐费等门店开销。</p>
+</div>
+<nz-card [nzBordered]="false" style="margin-bottom: 0!important;height: 80px;">
+  <div nz-form [nzLayout]="'inline'"  class="search__form">
+    <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
+      <nz-col nzMd="8">
+        <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [storeId]="storeId"
+                         [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth"
+                         (storeListPush)="storeListPush($event)" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
+      </nz-col>
+    </nz-row>
+  </div>
+</nz-card>
+<!-- table 图表 -->
+<form nz-form [formGroup]="form" [nzLayout]="'vertical'">
+  <nz-card [nzBordered]="false">
+    <nz-table formArrayName="items" [nzData]="items.value" [nzShowPagination]="false">
+      <thead>
+      <tr>
+        <th nz-th class="tal">月份</th>
+        <th nz-th class="tac" *ngFor="let list of theadName">{{ list }}</th>
+        <th nz-th class="tar">操作</th>
+      </tr>
+      </thead>
+      <tbody class="tbady-ui">
+        <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
+        <td>
+          <span style="width: 100px;display: inline-block">{{items.value[i].costDate}}</span>
+        </td>
+        <td>
+          <span *ngIf="editIndex!==i">{{items.value[i].houseRent}}</span>
+          <span *ngIf="editIndex===i" nz-form-control>
+            <input nz-input formControlName="houseRent" placeholder="请输入房租">
+          </span>
+        </td>
+        <td>
+          <span *ngIf="editIndex!==i">{{items.value[i].hydropowerCost}}</span>
+          <span *ngIf="editIndex===i" nz-form-control>
+            <input nz-input formControlName="hydropowerCost" placeholder="请输入水电网">
+          </span>
+        </td>
+        <td>
+          <span *ngIf="editIndex!==i">{{items.value[i].propertyCost}}</span>
+          <span *ngIf="editIndex===i" nz-form-control>
+            <input nz-input formControlName="propertyCost" placeholder="请输入物业">
+          </span>
+        </td>
+        <td>
+          <span *ngIf="editIndex!==i">{{items.value[i].otherCost}}</span>
+          <span *ngIf="editIndex===i" nz-form-control>
+            <input nz-input formControlName="otherCost" placeholder="请输入其他">
+          </span>
+        </td>
+        <td>
+          <span *ngIf="editIndex!==i">
+            <a (click)="edit(i)">编辑</a>
+            <nz-divider nzType="vertical"></nz-divider>
+            <nz-popconfirm (nzOnConfirm)="deleteListInfor(items.value[i].costId)" [nzTitle]="'是否要删除此行？'">
+              <a nz-popconfirm>删除</a>
+            </nz-popconfirm>
+          </span>
+          <span *ngIf="editIndex===i">
+            <a (click)="save(i)">保存</a>
+            <nz-divider nzType="vertical"></nz-divider>
+            <nz-popconfirm (nzOnConfirm)="cancel(i)" [nzTitle]="'是否要取消操作？'">
+              <a nz-popconfirm>取消</a>
+            </nz-popconfirm>
+          </span>
+        </td>
+      </tr>
+      </tbody>
+    </nz-table>
+    <div class="nzPaginationBox">
+      <nz-pagination class="nzPagination" [nzTotal]="totalElements" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
+      <p class="countTotal">总共: {{totalElements}}条</p>
+    </div>
+  </nz-card>
+</form>

@@ -8,10 +8,12 @@ import { PayWayComponent } from "./pay-way/pay-way/pay-way.component";
 import { SoftwareBuyComponent } from "./software-buy/software-buy.component";
 import { CloudPrinterComponent } from './CloudPrinter/CloudPrinter.component';
 import { PayDownloadComponent } from "./pay-way/pay-download/pay-download.component";
-import {PayRecordComponent} from "./pay-way/pay-record/pay-record.component";
+import { PayRecordComponent } from "./pay-way/pay-record/pay-record.component";
 import { VedioComponent } from './vedio/vedio.component';
-import {SoftwareBuyRecordComponent} from "./software-buy-record/software-buy-record.component";
-
+import { SoftwareBuyRecordComponent } from "./software-buy-record/software-buy-record.component";
+import { NameManageComponent } from "./name-manage/name-manage.component";
+import { KoubeiHXYDComponent } from './koubeiHXYD/koubeiHXYD.component';
+import { MeituanHXYDComponent } from './meituanHXYD/meituanHXYD.component';
 const routes: Routes = [
   { path: 'administration', component: AdministrationComponent },
   { path: 'hardware/install', component: HardwareInstallComponent },
@@ -23,7 +25,11 @@ const routes: Routes = [
   { path: 'software/buy', component: SoftwareBuyComponent },
   { path: 'software/buy/record', component: SoftwareBuyRecordComponent },
   { path: 'hardware/vedio', component: VedioComponent },
-  { path: 'hardware/install/CloudPrinter', component: CloudPrinterComponent }
+  { path: 'hardware/install/CloudPrinter', component: CloudPrinterComponent },
+  { path: 'name/manage', component: NameManageComponent },
+  { path: 'meituanHXYD', component: MeituanHXYDComponent },
+  { path: 'koubeiHXYD', component: KoubeiHXYDComponent },
+
 ];
 
 @NgModule({

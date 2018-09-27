@@ -67,6 +67,7 @@ export interface CreateOrder {
   faceId?: string;
   customerId?: string;
   settleCardDTOList?: any;
+  extraMoney?:any;
 }
 
 export interface OpenCardOrder {

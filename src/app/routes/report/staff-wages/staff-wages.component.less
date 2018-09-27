@@ -1,0 +1,78 @@
+
+
+@import 'node_modules/@delon/theme/styles/default';
+
+:host ::ng-deep {
+  .icon-group {
+    transition: color 0.32s;
+    color: @text-color-secondary;
+    cursor: pointer;
+    margin-left: 16px;
+    &:hover {
+      color: @text-color;
+    }
+  }
+  @media screen and (max-width: @screen-lg) {
+    .sales-extra {
+      display: none;
+    }
+
+    .rank-list {
+      li {
+        span:first-child {
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: @screen-md) {
+    .rank-title {
+      margin-top: 16px;
+    }
+
+    .sales-card .bar {
+      padding: 16px;
+    }
+  }
+
+  @media screen and (max-width: @screen-sm) {
+    .sales-extra-wrap {
+      display: none;
+    }
+
+    .sales-card {
+      .ant-tabs-content {
+        padding-top: 30px;
+      }
+    }
+  }
+
+  .ant-table-pagination {
+    margin-bottom: 0;
+  }
+}
+
+@media screen and (max-width: 770px) {
+  .ant-btn-primary.primary-btn{
+    float: none;
+  }
+}
+
+.content__title{
+  position: relative;
+}
+.content__title .btn-set{
+  position: absolute;
+  top: 50px;
+  right: 30px;
+  border: 1px solid #FF6600;
+  color: #ff6600;
+}
+.ant-btn-primary {
+  float: right;
+  margin-right: 24px;
+}
+.datepicker{
+  margin-left: 20px;
+}

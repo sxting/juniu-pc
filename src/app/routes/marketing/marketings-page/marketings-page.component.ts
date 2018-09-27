@@ -112,6 +112,31 @@ export class MarketingsPageComponent implements OnInit {
         return differenceInDays(current, new Date(new Date().getTime())) < 0;
     };
 
+  labelList: any[] = [
+    {
+      name: '油性皮肤',
+      id: '01'
+    },
+    {
+      name: '油性皮肤',
+      id: '02'
+    },
+    {
+      name: '油性皮肤',
+      id: '03'
+    },
+    {
+      name: '油性皮肤',
+      id: '04'
+    }
+  ];
+  labelIdsArr: any = [];
+  labelsArr: any = [];
+
+  selectIds: string = '';
+  selectNames: string = '';
+  selectNum: any = 0;
+
     //编辑
     marketingId: any = '';
     marketingStatus: any = '';
@@ -131,7 +156,6 @@ export class MarketingsPageComponent implements OnInit {
 
     ngOnInit() {
       this.moduleId = this.route.snapshot.params['menuId'];
-
         this.paramsId = this.route.snapshot.params['id'];
         this.paramsIdNumber = parseInt(this.paramsId);
         this.marketingId = this.route.snapshot.params['marketingId'] ? this.route.snapshot.params['marketingId'] : '';
@@ -143,12 +167,6 @@ export class MarketingsPageComponent implements OnInit {
         }
         this.pageHeader2 = decodeURIComponent(this.route.snapshot.params['name']);
         this.pageDesc = decodeURIComponent(this.route.snapshot.params['desc']);
-
-        // if(JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['staffType'] == 'STORE') {
-        //     let store: any = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
-        //         JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) : [];
-        //     this.storeId = store[0].storeId ? store[0].storeId : '';
-        // }
         this.merchantId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['merchantId'];
 
         if(this.paramsId == '05' || this.paramsId == '06' || this.paramsId == '12' || this.paramsId == '13') {
@@ -179,13 +197,14 @@ export class MarketingsPageComponent implements OnInit {
         }
 
         if(this.marketingId) {
-            // this.getThreeCoupons();
+            this.isEdit = true;
             this.editFormInit();
         } else {
             this.formInit();
         }
     }
 
+  //  门店组件内部初始化
   onSelectStoreChange(e: any) {
     if(JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['staffType'] == 'STORE') {
       let store: any = JSON.parse(this.localStorageService.getLocalstorage(STORES_INFO)) ?
@@ -195,6 +214,46 @@ export class MarketingsPageComponent implements OnInit {
     if(this.marketingId) {
       this.getThreeCoupons();
     }
+  }
+
+    //选择标签
+  onSelectLabelClick(tpl: any) {
+    let self = this;
+    this.modalSrv.create({
+      nzTitle: '选择会员标签',
+      nzContent: tpl,
+      nzWidth: '500px',
+      nzOnOk: () => {
+        self.labelsArr = [];
+        self.labelList.forEach(function (item1: any, i: any) {
+          self.labelIdsArr.forEach(function (item2: any, i: any) {
+            if(item1.id === item2) {
+              self.labelsArr.push(item1)
+            }
+          })
+        });
+        self.selectNum = self.labelIdsArr.length;
+      },
+      nzOnCancel: () => {
+        self.labelIdsArr = [];
+        self.labelList.forEach(function (item1: any, i: any) {
+          self.labelsArr.forEach(function (item2: any) {
+            if(item1.id === item2.id) {
+              self.labelIdsArr.push(item2.id)
+            }
+          });
+        });
+        self.selectNum = self.labelIdsArr.length;
+      },
+    });
+  }
+
+  onLabelItemClick(item: any) {
+      if(this.labelIdsArr.indexOf(item.id) < 0) {
+        this.labelIdsArr.push(item.id)
+      } else {
+        this.labelIdsArr.splice(this.labelIdsArr.indexOf(item.id), 1)
+      }
   }
 
     //活动对象
@@ -548,7 +607,7 @@ export class MarketingsPageComponent implements OnInit {
                 marketingEndTime: FunctionUtil.changeDate(this.form.value.active_date[1]) + ' 23:59:59', //活动结束时间
                 isSendSms: this.smsInputValue ? 1 : 0, //是否发送短信 *
                 sendSmsContent: this.smsInputValue, //短信内容 *
-                sendTime: sendTime, //发送时间 * sendTime: "2018-05-22 15:00:00"
+                // sendTime: sendTime, //发送时间 * sendTime: "2018-05-22 15:00:00"
                 pullLimitType: 'UNLIMIT', //领券限制类型 UNLIMIT("无限制"),TOTAL("总数量"),目前均是无限制
                 couponDefId: this.couponId,
                 marketingId: this.marketingId,
@@ -602,8 +661,8 @@ export class MarketingsPageComponent implements OnInit {
                 isSendSms: this.smsInputValue ? 1 : 0, //是否发送短信 * 0 1
                 sendSmsContent: this.smsInputValue, //短信内容 *
                 sendTime: sendTime, //发送时间 * sendTime: "2018-05-22 15:00:00"
-                marketingStartTime: FunctionUtil.changeDate(this.form.value.active_date[0]) + ' 00:00:00', //活动开始时间
-                marketingEndTime: FunctionUtil.changeDate(this.form.value.active_date[1]) + ' 23:59:59', //活动结束时间
+                // marketingStartTime: FunctionUtil.changeDate(this.form.value.active_date[0]) + ' 00:00:00', //活动开始时间
+                // marketingEndTime: FunctionUtil.changeDate(this.form.value.active_date[1]) + ' 23:59:59', //活动结束时间
                 needSendKey: this.needSendKey, //
                 pullLimitType: 'UNLIMIT', //领取限制
                 couponDefId: this.couponId,
@@ -823,6 +882,11 @@ export class MarketingsPageComponent implements OnInit {
         )
     }
     /*编辑end*/
+
+  //  会员层级
+  getLevelList() {
+
+  }
 
     //获取会员数量
     getCalculateMemberNum() {
@@ -1114,9 +1178,9 @@ export class MarketingsPageComponent implements OnInit {
             send_time_day: [null, []],
             send_menkan: [null, this.paramsId=='07' || this.paramsId=='08' || this.paramsId == '09' ? [Validators.compose([Validators.required, Validators.pattern(`[0-9]+`)])]:[] ],
             sms_content: ['', []],
-            active_date: [null, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' ? [] : [Validators.required]],
-            sms_send_date: [null, this.paramsId == '03' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' ? [] : [Validators.required]],
-            sms_send_time: [null, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' ? [] : [Validators.required]],
+            active_date: [null, this.paramsIdNumber <= 6 ? [] : [Validators.required]],
+            sms_send_date: [null, this.paramsId == '03' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' || this.paramsId == '07' || this.paramsId == '08' || this.paramsId == '09' ? [] : [Validators.required]],
+            sms_send_time: [null, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' || this.paramsId == '07' || this.paramsId == '08' || this.paramsId == '09' ? [] : [Validators.required]],
         });
 
         this.form2 = this.fb.group({
@@ -1141,9 +1205,9 @@ export class MarketingsPageComponent implements OnInit {
             send_time_day: [null, []],
             send_menkan: [null, this.paramsId=='07' || this.paramsId=='08' || this.paramsId == '09' ? [Validators.compose([Validators.required, Validators.pattern(`[0-9]+`)])]:[] ],
             sms_content: ['', []],
-            active_date: [null, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' ? [] : [Validators.required]],
-            sms_send_date: [null, this.paramsId == '03' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' ? [] : [Validators.required]],
-            sms_send_time: [null, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' ? [] : [Validators.required]],
+            active_date: [null, this.paramsIdNumber <= 6 ? [] : [Validators.required]],
+            sms_send_date: [null, this.paramsId == '03' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' || this.paramsId == '07' || this.paramsId == '08' || this.paramsId == '09' ? [] : [Validators.required]],
+            sms_send_time: [null, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' || this.paramsId == '07' || this.paramsId == '08' || this.paramsId == '09'? [] : [Validators.required]],
             // send_time: [null, this.paramsId == '04' || this.paramsId == '11' ? [Validators.required] : []]
         });
 
@@ -1169,9 +1233,9 @@ export class MarketingsPageComponent implements OnInit {
             send_time_day: [this.form.value.send_time_day, []],
             send_menkan: [this.form.value.send_menkan, this.paramsId=='07' || this.paramsId=='08' || this.paramsId == '09' ? [Validators.compose([Validators.required, Validators.pattern(`[0-9]+`)])]:[] ],
             sms_content: [this.form.value.sms_content, []],
-            active_date: [this.form.value.active_date, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' ? [] : [Validators.required]],
-            sms_send_date: [this.form.value.sms_send_date, this.paramsId == '03' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13'  ? [] : [Validators.required]],
-            sms_send_time: [this.form.value.sms_send_time, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' ? [] : [Validators.required]],
+            active_date: [this.form.value.active_date, this.paramsIdNumber <= 6 ? [] : [Validators.required]],
+            sms_send_date: [this.form.value.sms_send_date, this.paramsId == '03' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' || this.paramsId == '07' || this.paramsId == '08' || this.paramsId == '09'  ? [] : [Validators.required]],
+            sms_send_time: [this.form.value.sms_send_time, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' || this.paramsId == '07' || this.paramsId == '08' || this.paramsId == '09' ? [] : [Validators.required]],
         };
     }
     getForm2InitData() {
@@ -1189,6 +1253,28 @@ export class MarketingsPageComponent implements OnInit {
             un_use_end_time: [this.form2.value.un_use_end_time, Validators.required],
         };
     }
+
+
+    // 选择活动对象（会员）
+
+  getSelectIds(event: any) {
+    if(event) {
+      this.selectIds = event.selectIds;
+    }
+  }
+
+  getSelectNames(event: any) {
+    if(event) {
+      this.selectNames = event.selectNames;
+    }
+  }
+
+  getSelectNum(event: any) {
+    if(event) {
+      this.selectNum = event.selectNum;
+    }
+  }
+
 
     //选择门店start
     getStoresChangeNum(event: any) {

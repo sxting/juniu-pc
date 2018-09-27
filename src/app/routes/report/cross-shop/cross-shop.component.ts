@@ -34,7 +34,6 @@ export class CrossShopComponent implements OnInit {
     pageSize: number = 10;//一页显示多少数据
     totalElements: any = 0;//商品总数
     settlementInfor: any = [];//跨点结算信息列表
-
     //弹框信息
     alertTableTitle: any[] = ['消费日期','会员姓名','所持会员卡','消费类型','订单金额','实付金额'];
     typeOfConsumption: any[] = [{ name: '全部类型', value: 'ALL'},{ name: '本店会员他店消费', value: 'OTHERSHOP'},{ name: '他店会员本店消费', value: 'OWNSHOP'}];//消费类型
@@ -49,7 +48,7 @@ export class CrossShopComponent implements OnInit {
     startTime: string = '';//转换字符串的时间
     endTime: string = '';//转换字符串的时间
     moduleId: any;
-    ifStoresAll: boolean = false;
+    crossType: string = '1';
 
     constructor(
         private http: _HttpClient,
@@ -108,6 +107,10 @@ export class CrossShopComponent implements OnInit {
         this.crossShopInforDetailHttp(this.batchQueryAlert);
     }
 
+    // 弹框tab切换
+    changeAlertTab(){
+
+    }
 
     //列表分页
     paginate(event: any) {

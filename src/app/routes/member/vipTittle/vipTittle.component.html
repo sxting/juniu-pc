@@ -1,0 +1,95 @@
+<page-header [title]="'添加标签'">
+    创建并维护一套会员标签，针对不同的会员设定不同的会员标签，便于管理及进行精准营销，培养优质会员。
+</page-header>
+
+<nz-card [nzBordered]="false">
+    <nz-form-item>
+        <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="ruleName">标签名称</nz-form-label>
+        <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+            <input nz-input maxlength="20" autocomplete="off" id="ruleName" [(ngModel)]="tagName" placeholder="请输入标签名称">
+        </nz-form-control>
+    </nz-form-item>
+    <!-- <nz-form-item style="margin-bottom: 0;">
+            <nz-form-label nzXs="24" nzSm="7" nzFor="type">设定自动打标签的条件</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+                <div>
+                    <span nz-col nzSm="10">累计消费金额超过</span>
+                    <span nz-col nzSm="10">
+                        <input nz-input maxlength="20" style="width:100px;" autocomplete="off" id="ruleName" placeholder="请输入金额">
+                    </span>
+                    <span nz-col nzSm="4">元</span>
+                </div>
+                <div>
+                    <span nz-col nzSm="10">持卡张数超过</span>
+                    <span nz-col nzSm="10">
+                        <input nz-input maxlength="20" style="width:100px;" autocomplete="off" id="ruleName" placeholder="请输入张数">
+                    </span>
+                    <span nz-col nzSm="4">张</span>
+                </div>
+                <div>
+                    <span nz-col nzSm="10">月均消费水平在</span>
+                    <span nz-col nzSm="10">
+                        已选2个层级
+                    </span>
+                    <span nz-col nzSm="4">自定义</span>
+                </div>
+                <div>
+                    <span nz-col nzSm="10">消费频次在</span>
+                    <span nz-col nzSm="10">
+                        已选2个层级
+                    </span>
+                    <span nz-col nzSm="4">自定义</span>
+                </div>
+                <div>
+                    <span nz-col nzSm="10">最后一次到店时间</span>
+                    <span nz-col nzSm="10">
+                        已选2个层级
+                    </span>
+                    <span nz-col nzSm="4">自定义</span>
+                </div>
+                <p>注：以上条件非必填项，设定后若会员满足以上设定条件，将自动赋予会员该标签</p>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzXs="24" nzSm="7">满足条件</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+                <div class="right-block">
+                    以上设定条件需
+                    <nz-select style="width: 100px;">
+                        <nz-option>全部</nz-option>
+                    </nz-select>
+                    满足，才可给会员自动添加标签
+                </div>
+            </nz-form-control>
+        </nz-form-item> -->
+
+    <nz-form-item>
+        <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
+            <button nz-button nzType="primary" type="submit" (click)="submit()" [nzLoading]="submitting">提交</button>
+          </nz-form-control>
+    </nz-form-item>
+
+</nz-card>
+
+<!--选择员工弹框-->
+<ng-template #alertStaff>
+    <app-select-transfer [cityStoreList]="staffListInfor" [allStaffNum]="allStaffNumber" (staffIds)="getStaffIds($event)" (selectStaffNum)="getSelectStaffNum($event)"></app-select-transfer>
+</ng-template>
+
+<!--选择商品弹框-->
+<ng-template #alertProduct>
+    <app-select-transfer [cityStoreList]="productListInfor" [allStaffNum]="allProductNumber" (staffIds)="getproductIds($event)"
+        (selectStaffNum)="getSelectProductNumber($event)"></app-select-transfer>
+</ng-template>
+
+<!--选择会员卡弹框-->
+<ng-template #alertCard>
+    <app-select-transfer [cityStoreList]="cardListInfor" [allStaffNum]="allCardNumber" (staffIds)="getCardConfigRuleIds($event)"
+        (selectStaffNum)="getSelectCardNumber($event)"></app-select-transfer>
+</ng-template>
+
+<!--选择服务项目弹框-->
+<ng-template #alertSeviceItems>
+    <app-select-transfer [cityStoreList]="seviceItemsListInfor" [allStaffNum]="seviceItemsNumber" (staffIds)="getSeviceItemsIds($event)"
+        (selectStaffNum)="getSelectSeviceItemsNumber($event)"></app-select-transfer>
+</ng-template>

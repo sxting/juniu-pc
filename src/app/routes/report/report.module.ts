@@ -8,9 +8,38 @@ import { CrossShopComponent } from './cross-shop/cross-shop.component';
 import { MonthReportComponent } from './month-report/month-report.component';
 import { SharedModule } from '@shared/shared.module';
 import { ReportService } from "./shared/report.service";
+import { vipConsumeReportComponent } from './vipconsume-report/vipconsume-report.component';
+import { revenueDetailReportComponent } from './revenue-detail/revenue-detail.component';
+import { profitReportComponent } from './profit-report/profit-report.component';
+import { staffWagesReportComponent } from './staff-wages/staff-wages.component';
+import { settingStaffWagesComponent } from './setting-wages/setting-wages.component';
+import { rentCostsComponent } from './rent-costs/rent-costs.component';
+import { productCostsComponent } from './product-cost/product-cost.component';
+import { platformMaidReportComponent } from './platform-maid/platform-maid.component';
+import { paymentChannelRateComponent } from './payment-channel-rate/payment-channel-rate.component';
 
 
-const COMPONENT_NOROUNT = [];
+const COMPONENT_NOROUNT = [
+
+];
+
+const JUNIUO_NOROUNT = [
+  RevenueReportComponent,
+  CommodityStatementComponent,
+  CustomerReportComponent,
+  CommissionReportComponent,
+  CrossShopComponent,
+  vipConsumeReportComponent,
+  MonthReportComponent,
+  revenueDetailReportComponent,
+  profitReportComponent,
+  staffWagesReportComponent,
+  settingStaffWagesComponent,
+  rentCostsComponent,
+  productCostsComponent,
+  platformMaidReportComponent,
+  paymentChannelRateComponent
+];
 
 @NgModule({
   imports: [
@@ -19,12 +48,7 @@ const COMPONENT_NOROUNT = [];
   ],
   declarations: [
       ...COMPONENT_NOROUNT,
-      RevenueReportComponent,
-      CommodityStatementComponent,
-      CustomerReportComponent,
-      CommissionReportComponent,
-      CrossShopComponent,
-      MonthReportComponent,
+      ...JUNIUO_NOROUNT
   ],
     providers: [ReportService],
     entryComponents: COMPONENT_NOROUNT

@@ -7,11 +7,12 @@
         <jn-stores-infor  [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth"
                          (storeListPush)="storeListPush($event)" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
       </nz-col>
-      <nz-col nzMd="8" nzSm="24" class="fr">
+      <nz-col nzMd="8" nzSm="24">
         <nz-form-item>
           <nz-form-label nzFor="yyyymmDate">选择日期</nz-form-label>
           <nz-form-control>
-            <nz-date-picker (ngModelChange)="reportDateAlert($event)" [nzFormat]="'YYYY-MM-DD'" [(ngModel)]="yyyymmDate" [nzAllowClear]="false"></nz-date-picker>
+            <nz-range-picker [nzDisabledDate]="disabledDate" [nzAllowClear]="false" nzFormat="yyyy-MM-dd"
+                             [(ngModel)]="dateRange" (ngModelChange)="onDateChange($event)" nzShowTime></nz-range-picker>
           </nz-form-control>
         </nz-form-item>
       </nz-col>
@@ -20,30 +21,59 @@
 </nz-card>
 <div nz-row [nzGutter]="24">
     <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="12">
-        <nz-card [nzBordered]="false" nzTitle="服务项目数量占比" [nzBodyStyle]="{'padding.px': 12}" style="min-height: 464px" class="sales-card">
-            <g2-pie *ngIf="countList.length > 0"
+        <nz-card [nzBordered]="false" nzTitle="服务项目数量占比" [nzBodyStyle]="{'padding.px': 12}" style="min-height: 350px" class="sales-card">
+            <g2-pie *ngIf="countListService.length > 0"
                 [hasLegend]="true"
-                subTitle="销售数量"
+                subTitle="销售数量(单)"
                 [height]="248"
                 [lineWidth]="4"
-                [total]="countListTotal"
-                [data]="countList">
+                [total]="countListTotalService"
+                [data]="countListService">
             </g2-pie>
-            <p class="tips-nothing" *ngIf="countList.length === 0">暂无数据</p>
+            <p class="tips-nothing" *ngIf="countListService.length === 0">暂无数据</p>
         </nz-card>
     </div>
 
     <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="12">
-        <nz-card [nzBordered]="false" nzTitle="服务项目销售额占比" [nzBodyStyle]="{'padding.px': 12}" style="min-height: 464px" class="sales-card">
-            <g2-pie *ngIf="moneyList.length > 0"
+        <nz-card [nzBordered]="false" nzTitle="服务项目销售额占比" [nzBodyStyle]="{'padding.px': 12}" style="min-height: 350px" class="sales-card">
+            <g2-pie *ngIf="moneyListService.length > 0"
                 [hasLegend]="true"
-                subTitle="销售额"
+                subTitle="销售额(元)"
                 [height]="248"
                 [lineWidth]="4"
-                [total]="moneyListTotal"
-                [data]="moneyList">
+                [total]="moneyListTotalService.toFixed(2)"
+                [data]="moneyListService">
             </g2-pie>
-            <p class="tips-nothing" *ngIf="moneyList.length === 0">暂无数据</p>
+            <p class="tips-nothing" *ngIf="moneyListService.length === 0">暂无数据</p>
         </nz-card>
     </div>
+</div>
+<div nz-row [nzGutter]="24">
+  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="12">
+    <nz-card [nzBordered]="false" nzTitle="实体产品数量占比" [nzBodyStyle]="{'padding.px': 12}" style="min-height: 350px" class="sales-card">
+      <g2-pie *ngIf="countListGoods.length > 0"
+              [hasLegend]="true"
+              subTitle="销售数量(单)"
+              [height]="248"
+              [lineWidth]="4"
+              [total]="countListTotalGoods"
+              [data]="countListGoods">
+      </g2-pie>
+      <p class="tips-nothing" *ngIf="countListGoods.length === 0">暂无数据</p>
+    </nz-card>
+  </div>
+
+  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="12">
+    <nz-card [nzBordered]="false" nzTitle="实体产品销售额占比" [nzBodyStyle]="{'padding.px': 12}" style="min-height: 350px" class="sales-card">
+      <g2-pie *ngIf="moneyListGoods.length > 0"
+              [hasLegend]="true"
+              subTitle="销售额(元)"
+              [height]="248"
+              [lineWidth]="4"
+              [total]="moneyListTotalGoods.toFixed(2)"
+              [data]="moneyListGoods">
+      </g2-pie>
+      <p class="tips-nothing" *ngIf="moneyListGoods.length === 0">暂无数据</p>
+    </nz-card>
+  </div>
 </div>

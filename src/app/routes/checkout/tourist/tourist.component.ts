@@ -100,7 +100,7 @@ export class TouristComponent implements OnInit {
     xyVip: any = false;
     xyVipRules: any;
     selectedValue1: any;
-
+    selectedValue2:any;
     customerName: any;
     birthday: any = new Date();
     customerId: any;
@@ -144,6 +144,14 @@ export class TouristComponent implements OnInit {
     customer_gender: any;
     customer_remarks: any;
     customer_date: any;
+
+
+    htmlModalVisible: boolean = false;
+    htmlModalData: any;
+
+
+    STOREDValue: any = 0;
+    STOREDextraMoney: any = 0;
     constructor(
         public msg: NzMessageService,
         private localStorageService: LocalStorageService,
@@ -175,7 +183,9 @@ export class TouristComponent implements OnInit {
         this.cardStoreTypes();
         this.getStaffList();
     }
-
+    handleCancel() {
+        this.htmlModalVisible = false;
+    }
     //收银开卡切换
     change(e: any) {
         this.changeType = e.index === 0 ? true : false;
@@ -332,6 +342,9 @@ export class TouristComponent implements OnInit {
                 if ((that.xfCardList.type === 'REBATE') && this.xyVip) {
                     this.vipCardmoney = this.REBATEValue;
                     this.isVerbVipCardmoney = Math.floor(this.REBATEValue);
+                } else if ((that.xfCardList.type === 'STORED') && this.xyVip) {
+                    this.vipCardmoney = this.STOREDValue;
+                    this.isVerbVipCardmoney = Math.floor(this.STOREDValue);
                 } else {
                     this.vipCardmoney = NP.divide(that.xfCardList.rules[that.xfCardList.ruleIndex].price, 100);
                     this.isVerbVipCardmoney = Math.floor(that.vipCardmoney);
@@ -342,6 +355,15 @@ export class TouristComponent implements OnInit {
     }
     REBATEValueFun(event: any) {
         this.REBATEValue = event;
+        this.totolMoneyFun();
+    }
+
+    STOREDValueFun(event: any) {
+        this.STOREDValue = event;
+        this.totolMoneyFun();
+    }
+    STOREDextraMoneyFun(event: any) {
+        this.STOREDextraMoney = event;
         this.totolMoneyFun();
     }
     // vipCardListfun() {
@@ -740,6 +762,7 @@ export class TouristComponent implements OnInit {
                 orderItem = {
                     cardId: that.xfCardList.cardId,
                     staffId: that.selectedValue1,
+                    staff2Id:that.selectedValue2,
                     typeName: "cardOrderItem",
                 }
             } else {
@@ -754,6 +777,7 @@ export class TouristComponent implements OnInit {
                     price: that.xfCardList.rules[that.xfCardList.ruleIndex].price,
                     validate: that.xfCardList.rules[that.xfCardList.ruleIndex].validate,
                     staffId: that.selectedValue1,
+                    staff2Id:that.selectedValue2,
                     rebate: that.xfCardList.rules[that.xfCardList.ruleIndex].rebate,
                     storeId: that.storeId
                 }
@@ -839,6 +863,7 @@ export class TouristComponent implements OnInit {
         if (create.settleCardDTOList && create.settleCardDTOList.length > 0) { create.recordType = 'BUCKLECARD'; create.payType = 'MEMBERCARD'; create.bizType = 'MEMBER' }
         if (!that.changeType) {
             create.money = that.isVerb2 ? that.isVerbVipCardmoney * 100 : that.vipCardmoney * 100;
+            create.extraMoney = that.STOREDextraMoney ? that.STOREDextraMoney * 100 : 0;
             create.originMoney = create.money;
         } else {
             if (this.xfList && this.xfList.length > 0) {
@@ -879,9 +904,16 @@ export class TouristComponent implements OnInit {
                         })
                     } else {
                         this.modalSrv.closeAll()
-                        this.modalSrv.success({
-                            nzContent: '收款成功'
-                        })
+                        this.xfCardList = '';
+                        if (res.data === 'SUCCESS') {
+                            this.modalSrv.success({
+                                nzContent: '收款成功'
+                            })
+                        } else {
+                            this.htmlModalVisible = true;
+                            this.htmlModalData = res.data;
+                        }
+
                         if (this.gdboolean) {
                             this.guadanSC(this.gdindx);
                         }
@@ -974,7 +1006,6 @@ export class TouristComponent implements OnInit {
                     (res: any) => {
                         this.vipXqFun();
                         if (res.success) {
-
                             self.changeFun();
                             if (res.data && res.data.length === 0) self.errorAlter('未查询到该会员');
                             self.vipData = res.data;
@@ -1360,6 +1391,10 @@ export class TouristComponent implements OnInit {
                         self.xfCardList.rules = a;
                         self.xfCardList.ruleIndex = 0;
                         self.xfCardList.CardTypeS = 'chongzhi';
+                        self.STOREDValue = self.xfCardList.rules[0].price / 100;
+                        self.STOREDextraMoney = self.xfCardList.rules[0].balance / 100 - self.xfCardList.rules[0].price / 100;
+
+                        console.log(self.xfCardList)
                         self.totolMoneyFun();
                     } else {
                         self.errorAlter(res.errorInfo)
@@ -1381,6 +1416,11 @@ export class TouristComponent implements OnInit {
                         nzContent: '收款成功'
                     })
                     this.REBATEValue = 0;
+                    this.STOREDValue = 0;
+                    this.STOREDextraMoney = 0;
+                    this.selectedValue1 = '';
+                    this.selectedValue2 = '';
+                    this.xfCardList = '';
                     this.vipXqFun();
                     this.searchMemberCard('', true);
                     if (this.gdboolean) {

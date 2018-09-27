@@ -10,6 +10,10 @@ import { KoubeiComponent } from './koubei/koubei.component';
 import { MeituanComponent } from './meituan/meituan.component';
 import { KoubeiModule } from '../koubei/koubei.module';
 import { WechatComponent } from './wechat/wechat.component';
+import { MeituanTichengListComponent } from './meituanTichengList/meituanTichengList.component';
+import { meituanTichengComponent } from './meituanTicheng/meituanTicheng.component';
+import { KoubeiTichengComponent } from './koubeiTicheng/koubeiTicheng.component';
+import { KoubeiTichengListComponent } from './koubeiTichengList/koubeiTichengList.component';
 
 
 @NgModule({
@@ -18,7 +22,11 @@ import { WechatComponent } from './wechat/wechat.component';
         TouristComponent,
         KoubeiComponent,
         MeituanComponent,
-        WechatComponent
+        WechatComponent,
+        MeituanTichengListComponent,
+        meituanTichengComponent,
+        KoubeiTichengComponent,
+        KoubeiTichengListComponent
     ],
     providers: [CheckoutService,MemberService],
 })

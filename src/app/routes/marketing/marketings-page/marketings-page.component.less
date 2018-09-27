@@ -1,5 +1,49 @@
+@import 'node_modules/@delon/theme/styles/default';
+@primary-color:#ff7700;
+
+.click-span {
+  color: @primary-color;
+  cursor: pointer;
+}
+
+.select-num-span {
+  padding-right: 20px;
+}
+
+.select-span-box {
+
+}
+.select-span-box span {
+  font-size: 13px;
+  border-radius: 4px;
+  border: 1px solid @primary-color;
+  color: @primary-color;
+  padding: 4px 6px;
+  background-color: rgba(255, 119, 0, 0.1);
+  margin-right: 10px;
+}
+
+.label-item-box {
+  display: flex;
+  span {
+    padding: 2px 10px;
+    border-radius: 5px;
+    border: 1px solid #000000;
+    margin-right: 20px;
+    cursor: pointer;
+  }
+  .active {
+    color: @primary-color;
+    border-color: @primary-color;
+  }
+}
+.label-member-num {
+  margin-top: 20px;
+  color: #000000;
+}
+
 .click-color {
-    color: #ff7700;
+    color: @primary-color;
     padding: 0 5px;
     cursor: pointer;
     //white-space: nowrap;
