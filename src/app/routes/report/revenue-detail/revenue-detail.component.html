@@ -228,27 +228,28 @@
         </tr>
       </tbody>
     </nz-table>
-    <nz-table [nzNoResult]="''" #basicTable [nzShowPagination]="false" [nzData]="reportOrderDetail" *ngIf="tabActiveType === 'MEIDA' || tabActiveType === 'KOUBEI'">
-      <thead nz-thead class="ui-grid-thead">
+    <table class="table-singel-nannan" *ngIf="tabActiveType === 'MEIDA' || tabActiveType === 'KOUBEI'">
+      <thead class="ui-grid-thead">
         <tr>
-          <th nz-th class="" *ngIf="tabActiveType === 'KOUBEI'">核销码</th>
-          <th nz-th class="" *ngIf="tabActiveType === 'MEIDA'">券码</th>
-          <th nz-th class="">商品名称</th>
-          <th nz-th class="">单价(元)</th>
-          <th nz-th class="">数量(件)</th>
-          <th nz-th class="">金额(元)</th>
+          <th class="" *ngIf="tabActiveType === 'KOUBEI'">核销码</th>
+          <th class="" *ngIf="tabActiveType === 'MEIDA'">券码</th>
+          <th class="">商品名称</th>
+          <th class="">单价(元)</th>
+          <th class="">数量(件)</th>
+          <th class="">金额(元)</th>
         </tr>
       </thead>
-      <tbody nz-tbody class="ui-grid-tbody" *ngIf="reportOrderDetail && (tabActiveType === 'MEIDA' || tabActiveType === 'KOUBEI')">
-        <tr nz-tbody-tr>
-          <td style="color: #108EE9">{{reportOrderDetail.voucherVO.voucherNo? reportOrderDetail.voucherVO.voucherNo: '-'}}</td>
+      <tbody class="ui-grid-tbody" *ngIf="reportOrderDetail && (tabActiveType === 'MEIDA' || tabActiveType === 'KOUBEI')">
+        <tr>
+          <td style="color: #108EE9" *ngIf="tabActiveType === 'MEIDA'">{{reportOrderDetail.voucherVO.voucherNo? reportOrderDetail.voucherVO.voucherNo: '-'}}</td>
+          <td style="color: #108EE9" *ngIf="tabActiveType === 'KOUBEI'">{{reportOrderDetail.voucherItemVO.voucherNo? reportOrderDetail.voucherItemVO.voucherNo: '-'}}</td>
           <td>{{reportOrderDetail.voucherVO.body? reportOrderDetail.voucherVO.body: '-'}}</td>
           <td>{{reportOrderDetail.voucherItemVO.price/100}}</td>
           <td>{{reportOrderDetail.voucherItemVO.num? reportOrderDetail.voucherItemVO.num : 1}}</td>
           <td>{{(reportOrderDetail.voucherItemVO.price/100) * (reportOrderDetail.voucherItemVO.num? reportOrderDetail.voucherItemVO.num : 1)}}</td>
         </tr>
       </tbody>
-    </nz-table>
+    </table>
     <div class="orderpage_detail_list_bottom detail_list_bot" *ngIf="reportOrderDetail">
       <table>
         <tr class="ui-grid-row" *ngIf="reportOrderDetail && (tabActiveType === 'BARCODE' || tabActiveType === 'CASH' || tabActiveType === 'QRCODE' || tabActiveType === 'BANK')">
@@ -267,11 +268,11 @@
         </tr>
         <tr class="ui-grid-row"  *ngIf="reportOrderDetail && (tabActiveType === 'KOUBEI' || tabActiveType === 'MEIDA' || tabActiveType === 'MINIPROGRAM')">
           <td class="">订单编号</td>
-          <td class="" style="width: 150px;" *ngIf="tabActiveType === 'MINIPROGRAM'">{{reportOrderDetail.orderId}}</td>
-          <td class="" style="width: 150px;" *ngIf="tabActiveType === 'KOUBEI' || tabActiveType === 'MEIDA'">{{reportOrderDetail.voucherVO.orderId}}</td>
+          <td class="" *ngIf="tabActiveType === 'MINIPROGRAM'">{{reportOrderDetail.orderId}}</td>
+          <td class="" *ngIf="tabActiveType === 'KOUBEI' || tabActiveType === 'MEIDA'">{{reportOrderDetail.voucherVO.orderId}}</td>
           <td class="">下单时间</td>
           <td class="trans-status" *ngIf="tabActiveType === 'MINIPROGRAM'">{{reportOrderDetail.juniuoModel? reportOrderDetail.juniuoModel.dateCreated : '-'}}</td>
-          <td class="" style="width: 100px;" *ngIf="tabActiveType === 'KOUBEI' || tabActiveType === 'MEIDA'">{{reportOrderDetail.voucherVO.usedDate}}</td>
+          <td class="" *ngIf="tabActiveType === 'KOUBEI' || tabActiveType === 'MEIDA'">{{reportOrderDetail.voucherVO.usedDate}}</td>
           <td class="">购买门店</td>
           <td class="trans-status" *ngIf="tabActiveType === 'MINIPROGRAM'">{{reportOrderDetail.storeName}}</td>
           <td class="trans-status" *ngIf="tabActiveType === 'MEIDA' || tabActiveType === 'KOUBEI'">{{reportOrderDetail.voucherVO.usedStoreName}}</td>
