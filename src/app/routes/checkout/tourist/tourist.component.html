@@ -840,8 +840,10 @@
         <td>{{item.customerName}}</td>
         <td>{{item.paidMoney/100}}</td>
         <td>
-          <span class="button" *ngIf="item.statusName !== '已取消'" (click)="refund(item)">撤销</span>
-          <span class="button" *ngIf="item.statusName === '已取消'">已退款</span>
+          <span class="button" *ngIf="item.orderType === 'ORDER'&&item.status !== 'REFUND'&&item.status !== 'CLOSE'" (click)="refund(item)">撤销</span>
+          <span class="button" *ngIf="item.orderType === 'ORDER'&&item.status === 'REFUND'">已退款</span>
+          <span class="button" *ngIf="item.orderType === 'ORDER'&&item.status === 'CLOSE'">已取消</span>
+          
         </td>
       </tr>
     </tbody>
