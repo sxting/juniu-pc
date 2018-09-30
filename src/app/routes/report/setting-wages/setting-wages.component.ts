@@ -136,8 +136,10 @@ export class settingStaffWagesComponent implements OnInit {
       (res: any) => {
         self.loading = false;
         if (res.success) {
-          console.log(res.data);
-          self.setStaffWagesList = res.data.items? res.data.items : [];
+          res.data.items.forEach(function(item: any){
+            item.roleName = item.roleName? item.roleName : '-';
+          });
+          self.setStaffWagesList = res.data.items;
           this.form = this.fb.group({
             items: this.fb.array([]),
           });
