@@ -572,7 +572,7 @@
       <div>
         <div nz-col nzSpan="12">
           <div nz-col nzSpan="6">备注:</div>
-          <div nz-col nzSpan="18" >
+          <div nz-col nzSpan="18">
             <nz-popover [nzTitle]="'备注'" [nzPlacement]="'bottom'">
               <p style="width:100%;overflow: hidden;
               text-overflow:ellipsis;
@@ -591,10 +591,10 @@
         </div>
       </div>
     </div>
-    <div class="vipcard">
+    <!-- <div class="vipcard">
       <h3 class="flex-1 text-lg borderLeft">会员标签</h3>
       <div class="biaoqian">油性皮肤</div>
-    </div>
+    </div> -->
     <nz-tabset>
       <nz-tab nzTitle="卡券">
         <div class="vipcard">
@@ -649,8 +649,25 @@
               <tr *ngFor="let item of CustomerData">
                 <td>{{item.juniuoModel.dateCreated}}</td>
                 <td>{{item.consumeProductNames}}</td>
-                <td>{{item.payTypeName}}</td>
-                <td>{{item.operationUserName}}</td>
+                <td>{{item.payTypeName}}
+                  <nz-popover [nzTitle]="'支付详情'"  [nzPlacement]="'bottom'" *ngIf="item.cardPaymentDetails&&item.cardPaymentDetails.length>0">
+                    <span style="cursor: pointer;" class="{{item.cardPaymentDetails&&item.cardPaymentDetails.length>0?'icon-ribao':''}} iconfont"
+                      nz-popover></span>
+                    <ng-template #nzTemplate>
+                      <div style="width:400px;overflow-wrap: break-word;">
+                        <p *ngFor="let v of item.cardPaymentDetails" style="display: flex;
+                        justify-content: space-around;">
+                          <span>{{v.name}}</span>
+                          <span *ngIf="v.paymentType ==='CARD'" class="iconfont {{v.detailType==='REBATE'?'icon-zhe':''}} {{v.detailType==='METERING'?'icon-ji':''}} {{v.detailType==='TIMES'?'icon-qi':''}} {{v.detailType==='STORED'?'icon-chu':''}}"></span>
+                          <span *ngIf="v.detailType==='REBATE'||v.detailType==='STORED'" >-{{v.money/100}}元</span>
+                          <span *ngIf="v.detailType==='METERING'" >-{{v.money}}次</span>
+                        </p>
+                      </div>
+                    </ng-template>
+                  </nz-popover>
+
+                </td>
+                <td>{{item.serveStaffNames}}</td>
                 <td>{{item.money / 100}}</td>
               </tr>
             </tbody>
@@ -754,7 +771,7 @@
     </div>
   </nz-form-item>
 
-  <nz-form-item class="formItem " *ngIf="false">
+  <!-- <nz-form-item class="formItem " *ngIf="true">
     <div class="lineHeight50 formItemBorder">
       <nz-form-label style="text-align:left;" nzSpan="6">选择会员标签</nz-form-label>
       <nz-form-control nzSpan="18">
@@ -762,7 +779,7 @@
         <p style="font-size: 12px; color: #b7b7b7;">注：设定会员标签，便于管理及进行精准营销，最多可设置3个</p>
       </nz-form-control>
     </div>
-  </nz-form-item>
+  </nz-form-item> -->
 </ng-template>
 
 
@@ -823,8 +840,10 @@
         <td>{{item.customerName}}</td>
         <td>{{item.paidMoney/100}}</td>
         <td>
-          <span class="button" *ngIf="item.statusName !== '已取消'" (click)="refund(item)">撤销</span>
-          <span class="button" *ngIf="item.statusName === '已取消'">已退款</span>
+          <span class="button" *ngIf="item.orderType === 'ORDER'&&item.status !== 'REFUND'&&item.status !== 'CLOSE'" (click)="refund(item)">撤销</span>
+          <span class="button" *ngIf="item.orderType === 'ORDER'&&item.status === 'REFUND'">已退款</span>
+          <span class="button" *ngIf="item.orderType === 'ORDER'&&item.status === 'CLOSE'">已取消</span>
+          
         </td>
       </tr>
     </tbody>

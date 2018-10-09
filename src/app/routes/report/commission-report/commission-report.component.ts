@@ -5,6 +5,7 @@ import { ReportService } from "../shared/report.service";
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { ActivatedRoute } from '@angular/router';
+import NP from 'number-precision'
 
 @Component({
   selector: 'app-commission-report',
@@ -166,7 +167,7 @@ export class CommissionReportComponent implements OnInit {
               if (res.success) {
                   self.loading = false;
                   res.data.list.forEach((element: any, index: number) => {
-                      element.assignRateStaffing = (Number(element.assignRate)*100)+'%';
+                      element.assignRateStaffing = NP.round(Number(element.assignRate)*100,2)+'%';
                   });
                   self.staffingInfor = res.data.list;
                   self.totalElements = res.data.pageInfo.countTotal;

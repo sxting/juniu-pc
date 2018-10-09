@@ -41,6 +41,10 @@ export class StaffCommissionListComponent implements OnInit {
 
     ngOnInit() {
       this.moduleId = this.route.snapshot.params['menuId'];
+      if(this.route.snapshot.params['storeId']){
+        this.storeId = this.route.snapshot.params['storeId'];
+      }
+
       let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
           JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
       this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';

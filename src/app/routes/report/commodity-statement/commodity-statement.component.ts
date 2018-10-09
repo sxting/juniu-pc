@@ -105,57 +105,66 @@ export class CommodityStatementComponent implements OnInit {
                 if (res.success) {
                     that.loading = false;
                     let moneyListService = [];
-                    if(res.data.SERVICE.moneyList){
-                      res.data.SERVICE.moneyList.forEach((element: any, index: number) => {
-                        let list = {
-                          x: element.name.length > 8? element.name.substring(0,5) + '...' : element.name,
-                          y: element.value/100
-                        };
-                        moneyListService.push(list);
-                      });
-                      this.moneyListService = moneyListService;
+                    if(res.data.SERVICE){
+                      if(res.data.SERVICE.moneyList){
+                        res.data.SERVICE.moneyList.forEach((element: any, index: number) => {
+                          let list = {
+                            x: element.name.length > 8? element.name.substring(0,5) + '...' : element.name,
+                            y: element.value/100
+                          };
+                          moneyListService.push(list);
+                        });
+                        this.moneyListService = moneyListService;
+                      }
+                      let countListService = [];
+                      if(res.data.SERVICE.countList){
+                        res.data.SERVICE.countList.forEach((element: any, index: number) => {
+                          let item = {
+                            x: element.name.length > 8? element.name.substring(0,5) + '...' : element.name,
+                            y: element.value
+                          };
+                          countListService.push(item);
+                        });
+
+                        this.countListService = countListService;
+                      }
+                      if (this.moneyListService) this.moneyListTotalService = this.moneyListService.reduce((pre, now) => now.y + pre, 0);
+                      if (this.countListService) this.countListTotalService = this.countListService.reduce((pre, now) => now.y + pre, 0);
+                    }else{
+                      this.moneyListService = [];
+                      this.countListService = [];
                     }
 
-                    let countListService = [];
-                    if(res.data.SERVICE.countList){
-                      res.data.SERVICE.countList.forEach((element: any, index: number) => {
-                        let item = {
-                          x: element.name.length > 8? element.name.substring(0,5) + '...' : element.name,
-                          y: element.value
-                        };
-                        countListService.push(item);
-                      });
-
-                      this.countListService = countListService;
+                    //商品
+                    if(res.data.GOODS){
+                      let moneyListGoods = [];
+                      if(res.data.GOODS.moneyList){
+                        res.data.GOODS.moneyList.forEach((element: any, index: number) => {
+                          let list = {
+                            x: element.name.length > 8? element.name.substring(0,5) + '...' : element.name,
+                            y: element.value/100
+                          };
+                          moneyListGoods.push(list);
+                        });
+                        this.moneyListGoods = moneyListGoods;
+                      }
+                      if(res.data.GOODS.countList){
+                        let countListGoods = [];
+                        res.data.GOODS.countList.forEach((element: any, index: number) => {
+                          let item = {
+                            x: element.name.length > 8? element.name.substring(0,5) + '...' : element.name,
+                            y: element.value
+                          };
+                          countListGoods.push(item);
+                        });
+                        this.countListGoods = countListGoods;
+                      }
+                      if (this.moneyListGoods) this.moneyListTotalGoods = this.moneyListGoods.reduce((pre, now) => now.y + pre, 0);
+                      if (this.countListGoods) this.countListTotalGoods = this.countListGoods.reduce((pre, now) => now.y + pre, 0);
+                    }else{
+                      this.countListGoods = [];
+                      this.moneyListGoods = [];
                     }
-                    if (this.moneyListService) this.moneyListTotalService = this.moneyListService.reduce((pre, now) => now.y + pre, 0);
-                    if (this.countListService) this.countListTotalService = this.countListService.reduce((pre, now) => now.y + pre, 0);
-
-                    let moneyListGoods = [];
-                    if(res.data.GOODS.moneyList){
-                      res.data.GOODS.moneyList.forEach((element: any, index: number) => {
-                        let list = {
-                          x: element.name.length > 8? element.name.substring(0,5) + '...' : element.name,
-                          y: element.value/100
-                        };
-                        moneyListGoods.push(list);
-                      });
-                      this.moneyListGoods = moneyListGoods;
-                    }
-                    if(res.data.GOODS.countList){
-                      let countListGoods = [];
-                      res.data.GOODS.countList.forEach((element: any, index: number) => {
-                        let item = {
-                          x: element.name.length > 8? element.name.substring(0,5) + '...' : element.name,
-                          y: element.value
-                        };
-                        countListGoods.push(item);
-                      });
-                      this.countListGoods = countListGoods;
-                    }
-                    if (this.moneyListGoods) this.moneyListTotalGoods = this.moneyListGoods.reduce((pre, now) => now.y + pre, 0);
-                    if (this.countListGoods) this.countListTotalGoods = this.countListGoods.reduce((pre, now) => now.y + pre, 0);
-
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
