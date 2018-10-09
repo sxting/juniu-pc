@@ -48,7 +48,7 @@ export class VipTittleListComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     this.dataList = res.data.dataList;
-                    this.totalElements = res.data.countTotal;
+                    this.totalElements = res.data.pageInfo.countTotal;
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
