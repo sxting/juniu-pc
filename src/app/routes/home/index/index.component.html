@@ -2,7 +2,8 @@
 <div class="mg-b20"></div>
 
 <div nz-row [nzGutter]="24">
-    <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
+    <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6" class="today-yings">
+      <span class="look-qrcode-btn" (click)="onLookQrcodeClick(qrcodeAlert)">查看详情</span>
         <g2-card
             [title]="'今日营收（元）'"
             total="{{IncomeData.todayIncomeAmount/100 ? IncomeData.todayIncomeAmount/100 : 0}}"
@@ -155,3 +156,10 @@
     <div class="sub-title"><span>近七日流水走势</span></div>
     <div id="seven_day_flow"></div>
 </div>
+
+<ng-template #qrcodeAlert>
+  <div class="qrcode-alert">
+    <img [src]="qrcodeImages" alt="">
+    <div>微信扫描此二维码，可直接在手机端查看该报表</div>
+  </div>
+</ng-template>
