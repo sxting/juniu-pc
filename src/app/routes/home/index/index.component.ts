@@ -99,6 +99,8 @@ export class IndexComponent implements OnInit {
 
     guadanCount: any = 0;
 
+  qrcodeImages: any = '';
+
     constructor(
         private http: _HttpClient,
         private msg: NzMessageService,
@@ -302,7 +304,39 @@ export class IndexComponent implements OnInit {
         myChart.setOption(option);
     }
 
+  onLookQrcodeClick(tpl: any) {
+    this.faceQRcode();
+    this.modalSrv.create({
+      nzTitle: '',
+      nzContent: tpl,
+      nzWidth: '400px',
+      nzFooter: null
+    });
+  }
     /*====我是分界线====*/
+
+  //员工二维码
+  faceQRcode(){
+    let self = this;
+    let batchQuery =  {
+      staffId: JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['staffId']
+    };
+    this.manageService.faceQRcode(batchQuery).subscribe(
+      (res: any) => {
+        if (res.success) {
+          self.qrcodeImages = res.data;
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      },
+      error => {
+        FunctionUtil.errorAlter(error);
+      }
+    );
+  }
 
     //今日营收
     getIncome() {
