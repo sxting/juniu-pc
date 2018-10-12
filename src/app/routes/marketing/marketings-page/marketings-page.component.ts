@@ -758,16 +758,16 @@ export class MarketingsPageComponent implements OnInit {
                     this.unUseEndTime = (new Date(data.couponDef.disabledTimeEnd).getHours().toString().length < 2 ? ('0'+ new Date(data.couponDef.disabledTimeEnd).getHours()) : new Date(data.couponDef.disabledTimeEnd).getHours()) + ':' +
                       (new Date(data.couponDef.disabledTimeEnd).getMinutes().toString().length < 2 ? ('0' + new Date(data.couponDef.disabledTimeEnd).getMinutes()) : new Date(data.couponDef.disabledTimeEnd).getMinutes());
 
-                    this.form = this.fb.group({
+                      this.form = this.fb.group({
                         activity_obj_days: [{value: data.lastConsume, disabled: !(data.marketingStatus === 'INIT')}, this.paramsId=='01'||this.paramsId=='02'?[Validators.compose([Validators.required, Validators.pattern(`[0-9]+`)])]:[]],
                         activity_name: [{value: data.marketingName, disabled: !(data.marketingStatus === 'INIT')}, Validators.required],
                         activity_on_off: [{value: data.marketingStatus === 'RUNING', disabled: !(data.marketingStatus === 'INIT')}, []],
                         send_time_day: [{value: data.aheadDays, disabled: !(data.marketingStatus === 'INIT')}, []],
                         send_menkan: [{value: data.sendLimitMoney/100, disabled: !(data.marketingStatus === 'INIT')}, this.paramsId=='07' || this.paramsId=='08' || this.paramsId == '09' ? [Validators.compose([Validators.required, Validators.pattern(`[0-9]+`)])]:[] ],
                         sms_content: [{value: data.sendSmsContent, disabled: !(data.marketingStatus === 'INIT')}, []],
-                        active_date: [{value: data.marketingStartTime&&data.marketingEndTime ? [new Date(data.marketingStartTime), new Date(data.marketingEndTime)] : null, disabled: !(data.marketingStatus === 'INIT')}, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' ? [] : [Validators.required]],
-                        sms_send_date: [{value: this.paramsId == '04'?new Date(data.festival+ ' 00:00:00'):new Date(data.sendTime), disabled: !(data.marketingStatus === 'INIT')}, this.paramsId == '03' ? [] : [Validators.required]],
-                        sms_send_time: [{value: data.sendTime ? new Date(data.sendTime) : new Date(), disabled: !(data.marketingStatus === 'INIT')}, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' ? [] : [Validators.required]],
+                        active_date: [{value: data.marketingStartTime&&data.marketingEndTime ? [new Date(data.marketingStartTime), new Date(data.marketingEndTime)] : null, disabled: !(data.marketingStatus === 'INIT')}, this.paramsIdNumber <= 6 ? [] : [Validators.required]],
+                        sms_send_date: [{value: this.paramsId == '04'?new Date(data.festival+ ' 00:00:00'):new Date(data.sendTime), disabled: !(data.marketingStatus === 'INIT')}, this.paramsId == '03' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' || this.paramsId == '07' || this.paramsId == '08' || this.paramsId == '09' ? [] : [Validators.required]],
+                        sms_send_time: [{value: data.sendTime ? new Date(data.sendTime) : new Date(), disabled: !(data.marketingStatus === 'INIT')}, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' || this.paramsId == '07' || this.paramsId == '08' || this.paramsId == '09' ? [] : [Validators.required]],
                     });
 
                     /*门店选择*/
