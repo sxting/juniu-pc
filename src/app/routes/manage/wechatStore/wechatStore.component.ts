@@ -80,6 +80,9 @@ export class WechatStoreComponent {
             nzContent: '暂不可解除小程序的授权，请联系桔牛客服010-80441899解决'
         });
     }
+    downloadQr() {
+      window.location.href = "https://w.juniuo.com/api/wxappQrCode.do?merchantId=" + this.merchantId;
+    }
     errorAlert(err) {
         this.modalSrv.error({
             nzTitle: '温馨提示',
