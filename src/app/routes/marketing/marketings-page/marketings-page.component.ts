@@ -143,6 +143,7 @@ export class MarketingsPageComponent implements OnInit {
   selectIds: string = '';
   selectNames: string = '';
   selectNum: any = 0;
+  selectIdsArr: any = [];
 
   memberKey: any = '';
 
@@ -257,6 +258,7 @@ export class MarketingsPageComponent implements OnInit {
       nzOnCancel: () => {},
     });
     let selectIdsArr = this.selectIds.split(',');
+    this.selectIdsArr = selectIdsArr;
     if(this.paramsId === '001') {
       let data = {
         merchantId: this.merchantId
@@ -293,22 +295,49 @@ export class MarketingsPageComponent implements OnInit {
         }
       )
     } else if(this.paramsId === '003') {
-
+      this.searchMemberInputChange('')
     }
   }
 
   //根据输入的内容查找指定会员
   searchMemberInputChange(e: any) {
-    console.log(e);
+    let selectIdsArr = this.selectIds.split(',');
+    this.selectIdsArr = selectIdsArr;
+    let self = this;
     let data = {
-      search: e
+      search: e,
+      merchantId: this.merchantId
     };
     this.marketingService.getListByPhoneOrName(data).subscribe(
       (res: any) => {
         if(res.success) {
+          res.data.forEach(function (item: any) {
+            item.change = false;
+            item.storeId = item.customerId;
+            item.storeName = item.customerName;
+          });
+          let dataList = [{
+              change: false,
+              checked: false,
+              cityCode: '',
+              cityName: '',
+              stores: res.data
+          }];
+
+          dataList.forEach(function (item1: any) {
+            item1.stores.forEach(function (item2: any) {
+              if(selectIdsArr.indexOf(item2.storeId) >= 0) {
+                item2.change = true;
+              }
+            })
+          });
+          self.dataList = dataList;
 
         } else {
-
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          })
         }
       }
     )
@@ -392,6 +421,7 @@ export class MarketingsPageComponent implements OnInit {
     // );
     this.selectIds = selectIds;
     this.selectNames = selectNames.join(',');
+    this.selectIdsArr = selectIdsArr;
   }
 
   /**会员分层和指定会员营销 的活动对象选择 end**/
@@ -439,7 +469,8 @@ export class MarketingsPageComponent implements OnInit {
 
       //查询会员个数
       let data = {
-        tagIds: this.labelIdsArr.join(',')
+        tagIds: this.labelIdsArr.join(','),
+        merchantId: this.merchantId
       };
       this.marketingService.getCountTaglibCustomers(data).subscribe(
         (res: any) => {
@@ -473,6 +504,13 @@ export class MarketingsPageComponent implements OnInit {
       }
     )
   }
+
+    // 查询发券会员数量
+  getCalculateTargets() {
+
+  }
+
+
 
     //活动对象
     onActivityObjClick(type: string) {

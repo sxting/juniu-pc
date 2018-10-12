@@ -55,6 +55,16 @@ export class MarketingService {
       });
   }
 
+    //查询要发信息的会员数量 （001 002 003）
+  getCalculateTargets(Params: any) {
+    let apiUrl = Config.API + this.member + '/marketing/calculate/targets.json';
+    return this.http.get(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
 
     //创建优惠券 /coupon/saveCouponDef.json
     saveCouponDef(Params: any) {

@@ -36,8 +36,11 @@
           <span class="select-num-span">已选{{selectNum}}个会员</span>
           <span class="select-btn" *ngIf="(!isEdit) || marketingStatus === 'INIT'" (click)="onSelectBtnClick(memberAlert)">{{name}}</span>
           <p class="select-span-box">
-            <span>15201375253</span>
-            <span>15201375233</span>
+            <span *ngFor="let item1 of dataList" class="span-wrap">
+              <span *ngFor="let item2 of item1.stores">
+                <span *ngIf="selectIdsArr.indexOf(item2.storeId) >= 0" class="select-span">{{item2.phone}}</span>
+              </span>
+            </span>
           </p>
         </div>
         <div *ngIf="paramsId == '01' || paramsId == '02'">最近
@@ -248,7 +251,9 @@
             <ul class="shop_names">
               <li *ngFor="let store of city.stores; let storeIndex=index">
                 <input type="checkbox" [checked]="store.change" (click)="onSelectStoreInputClick(cityIndex, storeIndex)" />
-                <span>{{store.storeName}}</span>
+                <span *ngIf="paramsId === '003'">姓名：</span>
+                <span>{{store.storeName ? store.storeName : '--'}}</span>
+                <span *ngIf="paramsId === '003'">  &nbsp; &nbsp; 电话：{{store.phone}}</span>
               </li>
             </ul>
           </div>
@@ -268,7 +273,11 @@
               <!--门店-->
               <ul class="shop_names">
                 <li *ngFor="let store of city.stores">
-                  <span *ngIf="store.change == true">{{store.storeName}}</span>
+                  <p *ngIf="store.change == true">
+                    <span *ngIf="paramsId === '003'">姓名：</span>
+                    <span *ngIf="store.change == true">{{store.storeName ? store.storeName : '--'}}</span>
+                    <span *ngIf="paramsId === '003'">  &nbsp; &nbsp;  电话：{{store.phone}}</span>
+                  </p>
                 </li>
               </ul>
             </div>
