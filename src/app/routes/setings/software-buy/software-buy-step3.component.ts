@@ -95,17 +95,17 @@ export class SoftBuyStep3Component implements OnInit, OnDestroy {
         if(res.success) {
           this.codeImgUrl = res.data.codeImgUrl;
           let self = this, time = 0;
-          this.timer = setInterval(function () {
-            time += 3000;
-            if(time >= 60000) {
-              self.modalSrv.error({
-                nzTitle: '温馨提示',
-                nzContent: '支付超时'
-              });
-              clearInterval(self.timer);
-            }
-            self.getPayUrlQuery();
-          }, 3000)
+          // this.timer = setInterval(function () {
+          //   time += 3000;
+          //   if(time >= 60000) {
+          //     self.modalSrv.error({
+          //       nzTitle: '温馨提示',
+          //       nzContent: '支付超时'
+          //     });
+          //     clearInterval(self.timer);
+          //   }
+          //   self.getPayUrlQuery();
+          // }, 3000)
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',
