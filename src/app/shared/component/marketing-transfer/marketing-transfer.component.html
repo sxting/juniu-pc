@@ -13,13 +13,13 @@
         <div class="city-list" *ngFor="let city of dataList; let cityIndex=index">
           <!--城市-->
           <div class="select_all_btn">
-            <span class="city">{{city.roleName}}</span>
+            <span class="city">{{city.cityName}}</span>
           </div>
           <!--门店-->
           <ul class="shop_names">
-            <li *ngFor="let store of city.staffs; let storeIndex=index">
+            <li *ngFor="let store of city.stores; let storeIndex=index">
               <input type="checkbox" [checked]="store.change" (click)="onSelectStoreInputClick(cityIndex, storeIndex)" />
-              <span>{{store.staffName}}</span>
+              <span>{{store.storeName}}</span>
             </li>
           </ul>
         </div>
@@ -34,12 +34,12 @@
           <div class="city-list bbn" *ngIf="city.checked == true">
             <!--城市-->
             <div class="select_all_btn">
-              <span class="city">{{city.roleName}}</span>
+              <span class="city">{{city.cityName}}</span>
             </div>
             <!--门店-->
             <ul class="shop_names">
-              <li *ngFor="let store of city.staffs">
-                <span *ngIf="store.change == true">{{store.staffName}}</span>
+              <li *ngFor="let store of city.stores">
+                <span *ngIf="store.change == true">{{store.storeName}}</span>
               </li>
             </ul>
           </div>

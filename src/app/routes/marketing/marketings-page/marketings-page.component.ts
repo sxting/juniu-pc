@@ -107,6 +107,13 @@ export class MarketingsPageComponent implements OnInit {
     needSendKey: any = '';
     memberType: any = 'ALL';
 
+  name: string = '';
+  errorAlert: string = '';
+  title: string = '';
+  leftTitle: string = '';
+  rightTitle: string = '';
+  dataList: any[] = []; // 处理过的数据列表
+
     disabledDate = (current: Date): boolean => {
         // return differenceInDays(current, new Date(new Date().getTime() + 24*60*60*1000)) < 0;
         return differenceInDays(current, new Date(new Date().getTime())) < 0;
@@ -136,6 +143,8 @@ export class MarketingsPageComponent implements OnInit {
   selectIds: string = '';
   selectNames: string = '';
   selectNum: any = 0;
+
+  memberKey: any = '';
 
     //编辑
     marketingId: any = '';
@@ -168,6 +177,20 @@ export class MarketingsPageComponent implements OnInit {
         this.pageHeader2 = decodeURIComponent(this.route.snapshot.params['name']);
         this.pageDesc = decodeURIComponent(this.route.snapshot.params['desc']);
         this.merchantId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['merchantId'];
+
+      if(this.paramsId === '001') {
+        this.name = '选择层级';
+        this.errorAlert = '请选择会员层级';
+        this.title = '选择会员层级';
+        this.leftTitle = '可选层级';
+        this.rightTitle = '已选层级';
+      } else if(this.paramsId === '003') {
+        this.name = '选择会员';
+        this.errorAlert = '请选择会员';
+        this.title = '选择会员';
+        this.leftTitle = '可选会员';
+        this.rightTitle = '已选会员';
+      }
 
         if(this.paramsId == '05' || this.paramsId == '06' || this.paramsId == '12' || this.paramsId == '13') {
             this.useRange = '3';
@@ -216,8 +239,165 @@ export class MarketingsPageComponent implements OnInit {
     }
   }
 
+  /**会员分层和指定会员营销 的活动对象选择 start**/
+
+  /*点击选择span*/
+  onSelectBtnClick(tpl: any) {
+    /* 获取数据 转换数据 显示弹框  */
+    let self = this;
+    self.modalSrv.create({
+      nzTitle: '',
+      nzContent: tpl,
+      nzWidth: '800px',
+      nzClosable: false,
+      nzOnOk: () => {
+        self.onSaveClick();
+      },
+      nzOnCancel: () => {},
+    });
+    let selectIdsArr = this.selectIds.split(',');
+    if(this.paramsId === '001') {
+      let data = {
+        merchantId: this.merchantId
+      };
+      this.marketingService.getListAllHierarchy(data).subscribe(
+        (res: any) => {
+          if(res.success) {
+            res.data.forEach(function (item1: any) {
+              item1.change = false;
+              item1.checked = false;
+              item1.cityCode = item1.id;
+              item1.cityName = item1.name;
+              item1.stores = item1.childs;
+              item1.stores.forEach(function (item2: any) {
+                item2.change = false;
+                item2.storeId = item2.id;
+                item2.storeName = item2.name;
+              })
+            });
+            res.data.forEach(function (item1: any) {
+              item1.stores.forEach(function (item2: any) {
+                if(selectIdsArr.indexOf(item2.storeId) >= 0) {
+                  item2.change = true;
+                }
+              })
+            });
+            self.dataList = res.data;
+          } else {
+            this.modalSrv.error({
+              nzTitle: '温馨提示',
+              nzContent: res.errorInfo
+            })
+          }
+        }
+      )
+    } else if(this.paramsId === '003') {
+
+    }
+  }
+
+  //根据输入的内容查找指定会员
+  searchMemberInputChange(e: any) {
+    console.log(e);
+    let data = {
+      search: e
+    };
+    this.marketingService.getListByPhoneOrName(data).subscribe(
+      (res: any) => {
+        if(res.success) {
+
+        } else {
+
+        }
+      }
+    )
+  }
+
+  /*单选*/
+  onSelectStoreInputClick(cityIndex: number, storeIndex: number) {
+    this.dataList[cityIndex].stores[storeIndex].change = !this.dataList[cityIndex].stores[storeIndex].change;
+
+    let changeArr: any[] = [];
+    for (let i = 0; i < this.dataList[cityIndex].stores.length; i++) {
+      if (this.dataList[cityIndex].stores[i].change === true) {
+        changeArr.push(this.dataList[cityIndex].stores[i]);
+      }
+    }
+    /*判断左边选择城市的全选是否设置为true*/
+    if (changeArr.length === this.dataList[cityIndex].stores.length) {
+      this.dataList[cityIndex].change = true;
+    } else {
+      this.dataList[cityIndex].change = false;
+    }
+    /*判断右边城市的显示是否设置为true*/
+    if (changeArr.length > 0) {
+      this.dataList[cityIndex].checked = true;
+    } else {
+      this.dataList[cityIndex].checked = false;
+    }
+  }
+
+  /*点击弹框保存按钮*/
+  onSaveClick() {
+    this.selectIds = '';
+    let selectIds = '';
+    for (let i = 0; i < this.dataList.length; i++) {
+      for (let j = 0; j < this.dataList[i].stores.length; j++) {
+        if (this.dataList[i].stores[j].change === true) {
+          selectIds += ',' + this.dataList[i].stores[j].storeId;
+        }
+      }
+    }
+    if (selectIds) {
+      selectIds = selectIds.substring(1);
+      this.selectNum = selectIds.split(',').length;
+    }
+    if (this.dataList.length > 0 && !selectIds) {
+      this.modalSrv.error({
+        nzTitle: '温馨提示',
+        nzContent: this.errorAlert
+      });
+    }
+
+    let selectIdsArr = selectIds.split(',');
+    let selectNames = [];
+    for (let i = 0; i < this.dataList.length; i++) {
+      for (let j = 0; j < this.dataList[i].stores.length; j++) {
+        for(let k =0; k<selectIdsArr.length; k++) {
+          if(selectIdsArr[k] === this.dataList[i].stores[j].storeId) {
+            selectNames.push(this.dataList[i].stores[j].storeName)
+          }
+        }
+      }
+    }
+
+    // let data = {
+    //   memberType: this.memberType,
+    //   lastConsume: this.limitLastTime ? this.lastBuyTime : -1, //最后一次消费时间 *
+    //   storeIds: selectIds
+    // };
+    // this.marketingService.getCalculateMemberNum(data).subscribe(
+    //   (res: any) => {
+    //     if(res.success) {
+    //       this.calculateMemberNum.emit({calculateMemberNum: res.data.count});
+    //       this.needSendKey.emit({needSendKey: res.data.needSendKey});
+    //     } else {
+    //       this.modalSrv.error({
+    //         nzTitle: '温馨提示',
+    //         nzContent: res.errorInfo
+    //       });
+    //     }
+    //   }
+    // );
+    this.selectIds = selectIds;
+    this.selectNames = selectNames.join(',');
+  }
+
+  /**会员分层和指定会员营销 的活动对象选择 end**/
+
     //选择标签
   onSelectLabelClick(tpl: any) {
+    this.getAllTaglibs();
     let self = this;
     this.modalSrv.create({
       nzTitle: '选择会员标签',
@@ -248,12 +428,49 @@ export class MarketingsPageComponent implements OnInit {
     });
   }
 
+  // 点击标签选择
   onLabelItemClick(item: any) {
       if(this.labelIdsArr.indexOf(item.id) < 0) {
         this.labelIdsArr.push(item.id)
       } else {
         this.labelIdsArr.splice(this.labelIdsArr.indexOf(item.id), 1)
       }
+
+      //查询会员个数
+      let data = {
+        tagIds: this.labelIdsArr.join(',')
+      };
+      this.marketingService.getCountTaglibCustomers(data).subscribe(
+        (res: any) => {
+            if(res.success) {
+
+            } else {
+              this.modalSrv.error({
+                nzTitle: '温馨提示',
+                nzContent: res.errorInfo
+              })
+            }
+        }
+      )
+  }
+
+  //查询全部会员标签
+  getAllTaglibs() {
+    let data = {
+      merchantId: this.merchantId
+    };
+    this.marketingService.getAllTaglibs(data).subscribe(
+      (res: any) => {
+        if(res.success) {
+          console.log(res.data);
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          })
+        }
+      }
+    )
   }
 
     //活动对象
@@ -883,11 +1100,6 @@ export class MarketingsPageComponent implements OnInit {
     }
     /*编辑end*/
 
-  //  会员层级
-  getLevelList() {
-
-  }
-
     //获取会员数量
     getCalculateMemberNum() {
         let data = {
@@ -1253,28 +1465,6 @@ export class MarketingsPageComponent implements OnInit {
             un_use_end_time: [this.form2.value.un_use_end_time, Validators.required],
         };
     }
-
-
-    // 选择活动对象（会员）
-
-  getSelectIds(event: any) {
-    if(event) {
-      this.selectIds = event.selectIds;
-    }
-  }
-
-  getSelectNames(event: any) {
-    if(event) {
-      this.selectNames = event.selectNames;
-    }
-  }
-
-  getSelectNum(event: any) {
-    if(event) {
-      this.selectNum = event.selectNum;
-    }
-  }
-
 
     //选择门店start
     getStoresChangeNum(event: any) {

@@ -18,14 +18,8 @@
       <nz-form-control nzXs="24" nzSm="15" nzMd="16">
         <div *ngIf="paramsId === '001'">
           <span class="select-num-span">已选{{selectNum}}个会员层级</span>
-          <jn-marketing-transfer *ngIf="(!isEdit) || marketingStatus === 'INIT'" [paramsId]="paramsId" [isEdit]="isEdit"
-                    [getCalculateMemberNum]="true"
-                    (selectIds)="getSelectIds($event)"
-                    (selectNames)="getSelectNames($event)"
-                    (selectNum)="getSelectNum($event)"
-                    (calculateMemberNum)="getCalculateMemberNumber($event)"
-                    (needSendKey)="getNeedSendKey($event)">
-          </jn-marketing-transfer>
+          <!--选择按钮-->
+          <span class="select-btn" *ngIf="(!isEdit) || marketingStatus === 'INIT'" (click)="onSelectBtnClick(memberAlert)">{{name}}</span>
           <p class="select-span-box">
             <span>月均消费金额（0~100）</span>
             <span>月均消费金额（100~300）</span>
@@ -40,14 +34,7 @@
         </div>
         <div *ngIf="paramsId === '003'">
           <span class="select-num-span">已选{{selectNum}}个会员</span>
-          <jn-marketing-transfer *ngIf="(!isEdit) || marketingStatus === 'INIT'" [paramsId]="paramsId" [isEdit]="isEdit"
-                                 [getCalculateMemberNum]="true"
-                                 (selectIds)="getSelectIds($event)"
-                                 (selectNames)="getSelectNames($event)"
-                                 (selectNum)="getSelectNum($event)"
-                                 (calculateMemberNum)="getCalculateMemberNumber($event)"
-                                 (needSendKey)="getNeedSendKey($event)">
-          </jn-marketing-transfer>
+          <span class="select-btn" *ngIf="(!isEdit) || marketingStatus === 'INIT'" (click)="onSelectBtnClick(memberAlert)">{{name}}</span>
           <p class="select-span-box">
             <span>15201375253</span>
             <span>15201375233</span>
@@ -240,6 +227,57 @@
     </nz-form-item>
   </form>
 </nz-card>
+
+<!--弹框-->
+<ng-template #memberAlert>
+  <div class="member-elert">
+    <div class="reserve-record-alert">
+      <!--左边-->
+      <div class="list">
+        <p class="head_store clearfix">{{leftTitle}}</p>
+        <div *ngIf="paramsId === '003'" class="search-box">
+          查询会员： <input (ngModelChange)="searchMemberInputChange($event)" [(ngModel)]="memberKey" nz-input placeholder="请输入会员手机号">
+        </div>
+        <div class="show_all_stores" [class.show_all_stores1]="paramsId === '003'">
+          <div class="city-list" *ngFor="let city of dataList; let cityIndex=index">
+            <!--城市-->
+            <div class="select_all_btn">
+              <span class="city">{{city.cityName}}</span>
+            </div>
+            <!--门店-->
+            <ul class="shop_names">
+              <li *ngFor="let store of city.stores; let storeIndex=index">
+                <input type="checkbox" [checked]="store.change" (click)="onSelectStoreInputClick(cityIndex, storeIndex)" />
+                <span>{{store.storeName}}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!--右边-->
+      <div class="list">
+        <p class="head_store">{{rightTitle}}</p>
+        <div class="show_all_stores">
+          <div  *ngFor="let city of dataList">
+            <div class="city-list bbn" *ngIf="city.checked == true">
+              <!--城市-->
+              <div class="select_all_btn">
+                <span class="city">{{city.cityName}}</span>
+              </div>
+              <!--门店-->
+              <ul class="shop_names">
+                <li *ngFor="let store of city.stores">
+                  <span *ngIf="store.change == true">{{store.storeName}}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
 
 <ng-template #labelAlert>
   <div class="label-item-box">

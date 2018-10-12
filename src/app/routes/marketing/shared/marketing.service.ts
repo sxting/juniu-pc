@@ -15,6 +15,47 @@ export class MarketingService {
     product = 'product';
     member = 'member';
 
+    //查询全部会员层级
+    getListAllHierarchy(Params: any) {
+      let apiUrl = Config.API + this.member + '/marketing/listAllHierarchy.json';
+      return this.http.get(apiUrl, Params)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
+
+    //查询全部会员标签
+    getAllTaglibs(Params: any) {
+      let apiUrl = Config.API + this.member + '/taglib/allTaglibs.json';
+      return this.http.get(apiUrl, Params)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
+
+    //查询会员
+  getListByPhoneOrName(Params: any) {
+    let apiUrl = Config.API + this.member + '/customer/listByPhoneOrName.json';
+    return this.http.get(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+    //根据标签ids查询标签的会员个数
+  getCountTaglibCustomers(Params: any) {
+    let apiUrl = Config.API + this.member + '/taglib/countTaglibCustomers.json';
+    return this.http.get(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+
     //创建优惠券 /coupon/saveCouponDef.json
     saveCouponDef(Params: any) {
         let apiUrl = Config.API + this.member + '/coupon/saveCouponDef.json';
