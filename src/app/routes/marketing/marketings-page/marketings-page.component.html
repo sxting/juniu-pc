@@ -21,15 +21,18 @@
           <!--选择按钮-->
           <span class="select-btn" *ngIf="(!isEdit) || marketingStatus === 'INIT'" (click)="onSelectBtnClick(memberAlert)">{{name}}</span>
           <p class="select-span-box">
-            <span>月均消费金额（0~100）</span>
-            <span>月均消费金额（100~300）</span>
+            <span *ngFor="let item1 of dataList" class="span-wrap">
+              <span *ngFor="let item2 of item1.stores">
+                <span *ngIf="selectIdsArr.indexOf(item2.storeId) >= 0" class="select-span">{{item1.cityName}}({{item2.storeName}})</span>
+              </span>
+            </span>
           </p>
         </div>
         <div *ngIf="paramsId === '002'">
           <span class="select-num-span">已选{{selectNum}}个会员标签</span>
           <span class="click-span" (click)="onSelectLabelClick(labelAlert)">选择标签</span>
           <p class="select-span-box">
-            <span *ngFor="let item of labelsArr">{{item.name}}</span>
+            <span *ngFor="let item of labelsArr" class="select-span">{{item.tagName}}</span>
           </p>
         </div>
         <div *ngIf="paramsId === '003'">
@@ -150,7 +153,8 @@
       <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="activity_name">活动门店</nz-form-label>
       <nz-form-control nzXs="24" nzSm="15" nzMd="15">
         已选 {{storesChangeNum}} 家门店
-        <jn-store [isEdit]="isEdit" [cityStoreList]="cityStoreList"
+        <jn-store [isEdit]="isEdit" [targetIds]="selectIds" [paramsId]="paramsId"
+                  [cityStoreList]="cityStoreList"
                   [getCalculateMemberNum]="true"
                   [lastBuyTime]="lastBuyTime"
                   [limitLastTime]="limitLastTime"
@@ -290,9 +294,9 @@
 
 <ng-template #labelAlert>
   <div class="label-item-box">
-    <span *ngFor="let item of labelList" [class.active]="labelIdsArr.indexOf(item.id) >= 0" (click)="onLabelItemClick(item)">{{item.name}}</span>
+    <span *ngFor="let item of labelList" [class.active]="labelIdsArr.indexOf(item.tagId) >= 0" (click)="onLabelItemClick(item)">{{item.tagName}}</span>
   </div>
-  <p class="label-member-num">此标签下包含会员数： 200</p>
+  <p class="label-member-num">此标签下包含会员数： {{labelMemberNum}}</p>
 </ng-template>
 
 <!--创建优惠券-->

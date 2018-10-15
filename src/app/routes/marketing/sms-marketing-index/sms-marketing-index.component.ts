@@ -22,9 +22,9 @@ export class SmsMarketingIndexComponent implements OnInit {
     ngOnInit() {
       this.moduleId = this.route.snapshot.params['menuId'];
         this.list1 = [
-          // { id: '001', name: '会员分层营销', img: './assets/img/sms_marketing_001.png', desc: '根据会员消费水平、消费频次、最后一次消费时间等纬度划分会员层级，针对不同层级会员发布营销活动，精准触达顾客。' },
-          // { id: '002', name: '会员标签营销', img: './assets/img/sms_marketing_002.jpg', desc: '针对不同的会员设定不同的会员标签，并可针对不同的会员标签分类进行精准营销，培养优质客户。' },
-          // { id: '003', name: '指定会员营销', img: './assets/img/sms_marketing_003.jpg', desc: '查询并进行精准的会员营销活动，提高会员留存，关怀并发展为优质会员。' },
+          { id: '001', name: '会员分层营销', img: './assets/img/sms_marketing_001.png', desc: '根据会员消费水平、消费频次、最后一次消费时间等纬度划分会员层级，针对不同层级会员发布营销活动，精准触达顾客。' },
+          { id: '002', name: '会员标签营销', img: './assets/img/sms_marketing_002.jpg', desc: '针对不同的会员设定不同的会员标签，并可针对不同的会员标签分类进行精准营销，培养优质客户。' },
+          { id: '003', name: '指定会员营销', img: './assets/img/sms_marketing_003.jpg', desc: '查询并进行精准的会员营销活动，提高会员留存，关怀并发展为优质会员。' },
           { id: '01', name: '持卡会员提醒', img: './assets/img/sms_marketing_1.png', desc: '唤醒长期未到店消费的持卡会员。商家可以自主设定未到店时长，并对该期间内未到店消费的顾客发送营销短信和优惠券。' },
           { id: '02', name: '潜在会员转化', img: './assets/img/sms_marketing_2.png', desc: '潜在会员为在店内或线上渠道留过手机号，到店消费但没有办卡的会员。针对这部分会员我们可以发送短信和优惠券，促进其到店消费。' },
           { id: '03', name: '会员生日礼', img: './assets/img/sms_marketing_3.png', desc: '在会员生日当天送上祝福短信和优惠券，拉近与顾客距离的同时，促进持卡会员的到店消费。' },

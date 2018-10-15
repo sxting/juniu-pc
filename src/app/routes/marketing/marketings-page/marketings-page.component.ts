@@ -119,26 +119,10 @@ export class MarketingsPageComponent implements OnInit {
         return differenceInDays(current, new Date(new Date().getTime())) < 0;
     };
 
-  labelList: any[] = [
-    {
-      name: '油性皮肤',
-      id: '01'
-    },
-    {
-      name: '油性皮肤',
-      id: '02'
-    },
-    {
-      name: '油性皮肤',
-      id: '03'
-    },
-    {
-      name: '油性皮肤',
-      id: '04'
-    }
-  ];
+  labelList: any[] = [];
   labelIdsArr: any = [];
   labelsArr: any = [];
+  labelMemberNum: any = 0;
 
   selectIds: string = '';
   selectNames: string = '';
@@ -401,6 +385,13 @@ export class MarketingsPageComponent implements OnInit {
       }
     }
 
+    if(this.paramsId === '001') {
+      this.getCalculateTargets('CUSTOMER_HIERARCHY', selectIds);
+    } else if(this.paramsId === '003') {
+      this.getCalculateTargets('CUSTOMER_SPECIFIED', selectIds);
+    }
+
+
     // let data = {
     //   memberType: this.memberType,
     //   lastConsume: this.limitLastTime ? this.lastBuyTime : -1, //最后一次消费时间 *
@@ -438,19 +429,20 @@ export class MarketingsPageComponent implements OnInit {
         self.labelsArr = [];
         self.labelList.forEach(function (item1: any, i: any) {
           self.labelIdsArr.forEach(function (item2: any, i: any) {
-            if(item1.id === item2) {
+            if(item1.tagId === item2) {
               self.labelsArr.push(item1)
             }
           })
         });
         self.selectNum = self.labelIdsArr.length;
+        self.getCalculateTargets('CUSTOMER_TAGLIBS', '');
       },
       nzOnCancel: () => {
         self.labelIdsArr = [];
         self.labelList.forEach(function (item1: any, i: any) {
           self.labelsArr.forEach(function (item2: any) {
-            if(item1.id === item2.id) {
-              self.labelIdsArr.push(item2.id)
+            if(item1.tagId === item2.tagId) {
+              self.labelIdsArr.push(item2.tagId)
             }
           });
         });
@@ -461,10 +453,10 @@ export class MarketingsPageComponent implements OnInit {
 
   // 点击标签选择
   onLabelItemClick(item: any) {
-      if(this.labelIdsArr.indexOf(item.id) < 0) {
-        this.labelIdsArr.push(item.id)
+      if(this.labelIdsArr.indexOf(item.tagId) < 0) {
+        this.labelIdsArr.push(item.tagId)
       } else {
-        this.labelIdsArr.splice(this.labelIdsArr.indexOf(item.id), 1)
+        this.labelIdsArr.splice(this.labelIdsArr.indexOf(item.tagId), 1)
       }
 
       //查询会员个数
@@ -475,7 +467,7 @@ export class MarketingsPageComponent implements OnInit {
       this.marketingService.getCountTaglibCustomers(data).subscribe(
         (res: any) => {
             if(res.success) {
-
+              this.labelMemberNum = res.data
             } else {
               this.modalSrv.error({
                 nzTitle: '温馨提示',
@@ -494,7 +486,7 @@ export class MarketingsPageComponent implements OnInit {
     this.marketingService.getAllTaglibs(data).subscribe(
       (res: any) => {
         if(res.success) {
-          console.log(res.data);
+          this.labelList = res.data;
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',
@@ -506,8 +498,26 @@ export class MarketingsPageComponent implements OnInit {
   }
 
     // 查询发券会员数量
-  getCalculateTargets() {
-
+  getCalculateTargets(targetType: string, targetIds: string) {
+    let data = {
+      merchantId: this.merchantId,
+      targetIds: targetIds,
+      targetType: targetType,
+      storeIds: this.selectStoresIds
+    };
+    this.marketingService.getCalculateTargets(data).subscribe(
+      (res: any) => {
+        if(res.success) {
+          this.needSendKey = res.data.needSendKey;
+          this.calculateMemberNum = res.data.count;
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          })
+        }
+      }
+    )
   }
 
 
