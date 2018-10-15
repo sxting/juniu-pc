@@ -7,7 +7,7 @@
             text-align: center;" [nzSize]="'large'"></nz-spin>
             <input class="file_upload" type="file" (change)="uploadImage($event, i)" />
             <input class="file_upload_val" name="{{image.name}}" type="hidden" />
-            <img *ngIf="image.showDelete" src="assets/img/close.png" class="delete" (click)="deleteImage(i)" />
+            <img *ngIf="image.showDelete" src="assets/img/delete.png" class="delete" (click)="deleteImage(i)" />
         </li>
     </ul>
 </li>

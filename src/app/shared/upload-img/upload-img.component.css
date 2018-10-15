@@ -46,10 +46,11 @@
 }
 
 .upload_pic .pic_up li .delete {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 0.4rem
+  position: absolute;
+  top: -8px;
+  right: 0;
+  width: 16px;
+  height: 16px;
 }
 
 .upload_pic .pic_up>li{

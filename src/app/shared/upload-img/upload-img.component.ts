@@ -159,7 +159,7 @@ export class UploadImageComponent implements OnInit, OnChanges {
               self.imageArray[index].imageId = self.uploadImageResult.pictureId;
               self.imageArray[index].src = Config.OSS_IMAGE_URL
                 + `${self.uploadImageResult.pictureId}/resize_80_60/mode_fill`;
-              self.imageArray[index].showDelete = false;
+              self.imageArray[index].showDelete = true;
               self.img.emit(this.imageArray);
             }
           }
