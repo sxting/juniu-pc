@@ -420,6 +420,7 @@ export class MarketingsPageComponent implements OnInit {
     //选择标签
   onSelectLabelClick(tpl: any) {
     this.getAllTaglibs();
+    this.getCountTaglibCustomers();
     let self = this;
     this.modalSrv.create({
       nzTitle: '选择会员标签',
@@ -459,23 +460,29 @@ export class MarketingsPageComponent implements OnInit {
         this.labelIdsArr.splice(this.labelIdsArr.indexOf(item.tagId), 1)
       }
 
-      //查询会员个数
-      let data = {
-        tagIds: this.labelIdsArr.join(','),
-        merchantId: this.merchantId
-      };
+      this.getCountTaglibCustomers();
+  }
+
+  //查询会员个数
+  getCountTaglibCustomers() {
+    let data = {
+      tagIds: this.labelIdsArr.join(','),
+      merchantId: this.merchantId
+    };
+    if(this.labelIdsArr.join(',')) {
       this.marketingService.getCountTaglibCustomers(data).subscribe(
         (res: any) => {
-            if(res.success) {
-              this.labelMemberNum = res.data
-            } else {
-              this.modalSrv.error({
-                nzTitle: '温馨提示',
-                nzContent: res.errorInfo
-              })
-            }
+          if(res.success) {
+            this.labelMemberNum = res.data
+          } else {
+            this.modalSrv.error({
+              nzTitle: '温馨提示',
+              nzContent: res.errorInfo
+            })
+          }
         }
       )
+    }
   }
 
   //查询全部会员标签
