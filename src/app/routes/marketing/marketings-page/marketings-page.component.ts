@@ -112,7 +112,7 @@ export class MarketingsPageComponent implements OnInit {
   title: string = '';
   leftTitle: string = '';
   rightTitle: string = '';
-  dataList: any[] = []; // 处理过的数据列表
+  dataList: any[] = []; // 处理过的全部数据列表
 
     disabledDate = (current: Date): boolean => {
         // return differenceInDays(current, new Date(new Date().getTime() + 24*60*60*1000)) < 0;
@@ -128,6 +128,7 @@ export class MarketingsPageComponent implements OnInit {
   selectNames: string = '';
   selectNum: any = 0;
   selectIdsArr: any = [];
+  dataIdsArr: any = []; //查询出的符合条件的会员ids；
 
   memberKey: any = '';
 
@@ -226,7 +227,6 @@ export class MarketingsPageComponent implements OnInit {
   }
 
   /**会员分层和指定会员营销 的活动对象选择 start**/
-
   /*点击选择span*/
   onSelectBtnClick(tpl: any) {
     /* 获取数据 转换数据 显示弹框  */
@@ -266,6 +266,8 @@ export class MarketingsPageComponent implements OnInit {
               item1.stores.forEach(function (item2: any) {
                 if(selectIdsArr.indexOf(item2.storeId) >= 0) {
                   item2.change = true;
+                  item1.checked = true;
+                  item1.change = true;
                 }
               })
             });
@@ -279,12 +281,13 @@ export class MarketingsPageComponent implements OnInit {
         }
       )
     } else if(this.paramsId === '003') {
-      this.searchMemberInputChange('')
+      this.memberKey = '';
+      this.searchMemberInputChange('',true)
     }
   }
 
   //根据输入的内容查找指定会员
-  searchMemberInputChange(e: any) {
+  searchMemberInputChange(e: any, searchAll: boolean) {
     let selectIdsArr = this.selectIds.split(',');
     this.selectIdsArr = selectIdsArr;
     let self = this;
@@ -292,6 +295,7 @@ export class MarketingsPageComponent implements OnInit {
       search: e,
       merchantId: this.merchantId
     };
+    self.dataIdsArr = [];
     this.marketingService.getListByPhoneOrName(data).subscribe(
       (res: any) => {
         if(res.success) {
@@ -299,6 +303,7 @@ export class MarketingsPageComponent implements OnInit {
             item.change = false;
             item.storeId = item.customerId;
             item.storeName = item.customerName;
+            self.dataIdsArr.push(item.customerId);
           });
           let dataList = [{
               change: false,
@@ -312,10 +317,14 @@ export class MarketingsPageComponent implements OnInit {
             item1.stores.forEach(function (item2: any) {
               if(selectIdsArr.indexOf(item2.storeId) >= 0) {
                 item2.change = true;
+                item1.checked = true;
+                item1.change = true;
               }
             })
           });
-          self.dataList = dataList;
+          if(searchAll) {
+            self.dataList = dataList;
+          }
 
         } else {
           this.modalSrv.error({
@@ -391,25 +400,6 @@ export class MarketingsPageComponent implements OnInit {
       this.getCalculateTargets('CUSTOMER_SPECIFIED', selectIds);
     }
 
-
-    // let data = {
-    //   memberType: this.memberType,
-    //   lastConsume: this.limitLastTime ? this.lastBuyTime : -1, //最后一次消费时间 *
-    //   storeIds: selectIds
-    // };
-    // this.marketingService.getCalculateMemberNum(data).subscribe(
-    //   (res: any) => {
-    //     if(res.success) {
-    //       this.calculateMemberNum.emit({calculateMemberNum: res.data.count});
-    //       this.needSendKey.emit({needSendKey: res.data.needSendKey});
-    //     } else {
-    //       this.modalSrv.error({
-    //         nzTitle: '温馨提示',
-    //         nzContent: res.errorInfo
-    //       });
-    //     }
-    //   }
-    // );
     this.selectIds = selectIds;
     this.selectNames = selectNames.join(',');
     this.selectIdsArr = selectIdsArr;

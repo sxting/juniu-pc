@@ -243,7 +243,7 @@
       <div class="list">
         <p class="head_store clearfix">{{leftTitle}}</p>
         <div *ngIf="paramsId === '003'" class="search-box">
-          查询会员： <input (ngModelChange)="searchMemberInputChange($event)" [(ngModel)]="memberKey" nz-input placeholder="请输入会员手机号">
+          查询会员： <input (ngModelChange)="searchMemberInputChange($event, false)" [(ngModel)]="memberKey" nz-input placeholder="请输入会员手机号">
         </div>
         <div class="show_all_stores" [class.show_all_stores1]="paramsId === '003'">
           <div class="city-list" *ngFor="let city of dataList; let cityIndex=index">
@@ -254,10 +254,12 @@
             <!--门店-->
             <ul class="shop_names">
               <li *ngFor="let store of city.stores; let storeIndex=index">
-                <input type="checkbox" [checked]="store.change" (click)="onSelectStoreInputClick(cityIndex, storeIndex)" />
-                <span *ngIf="paramsId === '003'">姓名：</span>
-                <span>{{store.storeName ? store.storeName : '--'}}</span>
-                <span *ngIf="paramsId === '003'">  &nbsp; &nbsp; 电话：{{store.phone}}</span>
+                <div class="dis-none" [class.show]="dataIdsArr.indexOf(store.storeId) >= 0">
+                  <input type="checkbox" [checked]="store.change" (click)="onSelectStoreInputClick(cityIndex, storeIndex)" />
+                  <span *ngIf="paramsId === '003'">姓名：</span>
+                  <span>{{store.storeName ? store.storeName : '--'}}</span>
+                  <span *ngIf="paramsId === '003'">  &nbsp; &nbsp; 电话：{{store.phone}}</span>
+                </div>
               </li>
             </ul>
           </div>
