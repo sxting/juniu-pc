@@ -49,7 +49,9 @@ export class SoftBuyStep2Component implements OnInit {
   }
 
   change(e: any) {
-    this.currentPage = e.pi;
+    if(e.pi) {
+      this.currentPage = e.pi;
+    }
   }
 
   checkboxChange(list: any) {
