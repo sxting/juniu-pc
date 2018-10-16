@@ -482,7 +482,7 @@ export class ReleaseGroupsComponent implements OnInit {
 
                     let pictureDetails;
                     if (res.data.images) {
-                        pictureDetails = res.data.images.length > 0 ? res.images : '';
+                        pictureDetails = res.data.images.length > 0 ? res.data.images : '';
                     }
                     self.pictureDetails = pictureDetails;
                     // this.shopIds = res.shopIds;
@@ -536,7 +536,7 @@ export class ReleaseGroupsComponent implements OnInit {
                     } else {
                         transforBuyerNotes = self.buyerNotes;
                     }
-                    if (res.descriptions.length > 0) {
+                    if (res.data.descriptions.length > 0) {
                         descriptions = res.data.descriptions;
                         self.editChangeData(descriptions, transforDescriptions);
                     } else {
