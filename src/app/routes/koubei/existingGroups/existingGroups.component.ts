@@ -163,7 +163,7 @@ export class ExistingGroupsComponent implements OnInit {
         if (res.success) {
           this.modalSrv.success({
             nzTitle: '成功!',
-            nzContent: '这个活动已经开始.'
+            nzContent: '这个活动已经结束.'
           });
           this.listHttp();
         } else {
