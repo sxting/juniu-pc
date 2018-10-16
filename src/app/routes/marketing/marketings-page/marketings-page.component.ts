@@ -135,6 +135,7 @@ export class MarketingsPageComponent implements OnInit {
     //编辑
     marketingId: any = '';
     marketingStatus: any = '';
+    targetNames: any = [];
 
   moduleId: any = '';
 
@@ -407,7 +408,8 @@ export class MarketingsPageComponent implements OnInit {
 
   /**会员分层和指定会员营销 的活动对象选择 end**/
 
-    //选择标签
+  /*会员标签营销 start*/
+  //选择标签
   onSelectLabelClick(tpl: any) {
     this.getAllTaglibs();
     this.getCountTaglibCustomers();
@@ -426,7 +428,7 @@ export class MarketingsPageComponent implements OnInit {
           })
         });
         self.selectNum = self.labelIdsArr.length;
-        self.getCalculateTargets('CUSTOMER_TAGLIBS', '');
+        self.getCalculateTargets('CUSTOMER_TAGLIBS', self.labelIdsArr.join(','));
       },
       nzOnCancel: () => {
         self.labelIdsArr = [];
@@ -472,6 +474,8 @@ export class MarketingsPageComponent implements OnInit {
           }
         }
       )
+    } else {
+      this.labelMemberNum = 0;
     }
   }
 
@@ -517,6 +521,7 @@ export class MarketingsPageComponent implements OnInit {
     )
   }
 
+  /*会员标签营销 end*/
 
 
     //活动对象
@@ -931,9 +936,26 @@ export class MarketingsPageComponent implements OnInit {
                 couponDefId: this.couponId,
                 marketingId: this.marketingId,
             };
+            if(this.paramsId === '001' || this.paramsId === '002' || this.paramsId === '003') {
+              data.applyMemberType = 'CARD';
+              if(this.paramsId === '002') {
+                data.targetIds = this.labelIdsArr.join(',');
+              } else {
+                data.targetIds = this.selectIds;
+              }
+            }
         }
 
         switch(this.paramsId) {
+            case '001':
+                data.scene = 'CUSTOMER_HIERARCHY';
+                break;
+            case '002':
+                data.scene = 'CUSTOMER_TAGLIBS';
+                break;
+            case '003':
+                data.scene = 'CUSTOMER_SPECIFIED';
+                break;
             case '01':
                 data.scene = 'AWAKENING';
                 break;
@@ -999,12 +1021,40 @@ export class MarketingsPageComponent implements OnInit {
         let data = {
             marketingId: this.marketingId
         };
+        let self = this;
         this.marketingService.getThreeCoupons(data).subscribe(
             (res: any) => {
                 if(res.success) {
                     let data = res.data;
                     this.marketingStatus = data.marketingStatus;
                     this.smsInputValue = data.sendSmsContent;
+                    this.calculateMemberNum = data.needSendKeyCount;
+                    this.selectNum = data.targetNames.length;
+                    this.targetNames = data.targetNames;
+                    this.selectIds = data.targetIds;
+                    this.labelIdsArr = data.targetIds.split(',');
+                    this.selectIdsArr = data.targetIds.split(',');
+                  this.marketingService.getAllTaglibs({ merchantId: this.merchantId }).subscribe(
+                    (res: any) => {
+                      if(res.success) {
+                        this.labelList = res.data;
+                        self.labelsArr = [];
+                        self.labelList.forEach(function (item1: any, i: any) {
+                          self.labelIdsArr.forEach(function (item2: any, i: any) {
+                            if(item1.tagId === item2) {
+                              self.labelsArr.push(item1)
+                            }
+                          })
+                        });
+                      } else {
+                        this.modalSrv.error({
+                          nzTitle: '温馨提示',
+                          nzContent: res.errorInfo
+                        })
+                      }
+                    }
+                  );
+
                     this.sendTimeToday = data.aheadDays == 0;
                     this.memberType = data.applyMemberType;
                     this.selectStoresIds = data.applyStoreIds;
@@ -1168,7 +1218,7 @@ export class MarketingsPageComponent implements OnInit {
         )
     }
 
-    //创建一般会员营销
+    //创建一般会员营销 + '001 002 003'
     createMarketing(data: any) {
         this.marketingService.createMarketing(data).subscribe(
             (res: any) => {

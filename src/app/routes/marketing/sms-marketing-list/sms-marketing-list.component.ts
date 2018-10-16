@@ -23,6 +23,9 @@ export class SmsMarketingListComponent implements OnInit {
     ];
     options1: any = [
         { value: 'ALL', label: '全部' },
+        { label: '会员分层营销', value: 'CUSTOMER_HIERARCHY' },
+        { label: '会员标签营销', value: 'CUSTOMER_TAGLIBS' },
+        { label: '指定会员营销', value: 'CUSTOMER_SPECIFIED' },
         { label: '持卡会员唤醒', value: 'AWAKENING' },
         { label: '潜在会员转化', value: 'TRANSFORMATION' },
         { label: '会员生日礼', value: 'BIRTHDAY_GIFT' },
@@ -225,7 +228,10 @@ export class SmsMarketingListComponent implements OnInit {
             { id: '09', name: '二次到店满减', img: './assets/img/sms_marketing_9.png', desc: '消费达到一定条件后，送给顾客一张代金券，下次到店消费可以满减。' },
             { id: '11', name: '节日主题活动', img: './assets/img/wechat_marketing_1.png', desc: '在小程序中创建节日主题活动，吸引线上用户到店消费。' },
             { id: '12', name: '新品促销', img: './assets/img/sms_marketing_5.png', desc: '在小程序上展示新品优惠，唤起顾客到店消费。' },
-            { id: '13', name: '指定项目促销', img: './assets/img/sms_marketing_6.png', desc: '在小程序上展示指定项目优惠，唤起顾客到店消费。' }
+            { id: '13', name: '指定项目促销', img: './assets/img/sms_marketing_6.png', desc: '在小程序上展示指定项目优惠，唤起顾客到店消费。' },
+            { id: '001', name: '会员分层营销', img: './assets/img/sms_marketing_001.png', desc: '根据会员消费水平、消费频次、最后一次消费时间等纬度划分会员层级，针对不同层级会员发布营销活动，精准触达顾客。' },
+            { id: '002', name: '会员标签营销', img: './assets/img/sms_marketing_002.jpg', desc: '针对不同的会员设定不同的会员标签，并可针对不同的会员标签分类进行精准营销，培养优质客户。' },
+            { id: '003', name: '指定会员营销', img: './assets/img/sms_marketing_003.jpg', desc: '查询并进行精准的会员营销活动，提高会员留存，关怀并发展为优质会员。' },
         ];
 
         let id: any = '', name: any = '', desc: any = '';
@@ -266,6 +272,15 @@ export class SmsMarketingListComponent implements OnInit {
                 break;
             case 'WECHAT_PRODUCT_PROMOTION':
                 id = list[11].id;name = list[11].name;desc = list[11].desc;
+                break;
+            case 'CUSTOMER_HIERARCHY':
+                id = list[12].id;name = list[12].name;desc = list[12].desc;
+                break;
+            case 'CUSTOMER_TAGLIBS':
+                id = list[13].id;name = list[13].name;desc = list[13].desc;
+                break;
+            case 'CUSTOMER_SPECIFIED':
+                id = list[14].id;name = list[14].name;desc = list[14].desc;
         }
 
         this.router.navigate(['/marketing/page', { menuId: this.moduleId, marketingId: marketingId, marketingStatus: marketingStatus, id: id, name: encodeURIComponent(name), desc: encodeURIComponent(desc)}]);
