@@ -204,7 +204,7 @@ export class CraftsmanManageComponent implements OnInit {
                 account_form: [this.account, []],
                 nick_name: [this.nickName, [Validators.compose([Validators.required])]],
                 title_form: [this.title, [Validators.compose([Validators.required])]],
-                phone_form: [this.phone, [Validators.compose([Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)])]],
+                phone_form: [this.phone, [Validators.compose([Validators.required, Validators.pattern(`^[1][3,4,5,6,7,8,9][0-9]{9}$`)])]],
                 weight_form: [this.weight, [Validators.compose([Validators.required, Validators.max(99999999), Validators.min(0)])]],
                 career_begin: [new Date(this.careerBegin), Validators.required]
             });
