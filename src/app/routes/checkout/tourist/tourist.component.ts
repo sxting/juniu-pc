@@ -9,7 +9,7 @@ import { CheckoutService } from '../shared/checkout.service';
 import { MemberService } from '../../member/shared/member.service';
 import { ProductService } from '../../product/shared/product.service';
 import { CreateOrder, OrderItem } from '../shared/checkout.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { Validators } from '@angular/forms';
 declare var swal: any;
@@ -152,6 +152,8 @@ export class TouristComponent implements OnInit {
   STOREDValue: any = 0;
   STOREDextraMoney: any = 0;
   allTaglibsList: any = [];
+
+  orderId: string = '';
   constructor(
     public msg: NzMessageService,
     private localStorageService: LocalStorageService,
@@ -159,6 +161,7 @@ export class TouristComponent implements OnInit {
     private manageService: ManageService,
     private memberService: MemberService,
     private route: ActivatedRoute,
+    private router: Router,
     private checkoutService: CheckoutService,
     private modalSrv: NzModalService,
     private http: _HttpClient,
@@ -1088,23 +1091,30 @@ export class TouristComponent implements OnInit {
   }
   createOrderFun(create: any) {
     this.loading = true;
+    let self =this;
     this.checkoutService.createOrder(create).subscribe(
       (res: any) => {
         if (res.success) {
-          if (res.data === 'CLOSE') {
+          let data: any = res.data;
+          if (data.paymentResult === 'CLOSE') {
             this.modalSrv.error({
               nzContent: '支付失败',
             });
           } else {
-            this.modalSrv.closeAll();
+            // this.modalSrv.closeAll();
             this.xfCardList = '';
-            if (res.data === 'SUCCESS') {
+            this.orderId = data.orderId;
+            if (data.cardBalances) {
+              this.htmlModalVisible = true;
+              this.htmlModalData = data.cardBalances;
+            } else {
               this.modalSrv.success({
                 nzContent: '收款成功',
+                nzOkText: '打印小票',
+                nzOnOk: () => {
+                  self.orderPrint();
+                }
               });
-            } else {
-              this.htmlModalVisible = true;
-              this.htmlModalData = res.data;
             }
 
             if (this.gdboolean) {
@@ -1122,7 +1132,42 @@ export class TouristComponent implements OnInit {
       error => this.errorAlter(error),
     );
   }
+
+  /*点击打印小票按钮*/
+  orderPrintClick() {
+    this.orderPrint();
+  }
   /*========我是分界线========*/
+  //打印小票接口
+  orderPrint() {
+    let data = {
+      orderId: this.orderId,
+      merchantId: this.merchantId
+    };
+    this.checkoutService.orderPrint(data).subscribe(
+      (res: any) => {
+        if(res.success) {
+          this.modalSrv.closeAll();
+        } else {
+          if(res.errorCode === '30000') {
+            this.modalSrv.error({
+              nzTitle: '温馨提示',
+              nzContent: res.errorInfo,
+              nzOkText: '去配置',
+              nzCancelText: '暂不配置',
+              nzOnOk: () => {
+                this.modalSrv.closeAll();
+                this.router.navigateByUrl('/setings/hardware/install/CloudPrinter')
+              }
+            });
+          } else {
+            this.modalSrv.closeAll();
+            this.errorAlter(res.errorInfo)
+          }
+        }
+      }
+    )
+  }
   // 获取全部商品
   getAllbuySearchs() {
     let data = {
@@ -1699,9 +1744,14 @@ export class TouristComponent implements OnInit {
     this.checkoutService.rechargeAndOrderPay(rechargeObj).subscribe(
       (res: any) => {
         if (res.success) {
+          this.orderId = res.data.orderId;
           this.modalSrv.closeAll();
           this.modalSrv.success({
             nzContent: '收款成功',
+            nzOkText: '打印小票',
+            nzOnOk: () => {
+              self.orderPrint();
+            }
           });
           this.REBATEValue = 0;
           this.STOREDValue = 0;
