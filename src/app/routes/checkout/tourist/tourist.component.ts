@@ -1149,6 +1149,7 @@ export class TouristComponent implements OnInit {
         if(res.success) {
           this.modalSrv.closeAll();
         } else {
+          this.modalSrv.closeAll();
           if(res.errorCode === '30000') {
             this.modalSrv.error({
               nzTitle: '温馨提示',
@@ -1156,12 +1157,10 @@ export class TouristComponent implements OnInit {
               nzOkText: '去配置',
               nzCancelText: '暂不配置',
               nzOnOk: () => {
-                this.modalSrv.closeAll();
                 this.router.navigateByUrl('/setings/hardware/install/CloudPrinter')
               }
             });
           } else {
-            this.modalSrv.closeAll();
             this.errorAlter(res.errorInfo)
           }
         }
