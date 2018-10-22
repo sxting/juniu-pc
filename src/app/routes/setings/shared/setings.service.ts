@@ -18,6 +18,28 @@ export class SetingsService {
     api5 = Config.API + 'finance'; //银行
     api6 = Config.API1 + 'account/merchant/module'; //模块控制 软件购买
 
+    //名称管理  查询   /config/getSysConfig.json
+  getSysConfig(Params: any) {
+    let apiUrl = Config.API1 + 'account/config/getSysConfig.json';
+    Params.timestamp = new Date().getTime();
+    return this.http.get(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+    //名称管理  修改保存
+  saveSysConfig(Params: any) {
+    let apiUrl = Config.API1 + 'account/config/saveSysConfig.json';
+    Params.timestamp = new Date().getTime();
+    return this.http.post(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
     /*软件购买 start*/
 
     //购买记录  /merchant/module/purchase/record.json

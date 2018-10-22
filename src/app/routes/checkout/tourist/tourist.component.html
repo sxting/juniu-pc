@@ -114,7 +114,7 @@
                   <div style="height:auto !important;overflow: hidden;padding-bottom: 10px;" *ngIf="item.open">
                     <div nz-col nzXs="24" nz-row nzType="flex" class="shopTypeBox">
                       <div nz-col nzSpan="12">
-                        <div nz-col nzSpan="12" class="textAline">技 师</div>
+                        <div nz-col nzSpan="12" class="textAline">{{selectedValue1Name}}</div>
 
                         <div nz-col nzSpan="12" class="colorRed">
                           <nz-select style="width: 90px;" [(ngModel)]="item.staff" nzAllowClear nzPlaceHolder="选择员工">
@@ -131,7 +131,7 @@
                     </div>
                     <div nz-col nzXs="24" nz-row nzType="flex" class="shopTypeBox">
                       <div nz-col nzSpan="12">
-                        <div nz-col nzSpan="12" class="textAline">小 工</div>
+                        <div nz-col nzSpan="12" class="textAline">{{selectedValue2Name}}</div>
                         <div nz-col nzSpan="12" class="colorRed">
                           <div nz-col nzSpan="12" class="colorRed">
                             <nz-select style="width: 90px;" [(ngModel)]="item.xiaogong" nzAllowClear nzPlaceHolder="选择员工">
@@ -447,7 +447,7 @@
                   <div style="height:auto !important;overflow: hidden;padding-bottom: 10px;">
                     <div nz-col nzXs="24" nz-row nzType="flex" class="shopTypeBox">
                       <div nz-col nzSpan="12">
-                        <div nz-col nzSpan="10" class="textAline">技 师</div>
+                        <div nz-col nzSpan="10" class="textAline">{{selectedValue1Name}}</div>
                         <div nz-col nzSpan="12" class="colorRed">
                           <nz-select style="width: 100px;" [(ngModel)]="selectedValue1" nzAllowClear nzPlaceHolder="选择员工">
                             <nz-option *ngFor="let item of staffGroupData" nzValue="{{item.staffId}}" nzLabel="{{item.staffName}}"></nz-option>
@@ -460,9 +460,9 @@
                     </div>
                     <div nz-col nzXs="24" nz-row nzType="flex" class="shopTypeBox">
                       <div nz-col nzSpan="12">
-                        <div nz-col nzSpan="10" class="textAline">小 工</div>
+                        <div nz-col nzSpan="10" class="textAline">{{selectedValue2Name}}</div>
                         <div nz-col nzSpan="12" class="colorRed">
-                          <nz-select style="width: 100px;" [(ngModel)]="selectedValue2" nzAllowClear nzPlaceHolder="选择小工">
+                          <nz-select style="width: 100px;" [(ngModel)]="selectedValue2" nzAllowClear nzPlaceHolder="选择员工">
                             <nz-option *ngFor="let item of staffGroupData" nzValue="{{item.staffId}}" nzLabel="{{item.staffName}}"></nz-option>
                           </nz-select>
                         </div>

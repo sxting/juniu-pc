@@ -12,6 +12,7 @@ import { CreateOrder, OrderItem } from '../shared/checkout.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { Validators } from '@angular/forms';
+import { SetingsService } from '../../setings/shared/setings.service';
 declare var swal: any;
 @Component({
   selector: 'app-tourist',
@@ -101,6 +102,8 @@ export class TouristComponent implements OnInit {
   xyVipRules: any;
   selectedValue1: any;
   selectedValue2: any;
+  selectedValue1Name: string = '';
+  selectedValue2Name: string = '';
   customerName: any;
   birthday: any = new Date();
   customerId: any;
@@ -164,6 +167,7 @@ export class TouristComponent implements OnInit {
     private router: Router,
     private checkoutService: CheckoutService,
     private modalSrv: NzModalService,
+    private setingsService: SetingsService,
     private http: _HttpClient,
   ) {}
   ngOnInit() {
@@ -180,7 +184,11 @@ export class TouristComponent implements OnInit {
     this.guadanList = this.localStorageService.getLocalstorage(GUADAN)
       ? JSON.parse(this.localStorageService.getLocalstorage(GUADAN))
       : [];
+
+    this.getSysConfig(`${this.merchantId}_tourist_staff1`);
+    this.getSysConfig(`${this.merchantId}_tourist_staff2`);
   }
+
   //切换数据
   changeFun() {
     this.getAllbuySearchs();
@@ -2244,5 +2252,28 @@ export class TouristComponent implements OnInit {
       this.errorAlter('最多只能选三个标签');
       item.check = false;
     }
+  }
+
+  //绩效名称
+  getSysConfig(configKey: any) {
+    let data = {
+      configKey: configKey
+    };
+    this.setingsService.getSysConfig(data).subscribe(
+      (res: any) => {
+        if(res.success) {
+          if(configKey === `${this.merchantId}_tourist_staff1`) {
+            this.selectedValue1Name = res.data.configValue ? res.data.configValue : '技师';
+          } else if(configKey === `${this.merchantId}_tourist_staff2`) {
+            this.selectedValue2Name = res.data.configValue ? res.data.configValue : '小工';
+          }
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      }
+    )
   }
 }

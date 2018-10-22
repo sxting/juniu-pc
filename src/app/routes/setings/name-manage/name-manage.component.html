@@ -18,11 +18,11 @@
           <span class="label">自定义名称：</span>
           <span class="name" *ngIf="!(itemId === item.id)">{{item.name}}</span>
           <span *ngIf="itemId === item.id">
-            <input type="text" maxlength="4" placeholder="请输入自定义名称，最多4字">
+            <input type="text" [(ngModel)]="configValue" maxlength="4" placeholder="请输入自定义名称，最多4字">
             <span class="save-btn" (click)="onSaveBtnClick()">保存</span>
             <span class="cancel-btn" (click)="onCancelBtnClick()">取消</span>
           </span>
-          <span class="fix-btn" *ngIf="!(itemId === item.id)" (click)="onFixBtnClick(item.id)">修改</span>
+          <span class="fix-btn" *ngIf="!(itemId === item.id)" (click)="onFixBtnClick(item)">修改</span>
         </p>
       </li>
     </ul>
