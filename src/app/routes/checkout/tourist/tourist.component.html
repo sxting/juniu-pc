@@ -943,6 +943,7 @@
     <p>会员卡：{{item.cardName}}</p>
     <p *ngIf="item.cardType !== 'TIMES' &&item.cardType !== 'METERING'">卡余额：{{item.balance/100}}元</p>
     <p *ngIf="item.cardType === 'METERING'">卡余额：{{item.balance}}次</p>
+    <p *ngIf="item.validate">有效期：{{item.validate}}天</p>
   </div>
   <button class="buttons" nz-button nzType="primary" type="submit" (click)="orderPrintClick()">打印小票</button>
 </nz-modal>

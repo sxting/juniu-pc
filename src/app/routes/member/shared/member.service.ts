@@ -405,7 +405,7 @@ export class MemberService {
             });
     }
     /**
- * 获取手机二维码
+ * 获取手机验证码
  */
     getValidCode(data) {
         // 类型 REGISTER或者VALID

@@ -349,7 +349,7 @@ export class SetingsService {
             });
     }
     /**
-   * 获取手机二维码
+   * 获取手机验证码
    */
     getValidCode(phone: string, bizType?: string) {
         // 类型 REGISTER或者VALID
