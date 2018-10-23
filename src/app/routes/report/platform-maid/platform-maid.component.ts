@@ -80,20 +80,17 @@ export class platformMaidReportComponent implements OnInit {
     this.ifStoresAll = userInfo.staffType === "MERCHANT"? true : false;
 
     this.getThirdPartyRate();
-    this.getThirdPartyCost();
   }
 
 
   //返回门店数据
   storeListPush(event: any){
     this.storeList = event.storeList? event.storeList : [];
-    console.log(this.storeList);
   }
 
   //门店id
   getStoreId(event: any){
     this.storeId = event.storeId? event.storeId : '';
-    console.log(this.storeId);
     this.getThirdPartyCost();
   }
 
@@ -208,7 +205,12 @@ export class platformMaidReportComponent implements OnInit {
     this.reportService.getThirdPartyCost(data).subscribe(
       (res: any) => {
         if(res.success) {
-
+          if(res.data.items) {
+            this.platformListInfor = res.data.items;
+          }
+          if(res.data.pageInfo) {
+            this.totalElements = res.data.pageInfo.countTotal
+          }
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',

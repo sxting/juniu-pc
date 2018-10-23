@@ -11,11 +11,11 @@
             <nz-form-item class="box-time-pick">
                 <nz-form-label nzFor="yyyymm">选择日期</nz-form-label>
                 <nz-form-control>
-                  <nz-range-picker [(ngModel)]="dateRange" (ngModelChange)="onDateChange($event)" nzShowTime></nz-range-picker>
+                  <nz-range-picker [(ngModel)]="dateRange" (ngModelChange)="onDateChange($event)"></nz-range-picker>
                 </nz-form-control>
             </nz-form-item>
         </nz-col>
-        <nz-radio-group [(ngModel)]="crossType" class="fr">
+        <nz-radio-group *ngIf="" [(ngModel)]="crossType" class="fr">
           <label nz-radio-button [nzValue]="'1'" (click)="changeAlertTab()">
             <span>转给其他店</span>
           </label>
@@ -52,9 +52,9 @@
             </tr>
         </tbody>
     </nz-table>
-    <div class="nzPaginationBox">
-        <nz-pagination class="nzPagination" [nzTotal]="totalElements" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
-    </div>
+    <!--<div class="nzPaginationBox">-->
+        <!--<nz-pagination class="nzPagination" [nzTotal]="totalElements" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>-->
+    <!--</div>-->
 </nz-card>
 <!--点击弹出框-->
 <ng-template #checkDetail>
@@ -65,7 +65,7 @@
                   <nz-form-item>
                     <nz-tabset class="tabset" (nzSelectChange)="changeAlertTab($event)">
                       <nz-tab nzTitle="会员卡"></nz-tab>
-                      <nz-tab nzTitle="小程序购买"></nz-tab>
+                      <!--<nz-tab nzTitle="小程序购买"></nz-tab>-->
                     </nz-tabset>
                     <!--<jn-stores-infor  [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>-->
                   </nz-form-item>
@@ -99,8 +99,8 @@
               </tr>
             </tbody>
         </nz-table>
-        <div class="nzPaginationBox">
-            <nz-pagination class="nzPagination" (nzPageIndexClickChange)="paginateAlert($event)" (nzPageIndexChange)="paginateAlert($event)" [nzPageIndex]="pageNo" [nzTotal]="countPage"></nz-pagination>
-        </div>
+        <!--<div class="nzPaginationBox">-->
+            <!--<nz-pagination class="nzPagination" (nzPageIndexClickChange)="paginateAlert($event)" (nzPageIndexChange)="paginateAlert($event)" [nzPageIndex]="pageNo" [nzTotal]="countPage"></nz-pagination>-->
+        <!--</div>-->
     </div>
 </ng-template>

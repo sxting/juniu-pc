@@ -89,12 +89,12 @@
     </thead>
     <tbody nz-tbody class="ui-grid-tbody">
       <tr nz-tbody-tr *ngFor="let item of platformListInfor;let i = index">
-        <td nz-td>{{i+1}}</td>
-        <td nz-td>{{item.staffName}}</td>
-        <td nz-td>{{item.staffCount}}</td>
-        <td nz-td>{{i+1}}</td>
-        <td nz-td>{{item.staffName}}</td>
-        <td nz-td class="operation-btn"></td>
+        <td nz-td>{{item.date}}</td>
+        <td nz-td>{{item.platform}}</td>
+        <td nz-td>{{item.tradeCount}}</td>
+        <td nz-td>{{item.tradeAmount}}</td>
+        <td nz-td>{{item.rate}}%</td>
+        <td nz-td>{{item.rateAmount}}</td>
       </tr>
     </tbody>
   </nz-table>

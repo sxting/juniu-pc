@@ -42,7 +42,7 @@ export class CrossShopComponent implements OnInit {
     pageIndex: number = 1;//弹框第几页吗
     storeList: any = [];//门店列表
     storeId: string = '';
-    merchantId: string;
+    merchantId: string = JSON.parse(this.localStorageService.getLocalstorage('User-Info'))['merchantId'];
     consumeType: string;//消费类型
     dateRange: Date = null;
     startTime: string = '';//转换字符串的时间
@@ -76,7 +76,9 @@ export class CrossShopComponent implements OnInit {
       pageIndex: this.pageIndex,
       pageSize: this.pageSize,
       consumeType: this.consumeType,
-      storeId: this.storeId
+      storeId: this.storeId,
+      start: this.startTime,
+      end: this.endTime,
     };
 
     ngOnInit() {
@@ -104,7 +106,8 @@ export class CrossShopComponent implements OnInit {
         });
         this.batchQueryAlert.consumeType = this.consumeType;
         this.batchQueryAlert.storeId = this.storeId;
-        this.crossShopInforDetailHttp(this.batchQueryAlert);
+      console.log(this.startTime);
+      this.crossShopInforDetailHttp(this.batchQueryAlert);
     }
 
     // 弹框tab切换
@@ -165,6 +168,8 @@ export class CrossShopComponent implements OnInit {
     crossShopInforDetailHttp(data: any) {
         let that = this;
         this.loading = true;
+        data.start = this.startTime;
+        data.end = this.endTime;
         this.reportService.crossShopSettlementDetail(data).subscribe(
             (res: any) => {
                 if (res.success) {
