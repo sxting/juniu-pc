@@ -9,6 +9,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { yuan } from '@delon/util';
 import * as differenceInDays from 'date-fns/difference_in_days';
 import NP from 'number-precision'
+import * as G2 from '@antv/g2/src';
+// import G2 from '@antv/g2';
 
 @Component({
   selector: 'app-profit-report',
@@ -172,15 +174,44 @@ export class profitReportComponent implements OnInit {
           //利润报表总的趋势图
           let totalProfit = 0;
           let visitData = [];
+          let visitData2 = [];
           res.data.items.forEach(function(item: any){
             totalProfit += item.profit;
             visitData.push({
                 x: item.date,
-                y:  NP.round(totalProfit/100,2)
+                y: totalProfit > 0 ? NP.round(totalProfit/100,2) : 0
+            });
+            visitData2.push({
+              year: item.date,
+              value: NP.round(totalProfit/100,2)
             })
           });
           self.visitData = visitData;
           self.totalProfit = NP.round(totalProfit/100,2);
+
+          const chart1 = new G2.Chart({
+            container: 'c1',
+            height: '200',
+            padding: [50, 5, 5, 0],
+            forceFit: true,
+            label: null
+          });
+          chart1.source(visitData2);
+          chart1.legend(false);
+          chart1.axis(false);
+          chart1.tooltip({
+            showTitle: false,
+            shared: false,
+          });
+          chart1.area().position('year*value').color('year').shape('smooth');
+          chart1.line().position('year*value').color('year').size(2).shape('smooth').tooltip('year*value', function(year, value) {
+            return {
+              name: year,
+              value: value
+            }
+          });
+          chart1.render();
+
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',

@@ -21,6 +21,42 @@ export class ReportService {
   api1 = Config.API + 'finance';
   api2 = Config.API + 'order';
 
+  /*平台抽佣成本start*/
+  //设置第三方平台费率   /profit/settingThirdPartyRate.json
+  settingThirdPartyRate(Params: any) {
+    let apiUrl = Config.API + '/finance/profit/settingThirdPartyRate.json';
+    return this.http.get(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  //获取第三方平台费率配置
+  getThirdPartyRate(Params: any) {
+    let apiUrl = Config.API + '/finance/profit/thirdPartyRateList.json';
+    return this.http.get(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  //查询第三方平台费率成本列表
+  getThirdPartyCost(Params: any) {
+    let apiUrl = Config.API + '/finance/profit/thirdPartyCost.json';
+    return this.http.get(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+
+
+
+  /*平台抽佣成本end*/
+
   // 描述:pc表表首页 数据统计
   financeIndexUp(Params: any) {
     let apiUrl = Config.API + '/finance/pc/indexUp.json';
