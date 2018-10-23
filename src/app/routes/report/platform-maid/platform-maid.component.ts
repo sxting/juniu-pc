@@ -116,6 +116,11 @@ export class platformMaidReportComponent implements OnInit {
   // 平台抽佣
   goPayWay(tpl: any, type: string,text: string){
     let self = this;
+    if(type === 'KOUBEI') {
+      this.rate = this.koubeiRate
+    } else if(type === 'MEITUAN') {
+      this.rate = this.XMDRate
+    }
     this.modalSrv.create({
       nzTitle:  text + '抽佣比例设置',
       nzContent: tpl,
