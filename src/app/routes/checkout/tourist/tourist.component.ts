@@ -1151,7 +1151,7 @@ export class TouristComponent implements OnInit {
                 arr2.forEach(function (i: any, n: any) {
                     if (NP.times(i.couponDefDiscount, xfListMoney) > NP.times(maxMoney.couponDefDiscount, xfListMoney) && (i.useLimitMoney === -1 || NP.divide(i.useLimitMoney, 100) >= money)) maxMoney = i;
                 })
-                maxMoney.ticketMoney = NP.divide(NP.times(NP.divide(maxMoney.couponDefDiscount, 10), xfListMoney), 100);
+                maxMoney.ticketMoney = NP.divide(xfListMoney - NP.times(NP.divide(maxMoney.couponDefDiscount, 10), xfListMoney), 100);
             }
         }
         return maxMoney;
