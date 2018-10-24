@@ -95,6 +95,26 @@ export class SetingsService {
             });
     }
 
+  //系统购买支付结果查询 /account/merchant/module/package/paymentSuccess.json?orderNo=
+  getPackagePayUrlQuery(Params: any) {
+    let apiUrl = Config.API1 + '/account/merchant/module/package/paymentSuccess.json';
+    return this.http.get(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  //短信购买支付结果查询  account/merchant/sms/paymentSuccess.json?orderNo=
+  getSmsPayUrlQuery(Params: any) {
+    let apiUrl = Config.API1 + '/account/merchant/sms/paymentSuccess.json';
+    return this.http.get(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
     /*软件购买 end*/
 
     //短信购买

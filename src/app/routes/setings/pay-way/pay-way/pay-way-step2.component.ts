@@ -83,7 +83,7 @@ export class PayWayStep2Component implements OnInit {
                 shenfz_number: [data.merchantDetail.idCode, [Validators.required, Validators.pattern(/^\d{15}$|^\d{18}$|^\d{17}(\d|X|x)$/)]],
                 tel: [data.merchantDetail.principalMobile, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
                 email: [data.merchantDetail.email, [Validators.required, Validators.pattern(`^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$`)]],
-                service_tel: [data.merchantDetail.customerPhone, [Validators.required, Validators.pattern(/^[1][3,4,5,7,8][0-9]{9}$|^0\d{2,3}-?\d{7,8}$/)]]
+                service_tel: [data.merchantDetail.customerPhone, [Validators.required, Validators.pattern(/^[0-9]*$/)]]
             });
         } else {
             this.form = this.fb.group({
@@ -97,7 +97,7 @@ export class PayWayStep2Component implements OnInit {
                 shenfz_number: ['', [Validators.required, Validators.pattern(/^\d{15}$|^\d{18}$|^\d{17}(\d|X|x)$/)]],
                 tel: ['', [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
                 email: ['', [Validators.required, Validators.pattern(`^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$`)]],
-                service_tel: ['', [Validators.required, Validators.pattern(/^[1][3,4,5,7,8][0-9]{9}$|^0\d{2,3}-?\d{7,8}$/)]]
+                service_tel: ['', [Validators.required, Validators.pattern(/^[0-9]*$/)]]
             });
         }
 

@@ -363,7 +363,7 @@ export class MsmNoticeComponent implements OnInit, OnChanges, OnDestroy {
                     let self = this, time = 0;
                     this.timer = setInterval(function () {
                         time += 3000;
-                        if (time >= 60000) {
+                        if (time >= (60000 * 5)) {
                             self.modalSrv.error({
                                 nzTitle: '温馨提示',
                                 nzContent: '支付超时'
@@ -385,13 +385,14 @@ export class MsmNoticeComponent implements OnInit, OnChanges, OnDestroy {
     //查询支付结果
     getPayUrlQuery(orderNo) {
         let data = {
-            orderId: orderNo,
+            // orderId: orderNo,
+          orderNo: orderNo
         };
-        this.setingsService.getPayUrlQuery(data).subscribe(
+        this.setingsService.getSmsPayUrlQuery(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     //描述:查询支付二维码 订单的支付状态tradeState: SUCCESS—支付成功 REFUND—转入退款 NOTPAY—未支付 CLOSED—已关闭 REVERSE—已冲正 REVOK—已撤销 
-                    if (res.data.tradeState === 'SUCCESS') {
+                    if (res.data) {
                         clearInterval(this.timer);
                         this.modalSrv.closeAll();
                         this.msg.success('支付成功');
@@ -407,10 +408,9 @@ export class MsmNoticeComponent implements OnInit, OnChanges, OnDestroy {
                         //     }
                         // });
                     }
-                    if (res.data.tradeState === 'CLOSED' || res.data.tradeState === 'REVOK') {
-                        clearInterval(this.timer);
-                        this.modalSrv.closeAll();
-                    }
+                    // if (res.data.tradeState === 'CLOSED' || res.data.tradeState === 'REVOK') {
+                    //
+                    // }
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
