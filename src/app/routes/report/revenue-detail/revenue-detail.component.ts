@@ -355,7 +355,19 @@ export class revenueDetailReportComponent implements OnInit {
   paginate(event: any) {
     this.pageNo = event;
     this.batchQuery.pageNo = this.pageNo;
-    this.revenuetOrderList(this.batchQuery);//营收报表订单详情页面
+    this.batchQueryKoubei.pageNo = this.pageNo;
+    // this.revenuetOrderList(this.batchQuery);//营收报表订单详情页面
+
+    let self = this;
+    if(self.tabActiveType === 'BARCODE' || self.tabActiveType === 'CASH' || self.tabActiveType === 'BANK' || self.tabActiveType === 'QRCODE'){
+      this.revenuetOrderList(this.batchQuery);//营收报表订单详情页面
+    } else if(self.tabActiveType === 'KOUBEI'){
+      this.koubeiVoucherListInfor(this.batchQueryKoubei);//口碑订单详情页面
+    } else if(self.tabActiveType === 'MINIPROGRAM'){
+      this.revenuetOrderList(this.batchQuery);//营收报表订单详情页面
+    } else {
+      this.meidaVoucherListInfor(this.batchQueryKoubei);//美大订单页面
+    }
   }
 
   // 获取营收报表订单列表页面

@@ -110,9 +110,15 @@ export class CommissionReportComponent implements OnInit {
     }
 
     //员工提成的图表echart信息
-    getStaffingdeDuctionUp(batchQuery:any){
+    getStaffingdeDuctionUp(batchQuery2?:any){
       let self = this;
       self.loading = true;
+      let batchQuery: any = {
+        storeId: this.storeId,
+        merchantId: this.merchantId,
+        date: this.date,
+        time: new Date().getTime()
+      };
       this.reportService.getStaffingdeDuctionUp(batchQuery).subscribe(
           (res: any) => {
               if (res.success) {
@@ -159,10 +165,19 @@ export class CommissionReportComponent implements OnInit {
   }
 
     //员工提成的列表信息
-    getStaffingdeDuctionDown(batchQuery: any){
+    getStaffingdeDuctionDown(batchQuery2?: any){
       let self = this;
       self.loading = true;
-      this.reportService.getStaffingdeDuctionDown(batchQuery).subscribe(
+      let batchQueryList: any = {
+        storeId: this.storeId,
+        merchantId: this.merchantId,
+        date: this.date,
+        pageNo: this.pageIndex,
+        pageSize: this.pageSize,
+        sortField: this.sortField,
+        time: new Date().getTime()
+      };
+      this.reportService.getStaffingdeDuctionDown(batchQueryList).subscribe(
           (res: any) => {
               if (res.success) {
                   self.loading = false;
