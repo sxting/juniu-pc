@@ -14,29 +14,29 @@
       <nz-card class="set-box clearfix">
         <img src="/assets/img/wechat_pay.svg" alt="wechat">
         <!--审核中和审核未通过以及未申请-->
-        <div *ngIf="status != '1'">
+        <div *ngIf="!wechatRate">
           <p class="no-set">暂未设置</p>
           <button nz-button (click)="goPayWay(rateAlert,'WECHAT','微信')">点击设置</button>
         </div>
         <!--审核通过显示-->
-        <div class="setted" *ngIf="status == '1'">
+        <div class="setted" *ngIf="wechatRate">
           <p class="color-000">已设置</p>
-          <p>微信支付费率：{{statusData.wechatRate/10}}%</p>
-          <button nz-button [disabled]="!haveData" class="fix-btn" (click)="goPayWay(rateAlert,'WECHAT','微信')">点击修改</button>
+          <p>微信支付费率：{{wechatRate}}%</p>
+          <button nz-button class="fix-btn" (click)="goPayWay(rateAlert,'WECHAT','微信')">点击修改</button>
         </div>
       </nz-card>
       <nz-card class="set-box">
         <img src="/assets/img/alipay.svg" alt="alipay">
         <!--审核中和审核未通过以及未申请-->
-        <div *ngIf="status != '1'">
+        <div *ngIf="!alipayRate">
           <p class="no-set">暂未设置</p>
           <button nz-button (click)="goPayWay(rateAlert,'ALIPAY','支付宝')">点击设置</button>
         </div>
         <!--审核通过显示-->
-        <div class="setted" *ngIf="status == '1'">
+        <div class="setted" *ngIf="alipayRate">
           <p class="color-000">已设置</p>
-          <p>支付宝支付费率：{{statusData.alipaysRate/10}}%</p>
-          <button nz-button [disabled]="!haveData" class="fix-btn" (click)="goPayWay(rateAlert,'ALIPAY','支付宝')">点击修改</button>
+          <p>支付宝支付费率：{{alipayRate}}%</p>
+          <button nz-button class="fix-btn" (click)="goPayWay(rateAlert,'ALIPAY','支付宝')">点击修改</button>
         </div>
       </nz-card>
     </div>
@@ -49,7 +49,7 @@
         <nz-form-item>
           <nz-form-label nzFor="productId">选择日期</nz-form-label>
           <nz-form-control class="box-time-pick">
-            <nz-range-picker nzFormat="yyyy-MM-dd"  [(ngModel)]="dateRange" (ngModelChange)="onDateChange($event)" nzShowTime></nz-range-picker>
+            <nz-range-picker nzFormat="yyyy-MM-dd"  [(ngModel)]="dateRange" (ngModelChange)="onDateChange($event)"></nz-range-picker>
           </nz-form-control>
         </nz-form-item>
       </nz-col>
@@ -74,12 +74,12 @@
     </thead>
     <tbody nz-tbody class="ui-grid-tbody">
     <tr nz-tbody-tr *ngFor="let item of platformListInfor;let i = index">
-      <td nz-td>{{i+1}}</td>
-      <td nz-td>{{item.staffName}}</td>
-      <td nz-td>{{item.staffCount}}</td>
-      <td nz-td>{{i+1}}</td>
-      <td nz-td>{{item.staffName}}</td>
-      <td nz-td class="operation-btn"></td>
+      <td nz-td>{{item.date}}</td>
+      <td nz-td>{{item.platform}}</td>
+      <td nz-td>{{item.tradeCount}}</td>
+      <td nz-td>{{item.tradeAmount}}</td>
+      <td nz-td>{{item.rate}}%</td>
+      <td nz-td>{{item.rateAmount}}</td>
     </tr>
     </tbody>
   </nz-table>
@@ -93,7 +93,7 @@
   <div class="maid-box">
     <p>
       <span>费率比例：</span>
-      <input nz-input class="maid-input" type="text" placeholder="请输入0.01-100的数字"/>
+      <input nz-input [(ngModel)]="rate" (ngModelChange)="ngRateChange($event)" class="maid-input" type="text" placeholder="请输入0.01-100的数字"/>
       <span>%</span>
     </p>
     <p class="text mt10">＊当日修改，次日生效</p>

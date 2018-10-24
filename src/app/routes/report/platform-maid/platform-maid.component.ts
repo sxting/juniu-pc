@@ -21,14 +21,13 @@ export class platformMaidReportComponent implements OnInit {
   merchantId: string = '';
   theadName: any = ['日期', '平台', '核销笔数', '核销金额','抽佣比例', '抽佣金额'];//表头
   moduleId: any;
-  ifStoresAll: boolean = true;//是否有全部门店
   ifStoresAuth: boolean = false;//是否授权
   pageNo: any = 1;//页码
   pageSize: any = '10';//一页展示多少数据
   totalElements: any = 0;//商品总数  expandForm = false;//展开
-  dateRange: Date = null;
-  startTime: string = '';//转换字符串的时间
-  endTime: string = '';//转换字符串的时间
+  dateRange: Date[] = [new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000), new Date()];
+  startTime: string = FunctionUtil.changeDateToSeconds(this.dateRange[0]);//转换字符串的时间
+  endTime: string = FunctionUtil.changeDateToSeconds(this.dateRange[1]);//转换字符串的时间
   ProductType: string;
   platformList: any = [
     {
@@ -41,7 +40,6 @@ export class platformMaidReportComponent implements OnInit {
     }
   ];
   platformListInfor: any = [];
-  status: string = '3'; //审核中0   审核通过1   审核未通过2   3未申请
 
   rate: string = '';
   koubeiRate: string = '';
@@ -77,7 +75,6 @@ export class platformMaidReportComponent implements OnInit {
     if (userInfo) {
       this.merchantId = userInfo.merchantId;
     }
-    this.ifStoresAll = userInfo.staffType === "MERCHANT"? true : false;
 
     this.getThirdPartyRate();
   }
@@ -106,7 +103,7 @@ export class platformMaidReportComponent implements OnInit {
   }
 
   //选择日期
-  onDateChange(date: Date): void {
+  onDateChange(date: Date[]): void {
     this.dateRange = date;
     this.startTime = FunctionUtil.changeDateToSeconds(this.dateRange[0]);
     this.endTime = FunctionUtil.changeDateToSeconds(this.dateRange[1]);
@@ -205,7 +202,8 @@ export class platformMaidReportComponent implements OnInit {
       endDate: this.endTime.split(' ')[0],
       platform: this.ProductType === 'KOUBEI' ? 'KOUBEI' : this.ProductType === 'MEITUAN' ? 'XMD' : '',
       pageNo: this.pageNo,
-      pageSize: this.pageSize
+      pageSize: this.pageSize,
+      rateType: 'SETTLE'
     };
     this.reportService.getThirdPartyCost(data).subscribe(
       (res: any) => {
