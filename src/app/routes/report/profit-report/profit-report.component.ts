@@ -249,6 +249,16 @@ export class profitReportComponent implements OnInit {
               x: '员工工资',
               y: res.data.staffWagesCost? res.data.staffWagesCost/100 : 0,
               type: 'staff'
+            },
+            {
+              x: '支付费率',
+              y: res.data.paymentCost? res.data.paymentCost/100 : 0,
+              type: 'rate'
+            },
+            {
+              x: '平台抽佣',
+              y: res.data.settleCost? res.data.settleCost/100 : 0,
+              type: 'paltform'
             }
           ];
           this.total = yuan(this.salesPieData.reduce((pre, now) => now.y + pre, 0));
