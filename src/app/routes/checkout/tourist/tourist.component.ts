@@ -1116,11 +1116,14 @@ export class TouristComponent implements OnInit {
               this.htmlModalVisible = true;
               this.htmlModalData = data.cardBalances;
             } else {
-              this.modalSrv.success({
+              this.modalSrv.confirm({
                 nzContent: '收款成功',
                 nzOkText: '打印小票',
                 nzOnOk: () => {
                   self.orderPrint();
+                },
+                nzOnCancel: () => {
+                  self.modalSrv.closeAll();
                 }
               });
             }
@@ -1753,11 +1756,14 @@ export class TouristComponent implements OnInit {
         if (res.success) {
           this.orderId = res.data.orderId;
           this.modalSrv.closeAll();
-          this.modalSrv.success({
+          this.modalSrv.confirm({
             nzContent: '收款成功',
             nzOkText: '打印小票',
             nzOnOk: () => {
               self.orderPrint();
+            },
+            nzOnCancel: () => {
+              self.modalSrv.closeAll();
             }
           });
           this.REBATEValue = 0;
