@@ -157,6 +157,7 @@ export class TouristComponent implements OnInit {
   allTaglibsList: any = [];
 
   orderId: string = '';
+  htmlModalVisible2: boolean = false;
   constructor(
     public msg: NzMessageService,
     private localStorageService: LocalStorageService,
@@ -198,6 +199,8 @@ export class TouristComponent implements OnInit {
   }
   handleCancel() {
     this.htmlModalVisible = false;
+    this.htmlModalVisible2 = false;
+    this.modalSrv.closeAll();
   }
   //收银开卡切换
   change(e: any) {
@@ -1116,16 +1119,18 @@ export class TouristComponent implements OnInit {
               this.htmlModalVisible = true;
               this.htmlModalData = data.cardBalances;
             } else {
-              this.modalSrv.confirm({
-                nzContent: '收款成功',
-                nzOkText: '打印小票',
-                nzOnOk: () => {
-                  self.orderPrint();
-                },
-                nzOnCancel: () => {
-                  self.modalSrv.closeAll();
-                }
-              });
+              this.modalSrv.closeAll();
+              this.htmlModalVisible2 = true;
+              // this.modalSrv.confirm({
+              //   nzContent: '收款成功',
+              //   nzOkText: '打印小票',
+              //   nzOnOk: () => {
+              //     self.orderPrint();
+              //   },
+              //   nzOnCancel: () => {
+              //     self.modalSrv.closeAll();
+              //   }
+              // });
             }
 
             if (this.gdboolean) {
@@ -1756,16 +1761,17 @@ export class TouristComponent implements OnInit {
         if (res.success) {
           this.orderId = res.data.orderId;
           this.modalSrv.closeAll();
-          this.modalSrv.confirm({
-            nzContent: '收款成功',
-            nzOkText: '打印小票',
-            nzOnOk: () => {
-              self.orderPrint();
-            },
-            nzOnCancel: () => {
-              self.modalSrv.closeAll();
-            }
-          });
+          this.htmlModalVisible2 = true;
+          // this.modalSrv.confirm({
+          //   nzContent: '收款成功',
+          //   nzOkText: '打印小票',
+          //   nzOnOk: () => {
+          //     self.orderPrint();
+          //   },
+          //   nzOnCancel: () => {
+          //     self.modalSrv.closeAll();
+          //   }
+          // });
           this.REBATEValue = 0;
           this.STOREDValue = 0;
           this.STOREDextraMoney = 0;
