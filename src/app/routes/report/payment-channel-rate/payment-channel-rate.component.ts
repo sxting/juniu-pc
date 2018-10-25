@@ -19,7 +19,7 @@ export class paymentChannelRateComponent implements OnInit {
   storeId: string;//门店ID
   loading = false;
   merchantId: string = '';
-  theadName: any = ['日期', '支付通道', '支付笔数', '支付金额','费率比列', '费率金额'];//表头
+  theadName: any = ['日期', '支付通道', '支付笔数', '支付金额','费率比例', '费率金额'];//表头
   moduleId: any;
   ifStoresAll: boolean = false;//是否有全部门店
   ifStoresAuth: boolean = false;//是否授权
