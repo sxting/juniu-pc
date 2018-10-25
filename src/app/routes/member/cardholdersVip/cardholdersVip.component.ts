@@ -241,6 +241,16 @@ export class CardholdersVipComponent {
             (res: any) => {
                 if (res.success) {
                     this.data2 = res.data.content;
+                    // CARD("会员卡"),BARCODE("扫码枪"),CASH("现金"),BANK("银行卡"),QRCODE("付款吗"),MINIPROGRAM("小程序"),KOUBEI("口碑核销"),MEIDA("美大验券");
+                    this.data2.forEach(function (i:any) {
+                        if(i.sceneType === 'CARD') i.sceneName = '会员卡';
+                        if(i.sceneType === 'BARCODE') i.sceneName = '扫码枪';
+                        if(i.sceneType === 'BANK') i.sceneName = '银行卡';
+                        if(i.sceneType === 'QRCODE') i.sceneName = '付款码';
+                        if(i.sceneType === 'MINIPROGRAM') i.sceneName = '小程序';
+                        if(i.sceneType === 'KOUBEI') i.sceneName = '口碑核销';
+                        if(i.sceneType === 'MEIDA') i.sceneName = '美大验券';
+                    })
                     this.loading = false;
                     this.Total2 = res.data.totalElements;
                 } else {
