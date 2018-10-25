@@ -49,7 +49,7 @@
         <nz-form-item>
           <nz-form-label nzFor="productId">选择日期</nz-form-label>
           <nz-form-control class="box-time-pick">
-            <nz-range-picker nzFormat="yyyy-MM-dd"  [(ngModel)]="dateRange" (ngModelChange)="onDateChange($event)"></nz-range-picker>
+            <nz-range-picker nzFormat="yyyy-MM-dd" [nzDisabledDate]="disabledDate" [(ngModel)]="dateRange" (ngModelChange)="onDateChange($event)"></nz-range-picker>
           </nz-form-control>
         </nz-form-item>
       </nz-col>

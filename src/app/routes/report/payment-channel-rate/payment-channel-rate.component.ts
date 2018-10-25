@@ -6,6 +6,7 @@ import { ReportService } from "../shared/report.service";
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
+import * as differenceInDays from 'date-fns/difference_in_days';
 
 @Component({
   selector: 'app-payment-channel-rate',
@@ -26,7 +27,7 @@ export class paymentChannelRateComponent implements OnInit {
   pageNo: any = 1;//页码
   pageSize: any = '10';//一页展示多少数据
   totalElements: any = 0;//商品总数  expandForm = false;//展开
-  dateRange: Date[] = [new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000), new Date()];
+  dateRange: Date[] = [new Date(new Date().getTime() - 8 * 24 * 60 * 60 * 1000), new Date(new Date().getTime() - 24 * 60 * 60 * 1000)];
   startTime: string = FunctionUtil.changeDateToSeconds(this.dateRange[0]);//转换字符串的时间
   endTime: string = FunctionUtil.changeDateToSeconds(this.dateRange[1]);//转换字符串的时间
   ProductType: string;
@@ -46,6 +47,10 @@ export class paymentChannelRateComponent implements OnInit {
   rate: string = '';
   wechatRate: string = '';
   alipayRate: string = '';
+
+  disabledDate = (current: Date): boolean => {
+    return differenceInDays(current, new Date()) >= 0;
+  };
 
   constructor(
     private http: _HttpClient,
