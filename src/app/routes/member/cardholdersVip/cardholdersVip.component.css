@@ -116,3 +116,22 @@
     color: #ff6600;
     cursor: pointer;
 }
+.biaoqian{
+    display: inline-block;
+    border: 1px solid #ff7700;
+    padding: 5px;
+    border-radius: 5px;
+    color: #ff7700;
+    cursor: pointer;
+    margin: 5px;
+}
+.biaoqianC{
+    color: #fff !important;
+    background: #ff6600 !important;
+}
+.remarksText{
+    width: 100%;
+    height: 100px;
+    margin-top:20px;
+    border: 1px solid #d9d9d9; 
+}
