@@ -153,14 +153,14 @@ export class paymentChannelRateComponent implements OnInit {
 
   /***===分界线====***/
   settingThirdPartyRate(data: any) {
-    let reg = new RegExp("^[0-9]+(.[0-9]{0,3})?$");
+    let reg = new RegExp("^[0-9]+(.[0-9]{0,2})?$");
     console.log(Number(this.rate));
     if( Number(this.rate) > 0 && Number(this.rate) <= 100 && reg.test(this.rate)) {
 
     } else {
       this.modalSrv.error({
         nzTitle: '温馨提示',
-        nzContent: '请输入0-100的数字'
+        nzContent: '请输入0.01-100的数字'
       });
       return;
     }
