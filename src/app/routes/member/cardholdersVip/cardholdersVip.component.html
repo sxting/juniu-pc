@@ -168,6 +168,8 @@
                 </nz-radio-group>
             </div>
         </div>
+
+        
         <div>
             <div class="addStaffBox-main-left icon-asterisks-1-copy iconfont">生日</div>
             <div class="addStaffBox-main-right">
@@ -175,6 +177,17 @@
                 <!-- <nz-datepicker [(ngModel)]="_date" [nzPlaceHolder]="'Select date'" [nzFormat]="'YYYY/MM/DD'"></nz-datepicker> -->
             </div>
         </div>
+        <!-- <div>
+            <div class="addStaffBox-main-left icon-asterisks-1-copy iconfont">会员标签</div>
+            <div class="addStaffBox-main-right">
+                <div>
+                    <span  style="padding:0 5px;" *ngFor="let item of allTaglibsList" (click)="checktag(item)" class="biaoqian {{item.check?'biaoqianC':''}}">{{item.tagName}}</span>
+                  </div>
+          
+          
+                  <p style="font-size: 12px; color: #b7b7b7;">注：设定会员标签，便于管理及进行精准营销，最多可设置3个</p>
+            </div>
+        </div> -->
         <!-- *ngIf="faceObj.length>0 ||headUrl" -->
         <div *ngIf="faceObj.length>0 ||headUrl">
             <div class="addStaffBox-main-left ">人脸识别</div>

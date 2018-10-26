@@ -70,6 +70,10 @@ export class CardholdersVipComponent {
     parm: any;
     modal: any;
     moduleId: any;
+    merchantId: any = JSON.parse(
+        this.localStorageService.getLocalstorage(USER_INFO),
+      )['merchantId'];
+      allTaglibsList:any = [];
     pincardInfo: any;
     constructor(private http: _HttpClient,
         private modalService: NzModalService,
@@ -80,6 +84,7 @@ export class CardholdersVipComponent {
         private memberService: MemberService) {
         let that = this;
         this.moduleId = this.route.snapshot.params['menuId'];
+        // this.getAllTaglibs();
         // this.customerlistHttp();
         // var goEasy = new GoEasy({
         //     appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
@@ -250,6 +255,8 @@ export class CardholdersVipComponent {
                         if(i.sceneType === 'MINIPROGRAM') i.sceneName = '小程序';
                         if(i.sceneType === 'KOUBEI') i.sceneName = '口碑核销';
                         if(i.sceneType === 'MEIDA') i.sceneName = '美大验券';
+                        if(i.sceneType === 'CASH') i.sceneName = '现金';
+                        
                     })
                     this.loading = false;
                     this.Total2 = res.data.totalElements;
@@ -476,4 +483,31 @@ export class CardholdersVipComponent {
             }
         );
     }
+    checktag(item) {
+        let num = 0;
+        item.check = item.check ? false : true;
+        this.allTaglibsList.forEach(i => {
+          if (i.check) num++;
+        });
+        if (num > 3) {
+          this.errorAlter('最多只能选三个标签');
+          item.check = false;
+        }
+      }
+    //全部标签
+  getAllTaglibs() {
+    let data = {
+      merchantId: this.merchantId
+    };
+    this.memberService.allTaglibs(this.data).subscribe(
+      (res: any) => {
+        if (res.success) {
+          this.allTaglibsList = res.data;
+        } else {
+          this.errorAlter(res.errorInfo);
+        }
+      },
+      error => this.errorAlter(error),
+    );
+  }
 }
