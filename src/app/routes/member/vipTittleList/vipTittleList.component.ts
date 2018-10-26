@@ -6,6 +6,7 @@ import { LocalStorageService } from '@shared/service/localstorage-service';
 import NP from 'number-precision'
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { MemberService } from '../shared/member.service';
+import { USER_INFO } from '@shared/define/juniu-define';
 
 
 @Component({
@@ -18,6 +19,9 @@ export class VipTittleListComponent implements OnInit {
     pageIndex: any = 1;
     dataList: any;
     totalElements: any;
+    merchantId: any=JSON.parse(
+        this.localStorageService.getLocalstorage(USER_INFO),
+      )['merchantId'];
     constructor(
         private http: _HttpClient,
         private modalSrv: NzModalService,
@@ -42,7 +46,8 @@ export class VipTittleListComponent implements OnInit {
     queryTaglibsList() {
         let data = {
             pageIndex: this.pageIndex,
-            pageSize: 10
+            pageSize: 10,
+            merchantId: this.merchantId
         }
         this.memberService.queryTaglibs(data).subscribe(
             (res: any) => {
