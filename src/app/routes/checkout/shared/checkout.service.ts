@@ -346,4 +346,14 @@ export class CheckoutService {
                 return Observable.throw(error);
             });
     }
+
+    //全部标签  
+    allTaglibs(data: any) {
+        let apiUrl = Config.API + 'member/taglib/allTaglibs.json';
+        return this.http.get(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
 }
