@@ -255,6 +255,8 @@ export class CardholdersVipComponent {
                         if(i.sceneType === 'MINIPROGRAM') i.sceneName = '小程序';
                         if(i.sceneType === 'KOUBEI') i.sceneName = '口碑核销';
                         if(i.sceneType === 'MEIDA') i.sceneName = '美大验券';
+                        if(i.sceneType === 'CASH') i.sceneName = '现金';
+                        
                     })
                     this.loading = false;
                     this.Total2 = res.data.totalElements;
