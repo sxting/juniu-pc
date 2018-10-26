@@ -1152,6 +1152,20 @@ export class AddKoubeiProductComponent implements OnInit {
                             });
                         }
                     } else {
+                      if(res.errorCode === 'NO_CONTRACT_GOODS_SALE' || res.errorCode === 'ITEM_NO_CONTRACT') {
+                        this.modalSrv.warning({
+                          nzTitle: '温馨提示',
+                          nzContent: '未签约新协议的商户无法对商品进行操作，请您尽快签约',
+                          nzMaskClosable: false,
+                          nzCancelText: '取消',
+                          nzOnOk: () => {
+                            window.open('https://e.alipay.com/p/contract-center/main.htm#/sign?biz=notice');
+                          },
+                          nzOnCancel: () => {
+
+                          }
+                        })
+                      }
                         if (!res.errorInfo2) {
                             this.modalSrv.error({
                                 nzTitle: '温馨提示',
