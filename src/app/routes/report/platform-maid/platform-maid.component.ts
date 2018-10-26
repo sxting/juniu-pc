@@ -6,6 +6,7 @@ import { ReportService } from "../shared/report.service";
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
+import * as differenceInDays from 'date-fns/difference_in_days';
 
 @Component({
   selector: 'app-platform-maid',
@@ -21,14 +22,13 @@ export class platformMaidReportComponent implements OnInit {
   merchantId: string = '';
   theadName: any = ['日期', '平台', '核销笔数', '核销金额','抽佣比例', '抽佣金额'];//表头
   moduleId: any;
-  ifStoresAll: boolean = true;//是否有全部门店
   ifStoresAuth: boolean = false;//是否授权
   pageNo: any = 1;//页码
   pageSize: any = '10';//一页展示多少数据
   totalElements: any = 0;//商品总数  expandForm = false;//展开
-  dateRange: Date = null;
-  startTime: string = '';//转换字符串的时间
-  endTime: string = '';//转换字符串的时间
+  dateRange: Date[] = [new Date(new Date().getTime() - 8 * 24 * 60 * 60 * 1000), new Date(new Date().getTime() - 24 * 60 * 60 * 1000)];
+  startTime: string = FunctionUtil.changeDateToSeconds(this.dateRange[0]);//转换字符串的时间
+  endTime: string = FunctionUtil.changeDateToSeconds(this.dateRange[1]);//转换字符串的时间
   ProductType: string;
   platformList: any = [
     {
@@ -41,8 +41,14 @@ export class platformMaidReportComponent implements OnInit {
     }
   ];
   platformListInfor: any = [];
-  status: string = '3'; //审核中0   审核通过1   审核未通过2   3未申请
 
+  rate: string = '';
+  koubeiRate: string = '';
+  XMDRate: string = '';
+
+  disabledDate = (current: Date): boolean => {
+    return differenceInDays(current, new Date()) >= 0;
+  };
 
   constructor(
     private http: _HttpClient,
@@ -74,7 +80,8 @@ export class platformMaidReportComponent implements OnInit {
     if (userInfo) {
       this.merchantId = userInfo.merchantId;
     }
-    this.ifStoresAll = userInfo.staffType === "MERCHANT"? true : false;
+
+    this.getThirdPartyRate();
   }
 
 
@@ -86,28 +93,36 @@ export class platformMaidReportComponent implements OnInit {
   //门店id
   getStoreId(event: any){
     this.storeId = event.storeId? event.storeId : '';
+    this.getThirdPartyCost();
   }
 
   //选择产品类型
   selectProductType(){
-    console.log(this.ProductType);
+    this.getThirdPartyCost();
   }
 
   // 切换分页码
   paginate(event: any) {
     this.pageNo = event;
+    this.getThirdPartyCost();
   }
 
   //选择日期
-  onDateChange(date: Date): void {
+  onDateChange(date: Date[]): void {
     this.dateRange = date;
     this.startTime = FunctionUtil.changeDateToSeconds(this.dateRange[0]);
     this.endTime = FunctionUtil.changeDateToSeconds(this.dateRange[1]);
+    this.getThirdPartyCost();
   }
 
   // 平台抽佣
   goPayWay(tpl: any, type: string,text: string){
     let self = this;
+    if(type === 'KOUBEI') {
+      this.rate = this.koubeiRate
+    } else if(type === 'MEITUAN') {
+      this.rate = this.XMDRate
+    }
     this.modalSrv.create({
       nzTitle:  text + '抽佣比例设置',
       nzContent: tpl,
@@ -115,9 +130,113 @@ export class platformMaidReportComponent implements OnInit {
       nzCancelText: null,
       nzOkText: '保存',
       nzOnOk: function(){
-
+        let data: any = {
+          rateType: 'SETTLE',
+          platform: 'KOUBEI', ///KOUBEI/XMD
+          rate: self.rate
+        };
+        if(type === 'KOUBEI') {
+          data.platform = 'KOUBEI';
+        } else if(type === 'MEITUAN') {
+          data.platform = 'XMD';
+        }
+        self.settingThirdPartyRate(data)
       }
     });
+  }
+
+  ngRateChange(e: any) {
+    this.rate = e;
+  }
+
+  /*=====分界线====*/
+  settingThirdPartyRate(data: any) {
+    let self = this;
+    let reg = new RegExp("^[0-9]+(.[0-9]{0,3})?$");
+    if( Number(this.rate) >= 0 && Number(this.rate) <= 100 && reg.test(this.rate)) {
+
+    } else {
+      this.modalSrv.error({
+        nzTitle: '温馨提示',
+        nzContent: '请输入1-100的数字'
+      });
+      return;
+    }
+    this.reportService.settingThirdPartyRate(data).subscribe(
+      (res: any) => {
+        if(res.success) {
+          this.modalSrv.success({
+            nzContent: '设置成功',
+            nzOnOk: () => {
+              self.getThirdPartyRate();
+            }
+          })
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      }
+    )
+  }
+
+  getThirdPartyRate() {
+    let self = this, data = {
+      rateType: 'SETTLE'
+    };
+    this.reportService.getThirdPartyRate(data).subscribe(
+      (res: any) => {
+        if(res.success) {
+          if(res.data.rates && res.data.rates.length) {
+            res.data.rates.forEach(function(item: any) {
+              if(item.platform === 'XMD') {
+                self.XMDRate = item.rate;
+              } else if(item.platform === 'KOUBEI') {
+                self.koubeiRate = item.rate;
+              }
+            })
+          } else {
+            this.koubeiRate = '';
+            this.XMDRate = ''
+          }
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      }
+    )
+  }
+
+  getThirdPartyCost() {
+    let data = {
+      storeId: this.storeId,
+      startDate: this.startTime.split(' ')[0],
+      endDate: this.endTime.split(' ')[0],
+      platform: this.ProductType === 'KOUBEI' ? 'KOUBEI' : this.ProductType === 'MEITUAN' ? 'XMD' : '',
+      pageNo: this.pageNo,
+      pageSize: this.pageSize,
+      rateType: 'SETTLE'
+    };
+    this.reportService.getThirdPartyCost(data).subscribe(
+      (res: any) => {
+        if(res.success) {
+          if(res.data.items) {
+            this.platformListInfor = res.data.items;
+          }
+          if(res.data.pageInfo) {
+            this.totalElements = res.data.pageInfo.countTotal
+          }
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      }
+    )
   }
 
 }

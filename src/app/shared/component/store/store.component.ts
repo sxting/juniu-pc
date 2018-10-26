@@ -1,6 +1,6 @@
 import {Component, OnInit, AfterViewInit, AfterViewChecked, Input, Output, EventEmitter} from '@angular/core';
 import { FunctionUtil } from "../../funtion/funtion-util";
-import { ALIPAY_SHOPS, CITYLIST, STORES_INFO } from "../../define/juniu-define";
+import {ALIPAY_SHOPS, CITYLIST, STORES_INFO, USER_INFO} from "../../define/juniu-define";
 import { MarketingService } from "../../../routes/marketing/shared/marketing.service";
 import {LocalStorageService} from "@shared/service/localstorage-service";
 import {NzModalService} from "ng-zorro-antd";
@@ -41,6 +41,8 @@ export class StoreComponent implements OnInit {
   public needSendKey = new EventEmitter(); //
 
   showStoreSelect: boolean = false;
+  merchantId: any = '';
+  targetType: any = '';
 
   @Input()
   getCalculateMemberNum: boolean = false;
@@ -51,7 +53,15 @@ export class StoreComponent implements OnInit {
   @Input()
   lastBuyTime: any = '';
 
+
+  @Input()
+  targetIds: any = '';
+  @Input()
+  paramsId: any = '';
+
   ngOnInit() {
+    this.merchantId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['merchantId'];
+
 
     if (this.isEdit == false) { //新增
       let data = {
@@ -124,24 +134,53 @@ export class StoreComponent implements OnInit {
             this.selectStoresNames.emit({selectStoresNames: selectStoresNames.join(',')})
 
             if(this.getCalculateMemberNum && selectStoresIds) {
-              let data = {
-                memberType: this.memberType,
-                lastConsume: this.limitLastTime ? this.lastBuyTime : -1, //最后一次消费时间 *
-                storeIds: selectStoresIds
-              };
-              this.marketingService.getCalculateMemberNum(data).subscribe(
-                (res: any) => {
-                  if(res.success) {
-                    this.calculateMemberNum.emit({calculateMemberNum: res.data.count});
-                    this.needSendKey.emit({needSendKey: res.data.needSendKey});
-                  } else {
-                    this.modalSrv.error({
-                      nzTitle: '温馨提示',
-                      nzContent: res.errorInfo
-                    });
-                  }
+              if(this.paramsId === '001' || this.paramsId === '002' || this.paramsId === '003') {
+                let data = {
+                  merchantId: this.merchantId,
+                  targetIds: this.targetIds,
+                  targetType: this.targetType,
+                  storeIds: selectStoresIds
+                };
+                if(this.paramsId === '001') {
+                  data.targetType = 'CUSTOMER_HIERARCHY';
+                } else if(this.paramsId === '002') {
+                  data.targetType = 'CUSTOMER_TAGLIBS';
+                } else if(this.paramsId === '003') {
+                  data.targetType = 'CUSTOMER_SPECIFIED';
                 }
-              )
+                this.marketingService.getCalculateTargets(data).subscribe(
+                  (res: any) => {
+                    if(res.success) {
+                      this.needSendKey = res.data.needSendKey;
+                      this.calculateMemberNum = res.data.count;
+                    } else {
+                      this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                      })
+                    }
+                  }
+                )
+              } else {
+                let data = {
+                  memberType: this.memberType,
+                  lastConsume: this.limitLastTime ? this.lastBuyTime : -1, //最后一次消费时间 *
+                  storeIds: selectStoresIds
+                };
+                this.marketingService.getCalculateMemberNum(data).subscribe(
+                  (res: any) => {
+                    if(res.success) {
+                      this.calculateMemberNum.emit({calculateMemberNum: res.data.count});
+                      this.needSendKey.emit({needSendKey: res.data.needSendKey});
+                    } else {
+                      this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                      });
+                    }
+                  }
+                )
+              }
             }
 
           } else {
@@ -246,12 +285,40 @@ export class StoreComponent implements OnInit {
     }
 
     if(this.getCalculateMemberNum) {
-      let data = {
-        memberType: this.memberType,
-        lastConsume: this.limitLastTime ? this.lastBuyTime : -1, //最后一次消费时间 *
-        storeIds: selectStoresIds
-      };
-      this.marketingService.getCalculateMemberNum(data).subscribe(
+      if(this.paramsId === '001' || this.paramsId === '002' || this.paramsId === '003') {
+        let data = {
+          merchantId: this.merchantId,
+          targetIds: this.targetIds,
+          targetType: this.targetType,
+          storeIds: selectStoresIds
+        };
+        if(this.paramsId === '001') {
+          data.targetType = 'CUSTOMER_HIERARCHY';
+        } else if(this.paramsId === '002') {
+          data.targetType = 'CUSTOMER_TAGLIBS';
+        } else if(this.paramsId === '003') {
+          data.targetType = 'CUSTOMER_SPECIFIED';
+        }
+        this.marketingService.getCalculateTargets(data).subscribe(
+          (res: any) => {
+            if(res.success) {
+              this.needSendKey = res.data.needSendKey;
+              this.calculateMemberNum = res.data.count;
+            } else {
+              this.modalSrv.error({
+                nzTitle: '温馨提示',
+                nzContent: res.errorInfo
+              })
+            }
+          }
+        )
+      } else {
+        let data = {
+          memberType: this.memberType,
+          lastConsume: this.limitLastTime ? this.lastBuyTime : -1, //最后一次消费时间 *
+          storeIds: selectStoresIds
+        };
+        this.marketingService.getCalculateMemberNum(data).subscribe(
           (res: any) => {
             if(res.success) {
               this.calculateMemberNum.emit({calculateMemberNum: res.data.count});
@@ -263,7 +330,8 @@ export class StoreComponent implements OnInit {
               });
             }
           }
-      )
+        )
+      }
     }
     this.selectStoresIds.emit({selectStoresIds: selectStoresIds});
     this.selectStoresNames.emit({selectStoresNames: selectStoresNames.join(',')});

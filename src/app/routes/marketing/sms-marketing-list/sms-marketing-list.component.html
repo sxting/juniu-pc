@@ -56,7 +56,10 @@
                 <tr *ngFor="let item of data;let ind = index;">
                     <td>{{ind+1}}</td>
                     <td>
-                        {{item.scene === 'AWAKENING'? '持卡会员提醒' :
+                        {{item.scene === 'CUSTOMER_HIERARCHY'? '会员分层营销' :
+                        item.scene === 'CUSTOMER_TAGLIBS'? '会员标签营销' :
+                        item.scene === 'CUSTOMER_SPECIFIED'? '指定会员营销' :
+                        item.scene === 'AWAKENING'? '持卡会员提醒' :
                         item.scene === 'TRANSFORMATION' ? '潜在会员转化' :
                         item.scene === 'BIRTHDAY_GIFT' ? '会员生日礼' :
                         item.scene === 'FESTIVAL_GIFT' ? '会员节日礼' :

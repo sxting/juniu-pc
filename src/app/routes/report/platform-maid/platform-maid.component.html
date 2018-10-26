@@ -18,14 +18,14 @@
           <span class="text-logo">口碑</span>
         </div>
         <!--审核中和审核未通过以及未申请-->
-        <div class="fl set-btn-box" *ngIf="">
+        <div class="fl set-btn-box" *ngIf="!koubeiRate">
           <p class="no-set">暂未设置</p>
           <button nz-button (click)="goPayWay(maidAlert,'KOUBEI','口碑')">点击设置</button>
         </div>
         <!--审核通过显示-->
-        <div class="setted set-btn-box" *ngIf="1">
+        <div class="setted set-btn-box" *ngIf="koubeiRate">
           <p class="color-000">抽佣比例</p>
-          <p class="precent-detail">2%</p>
+          <p class="precent-detail">{{koubeiRate}}%</p>
           <button nz-button class="fix-btn" (click)="goPayWay(maidAlert,'KOUBEI','口碑')">点击修改</button>
         </div>
       </nz-card>
@@ -36,14 +36,14 @@
           <span class="text-logo">美团点评</span>
         </div>
         <!--审核中和审核未通过以及未申请-->
-        <div class="fl set-btn-box" *ngIf="1">
+        <div class="fl set-btn-box" *ngIf="!XMDRate">
           <p class="no-set">暂未设置</p>
           <button nz-button style="margin-left: 25px;" (click)="goPayWay(maidAlert,'MEITUAN','美团点评')">点击设置</button>
         </div>
         <!--审核通过显示-->
-        <div class="setted set-btn-box" *ngIf=" ">
+        <div class="setted set-btn-box" *ngIf="XMDRate">
           <p class="color-000">抽佣比例</p>
-          <p class="precent-detail">2%</p>
+          <p class="precent-detail">{{XMDRate}}%</p>
           <button nz-button class="fix-btn" (click)="goPayWay(maidAlert,'MEITUAN','美团点评')">点击修改</button>
         </div>
       </nz-card>
@@ -57,14 +57,14 @@
     </div>
     <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
       <nz-col nzMd="8" nzSm="24">
-        <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth"
+        <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="false" [ifStoresAuth]="ifStoresAuth"
                          (storeListPush)="storeListPush($event)" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
       </nz-col>
       <nz-col nzMd="8" nzSm="24">
         <nz-form-item>
           <nz-form-label nzFor="productId">选择日期</nz-form-label>
           <nz-form-control class="box-time-pick">
-            <nz-range-picker nzFormat="yyyy-MM-dd"  [(ngModel)]="dateRange" (ngModelChange)="onDateChange($event)" nzShowTime></nz-range-picker>
+            <nz-range-picker nzFormat="yyyy-MM-dd" [nzDisabledDate]="disabledDate" [(ngModel)]="dateRange" (ngModelChange)="onDateChange($event)"></nz-range-picker>
           </nz-form-control>
         </nz-form-item>
       </nz-col>
@@ -89,12 +89,12 @@
     </thead>
     <tbody nz-tbody class="ui-grid-tbody">
       <tr nz-tbody-tr *ngFor="let item of platformListInfor;let i = index">
-        <td nz-td>{{i+1}}</td>
-        <td nz-td>{{item.staffName}}</td>
-        <td nz-td>{{item.staffCount}}</td>
-        <td nz-td>{{i+1}}</td>
-        <td nz-td>{{item.staffName}}</td>
-        <td nz-td class="operation-btn"></td>
+        <td nz-td>{{item.date}}</td>
+        <td nz-td>{{item.platform}}</td>
+        <td nz-td>{{item.tradeCount}}</td>
+        <td nz-td>{{item.tradeAmount}}</td>
+        <td nz-td>{{item.rate}}%</td>
+        <td nz-td>{{item.rateAmount}}</td>
       </tr>
     </tbody>
   </nz-table>
@@ -108,7 +108,7 @@
   <div class="maid-box">
     <p>
       <span>抽佣比例：</span>
-      <input nz-input class="maid-input" type="text" placeholder="请输入1-100的数字"/>
+      <input nz-input [(ngModel)]="rate" (ngModelChange)="ngRateChange($event)" class="maid-input" type="text" placeholder="请输入0-100的数字"/>
       <span>%</span>
     </p>
     <p class="text mt10">＊计算员工提成时会剔除此部分抽佣</p>

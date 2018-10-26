@@ -1,6 +1,95 @@
 @import 'node_modules/@delon/theme/styles/default';
 @primary-color:#ff7700;
 
+.select-btn {
+  color: @primary-color;
+  cursor: pointer;
+}
+.show {
+  display: block !important;
+}
+.member-elert {
+  .search-box {
+    margin-top: 10px;
+    padding-left: 10px;
+
+    input {
+      width: 200px;
+    }
+  }
+  .reserve-record-alert{
+    width: 100%;
+    height: 400px;
+    display: flex;
+  }
+  .reserve-record-alert .list{
+    flex: 1;
+    width:50%;
+    display: inline-block;
+    border: 1px solid #e5e5e5;
+  }
+  .reserve-record-alert .list:last-child{
+    margin-left: 20px;
+  }
+  .reserve-record-alert .list .head_store{
+    font-family: PingFangSC-Regular;
+    font-size: 12px;
+    color: #1a1a1a;
+    line-height: 30px;
+    height: 30px;
+    border-bottom: 1px solid #e5e5e5;
+    text-align: center;
+    width: 100%;
+    position: relative;
+  }
+  .select-all{
+    display: inline-block;
+    position: absolute;
+    left: 20px;
+    font-family: PingFangSC-Regular;
+    font-size: 12px;
+    color: #666;
+  }
+  .show_all_stores{
+    height: 370px;
+    width: 100%;
+    overflow-y: scroll;
+  }
+  .show_all_stores1 {
+    height: 326px;
+  }
+  .city-list{
+    padding: 10px 0px 10px 20px;
+    border-bottom: 1px dashed #e5e5e5;
+  }
+  .show_all_stores .city-list:last-child{
+    border-bottom: none;
+  }
+  .select_all_btn{
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #1a1a1a;
+  }
+  .select_all_btn input{
+    margin-right: 8px;
+    cursor: pointer;
+  }
+  .shop_names {
+    font-family: PingFangSC-Regular;
+    font-size: 12px;
+    color: #666;
+    margin-left: 20px;
+    margin-top: 10px;
+  }
+  .shop_names li{
+    line-height: 30px;
+  }
+  .shop_names li input{
+    margin-right: 8px;
+    cursor: pointer;
+  }
+}
+
 .click-span {
   color: @primary-color;
   cursor: pointer;
@@ -13,7 +102,7 @@
 .select-span-box {
 
 }
-.select-span-box span {
+.select-span-box .select-span {
   font-size: 13px;
   border-radius: 4px;
   border: 1px solid @primary-color;
@@ -22,15 +111,21 @@
   background-color: rgba(255, 119, 0, 0.1);
   margin-right: 10px;
 }
+.span-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
 
 .label-item-box {
   display: flex;
+  flex-wrap: wrap;
   span {
     padding: 2px 10px;
     border-radius: 5px;
     border: 1px solid #000000;
     margin-right: 20px;
     cursor: pointer;
+    margin-bottom: 10px;
   }
   .active {
     color: @primary-color;

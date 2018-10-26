@@ -9,6 +9,7 @@ import { Validators } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
 import { ManageService } from '../../manage/shared/manage.service';
 import { MemberService } from '../shared/member.service';
+import { USER_INFO } from '@shared/define/juniu-define';
 
 
 @Component({
@@ -21,6 +22,9 @@ export class VipTittleComponent implements OnInit {
     tagName: any;
     tagId: any;
     submitting:any;
+  merchantId: any = JSON.parse(
+    this.localStorageService.getLocalstorage(USER_INFO),
+  )['merchantId'];
     constructor(
         private http: _HttpClient,
         private modalSrv: NzModalService,
@@ -38,7 +42,8 @@ export class VipTittleComponent implements OnInit {
     }
     getTaglib() {
         let data = {
-            tagId: this.tagId
+            tagId: this.tagId,
+          merchantId: this.merchantId
         }
         this.memberService.getTaglib(data).subscribe(
             (res: any) => {
@@ -57,7 +62,8 @@ export class VipTittleComponent implements OnInit {
     submit() {
         let data = {
             tagName: this.tagName,
-            tagId: this.tagId
+            tagId: this.tagId,
+          merchantId: this.merchantId
         }
         if (!this.tagId) delete data.tagId;
         if (!this.tagName) {

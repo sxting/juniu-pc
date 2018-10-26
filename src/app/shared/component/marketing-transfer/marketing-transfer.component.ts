@@ -1,6 +1,6 @@
 import {Component, OnInit, AfterViewInit, AfterViewChecked, Input, Output, EventEmitter} from '@angular/core';
 import { FunctionUtil } from "../../funtion/funtion-util";
-import { ALIPAY_SHOPS, CITYLIST, STORES_INFO } from "../../define/juniu-define";
+import {ALIPAY_SHOPS, CITYLIST, STORES_INFO, USER_INFO} from "../../define/juniu-define";
 import { MarketingService } from "../../../routes/marketing/shared/marketing.service";
 import {LocalStorageService} from "@shared/service/localstorage-service";
 import {NzModalService} from "ng-zorro-antd";
@@ -56,9 +56,11 @@ export class MarketingTransferComponent implements OnInit {
   leftTitle: string = '';
   rightTitle: string = '';
   dataList: any[] = []; // 处理过的数据列表
+  merchantId: any = '';
 
 
   ngOnInit() {
+    this.merchantId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['merchantId'];
     if(this.paramsId === '001') {
       this.name = '选择层级';
       this.errorAlert = '请选择会员层级';
@@ -163,38 +165,50 @@ export class MarketingTransferComponent implements OnInit {
 
   /* 获取数据 转换数据 显示弹框  */
   getData(tpl: any) {
+    let self = this;
+    if(this.paramsId === '001') {
+      let data = {
+        merchantId: this.merchantId
+      };
+      this.marketingService.getListAllHierarchy(data).subscribe(
+        (res: any) => {
+          if(res.success) {
 
-    this.modalSrv.create({
-      nzTitle: this.title,
-      nzContent: tpl,
-      nzWidth: '800px',
-      nzOnOk: () => {
-        this.onSaveClick();
-      },
-      nzOnCancel: () => {},
-    });
+            res.data.forEach(function (item1: any) {
+              item1.change = false;
+              item1.checked = false;
+              item1.cityCode = item1.id;
+              item1.cityName = item1.name;
+              item1.stores = item1.childs;
+              item1.stores.forEach(function (item2: any) {
+                item2.change = false;
+                item2.storeId = item2.id;
+                item2.storeName = item2.name;
+              })
+            });
 
-    // let data = {};
-    // this.marketingService.getData(data).subscribe(
-    //   (res: any) => {
-    //     if(res.success) {
-    //       this.modalSrv.create({
-    //         nzTitle: this.title,
-    //         nzContent: tpl,
-    //         nzWidth: '800px',
-    //         nzOnOk: () => {
-    //           this.onSaveClick();
-    //         },
-    //         nzOnCancel: () => {},
-    //       })
-    //     } else {
-    //       this.modalSrv.error({
-    //         nzTitle: '温馨提示',
-    //         nzContent: res.errorInfo
-    //       });
-    //     }
-    //   }
-    // )
+            self.dataList = res.data;
+
+            self.modalSrv.create({
+              nzTitle: this.title,
+              nzContent: tpl,
+              nzWidth: '800px',
+              nzOnOk: () => {
+                self.onSaveClick();
+              },
+              nzOnCancel: () => {},
+            });
+          } else {
+            this.modalSrv.error({
+              nzTitle: '温馨提示',
+              nzContent: res.errorInfo
+            })
+          }
+        }
+      )
+    } else if(this.paramsId === '003') {
+
+    }
   }
 }
 

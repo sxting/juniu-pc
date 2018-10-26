@@ -12,6 +12,17 @@ export class CheckoutService {
     api1 = Config.API1 + 'xmd';
 
     constructor(private http: _HttpClient) { }
+
+  /** 打印小票*/
+  orderPrint(data: any) {
+    let apiUrl = Config.API + 'order/order/print.json';
+    let req = FunctionUtil.obectToURLSearchParams(data);
+    return this.http.get(apiUrl, data)
+      .map((response: Response) => response).catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
     /**获取历史收银订单 */
     getOrderHistoryList(data: any) {
         let apiUrl = Config.API + 'order/currentDayOrders.json';

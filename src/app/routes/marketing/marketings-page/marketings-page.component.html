@@ -18,39 +18,49 @@
       <nz-form-control nzXs="24" nzSm="15" nzMd="16">
         <div *ngIf="paramsId === '001'">
           <span class="select-num-span">已选{{selectNum}}个会员层级</span>
-          <jn-marketing-transfer *ngIf="(!isEdit) || marketingStatus === 'INIT'" [paramsId]="paramsId" [isEdit]="isEdit"
-                    [getCalculateMemberNum]="true"
-                    (selectIds)="getSelectIds($event)"
-                    (selectNames)="getSelectNames($event)"
-                    (selectNum)="getSelectNum($event)"
-                    (calculateMemberNum)="getCalculateMemberNumber($event)"
-                    (needSendKey)="getNeedSendKey($event)">
-          </jn-marketing-transfer>
+          <!--选择按钮-->
+          <span class="select-btn" *ngIf="(!isEdit) || marketingStatus === 'INIT'" (click)="onSelectBtnClick(memberAlert)">{{name}}</span>
+          <p class="select-span-box" *ngIf="isEdit && dataList.length === 0">
+            <span class="span-wrap">
+              <span *ngFor="let item of targetNames">
+                <span *ngIf="item" class="select-span">{{item}}</span>
+              </span>
+            </span>
+          </p>
           <p class="select-span-box">
-            <span>月均消费金额（0~100）</span>
-            <span>月均消费金额（100~300）</span>
+            <span *ngFor="let item1 of dataList" class="span-wrap">
+              <span *ngFor="let item2 of item1.stores">
+                <span *ngIf="selectIdsArr.indexOf(item2.storeId) >= 0" class="select-span">
+                  <!--{{item1.cityName}}()-->
+                  {{item2.storeName}}
+                </span>
+              </span>
+            </span>
           </p>
         </div>
         <div *ngIf="paramsId === '002'">
           <span class="select-num-span">已选{{selectNum}}个会员标签</span>
           <span class="click-span" (click)="onSelectLabelClick(labelAlert)">选择标签</span>
           <p class="select-span-box">
-            <span *ngFor="let item of labelsArr">{{item.name}}</span>
+            <span *ngFor="let item of labelsArr" class="select-span">{{item.tagName}}</span>
           </p>
         </div>
         <div *ngIf="paramsId === '003'">
           <span class="select-num-span">已选{{selectNum}}个会员</span>
-          <jn-marketing-transfer *ngIf="(!isEdit) || marketingStatus === 'INIT'" [paramsId]="paramsId" [isEdit]="isEdit"
-                                 [getCalculateMemberNum]="true"
-                                 (selectIds)="getSelectIds($event)"
-                                 (selectNames)="getSelectNames($event)"
-                                 (selectNum)="getSelectNum($event)"
-                                 (calculateMemberNum)="getCalculateMemberNumber($event)"
-                                 (needSendKey)="getNeedSendKey($event)">
-          </jn-marketing-transfer>
+          <span class="select-btn" *ngIf="(!isEdit) || marketingStatus === 'INIT'" (click)="onSelectBtnClick(memberAlert)">{{name}}</span>
+          <p class="select-span-box" *ngIf="isEdit && dataList.length === 0">
+            <span class="span-wrap">
+              <span *ngFor="let item of targetNames">
+                <span *ngIf="item" class="select-span">{{item}}</span>
+              </span>
+            </span>
+          </p>
           <p class="select-span-box">
-            <span>15201375253</span>
-            <span>15201375233</span>
+            <span *ngFor="let item1 of dataList" class="span-wrap">
+              <span *ngFor="let item2 of item1.stores">
+                <span *ngIf="selectIdsArr.indexOf(item2.storeId) >= 0" class="select-span">{{item2.phone}}</span>
+              </span>
+            </span>
           </p>
         </div>
         <div *ngIf="paramsId == '01' || paramsId == '02'">最近
@@ -160,7 +170,8 @@
       <nz-form-label nzXs="24" nzSm="5" nzRequired nzFor="activity_name">活动门店</nz-form-label>
       <nz-form-control nzXs="24" nzSm="15" nzMd="15">
         已选 {{storesChangeNum}} 家门店
-        <jn-store [isEdit]="isEdit" [cityStoreList]="cityStoreList"
+        <jn-store [isEdit]="isEdit" [targetIds]="selectIds" [paramsId]="paramsId"
+                  [cityStoreList]="cityStoreList"
                   [getCalculateMemberNum]="true"
                   [lastBuyTime]="lastBuyTime"
                   [limitLastTime]="limitLastTime"
@@ -241,11 +252,77 @@
   </form>
 </nz-card>
 
+<!-- 001 003 弹框-->
+<ng-template #memberAlert>
+  <div class="member-elert">
+    <div class="reserve-record-alert">
+      <!--左边-->
+      <div class="list">
+        <p class="head_store clearfix">{{leftTitle}}</p>
+        <div *ngIf="paramsId === '003'" class="search-box">
+          查询会员： <input (ngModelChange)="searchMemberInputChange($event, false)" [(ngModel)]="memberKey" nz-input placeholder="请输入会员手机号">
+        </div>
+        <div class="show_all_stores" [class.show_all_stores1]="paramsId === '003'">
+          <div class="city-list" *ngFor="let city of dataList; let cityIndex=index">
+            <!--城市-->
+            <div class="select_all_btn">
+              <span class="city">{{city.cityName}}</span>
+            </div>
+            <!--门店-->
+            <ul class="shop_names">
+              <li *ngFor="let store of city.stores; let storeIndex=index">
+                <div *ngIf="paramsId === '001'">
+                  <input type="checkbox" [checked]="store.change" (click)="onSelectStoreInputClick(cityIndex, storeIndex)" />
+                  <span *ngIf="paramsId === '003'">姓名：</span>
+                  <span>{{store.storeName ? store.storeName : '--'}}</span>
+                  <span *ngIf="paramsId === '003'">  &nbsp; &nbsp; 电话：{{store.phone}}</span>
+                </div>
+                <div class="dis-none" [class.show]="dataIdsArr.indexOf(store.storeId) >= 0">
+                  <input type="checkbox" [checked]="store.change" (click)="onSelectStoreInputClick(cityIndex, storeIndex)" />
+                  <span *ngIf="paramsId === '003'">姓名：</span>
+                  <span>{{store.storeName ? store.storeName : '--'}}</span>
+                  <span *ngIf="paramsId === '003'">  &nbsp; &nbsp; 电话：{{store.phone}}</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!--右边-->
+      <div class="list">
+        <p class="head_store">{{rightTitle}}</p>
+        <div class="show_all_stores">
+          <div  *ngFor="let city of dataList">
+            <div class="city-list bbn" *ngIf="city.checked == true">
+              <!--城市-->
+              <div class="select_all_btn">
+                <span class="city">{{city.cityName}}</span>
+              </div>
+              <!--门店-->
+              <ul class="shop_names">
+                <li *ngFor="let store of city.stores">
+                  <p *ngIf="store.change == true">
+                    <span *ngIf="paramsId === '003'">姓名：</span>
+                    <span *ngIf="store.change == true">{{store.storeName ? store.storeName : '--'}}</span>
+                    <span *ngIf="paramsId === '003'">  &nbsp; &nbsp;  电话：{{store.phone}}</span>
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!--002 弹框-->
 <ng-template #labelAlert>
   <div class="label-item-box">
-    <span *ngFor="let item of labelList" [class.active]="labelIdsArr.indexOf(item.id) >= 0" (click)="onLabelItemClick(item)">{{item.name}}</span>
+    <span *ngFor="let item of labelList" [class.active]="labelIdsArr.indexOf(item.tagId) >= 0" (click)="onLabelItemClick(item)">{{item.tagName}}</span>
   </div>
-  <p class="label-member-num">此标签下包含会员数： 200</p>
+  <p class="label-member-num">此标签下包含会员数： {{labelMemberNum}}</p>
 </ng-template>
 
 <!--创建优惠券-->

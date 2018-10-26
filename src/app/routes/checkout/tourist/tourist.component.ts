@@ -9,9 +9,10 @@ import { CheckoutService } from '../shared/checkout.service';
 import { MemberService } from '../../member/shared/member.service';
 import { ProductService } from '../../product/shared/product.service';
 import { CreateOrder, OrderItem } from '../shared/checkout.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { Validators } from '@angular/forms';
+import { SetingsService } from '../../setings/shared/setings.service';
 declare var swal: any;
 @Component({
   selector: 'app-tourist',
@@ -101,6 +102,8 @@ export class TouristComponent implements OnInit {
   xyVipRules: any;
   selectedValue1: any;
   selectedValue2: any;
+  selectedValue1Name: string = '';
+  selectedValue2Name: string = '';
   customerName: any;
   birthday: any = new Date();
   customerId: any;
@@ -152,6 +155,9 @@ export class TouristComponent implements OnInit {
   STOREDValue: any = 0;
   STOREDextraMoney: any = 0;
   allTaglibsList: any = [];
+
+  orderId: string = '';
+  htmlModalVisible2: boolean = false;
   constructor(
     public msg: NzMessageService,
     private localStorageService: LocalStorageService,
@@ -159,8 +165,10 @@ export class TouristComponent implements OnInit {
     private manageService: ManageService,
     private memberService: MemberService,
     private route: ActivatedRoute,
+    private router: Router,
     private checkoutService: CheckoutService,
     private modalSrv: NzModalService,
+    private setingsService: SetingsService,
     private http: _HttpClient,
   ) {}
   ngOnInit() {
@@ -177,7 +185,11 @@ export class TouristComponent implements OnInit {
     this.guadanList = this.localStorageService.getLocalstorage(GUADAN)
       ? JSON.parse(this.localStorageService.getLocalstorage(GUADAN))
       : [];
+
+    this.getSysConfig(`${this.merchantId}_tourist_staff1`);
+    this.getSysConfig(`${this.merchantId}_tourist_staff2`);
   }
+
   //切换数据
   changeFun() {
     this.getAllbuySearchs();
@@ -187,6 +199,8 @@ export class TouristComponent implements OnInit {
   }
   handleCancel() {
     this.htmlModalVisible = false;
+    this.htmlModalVisible2 = false;
+    this.modalSrv.closeAll();
   }
   //收银开卡切换
   change(e: any) {
@@ -1088,23 +1102,35 @@ export class TouristComponent implements OnInit {
   }
   createOrderFun(create: any) {
     this.loading = true;
+    let self =this;
     this.checkoutService.createOrder(create).subscribe(
       (res: any) => {
         if (res.success) {
-          if (res.data === 'CLOSE') {
+          let data: any = res.data;
+          if (data.paymentResult === 'CLOSE') {
             this.modalSrv.error({
               nzContent: '支付失败',
             });
           } else {
-            this.modalSrv.closeAll();
+            // this.modalSrv.closeAll();
             this.xfCardList = '';
-            if (res.data === 'SUCCESS') {
-              this.modalSrv.success({
-                nzContent: '收款成功',
-              });
-            } else {
+            this.orderId = data.orderId;
+            if (data.cardBalances) {
               this.htmlModalVisible = true;
-              this.htmlModalData = res.data;
+              this.htmlModalData = data.cardBalances;
+            } else {
+              this.modalSrv.closeAll();
+              this.htmlModalVisible2 = true;
+              // this.modalSrv.confirm({
+              //   nzContent: '收款成功',
+              //   nzOkText: '打印小票',
+              //   nzOnOk: () => {
+              //     self.orderPrint();
+              //   },
+              //   nzOnCancel: () => {
+              //     self.modalSrv.closeAll();
+              //   }
+              // });
             }
 
             if (this.gdboolean) {
@@ -1122,7 +1148,41 @@ export class TouristComponent implements OnInit {
       error => this.errorAlter(error),
     );
   }
+
+  /*点击打印小票按钮*/
+  orderPrintClick() {
+    this.orderPrint();
+  }
   /*========我是分界线========*/
+  //打印小票接口
+  orderPrint() {
+    let data = {
+      orderId: this.orderId,
+      merchantId: this.merchantId
+    };
+    this.checkoutService.orderPrint(data).subscribe(
+      (res: any) => {
+        if(res.success) {
+          this.modalSrv.closeAll();
+        } else {
+          this.modalSrv.closeAll();
+          if(res.errorCode === '30000') {
+            this.modalSrv.error({
+              nzTitle: '温馨提示',
+              nzContent: res.errorInfo,
+              nzOkText: '去配置',
+              nzCancelText: '暂不配置',
+              nzOnOk: () => {
+                this.router.navigateByUrl('/setings/hardware/install/CloudPrinter')
+              }
+            });
+          } else {
+            this.errorAlter(res.errorInfo)
+          }
+        }
+      }
+    )
+  }
   // 获取全部商品
   getAllbuySearchs() {
     let data = {
@@ -1699,10 +1759,19 @@ export class TouristComponent implements OnInit {
     this.checkoutService.rechargeAndOrderPay(rechargeObj).subscribe(
       (res: any) => {
         if (res.success) {
+          this.orderId = res.data.orderId;
           this.modalSrv.closeAll();
-          this.modalSrv.success({
-            nzContent: '收款成功',
-          });
+          this.htmlModalVisible2 = true;
+          // this.modalSrv.confirm({
+          //   nzContent: '收款成功',
+          //   nzOkText: '打印小票',
+          //   nzOnOk: () => {
+          //     self.orderPrint();
+          //   },
+          //   nzOnCancel: () => {
+          //     self.modalSrv.closeAll();
+          //   }
+          // });
           this.REBATEValue = 0;
           this.STOREDValue = 0;
           this.STOREDextraMoney = 0;
@@ -2195,5 +2264,28 @@ export class TouristComponent implements OnInit {
       this.errorAlter('最多只能选三个标签');
       item.check = false;
     }
+  }
+
+  //绩效名称
+  getSysConfig(configKey: any) {
+    let data = {
+      configKey: configKey
+    };
+    this.setingsService.getSysConfig(data).subscribe(
+      (res: any) => {
+        if(res.success) {
+          if(configKey === `${this.merchantId}_tourist_staff1`) {
+            this.selectedValue1Name = res.data.configValue ? res.data.configValue : '技师';
+          } else if(configKey === `${this.merchantId}_tourist_staff2`) {
+            this.selectedValue2Name = res.data.configValue ? res.data.configValue : '小工';
+          }
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      }
+    )
   }
 }
