@@ -12,7 +12,7 @@
         <nz-form-label nzSpan="5" nzRequired nzFor="kaihuren">开户人</nz-form-label>
         <nz-form-control nzSpan="16">
             <nz-input-group nzCompact>
-                <input nz-input formControlName="kaihuren" placeholder="开户人必须为营业执照法人" disabled="{{item.itemData}}">
+                <input nz-input formControlName="kaihuren" placeholder="开户人必须为营业执照法人">
             </nz-input-group>
             <nz-form-explain class="error-color" *ngIf="kaihuren.dirty && kaihuren.errors">请输入开户人姓名</nz-form-explain>
         </nz-form-control>
