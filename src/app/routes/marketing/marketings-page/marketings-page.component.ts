@@ -1029,11 +1029,11 @@ export class MarketingsPageComponent implements OnInit {
                     this.marketingStatus = data.marketingStatus;
                     this.smsInputValue = data.sendSmsContent;
                     this.calculateMemberNum = data.needSendKeyCount;
-                    this.selectNum = data.targetNames.length;
+                    this.selectNum = data.targetNames ? data.targetNames.length : 0;
                     this.targetNames = data.targetNames;
                     this.selectIds = data.targetIds;
-                    this.labelIdsArr = data.targetIds.split(',');
-                    this.selectIdsArr = data.targetIds.split(',');
+                    this.labelIdsArr = data.targetIds ? data.targetIds.split(',') : [];
+                    this.selectIdsArr = data.targetIds ? data.targetIds.split(',') : [];
                   this.marketingService.getAllTaglibs({ merchantId: this.merchantId }).subscribe(
                     (res: any) => {
                       if(res.success) {
@@ -1083,7 +1083,7 @@ export class MarketingsPageComponent implements OnInit {
                         sms_send_time: [{value: data.sendTime ? new Date(data.sendTime) : new Date(), disabled: !(data.marketingStatus === 'INIT')}, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' || this.paramsId == '07' || this.paramsId == '08' || this.paramsId == '09' ? [] : [Validators.required]],
                     });
 
-                    /*门店选择*/
+                  /*门店选择*/
                     let self =this;
                     let choiseStoreIdList = data.applyStoreIds.split(',');
                     this.storesChangeNum = choiseStoreIdList.length;
