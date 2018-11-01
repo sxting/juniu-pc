@@ -2249,7 +2249,7 @@ export class TouristComponent implements OnInit {
     let data = {
       merchantId: this.merchantId,
     };
-    this.checkoutService.allTaglibs(this.data).subscribe(
+    this.checkoutService.allTaglibs(data).subscribe(
       (res: any) => {
         if (res.success) {
           this.allTaglibsList = res.data;

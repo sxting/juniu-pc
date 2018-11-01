@@ -80,6 +80,23 @@ export class PayWayStep5Component implements OnInit {
             (res: any) => {
                 if(res.success) {
                     this.data = res.data;
+
+                  //status: string = '3'; //审核中0   审核通过1   审核未通过2   3未申请
+                  if(res.data.examineStatus == '0') {
+                    this.item.status = '0';
+                  } else if(res.data.examineStatus == '1') {
+                    this.item.status = '1';
+                  } else if(res.data.examineStatus == '2' || res.data.examineStatus == '3') {
+                    this.item.status = '2';
+                  }
+                  if(res.data.applyStatus == '0') {
+                    this.item.status = '3';
+                  }
+
+                  if(this.item.status != '2') { //不是审核未通过
+                    this.item.status = '0'
+                  }
+
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
