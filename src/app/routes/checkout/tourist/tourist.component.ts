@@ -1074,7 +1074,7 @@ export class TouristComponent implements OnInit {
       create.originMoney = create.money;
     } else {
       if (this.xfList && this.xfList.length > 0) {
-        create.money = NP.times(that.createMoney, 100);
+        create.money = NP.times(that.inputValue, 100);
         create.originMoney = create.money;
       } else {
         create.money = NP.times(this.inputValue, 100);
@@ -2136,6 +2136,13 @@ export class TouristComponent implements OnInit {
   }
   shijiaChange(event, ind) {
     this.xfList[ind].currentPrice = event * 100;
+    this.allproducks.forEach(function (i:any) {
+      i.productList.forEach(function (n:any) {
+        n.currentPrice = n.currentPrice1;
+      })
+    })
+    console.log(this.allproducks)
+    
     let that = this;
 
     this.totolMoneyFun();
