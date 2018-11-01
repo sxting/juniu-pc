@@ -817,6 +817,7 @@ export class TouristComponent implements OnInit {
       i.productList.forEach(function(n: any) {
         n.click = false;
         n.num = 1;
+        n.discount = 100;
       });
     });
     that.totolMoneyFun();
@@ -2140,9 +2141,13 @@ export class TouristComponent implements OnInit {
     this.totolMoneyFun(true);
   }
   shijiaChange(event, ind) {
-    this.xfList[ind].currentPrice = event * 100;
-   
-    console.log(this.allproducks)
+    // console.log( event.target.value *100 /this.xfList[ind].currentPrice1)
+
+    
+    // this.xfList[ind].currentPrice = event.target.value * 100;
+    this.xfList[ind].discount = NP.times( NP.divide( NP.times(event.target.value ,100),this.xfList[ind].currentPrice1,this.xfList[ind].num),100)
+    console.log(this.xfList[ind])
+    
     
     let that = this;
 

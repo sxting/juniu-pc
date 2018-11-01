@@ -162,7 +162,7 @@
                       <div nz-col nzSpan="10">
                         <div nz-col nzSpan="14" class="textAline">实 价</div>
                         <div nz-col nzSpan="8" class="colorRed">
-                          <input nz-input  style="width:90px;" [(ngModel)]="item.totoleMoney1" (ngModelChange)="shijiaChange($event,ind)">
+                          <input nz-input type="number" style="width:90px;" [(ngModel)]="item.totoleMoney1" (blur)="shijiaChange($event,ind)">
                         </div>
                       </div>
                     </div>
