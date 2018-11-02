@@ -33,7 +33,9 @@ const routes: Routes = [
       { path: 'pro', loadChildren: './pro/pro.module#ProModule' },
       { path: 'checkout', loadChildren: './checkout/checkout.module#CheckoutModule' },
       { path: 'report', loadChildren: './report/report.module#ReportModule' },
-      { path: 'wechat', loadChildren: './wechat/wechat.module#WechatModule' }
+      { path: 'wechat', loadChildren: './wechat/wechat.module#WechatModule' },
+      { path: 'cashFlow', loadChildren: './cashFlow/cashFlow.module#CashFlowModule' },
+      
     ]
   },
   // passport
