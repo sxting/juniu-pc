@@ -314,14 +314,15 @@ export class revenueDetailReportComponent implements OnInit {
   //选择日期
   onDateChange(date: Date): void {
     this.dateRange = date;
-    this.startTime = this.timestampToTime2(
-      this.dateRange[0].getTime(),
-      'yyyy-MM-dd HH:mm:ss',
-    );
-    this.endTime = this.timestampToTime2(
-      this.dateRange[1].getTime(),
-      'yyyy-MM-dd HH:mm:ss',
-    );
+      this.startTime = this.timestampToTime2(
+        this.dateRange[0].getTime(),
+        'yyyy-MM-dd HH:mm:ss',
+      );
+      this.endTime = this.timestampToTime2(
+        this.dateRange[1].getTime(),
+        'yyyy-MM-dd HH:mm:ss',
+      );
+    
   }
   timestampToTime2(time, format) {
     var t = new Date(time);

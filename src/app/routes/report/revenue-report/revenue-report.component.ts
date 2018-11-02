@@ -96,7 +96,6 @@ export class RevenueReportComponent implements OnInit {
 
   //选择日期
   onDateChange(date: Date): void {
-    console.log(this.dateRange[0].getTime());
     this.dateRange = date;
     this.startTime = this.timestampToTime2(
       this.dateRange[0].getTime(),

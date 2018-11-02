@@ -1,22 +1,24 @@
-
-<page-header [title]="'营收报表'"></page-header>
+<page-header [title]="'营收报表'">
+</page-header>
 <nz-card [nzBordered]="false">
-    <div nz-form [nzLayout]="'inline'" class="search__form">
-        <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
-            <nz-col nzMd="8" nzSm="24">
-              <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth"
-                                (storeListPush)="storeListPush($event)" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
-            </nz-col>
-            <nz-col nzMd="16" nzSm="24">
-                <nz-form-item>
-                    <nz-form-label nzFor="updatedAt">选择日期</nz-form-label>
-                    <nz-form-control>
-                      <nz-range-picker style="width:500px" [nzDisabledDate]="disabledDate"  nzFormat="yyyy-MM-dd HH:mm:ss" [(ngModel)]="dateRange" (ngModelChange)="onDateChange($event)" nzShowTime></nz-range-picker>
-                    </nz-form-control>
-                </nz-form-item>
-            </nz-col>
-        </nz-row>
-    </div>
+  <div nz-form [nzLayout]="'inline'" class="search__form">
+    <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
+      <nz-col nzMd="8" nzSm="24">
+        <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth" (storeListPush)="storeListPush($event)"
+          (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
+      </nz-col>
+      <nz-col nzMd="16" nzSm="24">
+        <nz-form-item>
+          <nz-form-label nzFor="updatedAt">选择日期</nz-form-label>
+          <nz-form-control>
+            <nz-range-picker [nzDisabledDate]="disabledDate" [nzAllowClear]="false" nzShowTime nzFormat="yyyy-MM-dd HH:mm:ss" [(ngModel)]="dateRange"
+              (ngModelChange)="onDateChange($event)"></nz-range-picker>
+            <!-- <nz-range-picker style="width:500px" [nzDisabledDate]="disabledDate"  nzFormat="yyyy-MM-dd HH:mm:ss" [(ngModel)]="dateRange" (ngModelChange)="onDateChange($event)" nzShowTime></nz-range-picker> -->
+          </nz-form-control>
+        </nz-form-item>
+      </nz-col>
+    </nz-row>
+  </div>
 </nz-card>
 <div class="echart-box" nz-row [nzGutter]="24">
   <div nz-col nzXs="24">
@@ -38,13 +40,8 @@
           <span>线下</span>
         </label>
       </nz-radio-group>
-      <g2-pie *ngIf="activeIndex === 0 && salesPieData.length > 0"
-              [hasLegend]="true"
-              title="营收金额"
-              subTitle="营收金额"
-              [total]="total"
-              [data]="salesPieData"
-              height="294">
+      <g2-pie *ngIf="activeIndex === 0 && salesPieData.length > 0" [hasLegend]="true" title="营收金额" subTitle="营收金额" [total]="total"
+        [data]="salesPieData" height="294">
       </g2-pie>
       <div *ngIf="activeIndex !== 0 && salesPieData.length > 0" style="background: #fff;padding:25px 50px 37px;height: 300px;">
         <div class="rank-list">
@@ -66,18 +63,8 @@
 </div>
 
 <div class="seven-day-flow">
-  <div class="sub-title"><span>营收走势</span></div>
+  <div class="sub-title">
+    <span>营收走势</span>
+  </div>
   <div id="revenue-echart"></div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
