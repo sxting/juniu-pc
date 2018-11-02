@@ -20,7 +20,7 @@ declare var GoEasy: any;
   `,
 })
 // <!--(clear)="clear($event)"-->
-export class HeaderNotifyComponent implements OnInit, OnDestroy, OnChanges {
+export class HeaderNotifyComponent implements OnInit, OnDestroy {
   data2: any = [
     {
       title: '未读消息',
@@ -57,29 +57,29 @@ export class HeaderNotifyComponent implements OnInit, OnDestroy, OnChanges {
       appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
     });
 
-    goEasy.subscribe({
-      channel: '12345678',
-      onMessage: function (message) {
-        // if (confirm(message.content)) {
-          console.log(message.content)
-        // }
-      }
-    });
+    // goEasy.subscribe({
+    //   channel: '12345678',
+    //   onMessage: function (message) {
+    //     // if (confirm(message.content)) {
+    //       console.log(message.content)
+    //     // }
+    //   }
+    // });
   }
-  ngOnChanges(changes: SimpleChanges): void {
-    let goEasy = new GoEasy({
-      appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
-    });
+  // ngOnChanges(changes: SimpleChanges): void {
+  //   let goEasy = new GoEasy({
+  //     appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
+  //   });
 
-    goEasy.subscribe({
-      channel: '12345678',
-      onMessage: function (message) {
-        // if (confirm(message.content)) {
-          console.log(message.content)
-        // }
-      }
-    });
-  }
+  //   goEasy.subscribe({
+  //     channel: '12345678',
+  //     onMessage: function (message) {
+  //       // if (confirm(message.content)) {
+  //         console.log(message.content)
+  //       // }
+  //     }
+  //   });
+  // }
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
