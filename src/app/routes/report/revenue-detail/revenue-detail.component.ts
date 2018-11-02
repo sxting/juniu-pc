@@ -181,9 +181,9 @@ export class revenueDetailReportComponent implements OnInit {
   //校验核销开始时间
   disabledDate = (current: Date): boolean => {
     // let date = '2017-01-01 23:59:59';
-    let endDate = new Date(new Date().getTime() - 24*60*60*1000); //今日 ==结束时
+    let endDate = new Date(new Date().getTime() ); //今日 ==结束时
     // return differenceInDays(current, new Date(date)) < 0;
-    return differenceInDays(current, new Date()) >= 0;
+    return differenceInDays(current, new Date()) > 0;
   };
 
   // Tab切换
@@ -314,10 +314,37 @@ export class revenueDetailReportComponent implements OnInit {
   //选择日期
   onDateChange(date: Date): void {
     this.dateRange = date;
-    this.startTime = FunctionUtil.changeDate(this.dateRange[0]) + ' 00:00:00';
-    this.endTime = FunctionUtil.changeDate(this.dateRange[1]) + ' 23:59:59';
+    this.startTime = this.timestampToTime2(
+      this.dateRange[0].getTime(),
+      'yyyy-MM-dd HH:mm:ss',
+    );
+    this.endTime = this.timestampToTime2(
+      this.dateRange[1].getTime(),
+      'yyyy-MM-dd HH:mm:ss',
+    );
   }
-
+  timestampToTime2(time, format) {
+    var t = new Date(time);
+    var tf = function(i) {
+      return (i < 10 ? '0' : '') + i;
+    };
+    return format.replace(/yyyy|MM|dd|HH|mm|ss/g, function(a) {
+      switch (a) {
+        case 'yyyy':
+          return tf(t.getFullYear());
+        case 'MM':
+          return tf(t.getMonth() + 1);
+        case 'mm':
+          return tf(t.getMinutes());
+        case 'dd':
+          return tf(t.getDate());
+        case 'HH':
+          return tf(t.getHours());
+        case 'ss':
+          return tf(t.getSeconds());
+      }
+    });
+  }
   //查看每个的订单详情
   checkDetailInfor(tpl: any,orderNo: string,status: string) {
     let self = this;

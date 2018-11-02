@@ -57,7 +57,7 @@ export class RevenueReportComponent implements OnInit {
   ngOnInit() {
     this.moduleId = this.route.snapshot.params['menuId'];
     let startDate = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000); //提前一周 ==开始时间
-    let endDate = new Date(new Date().getTime() - 24 * 60 * 60 * 1000); //今日 ==结束时
+    let endDate = new Date(new Date().getTime()); //今日 ==结束时
     this.startTime = FunctionUtil.changeDate(startDate) + ' 00:00:00';
     this.endTime = FunctionUtil.changeDate(endDate) + ' 23:59:59';
     this.dateRange = [new Date(this.startTime), new Date(this.endTime)];
@@ -89,9 +89,9 @@ export class RevenueReportComponent implements OnInit {
   //校验核销开始时间
   disabledDate = (current: Date): boolean => {
     // let date = '2017-01-01 23:59:59';
-    let endDate = new Date(new Date().getTime() - 24 * 60 * 60 * 1000); //今日 ==结束时
+    let endDate = new Date(new Date().getTime()); //今日 ==结束时
     // return differenceInDays(current, new Date(date)) < 0;
-    return differenceInDays(current, new Date()) >= 0;
+    return differenceInDays(current, new Date()) > 0;
   };
 
   //选择日期
