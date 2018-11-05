@@ -83,7 +83,7 @@ export class RevenueReportComponent implements OnInit {
       this.storeList = event.storeList? event.storeList : [];
     }
 
-    //校验核销开始时间
+    //校验核销开始时间 a
     disabledDate = (current: Date): boolean => {
       // let date = '2017-01-01 23:59:59';
       let endDate = new Date(new Date().getTime() - 24*60*60*1000); //今日 ==结束时
