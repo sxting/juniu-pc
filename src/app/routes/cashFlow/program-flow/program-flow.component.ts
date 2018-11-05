@@ -8,11 +8,12 @@ import { CashFlowService } from '../shared/cashFlow.service';
 import { FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-koubeiFlow',
-  templateUrl: './koubeiFlow.component.html',
-  styleUrls: ['./koubeiFlow.component.less'],
+  selector: 'app-programFlow',
+  templateUrl: './program-flow.component.html',
+  styleUrls: ['./program-flow.component.less'],
 })
-export class KoubeiFlowComponent implements OnInit {
+
+export class ProgramFlowComponent implements OnInit {
   loading = false;
   expandForm: boolean = false;
   form: FormGroup;
@@ -20,10 +21,11 @@ export class KoubeiFlowComponent implements OnInit {
   storeList: any[] = []; //门店列表
   storeId: string; //门店ID
   merchantId: string = '';
-  tabActiveType: string = '核销';
   activeIndex: any = 0;
   totalElements: any = 0;//商品总数  expandForm = false;//展开
   orderType: string;
+  tabText: string = '小程序商品';
+  tabLists: any = ['小程序商品','小程序开卡','小程序拼团'];
   statusList: any = [
     { statusName: '已支付', status: 'PAID' },
     { statusName: '已退款', status: 'REFUND' },
@@ -42,7 +44,6 @@ export class KoubeiFlowComponent implements OnInit {
   batchQuery = {
     storeId: this.storeId,
     status: this.status,
-    sceneType: this.tabActiveType,
     startDate: this.startTime,
     endDate: this.endTime,
     pageNo: this.pageNo,
@@ -80,7 +81,13 @@ export class KoubeiFlowComponent implements OnInit {
   // 切换tab按钮
   changeEchartsTab(e: any){
     this.activeIndex = e.index;
-    this.tabActiveType = this.activeIndex === 0? '核销' : '订单';
+    if(this.activeIndex === 0){
+      this.tabText = '小程序商品';
+    }else if(this.activeIndex === 1){
+      this.tabText = '会员卡';
+    }else{
+      this.tabText = '口碑拼团活动';
+    }
   }
 
   // 切换分页码
