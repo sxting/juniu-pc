@@ -455,6 +455,11 @@ export class TouristComponent implements OnInit {
         }
       }
     }
+    this.allproducks.forEach(function (i:any) {
+      i.productList.forEach(function (n:any) {
+        n.currentPrice = n.currentPrice1;
+      })
+    })
   }
   REBATEValueFun(event: any) {
     this.REBATEValue = event;
@@ -812,6 +817,7 @@ export class TouristComponent implements OnInit {
       i.productList.forEach(function(n: any) {
         n.click = false;
         n.num = 1;
+        n.discount = 100;
       });
     });
     that.totolMoneyFun();
@@ -1074,7 +1080,7 @@ export class TouristComponent implements OnInit {
       create.originMoney = create.money;
     } else {
       if (this.xfList && this.xfList.length > 0) {
-        create.money = NP.times(that.createMoney, 100);
+        create.money = NP.times(that.inputValue, 100);
         create.originMoney = create.money;
       } else {
         create.money = NP.times(this.inputValue, 100);
@@ -2135,7 +2141,14 @@ export class TouristComponent implements OnInit {
     this.totolMoneyFun(true);
   }
   shijiaChange(event, ind) {
-    this.xfList[ind].currentPrice = event * 100;
+    // console.log( event.target.value *100 /this.xfList[ind].currentPrice1)
+
+    
+    // this.xfList[ind].currentPrice = event.target.value * 100;
+    this.xfList[ind].discount = NP.times( NP.divide( NP.times(event.target.value ,100),this.xfList[ind].currentPrice1,this.xfList[ind].num),100)
+    console.log(this.xfList[ind])
+    
+    
     let that = this;
 
     this.totolMoneyFun();
@@ -2242,7 +2255,7 @@ export class TouristComponent implements OnInit {
     let data = {
       merchantId: this.merchantId,
     };
-    this.checkoutService.allTaglibs(this.data).subscribe(
+    this.checkoutService.allTaglibs(data).subscribe(
       (res: any) => {
         if (res.success) {
           this.allTaglibsList = res.data;

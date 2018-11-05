@@ -78,24 +78,24 @@ export class PayWayStep3Component implements OnInit {
             if(this.item.type === 'qiye') {
                 this.form = this.fb.group({
                     // kaihu_name: [data.bankAccount, [Validators.required]],
-                    kaihuren: [{value: data.bankAccount.accountName, disabled: true}, [Validators.required]],
-                    kaihur_shenfz: [{value: data.bankAccount.idCard, disabled: true}, [Validators.required, Validators.pattern(/^\d{15}$|^\d{18}$|^\d{17}(\d|X|x)$/)]],
-                    kaihur_tel: [{value: data.bankAccount.tel, disabled: true}, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
-                    kaihuhang: [{value: data.bankAccount.bankId + '', disabled: true}, [Validators.required]],
-                    zhihang_name: [{value: zhihangName, disabled: true}, [Validators.required]],
-                    in_shengshiqu: [{value: shanghuAddress, disabled: true}, [Validators.required]],
-                    jiesuan_zhanghao: [{value: data.bankAccount.accountCode, disabled: true}, [Validators.required]],
+                    kaihuren: [{value: data.bankAccount.accountName, disabled: false}, [Validators.required]],
+                    kaihur_shenfz: [{value: data.bankAccount.idCard, disabled: false}, [Validators.required, Validators.pattern(/^\d{15}$|^\d{18}$|^\d{17}(\d|X|x)$/)]],
+                    kaihur_tel: [{value: data.bankAccount.tel, disabled: false}, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
+                    kaihuhang: [{value: data.bankAccount.bankId + '', disabled: false}, [Validators.required]],
+                    zhihang_name: [{value: zhihangName, disabled: false}, [Validators.required]],
+                    in_shengshiqu: [{value: shanghuAddress, disabled: false}, [Validators.required]],
+                    jiesuan_zhanghao: [{value: data.bankAccount.accountCode, disabled: false}, [Validators.required]],
                 });
             } else {
                 this.form = this.fb.group({
                     // kaihu_name: ['开户行名称', [Validators.required]],
-                    kaihuren: [{value: data.bankAccount.accountName, disabled: true}, [Validators.required]],
-                    kaihur_shenfz: [{value: data.bankAccount.idCard, disabled: true}, [Validators.required, Validators.pattern(/^\d{15}$|^\d{18}$|^\d{17}(\d|X|x)$/)]],
-                    kaihur_tel: [{value: data.bankAccount.tel, disabled: true}, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
-                    kaihuhang: [{value: data.bankAccount.bankId + '', disabled: true}, [Validators.required]],
-                    zhihang_name: [{value: zhihangName, disabled: true}, [Validators.required]],
-                    in_shengshiqu: [{value: shanghuAddress, disabled: true}, [Validators.required]],
-                    yinhang_kaohao: [{value: data.bankAccount.accountCode, disabled: true}, [Validators.required]]
+                    kaihuren: [{value: data.bankAccount.accountName, disabled: false}, [Validators.required]],
+                    kaihur_shenfz: [{value: data.bankAccount.idCard, disabled: false}, [Validators.required, Validators.pattern(/^\d{15}$|^\d{18}$|^\d{17}(\d|X|x)$/)]],
+                    kaihur_tel: [{value: data.bankAccount.tel, disabled: false}, [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
+                    kaihuhang: [{value: data.bankAccount.bankId + '', disabled: false}, [Validators.required]],
+                    zhihang_name: [{value: zhihangName, disabled: false}, [Validators.required]],
+                    in_shengshiqu: [{value: shanghuAddress, disabled: false}, [Validators.required]],
+                    yinhang_kaohao: [{value: data.bankAccount.accountCode, disabled: false}, [Validators.required]]
                 });
             }
 

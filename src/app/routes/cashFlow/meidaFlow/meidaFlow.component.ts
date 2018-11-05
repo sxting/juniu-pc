@@ -45,19 +45,11 @@ export class MeidaFlowComponent implements OnInit {
   status: any;
   orderNo: any;
   endTime: any;
-  /**
-   * "扫码枪"),CASH("现金"),BANK("银行卡"),QRCODE("付款吗 请求体
-   ***/
-  batchQuery = {
-    storeId: this.storeId,
-    status: this.status,
-    orderId: this.orderNo,
-    sceneType: this.tabActiveType,
-    startDate: this.startTime,
-    endDate: this.endTime,
-    pageNo: this.pageNo,
-    pageSize: this.pageSize,
-  };
+  dateRange:any;
+  productName:any;
+  dataList :any;
+  totalElements:any;
+  totalAmount:any = 0;
   constructor(
     private http: _HttpClient,
     private msg: NzMessageService,
@@ -68,7 +60,13 @@ export class MeidaFlowComponent implements OnInit {
     private cashFlowService: CashFlowService,
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    let startDate = new Date(new Date().getTime() - 7*24*60*60*1000); //提前一周 ==开始时间
+      let endDate = new Date(new Date().getTime() - 24*60*60*1000); //今日 ==结束时
+      this.dateRange = [ startDate,endDate ];
+      this.startTime  = FunctionUtil.changeDate(startDate) + ' 00:00:00';
+      this.endTime = FunctionUtil.changeDate(endDate) + ' 23:59:59';
+  }
   //返回门店数据
   storeListPush(event: any) {
     this.storeList = event.storeList ? event.storeList : [];
@@ -77,12 +75,16 @@ export class MeidaFlowComponent implements OnInit {
   getStoreId(event: any) {
     let self = this;
     this.storeId = event.storeId ? event.storeId : '';
+    this.koubeiProductVouchersListFirst()
+    
   }
-
+  getData(){
+    this.koubeiProductVouchersListFirst()
+  }
   // 切换分页码
   paginate(event: any) {
     this.pageNo = event;
-    this.batchQuery.pageNo = this.pageNo;
+    this.koubeiProductVouchersListFirst()
   }
 
 
@@ -96,5 +98,45 @@ export class MeidaFlowComponent implements OnInit {
       nzFooter: null,
     });
     
+  }
+  //口碑核销列表信息
+  koubeiProductVouchersListFirst() {
+    let self = this;
+    let data ={
+      storeId:this.storeId ,
+      startDate:this.startTime,
+      endDate:this.endTime,
+      productName:this.productName,
+      pageNo:this.pageNo,
+      pageSize:10
+    }
+    if(!data.storeId) delete data.storeId;
+    if(!data.startDate) delete data.startDate;
+    if(!data.endDate) delete data.endDate;
+    if(!data.productName) delete data.productName;
+    
+    this.cashFlowService.orderStreamBatchQuery(data).subscribe(
+      (res: any) => {
+        if (res.success) {
+          console.log(res.data)
+          this.dataList = res.data.details;
+          this.totalAmount = res.data.totalAmount;
+          this.totalElements = res.data.page.countTotal;
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      },
+      error => this.errorAlter(error)
+    );
+  }
+
+  errorAlter(err: any) {
+    this.modalSrv.error({
+      nzTitle: '温馨提示',
+      nzContent: err
+    });
   }
 }

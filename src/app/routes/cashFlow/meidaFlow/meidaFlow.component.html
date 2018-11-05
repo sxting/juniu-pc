@@ -20,18 +20,18 @@
           <nz-form-item>
             <nz-form-label nzFor="productId">选择日期</nz-form-label>
             <nz-form-control>
-              <nz-range-picker [nzDisabledDate]="disabledDate" [nzAllowClear]="false" nzFormat="yyyy-MM-dd" [(ngModel)]="dateRange" (ngModelChange)="onDateChange($event)"></nz-range-picker>
+              <nz-range-picker [nzDisabledDate]="disabledDate" [nzAllowClear]="false" nzFormat="yyyy-MM-dd HH:mm:ss" [(ngModel)]="dateRange" (ngModelChange)="onDateChange($event)"></nz-range-picker>
             </nz-form-control>
           </nz-form-item>
         </nz-col>
         
 
 
-        <nz-col nzMd="8" nzSm="24" *ngIf="expandForm && (tabActiveType != 'MINIPROGRAM')">
+        <nz-col nzMd="8" nzSm="24">
           <nz-form-item>
             <nz-form-label nzFor="phone">搜 索</nz-form-label>
             <nz-form-control>
-              <input nz-input name="orderNo" [(ngModel)]="orderNo" placeholder="请输入美团团购商品名称" id="orderNo">
+              <input nz-input name="orderNo" [(ngModel)]="productName" placeholder="请输入美团团购商品名称" id="orderNo">
             </nz-form-control>
           </nz-form-item>
         </nz-col>
@@ -46,7 +46,7 @@
       </nz-row>
     </div>
     <div class="mb-md">
-      <nz-alert nzType="info" nzMessage="共有 2 条数据  |   总金额：300.00万" nzShowIcon></nz-alert>
+      <nz-alert nzType="info" nzMessage="共有{{totalElements || 0}}条数据  |   总金额：{{totalAmount/100}}元" nzShowIcon></nz-alert>
     </div>
     <!-- table -->
     <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="reportOrderList">
@@ -56,15 +56,15 @@
         </tr>
       </thead>
       <tbody nz-tbody class="ui-grid-tbody">
-        <tr nz-tbody-tr *ngFor="let item of reportOrderList; let i = index">
-          <td style="color: #368ff7">{{item.orderNo}}</td>
+        <tr nz-tbody-tr *ngFor="let item of dataList; let i = index">
+          <td style="color: #368ff7">{{item.verifyTime}}</td>
           <td>{{item.dateCreated? item.dateCreated : '-'}}</td>
-          <td>{{item.payTypeName}}</td>
-          <td class="panduan" style="font-size: 0">
-            <span class="iconfont icon-dian" [class.paid]="item.status === 'PAID'"></span>
-            <span style="font-size: 14px">{{item.statusName}}</span>
-          </td>
           <td>{{item.amount/100}}</td>
+          <td>{{item.itemName}}</td>
+          <td class="panduan" style="font-size: 0">
+            <span class="iconfont icon-dian" [class.paid]="item.status === 'PAID'">{{item.storeName}}</span>
+            <span style="font-size: 14px">{{item.storeName}}</span>
+          </td>
           <td style="color: #108EE9;cursor: pointer" (click)="checkDetailInfor(orderDetail,item.orderNo,item.status)">查看详情</td>
         </tr>
       </tbody>

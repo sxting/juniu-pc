@@ -14,7 +14,16 @@ export class CashFlowService {
     api = Config.API;
     api1 = Config.API + 'finance'; //银行
     api2 = Config.API + 'member'; //会员
-   
+   //美大流水  
+   orderStreamBatchQuery(data: any) {
+    let apiUrl = Config.API1 + 'xmd-service/tuangou/orderStreamBatchQuery.json';
+    return this.http.get(apiUrl, data)
+        .map((response: Response) => response)
+        .catch(error => {
+            return Observable.throw(error);
+        });
+}
+
 }
 
 
