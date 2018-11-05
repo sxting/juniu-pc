@@ -6,6 +6,8 @@ import { CashFlowService } from './shared/cashFlow.service';
 import { OpenCardComponent } from './openCard/openCard.component';
 import { MeidaFlowComponent } from './meidaFlow/meidaFlow.component';
 import { WechatFlowComponent } from './wechatFlow/wechatFlow.component';
+import { KoubeiFlowComponent } from './koubeiFlow/koubeiFlow.component';
+import { ProgramFlowComponent } from './program-flow/program-flow.component';
 
 
 @NgModule({
@@ -17,7 +19,9 @@ import { WechatFlowComponent } from './wechatFlow/wechatFlow.component';
     ConsumptionComponent,
     OpenCardComponent,
     MeidaFlowComponent,
-    WechatFlowComponent
+    WechatFlowComponent,
+    KoubeiFlowComponent,
+    ProgramFlowComponent
   ],
   providers: [CashFlowService]
 })

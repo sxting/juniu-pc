@@ -1,0 +1,92 @@
+
+<nz-card [nzBordered]="false" [nzBodyStyle]="{'padding.px': 12}" class="sales-card">
+  <div class="title">
+    <nz-tabset (nzSelectChange)="changeEchartsTab($event)" style="padding-bottom: 20px;">
+      <nz-tab *ngFor="let item of tabLists" nzTitle="{{item}}"></nz-tab>
+    </nz-tabset>
+    <div nz-form [nzLayout]="'inline'" class="search__form">
+      <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
+        <nz-col nzMd="8" nzSm="24">
+          <nz-form-item>
+            <nz-form-label nzFor="money">订单类型</nz-form-label>
+            <nz-form-control>
+              <nz-select style="width: 200px;" [(ngModel)]="status" (ngModelChange)="selectOrderStatus()" name="statusList" nzPlaceHolder="全部类型"
+                         [nzShowSearch]="true">
+                <nz-option *ngFor="let i of statusList; let idx = index" [nzLabel]="i.statusName" [nzValue]="i.status"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </nz-col>
+        <nz-col nzMd="8" nzSm="24">
+          <nz-form-item>
+            <nz-form-label nzFor="productId">订单时间</nz-form-label>
+            <nz-form-control>
+              <nz-range-picker [nzDisabledDate]="disabledDate" [nzAllowClear]="false" nzFormat="yyyy-MM-dd" [(ngModel)]="dateRange" (ngModelChange)="onDateChange($event)"></nz-range-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </nz-col>
+        <nz-col nzMd="8" nzSm="24" style="overflow: hidden;height: 56.5px;">
+          <nz-form-item>
+            <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [storeId]="storeId" [ifStoresAll]="ifStoresAll"
+                             (storeListPush)="storeListPush($event)" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
+          </nz-form-item>
+        </nz-col>
+
+        <nz-col nzMd="8" nzSm="24" *ngIf="expandForm">
+          <nz-form-item>
+            <nz-form-label nzFor="phone">搜 索</nz-form-label>
+            <nz-form-control>
+              <input nz-input name="orderNo" [(ngModel)]="orderNo" placeholder="请输入{{tabText}}名称" id="orderNo">
+            </nz-form-control>
+          </nz-form-item>
+        </nz-col>
+        <nz-col nzMd="8" nzSm="24" *ngIf="expandForm && (activeIndex === 1)">
+          <nz-form-item>
+            <nz-form-control>
+              <input nz-input name="orderNo" [(ngModel)]="orderNo" placeholder="请输入会员手机号/微信昵称" id="orderNo">
+            </nz-form-control>
+          </nz-form-item>
+        </nz-col>
+        <nz-col [nzSpan]="expandForm ? 24 : 8" [class.text-right]="expandForm" style="width:200px">
+          <button nz-button type="submit" [nzType]="'primary'" [nzLoading]="loading" (click)="getData()">查询</button>
+          <a (click)="expandForm=!expandForm">
+            {{expandForm ? '收起' : '展开'}}
+            <i class="anticon" [class.anticon-down]="!expandForm" [class.anticon-up]="expandForm"></i>
+          </a>
+        </nz-col>
+      </nz-row>
+    </div>
+    <div class="mb-md">
+      <nz-alert nzType="info" nzMessage="共有 2 条数据  |   总金额：300.00万" nzShowIcon></nz-alert>
+    </div>
+    <!-- table -->
+    <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="orderListInfor">
+      <thead nz-thead class="ui-grid-thead">
+        <tr>
+          <th nz-th class="">付款/退款时间</th>
+          <th nz-th class="" *ngIf="activeIndex === 1">会员信息</th>
+          <th nz-th class="">订单类型</th>
+          <th nz-th class="" *ngIf="(activeIndex === 0) || (activeIndex === 2)">商家实收金额</th>
+          <th nz-th class="" *ngIf="activeIndex === 1">实收金额</th>
+          <th nz-th class="" *ngIf="activeIndex === 1">充值金额</th>
+          <th nz-th class="" *ngIf="activeIndex === 1">卡名称</th>
+          <th nz-th class="" *ngIf="activeIndex === 1">开卡门店</th>
+          <th nz-th class="" *ngIf="activeIndex === 2">拼团活动</th>
+          <th nz-th class="" *ngIf="activeIndex === 0">购买项目</th>
+          <th nz-th class="" *ngIf="(activeIndex === 0) || (activeIndex === 2)">购买门店</th>
+          <th nz-th class="">操作</th>
+        </tr>
+      </thead>
+      <tbody nz-tbody class="ui-grid-tbody">
+      <tr nz-tbody-tr *ngFor="let item of orderListInfor; let i = index">
+        <td style="color: #368ff7">{{item.orderNo}}</td>
+        <td>{{item.amount/100}}</td>
+        <td style="color: #108EE9;cursor: pointer" (click)="checkDetailInfor(orderDetail,item.orderNo,item.status)">查看</td>
+      </tr>
+      </tbody>
+    </nz-table>
+    <div class="nzPaginationBox clearfix">
+      <nz-pagination class="nzPagination" style="float: right;padding: 20px 0" [nzTotal]="totalElements" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
+    </div>
+  </div>
+</nz-card>
