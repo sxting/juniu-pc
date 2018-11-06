@@ -173,6 +173,8 @@ export class settingStaffWagesComponent implements OnInit {
         if (res.success) {
           console.log(res.data);
           this.msg.success(`修改员工工资成功`);
+          this.batchQuery.pageNo = 1;
+          this.settingStaffWagesList(this.batchQuery);//获取员工工资设置列表信息
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',
