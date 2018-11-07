@@ -20,7 +20,7 @@
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="phone">手机号</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <input nz-input formControlName="phone"  autocomplete="off" id="phone" placeholder="接收各种短信通知，并作为员工登录帐号登录桔牛后台">
+        <input nz-input formControlName="phone" autocomplete="off" id="phone" placeholder="接收各种短信通知，并作为员工登录帐号登录桔牛后台">
         <ng-container *ngIf="phone.dirty || phone.touched">
           <nz-form-explain class="errorTips" *ngIf="phone.errors?.required">请输入手机号</nz-form-explain>
           <nz-form-explain class="errorTips" *ngIf="phone.errors?.pattern">手机号码有误,请重新输入</nz-form-explain>
@@ -30,7 +30,8 @@
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="password">登录密码</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <input type="password" minlength="6" maxlength="16" nz-input  autocomplete="off" formControlName="password" id="password" placeholder="员工可以用手机号和密码登录桔牛后台">
+        <input type="password" minlength="6" maxlength="16" nz-input autocomplete="off" formControlName="password" id="password"
+          placeholder="员工可以用手机号和密码登录桔牛后台">
         <ng-container *ngIf="password.dirty || password.touched">
           <nz-form-explain class="errorTips" *ngIf="password.errors?.required">请设置登录密码</nz-form-explain>
           <nz-form-explain class="errorTips" *ngIf="password.errors?.pattern">登录密码必须为6-16位大小写字母和数字组成</nz-form-explain>
@@ -47,7 +48,7 @@
         </em>
       </nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <nz-select formControlName="belongType" name="belongList" id="belongList" [nzShowSearch]="true"  (ngModelChange)="onChangesBelongs($event)" >
+        <nz-select formControlName="belongType" name="belongList" id="belongList" [nzShowSearch]="true" (ngModelChange)="onChangesBelongs($event)">
           <nz-option *ngFor="let i of belongList; let idx = index" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
         </nz-select>
       </nz-form-control>
@@ -78,7 +79,7 @@
         </em>
       </nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <nz-select formControlName="roleId" name="roleId" id="roleId"  [nzShowSearch]="true">
+        <nz-select formControlName="roleId" name="roleId" id="roleId" [nzShowSearch]="true">
           <nz-option *ngFor="let i of RolesListInfor; let idx = index" [nzLabel]="i.roleName" [nzValue]="i.roleId"></nz-option>
         </nz-select>
         <nz-form-explain class="errorTips" *ngIf="form.get('roleId').dirty && form.get('roleId').errors">请选择员工职位</nz-form-explain>
@@ -93,7 +94,15 @@
         </nz-select>
       </nz-form-control>
     </nz-form-item>
-
+    <nz-form-item *ngIf="!ifShow">
+      <nz-form-label nzXs="24" nzSm="7" nzRequired>可管理门店</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <span>
+          已选{{allStoreNum}}家门店
+          <span class="setClick" (click)="shezhi(modalContent2,'选择门店')">选择门店></span>
+        </span>
+      </nz-form-control>
+    </nz-form-item>
     <nz-form-item>
       <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
         <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">保存</button>
@@ -101,3 +110,22 @@
     </nz-form-item>
   </form>
 </nz-card>
+<ng-template #modalContent2>
+  <div>
+    <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()" [nzIndeterminate]="indeterminate">
+      选择全部
+    </label>
+  </div>
+  <div style="    height: 300px;
+  overflow-y: scroll;">
+    <nz-checkbox-wrapper style="width: 100%;margin:10px 0 ;"  (nzOnChange)="log($event)">
+      <div>
+        <div *ngFor="let i of storeList; let idx = index">
+          <label nz-checkbox [nzValue]="i.storeId" [(ngModel)]="i.checked">{{i.branchName}}</label>
+        </div>
+
+      </div>
+    </nz-checkbox-wrapper>
+  </div>
+
+</ng-template>
