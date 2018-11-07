@@ -800,6 +800,9 @@ export class TouristComponent implements OnInit {
       nzOnOk: () => {
         that.addCustomer();
       },
+      nzOnCancel: () => {
+        that.vipXqFun2();
+      },
     });
   }
   //会员信息清除
@@ -822,6 +825,8 @@ export class TouristComponent implements OnInit {
     });
     that.totolMoneyFun();
   }
+
+  
   scanPay(tpl: TemplateRef<{}>) {
     let self = this;
     this.modalSrv.create({
@@ -1660,7 +1665,15 @@ export class TouristComponent implements OnInit {
       error => this.errorAlter(error),
     );
   }
-
+//会员信息清除
+vipXqFun2() {
+  this.vipdate = '';
+  this.vipname = '';
+  this.vipphone = '';
+  this.remarks = '';
+  this.storeId = '';
+  this.selectFaceId = '';
+}
   /**新增会员 */
   addCustomer() {
     let self = this;
@@ -1694,27 +1707,9 @@ export class TouristComponent implements OnInit {
         remarks: this.remarks,
         faceId: this.selectFaceId,
         storeId: this.storeId,
-        customerId: this.customerId,
         tagIds: tagIds,
       };
-      if (data.customerId) {
-        this.memberService.updateCustomer(data).subscribe(
-          (res: any) => {
-            if (res.success) {
-              this.modalSrv.closeAll();
-              this.modalSrv.success({
-                nzTitle: '修改成功',
-              });
-            } else {
-              this.errorAlter(res.errorInfo);
-            }
-            if (res) {
-            }
-          },
-          error => this.errorAlter(error),
-        );
-      } else {
-        delete data.customerId;
+
         this.memberService.addCustomer(data).subscribe(
           (res: any) => {
             if (res.success) {
@@ -1728,7 +1723,6 @@ export class TouristComponent implements OnInit {
           },
           error => this.errorAlter(error),
         );
-      }
     }
   }
   CardConfigRuleFun(ruleId: any, index) {
