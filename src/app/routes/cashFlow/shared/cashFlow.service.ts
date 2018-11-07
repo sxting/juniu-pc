@@ -24,6 +24,31 @@ export class CashFlowService {
         return Observable.throw(error);
       });
   }
+    api = Config.API;
+    api1 = Config.API + 'finance'; //银行
+    api2 = Config.API + 'member'; //会员
+    api3 = Config.API + '/order'; //小程序
+
+
+    //美大流水
+    orderStreamBatchQuery(data: any) {
+      let apiUrl = Config.API1 + 'xmd-service/tuangou/orderStreamBatchQuery.json';
+      return this.http.get(apiUrl, data)
+          .map((response: Response) => response)
+          .catch(error => {
+              return Observable.throw(error);
+          });
+    }
+
+    //小程序流水
+    programListInfor(data: any) {
+      let apiUrl = this.api3 + '/app/pc/order/lists.json';
+      return this.http.get(apiUrl, data)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
 
   //消费流水
   consumeRecords(data: any) {

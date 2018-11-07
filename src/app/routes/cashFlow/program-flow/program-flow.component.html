@@ -34,16 +34,16 @@
 
         <nz-col nzMd="8" nzSm="24" *ngIf="expandForm">
           <nz-form-item>
-            <nz-form-label nzFor="phone">搜 索</nz-form-label>
+            <nz-form-label nzFor="checkName">搜 索</nz-form-label>
             <nz-form-control>
-              <input nz-input name="orderNo" [(ngModel)]="orderNo" placeholder="请输入{{tabText}}名称" id="orderNo">
+              <input nz-input name="checkName" [(ngModel)]="checkName" placeholder="请输入{{tabText}}名称" id="checkName">
             </nz-form-control>
           </nz-form-item>
         </nz-col>
         <nz-col nzMd="8" nzSm="24" *ngIf="expandForm && (activeIndex === 1)">
           <nz-form-item>
             <nz-form-control>
-              <input nz-input name="orderNo" [(ngModel)]="orderNo" placeholder="请输入会员手机号/微信昵称" id="orderNo">
+              <input nz-input name="search" [(ngModel)]="search" placeholder="请输入会员手机号/微信昵称" id="search">
             </nz-form-control>
           </nz-form-item>
         </nz-col>
