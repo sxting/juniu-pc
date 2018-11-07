@@ -14,8 +14,8 @@
         <nz-form-item>
           <nz-form-label nzFor="money">订单类型</nz-form-label>
           <nz-form-control>
-            <nz-select style="width: 200px;" [(ngModel)]="status" (ngModelChange)="selectOrderStatus()" name="statusList" nzPlaceHolder="请选择{{orderTypeTitle}}"
-              [nzShowSearch]="true">
+            <nz-select style="width: 200px;" [(ngModel)]="orderStatus" (ngModelChange)="selectOrderStatus('orderStatus')" name="statusList"
+              nzPlaceHolder="请选择{{orderTypeTitle}}" [nzShowSearch]="true">
               <nz-option *ngFor="let i of statusList; let idx = index" [nzLabel]="i.statusName" [nzValue]="i.status"></nz-option>
             </nz-select>
           </nz-form-control>
@@ -25,7 +25,8 @@
         <nz-form-item>
           <nz-form-label nzFor="productId">选择日期</nz-form-label>
           <nz-form-control>
-            <nz-range-picker [nzDisabledDate]="disabledDate" [nzAllowClear]="false" nzFormat="yyyy-MM-dd" [(ngModel)]="dateRange" (ngModelChange)="onDateChange($event)"></nz-range-picker>
+            <nz-range-picker [nzDisabledDate]="disabledDate" [nzAllowClear]="false" nzShowTime nzFormat="yyyy-MM-dd HH:mm:ss" [(ngModel)]="dateRange"
+              (ngModelChange)="onDateChange($event)"></nz-range-picker>
           </nz-form-control>
         </nz-form-item>
       </nz-col>
@@ -39,9 +40,9 @@
         <nz-form-item>
           <nz-form-label nzFor="money">业务类型</nz-form-label>
           <nz-form-control>
-            <nz-select style="width: 200px;" [(ngModel)]="status" (ngModelChange)="selectOrderStatus()" name="statusList" nzPlaceHolder="请选择{{orderTypeTitle}}"
+            <nz-select style="width: 200px;" [(ngModel)]="bizType" (ngModelChange)="selectOrderStatus('bizType')" name="statusList" nzPlaceHolder="请选择{{orderTypeTitle}}"
               [nzShowSearch]="true">
-              <nz-option *ngFor="let i of statusList; let idx = index" [nzLabel]="i.statusName" [nzValue]="i.status"></nz-option>
+              <nz-option *ngFor="let i of orderList; let idx = index" [nzLabel]="i.statusName" [nzValue]="i.status"></nz-option>
             </nz-select>
           </nz-form-control>
         </nz-form-item>
@@ -50,9 +51,9 @@
         <nz-form-item>
           <nz-form-label nzFor="money">付款方式</nz-form-label>
           <nz-form-control>
-            <nz-select style="width: 200px;" [(ngModel)]="status" (ngModelChange)="selectOrderStatus()" name="statusList" nzPlaceHolder="请选择{{orderTypeTitle}}"
+            <nz-select style="width: 200px;" [(ngModel)]="payType" (ngModelChange)="selectOrderStatus('payType')" name="statusList" nzPlaceHolder="请选择{{orderTypeTitle}}"
               [nzShowSearch]="true">
-              <nz-option *ngFor="let i of statusList; let idx = index" [nzLabel]="i.statusName" [nzValue]="i.status"></nz-option>
+              <nz-option *ngFor="let i of payList; let idx = index" [nzLabel]="i.statusName" [nzValue]="i.status"></nz-option>
             </nz-select>
           </nz-form-control>
         </nz-form-item>
@@ -61,7 +62,7 @@
         <nz-form-item>
           <nz-form-label nzFor="phone">搜 索</nz-form-label>
           <nz-form-control>
-            <input nz-input name="orderNo" [(ngModel)]="orderNo" placeholder="请输入项目名称" id="orderNo">
+            <input nz-input name="orderNo" [(ngModel)]="orderName" placeholder="请输入项目名称" id="orderNo">
           </nz-form-control>
         </nz-form-item>
       </nz-col>
@@ -69,7 +70,7 @@
         <nz-form-item>
           <nz-form-label nzFor="phone">搜 索</nz-form-label>
           <nz-form-control>
-            <input nz-input name="orderNo" [(ngModel)]="orderNo" placeholder="请输入会员手机号/姓名" id="orderNo">
+            <input nz-input name="orderNo" [(ngModel)]="phone" placeholder="请输入会员手机号/姓名" id="orderNo">
           </nz-form-control>
         </nz-form-item>
       </nz-col>
@@ -89,23 +90,27 @@
   <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="reportOrderList">
     <thead nz-thead class="ui-grid-thead">
       <tr>
-        <th nz-th class="" *ngFor="let item of theadName;let i = index" (click)="checkDetailInfor(orderDetail)">{{item}}</th>
+        <th nz-th class="" *ngFor="let item of theadName;let i = index">{{item}}</th>
       </tr>
     </thead>
     <tbody nz-tbody class="ui-grid-tbody">
       <tr nz-tbody-tr *ngFor="let item of reportOrderList; let i = index">
-        <td style="color: #368ff7">{{item.orderNo}}</td>
-        <td>{{item.dateCreated? item.dateCreated : '-'}}</td>
-        <td>{{item.payTypeName}}</td>
-        <td>{{item.storeName}}</td>
-        <td>{{item.storeName}}</td>
-
-        <td class="panduan" style="font-size: 0">
-          <span class="iconfont icon-dian" [class.paid]="item.status === 'PAID'"></span>
-          <span style="font-size: 14px">{{item.statusName}}</span>
+        <td style="color: #368ff7">{{item.juniuoModel.dateCreated}}</td>
+        <td>{{item.customerName}}</td>
+        <td>{{item.statusName}}</td>
+        <td>{{item.paidMoney/100}}</td>
+        <td>{{item.body}}</td>
+        <td class="panduan">
+          <span *ngFor="let i of item.deductionInfoList">
+            <span>{{item.staffName}}/</span>
+            <span>{{item.deductMoney/100}}</span>
+          </span>
         </td>
-        <td>{{item.amount/100}}</td>
-        <td style="color: #108EE9;cursor: pointer" (click)="checkDetailInfor(orderDetail,item.orderNo,item.status)">查看详情</td>
+        <td class="panduan">
+          <span>{{item.storeName}}/</span>
+          <span>{{item.operationUserName}}</span>
+        </td>
+        <td style="color: #108EE9;cursor: pointer" (click)="checkDetailInfor(orderDetail,item.orderId,item.status)">查看详情</td>
       </tr>
     </tbody>
   </nz-table>
@@ -120,26 +125,28 @@
   <div class="reserve-record-alert">
     <div class="content-title">
       <span></span>{{typeText}}详情</div>
-      <div class="orderpage_detail_list detail_list_bot">
-        <table>
-          <tr class="ui-grid-row">
-            <td class="">订单编号</td>
-            <td class="">1526442516236560284087</td>
-            <td class="">下单时间</td>
-            <td class="trans-status">2018-05-21 15:11:13</td>
-            <td class="">订单状态</td>
-            <td class="trans-status">已支付</td>
-          </tr>
-          <tr class="ui-grid-row">
-            <td class="">交易号</td>
-            <td class="">201805213452809594831849</td>
-            <td class="">收款门店</td>
-            <td class="trans-status">桔牛体验店(健身馆)</td>
-            <td class="">支付方式</td>
-            <td class="trans-status">微信</td>
-          </tr>
-        </table>
-      </div>
+    <div class="orderpage_detail_list detail_list_bot">
+      <table>
+        <tr class="ui-grid-row">
+          <td class="">订单编号</td>
+          <td class="">{{reportOrderDetail.orderId? reportOrderDetail.orderId : '-'}}</td>
+          <td class="">下单时间</td>
+          <td class="trans-status">{{reportOrderDetail?.juniuoModel?.dateCreated? reportOrderDetail.juniuoModel.dateCreated : '-'}}</td>
+          <td class="">状态</td>
+          <td class="trans-status">
+            {{reportOrderDetail.status == 'PAID'? '已支付' : '已退款'}}
+          </td>
+        </tr>
+        <tr class="ui-grid-row">
+          <td class="">交易号</td>
+          <td class="">{{reportOrderDetail.transactionNo? reportOrderDetail.transactionNo : '-'}}</td>
+          <td class="">收款门店</td>
+          <td class="">{{reportOrderDetail?.storeName}}</td>
+          <td class="">支付方式</td>
+          <td class="">{{reportOrderDetail?.payTypeName}}</td>
+        </tr>
+      </table>
+    </div>
     <nz-table [nzNoResult]="''" #basicTable [nzShowPagination]="false" [nzData]="orderItemDetail">
       <thead nz-thead class="ui-grid-thead">
         <tr>
@@ -152,11 +159,16 @@
       </thead>
       <tbody nz-tbody class="ui-grid-tbody">
         <tr nz-tbody-tr *ngFor="let list of orderItemDetail">
-          <td style="color: #108EE9">1</td>
-          <td>2</td>
-          <td>5</td>
-          <td>6</td>
-          <td>7}</td>
+          <td style="color: #108EE9">{{list.categoryName? list.categoryName : '-'}}</td>
+          <td>{{list.productName? list.productName:'-'}}</td>
+          <td>{{list.price/100}}</td>
+          <td>{{list.num? list.num : 1}}</td>
+          <td>{{(list.price/100) * (list.num? list.num : 1)}}</td>
+        </tr>
+        <tr nz-tbody-tr>
+          <td colspan="3" style="color: #000">总计</td>
+          <td>{{totalNum}}</td>
+          <td>{{totalMoney}}</td>
         </tr>
       </tbody>
     </nz-table>
