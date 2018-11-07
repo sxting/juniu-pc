@@ -16,8 +16,6 @@ export class CashFlowService {
     api2 = Config.API + 'member'; //会员
     api3 = Config.API + '/order'; //小程序
 
-    
-
 
     //美大流水
     orderStreamBatchQuery(data: any) {
@@ -31,7 +29,7 @@ export class CashFlowService {
 
     //小程序流水
     programListInfor(data: any) {
-      let apiUrl = this.api2 + '/app/pc/order/lists.json';
+      let apiUrl = this.api3 + '/app/pc/order/lists.json';
       return this.http.get(apiUrl, data)
         .map((response: Response) => response)
         .catch(error => {
@@ -41,7 +39,7 @@ export class CashFlowService {
 
     //小程序订单详情
     programOrderDetailInfor(data: any) {
-      let apiUrl = this.api2 + '/app/pc/order/detail.json';
+      let apiUrl = this.api3 + '/app/pc/order/detail.json';
       return this.http.get(apiUrl, data)
         .map((response: Response) => response)
         .catch(error => {
@@ -51,7 +49,7 @@ export class CashFlowService {
 
     //口碑商品流水订单列表
     koubeiProductFlowListInfor(data: any) {
-      let apiUrl = this.api2 + '/koubei/vouchers.json';
+      let apiUrl = this.api3 + '/koubei/vouchers.json';
       return this.http.get(apiUrl, data)
         .map((response: Response) => response)
         .catch(error => {
@@ -69,7 +67,7 @@ export class CashFlowService {
         });
     }
 
- 
+
     //口碑拼团流水订单详情
     koubeiPintuanFlowDetailInfor(data: any) {
       let apiUrl = Config.API1 + '/merchant/pintuan/order/orderDetail.json';
