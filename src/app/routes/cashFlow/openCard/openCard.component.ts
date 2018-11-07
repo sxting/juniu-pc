@@ -13,6 +13,7 @@ import NP from 'number-precision';
 import { CashFlowService } from '../shared/cashFlow.service';
 import { FormGroup } from '@angular/forms';
 import * as differenceInDays from 'date-fns/difference_in_days';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-openCard',
@@ -87,6 +88,12 @@ export class OpenCardComponent implements OnInit {
     pageSize: this.pageSize,
   };
   ifShow : any = false;
+  moduleId: any;
+  ifStoresAll: any;
+  ifStoresAuth: any;
+  orderTypeTitle: any;
+  expandForm: any;
+  
   constructor(
     private http: _HttpClient,
     private msg: NzMessageService,
@@ -94,6 +101,7 @@ export class OpenCardComponent implements OnInit {
     private localStorageService: LocalStorageService,
     private modalSrv: NzModalService,
     private storesInforService: StoresInforService,
+    private route: ActivatedRoute,
     private cashFlowService: CashFlowService,
   ) {}
   getData() {
@@ -102,6 +110,7 @@ export class OpenCardComponent implements OnInit {
 
   selectOrderStatus(type) {}
   ngOnInit() {
+    this.moduleId = this.route.snapshot.params['menuId'];
     this.startTime = FunctionUtil.changeDate(new Date()) + ' 00:00:00';
     this.endTime = FunctionUtil.changeDate(new Date()) + ' 23:59:59';
     this.dateRange = [this.startTime, this.endTime];
