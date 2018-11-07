@@ -609,7 +609,16 @@ export class ManageService {
         return Observable.throw(error);
       });
   }
-
+  //解绑员工第三方平台绑定关系(WECHAT_PUB)
+  unbindingPlatform(data: any) {
+    let apiUrl = Config.API1 + '/account/merchant/staff/unbindingPlatform.json';
+    return this.http
+      .get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
   //现有提成规则
   deductRulepage(data: any) {
     let apiUrl = Config.API + '/finance/deductRule/page.json';
