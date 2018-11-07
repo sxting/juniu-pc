@@ -1995,6 +1995,7 @@ export class TouristComponent implements OnInit {
   getOrderHistoryListHttp(phone?: any) {
     let self = this;
     let data = {
+      storeId : this.storeId,
       pageIndex: this.pageIndex,
       pageSize: this.pageSize,
       phone: phone,
