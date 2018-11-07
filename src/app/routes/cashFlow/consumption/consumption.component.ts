@@ -70,6 +70,7 @@ export class ConsumptionComponent implements OnInit {
   phone: any;
   orderName: any;
   totalElements: any = 0;
+  total = 0;
   reportOrderList: any = [];
   /**
    * "扫码枪"),CASH("现金"),BANK("银行卡"),QRCODE("付款吗 请求体
@@ -84,6 +85,7 @@ export class ConsumptionComponent implements OnInit {
     pageNo: this.pageNo,
     pageSize: this.pageSize,
   };
+  ifShow : any = false;
   constructor(
     private http: _HttpClient,
     private msg: NzMessageService,
@@ -140,6 +142,7 @@ export class ConsumptionComponent implements OnInit {
       nzWidth: '800px',
       nzFooter: null,
     });
+    this.ifShow = status === 'REFUND'? true : false;
     this.revenuetOrderDetail(orderNo); //订单详情页面数据
   }
 
@@ -178,8 +181,10 @@ export class ConsumptionComponent implements OnInit {
         nzContent: '时间间隔不能大于31天',
       });
     } else {
+      this.loading = true;
       this.cashFlowService.consumeRecords(data).subscribe(
         (res: any) => {
+          this.loading = false;
           if (res.success) {
             console.log(res.data);
             this.totalElements = res.data.totalElements;
@@ -201,7 +206,7 @@ export class ConsumptionComponent implements OnInit {
     this.cashFlowService.recordStatistics(data).subscribe(
       (res: any) => {
         if (res.success) {
-          console.log(res.data);
+          this.total = res.data;
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',
@@ -246,7 +251,6 @@ export class ConsumptionComponent implements OnInit {
       }
     });
   }
-  
 
   // 获取营收报表订单详情页面
   revenuetOrderDetail(batchQuery: any) {
@@ -259,15 +263,15 @@ export class ConsumptionComponent implements OnInit {
           console.log(res.data);
           let totalNum = 0;
           let totalMoney = 0;
-          res.data.orderItem.forEach(function(item: any){
-            item.num = item.num? item.num : 1;
+          res.data.orderItem.forEach(function(item: any) {
+            item.num = item.num ? item.num : 1;
             totalNum += item.num;
-            totalMoney += item.price/100 * item.num;
+            totalMoney += item.price / 100 * item.num;
           });
           self.orderItemDetail = res.data.orderItem;
           self.reportOrderDetail = res.data;
           self.totalNum = totalNum;
-          self.totalMoney = NP.round(totalMoney,2);
+          self.totalMoney = NP.round(totalMoney, 2);
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',

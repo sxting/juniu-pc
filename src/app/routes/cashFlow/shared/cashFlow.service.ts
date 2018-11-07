@@ -11,9 +11,13 @@ import { Config } from '@shared/config/env.config';
 export class CashFlowService {
   constructor(private http: _HttpClient) {}
 
-    api = Config.API;
+  api = Config.API;
     api1 = Config.API + 'finance'; //银行
-    api2 = Config.API + 'order'; //会员
+    api2 = Config.API + 'member'; //会员
+    api3 = Config.API + '/order'; //小程序
+
+    
+
 
     //美大流水
     orderStreamBatchQuery(data: any) {
@@ -65,6 +69,7 @@ export class CashFlowService {
         });
     }
 
+ 
     //口碑拼团流水订单详情
     koubeiPintuanFlowDetailInfor(data: any) {
       let apiUrl = Config.API1 + '/merchant/pintuan/order/orderDetail.json';

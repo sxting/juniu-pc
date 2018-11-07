@@ -84,7 +84,7 @@
     </nz-row>
   </div>
   <div class="mb-md">
-    <nz-alert nzType="info" nzMessage="共有 2 条数据  |   总金额：300.00万" nzShowIcon></nz-alert>
+    <nz-alert nzType="info" nzMessage="共有 {{totalElements}} 条数据  |   总金额：{{total/100}}元" nzShowIcon></nz-alert>
   </div>
   <!-- table -->
   <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="reportOrderList">
@@ -123,27 +123,32 @@
 <!--查看详情-->
 <ng-template #orderDetail>
   <div class="reserve-record-alert">
-    <div class="content-title">
-      <span></span>{{typeText}}详情</div>
-    <div class="orderpage_detail_list detail_list_bot">
+    <div class="content-title"><span></span>{{typeText}}详情</div>
+    <div class="orderpage_detail_list detail_list_bot" *ngIf="reportOrderDetail">
       <table>
-        <tr class="ui-grid-row">
+        <tr class="ui-grid-row" *ngIf="reportOrderDetail ">
           <td class="">订单编号</td>
           <td class="">{{reportOrderDetail.orderId? reportOrderDetail.orderId : '-'}}</td>
           <td class="">下单时间</td>
-          <td class="trans-status">{{reportOrderDetail?.juniuoModel?.dateCreated? reportOrderDetail.juniuoModel.dateCreated : '-'}}</td>
+          <td class="trans-status">{{reportOrderDetail.juniuoModel.dateCreated? reportOrderDetail.juniuoModel.dateCreated : '-'}}</td>
           <td class="">状态</td>
           <td class="trans-status">
             {{reportOrderDetail.status == 'PAID'? '已支付' : '已退款'}}
           </td>
         </tr>
-        <tr class="ui-grid-row">
+        <tr class="ui-grid-row" *ngIf="reportOrderDetail ">
           <td class="">交易号</td>
           <td class="">{{reportOrderDetail.transactionNo? reportOrderDetail.transactionNo : '-'}}</td>
           <td class="">收款门店</td>
           <td class="">{{reportOrderDetail?.storeName}}</td>
           <td class="">支付方式</td>
           <td class="">{{reportOrderDetail?.payTypeName}}</td>
+        </tr>
+        <tr class="ui-grid-row"  *ngIf="ifShow ">
+          <td class="">退款单号</td>
+          <td class="">{{reportOrderDetail.refundOrder? reportOrderDetail.refundOrder.orderId : '-'}}</td>
+          <td class="">退款时间</td>
+          <td class="trans-status">{{reportOrderDetail.refundOrder.juniuoModel.dateCreated? reportOrderDetail.refundOrder.juniuoModel.dateCreated : '-'}}</td>
         </tr>
       </table>
     </div>
@@ -152,6 +157,8 @@
         <tr>
           <th nz-th class="">商品分类</th>
           <th nz-th class="">商品名称</th>
+          <th nz-th class="">技师／小工</th>
+          <th class="">是否指定</th>
           <th nz-th class="">单价(元)</th>
           <th nz-th class="">数量(件)</th>
           <th nz-th class="">金额(元)</th>
@@ -161,18 +168,20 @@
         <tr nz-tbody-tr *ngFor="let list of orderItemDetail">
           <td style="color: #108EE9">{{list.categoryName? list.categoryName : '-'}}</td>
           <td>{{list.productName? list.productName:'-'}}</td>
+          <td class="">{{list.staffName? list.staffName : '-'}}／{{list.staff2Name? list.staff2Name : '-'}}</td>
+          <td class="">{{list.assign == 0? '否' : '是'}}</td>
           <td>{{list.price/100}}</td>
           <td>{{list.num? list.num : 1}}</td>
           <td>{{(list.price/100) * (list.num? list.num : 1)}}</td>
         </tr>
         <tr nz-tbody-tr>
-          <td colspan="3" style="color: #000">总计</td>
+          <td colspan="5" style="color: #000">总计</td>
           <td>{{totalNum}}</td>
           <td>{{totalMoney}}</td>
         </tr>
       </tbody>
     </nz-table>
-    <table class="table-singel-nannan" *ngIf="tabActiveType === 'MEIDA' || tabActiveType === 'KOUBEI'">
+    <!-- <table class="table-singel-nannan" >
       <thead class="ui-grid-thead">
         <tr>
           <th class="" *ngIf="tabActiveType === 'KOUBEI'">核销码</th>
@@ -190,28 +199,36 @@
           <td>{{reportOrderDetail.voucherVO.body? reportOrderDetail.voucherVO.body: '-'}}</td>
           <td>{{reportOrderDetail.voucherItemVO.price/100}}</td>
           <td>{{reportOrderDetail.voucherItemVO.num? reportOrderDetail.voucherItemVO.num : 1}}</td>
-          <td>{{(reportOrderDetail.voucherItemVO.price/100) * (reportOrderDetail.voucherItemVO.num? reportOrderDetail.voucherItemVO.num
-            : 1)}}</td>
+          <td>{{(reportOrderDetail.voucherItemVO.price/100) * (reportOrderDetail.voucherItemVO.num? reportOrderDetail.voucherItemVO.num : 1)}}</td>
         </tr>
       </tbody>
-    </table>
-    <div class="orderpage_detail_list_bottom detail_list_bot">
+    </table> -->
+    <div class="orderpage_detail_list_bottom detail_list_bot" *ngIf="reportOrderDetail">
       <table>
-        <tr class="ui-grid-row">
+        <tr class="ui-grid-row" *ngIf="reportOrderDetail ">
           <td class="">优惠券</td>
-          <td class="">1</td>
+          <td class="">{{reportOrderDetail.coupon.couponDefName? reportOrderDetail.coupon.couponDefName : '-'}}</td>
           <td class="">优惠金额</td>
-          <td class="trans-status">2元</td>
+          <td class="trans-status">{{reportOrderDetail.couponAmount/100}} 元</td>
           <td class="">实付金额</td>
-          <td class="trans-status">3元</td>
+          <td class="trans-status">{{reportOrderDetail.paidMoney/100}}元</td>
         </tr>
-        <tr class="ui-grid-row">
-          <td class="">技师</td>
-          <td class="">1</td>
-          <td class="">是否指定</td>
-          <td class="trans-status">2元</td>
-          <td class="">小工</td>
-          <td class="trans-status">3元</td>
+        <tr class="ui-grid-row" *ngIf="reportOrderDetail ">
+          <td class="">顾客姓名</td>
+          <td class="">{{reportOrderDetail.customerName? reportOrderDetail.customerName : '-'}}</td>
+          <td class="">手机号</td>
+          <td class="">{{reportOrderDetail.phone}}</td>
+        </tr>
+        <tr class="ui-grid-row"  *ngIf="reportOrderDetail && (tabActiveType === 'KOUBEI' || tabActiveType === 'MEIDA' || tabActiveType === 'MINIPROGRAM')">
+          <td class="">订单编号</td>
+          <td class="" *ngIf="tabActiveType === 'MINIPROGRAM'">{{reportOrderDetail.orderId}}</td>
+          <td class="" *ngIf="tabActiveType === 'KOUBEI' || tabActiveType === 'MEIDA'">{{reportOrderDetail.voucherVO.orderId}}</td>
+          <td class="">下单时间</td>
+          <td class="trans-status" *ngIf="tabActiveType === 'MINIPROGRAM'">{{reportOrderDetail.juniuoModel? reportOrderDetail.juniuoModel.dateCreated : '-'}}</td>
+          <td class="" *ngIf="tabActiveType === 'KOUBEI' || tabActiveType === 'MEIDA'">{{reportOrderDetail.voucherVO.usedDate}}</td>
+          <td class="">购买门店</td>
+          <td class="trans-status" *ngIf="tabActiveType === 'MINIPROGRAM'">{{reportOrderDetail.storeName}}</td>
+          <td class="trans-status" *ngIf="tabActiveType === 'MEIDA' || tabActiveType === 'KOUBEI'">{{reportOrderDetail.voucherVO.usedStoreName}}</td>
         </tr>
       </table>
     </div>
