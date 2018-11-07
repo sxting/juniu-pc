@@ -12,22 +12,11 @@ export class CashFlowService {
   constructor(private http: _HttpClient) {}
 
   api = Config.API;
-  api1 = Config.API + 'finance'; //银行
-  api2 = Config.API + 'order'; //会员
-  //美大流水
-  orderStreamBatchQuery(data: any) {
-    let apiUrl = Config.API1 + 'xmd-service/tuangou/orderStreamBatchQuery.json';
-    return this.http
-      .get(apiUrl, data)
-      .map((response: Response) => response)
-      .catch(error => {
-        return Observable.throw(error);
-      });
-  }
-    api = Config.API;
     api1 = Config.API + 'finance'; //银行
     api2 = Config.API + 'member'; //会员
     api3 = Config.API + '/order'; //小程序
+
+    
 
 
     //美大流水
@@ -73,7 +62,7 @@ export class CashFlowService {
 
   // 营收报表订单详情
   revenuetOrderDetail(data: any) {
-    let apiUrl = this.api2 + '/order/' + data + '/detail.json';
+    let apiUrl = this.api3 + '/order/' + data + '/detail.json';
     return this.http
       .get(apiUrl)
       .map((response: Response) => response)

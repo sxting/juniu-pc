@@ -50,6 +50,7 @@ export class MeidaFlowComponent implements OnInit {
   dataList :any;
   totalElements:any;
   totalAmount:any = 0;
+  alertDate:any;
   constructor(
     private http: _HttpClient,
     private msg: NzMessageService,
@@ -87,9 +88,43 @@ export class MeidaFlowComponent implements OnInit {
     this.koubeiProductVouchersListFirst()
   }
 
+   //选择日期
+   onDateChange(date: Date): void {
+    this.dateRange = date;
+    this.startTime = this.timestampToTime2(
+      this.dateRange[0].getTime(),
+      'yyyy-MM-dd HH:mm:ss',
+    );
+    this.endTime = this.timestampToTime2(
+      this.dateRange[1].getTime(),
+      'yyyy-MM-dd HH:mm:ss',
+    );
+  }
+  timestampToTime2(time, format) {
+    var t = new Date(time);
+    var tf = function(i) {
+      return (i < 10 ? '0' : '') + i;
+    };
+    return format.replace(/yyyy|MM|dd|HH|mm|ss/g, function(a) {
+      switch (a) {
+        case 'yyyy':
+          return tf(t.getFullYear());
+        case 'MM':
+          return tf(t.getMonth() + 1);
+        case 'mm':
+          return tf(t.getMinutes());
+        case 'dd':
+          return tf(t.getDate());
+        case 'HH':
+          return tf(t.getHours());
+        case 'ss':
+          return tf(t.getSeconds());
+      }
+    });
+  }
 
    //查看每个的订单详情
-   checkDetailInfor(tpl: any,orderNo?: string,status?: string) {
+   checkDetailInfor(tpl: any,item:any) {
     let self = this;
     this.modalSrv.create({
       nzTitle: '',
@@ -97,7 +132,7 @@ export class MeidaFlowComponent implements OnInit {
       nzWidth: '800px',
       nzFooter: null,
     });
-    
+    this.alertDate = item;
   }
   //口碑核销列表信息
   koubeiProductVouchersListFirst() {
