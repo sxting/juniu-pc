@@ -110,7 +110,7 @@ export class KoubeiFlowComponent implements OnInit {
     this.activeIndex = e.index;
     this.tabActiveType = this.activeIndex === 0? '核销' : '订单';
     this.pageNo = 1;
-    this.storeList = this.itemList = this.orderListInfor = [];//先清除 再赋值
+    this.itemList = this.orderListInfor = [];//先清除 再赋值
     this.getTabListInfor();//切换tab的时候，根据不同场景get列表数据
   }
 
@@ -362,14 +362,14 @@ export class KoubeiFlowComponent implements OnInit {
   //  请求列表数据
   getTabListInfor(){
     if(this.activeIndex === 0){//口碑商品流水
-      this.batchQueryProduct.storeId = this.storeId;
+      this.batchQueryProduct.storeId = this.storeId? this.storeId : '';
       this.batchQueryProduct.endDate = this.endTime;
       this.batchQueryProduct.startDate = this.startTime;
       this.batchQueryProduct.pageIndex = this.pageNo;
       this.batchQueryProduct.productId = this.productId? this.productId : '';
       this.koubeiProductFlowListInfor(this.batchQueryProduct);//口碑商品流水列表
     }else{//口碑拼团流水
-      this.batchQuery.storeId = this.storeId;
+      this.batchQuery.storeId = this.storeId? this.storeId : '';
       this.batchQuery.endDate = this.endTime;
       this.batchQuery.startDate = this.startTime;
       this.batchQuery.type = this.orderType;
