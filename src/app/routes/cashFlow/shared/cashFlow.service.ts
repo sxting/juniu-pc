@@ -45,6 +45,26 @@ export class CashFlowService {
         });
     }
 
+    //口碑拼团流水订单列表
+    koubeiPintuanFlowListInfor(data: any) {
+      let apiUrl = this.api2 + '/merchant/pintuan/order/orderStreamBatchQuery.json';
+      return this.http.get(apiUrl, data)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
+
+    //口碑拼团流水订单详情
+    koubeiPintuanFlowDetailInfor(data: any) {
+      let apiUrl = this.api2 + '/merchant/pintuan/order/orderDetail.json';
+      return this.http.get(apiUrl, data)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
+
     //消费流水
     consumeRecords(data: any) {
       let apiUrl = Config.API + 'order/consume/records.json';
