@@ -13,6 +13,7 @@ import NP from 'number-precision';
 import * as differenceInDays from 'date-fns/difference_in_days';
 import { CashFlowService } from '../shared/cashFlow.service';
 import { FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-consumption',
@@ -72,6 +73,7 @@ export class ConsumptionComponent implements OnInit {
   totalElements: any = 0;
   total = 0;
   reportOrderList: any = [];
+  moduleId:any;
   /**
    * "扫码枪"),CASH("现金"),BANK("银行卡"),QRCODE("付款吗 请求体
    ***/
@@ -86,12 +88,18 @@ export class ConsumptionComponent implements OnInit {
     pageSize: this.pageSize,
   };
   ifShow : any = false;
+  ifStoresAll:any;
+  ifStoresAuth:any;
+  orderTypeTitle:any;
+  expandForm:any;
+  
   constructor(
     private http: _HttpClient,
     private msg: NzMessageService,
     private router: Router,
     private localStorageService: LocalStorageService,
     private modalSrv: NzModalService,
+    private route: ActivatedRoute,
     private storesInforService: StoresInforService,
     private cashFlowService: CashFlowService,
   ) {}
@@ -101,6 +109,7 @@ export class ConsumptionComponent implements OnInit {
 
   selectOrderStatus(type) {}
   ngOnInit() {
+    this.moduleId = this.route.snapshot.params['menuId'];
     this.startTime = FunctionUtil.changeDate(new Date()) + ' 00:00:00';
     this.endTime = FunctionUtil.changeDate(new Date()) + ' 23:59:59';
     this.dateRange = [this.startTime, this.endTime];

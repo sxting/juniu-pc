@@ -12,6 +12,9 @@ declare var echarts: any;
 import NP from 'number-precision';
 import { CashFlowService } from '../shared/cashFlow.service';
 import { FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import * as differenceInDays from 'date-fns/difference_in_days';
+
 
 @Component({
   selector: 'app-meidaFlow',
@@ -45,28 +48,35 @@ export class MeidaFlowComponent implements OnInit {
   status: any;
   orderNo: any;
   endTime: any;
-  dateRange:any;
-  productName:any;
-  dataList :any;
-  totalElements:any;
-  totalAmount:any = 0;
-  alertDate:any;
+  dateRange: any;
+  productName: any;
+  dataList: any;
+  totalElements: any;
+  totalAmount: any = 0;
+  alertDate: any;
+  moduleId: any;
+  ifStoresAll: any;
+  ifStoresAuth: any;
+  expandForm: any;
+
   constructor(
     private http: _HttpClient,
     private msg: NzMessageService,
     private router: Router,
     private localStorageService: LocalStorageService,
     private modalSrv: NzModalService,
+    private route: ActivatedRoute,
     private storesInforService: StoresInforService,
     private cashFlowService: CashFlowService,
   ) {}
 
   ngOnInit() {
-    let startDate = new Date(new Date().getTime() - 7*24*60*60*1000); //提前一周 ==开始时间
-      let endDate = new Date(new Date().getTime() - 24*60*60*1000); //今日 ==结束时
-      this.dateRange = [ startDate,endDate ];
-      this.startTime  = FunctionUtil.changeDate(startDate) + ' 00:00:00';
-      this.endTime = FunctionUtil.changeDate(endDate) + ' 23:59:59';
+    this.moduleId = this.route.snapshot.params['menuId'];
+    let startDate = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000); //提前一周 ==开始时间
+    let endDate = new Date(new Date().getTime() - 24 * 60 * 60 * 1000); //今日 ==结束时
+    this.dateRange = [startDate, endDate];
+    this.startTime = FunctionUtil.changeDate(startDate) + ' 00:00:00';
+    this.endTime = FunctionUtil.changeDate(endDate) + ' 23:59:59';
   }
   //返回门店数据
   storeListPush(event: any) {
@@ -76,20 +86,24 @@ export class MeidaFlowComponent implements OnInit {
   getStoreId(event: any) {
     let self = this;
     this.storeId = event.storeId ? event.storeId : '';
-    this.koubeiProductVouchersListFirst()
-    
+    this.koubeiProductVouchersListFirst();
   }
-  getData(){
-    this.koubeiProductVouchersListFirst()
+  //校验核销开始时间
+  disabledDate = (current: Date): boolean => {
+    let endDate = new Date(new Date().getTime()); //今日 ==结束时
+    return differenceInDays(current, new Date()) > 0;
+  };
+  getData() {
+    this.koubeiProductVouchersListFirst();
   }
   // 切换分页码
   paginate(event: any) {
     this.pageNo = event;
-    this.koubeiProductVouchersListFirst()
+    this.koubeiProductVouchersListFirst();
   }
 
-   //选择日期
-   onDateChange(date: Date): void {
+  //选择日期
+  onDateChange(date: Date): void {
     this.dateRange = date;
     this.startTime = this.timestampToTime2(
       this.dateRange[0].getTime(),
@@ -123,8 +137,8 @@ export class MeidaFlowComponent implements OnInit {
     });
   }
 
-   //查看每个的订单详情
-   checkDetailInfor(tpl: any,item:any) {
+  //查看每个的订单详情
+  checkDetailInfor(tpl: any, item: any) {
     let self = this;
     this.modalSrv.create({
       nzTitle: '',
@@ -137,41 +151,41 @@ export class MeidaFlowComponent implements OnInit {
   //口碑核销列表信息
   koubeiProductVouchersListFirst() {
     let self = this;
-    let data ={
-      storeId:this.storeId ,
-      startDate:this.startTime,
-      endDate:this.endTime,
-      productName:this.productName,
-      pageNo:this.pageNo,
-      pageSize:10
-    }
-    if(!data.storeId) delete data.storeId;
-    if(!data.startDate) delete data.startDate;
-    if(!data.endDate) delete data.endDate;
-    if(!data.productName) delete data.productName;
-    
+    let data = {
+      storeId: this.storeId,
+      startDate: this.startTime,
+      endDate: this.endTime,
+      productName: this.productName,
+      pageNo: this.pageNo,
+      pageSize: 10,
+    };
+    if (!data.storeId) delete data.storeId;
+    if (!data.startDate) delete data.startDate;
+    if (!data.endDate) delete data.endDate;
+    if (!data.productName) delete data.productName;
+
     this.cashFlowService.orderStreamBatchQuery(data).subscribe(
       (res: any) => {
         if (res.success) {
-          console.log(res.data)
+          console.log(res.data);
           this.dataList = res.data.details;
           this.totalAmount = res.data.totalAmount;
           this.totalElements = res.data.page.countTotal;
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',
-            nzContent: res.errorInfo
+            nzContent: res.errorInfo,
           });
         }
       },
-      error => this.errorAlter(error)
+      error => this.errorAlter(error),
     );
   }
 
   errorAlter(err: any) {
     this.modalSrv.error({
       nzTitle: '温馨提示',
-      nzContent: err
+      nzContent: err,
     });
   }
 }
