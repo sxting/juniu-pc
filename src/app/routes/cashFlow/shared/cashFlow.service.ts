@@ -31,7 +31,7 @@ export class CashFlowService {
 
     //小程序流水
     programListInfor(data: any) {
-      let apiUrl = this.api3 + '/app/pc/order/lists.json';
+      let apiUrl = this.api2 + '/app/pc/order/lists.json';
       return this.http.get(apiUrl, data)
         .map((response: Response) => response)
         .catch(error => {
@@ -39,35 +39,66 @@ export class CashFlowService {
         });
     }
 
-  //消费流水
-  consumeRecords(data: any) {
-    let apiUrl = Config.API + 'order/consume/records.json';
-    return this.http
-      .get(apiUrl, data)
-      .map((response: Response) => response)
-      .catch(error => {
-        return Observable.throw(error);
-      });
-  }
+    //小程序订单详情
+    programOrderDetailInfor(data: any) {
+      let apiUrl = this.api2 + '/app/pc/order/detail.json';
+      return this.http.get(apiUrl, data)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
 
-  recordStatistics(data: any) {
-    let apiUrl = Config.API + 'order/consume/records/statistics.json';
-    return this.http
-      .get(apiUrl, data)
-      .map((response: Response) => response)
-      .catch(error => {
-        return Observable.throw(error);
-      });
-  }
+    //口碑拼团流水订单列表
+    koubeiPintuanFlowListInfor(data: any) {
+      let apiUrl = this.api2 + '/merchant/pintuan/order/orderStreamBatchQuery.json';
+      return this.http.get(apiUrl, data)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
 
-  // 营收报表订单详情
-  revenuetOrderDetail(data: any) {
-    let apiUrl = this.api3 + '/order/' + data + '/detail.json';
-    return this.http
-      .get(apiUrl)
-      .map((response: Response) => response)
-      .catch(error => {
-        return Observable.throw(error);
-      });
-  }
+ 
+    //口碑拼团流水订单详情
+    koubeiPintuanFlowDetailInfor(data: any) {
+      let apiUrl = this.api2 + '/merchant/pintuan/order/orderDetail.json';
+      return this.http.get(apiUrl, data)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
+
+    //消费流水
+    consumeRecords(data: any) {
+      let apiUrl = Config.API + 'order/consume/records.json';
+      return this.http
+        .get(apiUrl, data)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
+
+    recordStatistics(data: any) {
+      let apiUrl = Config.API + 'order/consume/records/statistics.json';
+      return this.http
+        .get(apiUrl, data)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
+
+    // 营收报表订单详情
+    revenuetOrderDetail(data: any) {
+      let apiUrl = this.api2 + '/order/' + data + '/detail.json';
+      return this.http
+        .get(apiUrl)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
 }

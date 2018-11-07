@@ -1,5 +1,5 @@
 
-<nz-card [nzBordered]="false" [nzBodyStyle]="{'padding.px': 12}" style="height: 400px" class="sales-card">
+<nz-card [nzBordered]="false" [nzBodyStyle]="{'padding.px': 12}" class="sales-card">
   <div class="title">
     <nz-tabset (nzSelectChange)="changeEchartsTab($event)" style="padding-bottom: 20px;">
       <nz-tab nzTitle="口碑商品"></nz-tab>
@@ -17,12 +17,6 @@
             </nz-form-control>
           </nz-form-item>
         </nz-col>
-        <nz-col nzMd="8" nzSm="24" style="overflow: hidden;height: 56.5px;">
-          <nz-form-item>
-            <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [storeId]="storeId" [ifStoresAll]="ifStoresAll"
-                             (storeListPush)="storeListPush($event)" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
-          </nz-form-item>
-        </nz-col>
         <nz-col nzMd="8" nzSm="24">
           <nz-form-item>
             <nz-form-label nzFor="productId">{{tabActiveType}}时间</nz-form-label>
@@ -31,8 +25,15 @@
             </nz-form-control>
           </nz-form-item>
         </nz-col>
+        <nz-col nzMd="8" nzSm="24" style="overflow: hidden;height: 56.5px;">
+          <nz-form-item>
+            <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [storeId]="storeId" [ifStoresAll]="ifStoresAll"
+                             (storeListPush)="storeListPush($event)" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
+          </nz-form-item>
+        </nz-col>
         <nz-col nzMd="8" nzSm="24" *ngIf="activeIndex === 0">
           <nz-form-item>
+            <nz-form-label nzFor="checkName">搜 索</nz-form-label>
             <nz-form-control>
               <input nz-input name="koubeiProductName" [(ngModel)]="koubeiProductName" placeholder="请输入口碑商品名称" id="koubeiProductName">
             </nz-form-control>
@@ -40,12 +41,13 @@
         </nz-col>
         <nz-col nzMd="8" nzSm="24" *ngIf="activeIndex === 1">
           <nz-form-item>
+            <nz-form-label nzFor="checkName">搜 索</nz-form-label>
             <nz-form-control>
               <input nz-input name="collageName" [(ngModel)]="collageName" placeholder="请输入口碑拼团活动名称" id="collageName">
             </nz-form-control>
           </nz-form-item>
         </nz-col>
-        <nz-col nzMd="8" nzSm="24">
+        <nz-col [nzSpan]="expandForm ? 24 : 8" [class.text-right]="expandForm" style="width:200px">
           <button nz-button type="submit" [nzType]="'primary'" [nzLoading]="loading" (click)="getData()">查询</button>
         </nz-col>
       </nz-row>
