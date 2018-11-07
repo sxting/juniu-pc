@@ -256,7 +256,7 @@ export class CardholdersVipComponent {
                         if(i.sceneType === 'KOUBEI') i.sceneName = '口碑核销';
                         if(i.sceneType === 'MEIDA') i.sceneName = '美大验券';
                         if(i.sceneType === 'CASH') i.sceneName = '现金';
-                        
+
                     })
                     this.loading = false;
                     this.Total2 = res.data.totalElements;
@@ -499,7 +499,7 @@ export class CardholdersVipComponent {
     let data = {
       merchantId: this.merchantId
     };
-    this.memberService.allTaglibs(this.data).subscribe(
+    this.memberService.allTaglibs(data).subscribe(
       (res: any) => {
         if (res.success) {
           this.allTaglibsList = res.data;
