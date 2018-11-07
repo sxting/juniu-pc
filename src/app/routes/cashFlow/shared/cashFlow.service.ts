@@ -37,6 +37,16 @@ export class CashFlowService {
         });
     }
 
+    //小程序订单详情
+    programOrderDetailInfor(data: any) {
+      let apiUrl = this.api3 + '/app/pc/order/detail.json';
+      return this.http.get(apiUrl, data)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
+
 }
 
 
