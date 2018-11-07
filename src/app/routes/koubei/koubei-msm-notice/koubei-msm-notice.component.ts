@@ -15,7 +15,7 @@ declare var GoEasy: any;
     templateUrl: './koubei-msm-notice.component.html',
     styleUrls: ['./koubei-msm-notice.component.less']
 })
-export class KoubeiMsmNoticeComponent implements OnInit, OnChanges, OnDestroy {
+export class KoubeiMsmNoticeComponent implements OnInit, OnDestroy {
     data: any = [
         { x: new Date(), y1: 3, y2: 3 },
         { x: new Date(), y1: 4, y2: 3 },
@@ -73,24 +73,24 @@ export class KoubeiMsmNoticeComponent implements OnInit, OnChanges, OnDestroy {
             appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
         });
     }
-    ngOnChanges() {
-        if (this.orderNo) {
-            let goEasy = new GoEasy({
-                appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
-            });
+    // ngOnChanges() {
+    //     if (this.orderNo) {
+    //         let goEasy = new GoEasy({
+    //             appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
+    //         });
 
-            goEasy.subscribe({
-                channel: 'SMS_PACKAGE_' + this.orderNo,
-                onMessage: (message: any) => {
-                    console.log(message);
-                    if (confirm(message.content)) {
-                        this.modalSrv.closeAll();
-                        this.msg.success('充值成功');
-                    }
-                }
-            });
-        }
-    }
+    //         goEasy.subscribe({
+    //             channel: 'SMS_PACKAGE_' + this.orderNo,
+    //             onMessage: (message: any) => {
+    //                 console.log(message);
+    //                 if (confirm(message.content)) {
+    //                     this.modalSrv.closeAll();
+    //                     this.msg.success('充值成功');
+    //                 }
+    //             }
+    //         });
+    //     }
+    // }
     ngOnDestroy() {
         clearInterval(this.timer);
     }

@@ -195,7 +195,7 @@
     <nz-form-item [class.dis-none]="paramsIdNumber >= 11">
       <nz-form-label nzXs="24" nzSm="5" nzFor="sms_content">短信内容</nz-form-label>
       <nz-form-control nzXs="24" nzSm="15" nzMd="15">
-        <textarea nz-input formControlName="sms_content" placeholder="请输入短信内容，不输入内容则默认不发送短信通知" value="{{smsInputValue}}"
+        <textarea nz-input formControlName="sms_content" maxlength="300" placeholder="请输入短信内容，不输入内容则默认不发送短信通知，最多输入300字" value="{{smsInputValue}}"
                   (change)="smsInputChange()"></textarea>
         <nz-form-explain [class.dis-none]="paramsId == '07' || paramsId == '08' || paramsId == '09'">
           共需发送{{calculateMemberNum}}条短信
