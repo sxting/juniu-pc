@@ -7,6 +7,7 @@ import { StoresInforService } from '@shared/stores-infor/shared/stores-infor.ser
 import { CashFlowService } from '../shared/cashFlow.service';
 import { FormGroup } from '@angular/forms';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
+import * as differenceInDays from 'date-fns/difference_in_days';
 import NP from 'number-precision'
 
 @Component({
@@ -101,6 +102,51 @@ export class ProgramFlowComponent implements OnInit {
     let self = this;
     this.storeId = event.storeId ? event.storeId : '';
     this.pageNo = 1;
+    this.batchQueryInfor();//根据查询条件筛选列表信息。
+  }
+
+  //校验核销开始时间
+  disabledDate = (current: Date): boolean => {
+    // let date = '2017-01-01 23:59:59';
+    let endDate = new Date(new Date().getTime()); //今日 ==结束时
+    // return differenceInDays(current, new Date(date)) < 0;
+    return differenceInDays(current, new Date()) > 0;
+  };
+
+  timestampToTime2(time, format) {
+    var t = new Date(time);
+    var tf = function(i) {
+      return (i < 10 ? '0' : '') + i;
+    };
+    return format.replace(/yyyy|MM|dd|HH|mm|ss/g, function(a) {
+      switch (a) {
+        case 'yyyy':
+          return tf(t.getFullYear());
+        case 'MM':
+          return tf(t.getMonth() + 1);
+        case 'mm':
+          return tf(t.getMinutes());
+        case 'dd':
+          return tf(t.getDate());
+        case 'HH':
+          return tf(t.getHours());
+        case 'ss':
+          return tf(t.getSeconds());
+      }
+    });
+  }
+
+  //选择日期
+  onDateChange(date: Date): void {
+    this.dateRange = date;
+    this.startTime = this.timestampToTime2(
+      this.dateRange[0].getTime(),
+      'yyyy-MM-dd HH:mm:ss',
+    );
+    this.endTime = this.timestampToTime2(
+      this.dateRange[1].getTime(),
+      'yyyy-MM-dd HH:mm:ss',
+    );
     this.batchQueryInfor();//根据查询条件筛选列表信息。
   }
 
