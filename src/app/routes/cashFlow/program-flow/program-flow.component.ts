@@ -44,12 +44,12 @@ export class ProgramFlowComponent implements OnInit {
   dateRange: any;
   search: string;//会员手机号/微信昵称
   checkName: string = '';//查询name
-  orderItemDetailInfor: any;//订单详情页面
   totalAmount: any;//总金额
   ifShowThis: boolean = false;//查看是否是订单详情里面的扣卡  false表示不是扣卡 true扣卡
   ifShow: boolean = false;
   totalNum: any;
   totalMoney: any;
+  orderItemDetailInfor: any;//订单详情页面
   orderItemDetailInforList: any;
   totalMoneyTwo: number = 0;
   orderTypeListText: any;//弹框的订单状态
@@ -326,7 +326,7 @@ export class ProgramFlowComponent implements OnInit {
   // 查询数据的条件赋值
   batchQueryInfor(){
     this.batchQuery.merchantId = this.merchantId;
-    this.batchQuery.storeId = '1530079118713392207393';
+    this.batchQuery.storeId = this.storeId;
     this.batchQuery.queryType = this.queryType;
     this.batchQuery.orderType = this.orderType? this.orderType : '';
     this.batchQuery.search = this.search? this.search : '';

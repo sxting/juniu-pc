@@ -67,10 +67,9 @@ export class CashFlowService {
         });
     }
 
-
     //口碑拼团流水订单详情
     koubeiPintuanFlowDetailInfor(data: any) {
-      let apiUrl = Config.API1 + '/merchant/pintuan/order/orderDetail.json';
+      let apiUrl = Config.API1 + 'pintuan-service/merchant/pintuan/order/orderDetail.json';
       return this.http.get(apiUrl, data)
         .map((response: Response) => response)
         .catch(error => {

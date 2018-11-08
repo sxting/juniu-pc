@@ -49,8 +49,8 @@
           <nz-form-item>
             <nz-form-label nzFor="checkName">口碑拼团</nz-form-label>
             <nz-form-control>
-              <nz-select  style="width: 200px;" [(ngModel)]="pintuanId" (ngModelChange)="selectStatusType()" [nzPlaceHolder]="'全部口碑拼团活动'" [nzShowSearch]="true">
-                <nz-option *ngFor="let item of pintuanItemList; let idx = index" [nzLabel]="item.statusName" [nzValue]="item.status"></nz-option>
+              <nz-select  style="width: 200px;" [(ngModel)]="pintuanId" (ngModelChange)="selectPintuanList()" [nzPlaceHolder]="'全部口碑拼团活动'" [nzShowSearch]="true">
+                <nz-option *ngFor="let item of pintuanItemList; let idx = index" [nzLabel]="item.pintuanName" [nzValue]="item.pintuanId"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -88,12 +88,12 @@
           <td *ngIf="activeIndex === 0">{{item.amount/100}}</td>
           <td *ngIf="activeIndex === 0">{{item.content.length > 8? item.content.substring(0,8)+'...' : item.content}} / {{item.useQuantity}}</td>
           <td *ngIf="activeIndex === 0">{{item.settleStoreName}}</td>
-          <td nz-th class="" *ngIf="activeIndex === 1">购买/退款时间</td>
-          <td nz-th class="" *ngIf="activeIndex === 1">订单类型</td>
-          <td nz-th class="" *ngIf="activeIndex === 1">实收金额</td>
-          <td nz-th class="" *ngIf="activeIndex === 1">拼团活动</td>
-          <td nz-th class="" *ngIf="activeIndex === 1">购买门店</td>
-          <td style="color: #108EE9;cursor: pointer" (click)="checkDetailInfor(orderDetail,item.orderNo,item.status)">查看</td>
+          <td nz-th class="" *ngIf="activeIndex === 1">{{item.time? item.time : '-'}}</td>
+          <td nz-th class="" *ngIf="activeIndex === 1">{{item.type}}</td>
+          <td nz-th class="" *ngIf="activeIndex === 1">{{item.amount/100}}</td>
+          <td nz-th class="" *ngIf="activeIndex === 1">{{item.pintuanName? item.pintuanName: '-'}}</td>
+          <td nz-th class="" *ngIf="activeIndex === 1">{{item.sellerStore? item.sellerStore : '-'}}</td>
+          <td style="color: #108EE9;cursor: pointer" (click)="checkDetailInfor(orderDetail,item.orderNo)">查看</td>
         </tr>
       </tbody>
     </nz-table>
@@ -102,4 +102,71 @@
     </div>
   </div>
 </nz-card>
+
+<!--查看详情-->
+<ng-template #orderDetail>
+  <div class="reserve-record-alert" style="padding-top: 25px;">
+    <div class="orderpage_detail_list detail_list_bot">
+      <table>
+        <tr class="ui-grid-row">
+          <td class="" *ngIf="orderType === 'PAID'">订单编号</td>
+          <td class="" *ngIf="orderType === 'REFUND'">退款单号</td><!--退款-->
+          <td class="">{{orderItemDetailInfor.groupNo}}</td>
+          <td class="" *ngIf="orderType === 'PAID'">下单时间</td>
+          <td class="trans-status" *ngIf="orderType === 'PAID'">{{orderItemDetailInfor.openedTime}}</td>
+          <td class="" *ngIf="orderType === 'REFUND'">退款时间</td><!--退款-->
+          <td class="" *ngIf="orderType === 'REFUND'">2018-09-30 00:00:00</td>
+          <td class="">订单状态</td>
+          <td class="trans-status">{{orderItemDetailInfor.orderStatus}}</td>
+        </tr>
+        <tr class="ui-grid-row">
+          <td class="" *ngIf="orderType === 'REFUND'">原订单号</td><!--退款-->
+          <td class="" *ngIf="orderType === 'REFUND'">218777837377837878378378788</td>
+          <td class="" *ngIf="orderType === 'REFUND'">退款门店</td><!--退款-->
+          <td class="" *ngIf="orderType === 'REFUND'">育文分店</td>
+          <td class="" *ngIf="orderType != 'REFUND'">交易号</td>
+          <td class="" *ngIf="orderType != 'REFUND'">736446463777228288111811</td>
+          <td class="" *ngIf="orderType != 'REFUND'">收款门店</td>
+          <td class="" *ngIf="orderType != 'REFUND'">{{orderItemDetailInfor.sellerStoreName}}</td>
+          <td class="">支付方式</td>
+          <td class="">微信支付</td>
+        </tr>
+      </table>
+    </div>
+    <nz-table [nzNoResult]="'暂无流水信息'" #basicTable [nzShowPagination]="false" [nzData]="orderItemDetailInforList">
+      <thead nz-thead class="ui-grid-thead">
+        <tr>
+          <th nz-th class="" *ngIf="activeIndex === 0">商品分类</th>
+          <th nz-th class="" *ngIf="activeIndex === 0">商品名称</th>
+          <th nz-th class="" *ngIf="activeIndex === 1">活动类型</th>
+          <th nz-th class="" *ngIf="activeIndex === 1">活动名称</th>
+          <th nz-th class="" *ngIf="activeIndex === 0">单价(元)</th>
+          <th nz-th class="" *ngIf="activeIndex === 0">数量(件)</th>
+          <th nz-th class="" class="text-right">商家实收金额(元)</th>
+        </tr>
+      </thead>
+      <tbody nz-tbody class="ui-grid-tbody">
+        <tr nz-tbody-tr *ngFor="let list of orderItemDetailInforList">
+          <td style="color: #108EE9" *ngIf="activeIndex === 0">{{list.categoryName? list.categoryName : '-'}}</td>
+          <td *ngIf="activeIndex === 1">{{list.categoryName? list.categoryName : '-'}}</td>
+          <td *ngIf="activeIndex === 1">{{list.categoryName? list.categoryName : '-'}}</td>
+          <td *ngIf="activeIndex === 1">{{list.categoryName? list.categoryName : '-'}}</td>
+
+          <td *ngIf="activeIndex === 0">{{list.categoryName? list.categoryName : '-'}}</td>
+          <td *ngIf="activeIndex === 0">{{list.categoryName? list.categoryName : '-'}}</td>
+          <td *ngIf="activeIndex === 0">{{list.categoryName? list.categoryName : '-'}}</td>
+
+        </tr>
+      </tbody>
+    </nz-table>
+    <div class="orderpage_detail_list_bottom detail_list_bot">
+      <table *ngIf="orderItemDetailInfor && (activeIndex === 1)">
+        <tr class="ui-grid-row">
+          <td class="">顾客手机号</td>
+          <td class="" style="width: 200px;">{{orderItemDetailInfor.phone}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</ng-template>
 

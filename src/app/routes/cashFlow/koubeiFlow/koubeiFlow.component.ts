@@ -42,6 +42,8 @@ export class KoubeiFlowComponent implements OnInit {
   productId: string;//条件筛选中的商品id
   pintuanId: string;//条件筛选中的拼团id
   totalAmount: number = 0;//总金额
+  orderItemDetailInfor: any;//详情页面的数据
+  orderItemDetailInforList: any;//详情页面的列表数据
 
 
   //口碑拼团流水参数
@@ -151,6 +153,11 @@ export class KoubeiFlowComponent implements OnInit {
     this.getTabListInfor();//切换tab的时候，根据不同场景get列表数据
   }
 
+  //选择拼团活动筛选数据
+  selectPintuanList(){
+
+  }
+
   // 切换tab按钮
   changeEchartsTab(e: any){
     this.activeIndex = e.index;
@@ -173,19 +180,32 @@ export class KoubeiFlowComponent implements OnInit {
   }
 
   //查看订单详情
-  checkDetailInfor(){
-
+  checkDetailInfor(tpl: any,orderNo: string){
+    this.modalSrv.create({
+      nzTitle: '',
+      nzContent: tpl,
+      nzWidth: '800px',
+      nzFooter: null,
+    });
+    if(this.activeIndex === 1){
+      let data = {
+        orderNo: '1540526069002109733038'
+      };
+      this.koubeiPintuanFlowDetailInfor(data);//口碑拼团订单详情
+    }
   }
 
-  // 口碑拼团流水列表数据
-  koubeiPintuanFlowListInfor(data: any){
+  //口碑拼团流水订单详情
+  koubeiPintuanFlowDetailInfor(data: any){
     let self = this;
     self.loading = true;
-    this.cashFlowService.koubeiPintuanFlowListInfor(data).subscribe(
+    this.cashFlowService.koubeiPintuanFlowDetailInfor(data).subscribe(
       (res: any) => {
         if (res.success) {
           self.loading = false;
-          self.totalElements = res.data.pageInfo.countTotal;
+          console.log(res.data);
+          self.orderItemDetailInfor = res.data;//详情页面的数据
+          self.orderItemDetailInforList = res.data.items? res.data.items : [];
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',
@@ -197,6 +217,50 @@ export class KoubeiFlowComponent implements OnInit {
         FunctionUtil.errorAlter(error);
       }
     );
+  }
+
+  // 口碑拼团流水列表数据
+  koubeiPintuanFlowListInfor(data: any){
+    let self = this;
+    // self.loading = true;
+    // this.cashFlowService.koubeiPintuanFlowListInfor(data).subscribe(
+    //   (res: any) => {
+    //     if (res.success) {
+    //       self.loading = false;
+    //       self.orderListInfor = res.data.elements? res.data.elements : [];
+    //       self.pintuanItemList = res.data.pintuanList? res.data.pintuanList : [];
+    //       self.totalElements = res.data.pageCount? res.data.pageCount : 0;
+    //     } else {
+    //       this.modalSrv.error({
+    //         nzTitle: '温馨提示',
+    //         nzContent: res.errorInfo
+    //       });
+    //     }
+    //   },
+    //   error => {
+    //     FunctionUtil.errorAlter(error);
+    //   }
+    // );
+    self.orderListInfor = [
+      {
+        "orderNo":"1540526069002109733038",
+        "pinTuanName":"测试创建潜在会员",
+        "peopleNumber":2,
+        "startTime":"2018-10-26 00:00:00",
+        "endTime":"2018-11-30 23:59:59",
+        "amount":10,
+        "status":"STARTED"
+      },
+      {
+        "orderNo":"1540176552526139449784",
+        "pinTuanName":"拼团",
+        "peopleNumber":2,
+        "startTime":"2018-10-31 00:00:00",
+        "endTime":"2018-11-30 23:59:59",
+        "amount":1100,
+        "status":"STARTED"
+      }
+    ];
   }
 
   //  口碑商品流水列表
@@ -408,6 +472,7 @@ export class KoubeiFlowComponent implements OnInit {
   //  请求列表数据
   getTabListInfor(){
     if(this.activeIndex === 0){//口碑商品流水
+      console.log(0);
       this.batchQueryProduct.storeId = this.storeId? this.storeId : '';
       this.batchQueryProduct.endDate = this.endTime;
       this.batchQueryProduct.startDate = this.startTime;
@@ -415,6 +480,7 @@ export class KoubeiFlowComponent implements OnInit {
       this.batchQueryProduct.productId = this.productId? this.productId : '';
       this.koubeiProductFlowListInfor(this.batchQueryProduct);//口碑商品流水列表
     }else{//口碑拼团流水
+      console.log(1);
       this.batchQuery.storeId = this.storeId? this.storeId : '';
       this.batchQuery.endDate = this.endTime;
       this.batchQuery.startDate = this.startTime;
