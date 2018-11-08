@@ -194,9 +194,17 @@ export class KoubeiFlowComponent implements OnInit {
       };
       this.koubeiPintuanFlowDetailInfor(data);//口碑拼团订单详情
     }else{
-      //  没接口 自带创建数据
-      // self.orderItemDetailInfor =
-      // self.orderItemDetailInforList =
+      console.log(self.orderListInfor);
+      //  没接口 让信息带过来自己创建数据
+      self.orderListInfor.vouchers.forEach(function(item: any){
+        if(item.orderNo === orderNo){
+          self.orderItemDetailInfor = item;
+          // 信息不完整 都重组不了数据 MD
+          let listData = {
+
+          }
+        }
+      })
     }
   }
 

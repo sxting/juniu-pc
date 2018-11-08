@@ -115,7 +115,7 @@
           <td class="" *ngIf="orderType === 'PAID'">下单时间</td>
           <td class="trans-status" *ngIf="orderType === 'PAID'">{{orderItemDetailInfor.openedTime}}</td>
           <td class="" *ngIf="orderType === 'REFUND'">退款时间</td><!--退款-->
-          <td class="" *ngIf="orderType === 'REFUND'">2018-09-30 00:00:00</td>
+          <td class="" *ngIf="orderType === 'REFUND'">{{orderItemDetailInfor.settleTime}}</td>
           <td class="">订单状态</td>
           <td class="trans-status">{{orderItemDetailInfor.orderStatus}}</td>
         </tr>
@@ -123,7 +123,7 @@
           <td class="" *ngIf="orderType === 'REFUND'">原订单号</td><!--退款-->
           <td class="" *ngIf="orderType === 'REFUND'">218777837377837878378378788</td>
           <td class="" *ngIf="orderType === 'REFUND'">退款门店</td><!--退款-->
-          <td class="" *ngIf="orderType === 'REFUND'">育文分店</td>
+          <td class="" *ngIf="orderType === 'REFUND'">{{orderItemDetailInfor.settleStoreName}}</td>
           <td class="" *ngIf="orderType != 'REFUND'">交易号</td>
           <td class="" *ngIf="orderType != 'REFUND'">736446463777228288111811</td>
           <td class="" *ngIf="orderType != 'REFUND'">收款门店</td>
