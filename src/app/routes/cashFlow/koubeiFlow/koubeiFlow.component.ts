@@ -267,7 +267,7 @@ export class KoubeiFlowComponent implements OnInit {
           self.orderListInfor = res.data.vouchers? res.data.vouchers : [];
           self.storeList = res.data.stores;
 
-          /*** 假数据 */
+          /*** 假数据 以后删除 */
           self.itemList = [
             {
               "productId":"2016120920076004000011077019",
