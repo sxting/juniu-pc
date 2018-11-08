@@ -107,7 +107,7 @@
 <ng-template #orderDetail>
   <div class="reserve-record-alert" style="padding-top: 25px;">
     <div class="orderpage_detail_list detail_list_bot">
-      <table>
+      <table *ngIf="orderItemDetailInfor">
         <tr class="ui-grid-row">
           <td class="" *ngIf="orderType === 'PAID'">订单编号</td>
           <td class="" *ngIf="orderType === 'REFUND'">退款单号</td><!--退款-->
@@ -138,24 +138,23 @@
         <tr>
           <th nz-th class="" *ngIf="activeIndex === 0">商品分类</th>
           <th nz-th class="" *ngIf="activeIndex === 0">商品名称</th>
-          <th nz-th class="" *ngIf="activeIndex === 1">活动类型</th>
-          <th nz-th class="" *ngIf="activeIndex === 1">活动名称</th>
           <th nz-th class="" *ngIf="activeIndex === 0">单价(元)</th>
           <th nz-th class="" *ngIf="activeIndex === 0">数量(件)</th>
+
+          <th nz-th class="" *ngIf="activeIndex === 1">活动类型</th>
+          <th nz-th class="" *ngIf="activeIndex === 1">活动名称</th>
           <th nz-th class="" class="text-right">商家实收金额(元)</th>
         </tr>
       </thead>
       <tbody nz-tbody class="ui-grid-tbody">
         <tr nz-tbody-tr *ngFor="let list of orderItemDetailInforList">
           <td style="color: #108EE9" *ngIf="activeIndex === 0">{{list.categoryName? list.categoryName : '-'}}</td>
-          <td *ngIf="activeIndex === 1">{{list.categoryName? list.categoryName : '-'}}</td>
-          <td *ngIf="activeIndex === 1">{{list.categoryName? list.categoryName : '-'}}</td>
-          <td *ngIf="activeIndex === 1">{{list.categoryName? list.categoryName : '-'}}</td>
-
-          <td *ngIf="activeIndex === 0">{{list.categoryName? list.categoryName : '-'}}</td>
           <td *ngIf="activeIndex === 0">{{list.categoryName? list.categoryName : '-'}}</td>
           <td *ngIf="activeIndex === 0">{{list.categoryName? list.categoryName : '-'}}</td>
 
+          <td style="color: #108EE9" *ngIf="activeIndex === 1">{{list.settleNumber}}人团</td>
+          <td *ngIf="activeIndex === 1">{{list.pinTuanName? list.pinTuanName : '-'}}</td>
+          <td class="text-right">{{list.amount/100}}</td>
         </tr>
       </tbody>
     </nz-table>
