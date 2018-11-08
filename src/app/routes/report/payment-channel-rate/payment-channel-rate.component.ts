@@ -94,11 +94,13 @@ export class paymentChannelRateComponent implements OnInit {
   //门店id
   getStoreId(event: any){
     this.storeId = event.storeId? event.storeId : '';
+    this.pageNo = 1;
     this.getThirdPartyCost();
   }
 
   //选择产品类型
   selectProductType(){
+    this.pageNo = 1;
     this.getThirdPartyCost();
   }
 
@@ -113,6 +115,7 @@ export class paymentChannelRateComponent implements OnInit {
     this.dateRange = date;
     this.startTime = FunctionUtil.changeDateToSeconds(this.dateRange[0]);
     this.endTime = FunctionUtil.changeDateToSeconds(this.dateRange[1]);
+    this.pageNo = 1;
     this.getThirdPartyCost();
   }
 
@@ -228,6 +231,13 @@ export class paymentChannelRateComponent implements OnInit {
       (res: any) => {
         if(res.success) {
           if(res.data.items) {
+            res.data.items.forEach(function(item: any){
+              if(item.platform === 'ALIPAY'){
+                item.platformText = '支付宝支付';
+              }else {
+                item.platformText = '微信支付';
+              }
+            });
             this.platformListInfor = res.data.items;
           }
           if(res.data.pageInfo) {

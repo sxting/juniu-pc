@@ -75,11 +75,11 @@
     <tbody nz-tbody class="ui-grid-tbody">
     <tr nz-tbody-tr *ngFor="let item of platformListInfor;let i = index">
       <td nz-td>{{item.date}}</td>
-      <td nz-td>{{item.platform}}</td>
+      <td nz-td>{{item.platformText}}</td>
       <td nz-td>{{item.tradeCount}}</td>
-      <td nz-td>{{item.tradeAmount}}</td>
+      <td nz-td>{{item.tradeAmount / 100}}</td>
       <td nz-td>{{item.rate}}%</td>
-      <td nz-td>{{item.rateAmount}}</td>
+      <td nz-td>{{item.rateAmount / 100}}</td>
     </tr>
     </tbody>
   </nz-table>
