@@ -189,7 +189,7 @@ export class KoubeiFlowComponent implements OnInit {
     });
     if(this.activeIndex === 1){
       let data = {
-        orderNo: '1540526069002109733038'
+        orderNo: orderNo
       };
       this.koubeiPintuanFlowDetailInfor(data);//口碑拼团订单详情
     }
