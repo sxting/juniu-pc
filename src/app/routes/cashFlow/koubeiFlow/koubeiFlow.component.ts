@@ -181,6 +181,7 @@ export class KoubeiFlowComponent implements OnInit {
 
   //查看订单详情
   checkDetailInfor(tpl: any,orderNo: string){
+    let self = this;
     this.modalSrv.create({
       nzTitle: '',
       nzContent: tpl,
@@ -189,9 +190,13 @@ export class KoubeiFlowComponent implements OnInit {
     });
     if(this.activeIndex === 1){
       let data = {
-        orderNo: orderNo
+        orderNo: '1540526069002109733038'
       };
       this.koubeiPintuanFlowDetailInfor(data);//口碑拼团订单详情
+    }else{
+      //  没接口 自带创建数据
+      // self.orderItemDetailInfor =
+      // self.orderItemDetailInforList =
     }
   }
 
@@ -203,7 +208,6 @@ export class KoubeiFlowComponent implements OnInit {
       (res: any) => {
         if (res.success) {
           self.loading = false;
-          console.log(res.data);
           self.orderItemDetailInfor = res.data;//详情页面的数据
           self.orderItemDetailInforList = res.data.items? res.data.items : [];
         } else {
@@ -254,6 +258,185 @@ export class KoubeiFlowComponent implements OnInit {
           self.itemList = res.data.items;
           self.orderListInfor = res.data.vouchers? res.data.vouchers : [];
           self.storeList = res.data.stores;
+
+          /*** 假数据 */
+          self.itemList = [
+            {
+              "productId":"2016120920076004000011077019",
+              "productName":"1分钱买不了吃亏"
+            },
+            {
+              "productId":"2016121720076004000011239669",
+              "productName":"口碑订单通知jms测试"
+            },
+            {
+              "productId":"2016122020076004000011215764",
+              "productName":"桔牛测试商品定时上架4"
+            },
+            {
+              "productId":"2016122020076004000011232396",
+              "productName":"桔牛测试商品定时上架3"
+            },
+            {
+              "productId":"2017010620076004000011612708",
+              "productName":"测试核销"
+            },
+            {
+              "productId":"2017010920076004000011657829",
+              "productName":"购买测试使用"
+            },
+            {
+              "productId":"2017012020076004000011958505",
+              "productName":"发的发"
+            },
+            {
+              "productId":"2017022820076004000012488845",
+              "productName":"桔牛测试商品定时上架"
+            },
+            {
+              "productId":"2017030820076004000012628059",
+              "productName":"地对地"
+            },
+            {
+              "productId":"2017031320076004000012797583",
+              "productName":"商品购买通知测试"
+            },
+            {
+              "productId":"2017051520076004000014189358",
+              "productName":"s呃呃呃呃呃s"
+            },
+            {
+              "productId":"2017101820076004000018370868",
+              "productName":"测试图片"
+            },
+            {
+              "productId":"2017101920076004000018365861",
+              "productName":"测类目"
+            },
+            {
+              "productId":"2017102320076004000018449816",
+              "productName":"ccc"
+            },
+            {
+              "productId":"2017102320076004000018456726",
+              "productName":"测时间"
+            },
+            {
+              "productId":"2017102320076004000018458974",
+              "productName":"商品的定时上架"
+            },
+            {
+              "productId":"2017102320076004000018478440",
+              "productName":"定时上下架"
+            },
+            {
+              "productId":"2017110820076004000018929677",
+              "productName":"上商品显示系统繁忙"
+            },
+            {
+              "productId":"2017110820076004000019030093",
+              "productName":"safiri浏览器上传商品显示系统繁忙"
+            },
+            {
+              "productId":"2017111520076004000019623070",
+              "productName":"商品CCCCCC"
+            },
+            {
+              "productId":"2017112120076004000020511133",
+              "productName":"ccc"
+            },
+            {
+              "productId":"2017112120076004000020605600",
+              "productName":"ccc米高"
+            },
+            {
+              "productId":"2018020620076004000022840483",
+              "productName":"测试有效期"
+            },
+            {
+              "productId":"2018030920076004000023279533",
+              "productName":"单次核销"
+            },
+            {
+              "productId":"2018030920076004000023290822",
+              "productName":"单词核销测试"
+            },
+            {
+              "productId":"2018030920076004000023318241",
+              "productName":"口碑次卡调试"
+            },
+            {
+              "productId":"2018030920076004000023332253",
+              "productName":"多次核销"
+            },
+            {
+              "productId":"2018031020076004000023278278",
+              "productName":"计次卡test"
+            },
+            {
+              "productId":"2018031020076004000023334534",
+              "productName":"口碑商品次卡调试4"
+            },
+            {
+              "productId":"2018031120076004000023298944",
+              "productName":"测试多次下架"
+            }];
+          self.orderListInfor = [
+            {
+              "orderNo":"20181026111040030100720603229815",
+              "settleNo":"129903123672",
+              "settleStoreName":"桔牛测试门店(育文街分店)",
+              "settleTime":"2018-10-26 17:00:07",
+              "amount":10,
+              "content":"理发特技",
+              "useQuantity":"1"
+            },
+            {
+              "orderNo":"20181025111040030100170603383454",
+              "settleNo":"129836821617",
+              "settleStoreName":"桔牛测试门店(育文街分店)",
+              "settleTime":"2018-10-25 10:44:32",
+              "amount":1,
+              "content":"口碑商品测试koubeiceshi123456789@@@@@@@@@@@@@@",
+              "useQuantity":"1"
+            },
+            {
+              "orderNo":"20181025111040030100170603383454",
+              "settleNo":"129836869617",
+              "settleStoreName":"桔牛测试门店(育文街分店)",
+              "settleTime":"2018-10-25 10:44:16",
+              "amount":1,
+              "content":"口碑商品测试koubeiceshi123456789@@@@@@@@@@@@@@",
+              "useQuantity":"1"
+            },
+            {
+              "orderNo":"20181025111040030100170603383454",
+              "settleNo":"129836861617",
+              "settleStoreName":"桔牛测试门店(育文街分店)",
+              "settleTime":"2018-10-25 10:44:01",
+              "amount":1,
+              "content":"口碑商品测试koubeiceshi123456789@@@@@@@@@@@@@@",
+              "useQuantity":"1"
+            },
+            {
+              "orderNo":"20181025111040030100170603383454",
+              "settleNo":"129836865617",
+              "settleStoreName":"桔牛测试门店(育文街分店)",
+              "settleTime":"2018-10-25 10:43:46",
+              "amount":1,
+              "content":"口碑商品测试koubeiceshi123456789@@@@@@@@@@@@@@",
+              "useQuantity":"1"
+            }];
+          self.storeList = [
+            {
+              "storeId":"2016080900077000000017955745",
+              "storeName":"测试门店"
+            },
+            {
+              "storeId":"2016110300077000000019717987",
+              "storeName":"桔牛测试门店(育文街分店)"
+            }
+          ];
 
           self.totalAmount = res.data.totalAmount? res.data.totalAmount : 0;//总金额
           self.totalElements = res.data.pageInfo.countTotal;
