@@ -1074,9 +1074,17 @@ export class TouristComponent implements OnInit {
       create.money = that.isVerb2
         ? that.isVerbVipCardmoney * 100
         : that.vipCardmoney * 100;
-      create.extraMoney = that.STOREDextraMoney
-        ? that.STOREDextraMoney * 100
-        : 0;
+        if(create.bizType === 'RECHARGE'){
+          create.extraMoney = that.STOREDextraMoney
+          ? that.STOREDextraMoney * 100
+          : 0;
+        }else{
+          let boo = create.orderItem[0]['cardConfigType'] === "STORED";
+          create.extraMoney = boo
+          ? (create.orderItem[0]['balance'] - create.orderItem[0]['price'])
+          : 0;
+        }
+      
       create.originMoney = create.money;
     } else {
       if (this.xfList && this.xfList.length > 0) {
@@ -1092,7 +1100,7 @@ export class TouristComponent implements OnInit {
     // create.faceId = this.selectFaceId;
     create.customerId = this.memberInfo.customerId;
     this.spinBoolean = true;
-    console.log(create);
+    // console.log(create);
     if (this.xyVip) {
       that.rechargeAndOrderPayFun(create);
     } else {
