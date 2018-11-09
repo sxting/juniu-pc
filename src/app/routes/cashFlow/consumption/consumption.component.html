@@ -147,7 +147,7 @@
         </tr>
         <tr class="ui-grid-row"  *ngIf="ifShow ">
           <td class="">退款单号</td>
-          <td class="">{{reportOrderDetail.refundOrder? reportOrderDetail.refundOrder.orderId : '-'}}</td>
+          <td class="">{{reportOrderDetail? reportOrderDetail.refundOrder.orderId : '-'}}</td>
           <td class="">退款时间</td>
           <td class="trans-status">{{reportOrderDetail.refundOrder.juniuoModel.dateCreated? reportOrderDetail.refundOrder.juniuoModel.dateCreated : '-'}}</td>
         </tr>
