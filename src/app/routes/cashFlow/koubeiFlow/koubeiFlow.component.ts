@@ -174,6 +174,7 @@ export class KoubeiFlowComponent implements OnInit {
   paginate(event: any) {
     this.pageNo = event;
     this.batchQuery.pageNo = this.pageNo;
+    this.getTabListInfor(); 
   }
 
   // 多条件查询
