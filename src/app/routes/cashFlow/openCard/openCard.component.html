@@ -106,6 +106,7 @@
             <span *ngFor="let i of item.deductionInfoList">
               <span>{{i.staffName || '-'}}/</span>
               <span>{{i.deductMoney/100}}</span>
+              <br />
             </span>
           </td>
           <td class="panduan">
@@ -169,7 +170,7 @@
         <tbody nz-tbody class="ui-grid-tbody">
           <tr nz-tbody-tr *ngFor="let list of orderItemDetail">
             <td style="color: #108EE9">{{list.categoryName? list.categoryName : '-'}}</td>
-            <td>{{list.productName? list.productName:'-'}}</td>
+            <td>{{reportOrderDetail.body? reportOrderDetail.body:'-'}}</td>
             <td class="">{{list.staffName? list.staffName : '-'}}／{{list.staff2Name? list.staff2Name : '-'}}</td>
             <td class="">{{list.assign == 0? '否' : '是'}}</td>
             <td>{{list.price/100}}</td>
