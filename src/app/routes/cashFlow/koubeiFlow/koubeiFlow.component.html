@@ -124,7 +124,7 @@
           <td class="" *ngIf="orderType === 'REFUND'">{{activeIndex === 0?listData.orderNo:listData2.orderNo}}</td>
           <td class="" *ngIf="orderType === 'REFUND'">退款门店</td><!--退款-->
           <td class="" *ngIf="orderType === 'REFUND'">{{activeIndex === 0?listData.settleStoreName:listData2.sellerStore}}</td>
-          <td class="" *ngIf="orderType != 'REFUND'">交易号</td>
+          <td class="" *ngIf="orderType != 'REFUND'">核销码</td>
           <td class="" *ngIf="orderType != 'REFUND'">{{activeIndex === 0?listData.settleNo:listData2.outBizNo}}</td>
           <td class="" *ngIf="orderType != 'REFUND'">收款门店</td>
           <td class="" *ngIf="orderType != 'REFUND'">{{activeIndex === 0?listData.settleStoreName:listData2.sellerStore}}</td>
