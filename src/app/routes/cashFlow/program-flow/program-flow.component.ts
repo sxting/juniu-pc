@@ -147,13 +147,13 @@ export class ProgramFlowComponent implements OnInit {
       this.dateRange[1].getTime(),
       'yyyy-MM-dd HH:mm:ss',
     );
-    this.batchQueryInfor();//根据查询条件筛选列表信息。
+    // this.batchQueryInfor();//根据查询条件筛选列表信息。
   }
 
   //订单类型
   selectStatusType(){
     this.pageNo = 1;
-    this.batchQueryInfor();//根据查询条件筛选列表信息
+    // this.batchQueryInfor();//根据查询条件筛选列表信息
   }
 
   // 切换tab按钮
