@@ -94,7 +94,7 @@
         </nz-select>
       </nz-form-control>
     </nz-form-item>
-    <nz-form-item *ngIf="!ifShow">
+    <!-- <nz-form-item *ngIf="!ifShow">
       <nz-form-label nzXs="24" nzSm="7" nzRequired>可管理门店</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
         <span>
@@ -102,7 +102,7 @@
           <span class="setClick" (click)="shezhi(modalContent2,'选择门店')">选择门店></span>
         </span>
       </nz-form-control>
-    </nz-form-item>
+    </nz-form-item> -->
     <nz-form-item>
       <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
         <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">保存</button>
@@ -110,7 +110,7 @@
     </nz-form-item>
   </form>
 </nz-card>
-<ng-template #modalContent2>
+<!-- <ng-template #modalContent2>
   <div>
     <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()" [nzIndeterminate]="indeterminate">
       选择全部
@@ -128,4 +128,4 @@
     </nz-checkbox-wrapper>
   </div>
 
-</ng-template>
+</ng-template> -->
