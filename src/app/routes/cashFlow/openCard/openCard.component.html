@@ -84,7 +84,7 @@
       </nz-row>
     </div>
     <div class="mb-md">
-      <nz-alert nzType="info" nzMessage="共有 {{totalElements}} 条数据  |   总金额：{{total/100}}元" nzShowIcon></nz-alert>
+      <nz-alert nzType="info" nzMessage="共有 {{totalElements}} 条数据  |   实收总金额：{{total/100 || 0 }}元 |  充值总金额：{{total2/100 || 0}}元" nzShowIcon></nz-alert>
     </div>
     <!-- table -->
     <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="reportOrderList">
@@ -96,21 +96,21 @@
       <tbody nz-tbody class="ui-grid-tbody">
         <tr nz-tbody-tr *ngFor="let item of reportOrderList; let i = index">
           <td style="color: #368ff7">{{item.juniuoModel.dateCreated}}</td>
-          <td>{{item.customerName}}</td>
-          <td>{{item.bizTypeName}}</td>
-          <td>{{item.paidMoney}}</td>
+          <td>{{(item.customerName +'-'+item.phone) || '-'}}</td>
+          <td>{{item.bizTypeName || '-'}}</td>
+          <td>{{item.paidMoney/100}}</td>
           <td>{{(item.paidMoney+item.extraMoney)/100}}</td>
           
           <td>{{item.body}}</td>
           <td class="panduan">
             <span *ngFor="let i of item.deductionInfoList">
-              <span>{{item.staffName}}/</span>
-              <span>{{item.deductMoney/100}}</span>
+              <span>{{i.staffName || '-'}}/</span>
+              <span>{{i.deductMoney/100}}</span>
             </span>
           </td>
           <td class="panduan">
-            <span>{{item.storeName}}/</span>
-            <span>{{item.operationUserName}}</span>
+            <span>{{item.storeName || '-'}}/</span>
+            <span>{{item.operationUserName || '-'}}</span>
           </td>
           <td style="color: #108EE9;cursor: pointer" (click)="checkDetailInfor(orderDetail,item.orderId,item.status)">查看详情</td>
         </tr>

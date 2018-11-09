@@ -48,8 +48,8 @@ export class OpenCardComponent implements OnInit {
   totalNum: number = 0;
   totalMoney: number = 0;
   orderList: any = [
-    { statusName: '散客', status: 'FIT' },
-    { statusName: '会员', status: 'MEMBER' },
+    { statusName: '开卡', status: 'OPENCARD' },
+    { statusName: '充值', status: 'RECHARGE' },
   ];
   statusList: any = [
     { statusName: '已支付', status: 'PAID' },
@@ -60,7 +60,6 @@ export class OpenCardComponent implements OnInit {
     { statusName: '支付宝支付', status: 'ALIPAY' },
     { statusName: '现金支付', status: 'CASH' },
     { statusName: '银行卡支付', status: 'BANKCARD' },
-    { statusName: '会员卡支付', status: 'MEMBERCARD' },
   ];
   pageNo: any = 1; //页码
   pageSize: any = 10; //页码
@@ -73,6 +72,7 @@ export class OpenCardComponent implements OnInit {
   orderName: any;
   totalElements: any = 0;
   total = 0;
+  total2 = 0;
   reportOrderList: any = [];
   /**
    * "扫码枪"),CASH("现金"),BANK("银行卡"),QRCODE("付款吗 请求体
@@ -123,6 +123,7 @@ export class OpenCardComponent implements OnInit {
   getStoreId(event: any) {
     let self = this;
     this.storeId = event.storeId ? event.storeId : '';
+    this.pageNo = 1;
     this.koubeiProductVouchersListFirst();
   }
 
@@ -213,10 +214,12 @@ export class OpenCardComponent implements OnInit {
   }
   recordStatisticsHttp(data) {
     delete data.type;
-    this.cashFlowService.recordStatistics(data).subscribe(
+    this.cashFlowService.recordStatistics2(data).subscribe(
       (res: any) => {
         if (res.success) {
-          this.total = res.data;
+          this.total = res.data.a;
+          this.total2 = res.data.b;
+          
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',

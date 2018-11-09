@@ -96,19 +96,19 @@
     <tbody nz-tbody class="ui-grid-tbody">
       <tr nz-tbody-tr *ngFor="let item of reportOrderList; let i = index">
         <td style="color: #368ff7">{{item.juniuoModel.dateCreated}}</td>
-        <td>{{item.customerName}}</td>
-        <td>{{item.statusName}}</td>
-        <td>{{item.paidMoney/100}}</td>
-        <td>{{item.body}}</td>
+        <td>{{item.bizType === 'FIT'?'散客':(item.customerName +'-'+item.phone)}}</td>
+        <td>{{item.statusName || '-'}}</td>
+        <td>{{item.paidMoney/100 || 0 }}</td>
+        <td>{{item.body || '-'}}</td>
         <td class="panduan">
           <span *ngFor="let i of item.deductionInfoList">
-            <span>{{item.staffName}}/</span>
-            <span>{{item.deductMoney/100}}</span>
+            <span>{{i.staffName || '-'}}/</span>
+            <span>{{i.deductMoney/100 || 0}}</span>
           </span>
         </td>
         <td class="panduan">
-          <span>{{item.storeName}}/</span>
-          <span>{{item.operationUserName}}</span>
+          <span>{{item.storeName || '-'}}/</span>
+          <span>{{item.operationUserName || '-'}}</span>
         </td>
         <td style="color: #108EE9;cursor: pointer" (click)="checkDetailInfor(orderDetail,item.orderId,item.status)">查看详情</td>
       </tr>

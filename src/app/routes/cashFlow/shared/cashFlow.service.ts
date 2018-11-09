@@ -97,7 +97,15 @@ export class CashFlowService {
           return Observable.throw(error);
         });
     }
-
+    recordStatistics2(data: any) {
+      let apiUrl = Config.API + 'order/opencard/records/statistics.json';
+      return this.http
+        .get(apiUrl, data)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
     // 营收报表订单详情
     revenuetOrderDetail(data: any) {
       let apiUrl = this.api + '/order/order/' + data + '/detail.json';

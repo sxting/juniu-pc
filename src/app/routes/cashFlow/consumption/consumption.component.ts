@@ -122,6 +122,7 @@ export class ConsumptionComponent implements OnInit {
   getStoreId(event: any) {
     let self = this;
     this.storeId = event.storeId ? event.storeId : '';
+    this.pageNo = 1; 
     this.koubeiProductVouchersListFirst();
   }
 
