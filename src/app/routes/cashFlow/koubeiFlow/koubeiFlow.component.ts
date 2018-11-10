@@ -233,7 +233,8 @@ export class KoubeiFlowComponent implements OnInit {
           self.pintuanItemList = res.data.pintuanList
             ? res.data.pintuanList
             : [];
-          self.totalElements = res.data.pageCount ? res.data.pageCount : 0;
+          self.totalElements = res.data.totalCount ? res.data.totalCount : 0;
+          self.totalAmount = res.data.totalAmount ? res.data.totalAmount : 0; //总金额
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',
