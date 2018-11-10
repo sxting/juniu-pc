@@ -322,6 +322,7 @@ export class TouristComponent implements OnInit {
       });
 
       this.createMoney = totolMoney;
+      console.log(this.createMoney)
       //标注每个卡对应的总计减免
       this.vipMoneyFun();
       this.balanceFun();
@@ -1088,7 +1089,7 @@ export class TouristComponent implements OnInit {
       create.originMoney = create.money;
     } else {
       if (this.xfList && this.xfList.length > 0) {
-        create.money = NP.times(that.inputValue, 100);
+        create.money = NP.times(that.createMoney, 100);
         create.originMoney = create.money;
       } else {
         create.money = NP.times(this.inputValue, 100);
@@ -1100,7 +1101,7 @@ export class TouristComponent implements OnInit {
     // create.faceId = this.selectFaceId;
     create.customerId = this.memberInfo.customerId;
     this.spinBoolean = true;
-    // console.log(create);
+    console.log(create);
     if (this.xyVip) {
       that.rechargeAndOrderPayFun(create);
     } else {
@@ -1485,7 +1486,7 @@ export class TouristComponent implements OnInit {
             maxMoney = i;
         });
         maxMoney.ticketMoney = NP.divide(
-          NP.times(NP.divide(maxMoney.couponDefDiscount, 10), xfListMoney),
+          NP.times(NP.minus(1,NP.divide(maxMoney.couponDefDiscount, 10)), xfListMoney),
           100,
         );
       }
