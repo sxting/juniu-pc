@@ -155,32 +155,33 @@ export class IndexComponent implements OnInit {
     }
 
     onFunctionItemClick(item: any) {
-        let data = {
-            menuId: item.menuId,
-            timestamp: new Date().getTime()
-        };
-        this.manageService.menuRoute(data).subscribe(
-            (res: any) => {
-                if(res.success) {
-                    if (res.data.eventType === 'ROUTE') {
-                        if (res.data.eventRoute) {
-                            this.router.navigate([res.data.eventRoute, { id: item.id, menuId: '900201' }]);
-                        }
-                    } else if (res.data.eventType === 'NONE') {
+        // let data = {
+        //     menuId: item.menuId,
+        //     timestamp: new Date().getTime()
+        // };
+        // this.manageService.menuRoute(data).subscribe(
+        //     (res: any) => {
+        //         if(res.success) {
+        //             if (res.data.eventType === 'ROUTE') {
+        //                 if (res.data.eventRoute) {
+        //                     this.router.navigate([res.data.eventRoute, { id: item.id, menuId: item.menuId}]);
+        //                 }
+        //             } else if (res.data.eventType === 'NONE') {
 
-                    } else if (res.data.eventType === 'API') {
+        //             } else if (res.data.eventType === 'API') {
 
-                    } else if (res.data.eventType === 'REDIRECT') {
+        //             } else if (res.data.eventType === 'REDIRECT') {
 
-                    }
-                } else {
-                    this.modalSrv.error({
-                        nzTitle: '温馨提示',
-                        nzContent: res.errorInfo
-                    });
-                }
-            }
-        )
+        //             }
+        //         } else {
+        //             this.modalSrv.error({
+        //                 nzTitle: '温馨提示',
+        //                 nzContent: res.errorInfo
+        //             });
+        //         }
+        //     }
+        // )
+        this.manageService.permissionFun(item.menuId, item.id)
     }
 
     handlePieValueFormat(value: any) {

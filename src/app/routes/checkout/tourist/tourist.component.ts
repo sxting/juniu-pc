@@ -322,6 +322,7 @@ export class TouristComponent implements OnInit {
       });
 
       this.createMoney = totolMoney;
+      console.log(this.createMoney)
       //标注每个卡对应的总计减免
       this.vipMoneyFun();
       this.balanceFun();
@@ -1079,13 +1080,21 @@ export class TouristComponent implements OnInit {
       create.money = that.isVerb2
         ? that.isVerbVipCardmoney * 100
         : that.vipCardmoney * 100;
-      create.extraMoney = that.STOREDextraMoney
-        ? that.STOREDextraMoney * 100
-        : 0;
+        if(create.bizType === 'RECHARGE'){
+          create.extraMoney = that.STOREDextraMoney
+          ? that.STOREDextraMoney * 100
+          : 0;
+        }else{
+          let boo = create.orderItem[0]['cardConfigType'] === "STORED";
+          create.extraMoney = boo
+          ? (create.orderItem[0]['balance'] - create.orderItem[0]['price'])
+          : 0;
+        }
+      
       create.originMoney = create.money;
     } else {
       if (this.xfList && this.xfList.length > 0) {
-        create.money = NP.times(that.inputValue, 100);
+        create.money = NP.times(that.createMoney, 100);
         create.originMoney = create.money;
       } else {
         create.money = NP.times(this.inputValue, 100);
@@ -1482,7 +1491,7 @@ export class TouristComponent implements OnInit {
             maxMoney = i;
         });
         maxMoney.ticketMoney = NP.divide(
-          NP.times(NP.divide(maxMoney.couponDefDiscount, 10), xfListMoney),
+          NP.times(NP.minus(1,NP.divide(maxMoney.couponDefDiscount, 10)), xfListMoney),
           100,
         );
       }
@@ -1995,6 +2004,7 @@ vipXqFun2() {
   getOrderHistoryListHttp(phone?: any) {
     let self = this;
     let data = {
+      storeId : this.storeId,
       pageIndex: this.pageIndex,
       pageSize: this.pageSize,
       phone: phone,
