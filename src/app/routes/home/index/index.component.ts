@@ -181,7 +181,11 @@ export class IndexComponent implements OnInit {
         //         }
         //     }
         // )
-        this.manageService.permissionFun(item.menuId, item.id)
+        let data ={
+            menuId:item.menuId,
+            id:item.id
+        }
+        this.manageService.permissionFun(data)
     }
 
     handlePieValueFormat(value: any) {

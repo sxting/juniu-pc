@@ -907,9 +907,9 @@ export class ManageService {
       });
   }
   //权限控制
-  permissionFun(menuId: any, id?: any) {
+  permissionFun(parme) {
     let data = {
-      menuId: menuId,
+      menuId: parme.menuId,
       timestamp: new Date().getTime(),
     };
     let self = this;
@@ -918,14 +918,7 @@ export class ManageService {
       if (res.success) {
         if (res.data.eventType === 'ROUTE') {
           if (res.data.eventRoute) {
-            if (id)
-              this.router.navigateByUrl(
-                res.data.eventRoute + ';menuId=' + menuId + ';id=' + id,
-              );
-            else
-              this.router.navigateByUrl(
-                res.data.eventRoute + ';menuId=' + menuId,
-              );
+            this.router.navigate([res.data.eventRoute,parme])
           }
         } else if (res.data.eventType === 'NONE') {
         } else if (res.data.eventType === 'API') {
