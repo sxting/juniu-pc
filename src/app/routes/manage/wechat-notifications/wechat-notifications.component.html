@@ -25,13 +25,13 @@
       <nz-radio-group [(ngModel)]="radioValue" (ngModelChange)="radioChange($event)">
         <label nz-radio nzValue="WORK_REPORT_STORE">接收门店工作报表</label>
         <label nz-radio nzValue="WORK_REPORT_ONESELF">只接收自己的工作报表</label>
-        <!-- <label nz-radio nzValue="C">不接收报表</label> -->
+        <label nz-radio nzValue="C">不接收报表</label>
       </nz-radio-group>
     </nz-form-control>
   </nz-form-item>
-  <!-- <nz-form-item style="background:#fff;">
+  <nz-form-item style="background:#fff;">
     <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
       <button nz-button nzType="primary" type="submit" (click)="jiebang()" [nzLoading]="submitting">解绑</button>
     </nz-form-control>
-  </nz-form-item> -->
+  </nz-form-item>
 </nz-card>
