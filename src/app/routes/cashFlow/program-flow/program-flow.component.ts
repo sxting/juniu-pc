@@ -22,7 +22,7 @@ export class ProgramFlowComponent implements OnInit {
   moduleId: any;
   storeList: any[] = []; //门店列表
   storeId: string; //门店ID
-  merchantId: string = '1529474810413943311710';
+  merchantId: string ;
   activeIndex: any = 0;
   totalElements: any = 0; //商品总数  expandForm = false;//展开
   orderType: string = 'PAID';
@@ -91,7 +91,7 @@ export class ProgramFlowComponent implements OnInit {
     let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
         JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
       this.ifStoresAll = UserInfo.staffType === "MERCHANT"? true : false;
-    // this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
+    this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
   }
 
   //返回门店数据
