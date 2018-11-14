@@ -945,10 +945,12 @@
     <p *ngIf="item.cardType === 'METERING'">卡余额：{{item.balance}}次</p>
     <p *ngIf="item.validate">有效期：{{item.validate}}天</p>
   </div>
-  <button class="buttons" nz-button nzType="primary" type="submit" (click)="orderPrintClick()">打印小票</button>
+  <button class="buttons" style="margin-right:20px;" nz-button nzType="primary" type="submit" (click)="handleCancel()">关闭</button>
+  <button class="buttons" nz-button  (click)="orderPrintClick()">打印小票</button>
 </nz-modal>
 <nz-modal style="z-index: 99999;" [(nzVisible)]="htmlModalVisible2" nzWidth="400" [nzFooter]="null" nzTitle="温馨提示" nzOkText="确定" (nzOnCancel)="handleCancel()">
   <h3>收款成功</h3>
-  <button class="buttons" nz-button nzType="primary" type="submit" (click)="orderPrintClick()">打印小票</button>
+  <button class="buttons" style="margin-right:20px;" nz-button nzType="primary" type="submit" (click)="handleCancel()">关闭</button>
+  <button class="buttons" nz-button  (click)="orderPrintClick()">打印小票</button>
 </nz-modal>
 <!-- <nz-spin></nz-spin> -->
