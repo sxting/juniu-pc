@@ -35,6 +35,7 @@ export class ConsumptionComponent implements OnInit {
     '订单类型',
     '付款金额',
     '消费项目',
+    '支付方式',
     '员工/提成',
     '门店/收银员',
     '操作',
@@ -51,7 +52,7 @@ export class ConsumptionComponent implements OnInit {
     { statusName: '会员', status: 'MEMBER' },
   ];
   statusList: any = [
-    { statusName: '已支付', status: 'PAID' },
+    { statusName: '已付款', status: 'PAID' },
     { statusName: '已退款', status: 'REFUND' },
   ];
   payList: any = [

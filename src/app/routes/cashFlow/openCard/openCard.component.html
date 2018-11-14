@@ -97,18 +97,26 @@
     <tbody nz-tbody class="ui-grid-tbody">
       <tr nz-tbody-tr *ngFor="let item of reportOrderList; let i = index">
         <td style="color: #368ff7">{{item.juniuoModel.dateCreated}}</td>
-        <td>{{(item.customerName +'-'+item.phone) || '-'}}</td>
+        <td>{{(item.customerName +'/'+item.phone) || '-'}}</td>
+        <td>{{item.statusName || '-'}}
+            <br />
+            <span *ngIf="item.orderType === 'REFUND'" style="color:red;">退款单</span>
+        </td>
         <td>{{item.bizTypeName || '-'}}</td>
+        
         <td>{{item.paidMoney/100}}</td>
         <td>{{(item.paidMoney+item.extraMoney)/100}}</td>
 
         <td>{{item.body.length>8?item.body.substring(0,8)+'...' : item.body }}</td>
-        <td class="panduan">
+        <td class="panduan" *ngIf="item.deductionInfoList.length>0" >
           <span *ngFor="let i of item.deductionInfoList">
-            <span>{{i.staffName || '-'}}/</span>
-            <span>{{i.deductMoney/100}}</span>
+                <span>{{i.staffName || '-'}}/</span>
+                <span>{{i.deductMoney/100}}</span>
             <br />
           </span>
+        </td>
+        <td class="panduan" *ngIf="item.deductionInfoList.length === 0" >
+          -
         </td>
         <td class="panduan">
           <span>{{item.storeName || '-'}}/</span>
