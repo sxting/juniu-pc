@@ -88,7 +88,7 @@ export class ConsumptionComponent implements OnInit {
     pageSize: this.pageSize,
   };
   ifShow : any = false;
-  ifStoresAll:any;
+  ifStoresAll:any = false;
   ifStoresAuth:any;
   orderTypeTitle:any;
   expandForm:any;
@@ -109,6 +109,9 @@ export class ConsumptionComponent implements OnInit {
 
   selectOrderStatus(type) {}
   ngOnInit() {
+    let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+        JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+      this.ifStoresAll = UserInfo.staffType === "MERCHANT"? true : false;
     this.moduleId = this.route.snapshot.params['menuId'];
     this.startTime = FunctionUtil.changeDate(new Date()) + ' 00:00:00';
     this.endTime = FunctionUtil.changeDate(new Date()) + ' 23:59:59';

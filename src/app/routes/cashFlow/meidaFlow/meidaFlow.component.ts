@@ -71,6 +71,9 @@ export class MeidaFlowComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+        JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+      // this.ifStoresAll = UserInfo.staffType === "MERCHANT"? true : false;
     this.moduleId = this.route.snapshot.params['menuId'];
     this.startTime = FunctionUtil.changeDate(new Date()) + ' 00:00:00';
     this.endTime = FunctionUtil.changeDate(new Date()) + ' 23:59:59';

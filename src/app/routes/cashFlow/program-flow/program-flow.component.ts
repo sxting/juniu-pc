@@ -88,11 +88,9 @@ export class ProgramFlowComponent implements OnInit {
     this.startTime = FunctionUtil.changeDate(startDate) + ' 00:00:00';
     this.endTime = FunctionUtil.changeDate(endDate) + ' 23:59:59';
     this.dateRange = [new Date(this.startTime), new Date(this.endTime)];
-    let UserInfo = JSON.parse(
-      this.localStorageService.getLocalstorage('User-Info'),
-    )
-      ? JSON.parse(this.localStorageService.getLocalstorage('User-Info'))
-      : [];
+    let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+        JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+      this.ifStoresAll = UserInfo.staffType === "MERCHANT"? true : false;
     // this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
   }
 
