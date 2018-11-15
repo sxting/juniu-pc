@@ -59,6 +59,7 @@ export class StoresTransforComponent implements OnInit {
     let self = this;
     let data = {
       moduleId: this.moduleId,
+      allStore : false,
       timestamp: new Date().getTime()
     };
     this.storesTransforService.selectStores(data).subscribe(

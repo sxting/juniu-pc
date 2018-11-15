@@ -66,6 +66,8 @@ export class StoresInforComponent implements OnInit {
 
   @Output()
   public storeListPush = new EventEmitter(); //所有门店信息
+  @Input()
+  public AllStoreBoolean :boolean = true;//全部门店展示
 
   ngOnInit() {
     let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
@@ -90,7 +92,8 @@ export class StoresInforComponent implements OnInit {
     let self = this;
     let data = {
       moduleId: this.moduleId,
-      timestamp: new Date().getTime()
+      timestamp: new Date().getTime(),
+      allStore:this.AllStoreBoolean
     };
     this.storesInforService.selectStores(data).subscribe(
       (res: any) => {

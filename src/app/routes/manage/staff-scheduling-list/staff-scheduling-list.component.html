@@ -11,7 +11,7 @@
     <form nz-form [nzLayout]="'inline'" class="search__form" style="width: 70%">
       <nz-row>
         <nz-col nzMd="8" nzSm="24">
-          <jn-stores-infor style="position: absolute;right: 0;" [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth"
+          <jn-stores-infor style="position: absolute;right: 0;" [nzXs]="7" [moduleId]="moduleId" [AllStoreBoolean]="false" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth"
                            (storeListPush)="storeListPush($event)" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
         </nz-col>
       </nz-row>
