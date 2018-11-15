@@ -115,7 +115,7 @@
             <br />
           </span>
         </td>
-        <td class="panduan" *ngIf="item.deductionInfoList&&item.deductionInfoList.length === 0" >
+        <td class="panduan" *ngIf="!item.deductionInfoList||item.deductionInfoList.length === 0" >
           -
         </td>
         <td class="panduan">

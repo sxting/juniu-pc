@@ -32,8 +32,8 @@ export class OpenCardComponent implements OnInit {
   theadName: any = [
     '付款/退款时间',
     '会员信息',
-    '业务类型',
     '订单类型',
+    '业务类型',
     '实收金额',
     '充值金额',
     '卡名称',

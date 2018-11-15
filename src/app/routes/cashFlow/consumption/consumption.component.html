@@ -100,9 +100,11 @@
         <td>{{item.statusName || '-'}}<br />
           <span *ngIf="item.orderType === 'REFUND'" style="color:red;">退款单</span>
         </td>
-        <td>{{item.paidMoney/100 || 0 }}</td>
+        <td>{{item.paidMoney/100 || 0 }}
+          <br/>
+          {{item.payTypeName || '-'}}
+        </td>
         <td>{{item.body || '-'}}</td>
-        <td>{{item.payTypeName || '-'}}</td>
         <td class="panduan" *ngIf="item.deductionInfoList&&item.deductionInfoList.length>0">
           <span *ngFor="let i of item.deductionInfoList">
             <span>{{i.staffName || '-'}}/</span>
@@ -110,7 +112,7 @@
             <br />
           </span>
         </td>
-        <td class="panduan" *ngIf="item.deductionInfoList&&item.deductionInfoList.length === 0" >
+        <td class="panduan" *ngIf="!item.deductionInfoList||item.deductionInfoList.length === 0" >
             -
           </td>
         <td class="panduan">
