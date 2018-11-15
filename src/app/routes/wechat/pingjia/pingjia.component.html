@@ -1,7 +1,7 @@
 <div>
     <div class="existing-main">
         <div class="member-top-middle">
-            <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false" (storeIdOutput)="onStoresChange($event)">
+            <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false" [AllStoreBoolean]="false" (storeIdOutput)="onStoresChange($event)">
             </jn-stores-infor>
             <span>选择类型:</span>
             <nz-select style="width: 300px;margin-right:50px;" [(ngModel)]="selectedOption" (ngModelChange)="selectStoreInfo($event)"

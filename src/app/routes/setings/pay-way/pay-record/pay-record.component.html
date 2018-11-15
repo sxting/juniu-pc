@@ -1,6 +1,6 @@
 <page-header [title]="'支付通道'">每天支付通道会与您自动结算，并将款项打到您配置的银行账户中。</page-header>
 <div style="opacity: 0; width: 0; height: 0;">
-  <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false"
+  <jn-stores-infor [moduleId]="moduleId" [AllStoreBoolean]="false" [ifStoresAll]="false"
                    (storeIdOutput)="onStoresChange($event)"></jn-stores-infor>
 </div>
 <div class="container">

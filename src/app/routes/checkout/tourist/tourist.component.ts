@@ -2132,6 +2132,7 @@ export class TouristComponent implements OnInit {
     let data = {
       moduleId: this.moduleId,
       timestamp: new Date().getTime(),
+      allStore:false
     };
     this.checkoutService.selectStores(data).subscribe(
       (res: any) => {
