@@ -17,7 +17,7 @@ export class StoresInforComponent implements OnInit {
     private storesInforService: StoresInforService,
     private localStorageService: LocalStorageService
   ) { }
-
+  boolean : any = false;
   @Input()
   public moduleId: string = '';
 
@@ -111,8 +111,7 @@ export class StoresInforComponent implements OnInit {
               item.nzDisabled = item.hasAuth === true ? false : true;
             });
           }
-          if (self.ifStoresAll&&false) {//需要全部门店
-            console.log(0);
+          if (self.ifStoresAll&&self.boolean) {//需要全部门店
             let list = {
               storeId: '',
               branchName: '全部门店'
