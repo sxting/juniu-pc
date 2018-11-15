@@ -111,7 +111,7 @@ export class StoresInforComponent implements OnInit {
               item.nzDisabled = item.hasAuth === true ? false : true;
             });
           }
-          if (self.ifStoresAll) {//需要全部门店
+          if (self.ifStoresAll&&false) {//需要全部门店
             console.log(0);
             let list = {
               storeId: '',
