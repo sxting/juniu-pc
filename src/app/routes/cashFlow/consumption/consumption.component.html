@@ -103,14 +103,14 @@
         <td>{{item.paidMoney/100 || 0 }}</td>
         <td>{{item.body || '-'}}</td>
         <td>{{item.payTypeName || '-'}}</td>
-        <td class="panduan" *ngIf="item.deductionInfoList.length>0">
+        <td class="panduan" *ngIf="item.deductionInfoList&&item.deductionInfoList.length>0">
           <span *ngFor="let i of item.deductionInfoList">
             <span>{{i.staffName || '-'}}/</span>
             <span>{{i.deductMoney/100 || 0}}</span>
             <br />
           </span>
         </td>
-        <td class="panduan" *ngIf="item.deductionInfoList.length === 0" >
+        <td class="panduan" *ngIf="item.deductionInfoList&&item.deductionInfoList.length === 0" >
             -
           </td>
         <td class="panduan">
