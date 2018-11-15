@@ -431,6 +431,7 @@ export class AddNewStaffComponent implements OnInit {
     let data = {
       moduleId: this.moduleId,
       timestamp: new Date().getTime(),
+      allStore:false
     };
     this.manageService.selectStores(data).subscribe(
       (res: any) => {

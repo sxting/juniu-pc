@@ -88,7 +88,6 @@ export class ConsumptionComponent implements OnInit {
     pageSize: this.pageSize,
   };
   ifShow : any = false;
-  ifStoresAll:any;
   ifStoresAuth:any;
   orderTypeTitle:any;
   expandForm:any;
