@@ -46,6 +46,8 @@ export class AddNewStaffComponent implements OnInit {
     { label: 'Orange', value: 'Orange', checked: false },
   ];
   allStoreNum = 0;
+
+  passWordBoolean : boolean = false;
   constructor(
     private http: _HttpClient,
     private fb: FormBuilder,
@@ -344,7 +346,9 @@ export class AddNewStaffComponent implements OnInit {
       },
     );
   }
-
+  onChangesPassWord(){
+    this.passWordBoolean = true;
+  }
   // 新增员工
   submit() {
     let self = this;
@@ -363,10 +367,7 @@ export class AddNewStaffComponent implements OnInit {
         ? [this.form.controls.storeId.value]
         : storeIdList;
     let passwordValue = this.form.controls.password.value;
-    let password =
-      passwordValue.substring(passwordValue.length - 3) === '...'
-        ? this.passwordPre
-        : this.form.controls.password.value;
+    let password =this.passWordBoolean?this.form.controls.password.value:'';
     let params = {
       staffName: this.form.controls.staffName.value,
       belongType: this.form.controls.belongType.value,
