@@ -56,7 +56,7 @@ export class StaffListComponent implements OnInit {
       this.storeList = event.storeList? event.storeList : [];
       let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
         JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
-      this.storeId = UserInfo.staffType === "MERCHANT"? '' : this.storeList[0].storeId;
+      this.storeId = this.storeList[0].storeId;
       this.staffListHttp();//员工列表请求数据
     }
 

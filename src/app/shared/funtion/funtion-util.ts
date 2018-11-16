@@ -11,7 +11,14 @@ export class FunctionUtil {
   constructor(private localStorageService: LocalStorageService, private modalService: NzModalService) { }
 
   //将门店列表数据格式转换成按照城市分类
-  static getCityList(storeList: any, id: any) {
+  static getCityList(storeList2: any, id: any) {
+    let storeList = [];
+    for (let i = 0; i < storeList2.length; i++) {
+      if(storeList2[i].hasAuth) {
+        storeList.push(storeList2[i])
+      }
+    }
+    console.log(storeList);
     let cityAllCodeArr = [];
     for (let i = 0; i < storeList.length; i++) {
       cityAllCodeArr.push(storeList[i].cityId + '-' + storeList[i].cityName);
@@ -36,7 +43,7 @@ export class FunctionUtil {
           cityArr[i].stores.push({
             storeId: id === 'store' ? storeList[j].storeId : storeList[j].shopId,
             storeName: id === 'store' ? storeList[j].storeName : storeList[j].shopName,
-            change: true
+            change: true,
           });
         }
       }

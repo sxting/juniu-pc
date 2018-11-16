@@ -108,7 +108,8 @@ export class ReserveComponent implements OnInit, AfterViewInit, AfterViewChecked
 
     let data = {
       moduleId: this.route.snapshot.params['menuId'],
-      timestamp: new Date().getTime()
+      timestamp: new Date().getTime(),
+      allStore:false
     };
     this.storesInforService.selectStores(data).subscribe(
       (res: any) => {

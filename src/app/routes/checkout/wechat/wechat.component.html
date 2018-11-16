@@ -2,7 +2,7 @@
     <nz-tabset>
         <nz-tab nzTitle="扫码核销" (nzClick)="tabclick()">
             <div class="member-top-middle">
-                <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false" (storeIdOutput)="selectStoreInfo($event)"></jn-stores-infor>
+                <jn-stores-infor [moduleId]="moduleId" [AllStoreBoolean]="false" [ifStoresAll]="false" (storeIdOutput)="selectStoreInfo($event)"></jn-stores-infor>
             </div>
             <div class="member-top-middle">
                 <nz-form-item>
@@ -42,7 +42,7 @@
         </nz-tab>
         <nz-tab nzTitle="手动核销" (nzClick)="tabclick()">
             <div class="member-top-middle">
-                <jn-stores-infor [ifStoresAll]="false" [moduleId]="moduleId" (storeIdOutput)="selectStoreInfo($event)"></jn-stores-infor>
+                <jn-stores-infor [ifStoresAll]="false" [AllStoreBoolean]="false" [moduleId]="moduleId" (storeIdOutput)="selectStoreInfo($event)"></jn-stores-infor>
             </div>
             <div class="member-top-middle">
                 <span style="margin-right:10px;">核销券码:</span>

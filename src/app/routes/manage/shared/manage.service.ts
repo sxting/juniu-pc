@@ -907,30 +907,31 @@ export class ManageService {
       });
   }
   //权限控制
-  permissionFun(menuId:any,id?:any) {
+  permissionFun(parme) {
     let data = {
-      menuId: menuId,
+      menuId: parme.menuId,
       timestamp: new Date().getTime(),
     };
-    this.menuRoute(data).subscribe((res: any) => {
+    let self = this;
+    var returnRes = '';
+     this.menuRoute(data).subscribe((res: any) => {
       if (res.success) {
         if (res.data.eventType === 'ROUTE') {
           if (res.data.eventRoute) {
-            if(id) this.router.navigateByUrl(res.data.eventRoute + ';menuId='+ menuId+ ';id=' + id);
-            else this.router.navigateByUrl(res.data.eventRoute + ';menuId=' + menuId);
+            this.router.navigate([res.data.eventRoute,parme])
           }
         } else if (res.data.eventType === 'NONE') {
-
         } else if (res.data.eventType === 'API') {
-
+          
         } else if (res.data.eventType === 'REDIRECT') {
           let href = res.data.eventRoute;
           window.open(href);
         }
+
         if (res.data.eventMsg) {
           this.modalSrv.error({
             nzTitle: '温馨提示',
-            nzContent: res.data.eventMsg
+            nzContent: res.data.eventMsg,
           });
         }
       } else {
