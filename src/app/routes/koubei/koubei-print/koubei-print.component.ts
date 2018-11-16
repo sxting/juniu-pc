@@ -275,7 +275,8 @@ export class KoubeiPrintComponent implements OnInit {
     selectStoresHttp() {
         let data = {
             moduleId: this.moduleId,
-            timestamp: new Date().getTime()
+            timestamp: new Date().getTime(),
+            allStore:false
         }
         let that = this;
         this.koubeiService.selectStores(data).subscribe(
