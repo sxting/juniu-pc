@@ -288,15 +288,22 @@ export class AddNewStaffComponent implements OnInit {
             self.ifShow = false;
             self.RolesListInfor = self.merchantRoles;
           }
-          let storeId = res.data.storeIds;
           this.storeList.forEach(element => {
             element.checked = false;
           });
-          this.storeList.forEach(element => {
-            storeId.forEach(item => {
-              if (element.storeId === item) element.checked = true;
+          let storeId;
+          if(res.data.belongType === 'STORE'){
+            storeId = res.data.storeIds[0];
+          }else{
+            storeId = res.data.storeIds;
+            this.storeList.forEach(element => {
+              storeId.forEach(item => {
+                if (element.storeId === item) element.checked = true;
+              });
             });
-          });
+          }
+         
+          
           this.allStoreNumFun();
           let password =
             res.data.password.length > 16
