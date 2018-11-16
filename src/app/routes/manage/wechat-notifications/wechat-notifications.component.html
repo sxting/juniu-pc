@@ -1,4 +1,4 @@
-<div *ngIf="false">
+<div >
   <div class="content__title ad-ph" >
     <h1 class="title ng-star-inserted">微信通知</h1>
     <div class="desc" style="color: rgba(0, 0, 0, 0.85);margin-left: 0px;">桔牛为门店的员工开发了一套基于微信公众号的自助管理系统，员工可以在公众号中接到每日的工作成果报表推送；店长和管理人员更能接收到门店所有员工的绩效排名、到店顾客的消费情况、商品售卖等情况的报表。如果您使用桔牛专业版系统，配套的人脸识别功能可以做到在顾客到店的第一时间将顾客信息推送给相应的技师。</div>
@@ -40,50 +40,52 @@
 
 
 
-
-<div class="ad-page-header" style="margin: 0 -24px; border-bottom:none !important;">
-  <nz-breadcrumb>
-      <nz-breadcrumb-item>主页</nz-breadcrumb-item>
-      <nz-breadcrumb-item>管理</nz-breadcrumb-item>
-      <nz-breadcrumb-item>员工</nz-breadcrumb-item>
-      <nz-breadcrumb-item>微信通知</nz-breadcrumb-item>
-  </nz-breadcrumb>
-  <page-header>
-      桔牛为门店的员工开发了一套基于微信公众号的自助管理系统，员工可以在公众号中接到每日的工作成果报表推送；店长和管理人员更能接收到门店所有员工的绩效排名、到店顾客的消费情况、商品售卖等情况的报表。如果您使用桔牛专业版系统，配套的人脸识别功能可以做到在顾客到店的第一时间将顾客信息推送给相应的技师。
-  </page-header>
-</div>
-<nz-card [nzBordered]="false">
-  <nz-form-item style="margin-bottom: 15px!important;">
-      <nz-form-label>请员工用自己的手机微信扫描下方二维码，绑定桔牛公众号</nz-form-label>
-  </nz-form-item>
-  <div class="qrcode" style="width: 150px;height: 150px;background-color: pink;margin:0 0 24px 140px">
-      <img [src]="qrcodeImages" style="width: 100%;height: 100%;"/>
+<div *ngIf="false">
+  <div class="ad-page-header" style="margin: 0 -24px; border-bottom:none !important;">
+    <nz-breadcrumb>
+        <nz-breadcrumb-item>主页</nz-breadcrumb-item>
+        <nz-breadcrumb-item>管理</nz-breadcrumb-item>
+        <nz-breadcrumb-item>员工</nz-breadcrumb-item>
+        <nz-breadcrumb-item>微信通知</nz-breadcrumb-item>
+    </nz-breadcrumb>
+    <page-header>
+        桔牛为门店的员工开发了一套基于微信公众号的自助管理系统，员工可以在公众号中接到每日的工作成果报表推送；店长和管理人员更能接收到门店所有员工的绩效排名、到店顾客的消费情况、商品售卖等情况的报表。如果您使用桔牛专业版系统，配套的人脸识别功能可以做到在顾客到店的第一时间将顾客信息推送给相应的技师。
+    </page-header>
   </div>
-  <form nz-form [formGroup]="form" (ngSubmit)="submit()">
-      <nz-form-item>
-          <nz-form-label class="fl">员工接收的报表类型</nz-form-label>
-          <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-              <nz-select formControlName="reportType" name="reportTypes" id="reportTypes" [nzShowSearch]="true" >
-                  <nz-option *ngFor="let i of reportTypes; let idx = index" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
-              </nz-select>
-          </nz-form-control>
-      </nz-form-item>
-
-      <nz-form-item>
-          <nz-form-label class="fl">员工接收的到店通知</nz-form-label>
-          <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-              <nz-select formControlName="receiveType" name="storeNotice" id="storeNotice" [nzShowSearch]="true">
-                  <nz-option *ngFor="let i of storeNotice; let idx = index" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
-              </nz-select>
-          </nz-form-control>
-      </nz-form-item>
-
-      <nz-form-item>
-          <nz-form-control  nzXs="24" nzSm="12" nzMd="10" style="margin-left: 140px">
-              <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">保存</button>
-          </nz-form-control>
-      </nz-form-item>
-  </form>
-
-</nz-card>
-
+  <nz-card [nzBordered]="false">
+    <nz-form-item style="margin-bottom: 15px!important;">
+        <nz-form-label>请员工用自己的手机微信扫描下方二维码，绑定桔牛公众号</nz-form-label>
+    </nz-form-item>
+    <div class="qrcode" style="width: 150px;height: 150px;background-color: pink;margin:0 0 24px 140px">
+        <img [src]="qrcodeImages" style="width: 100%;height: 100%;"/>
+    </div>
+    <form nz-form [formGroup]="form" (ngSubmit)="submit()">
+        <nz-form-item>
+            <nz-form-label class="fl">员工接收的报表类型</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+                <nz-select formControlName="reportType" name="reportTypes" id="reportTypes" [nzShowSearch]="true" >
+                    <nz-option *ngFor="let i of reportTypes; let idx = index" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+  
+        <nz-form-item>
+            <nz-form-label class="fl">员工接收的到店通知</nz-form-label>
+            <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+                <nz-select formControlName="receiveType" name="storeNotice" id="storeNotice" [nzShowSearch]="true">
+                    <nz-option *ngFor="let i of storeNotice; let idx = index" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+  
+        <nz-form-item>
+            <nz-form-control  nzXs="24" nzSm="12" nzMd="10" style="margin-left: 140px">
+                <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">保存</button>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+  
+  </nz-card>
+  
+  
+</div>
