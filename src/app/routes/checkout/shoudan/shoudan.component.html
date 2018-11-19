@@ -1,82 +1,52 @@
 <g2-card>
     <div class="stores-box">
-        <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false" (storeIdOutput)="onSelectStoreClick($event)"></jn-stores-infor>
+        <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false" [ifStoresAuth]="false" (storeIdOutput)="onSelectStoreClick($event)"></jn-stores-infor>
     </div>
 
     <div>
-        <div class="quan-input-box">
-            <span>输入券码:</span>
-            <input type="text" nz-input placeholder="请输入团购券序列号" [(ngModel)]="receiptCode">
-        </div>
-
-        <input nz-input class="hidden"  type="text" id="qrCode" [(ngModel)]="qrCode" name="qrCode" (ngModelChange)="scanPrepare($event)">
-
-        <div class="saoma-btn">
-            <span  (click)="onClickBtnClick('input')">输入金额</span>
+        <div class="quan-input-box" style="position: relative;">
+            <span>输入金额:</span>
+            <input type="text" nz-input placeholder="请输入收款金额" style="width: 300px !important;    z-index: 999;position: relative;" [(ngModel)]="receiptCode">
+            <input nz-input  class="hidden" id="authCode1" (ngModelChange)="goToSubmitOrder($event)" style="width:128px;position: absolute;left:80px;top: 10px;"
+        [(ngModel)]="authCode">
         </div>
     </div>
-
-    <div class="coupon-box" *ngIf="isClick">
-        <!--<p>该顾客在本店购买1个套餐，请选择验券的套餐</p>-->
-
-        <div>
-            <div class="coupon-detail coupon-selected">
-                <p class="coupon-name">{{deal.deal_title}}</p>
-                <span>￥
-                    <span class="price">{{deal.deal_price}}</span>
-                </span>
-                <span class="fr">{{type === 'saoma' ? deal.available_count : deal.count}}张</span>
-                <span class="iconfont icon-yousanjiaogou_ic"></span>
-            </div>
-            <div class="coupon-num-box">
-                <span>验券数量</span>
-                <input type="number" min="1" max="{{type === 'saoma' ? deal.available_count : deal.count}}" [(ngModel)]="count">
-            </div>
-        </div>
-
-        <div class="coupon-btn-box">
-            <span (click)="onCouponBtnClick('yes')">确认消费</span>
-            <span (click)="onCouponBtnClick('no')">取消</span>
-        </div>
-    </div>
-
+    <button nz-button nzType="primary" style="margin-left:90px;" type="submit" [nzLoading]="loading" (click)="scanPay(jiazai)">收单</button>
     <div class="record-box">
         <div class="sub-title">
-            <span></span>验券记录</div>
+            <span></span>今日收银记录</div>
 
-        <nz-table [nzNoResult]="'没有数据'" [nzShowPagination]="false" [nzData]="recordList" #nzTable>
+        <nz-table [nzNoResult]="'没有数据'" [nzShowPagination]="false" [nzData]="shopyinList" #nzTable>
             <thead nz-thead>
-                <tr>
-                    <th nz-th *ngFor="let item of theadName">
-                        <span>{{item}}</span>
-                    </th>
-                </tr>
+                    <tr>
+                    <th>收银时间</th>
+                    <th>流水号</th>
+                    <th>渠道</th>
+                    <th>金额</th>
+                    <th>操作</th>
+                    </tr>
             </thead>
             <tbody nz-tbody>
-                <tr nz-tbody-tr *ngFor="let item of recordList">
-                    <td>{{item.verifyTime}}</td>
-                    <td>{{item.storeName}}</td>
-                    <td>{{item.itemName}}</td>
-                    <td>{{item.number}}</td>
-                    <td>{{item.amount}}</td>
-                    <td class="revoke" *ngIf="item.canReverser" (click)="onItemCancelClick(item.consumedId)">撤销</td>
-                    <td class="has-revoke" *ngIf="!item.canReverser&&item.status ==='CONSUMED'" >撤销</td>
-                    <td class="has-revoke" *ngIf="!item.canReverser&&item.status !=='CONSUMED'">已撤销</td>
+                <tr nz-tbody-tr *ngFor="let item of shopyinList">
+                    <td>{{item.juniuoModel.dateCreated}}</td>
+                <td>{{item.orderId}}</td>
+                <td>{{item.payTypeName||'-'}}</td>
+                <td>{{item.paidMoney/100}}</td>
+                <td>
+                <span class="button" *ngIf="item.orderType === 'ORDER'&&item.status !== 'REFUND'&&item.status !== 'CLOSE'" (click)="refund(item)">撤销</span>
+                <span *ngIf="item.orderType === 'ORDER'&&item.status === 'REFUND'">已退款</span>
+                <span  *ngIf="item.orderType === 'ORDER'&&item.status === 'CLOSE'">已取消</span>
+                </td>
                 </tr>
             </tbody>
         </nz-table>
         <div class="nzPaginationBox">
-            <nz-pagination  class="nzPagination" (nzPageIndexClickChange)="paginate($event)" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)" [nzPageIndex]="1"
-            [nzTotal]="countPage"></nz-pagination>
-        </div>
-        <!-- <nz-pagination (nzPageIndexClickChange)="paginate($event)" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)" [nzPageIndex]="1"
-            [nzTotal]="countPage"></nz-pagination> -->
-
+                <nz-pagination class="nzPagination" [nzTotal]="pageInfoNum" [nzPageSize]="10" (nzPageIndexChange)="getData($event)"></nz-pagination>
+              </div>
     </div>
 </g2-card>
-<div class="iframe-alert-bg" *ngIf="showAlertBox">
-    <div class="iframe-alert">
-        <span class="iconfont icon-tubiao06" (click)="onCloseAlertClick()"></span>
-        <iframe id="koubeikeFrame" class="all-iframe" [src]="url" frameborder="0" scrolling="auto" height="960px" width="785px"></iframe>
-    </div>
-</div>
+
+<ng-template #jiazai>
+    <div style="text-align: center;
+    font-size: 25px;">扫描条形码中......</div>
+  </ng-template>
