@@ -53,7 +53,7 @@
   <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="dataList">
     <thead nz-thead class="ui-grid-thead">
       <tr>
-        <th nz-th class="" *ngFor="let item of theadName;let i = index" (click)="checkDetailInfor(orderDetail)">{{item}}</th>
+        <th nz-th class="" *ngFor="let item of theadName;let i = index" >{{item}}</th>
       </tr>
     </thead>
     <tbody nz-tbody class="ui-grid-tbody">

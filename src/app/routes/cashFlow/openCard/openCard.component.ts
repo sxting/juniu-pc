@@ -33,6 +33,7 @@ export class OpenCardComponent implements OnInit {
     '付款/退款时间',
     '会员信息',
     '订单类型',
+    '业务类型',
     '实收金额',
     '充值金额',
     '卡名称',
@@ -110,6 +111,9 @@ export class OpenCardComponent implements OnInit {
 
   selectOrderStatus(type) {}
   ngOnInit() {
+    let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+        JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+      this.ifStoresAll = UserInfo.staffType === "MERCHANT"? true : false;
     this.moduleId = this.route.snapshot.params['menuId'];
     this.startTime = FunctionUtil.changeDate(new Date()) + ' 00:00:00';
     this.endTime = FunctionUtil.changeDate(new Date()) + ' 23:59:59';
