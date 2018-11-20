@@ -7,11 +7,12 @@
         <jn-stores-infor  [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="ifStoresAll" [ifStoresAuth]="ifStoresAuth"
                          (storeListPush)="storeListPush($event)" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
       </nz-col>
-      <nz-col nzMd="8" nzSm="24" class="fr">
+      <nz-col nzMd="8" nzSm="24">
         <nz-form-item>
-          <nz-form-label nzFor="updatedAt">选择日期</nz-form-label>
+          <nz-form-label nzFor="yyyymmDate">选择日期</nz-form-label>
           <nz-form-control>
-            <nz-date-picker (ngModelChange)="reportDateAlert($event)" [nzFormat]="'YYYY-MM-DD'" [(ngModel)]="staffingDate" [nzAllowClear]="false"></nz-date-picker>
+            <nz-range-picker [nzDisabledDate]="disabledDate" [nzAllowClear]="false" nzFormat="yyyy-MM-dd"
+                             [(ngModel)]="dateRange" (ngModelChange)="onDateChange($event)"></nz-range-picker>
           </nz-form-control>
         </nz-form-item>
       </nz-col>
