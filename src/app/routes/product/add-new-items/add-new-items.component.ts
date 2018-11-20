@@ -29,7 +29,7 @@ export class AddNewItemsComponent implements OnInit {
         private titleSrv: TitleService,
         private localStorageService: LocalStorageService
     ) { }
-
+   
     formData: any;
     form: FormGroup;
     loading: boolean = false;
@@ -45,7 +45,6 @@ export class AddNewItemsComponent implements OnInit {
     //上传图片的时候
     imagePath: string = '';
     picId: string = '';//商品首图的ID
-
     // 门店相关的
     cityStoreList: any;  // 数据格式转换过的门店列表
     selectStoresIds: any = ''; //选中的门店
@@ -54,6 +53,14 @@ export class AddNewItemsComponent implements OnInit {
     moduleId: string;
     ifShow: boolean = false;//门店错误提示
     spinBoolean: boolean = false;
+
+
+    
+    buyerNotes: any[] = [{ title: '', details: [{ item: '' }] }];//购买须知
+    showPics: any = [];
+    syncAlipay: string = 'F';
+    isClear: boolean = false;
+    showDiv: boolean = false;
     get categoryInfor() { return this.form.controls.categoryInfor; }
     get currentPrice() { return this.form.controls['currentPrice']; }
     get costPrice() { return this.form.controls['costPrice']; }
@@ -81,7 +88,7 @@ export class AddNewItemsComponent implements OnInit {
         this.form = this.fb.group(self.formData);
         this.getCategoryListInfor();//获取商品分类信息
     }
-
+    
     //获取门店数据
     storeListPush(event){
       this.cityStoreList = event.storeList? event.storeList : [];
@@ -297,7 +304,13 @@ export class AddNewItemsComponent implements OnInit {
             )
         }
     }
-
+   /**获取其他门店图片 */
+   getPictureDetails(event: any) {
+    console.log(event);
+    let that = this;
+    // this.shopEdit.pictureDetails = [];
+    this.showPics = event;
+}
     //上传图片接口
     uploadImage(event: any) {
         event = event ? event : window.event;
@@ -451,4 +464,55 @@ export class AddNewItemsComponent implements OnInit {
         }
     }
 
+    showDivFun(){
+        this.showDiv = !this.showDiv;
+    }
+    errorAlter(err: any) {
+        this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: err
+        });
+    }
+    getnoteTitledata(index: number, event: any) {
+        this.buyerNotes[index].title = event;
+    }
+    getnoteDetaildata(index: number, notenum: number, event: any) {
+        this.buyerNotes[index].details[notenum].item = event;
+    }
+
+    addLineNoteDetail(index: number) {
+        if (this.buyerNotes[index].details.length >= 10) {
+            this.errorAlter('您最多只能添加10组!!');
+        } else {
+            this.buyerNotes[index].details.push({ item: '' });
+        }
+    }
+
+    deleteNoteDetail(count: number, index: number) {
+        if (this.buyerNotes[count].details.length <= 1) {
+            this.errorAlter('手下留情啊,不能再删除了!!');
+            return;
+        } else {
+            this.buyerNotes[count].details.splice(index, 1);
+        }
+    }
+
+    addGroupBuynote() {
+        if (this.buyerNotes.length >= 10) {
+            this.errorAlter('您最多只能添加10组!!');
+        } else {
+            this.buyerNotes.push({
+                title: '',
+                details: [{ item: '' }]
+            });
+        }
+    }
+    pluseGroupbuyNote(index: number) {
+        if (this.buyerNotes.length <= 1) {
+            this.errorAlter('手下留情啊,不能再删除了!!');
+            return;
+        } else {
+            this.buyerNotes.splice(index, 1);
+        }
+    }
 }
