@@ -32,6 +32,7 @@ export class ShoudanComponent implements OnInit {
   pageSize=10;
   shopyinList=[];
   pageInfoNum:any;
+  branchName:any;
   constructor(
     private http: _HttpClient,
     private modalSrv: NzModalService,
@@ -72,6 +73,7 @@ export class ShoudanComponent implements OnInit {
     this.checkoutService.createOrder(create).subscribe(
       (res: any) => {
         this.loading = false;
+        this.authCode = '';
         if (res.success) {
           let data: any = res.data;
           if (data.paymentResult === 'CLOSE') {
@@ -81,7 +83,7 @@ export class ShoudanComponent implements OnInit {
           } else {
             this.modalSrv.closeAll();
             this.modalSrv.success({
-              nzContent: '收款成功',
+              nzContent: `收款成功,收款金额:${self.receiptCode}元,收款门店:${self.branchName}`,
             });
             this.getOrderHistoryListHttp();
           }
@@ -96,6 +98,7 @@ export class ShoudanComponent implements OnInit {
   //选择门店
   onSelectStoreClick(e: any) {
     this.storeId = e.storeId;
+    this.branchName = e.branchName;
     this.getOrderHistoryListHttp();
   }
   goToSubmitOrder(event: any) {
