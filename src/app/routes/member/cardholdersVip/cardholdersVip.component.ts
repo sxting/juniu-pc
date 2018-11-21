@@ -70,10 +70,10 @@ export class CardholdersVipComponent {
     parm: any;
     modal: any;
     moduleId: any;
+    allTaglibsList:any = [];
     merchantId: any = JSON.parse(
         this.localStorageService.getLocalstorage(USER_INFO),
       )['merchantId'];
-      allTaglibsList:any = [];
     pincardInfo: any;
     constructor(private http: _HttpClient,
         private modalService: NzModalService,
@@ -84,7 +84,7 @@ export class CardholdersVipComponent {
         private memberService: MemberService) {
         let that = this;
         this.moduleId = this.route.snapshot.params['menuId'];
-        // this.getAllTaglibs();
+        this.getAllTaglibs();
         // this.customerlistHttp();
         // var goEasy = new GoEasy({
         //     appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
@@ -296,6 +296,7 @@ export class CardholdersVipComponent {
                     that.customer_phone = res.data.phone;
                     that.customer_name = res.data.customerName;
                     that._date = new Date(res.data.birthday);
+                    that.selectDefaultTaglib(res.data.tagIds);
                     if (res.data.face && res.data.face.picId)
                         that.faceImg(res.data.face)
 
@@ -312,6 +313,7 @@ export class CardholdersVipComponent {
         );
     }
     bianji(tpl: TemplateRef<{}>, customerId: any, phone: any, storeId: any) {
+        this.resetSelectedTaglib();
         this.customerId = customerId;
         this.phone = phone;
         this.storeId = storeId
@@ -331,6 +333,10 @@ export class CardholdersVipComponent {
     }
     updateCustomerHttp(storeId) {
         let that = this;
+        let tagIds = '';
+        this.allTaglibsList.forEach(element => {
+            if (element.check) tagIds += element.tagId + ',';
+        });
         let data = {
             customerId: that.customerId,
             gender: that.gender,
@@ -339,6 +345,7 @@ export class CardholdersVipComponent {
             birthday: that.formatDateTime(that._date, 'start'),
             faceId: this.faceId,
             faceImg: this.faceImgId,
+            tagIds: tagIds,
             storeId: storeId
         }
         if (!data.customerName) {
@@ -483,6 +490,22 @@ export class CardholdersVipComponent {
             }
         );
     }
+    // 重置标签都选中状态
+    resetSelectedTaglib() {
+        this.allTaglibsList.forEach(i => {
+            i.check = false;
+        });
+    }
+    // 赋值默认都选中标签效果
+    selectDefaultTaglib(tagIds) {
+        let arr = tagIds.split(',');
+        this.allTaglibsList.forEach(i => {
+            arr.forEach(n => {
+                if (i.tagId === n) i.check = true;
+            });
+        });
+    }
+    // 检查标签个数
     checktag(item) {
         let num = 0;
         item.check = item.check ? false : true;
@@ -493,21 +516,21 @@ export class CardholdersVipComponent {
           this.errorAlter('最多只能选三个标签');
           item.check = false;
         }
-      }
-    //全部标签
-  getAllTaglibs() {
-    let data = {
-      merchantId: this.merchantId
-    };
-    this.memberService.allTaglibs(data).subscribe(
-      (res: any) => {
-        if (res.success) {
-          this.allTaglibsList = res.data;
-        } else {
-          this.errorAlter(res.errorInfo);
-        }
-      },
-      error => this.errorAlter(error),
-    );
-  }
+    }
+    // 全部标签
+    getAllTaglibs() {
+        let data = {
+        merchantId: this.merchantId
+        };
+        this.memberService.allTaglibs(data).subscribe(
+        (res: any) => {
+            if (res.success) {
+            this.allTaglibsList = res.data;
+            } else {
+            this.errorAlter(res.errorInfo);
+            }
+        },
+        error => this.errorAlter(error),
+        );
+    }
 }
