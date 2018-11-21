@@ -71,6 +71,10 @@ export class PotentialVipComponent {
     parm: any;
     modal: any;
     moduleId: any;
+    merchantId: any = JSON.parse(
+        this.localStorageService.getLocalstorage(USER_INFO),
+      )['merchantId'];
+    allTaglibsList:any = [];
     constructor(private http: _HttpClient,
         private modalService: NzModalService,
         public msg: NzMessageService,
@@ -80,6 +84,7 @@ export class PotentialVipComponent {
         private memberService: MemberService) {
         let that = this;
         this.moduleId = this.route.snapshot.params['menuId'];
+        this.getAllTaglibs();
         // this.customerlistHttp();
         // var goEasy = new GoEasy({
         //     appkey: 'BS-9c662073ae614159871d6ae0ddb8adda'
@@ -279,6 +284,7 @@ export class PotentialVipComponent {
                     that.customer_phone = res.data.phone;
                     that.customer_name = res.data.customerName;
                     that._date = new Date(res.data.birthday);
+                    that.selectDefaultTaglib(res.data.tagIds);
                     if (res.data.face && res.data.face.picId)
                         that.faceImg(res.data.face)
 
@@ -295,6 +301,7 @@ export class PotentialVipComponent {
         );
     }
     bianji(tpl: TemplateRef<{}>, customerId: any, phone: any, storeId: any) {
+        this.resetSelectedTaglib();
         this.customerId = customerId;
         this.phone = phone;
         this.storeId = storeId
@@ -315,6 +322,10 @@ export class PotentialVipComponent {
     }
     updateCustomerHttp(storeId) {
         let that = this;
+        let tagIds = '';
+        this.allTaglibsList.forEach(element => {
+            if (element.check) tagIds += element.tagId + ',';
+        });
         let data = {
             customerId: that.customerId,
             gender: that.gender,
@@ -323,6 +334,7 @@ export class PotentialVipComponent {
             birthday: that.formatDateTime(that._date, 'start'),
             faceId: this.faceId,
             faceImg: this.faceImgId,
+            tagIds: tagIds,
             storeId: storeId
         }
         if (!data.customerName) {
@@ -433,6 +445,49 @@ export class PotentialVipComponent {
             error => {
                 this.errorAlter(error);
             }
+        );
+    }
+    // 重置标签都选中状态
+    resetSelectedTaglib() {
+        this.allTaglibsList.forEach(i => {
+            i.check = false;
+        });
+    }
+    // 赋值默认都选中标签效果
+    selectDefaultTaglib(tagIds) {
+        let arr = tagIds.split(',');
+        this.allTaglibsList.forEach(i => {
+            arr.forEach(n => {
+                if (i.tagId === n) i.check = true;
+            });
+        });
+    }
+    // 检查标签个数
+    checktag(item) {
+        let num = 0;
+        item.check = item.check ? false : true;
+        this.allTaglibsList.forEach(i => {
+          if (i.check) num++;
+        });
+        if (num > 3) {
+          this.errorAlter('最多只能选三个标签');
+          item.check = false;
+        }
+    }
+    // 全部标签
+    getAllTaglibs() {
+        let data = {
+        merchantId: this.merchantId
+        };
+        this.memberService.allTaglibs(data).subscribe(
+        (res: any) => {
+            if (res.success) {
+            this.allTaglibsList = res.data;
+            } else {
+            this.errorAlter(res.errorInfo);
+            }
+        },
+        error => this.errorAlter(error),
         );
     }
 }
