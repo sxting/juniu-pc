@@ -645,6 +645,7 @@
                 <th>支付详情</th>
                 <th>服务技师</th>
                 <th>收款金额</th>
+                <th>支付状态</th>
               </tr>
             </thead>
             <tbody>
@@ -671,6 +672,10 @@
                 </td>
                 <td>{{item.serveStaffNames}}</td>
                 <td>{{item.money / 100}}</td>
+                <td>
+                  <span *ngIf="item.status === 'REFUND'" style="color:red;">{{item.statusName}}</span>
+                  <span *ngIf="item.status != 'REFUND'">{{item.statusName}}</span>
+              </td>
               </tr>
             </tbody>
 

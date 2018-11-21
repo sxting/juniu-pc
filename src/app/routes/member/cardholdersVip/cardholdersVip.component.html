@@ -119,6 +119,7 @@
                 <th>支付方式</th>
                 <th>服务技师</th>
                 <th>收款金额</th>
+                <th>支付状态</th>
             </tr>
         </thead>
         <tbody>
@@ -127,7 +128,11 @@
                 <td>{{item.body}}</td>
                 <td>{{item.sceneName}}</td>
                 <td>{{item.genderName}}</td>
-                <td>{{item.paidMoney / 100}}</td>
+                <td>{{item.money / 100}}</td>
+                <td>
+                    <span *ngIf="item.status === 'REFUND'" style="color:red;">{{item.statusName}}</span>
+                    <span *ngIf="item.status != 'REFUND'">{{item.statusName}}</span>
+                </td>
             </tr>
         </tbody>
 
@@ -168,8 +173,6 @@
                 </nz-radio-group>
             </div>
         </div>
-
-        
         <div>
             <div class="addStaffBox-main-left icon-asterisks-1-copy iconfont">生日</div>
             <div class="addStaffBox-main-right">
@@ -177,17 +180,13 @@
                 <!-- <nz-datepicker [(ngModel)]="_date" [nzPlaceHolder]="'Select date'" [nzFormat]="'YYYY/MM/DD'"></nz-datepicker> -->
             </div>
         </div>
-        <!-- <div>
-            <div class="addStaffBox-main-left icon-asterisks-1-copy iconfont">会员标签</div>
+        <div>
+            <div class="addStaffBox-main-left iconfont">会员标签</div>
             <div class="addStaffBox-main-right">
-                <div>
-                    <span  style="padding:0 5px;" *ngFor="let item of allTaglibsList" (click)="checktag(item)" class="biaoqian {{item.check?'biaoqianC':''}}">{{item.tagName}}</span>
-                  </div>
-          
-          
-                  <p style="font-size: 12px; color: #b7b7b7;">注：设定会员标签，便于管理及进行精准营销，最多可设置3个</p>
+                <span *ngFor="let item of allTaglibsList" (click)="checktag(item)" class="biaoqian {{item.check?'biaoqianC':''}}">{{item.tagName}}</span>
+                <p style="font-size: 12px; color: #b7b7b7;">注：设定会员标签，便于管理及进行精准营销，最多可设置3个</p>
             </div>
-        </div> -->
+        </div>
         <!-- *ngIf="faceObj.length>0 ||headUrl" -->
         <div *ngIf="faceObj.length>0 ||headUrl">
             <div class="addStaffBox-main-left ">人脸识别</div>
