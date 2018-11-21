@@ -54,8 +54,8 @@ export class AddNewItemsComponent implements OnInit {
     ifShow: boolean = false;//门店错误提示
     spinBoolean: boolean = false;
 
-
-    
+    pictureDetails: any;
+    picIds: any = ''; //图片列表
     buyerNotes: any[] = [{ title: '', details: [{ item: '' }] }];//购买须知
     showPics: any = [];
     syncAlipay: string = 'F';
@@ -84,6 +84,9 @@ export class AddNewItemsComponent implements OnInit {
             productNo: [ null, [ Validators.pattern(`[0-9]+`)] ],
             status: [self.ItemsStatus[0].value, [ Validators.required  ] ],
             storeType: [ self.storeStatus[0].value, [ Validators.required ] ],
+            cutOffDays:[ null ],
+            wxBuyLimitNum:[ null ],
+            idx :[ null ]
         };
         this.form = this.fb.group(self.formData);
         this.getCategoryListInfor();//获取商品分类信息
@@ -360,6 +363,9 @@ export class AddNewItemsComponent implements OnInit {
                         productNo: [ res.data.productNo, [ Validators.pattern(`[0-9]+`)] ],
                         status: [ status, [ Validators.required  ] ],
                         storeType: [ storeType, [ Validators.required ] ],
+                        cutOffDays:[ res.data.cutOffDays],
+                        wxBuyLimitNum:[ res.data.wxBuyLimitNum ],
+                        idx :[ res.data.idx ],
                     };
                     this.picId = res.data.picId;
                     this.imagePath = res.data.picUrl? Config.OSS_IMAGE_URL+`${this.picId}/resize_${102}_${102}/mode_fill`: '';
@@ -417,15 +423,41 @@ export class AddNewItemsComponent implements OnInit {
         });
         return staffListInfor;
     }
-
+    
     submit() {
         let self = this;
+        let that = this;
         for (const i in this.form.controls) {
             this.form.controls[ i ].markAsDirty();
             this.form.controls[ i ].updateValueAndValidity();
         }
         if (this.form.invalid) return;
         let categoryInfor = this.form.controls.categoryInfor.value;
+        let buyerNotes: any = [];//购买须知
+
+        let picId = '';
+            that.picIds = '';
+            if (this.showPics.length > 0) {
+                this.showPics.forEach((item: any, index: number) => {
+                    if (item.imageId) {
+                        if (!that.picIds) {
+                            that.picIds += item.imageId;
+                        } else {
+                            that.picIds += ',' + item.imageId;
+                        }
+                    }
+                });
+            } else if (that.pictureDetails) {
+
+                that.pictureDetails.forEach(function (item: any) {
+                    if (!that.picIds) {
+                        that.picIds += item.pictureId;
+                    } else {
+                        that.picIds += ',' + item.pictureId;
+                    }
+                })
+            }
+        this.changeDataDetail(this.buyerNotes, buyerNotes);
         let params = {
             productName: this.form.controls.productName.value,
             productId: this.productId? this.productId : '',
@@ -440,8 +472,17 @@ export class AddNewItemsComponent implements OnInit {
             productNo: this.form.controls.productNo.value,
             picId: this.picId,
             applyStoreType: this.form.controls.storeType.value,
-            categoryType: 'SERVICE'
+            categoryType: 'SERVICE',
+            notice:JSON.stringify(buyerNotes) ,
+            descPicIds:this.picIds,
+            cutOffDays:this.form.controls.cutOffDays.value,
+            wxBuyLimitNum:this.form.controls.wxBuyLimitNum.value,
+            idx :this.form.controls.idx.value,
         };
+        if(!params.cutOffDays) delete params.cutOffDays;
+        if(!params.wxBuyLimitNum) delete params.wxBuyLimitNum;
+        if(!params.idx) delete params.idx;
+        console.log(params)
         if(this.ifShow == false){
           this.submitting = true;
           this.productService.saveAddProductInfor(params).subscribe(
@@ -514,5 +555,21 @@ export class AddNewItemsComponent implements OnInit {
         } else {
             this.buyerNotes.splice(index, 1);
         }
+    }
+
+    //提交的时候,转换数据
+    changeDataDetail(obj: any, transfor: any) {
+        obj.forEach((element: any, index: number, arr: any) => {
+            let list: any = [];
+            let group: any;
+            for (let i = 0; i < element.details.length; i++) {
+                list.push(element.details[i].item);
+                group = {
+                    title: element.title,
+                    details: list
+                };
+            }
+            transfor.push(group);
+        });
     }
 }
