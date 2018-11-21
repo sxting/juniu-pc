@@ -85,7 +85,7 @@
        <span class="iconfont {{showDiv?'icon-shangla':'icon-xiala1'}}" style="cursor: pointer;color:#ff6600;" (click)="showDivFun()">点击收起</span>
       </nz-form-control>
     </nz-form-item>
-    <div *ngIf="showDiv" >
+    <div  class="{{!showDiv?'displayNone':''}}">
       <nz-form-item>
         <nz-form-label nzXs="24" nzSm="7" nzFor="card_img">项目图片(选填)</nz-form-label>
         <nz-form-control nzXs="24" nzSm="12" nzMd="10">

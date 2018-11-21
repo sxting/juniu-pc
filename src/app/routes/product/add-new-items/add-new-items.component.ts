@@ -307,13 +307,7 @@ export class AddNewItemsComponent implements OnInit {
             )
         }
     }
-   /**获取其他门店图片 */
-   getPictureDetails(event: any) {
-    console.log(event);
-    let that = this;
-    // this.shopEdit.pictureDetails = [];
-    this.showPics = event;
-}
+  
     //上传图片接口
     uploadImage(event: any) {
         event = event ? event : window.event;
@@ -355,6 +349,33 @@ export class AddNewItemsComponent implements OnInit {
                     let status = res.data.putaway === 1? this.ItemsStatus[0].value : this.ItemsStatus[1].value;
                     let storeType = res.data.applyStoreType === 'CUSTOMIZE'? this.storeStatus[1].value : this.storeStatus[0].value;
                     let costPrice = res.data.costPrice?  res.data.costPrice/ 100 : null;
+                    var descPicIdArr = [];
+                    if (res.data.descPicIds) {
+                        let descPicId = res.data.descPicIds?res.data.descPicIds.split(','):[];
+                        if(descPicId&&descPicId.length>0){
+                            descPicId.forEach(i => {
+                                descPicIdArr.push({
+                                    imageId:i,
+                                    imageUrl:i
+                                })
+                            });
+                        }
+                    }
+                    console.log(descPicIdArr)
+                    
+                    self.pictureDetails = descPicIdArr;
+                    
+                    let descriptions: any = [];
+                    let buyerNotes: any = [];
+                    let transforBuyerNotes: any = [];
+                    let transforDescriptions: any = [];
+                    if (res.data.notice&&JSON.parse(res.data.notice.length)  > 0) {
+                        buyerNotes = JSON.parse(res.data.notice);
+                        self.editChangeData(buyerNotes, transforBuyerNotes);
+                    } else {
+                        transforBuyerNotes = self.buyerNotes;
+                    }
+                    self.buyerNotes = transforBuyerNotes;
                     this.formData = {
                         categoryInfor: [ categoryInfor, [ Validators.required ] ],
                         productName:[ res.data.productName, [ Validators.required ] ],
@@ -448,12 +469,11 @@ export class AddNewItemsComponent implements OnInit {
                     }
                 });
             } else if (that.pictureDetails) {
-
                 that.pictureDetails.forEach(function (item: any) {
                     if (!that.picIds) {
-                        that.picIds += item.pictureId;
+                        that.picIds += item.imageId;
                     } else {
-                        that.picIds += ',' + item.pictureId;
+                        that.picIds += ',' + item.imageId;
                     }
                 })
             }
@@ -505,6 +525,13 @@ export class AddNewItemsComponent implements OnInit {
         }
     }
 
+     /**获取其他门店图片 */
+   getPictureDetails(event: any) {
+        console.log(event);
+        let that = this;
+        // this.shopEdit.pictureDetails = [];
+        this.showPics = event;
+    }
     showDivFun(){
         this.showDiv = !this.showDiv;
     }
@@ -568,6 +595,24 @@ export class AddNewItemsComponent implements OnInit {
                     title: element.title,
                     details: list
                 };
+            }
+            transfor.push(group);
+        });
+    }
+
+    //编辑多来转化数据
+    editChangeData(object: any, transfor: any) {
+        object.forEach((element: any, index: number) => {
+            let group: any = {
+                title: element.title,
+                details: []
+            };
+            let list: any;
+            for (let i = 0; i < element.details.length; i++) {
+                list = {
+                    item: element.details[i]
+                };
+                group.details.push(list);
             }
             transfor.push(group);
         });

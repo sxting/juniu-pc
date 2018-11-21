@@ -37,7 +37,7 @@ export class UploadImageComponent implements OnInit, OnChanges {
    * @type {Array}
    */
   imageArray: ImageArray[] = [
-    { id: 1, imageId: '', name: 'one', src: '', showDelete: false }
+    { id: 1, imageId: '', name: 'one', src: '', showDelete: true }
   ];
   uploadImageResult: any;
   
@@ -47,7 +47,7 @@ export class UploadImageComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     for (let i = 1; i < this.uploadNum; i++) {
-      this.imageArray.push({ id: i, imageId: '', name: 'one', src: '', showDelete: false });
+      this.imageArray.push({ id: i, imageId: '', name: 'one', src: '', showDelete: true });
     }
   }
 
