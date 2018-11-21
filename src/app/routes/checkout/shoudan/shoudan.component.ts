@@ -98,7 +98,7 @@ export class ShoudanComponent implements OnInit {
   //选择门店
   onSelectStoreClick(e: any) {
     this.storeId = e.storeId;
-    this.branchName = e.branchName;
+    this.branchName = e.storeName;
     this.getOrderHistoryListHttp();
   }
   goToSubmitOrder(event: any) {
