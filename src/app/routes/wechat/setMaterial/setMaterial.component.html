@@ -1,0 +1,69 @@
+<nz-card
+  style="background:#fff;"
+  style="min-width:860px;"
+  class="{{settings.layout.collapsed?'settingsCollapsedTrue':'settingsCollapsedFalse'}}"
+  [nzBodyStyle]="{ height: '100%' }"
+>
+  <nz-card
+    [nzBordered]="false"
+    [nzBodyStyle]="{ height: '100%' }"
+    style="position: absolute;left: 0;top: 0;right: 0;bottom: 0;min-height:460px;min-width:860px;"
+  >
+    <nz-card
+      style="background:#fff;"
+      [nzBodyStyle]="{ height: '100%' }"
+      class="{{renlian?'renlianTrue':'renlianFalse'}}"
+    >
+      <div><h1>素材管理</h1></div>
+      <nz-tabset (nzSelectChange)="change($event)" [nzSelectedIndex]="index">
+        <nz-tab nzTitle="图片"> </nz-tab>
+        <nz-tab nzTitle="视频"> </nz-tab>
+      </nz-tabset>
+      <div>
+        <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">
+            {{ buttonText }}
+          </button>
+      </div>
+     
+
+      <div class="mainBox">
+        <div nz-col nzSpan="6" class="leftBox">
+            <div >
+                <div *ngFor="let item of fenzu;let ind = index;" class="fenzuLi {{item.check?'checked':''}}" (click)="fenzuCheck(ind)">{{item.name}}</div>
+            </div>
+            <button nz-button nzType="primary" type="submit" style="margin: 0 auto;display: block;" [nzLoading]="submitting">新建分组</button>
+        </div>
+        <div nz-col nzSpan="17" class="rightBox">
+            <div>
+                <span>{{fenzuName}}(20)</span>
+                <span class="buttons">重命名</span>
+                <span class="buttons">删除分组</span>
+            </div>
+
+            <div style="background: #e5e5e5;padding: 10px;margin-top: 10px;">
+                <label nz-checkbox [(ngModel)]="checked">全选</label>
+            </div>
+            <div class="imgBox">
+                <div  *ngFor="let item of imgbox" class="imgMain ">
+                    <img [src]="'./../../../../assets/img/product.png'" alt="" class="img">
+                    <div>发现总监设计</div>
+                    <div class="zhezhao {{item.checked?'imgbox2':''}}">
+                      <label nz-checkbox class="imgLable" [(ngModel)]="item.checked"></label>
+                      
+                      <nz-popover [nzTitle]="'备注'" [nzPlacement]="'bottom'">
+                        <span class="iconfont icon-dx"  nz-popover></span>
+                        <ng-template #nzTemplate>
+                          <div style="width:200px;overflow-wrap: break-word;">
+                            <p>hh</p>
+                          </div>
+                        </ng-template>
+                      </nz-popover>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+      </div>
+    </nz-card>
+  </nz-card>
+</nz-card>

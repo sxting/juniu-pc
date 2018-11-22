@@ -7,13 +7,15 @@ import { WechatOrderGroupComponent } from './orderGroup/orderGroup.component';
 import { WechatStatisticsComponent } from './resultStatistics/wechatStatistics.component';
 import { WxreleaseGroupsComponent } from './wxreleaseGroups/wxreleaseGroups.component';
 import { PingjiaComponent } from './pingjia/pingjia.component';
+import { SetMaterialComponent } from './setMaterial/setMaterial.component';
 
 const COMPONENT_NOROUNT = [
   GroupListComponent,
   WechatOrderGroupComponent,
   WechatStatisticsComponent,
   WxreleaseGroupsComponent,
-  PingjiaComponent
+  PingjiaComponent,
+  SetMaterialComponent
 ];
 
 @NgModule({

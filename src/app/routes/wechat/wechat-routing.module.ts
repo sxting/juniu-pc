@@ -5,6 +5,7 @@ import { WechatOrderGroupComponent } from './orderGroup/orderGroup.component';
 import { WechatStatisticsComponent } from './resultStatistics/wechatStatistics.component';
 import { WxreleaseGroupsComponent } from './wxreleaseGroups/wxreleaseGroups.component';
 import { PingjiaComponent } from './pingjia/pingjia.component';
+import { SetMaterialComponent } from './setMaterial/setMaterial.component';
 
 
 const routes: Routes = [
@@ -13,7 +14,7 @@ const routes: Routes = [
   { path: 'resultStatistics', component: WechatStatisticsComponent },
   { path: 'wxreleaseGroups', component: WxreleaseGroupsComponent },
   { path: 'pingjia', component: PingjiaComponent },
-
+  { path: 'setMaterial', component: SetMaterialComponent },
 ];
 
 @NgModule({
