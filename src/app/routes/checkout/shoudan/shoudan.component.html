@@ -6,7 +6,7 @@
     <div>
         <div class="quan-input-box" style="position: relative;">
             <span>输入金额:</span>
-            <input nz-input type="number" class="inputNumber" (keyup.enter)="scanPay(jiazai);" onkeyup="if(value>99999)value=99999;if(value<0)value=0.01;" [(ngModel)]="receiptCode"  placeholder="请输入收款金额" (ngModelChange)="inputChange($event)">
+            <input nz-input type="number" class="inputNumber" (keyup.enter)="scanPay(jiazai);" onkeyup="if(value>99999)value=99999;if(value<0)value=0.01;this.value=this.value.toString().match(/^\d+(?:\.\d{0,2})?/);" [(ngModel)]="receiptCode"  placeholder="请输入收款金额" (ngModelChange)="inputChange($event)">
             <!-- <nz-input-number [(ngModel)]="receiptCode" [nzSize]="'large'" placeholder="请输入收款金额" (ngModelChange)="inputChange($event)" [nzMin]="0.01" [nzMax]="999999" style="margin-left:10px;width: 300px !important;    z-index: 999;position: relative;" [nzStep]="0.01"></nz-input-number> -->
             <input nz-input  class="hidden" id="authCode1" (ngModelChange)="goToSubmitOrder($event)" style="width:128px;position: absolute;left:80px;top: 10px;"
         [(ngModel)]="authCode">

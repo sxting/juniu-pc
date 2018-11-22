@@ -110,7 +110,6 @@ export class ShoudanComponent implements OnInit {
     }
   }
   inputChange(event){
-    console.log(event)
     this.receiptCode = event;
   }
   getOrderHistoryListHttp(phone?: any) {
