@@ -110,7 +110,7 @@ export class ShoudanComponent implements OnInit {
     }
   }
   inputChange(event){
-    this.receiptCode = event;
+      this.receiptCode = event;
   }
   getOrderHistoryListHttp(phone?: any) {
     let self = this;
@@ -204,7 +204,8 @@ export class ShoudanComponent implements OnInit {
     });
   }
   scanPay(tpl: TemplateRef<{}>) {
-    if(this.receiptCode){
+    console.log(this.receiptCode>0)
+    if(this.receiptCode&&this.receiptCode>0){
       let self = this;
       this.modalSrv.create({
         nzTitle: null,
@@ -217,6 +218,11 @@ export class ShoudanComponent implements OnInit {
       });
          // 使条形码输入框处于选中状态
       setTimeout('document.getElementById("authCode1").focus()', 50);
+    }else{
+      this.modalSrv.error({
+        nzTitle: '温馨提示',
+        nzContent: '请输入正确的收款金额',
+      });
     }
     
  
