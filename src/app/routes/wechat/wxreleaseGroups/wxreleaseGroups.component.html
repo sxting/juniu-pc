@@ -28,7 +28,8 @@
                     <button class="buttons" (click)="checkProduct(product)" nz-button>选择商品</button>
                 </nz-input-group>
                 <div class="radioBox" *ngIf="radioValue">{{radioValue.productNo}}
-                    <span></span> {{radioValue.productName}}</div>
+                    <span></span> {{radioValue.productName}}
+                </div>
                 <span *ngIf="radioValue" (click)="radioBottomFun()" class="radioBottom">删除</span>
                 <p class="product-tip">请选择参与砍价的商品，一旦发布，活动期间该商品不可修改</p>
             </nz-form-control>
@@ -59,8 +60,6 @@
                             {{canMofidy?'':item.text}}
                         </span>
                         <input nz-input formControlName="peopleNumber" type="number"   [style.display]="ctrsBoo ? 'block' : 'none'">
-
-
                         <!-- <nz-radio-group formControlName="peopleNumber" (ngModelChange)="ctrsFun($event)" >
                             <label nz-radio [nzValue]="2">2</label>
                             <label nz-radio [nzValue]="3">3</label>
@@ -137,14 +136,18 @@
                                                             placeholder="请输入内容，最多输入100个字，更多内容点“添加更多”"></textarea>
                                                         <!-- <textarea type="text" name="details" maxlength="100" *ngIf="!canMofidy" disabled class="desc_textarea" [value]="detail.item"
                                                             (change)="getnoteDetaildata(j,noteIndex,$event.target.value)" placeholder="请输入内容，最多输入100个字，更多内容点“添加更多”"></textarea> -->
-                                                        <span class="descriptions_add_btn descriptions_btns" (click)="addLineNoteDetail(j)">添加更多</span>
-                                                        <span class="descriptions_minus_btn descriptions_btns" (click)="deleteNoteDetail(j,noteIndex)">删除</span>
+                                                        <nz-col *ngIf="canMofidy">
+                                                            <span class="descriptions_add_btn descriptions_btns" (click)="addLineNoteDetail(j)">添加更多</span>
+                                                            <span class="descriptions_minus_btn descriptions_btns" (click)="deleteNoteDetail(j,noteIndex)">删除</span>
+                                                        </nz-col>
                                                     </div>
                                                 </div>
-                                                <p class="double_btn">
-                                                    <span class="descriptions_addAll_btn" (click)="addGroupBuynote()">增加一组</span>
-                                                    <span class="descriptions_minusAll_btn" (click)="pluseGroupbuyNote(j)">删除此组</span>
-                                                </p>
+                                                <nz-col *ngIf="canMofidy">
+                                                    <p class="double_btn">
+                                                      <span class="descriptions_addAll_btn" (click)="addGroupBuynote()">增加一组</span>
+                                                      <span class="descriptions_minusAll_btn" (click)="pluseGroupbuyNote(j)">删除此组</span>
+                                                    </p>
+                                                </nz-col>
                                             </form>
                                         </div>
                                     </li>
@@ -162,11 +165,22 @@
                     <nz-range-picker [nzDisabled]="!canMofidy" formControlName="time"></nz-range-picker>
                 </nz-form-control>
             </nz-form-item>
-            <nz-form-item>
+            <!-- <nz-form-item>
                 <nz-form-label nzXs="24" nzFor="time2" nzSm="7">核销截止日期</nz-form-label>
                 <nz-form-control nzXs="24" nzSm="12" nzMd="8">
                     <nz-date-picker [nzDisabled]="!canMofidy" formControlName="time2" (ngModelChange)="endValueChange($event)"></nz-date-picker>
                     <p class="product-tip">核销截止日期不能早于活动结束日期</p>
+                </nz-form-control>
+            </nz-form-item> -->
+            <nz-form-item>
+                <nz-form-label nzXs="24" nzFor="time2" nzSm="7">核销截止日期</nz-form-label>
+                <nz-form-control nzXs="24" nzSm="12" nzMd="8">
+                    <p style="margin-right: 20px;">
+                        <label style="margin-right: 5px;">自购买之日起</label>
+                        <nz-input-number formControlName="verifyLimitDays" [nzDisabled]="!canMofidy" maxlength="3" [nzMin]="7" [nzMax]="180" style="width: 65px;" [nzStep]="1"></nz-input-number>
+                        <label style="margin-left: 5px;">天内可使用 </label>
+                        <label class="product-tip">可输入范围7-180天</label>
+                    </p>
                 </nz-form-control>
             </nz-form-item>
             <nz-form-item>
