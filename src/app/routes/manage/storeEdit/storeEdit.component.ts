@@ -214,8 +214,8 @@ export class StoreEditComponent implements OnInit {
                     this.xxaddress = res.data.address;
                     self.form = this.fb.group({
                         storeName: [res.data.branchName, []],
-                        address: [this.xxaddress, []],
-                        Alladdress: [null, []],
+                        address: [adress, []],
+                        Alladdress: [this.xxaddress, []],
                     });
                     this.data = {
                         address: res.data.address,
