@@ -81,9 +81,10 @@ export class ShoudanComponent implements OnInit {
               nzContent: '支付失败',
             });
           } else {
+            let arr :any = `<p>收款成功,</p><p>收款金额:${self.receiptCode}元,</p><p>收款门店:${self.branchName}</p>`;
             this.modalSrv.closeAll();
             this.modalSrv.success({
-              nzContent: `收款成功,收款金额:${self.receiptCode}元,收款门店:${self.branchName}`,
+              nzContent: arr,
             });
             this.getOrderHistoryListHttp();
           }
@@ -108,7 +109,10 @@ export class ShoudanComponent implements OnInit {
       this.jiesuanFun(event);
     }
   }
-
+  inputChange(event){
+    console.log(event)
+    this.receiptCode = event;
+  }
   getOrderHistoryListHttp(phone?: any) {
     let self = this;
     let data = {
@@ -201,18 +205,22 @@ export class ShoudanComponent implements OnInit {
     });
   }
   scanPay(tpl: TemplateRef<{}>) {
-    let self = this;
-    this.modalSrv.create({
-      nzTitle: null,
-      nzContent: tpl,
-      nzWidth: '500px',
-      nzOkText: null,
-      nzOnCancel: () => {
-        this.authCode = '';
-      },
-    });
-    // 使条形码输入框处于选中状态
-    setTimeout('document.getElementById("authCode1").focus()', 50);
+    if(this.receiptCode){
+      let self = this;
+      this.modalSrv.create({
+        nzTitle: null,
+        nzContent: tpl,
+        nzWidth: '500px',
+        nzOkText: null,
+        nzOnCancel: () => {
+          this.authCode = '';
+        },
+      });
+         // 使条形码输入框处于选中状态
+      setTimeout('document.getElementById("authCode1").focus()', 50);
+    }
+    
+ 
   }
   addNewCommissionRules() {
     this.router.navigate(['/checkout/meituanTicheng']);

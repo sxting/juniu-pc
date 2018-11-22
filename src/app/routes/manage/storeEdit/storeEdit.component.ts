@@ -104,7 +104,7 @@ export class StoreEditComponent implements OnInit {
             document.getElementById('pickerInput')['value'] = add;
         }
     }
-    mapFun() {
+    mapFun(boolean?:any) {
         let that = this;
         var windowsArr = [];
         var marker = [];
@@ -132,7 +132,7 @@ export class StoreEditComponent implements OnInit {
                 //city:'北京',
                 input: 'pickerInput'
             });
-            that.poiPickerReady(map, poiPicker, positionPicker);
+            that.poiPickerReady(map, poiPicker, positionPicker,boolean);
 
         });
     }
@@ -214,7 +214,7 @@ export class StoreEditComponent implements OnInit {
                     this.xxaddress = res.data.address;
                     self.form = this.fb.group({
                         storeName: [res.data.branchName, []],
-                        address: [adress, []],
+                        address: [this.xxaddress, []],
                         Alladdress: [null, []],
                     });
                     this.data = {
@@ -227,7 +227,7 @@ export class StoreEditComponent implements OnInit {
                         provinceCode: res.data.provinceCode,
                         timestamp: new Date().getTime()
                     }
-                    this.mapFun();
+                    this.mapFun(true);
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -241,7 +241,7 @@ export class StoreEditComponent implements OnInit {
         );
     }
 
-    poiPickerReady(map: any, poiPicker: any, positionPicker: any) {
+    poiPickerReady(map: any, poiPicker: any, positionPicker: any,boolean?:any) {
         let that = this;
         poiPicker = poiPicker;
 
@@ -280,7 +280,12 @@ export class StoreEditComponent implements OnInit {
             that.location = positionResult.position;
             // marker.setMap(map);
             // infoWindow.setMap(map);
-            that.xxaddress = positionResult.address;
+            if(!boolean){
+                that.xxaddress = positionResult.address;
+            }
+            if(Number(that.data.longitude)!== positionResult.position.lng){
+                that.xxaddress = positionResult.address;
+            }
             // marker.setPosition(positionResult.address);
             infoWindow.setPosition(positionResult.position);
             // let str = JSON.stringify(info, null, 2)
