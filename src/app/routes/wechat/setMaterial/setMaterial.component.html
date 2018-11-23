@@ -47,7 +47,7 @@
                 <div  *ngFor="let item of imgbox" class="imgMain ">
                     <img [src]="'./../../../../assets/img/product.png'" alt="" class="img">
                     <div>发现总监设计</div>
-                    <div class="zhezhao {{item.checked?'imgbox2':''}}">
+                    <div class="zhezhao {{item.checked?'imgMain2':''}}">
                       <label nz-checkbox class="imgLable" [(ngModel)]="item.checked"></label>
                       
                       <nz-popover [nzTitle]="'备注'" [nzPlacement]="'bottom'">
