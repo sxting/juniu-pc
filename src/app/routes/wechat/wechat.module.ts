@@ -9,6 +9,8 @@ import { WxreleaseGroupsComponent } from './wxreleaseGroups/wxreleaseGroups.comp
 import { PingjiaComponent } from './pingjia/pingjia.component';
 import { StaffListComponent } from './staff/staff-list/staff-list.component';
 import { StaffAddComponent } from './staff/staff-add/staff-add.component';
+import { SetMaterialComponent } from './setMaterial/setMaterial.component';
+
 
 const COMPONENT_NOROUNT = [
   GroupListComponent,
@@ -17,7 +19,8 @@ const COMPONENT_NOROUNT = [
   WxreleaseGroupsComponent,
   PingjiaComponent,
   StaffListComponent,
-  StaffAddComponent
+  StaffAddComponent,
+  SetMaterialComponent
 ];
 
 @NgModule({
