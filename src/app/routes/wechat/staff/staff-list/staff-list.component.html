@@ -1,0 +1,24 @@
+<nz-card [nzBordered]="false">
+  <div class="top-btn-box">
+    <button nz-button (click)="addStaffClick()" [nzType]="'primary'">
+      <span>新增展示技师</span>
+    </button>
+  </div>
+  <div>
+    <nz-table [nzNoResult]="'没有数据'" [nzData]="dataList" [nzShowPagination]="false">
+      <thead>
+      <tr>
+        <th *ngFor="let item of theadName"><span>{{item}}</span></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of dataList">
+        <td></td>
+      </tr>
+      </tbody>
+    </nz-table>
+    <div class="nzPaginationBox">
+      <nz-pagination class="nzPagination" (nzPageIndexClickChange)="paginate($event)" (nzPageIndexChange)="paginate($event)" [nzPageIndex]="1" [nzTotal]="countPage"></nz-pagination>
+    </div>
+  </div>
+</nz-card>

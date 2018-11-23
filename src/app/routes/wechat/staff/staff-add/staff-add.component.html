@@ -1,0 +1,119 @@
+<div class="content__title ad-ph">
+  <nz-breadcrumb>
+    <nz-breadcrumb-item>微信</nz-breadcrumb-item>
+    <nz-breadcrumb-item>微信门店</nz-breadcrumb-item>
+  </nz-breadcrumb>
+  <h1 class="title ng-star-inserted">新增展示手艺人</h1>
+  <div class="row">
+    <div class="desc">选择手艺人到微信小程序，可丰富手艺人信息及作品，方便顾客选择</div>
+  </div>
+</div>
+
+<nz-card [nzBordered]="false">
+  <form nz-form>
+    <div class="sub-title">选择展示手艺人</div>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="5" nzRequired>选择手艺人</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="15" nzMd="16">
+        <button nz-button >选择手艺人</button>
+        <span>请选择在微信小程序里展示的手艺人</span>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="5">手艺人擅长</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="15" nzMd="16">
+        <textarea nz-input maxlength="100"></textarea>
+        <div class="tip">添加手艺人擅长，方便顾客了解手艺人，限100个中文字符</div>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="5">手艺人简介</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="15" nzMd="16">
+        <textarea nz-input maxlength="100"></textarea>
+        <div class="tip">添加手艺人简介，方便顾客了解手艺人，限100个中文字符</div>
+      </nz-form-control>
+    </nz-form-item>
+    <div class="sub-title">添加作品</div>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="5">添加作品</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="15" nzMd="16">
+        <div class="add-new-work" (click)="onAddNewWorkClick(newWorkAlert)">+添加新作品</div>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-card>
+
+<ng-template #newWorkAlert>
+  <form>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="5">项目名称</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="15" nzMd="16">
+        <input type="text" nz-input placeholder="请填写作品名称">
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="5">展示类型</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="15" nzMd="16">
+        <nz-select (ngModelChange)="workTypeChange($event)" [ngModel]="workType" [ngModelOptions]="{standalone: true}">
+          <nz-option nzLabel="视频" [nzValue]="0" ></nz-option>
+          <nz-option nzLabel="图片" [nzValue]="1"></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <div *ngIf="workType === 0">
+        <nz-form-label nzXs="24" nzSm="5">上传附件</nz-form-label>
+        <nz-form-control nzXs="24" nzSm="15" nzMd="16">
+          <button nz-button (click)="onSelectSourceClick(sourceAlert)">选择素材</button>
+        </nz-form-control>
+      </div>
+      <div *ngIf="workType === 1">
+        <nz-form-label nzXs="24" nzSm="5">上传图片</nz-form-label>
+        <nz-form-control nzXs="24" nzSm="15" nzMd="16">
+          <juniu-upload-img [uploadNum]="5"></juniu-upload-img>
+        </nz-form-control>
+      </div>
+    </nz-form-item>
+  </form>
+</ng-template>
+
+<ng-template #sourceAlert>
+  <!--无素材-->
+  <div *ngIf="" class="no-source">
+    <div class="top">
+      <div class="icon-gantanhao iconfont"></div>
+      <div class="text">暂无素材</div>
+    </div>
+    <div>
+      <p>上传素材教程</p>
+      <h3>方式一</h3>
+      <div>1.直接在素材管理中上传视频，<span>去上传>></span></div>
+      <h3>方式二</h3>
+      <div class="lh30">
+        <div>1.绑定公众号</div>
+        <div>进入系统管理-员工-找到需要绑定员工-点击“微信图标”，员工扫描后就可绑定桔牛公众号</div>
+        <div>2.上传素材</div>
+        <div>关注公众号后点击图标，可选择“照片”(选择本地视频)或者“拍摄”两种方式上传视频，上传图片等。将不会在素材库中展示。</div>
+      </div>
+    </div>
+  </div>
+  <!--有素材-->
+  <div *ngIf="2" class="source">
+    <button class="" nz-button nzType="primary">上传视频</button>
+    <div class="source-content">
+      <div class="left">
+        <p>未分组</p>
+        <p>接发</p>
+        <p>烫发</p>
+      </div>
+      <div class="right">
+        <div class="work-item" *ngFor="let item of sourceList" (click)="onSourceItemClick(item)">
+          <span class="iconfont icon-success" *ngIf="selectedSourceId1 === item.id"></span>
+          <img src="/assets/img/wechat1.png" alt="">
+          <p>发型总监设计</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
