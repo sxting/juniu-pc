@@ -29,6 +29,15 @@
       </nz-radio-group>
     </nz-form-control>
   </nz-form-item>
+  <nz-form-item>
+    <nz-form-label nzXs="24" nzSm="7" nzFor="storeName">收款码收款通知</nz-form-label>
+    <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+      <nz-radio-group [(ngModel)]="msgRadioValue" (ngModelChange)="msgRadioChange($event)">
+        <label nz-radio nzValue="C2B_TPL_MSG">接收</label>
+        <label nz-radio nzValue="F">不接收</label>
+      </nz-radio-group>
+    </nz-form-control>
+  </nz-form-item>
   <nz-form-item style="background:#fff;">
     <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
       <button nz-button nzType="primary" type="submit" (click)="jiebang()" [nzLoading]="submitting">解绑</button>

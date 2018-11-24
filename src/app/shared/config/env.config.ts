@@ -22,8 +22,8 @@ let config = env === 'development' ? {
   ENV: 'DEV',
   //  API: '//biz.juniuo.com/merchant/',
   // API1: '//biz.juniuo.com/',
-    API: 'http://b-test.juniuo.com/merchant/',
-    API1: 'http://b-test.juniuo.com/',
+  API: 'http://b-test.juniuo.com/merchant/',
+  API1: 'http://b-test.juniuo.com/',
   IMGURL: 'http://ts.diankayi.net/',
   OSS_IMAGE_URL: 'http://fdfs.juniuo.com/juniuo-pic/picture/juniuo/'
 } : {
@@ -36,6 +36,3 @@ let config = env === 'development' ? {
   OSS_IMAGE_URL: 'http://fdfs.juniuo.com/juniuo-pic/picture/juniuo/'
 };
 export const Config: any = JSON.parse(JSON.stringify(config));
-
-
-
