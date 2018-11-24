@@ -27,6 +27,7 @@ export class WechatNotificationsComponent implements OnInit {
   WXname: string = ''; //微信名字
   openid: any;
   radioValue = 'WORK_REPORT_STORE';
+  msgRadioValue = "F";
   timer: any;
   constructor(
     private http: _HttpClient,
@@ -98,6 +99,7 @@ export class WechatNotificationsComponent implements OnInit {
             reportTypes = pushTypeList[0];
           }
           this.radioValue = reportTypes;
+          this.msgRadioValue = res.data.c2bTplMsg ? "C2B_TPL_MSG" : "F";
           this.openid = res.data.openid;
           if (!this.openid) {
             this.timer = setTimeout(() => {
@@ -156,6 +158,7 @@ export class WechatNotificationsComponent implements OnInit {
     let reportTypes = event === 'C'?[]:[event];
     let params = {
       pushTypeList: reportTypes,
+      pushChannel: "WECHAT_PUB",
       staffId: this.staffId,
       timestamp: new Date().getTime(),
     };
@@ -163,7 +166,35 @@ export class WechatNotificationsComponent implements OnInit {
       (res: any) => {
         self.submitting = false;
         if (res.success) {
-          self.msg.success(`微信推送配置成功`);
+          self.msg.success(`员工接收的报表类型配置成功`);
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo,
+          });
+        }
+      },
+      error => {
+        this.msg.warning(error);
+      },
+    );
+  }
+  //切换是否接收模版消息
+  msgRadioChange(event) {
+    let self = this;
+    this.submitting = true;
+    let reportTypes = event === 'F'?[]:[event];
+    let params = {
+      pushTypeList: reportTypes,
+      pushChannel: "WECHAT_TPL",
+      staffId: this.staffId,
+      timestamp: new Date().getTime(),
+    };
+    this.manageService.setPushWechat(params).subscribe(
+      (res: any) => {
+        self.submitting = false;
+        if (res.success) {
+          self.msg.success(`收款码收款通知配置成功`);
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',
