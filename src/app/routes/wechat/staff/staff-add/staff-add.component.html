@@ -15,8 +15,11 @@
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="5" nzRequired>选择手艺人</nz-form-label>
       <nz-form-control nzXs="24" nzSm="15" nzMd="16">
-        <button nz-button >选择手艺人</button>
-        <span>请选择在微信小程序里展示的手艺人</span>
+        <nz-select (ngModelChange)="onStaffChange($event)" [ngModel]="staffId" [ngModelOptions]="{standalone: true}">
+          <nz-option nzLabel="选择手艺人" [nzValue]="''" ></nz-option>
+          <nz-option nzLabel="{{item.staffName}}" [nzValue]="item.staffId" *ngFor="let item of staffList"></nz-option>
+        </nz-select>
+        <div class="tip">请选择在微信小程序里展示的手艺人</div>
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
@@ -37,7 +40,19 @@
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="5">添加作品</nz-form-label>
       <nz-form-control nzXs="24" nzSm="15" nzMd="16">
-        <div class="add-new-work" (click)="onAddNewWorkClick(newWorkAlert)">+添加新作品</div>
+        <div class="add-work-right">
+          <div class="work-item" *ngFor="let item of selectedWorkList">
+            <img class="video-icon" src="/assets/img/video-icon.png" alt="">
+            <img src="/assets/img/wechat1.png" alt="">
+            <p>发型总监设计</p>
+          </div>
+          <div class="add-new-work" (click)="onAddNewWorkClick(newWorkAlert)">+添加新作品</div>
+        </div>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 5 }">
+        <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">保存</button>
       </nz-form-control>
     </nz-form-item>
   </form>

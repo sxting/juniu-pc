@@ -16,11 +16,14 @@ export class StaffAddComponent implements OnInit {
   constructor(
     private wechatService: WechatService,
     private modalSrv: NzModalService,
-    private router: Router
+    private router: Router,
   ) { }
 
   form: FormGroup;
+  staffId: any = '';
+  staffList: any[] = [];
   workType: any = 1;
+  selectedWorkList: any = [];
   sourceList: any[] = [
     {
       id: 0
@@ -45,8 +48,16 @@ export class StaffAddComponent implements OnInit {
   selectedImageIds: any = []; //用来显示的数组
   selectedImages: any = []; //点击确认之后确认选择的图片
 
-  ngOnInit() {
+  submitting: boolean = false;
 
+
+  ngOnInit() {
+    this.getStaffList();
+
+  }
+
+  onStaffChange(e) {
+    this.staffId = e;
   }
 
   onAddNewWorkClick(tpl: any) {
@@ -126,6 +137,31 @@ export class StaffAddComponent implements OnInit {
 
   submit() {
 
+  }
+
+
+  /*=======分界线=======*/
+  errorAlter(err: any) {
+    this.modalSrv.error({
+      nzTitle: '温馨提示',
+      nzContent: err
+    });
+  }
+  getStaffList() {
+    let data = {
+      storeId: '1531800050458194516965'
+    };
+    this.wechatService.getStaffList(data).subscribe(
+      (res: any) => {
+        if (res.success) {
+          this.staffList = res.data.items;
+        } else {
+          this.errorAlter(res.errorInfo)
+        }
+
+      },
+      error => this.errorAlter(error)
+    )
   }
 
 }
