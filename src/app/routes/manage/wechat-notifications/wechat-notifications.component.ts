@@ -211,4 +211,8 @@ export class WechatNotificationsComponent implements OnInit {
   submit() {
     
   }
+
+  return() {
+    this.router.navigate(['/manage/staff/list']);
+  }
 }
