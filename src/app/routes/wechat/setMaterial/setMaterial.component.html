@@ -20,7 +20,7 @@
         <nz-tab nzTitle="视频"> </nz-tab>
       </nz-tabset>
       <div>
-        <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">
+        <button nz-button nzType="primary" type="submit" (click)="upFun(type?imgUp:mouveUp,buttonText)" [nzLoading]="submitting">
             {{ buttonText }}
           </button>
       </div>
@@ -29,32 +29,38 @@
       <div class="mainBox">
         <div nz-col nzSpan="6" class="leftBox">
             <div >
-                <div *ngFor="let item of fenzu;let ind = index;" class="fenzuLi {{item.check?'checked':''}}" (click)="fenzuCheck(ind)">{{item.name}}</div>
+                <div *ngFor="let item of fenzu;let ind = index;" class="fenzuLi {{item.check?'checked':''}}" (click)="fenzuCheck(ind,item)">{{item.groupName}}</div>
             </div>
-            <button nz-button nzType="primary" type="submit" style="margin: 0 auto;display: block;" [nzLoading]="submitting">新建分组</button>
+            <button nz-button nzType="primary" type="submit" style="margin: 0 auto;display: block;" [nzLoading]="submitting"  (click)="addName(addNamete)">新建分组</button>
         </div>
         <div nz-col nzSpan="17" class="rightBox">
             <div>
-                <span>{{fenzuName}}(20)</span>
-                <span class="buttons">重命名</span>
-                <span class="buttons">删除分组</span>
+                  <span>{{fenzuName}}({{countTotal}})</span>
+                  <span class="buttons" (click)="reName(reNamete)">重命名</span>
+                  <span class="buttons" (click)="deReName()">删除分组</span>
             </div>
 
             <div style="background: #e5e5e5;padding: 10px;margin-top: 10px;">
-                <label nz-checkbox [(ngModel)]="checked">全选</label>
+                <label nz-checkbox [(ngModel)]="checked" (ngModelChange)="checkAll($event)">全选</label>
+
+                <div style="float:right;" *ngIf="showButton">
+                  <span class="iconfont icon-icon- buttons" (click)="moveSome(moveGroup2)"></span>
+                  <span class="iconfont icon-delete buttons" (click)="DelSome(moveGroup2)"></span>
+                </div>
             </div>
             <div class="imgBox">
                 <div  *ngFor="let item of imgbox" class="imgMain ">
-                    <img [src]="'./../../../../assets/img/product.png'" alt="" class="img">
-                    <div>发现总监设计</div>
+                    <img [src]="item.pictureUrl||'assets/img/product.png'" alt="" class="img">
                     <div class="zhezhao {{item.checked?'imgMain2':''}}">
-                      <label nz-checkbox class="imgLable" [(ngModel)]="item.checked"></label>
+                      <label nz-checkbox class="imgLable"  [(ngModel)]="item.checked" (ngModelChange)="checkAllFun()"></label>
                       
-                      <nz-popover [nzTitle]="'备注'" [nzPlacement]="'bottom'">
+                      <nz-popover [nzTitle]="'操作'" [nzTrigger]="'click'" *ngIf="item.checked" [nzPlacement]="'bottomRight'">
                         <span class="iconfont icon-dx"  nz-popover></span>
+                    
                         <ng-template #nzTemplate>
-                          <div style="width:200px;overflow-wrap: break-word;">
-                            <p>hh</p>
+                          <div>
+                            <div class="buttons">删除</div>
+                            <div class="buttons"  (click)="moveGroupFun(moveGroup,item)">移动</div>
                           </div>
                         </ng-template>
                       </nz-popover>
@@ -67,3 +73,103 @@
     </nz-card>
   </nz-card>
 </nz-card>
+
+<!-- 移动分组 -->
+<ng-template #moveGroup>
+  <div >
+    <div *ngFor="let item of fenzu;let ind = index;" class="fenzuLi {{item.check?'checked':''}}" (click)="fenzuCheck(item)">{{item.groupName}}</div>
+</div>
+</ng-template>
+<!-- 移动分组 -->
+<ng-template #moveGroup2>
+    <div >
+      <div *ngFor="let item of fenzu;let ind = index;" class="fenzuLi {{item.check2?'checked':''}}" (click)="fenzuCheck2(item)">{{item.groupName}}</div>
+  </div>
+  </ng-template>
+
+<!-- 上传图片 -->
+<ng-template #imgUp>
+    <nz-form-item>
+        <nz-form-label nzXs="24"  nzFor="inventory" nzSm="7" >选择分组</nz-form-label>
+        <nz-form-control nzXs="24" nzSm="12" nzMd="15">
+            <nz-input-group nzSize="large">
+                <nz-select style="width: 100%;" [(ngModel)]="selectedOption2">
+                    <nz-option *ngFor="let option of fenzu" [nzLabel]="option.groupName" [nzValue]="option.groupId" >
+                    </nz-option>
+                </nz-select>
+            </nz-input-group>
+        </nz-form-control>
+    </nz-form-item>
+  <nz-form-item>
+    <nz-form-label nzXs="24"  nzFor="inventory" nzSm="7" >上传图片</nz-form-label>
+    <nz-form-control nzXs="24" nzSm="12" nzMd="15">
+        <nz-input-group nzSize="large">
+          <!-- <juniu-upload-img [image]="pictureDetails" [uploadNum]="5" [syncAlipay]="syncAlipay" [bizType]="'shop'" [isClear]="isClear"
+          (img)="getPictureDetails($event)"></juniu-upload-img> -->
+          <nz-upload
+            nzListType="picture-card"
+            [nzCustomRequest]="nzCustomRequestFun2"
+            [nzShowButton]="fileList2.length < 5"
+            [nzPreview]="handlePreview"
+            (nzChange)="moveChange2($event)">
+              <i class="anticon anticon-plus" (click)="bianda()"></i>
+              <div class="ant-upload-text">点击上传</div>
+          </nz-upload>
+          <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" (nzOnCancel)="previewVisible=false">
+            <ng-template #modalContent>
+              <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }" />
+            </ng-template>
+          </nz-modal>
+        </nz-input-group>
+        <p class="product-tip">上传素材图片，可选择上传多张，支持格式jpg、png等</p>
+    </nz-form-control>
+</nz-form-item>
+</ng-template>
+
+<!-- 上传视频 -->
+<ng-template #mouveUp>
+    <nz-form-item>
+        <nz-form-label nzXs="24"  nzFor="inventory" nzSm="7" >选择分组</nz-form-label>
+        <nz-form-control nzXs="24" nzSm="12" nzMd="15">
+            <nz-input-group nzSize="large">
+                <nz-select style="width: 100%;" (nzOpenChange)="console($event)" [(ngModel)]="selectedOption2">
+                    <nz-option *ngFor="let option of fenzu" [nzLabel]="option.name" [nzValue]="option" >
+                    </nz-option>
+                </nz-select>
+            </nz-input-group>
+        </nz-form-control>
+    </nz-form-item>
+  <nz-form-item>
+    <nz-form-label nzXs="24"  nzFor="inventory" nzSm="7" >上传视频</nz-form-label>
+    <nz-form-control nzXs="24" nzSm="12" nzMd="15">
+        <nz-input-group nzSize="large">
+            <nz-upload
+            [nzLimit]="2"
+            (nzChange)="moveChange($event)"
+            [nzCustomRequest]="nzCustomRequestFun"
+            [nzShowButton]="fileList.length < 1"
+            [nzDisabled]="uploading"            >
+            <button nz-button>
+              <i nz-icon type="upload"></i><span>点击上传</span>
+            </button>
+          </nz-upload>
+         
+        </nz-input-group>
+        <p class="product-tip">上传素材图片，可选择上传多张，支持格式jpg、png等</p>
+    </nz-form-control>
+</nz-form-item>
+</ng-template>
+
+<!-- 重命名 -->
+<ng-template #reNamete>
+  <div >
+      <input type="text" nz-input [(ngModel)]="reNameNg" placeholder="请输入分组名称" maxlength="8" />
+  </div>
+</ng-template>
+
+<!-- 新增分组 -->
+<ng-template #addNamete>
+  <div >
+      <input type="text" nz-input [(ngModel)]="addNameNg" placeholder="请输入分组名称" maxlength="8" />
+  </div>
+</ng-template>
