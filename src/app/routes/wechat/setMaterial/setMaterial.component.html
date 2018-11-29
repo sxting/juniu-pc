@@ -45,7 +45,7 @@
 
                 <div style="float:right;" *ngIf="showButton">
                   <span class="iconfont icon-icon- buttons" (click)="moveSome(moveGroup2)"></span>
-                  <span class="iconfont icon-delete buttons" (click)="DelSome(moveGroup2)"></span>
+                  <span class="iconfont icon-delete buttons" (click)="DelSome()"></span>
                 </div>
             </div>
             <div class="imgBox">
@@ -53,14 +53,14 @@
                     <img [src]="item.pictureUrl||'assets/img/product.png'" alt="" class="img">
                     <div class="zhezhao {{item.checked?'imgMain2':''}}">
                       <label nz-checkbox class="imgLable"  [(ngModel)]="item.checked" (ngModelChange)="checkAllFun()"></label>
-                      
+                      <span *ngIf="checkType === 'video'" class="iconfont icon-shipin" (click)="seeVideo(videoAlert,item)"></span>
                       <nz-popover [nzTitle]="'操作'" [nzTrigger]="'click'" *ngIf="item.checked" [nzPlacement]="'bottomRight'">
                         <span class="iconfont icon-dx"  nz-popover></span>
                     
                         <ng-template #nzTemplate>
                           <div>
-                            <div class="buttons">删除</div>
-                            <div class="buttons"  (click)="moveGroupFun(moveGroup,item)">移动</div>
+                            <div class="buttons" (click)="DelSome(item)">删除</div>
+                            <div class="buttons"  (click)="moveSome(moveGroup2,item)">移动</div>
                           </div>
                         </ng-template>
                       </nz-popover>
@@ -74,6 +74,12 @@
   </nz-card>
 </nz-card>
 
+<!-- 查看视频 -->
+<ng-template #videoAlert>
+  <video  controls="controls"  *ngIf="Property"   style="width:100%;">
+    <source id="video" [src]="videoAlert"  />
+  </video>
+</ng-template>
 <!-- 移动分组 -->
 <ng-template #moveGroup>
   <div >
@@ -132,8 +138,8 @@
         <nz-form-label nzXs="24"  nzFor="inventory" nzSm="7" >选择分组</nz-form-label>
         <nz-form-control nzXs="24" nzSm="12" nzMd="15">
             <nz-input-group nzSize="large">
-                <nz-select style="width: 100%;" (nzOpenChange)="console($event)" [(ngModel)]="selectedOption2">
-                    <nz-option *ngFor="let option of fenzu" [nzLabel]="option.name" [nzValue]="option" >
+                <nz-select style="width: 100%;"  [(ngModel)]="selectedOption2">
+                    <nz-option *ngFor="let option of fenzu" [nzLabel]="option.groupName" [nzValue]="option.groupId" >
                     </nz-option>
                 </nz-select>
             </nz-input-group>

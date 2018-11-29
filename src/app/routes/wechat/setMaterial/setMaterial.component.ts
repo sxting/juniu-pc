@@ -14,6 +14,7 @@ import { APP_TOKEN, ALIPAY_SHOPS, USER_INFO } from "../../../shared/define/juniu
 import { WechatService } from '../shared/wechat.service';
 import { UploadService } from '@shared/upload-img';
 import { HttpEvent } from '@angular/common/http';
+import { DomSanitizer } from '@angular/platform-browser';
 
 
 declare var layer: any;
@@ -52,6 +53,8 @@ export class SetMaterialComponent implements OnInit {
     reNameNg:any = '';
     showButton:any = false;
     groupId2:any;
+    checkType:any='image';
+    videoAlert:any='';
     // addNameNg:any = '';
     // addNameNg:any = '';
     checked:any;
@@ -61,6 +64,7 @@ export class SetMaterialComponent implements OnInit {
         private wechatService: WechatService,
         public settings: SettingsService,
         private router: Router,
+        private sanitizer: DomSanitizer,
         private uploadService: UploadService,
         private modalSrv: NzModalService,
     ) { }
@@ -72,8 +76,11 @@ export class SetMaterialComponent implements OnInit {
         console.log(item)
     }
     change(event){
+        this.showButton = false;
         this.type = event.index === 0 ? true : false;
         this.buttonText =  event.index === 0 ?'上传图片':'上传视频';
+        this.checkType = event.index === 0 ?'image':'video';
+        this.materialGroupsFun();
     }
     fenzuCheck(ind,item){
         this.fenzu.forEach(element => {
@@ -93,6 +100,11 @@ export class SetMaterialComponent implements OnInit {
         // this.shopEdit.pictureDetails = [];
         this.showPics = event;
     }
+    seeVideo(tpl:any,item:any){
+        let that = this;
+        
+        this.getVideoUrlById(item.videoId.replace(",",""),tpl)
+    }
     /*移动分组*/
     moveGroupFun(tpl:any,item:any){
         this.modalSrv.create({
@@ -110,11 +122,31 @@ export class SetMaterialComponent implements OnInit {
             nzContent: tpl,
             nzWidth: '800px',
             nzOnOk: () => {
-                let ids = ''
-                that.fileList2.forEach(e => {
-                    ids +=(e.response.pictureId+',')
-                });
-                that.materialSave('image',ids);
+                let ids = '';
+                let ids2 = '';
+                if((that.fileList2.length>0||that.fileList.length>0)&&that.selectedOption2){
+                    if(that.checkType === 'image'){
+                        that.fileList2.forEach(e => {
+                            ids +=(e.response.pictureId+',')
+                        });
+                    }else{
+                        that.fileList.forEach(e => {
+                            ids +=(e.response.pictureId+',')
+                            ids2+=(e.response.videoId+',')
+                        });
+                    }
+                    that.materialSave(that.checkType,ids,ids2);
+                }else if(that.fileList2.length === 0){
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: `请选择${this.checkType==='image'?'图片':'视频'}`
+                    });
+                }else if(!that.selectedOption2){
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: '请选择分组'
+                    });
+                }
             }
         });
     }
@@ -205,7 +237,7 @@ export class SetMaterialComponent implements OnInit {
             groupId:this.groupId,
             pageIndex:this.pageIndex,
             pageSize:10,
-            type:'image'
+            type:this.checkType
         };
         this.wechatService.materialList(data).subscribe(
             (res: any) => {
@@ -216,7 +248,7 @@ export class SetMaterialComponent implements OnInit {
                     this.imgbox.forEach(element => {
                         element.check = false;
                         element.pictureUrl = Config.OSS_IMAGE_URL
-                        + `${element.pictureId}/resize_80_60/mode_fill`;
+                        + `${element.pictureId.replace(",","")}/resize_80_60/mode_fill`;
                     });
                 } else {
                     this.modalSrv.error({
@@ -387,6 +419,8 @@ export class SetMaterialComponent implements OnInit {
         this.wechatService.materialSave(data).subscribe(
             (res: any) => {
                 if (res.success) {
+                    this.fileList2 = [];
+                    this.fileList = [];
                     this.materialGroupsFun();
                 } else {
                     this.modalSrv.error({
@@ -399,13 +433,18 @@ export class SetMaterialComponent implements OnInit {
         )
     }
     //移动
-    moveSome(tpl){
+    moveSome(tpl,item?:any){
         let that = this;
         let materialIds = '';
         this.groupId2 = this.fenzu[0].groupId;
-        this.imgbox.forEach(i => {
-            if(i.checked) materialIds+=(i.materialId+',');
-        });
+        if(item){
+            materialIds = item.materialId;
+        }else{
+            this.imgbox.forEach(i => {
+                if(i.checked) materialIds+=(i.materialId+',');
+            });
+        }
+        
         this.modalSrv.create({
             nzTitle: '移动分组',
             nzContent: tpl,
@@ -442,13 +481,17 @@ export class SetMaterialComponent implements OnInit {
             error => this.errorAlter(error)
         )
     }
-    DelSome(){
+    DelSome(item?:any){
         let that = this;
         let materialIds = '';
         this.groupId2 = this.fenzu[0].groupId;
-        this.imgbox.forEach(i => {
-            if(i.checked) materialIds+=(i.materialId+',');
-        });
+        if(item){
+            materialIds = item.materialId;
+        }else{
+            this.imgbox.forEach(i => {
+                if(i.checked) materialIds+=(i.materialId+',');
+            });
+        }
         this.modalSrv.confirm({
             nzTitle: '是否确认删除',
             nzOnOk: () =>{
@@ -465,6 +508,39 @@ export class SetMaterialComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     this.materialGroupsFun();
+                } else {
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: res.errorInfo
+                    });
+                }
+            },
+            error => this.errorAlter(error)
+        )
+    }
+   
+    Property:any = false;
+    getVideoUrlById(videoId,tpl){
+        let data = {
+            videoId : videoId
+        };
+        let that = this;
+        this.wechatService.getVideoUrlById(data).subscribe(
+            (res: any) => {
+                if (res.success) {
+                    // this.modalSrv.create({
+                    //     nzTitle: '查看视频',
+                    //     nzContent: tpl,
+                    //     nzWidth: '500px',
+                    //     nzOnOk: () => {
+                    //     }
+                    // });
+                    let str = res.data;
+                    that.videoAlert = str;
+                    this.Property = true;
+                    window.open(str)
+                    // this.videoAlert = res.data;
+                    // this.videoAlert = Config.OSS_IMAGE_URL+'kWHEyV-3hyJ_/resize_80_60/mode_fill`'
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',

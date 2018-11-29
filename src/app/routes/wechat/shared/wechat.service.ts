@@ -280,4 +280,15 @@ export class WechatService {
                 return Observable.throw(error);
             });
     }
+
+    //视频 http://b-test.juniuo.com/getVideoUrlById.json?videoId=kWHEyV-3hyJ_
+
+    getVideoUrlById(data) {
+        let apiUrl = Config.API1 + 'getVideoUrlById.json';
+        return this.http.get(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
 }
