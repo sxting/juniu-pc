@@ -187,4 +187,64 @@ export class WechatService {
           return Observable.throw(error);
         });
     }
+
+    //查询素材分组列表
+    getMaterialGroups(data) {
+      let apiUrl = Config.API1 + '/account/merchant/material/groups.json';
+      return this.http.get(apiUrl, data)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
+
+    //查询素材列表  /merchant/material/list.json
+    getMaterialList(data: any) {
+      let apiUrl = Config.API1 + '/account/merchant/material/list.json';
+      return this.http.get(apiUrl, data)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
+
+    //保存手艺人信息
+    saveStaffSetArtisan(data) {
+      let apiUrl = Config.API1 + '/account/merchant/staff/setArtisan.json';
+      return this.http.post(apiUrl, data)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
+
+    //查询手艺人信息  /merchant/staff/artisan/detail.json
+    getStaffArtisanDetail(data: any) {
+      let apiUrl = Config.API1 + '/account/merchant/staff/artisan/detail.json';
+      return this.http.get(apiUrl, data)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
+
+    //展示手艺人列表  /merchant/staff/artisan/page.json
+    getStaffArtisanList(data: any) {
+      let apiUrl = Config.API1 + '/account/merchant/staff/artisan/page.json';
+      return this.http.get(apiUrl, data)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
+
+    //删除展示的手艺人信息  /merchant/staff/artisan/del.json
+    delStaffArtisan(data: any) {
+      let apiUrl = Config.API1 + '/account/merchant/staff/artisan/del.json';
+      return this.http.get(apiUrl, data)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
 }

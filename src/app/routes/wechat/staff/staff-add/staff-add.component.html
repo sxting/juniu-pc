@@ -15,7 +15,7 @@
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="5" nzRequired>选择手艺人</nz-form-label>
       <nz-form-control nzXs="24" nzSm="15" nzMd="16">
-        <nz-select (ngModelChange)="onStaffChange($event)" [ngModel]="staffId" [ngModelOptions]="{standalone: true}">
+        <nz-select (ngModelChange)="onStaffChange($event)" [(ngModel)]="staffId" [ngModelOptions]="{standalone: true}">
           <nz-option nzLabel="选择手艺人" [nzValue]="''" ></nz-option>
           <nz-option nzLabel="{{item.staffName}}" [nzValue]="item.staffId" *ngFor="let item of staffList"></nz-option>
         </nz-select>
@@ -25,15 +25,15 @@
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="5">手艺人擅长</nz-form-label>
       <nz-form-control nzXs="24" nzSm="15" nzMd="16">
-        <textarea nz-input maxlength="100"></textarea>
-        <div class="tip">添加手艺人擅长，方便顾客了解手艺人，限100个中文字符</div>
+        <textarea nz-input maxlength="100" [(ngModel)]="advantage" [ngModelOptions]="{standalone: true}"></textarea>
+        <div class="tip">添加手艺人擅长，方便顾客了解手艺人，限100个字符</div>
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="5">手艺人简介</nz-form-label>
       <nz-form-control nzXs="24" nzSm="15" nzMd="16">
-        <textarea nz-input maxlength="100"></textarea>
-        <div class="tip">添加手艺人简介，方便顾客了解手艺人，限100个中文字符</div>
+        <textarea nz-input maxlength="100" [(ngModel)]="introduction" [ngModelOptions]="{standalone: true}"></textarea>
+        <div class="tip">添加手艺人简介，方便顾客了解手艺人，限100个字符</div>
       </nz-form-control>
     </nz-form-item>
     <div class="sub-title">添加作品</div>
@@ -41,10 +41,10 @@
       <nz-form-label nzXs="24" nzSm="5">添加作品</nz-form-label>
       <nz-form-control nzXs="24" nzSm="15" nzMd="16">
         <div class="add-work-right">
-          <div class="work-item" *ngFor="let item of selectedWorkList">
-            <img class="video-icon" src="/assets/img/video-icon.png" alt="">
-            <img src="/assets/img/wechat1.png" alt="">
-            <p>发型总监设计</p>
+          <div class="work-item" *ngFor="let item of addWorkList">
+            <img *ngIf="item.workType === 0" class="video-icon" src="/assets/img/video-icon.png" alt="">
+            <img src="{{item.picUrl}}" alt="">
+            <p>{{item.workName}}</p>
           </div>
           <div class="add-new-work" (click)="onAddNewWorkClick(newWorkAlert)">+添加新作品</div>
         </div>
@@ -52,7 +52,7 @@
     </nz-form-item>
     <nz-form-item>
       <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 5 }">
-        <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">保存</button>
+        <button nz-button nzType="primary" type="submit" [nzLoading]="submitting" (click)="saveStaffSetArtisan()">保存</button>
       </nz-form-control>
     </nz-form-item>
   </form>
@@ -61,9 +61,9 @@
 <ng-template #newWorkAlert>
   <form>
     <nz-form-item>
-      <nz-form-label nzXs="24" nzSm="5">项目名称</nz-form-label>
+      <nz-form-label nzXs="24" nzSm="5">作品名称</nz-form-label>
       <nz-form-control nzXs="24" nzSm="15" nzMd="16">
-        <input type="text" nz-input placeholder="请填写作品名称">
+        <input type="text" nz-input placeholder="请填写作品名称" [ngModel]="workName" (ngModelChange)="workNameChange($event)" [ngModelOptions]="{standalone: true}">
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
@@ -79,10 +79,14 @@
       <div>
         <nz-form-label nzXs="24" nzSm="5">上传附件</nz-form-label>
         <nz-form-control nzXs="24" nzSm="15" nzMd="16">
+          <div class="work-item dis-inb select-video" *ngIf="workType === 0 && selectedVideoId">
+            <img class="video-icon" src="/assets/img/video-icon.png" alt="">
+            <img src="{{selectedVideoImg}}" alt="">
+          </div>
           <button nz-button (click)="onSelectSourceClick(sourceAlert)">选择素材</button>
           <span *ngIf="workType === 1"> 上传手艺人作品展示图片，最多上传5张</span>
           <div>
-            <img *ngFor="let item of selectedImages" src="/assets/img/wechat1.png" alt="" class="img-item">
+            <img *ngFor="let item of selectedImages" src="{{item.pictureUrl}}" alt="" class="img-item">
           </div>
         </nz-form-control>
       </div>
@@ -96,22 +100,20 @@
     <button nz-button nzType="primary" (click)="goSetMaterialPage()">上传素材</button>
     <div class="source-content">
       <div class="left">
-        <p>未分组</p>
-        <p>接发</p>
-        <p>烫发</p>
+        <p [class.active-color]="groupId === 0" (click)="onGroupItemClick()">未分组</p>
+        <p [class.active-color]="groupId === item.groupId" *ngFor="let item of materialGroupList" (click)="onGroupItemClick(item)">{{item.groupName}}</p>
       </div>
       <div class="right" *ngIf="workType === 0">
-        <div class="work-item" *ngFor="let item of sourceList" (click)="onSourceItemClick(item)">
-          <span class="iconfont icon-success" *ngIf="selectedVideoId === item.id"></span>
-          <img src="/assets/img/wechat1.png" alt="">
-          <p>发型总监设计</p>
+        <div class="work-item" *ngFor="let item of materialListData" (click)="onSourceItemClick(item)">
+          <img class="video-icon" src="/assets/img/video-icon.png" alt="">
+          <span class="iconfont icon-success" *ngIf="selectedVideoId === item.materialId"></span>
+          <img src="{{item.pictureUrl}}" alt="">
         </div>
       </div>
       <div class="right" *ngIf="workType === 1">
-        <div class="work-item" *ngFor="let item of iamgeList" (click)="onSourceItemClick(item)">
-          <span class="iconfont icon-success" *ngIf="selectedImageIds.indexOf(item.id) >= 0"></span>
-          <img src="/assets/img/wechat1.png" alt="">
-          <p>发型总监设计</p>
+        <div class="work-item" *ngFor="let item of materialListData" (click)="onSourceItemClick(item)">
+          <span class="iconfont icon-success" *ngIf="selectedImageIds.indexOf(item.materialId) >= 0"></span>
+          <img src="{{item.pictureUrl}}" alt="">
         </div>
       </div>
     </div>

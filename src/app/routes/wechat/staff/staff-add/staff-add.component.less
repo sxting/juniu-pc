@@ -17,8 +17,8 @@
   border: 1px dashed #ccc;
   width: 160px;
   height: 200px;
-  text-align: center;
   line-height: 200px;
+  text-align: center;
   font-size: 14px;
   color: #c5c5c5;
   cursor: pointer;
@@ -70,19 +70,35 @@
       border-right: 1px solid #e8e8e8;
       text-align: center;
       line-height: 30px;
+
+      p {
+        cursor: pointer;
+      }
+
+      .active-color {
+        color: @primary-color;
+      }
     }
     .right {
       width: 600px;
       display: flex;
       flex-wrap: wrap;
-      justify-content: space-around;
+
+      .work-item {
+        margin-left: 30px;
+      }
     }
   }
 }
 
+.select-video {
+  margin-right: 20px;
+  vertical-align: top;
+}
+
 .work-item {
   width: 160px;
-  height: 200px;
+  height: 160px;
   border: 1px solid #e8e8e8;
   position: relative;
   text-align: center;
@@ -125,6 +141,7 @@
   flex-wrap: wrap;
 
   .work-item, .add-new-work {
+    height: 200px;
     margin-right: 30px;
   }
 }
