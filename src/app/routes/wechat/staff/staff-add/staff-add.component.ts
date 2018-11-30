@@ -20,20 +20,21 @@ export class StaffAddComponent implements OnInit {
     private wechatService: WechatService,
     private modalSrv: NzModalService,
     private router: Router,
+    private route: ActivatedRoute,
     private localStorageService: LocalStorageService
   ) { }
 
   merchantId: any = JSON.parse(
     this.localStorageService.getLocalstorage(USER_INFO),
   )['merchantId'];
-  storeId: any = '1531800050458194516965';
+  storeId: any = this.route.snapshot.params['storeId'];
   imgW: any = 160;
   imgH: any = 160;
 
   submitting: boolean = false;
   form: FormGroup;
-  staffId: any = '';
-  staffList: any[] = [];
+  staffId: any = this.route.snapshot.params['storeId'];
+  staffName: any = this.route.snapshot.params['staffName'];
   addWorkList: any = [];
 
   workName: string = '';
@@ -58,14 +59,7 @@ export class StaffAddComponent implements OnInit {
   advantage: string = '';
   introduction: string = '';
 
-  ngOnInit() {
-    this.getStaffList();
-
-  }
-
-  onStaffChange(e) {
-    this.staffId = e;
-  }
+  ngOnInit() {}
 
   onAddNewWorkClick(tpl: any) {
     this.workName = '';
@@ -231,22 +225,6 @@ export class StaffAddComponent implements OnInit {
       nzTitle: '温馨提示',
       nzContent: err
     });
-  }
-
-  getStaffList() {
-    let data = {
-      storeId: this.storeId
-    };
-    this.wechatService.getStaffList(data).subscribe(
-      (res: any) => {
-        if (res.success) {
-          this.staffList = res.data.items;
-        } else {
-          this.errorAlter(res.errorInfo)
-        }
-      },
-      error => this.errorAlter(error)
-    )
   }
 
   //素材分组
