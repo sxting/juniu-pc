@@ -1,0 +1,144 @@
+<div class="content__title ad-ph">
+  <nz-breadcrumb>
+    <nz-breadcrumb-item>微信</nz-breadcrumb-item>
+    <nz-breadcrumb-item>微信门店</nz-breadcrumb-item>
+  </nz-breadcrumb>
+  <h1 class="title ng-star-inserted">新增展示手艺人</h1>
+  <div class="row">
+    <div class="desc">选择手艺人到微信小程序，可丰富手艺人信息及作品，方便顾客选择</div>
+  </div>
+</div>
+
+<nz-card [nzBordered]="false">
+  <form nz-form>
+    <div class="sub-title">选择展示手艺人</div>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="5" nzRequired>选择手艺人</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="15" nzMd="16">
+        <nz-select (ngModelChange)="onStaffChange($event)" [(ngModel)]="staffId" [ngModelOptions]="{standalone: true}">
+          <nz-option nzLabel="选择手艺人" [nzValue]="''" ></nz-option>
+          <nz-option nzLabel="{{item.staffName}}" [nzValue]="item.staffId" *ngFor="let item of staffList"></nz-option>
+        </nz-select>
+        <div class="tip">请选择在微信小程序里展示的手艺人</div>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="5">手艺人擅长</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="15" nzMd="16">
+        <textarea nz-input maxlength="100" [(ngModel)]="advantage" [ngModelOptions]="{standalone: true}"></textarea>
+        <div class="tip">添加手艺人擅长，方便顾客了解手艺人，限100个字符</div>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="5">手艺人简介</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="15" nzMd="16">
+        <textarea nz-input maxlength="100" [(ngModel)]="introduction" [ngModelOptions]="{standalone: true}"></textarea>
+        <div class="tip">添加手艺人简介，方便顾客了解手艺人，限100个字符</div>
+      </nz-form-control>
+    </nz-form-item>
+    <div class="sub-title">添加作品</div>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="5">添加作品</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="15" nzMd="16">
+        <div class="add-work-right">
+          <div class="work-item" *ngFor="let item of addWorkList">
+            <img *ngIf="item.workType === 0" class="video-icon" src="/assets/img/video-icon.png" alt="">
+            <img src="{{item.picUrl}}" alt="">
+            <p>{{item.workName}}</p>
+          </div>
+          <div class="add-new-work" (click)="onAddNewWorkClick(newWorkAlert)">+添加新作品</div>
+        </div>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 5 }">
+        <button nz-button nzType="primary" type="submit" [nzLoading]="submitting" (click)="saveStaffSetArtisan()">保存</button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-card>
+
+<ng-template #newWorkAlert>
+  <form>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="5">作品名称</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="15" nzMd="16">
+        <input type="text" nz-input placeholder="请填写作品名称" [ngModel]="workName" (ngModelChange)="workNameChange($event)" [ngModelOptions]="{standalone: true}">
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="5">展示类型</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="15" nzMd="16">
+        <nz-select (ngModelChange)="workTypeChange($event)" [ngModel]="workType" [ngModelOptions]="{standalone: true}">
+          <nz-option nzLabel="视频" [nzValue]="0" ></nz-option>
+          <nz-option nzLabel="图片" [nzValue]="1"></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <div>
+        <nz-form-label nzXs="24" nzSm="5">上传附件</nz-form-label>
+        <nz-form-control nzXs="24" nzSm="15" nzMd="16">
+          <div class="work-item dis-inb select-video" *ngIf="workType === 0 && selectedVideoId">
+            <img class="video-icon" src="/assets/img/video-icon.png" alt="">
+            <img src="{{selectedVideoImg}}" alt="">
+          </div>
+          <button nz-button (click)="onSelectSourceClick(sourceAlert)">选择素材</button>
+          <span *ngIf="workType === 1"> 上传手艺人作品展示图片，最多上传5张</span>
+          <div>
+            <img *ngFor="let item of selectedImages" src="{{item.pictureUrl}}" alt="" class="img-item">
+          </div>
+        </nz-form-control>
+      </div>
+    </nz-form-item>
+  </form>
+</ng-template>
+
+<ng-template #sourceAlert>
+  <!--有素材-->
+  <div *ngIf="materialList.length > 0" class="source">
+    <button nz-button nzType="primary" (click)="goSetMaterialPage()">上传素材</button>
+    <div class="source-content">
+      <div class="left">
+        <p [class.active-color]="groupId === 0" (click)="onGroupItemClick()">未分组</p>
+        <p [class.active-color]="groupId === item.groupId" *ngFor="let item of materialGroupList" (click)="onGroupItemClick(item)">{{item.groupName}}</p>
+      </div>
+      <div class="right" *ngIf="workType === 0">
+        <div class="work-item" *ngFor="let item of materialListData" (click)="onSourceItemClick(item)">
+          <img class="video-icon" src="/assets/img/video-icon.png" alt="">
+          <span class="iconfont icon-success" *ngIf="selectedVideoId === item.materialId"></span>
+          <img src="{{item.pictureUrl}}" alt="">
+        </div>
+      </div>
+      <div class="right" *ngIf="workType === 1">
+        <div class="work-item" *ngFor="let item of materialListData" (click)="onSourceItemClick(item)">
+          <span class="iconfont icon-success" *ngIf="selectedImageIds.indexOf(item.materialId) >= 0"></span>
+          <img src="{{item.pictureUrl}}" alt="">
+        </div>
+      </div>
+    </div>
+    <div class="nzPaginationBox">
+      <nz-pagination class="nzPagination" (nzPageIndexClickChange)="paginate($event)" (nzPageIndexChange)="paginate($event)" [nzPageIndex]="1" [nzPageSize]="pageSize" [nzTotal]="countTotal"></nz-pagination>
+    </div>
+  </div>
+  <!--无素材-->
+  <div *ngIf="materialList.length === 0" class="no-source">
+    <div class="top">
+      <div class="icon-gantanhao iconfont"></div>
+      <div class="text">暂无素材</div>
+    </div>
+    <div>
+      <p>上传素材教程</p>
+      <h3>方式一</h3>
+      <div>1.直接在素材管理中上传素材，<span>去上传>></span></div>
+      <h3>方式二</h3>
+      <div class="lh30">
+        <div>1.绑定公众号</div>
+        <div>进入系统管理-员工-找到需要绑定员工-点击“微信图标”，员工扫描后就可绑定桔牛公众号</div>
+        <div>2.上传素材</div>
+        <div>关注公众号后点击图标，可选择“照片”(选择本地视频)或者“拍摄”两种方式上传视频，上传图片等。将不会在素材库中展示。</div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
