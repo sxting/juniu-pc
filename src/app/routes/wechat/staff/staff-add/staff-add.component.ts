@@ -47,6 +47,7 @@ export class StaffAddComponent implements OnInit {
   groupId: any = 0;
   pageIndex: any = 1;
   pageSize: any = 9;
+  countTotal: any = 0;
 
   materialGroupList: any[] = [];
   materialList: any[] = [];
@@ -195,6 +196,11 @@ export class StaffAddComponent implements OnInit {
     }
   }
 
+  paginate(event: any) {
+    this.pageIndex = event;
+    this.getMaterialList();
+  }
+
   goSetMaterialPage() {
     this.router.navigateByUrl('/wechat/setMaterial');
     this.modalSrv.closeAll();
@@ -261,6 +267,7 @@ export class StaffAddComponent implements OnInit {
           res.data.dataList.forEach(function(item: any) {
             item.pictureUrl = Config.OSS_IMAGE_URL+`${item.pictureId}/resize_${self.imgW}_${self.imgH}/mode_fill`;
           });
+          this.countTotal = res.data.pageInfo.countTotal;
           this.materialListData = res.data.dataList;
           this.materialList = this.materialList.concat(res.data.dataList);
         } else {

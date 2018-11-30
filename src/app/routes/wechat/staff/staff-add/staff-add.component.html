@@ -96,7 +96,7 @@
 
 <ng-template #sourceAlert>
   <!--有素材-->
-  <div *ngIf="2" class="source">
+  <div *ngIf="materialList.length > 0" class="source">
     <button nz-button nzType="primary" (click)="goSetMaterialPage()">上传素材</button>
     <div class="source-content">
       <div class="left">
@@ -117,9 +117,12 @@
         </div>
       </div>
     </div>
+    <div class="nzPaginationBox">
+      <nz-pagination class="nzPagination" (nzPageIndexClickChange)="paginate($event)" (nzPageIndexChange)="paginate($event)" [nzPageIndex]="1" [nzPageSize]="pageSize" [nzTotal]="countTotal"></nz-pagination>
+    </div>
   </div>
   <!--无素材-->
-  <div *ngIf="" class="no-source">
+  <div *ngIf="materialList.length === 0" class="no-source">
     <div class="top">
       <div class="icon-gantanhao iconfont"></div>
       <div class="text">暂无素材</div>
