@@ -10,6 +10,7 @@ import { PingjiaComponent } from './pingjia/pingjia.component';
 import { StaffListComponent } from './staff/staff-list/staff-list.component';
 import { StaffAddComponent } from './staff/staff-add/staff-add.component';
 import { SetMaterialComponent } from './setMaterial/setMaterial.component';
+import { StoreWorkComponent } from './storeWork/storeWork.component';
 
 
 const COMPONENT_NOROUNT = [
@@ -20,7 +21,8 @@ const COMPONENT_NOROUNT = [
   PingjiaComponent,
   StaffListComponent,
   StaffAddComponent,
-  SetMaterialComponent
+  SetMaterialComponent,
+  StoreWorkComponent
 ];
 
 @NgModule({

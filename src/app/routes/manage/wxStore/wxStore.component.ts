@@ -761,12 +761,14 @@ export class WxStoreComponent implements OnInit {
     // 修改门店详情（微信门店）
     modifyDetail(data: any,type?:any) {
         this.submitting = true;
+        let that = this;
         this.manageService.modifyDetail(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     this.submitting = false;
                     if(type){
-                        
+                        if(type === 'jishi')this.router.navigate(['wechat/staff/list',{storeId : that.storeId}]);
+                        if(type === 'dianpu')this.router.navigate(['wechat/storeWork',{storeId : that.storeId}]);
                     }else{
                         this.router.navigate(['/manage/storeList']);
                     }
