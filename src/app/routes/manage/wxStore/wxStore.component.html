@@ -102,6 +102,12 @@
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
+    <nz-form-label nzXs="24" nzSm="7">展示门店</nz-form-label>
+    <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+      <nz-switch nzCheckedChildren="开" [ngModel]="switch4" (ngModelChange)="switchFun(4)" nzUnCheckedChildren="关"></nz-switch>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
     <nz-form-label nzXs="24" nzSm="7">展示商品</nz-form-label>
     <nz-form-control nzXs="24" nzSm="12" nzMd="10">
       <nz-switch nzCheckedChildren="开" [ngModel]="switch1" (ngModelChange)="switchFun(1)" nzUnCheckedChildren="关"></nz-switch>
@@ -132,9 +138,15 @@
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-label nzXs="24" nzSm="7">展示门店</nz-form-label>
+    <nz-form-label nzXs="24" nzSm="7">店铺作品</nz-form-label>
     <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-      <nz-switch nzCheckedChildren="开" [ngModel]="switch4" (ngModelChange)="switchFun(4)" nzUnCheckedChildren="关"></nz-switch>
+      <span class="setClick" (click)="goZuopin('dianpu')">点击设置></span>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item *ngIf="(this.staffIdsArr&&this.staffIdsArr.length>0)||(this.staffIds&&this.staffIds.split(',').length>0)">
+    <nz-form-label nzXs="24" nzSm="7">技师作品</nz-form-label>
+    <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+      <span class="setClick" (click)="goZuopin('jishi')">点击设置></span>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
