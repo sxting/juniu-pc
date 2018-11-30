@@ -41,10 +41,13 @@
       <nz-form-label nzXs="24" nzSm="5">添加作品</nz-form-label>
       <nz-form-control nzXs="24" nzSm="15" nzMd="16">
         <div class="add-work-right">
-          <div class="work-item" *ngFor="let item of addWorkList">
+          <div class="work-item" *ngFor="let item of addWorkList;let index = index" (mouseenter)="onWorkItemHover(index)" (mouseleave)="onWorkItemLeave()">
             <img *ngIf="item.workType === 0" class="video-icon" src="/assets/img/video-icon.png" alt="">
             <img src="{{item.picUrl}}" alt="">
             <p>{{item.workName}}</p>
+            <div class="work-item-hover" *ngIf="index === workItemHoverIndex">
+              <div (click)="onDeleteWorkItemClick()">删除</div>
+            </div>
           </div>
           <div class="add-new-work" (click)="onAddNewWorkClick(newWorkAlert)">+添加新作品</div>
         </div>

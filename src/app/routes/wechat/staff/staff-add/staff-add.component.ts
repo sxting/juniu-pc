@@ -53,6 +53,8 @@ export class StaffAddComponent implements OnInit {
   materialList: any[] = [];
   materialListData: any[] = [];
 
+  workItemHoverIndex: any = '';
+
   advantage: string = '';
   introduction: string = '';
 
@@ -204,6 +206,18 @@ export class StaffAddComponent implements OnInit {
   goSetMaterialPage() {
     this.router.navigateByUrl('/wechat/setMaterial');
     this.modalSrv.closeAll();
+  }
+
+  onWorkItemHover(index: any) {
+    this.workItemHoverIndex = index;
+  }
+
+  onWorkItemLeave() {
+    this.workItemHoverIndex = '';
+  }
+
+  onDeleteWorkItemClick() {
+    this.addWorkList.splice(this.workItemHoverIndex, 1)
   }
 
   submit() {
