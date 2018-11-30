@@ -33,7 +33,8 @@ let config = env === 'development' ? {
   // API: '//biz.juniuo.com/merchant/',
   // API1: '//biz.juniuo.com/',
   IMGURL: 'http://ts.diankayi.net/',
-  OSS_IMAGE_URL: 'http://fdfs.juniuo.com/juniuo-pic/picture/juniuo/'
+  OSS_IMAGE_URL: 'http://fdfs.juniuo.com/juniuo-pic/picture/juniuo/',
+  OSS_VIDEO_URL: 'https://juniuo-pic.oss-cn-beijing.aliyuncs.com/picture/201811/28/'  
 };
 export const Config: any = JSON.parse(JSON.stringify(config));
 

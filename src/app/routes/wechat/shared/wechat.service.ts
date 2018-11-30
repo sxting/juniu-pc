@@ -7,11 +7,15 @@ import { Config } from '../../../shared/config/env.config';
 import { FunctionUtil } from '../../../shared/funtion/funtion-util';
 import { NzModalService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
+import { USER_INFO } from '@shared/define/juniu-define';
+import { HttpEvent } from '@angular/common/http';
+import { LocalStorageService } from '@shared/service/localstorage-service';
 
 @Injectable()
 export class WechatService {
-    api: any = Config.API1 + 'pintuan'
-    constructor(private http: _HttpClient, private modalSrv: NzModalService) { }
+    api: any = Config.API1 + 'pintuan';
+    responseData: any;
+    constructor(private http: _HttpClient, private localStorageService: LocalStorageService,private modalSrv: NzModalService) { }
     // 开始拼团活动
     pintuanStart(Params: any) {
         // let apiUrl = Config.API1 + '/merchant/activity/start.json';
@@ -178,6 +182,7 @@ export class WechatService {
             });
     }
 
+
     //查询手艺人列表  https://biz.juniuo.com/account/merchant/staff/select.json?storeId=1530602323164136822988
     getStaffList(data) {
       let apiUrl = Config.API1 + 'account/merchant/staff/select.json';
@@ -246,5 +251,115 @@ export class WechatService {
         .catch(error => {
           return Observable.throw(error);
         });
+    }
+
+    //上传视频  
+    uploadMaterial(data) {
+        let apiUrl =  Config.API1 + '/merchant/upload/material.json';
+        return this.http.post(apiUrl,'', data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+
+    //查询素材列表、分页
+    materialList(data) {
+        let apiUrl = Config.API1 + 'account/merchant/material/list.json';
+        return this.http.get(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    //查询素材分组列表 
+    materialGroups(data) {
+        let apiUrl = Config.API1 + 'account/merchant/material/groups.json';
+        return this.http.get(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+
+    //删除素材分组
+    materialDelGroup(data) {
+        let apiUrl =  Config.API1 + 'account/merchant/material/delGroup.json';
+        return this.http.post(apiUrl,'', data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    //新建素材分组
+    materialAddGroup(data) {
+        let apiUrl =  Config.API1 + 'account/merchant/material/addGroup.json';
+        return this.http.post(apiUrl,'', data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    //修改素材分组名称
+    materialSaveGroup(data) {
+        let apiUrl =  Config.API1 + 'account/merchant/material/saveGroup.json';
+        return this.http.post(apiUrl,'', data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+     /**
+     * 上传视频
+     * @param files
+     * @returns {Promise<T>}
+     */
+
+    materPostWithFile(formData) {
+        let apiUrl = Config.API1 + '/merchant/upload/material.json';
+        return this.http.post(apiUrl,'', formData)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+
+    //保存素材分组
+    materialSave(data) {
+        let apiUrl =  Config.API1 + 'account/merchant/material/save.json';
+        return this.http.post(apiUrl,'', data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    //移动素材到其他分组
+    materialMove(data) {
+        let apiUrl =  Config.API1 + 'account/merchant/material/move.json';
+        return this.http.post(apiUrl,'', data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    //删除素材
+    materialDel(data) {
+        let apiUrl =  Config.API1 + 'account/merchant/material/del.json';
+        return this.http.post(apiUrl,'', data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+
+    //视频 http://b-test.juniuo.com/getVideoUrlById.json?videoId=kWHEyV-3hyJ_
+
+    getVideoUrlById(data) {
+        let apiUrl = Config.API1 + 'getVideoUrlById.json';
+        return this.http.get(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
     }
 }

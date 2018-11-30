@@ -60,7 +60,47 @@
       </nz-form-control>
     </nz-form-item>
 
+
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7">服务环境</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <juniu-upload-img [image]="pictureDetails2" [uploadNum]="10" [syncAlipay]="syncAlipay" [bizType]="'shop'" [isClear]="isClear"
+          (img)="getPictureDetails($event)"></juniu-upload-img>
+        <div style="font-size:14px;line-height:16px;color:#b7b7b7;">
+          上传店铺服务环境照片，最多上传10张门店图片。推荐分辨率750*360.
+        </div>
+      </nz-form-control>
+    </nz-form-item>
   </form>
+  <nz-form-item>
+    <nz-form-label nzXs="24" nzSm="7">店铺标签</nz-form-label>
+    <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+      <nz-tag
+      *ngFor="let tag of tags; let i = index;"
+      [nzMode]="'closeable'"
+      (nzAfterClose)="handleClose(tag)">
+      {{ sliceTagName(tag) }}
+    </nz-tag>
+    <nz-tag
+      *ngIf="!inputVisible"
+      class="editable-tag"
+      (click)="showInput()">
+      <i nz-icon type="plus" *ngIf="tags&&tags.length>9"></i>新的标签+
+    </nz-tag>
+    <input
+      #inputElement
+      nz-input
+      *ngIf="inputVisible" type="text"
+      maxlength="10"
+      [(ngModel)]="inputValue"
+      style="width: 78px;"
+      (blur)="handleInputConfirm()"
+      (keydown.enter)="handleInputConfirm()">
+      <div style="font-size:14px;line-height:16px;color:#b7b7b7;">
+        设置店铺标签，最多10个，请以空格隔开，例：免费Wi-Fi  特色小吃  新客优惠  免费停车场
+      </div>
+    </nz-form-control>
+  </nz-form-item>
   <nz-form-item>
     <nz-form-label nzXs="24" nzSm="7">展示商品</nz-form-label>
     <nz-form-control nzXs="24" nzSm="12" nzMd="10">

@@ -8,6 +8,8 @@ import { LocalStorageService } from '@shared/service/localstorage-service';
 import { STORES_INFO, USER_INFO } from '@shared/define/juniu-define';
 import { ActivatedRoute } from '@angular/router';
 import { Validators } from '@angular/forms';
+import { ViewChild } from '@angular/core';
+import { ElementRef } from '@angular/core';
 
 @Component({
     selector: 'app-wxStore',
@@ -22,8 +24,10 @@ export class WxStoreComponent implements OnInit {
     data: any = [];
     isClear: boolean = false;
     showPics: any = [];
+    showPics2: any = [];
     syncAlipay: string = 'F';
     allproducks: any = [];
+    
     objArr: any = [];
     allcards: any = [];
     list: any[] = [];
@@ -37,7 +41,7 @@ export class WxStoreComponent implements OnInit {
     nodes: any = [];
     eventCheckedKeys: any = [];
     pictureDetails: any = [];
-
+    pictureDetails2: any = [];
     staffIds: any = '';
     staffIdsCount: any = 0;
     cardConfigRuleIds: any = '';
@@ -55,6 +59,14 @@ export class WxStoreComponent implements OnInit {
     switch4: boolean = false;
     staffList: any;
     staffIdsArr: any;
+
+
+
+
+    tags = [];
+    inputVisible = false;
+    inputValue = '';
+    @ViewChild('inputElement') inputElement: ElementRef;
     constructor(
         private localStorageService: LocalStorageService,
         public msg: NzMessageService,
@@ -198,6 +210,13 @@ export class WxStoreComponent implements OnInit {
         // this.shopEdit.pictureDetails = [];
         this.showPics = event;
 
+    }
+
+    getPictureDetails2(event:any){
+        console.log(event);
+        let that = this;
+        // this.shopEdit.pictureDetails = [];
+        this.showPics2 = event;
     }
     // 获取全部商品
     getAllbuySearchs() {
@@ -865,4 +884,35 @@ export class WxStoreComponent implements OnInit {
         }
         return t;
     }
+
+    handleClose(removedTag: {}): void {
+        this.tags = this.tags.filter(tag => tag !== removedTag);
+      }
+    
+      sliceTagName(tag: string): string {
+        const isLongTag = tag.length > 20;
+        return isLongTag ? `${tag.slice(0, 20)}...` : tag;
+      }
+    
+      showInput(): void {
+        if(this.tags.length>9){
+            this.modalSrv.error({
+                nzTitle: '温馨提示',
+                nzContent: '最多十个标签'
+            });
+        }else{
+            this.inputVisible = true;
+            setTimeout(() => {
+            this.inputElement.nativeElement.focus();
+            }, 10);
+        }
+      }
+    
+      handleInputConfirm(): void {
+        if (this.inputValue && this.tags.indexOf(this.inputValue) === -1) {
+          this.tags.push(this.inputValue);
+        }
+        this.inputValue = '';
+        this.inputVisible = false;
+      }
 }
