@@ -628,7 +628,7 @@ export class WxStoreComponent implements OnInit {
             arr.isLeaf = true;
         }
     }
-    submit() {
+    submit(type:any) {
         let that = this;
         for (const i in this.form.controls) {
             this.form.controls[i].markAsDirty();
@@ -680,7 +680,7 @@ export class WxStoreComponent implements OnInit {
                 storeId: this.storeId,
                 timestamp: new Date().getTime()
             }
-            this.modifyDetail(data);
+            this.modifyDetail(data,type);
         }
     }
 
@@ -759,13 +759,17 @@ export class WxStoreComponent implements OnInit {
         );
     }
     // 修改门店详情（微信门店）
-    modifyDetail(data: any) {
+    modifyDetail(data: any,type?:any) {
         this.submitting = true;
         this.manageService.modifyDetail(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     this.submitting = false;
-                    this.router.navigate(['/manage/storeList']);
+                    if(type){
+                        
+                    }else{
+                        this.router.navigate(['/manage/storeList']);
+                    }
                 } else {
                     this.submitting = false;
                     this.modalSrv.error({
@@ -914,5 +918,13 @@ export class WxStoreComponent implements OnInit {
         }
         this.inputValue = '';
         this.inputVisible = false;
+      }
+      goZuopin(type){
+        let that = this;
+        this.modalSrv.confirm({
+            nzTitle: '当前页面内容已做修改，请先保存后在去编辑?',
+            nzOnOk: () => {that.submit(type)},
+            nzOkText : '保存并去设置'
+          });
       }
 }
