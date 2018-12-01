@@ -304,7 +304,7 @@ export class SetMaterialComponent implements OnInit {
         });
     }
     //删除分组
-    deReName(groupId){
+    deReName(){
         let that = this;
         this.modalSrv.confirm({
             nzTitle: '是否确认删除',

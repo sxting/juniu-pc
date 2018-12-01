@@ -628,7 +628,7 @@ export class WxStoreComponent implements OnInit {
             arr.isLeaf = true;
         }
     }
-    submit(type:any) {
+    submit(type?:any) {
         let that = this;
         for (const i in this.form.controls) {
             this.form.controls[i].markAsDirty();
