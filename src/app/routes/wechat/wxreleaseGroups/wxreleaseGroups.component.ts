@@ -81,6 +81,7 @@ export class WxreleaseGroupsComponent implements OnInit {
     get timeLimit() { return this.form.controls.timeLimit; }
     get originalPrice() { return this.form.controls.originalPrice; }
     get presentPrice() { return this.form.controls.presentPrice; }
+    get verifyLimitDays(){ return this.form.controls.verifyLimitDays; }
     get mock() { return this.form.controls.mock; }
 
     error = '';
@@ -116,6 +117,7 @@ export class WxreleaseGroupsComponent implements OnInit {
             presentPrice: [null, [Validators.required, Validators.pattern(/^[0-9]+(.[0-9]{1,2})?$/), Validators.max(99999999), Validators.min(0.01)]],
             time: [null, [Validators.required]],
             time2: [null, [Validators.required]],
+            verifyLimitDays: [null, [Validators.required, Validators.pattern(/^[0-9]\d*$/), Validators.minLength(1), Validators.maxLength(3), Validators.max(180), Validators.min(7)]],
             mock: [false]
 
         });
@@ -193,6 +195,7 @@ export class WxreleaseGroupsComponent implements OnInit {
                     activityId: this.pinTuanId,
                     activityName: this.pinTuanName.value,
                     timeLimit: this.timeLimit.value,
+                    verifyLimitDays: this.verifyLimitDays.value,
                     peopleCount: this.ctrsBoo ? this.peopleNumber.value : this.peopleNumber2,
                     activityStartDate: this.startTime,
                     activityEndDate: this.endTime,
@@ -231,9 +234,7 @@ export class WxreleaseGroupsComponent implements OnInit {
                 if (!data.timeLimit) {
                     data.timeLimit = 24;
                 }
-                if ((new Date(data.settleEndDate).getTime() - new Date(data.activityStartDate).getTime()) > (180 * 24 * 60 * 60 * 1000)) {
-                    this.errorAlter('核销截止日期与活动开始日期相差不能大于180天，否则无法退款！');
-                } else if (!data.activityStartDate || !data.activityEndDate) {
+                if (!data.activityStartDate || !data.activityEndDate) {
                     this.errorAlter('请选择活动日期');
                 }
                 else if (data.peopleCount * 1 > data.products[0].inventory * 1) {
@@ -555,6 +556,7 @@ export class WxreleaseGroupsComponent implements OnInit {
                     let originalPrice = res.data.product[0].originalPrice ? NP.divide(res.data.product[0].originalPrice, 100) : null;
                     let presentPrice = res.data.product[0].activityPrice ? NP.divide(res.data.product[0].activityPrice, 100) : null;
                     let peopleNumber = res.data.peopleCount ? res.data.peopleCount * 1 : null;
+                    let verifyLimitDays = res.data.verifyLimitDays ? res.data.verifyLimitDays * 1 : null;
                     this.radiocheck = false;
                     if (peopleNumber > 4) {
                         this.ctrsFun('zdy')
@@ -586,6 +588,7 @@ export class WxreleaseGroupsComponent implements OnInit {
                         presentPrice: [{ value: presentPrice, disabled: !this.canMofidy ? true : false }, [Validators.required, Validators.pattern(/^[0-9]+(.[0-9]{1,2})?$/), Validators.max(99999999), Validators.min(0.01)]],
                         time: [time],
                         time2: [this._validateEndTime],
+                        verifyLimitDays: [{ value: verifyLimitDays, disabled: !this.canMofidy ? true : false }, [Validators.required, Validators.pattern(/^[0-9]\d*$/), Validators.minLength(1), Validators.maxLength(3), Validators.max(180), Validators.min(7)]],
                         mock: [mock]
                     });
                     this.startTime = res.data.activityStartDate;
@@ -975,11 +978,13 @@ export class WxreleaseGroupsComponent implements OnInit {
         this.modalSrv.closeAll();
     }
     radioBottomFun() {
-        this.radioValue = '';
-        this.shopboolean = false;
-        this.selectStoresIds = '';
-        this.storesChangeNum = 0;
-        this.allShopsNumber = 0;
+        if (this.canMofidy) {
+          this.radioValue = '';
+          this.shopboolean = false;
+          this.selectStoresIds = '';
+          this.storesChangeNum = 0;
+          this.allShopsNumber = 0;
+        }
     }
     productStoreHttp(productId: any, choiseStoreIdList?: any) {
         let data = {

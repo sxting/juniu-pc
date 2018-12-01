@@ -12,19 +12,19 @@
                     <!--</nz-select>-->
                 <!--</nz-form-control>-->
             <!--</nz-form-item>-->
-            <nz-form-item>
-                <nz-form-label nzXs="24" nzSm="7" nzRequired>背景颜色</nz-form-label>
-                <nz-form-control>
-                    <nz-radio-group [(ngModel)]="color" (ngModelChange)="colorChange()">
-                        <label nz-radio [nzValue]="colorArr[0]">绿色</label>
-                        <label nz-radio [nzValue]="colorArr[1]">蓝色</label>
-                        <label nz-radio [nzValue]="colorArr[2]">橙色</label>
-                        <label nz-radio [nzValue]="myColor">
-                            自定义# <input nz-input placeholder="请输入色值" minlength="6" maxlength="6" style="width: 100px;" [(ngModel)]="myColor" (blur)="changeMyColor()">
-                        </label>
-                    </nz-radio-group>
-                </nz-form-control>
-            </nz-form-item>
+            <!--<nz-form-item>-->
+                <!--<nz-form-label nzXs="24" nzSm="7" nzRequired>背景颜色</nz-form-label>-->
+                <!--<nz-form-control>-->
+                    <!--<nz-radio-group [(ngModel)]="color" (ngModelChange)="colorChange()">-->
+                        <!--<label nz-radio [nzValue]="colorArr[0]">绿色</label>-->
+                        <!--<label nz-radio [nzValue]="colorArr[1]">蓝色</label>-->
+                        <!--<label nz-radio [nzValue]="colorArr[2]">橙色</label>-->
+                        <!--<label nz-radio [nzValue]="myColor">-->
+                            <!--自定义# <input nz-input placeholder="请输入色值" minlength="6" maxlength="6" style="width: 100px;" [(ngModel)]="myColor" (blur)="changeMyColor()">-->
+                        <!--</label>-->
+                    <!--</nz-radio-group>-->
+                <!--</nz-form-control>-->
+            <!--</nz-form-item>-->
             <nz-form-item>
                 <nz-form-label nzXs="24" nzSm="7" nzRequired>商家Logo</nz-form-label>
                 <nz-form-control>
