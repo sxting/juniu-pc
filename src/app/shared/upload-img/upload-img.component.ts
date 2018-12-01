@@ -67,6 +67,7 @@ export class UploadImageComponent implements OnInit, OnChanges {
           if (this.image[0].hasOwnProperty('pictureUrl')) {
             if (this.image[0].pictureUrl) {
               this.image.forEach((item: any, index: number) => {
+                this.imageArray[index].showDelete = true;
                 if (this.imageArray[index].src.indexOf('taobao') > 0) {
                   this.imageArray[index].src = Config.OSS_IMAGE_URL
                     + `${item.pictureId}/resize_80_60/mode_fill`;
@@ -86,6 +87,7 @@ export class UploadImageComponent implements OnInit, OnChanges {
                 i.imageId = '';
               });
               this.image.forEach((item: any, index: number) => {
+                this.imageArray[index].showDelete = true;
                 if (this.imageArray[index].src.indexOf('taobao') > 0) {
                   this.imageArray[index].src = Config.OSS_IMAGE_URL
                     + `${item.picId}/resize_80_60/mode_fill`;
@@ -106,6 +108,7 @@ export class UploadImageComponent implements OnInit, OnChanges {
                 i.imageId = '';
               });
               this.image.forEach((item: any, index: number) => {
+                this.imageArray[index].showDelete = true;
                 if (this.imageArray[index].src.indexOf('taobao') > 0) {
                   this.imageArray[index].src = Config.OSS_IMAGE_URL
                     + `${item.imageId}/resize_80_60/mode_fill`;

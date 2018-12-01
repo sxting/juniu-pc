@@ -29,7 +29,7 @@ export class AddNewItemsComponent implements OnInit {
         private titleSrv: TitleService,
         private localStorageService: LocalStorageService
     ) { }
-
+   
     formData: any;
     form: FormGroup;
     loading: boolean = false;
@@ -45,7 +45,6 @@ export class AddNewItemsComponent implements OnInit {
     //上传图片的时候
     imagePath: string = '';
     picId: string = '';//商品首图的ID
-
     // 门店相关的
     cityStoreList: any;  // 数据格式转换过的门店列表
     selectStoresIds: any = ''; //选中的门店
@@ -54,6 +53,14 @@ export class AddNewItemsComponent implements OnInit {
     moduleId: string;
     ifShow: boolean = false;//门店错误提示
     spinBoolean: boolean = false;
+
+    pictureDetails: any;
+    picIds: any = ''; //图片列表
+    buyerNotes: any[] = [{ title: '', details: [{ item: '' }] }];//购买须知
+    showPics: any = [];
+    syncAlipay: string = 'F';
+    isClear: boolean = false;
+    showDiv: boolean = false;
     get categoryInfor() { return this.form.controls.categoryInfor; }
     get currentPrice() { return this.form.controls['currentPrice']; }
     get costPrice() { return this.form.controls['costPrice']; }
@@ -77,11 +84,14 @@ export class AddNewItemsComponent implements OnInit {
             productNo: [ null, [ Validators.pattern(`[0-9]+`)] ],
             status: [self.ItemsStatus[0].value, [ Validators.required  ] ],
             storeType: [ self.storeStatus[0].value, [ Validators.required ] ],
+            cutOffDays:[ null ],
+            wxBuyLimitNum:[ null ],
+            idx :[ null ]
         };
         this.form = this.fb.group(self.formData);
         this.getCategoryListInfor();//获取商品分类信息
     }
-
+    
     //获取门店数据
     storeListPush(event){
       this.cityStoreList = event.storeList? event.storeList : [];
@@ -297,7 +307,7 @@ export class AddNewItemsComponent implements OnInit {
             )
         }
     }
-
+  
     //上传图片接口
     uploadImage(event: any) {
         event = event ? event : window.event;
@@ -339,6 +349,33 @@ export class AddNewItemsComponent implements OnInit {
                     let status = res.data.putaway === 1? this.ItemsStatus[0].value : this.ItemsStatus[1].value;
                     let storeType = res.data.applyStoreType === 'CUSTOMIZE'? this.storeStatus[1].value : this.storeStatus[0].value;
                     let costPrice = res.data.costPrice?  res.data.costPrice/ 100 : null;
+                    var descPicIdArr = [];
+                    if (res.data.descPicIds) {
+                        let descPicId = res.data.descPicIds?res.data.descPicIds.split(','):[];
+                        if(descPicId&&descPicId.length>0){
+                            descPicId.forEach(i => {
+                                descPicIdArr.push({
+                                    imageId:i,
+                                    imageUrl:i
+                                })
+                            });
+                        }
+                    }
+                    console.log(descPicIdArr)
+                    
+                    self.pictureDetails = descPicIdArr;
+                    
+                    let descriptions: any = [];
+                    let buyerNotes: any = [];
+                    let transforBuyerNotes: any = [];
+                    let transforDescriptions: any = [];
+                    if (res.data.notice&&JSON.parse(res.data.notice.length)  > 0) {
+                        buyerNotes = JSON.parse(res.data.notice);
+                        self.editChangeData(buyerNotes, transforBuyerNotes);
+                    } else {
+                        transforBuyerNotes = self.buyerNotes;
+                    }
+                    self.buyerNotes = transforBuyerNotes;
                     this.formData = {
                         categoryInfor: [ categoryInfor, [ Validators.required ] ],
                         productName:[ res.data.productName, [ Validators.required ] ],
@@ -347,6 +384,9 @@ export class AddNewItemsComponent implements OnInit {
                         productNo: [ res.data.productNo, [ Validators.pattern(`[0-9]+`)] ],
                         status: [ status, [ Validators.required  ] ],
                         storeType: [ storeType, [ Validators.required ] ],
+                        cutOffDays:[ res.data.cutOffDays],
+                        wxBuyLimitNum:[ res.data.wxBuyLimitNum ],
+                        idx :[ res.data.idx ],
                     };
                     this.picId = res.data.picId;
                     this.imagePath = res.data.picUrl? Config.OSS_IMAGE_URL+`${this.picId}/resize_${102}_${102}/mode_fill`: '';
@@ -404,15 +444,40 @@ export class AddNewItemsComponent implements OnInit {
         });
         return staffListInfor;
     }
-
+    
     submit() {
         let self = this;
+        let that = this;
         for (const i in this.form.controls) {
             this.form.controls[ i ].markAsDirty();
             this.form.controls[ i ].updateValueAndValidity();
         }
         if (this.form.invalid) return;
         let categoryInfor = this.form.controls.categoryInfor.value;
+        let buyerNotes: any = [];//购买须知
+
+        let picId = '';
+            that.picIds = '';
+            if (this.showPics.length > 0) {
+                this.showPics.forEach((item: any, index: number) => {
+                    if (item.imageId) {
+                        if (!that.picIds) {
+                            that.picIds += item.imageId;
+                        } else {
+                            that.picIds += ',' + item.imageId;
+                        }
+                    }
+                });
+            } else if (that.pictureDetails) {
+                that.pictureDetails.forEach(function (item: any) {
+                    if (!that.picIds) {
+                        that.picIds += item.imageId;
+                    } else {
+                        that.picIds += ',' + item.imageId;
+                    }
+                })
+            }
+        this.changeDataDetail(this.buyerNotes, buyerNotes);
         let params = {
             productName: this.form.controls.productName.value,
             productId: this.productId? this.productId : '',
@@ -427,8 +492,17 @@ export class AddNewItemsComponent implements OnInit {
             productNo: this.form.controls.productNo.value,
             picId: this.picId,
             applyStoreType: this.form.controls.storeType.value,
-            categoryType: 'SERVICE'
+            categoryType: 'SERVICE',
+            notice:JSON.stringify(buyerNotes) ,
+            descPicIds:this.picIds,
+            cutOffDays:this.form.controls.cutOffDays.value,
+            wxBuyLimitNum:this.form.controls.wxBuyLimitNum.value,
+            idx :this.form.controls.idx.value,
         };
+        if(!params.cutOffDays) delete params.cutOffDays;
+        if(!params.wxBuyLimitNum) delete params.wxBuyLimitNum;
+        if(!params.idx) delete params.idx;
+        console.log(params)
         if(this.ifShow == false){
           this.submitting = true;
           this.productService.saveAddProductInfor(params).subscribe(
@@ -451,4 +525,96 @@ export class AddNewItemsComponent implements OnInit {
         }
     }
 
+     /**获取其他门店图片 */
+   getPictureDetails(event: any) {
+        console.log(event);
+        let that = this;
+        // this.shopEdit.pictureDetails = [];
+        this.showPics = event;
+    }
+    showDivFun(){
+        this.showDiv = !this.showDiv;
+    }
+    errorAlter(err: any) {
+        this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: err
+        });
+    }
+    getnoteTitledata(index: number, event: any) {
+        this.buyerNotes[index].title = event;
+    }
+    getnoteDetaildata(index: number, notenum: number, event: any) {
+        this.buyerNotes[index].details[notenum].item = event;
+    }
+
+    addLineNoteDetail(index: number) {
+        if (this.buyerNotes[index].details.length >= 10) {
+            this.errorAlter('您最多只能添加10组!!');
+        } else {
+            this.buyerNotes[index].details.push({ item: '' });
+        }
+    }
+
+    deleteNoteDetail(count: number, index: number) {
+        if (this.buyerNotes[count].details.length <= 1) {
+            this.errorAlter('手下留情啊,不能再删除了!!');
+            return;
+        } else {
+            this.buyerNotes[count].details.splice(index, 1);
+        }
+    }
+
+    addGroupBuynote() {
+        if (this.buyerNotes.length >= 10) {
+            this.errorAlter('您最多只能添加10组!!');
+        } else {
+            this.buyerNotes.push({
+                title: '',
+                details: [{ item: '' }]
+            });
+        }
+    }
+    pluseGroupbuyNote(index: number) {
+        if (this.buyerNotes.length <= 1) {
+            this.errorAlter('手下留情啊,不能再删除了!!');
+            return;
+        } else {
+            this.buyerNotes.splice(index, 1);
+        }
+    }
+
+    //提交的时候,转换数据
+    changeDataDetail(obj: any, transfor: any) {
+        obj.forEach((element: any, index: number, arr: any) => {
+            let list: any = [];
+            let group: any;
+            for (let i = 0; i < element.details.length; i++) {
+                list.push(element.details[i].item);
+                group = {
+                    title: element.title,
+                    details: list
+                };
+            }
+            transfor.push(group);
+        });
+    }
+
+    //编辑多来转化数据
+    editChangeData(object: any, transfor: any) {
+        object.forEach((element: any, index: number) => {
+            let group: any = {
+                title: element.title,
+                details: []
+            };
+            let list: any;
+            for (let i = 0; i < element.details.length; i++) {
+                list = {
+                    item: element.details[i]
+                };
+                group.details.push(list);
+            }
+            transfor.push(group);
+        });
+    }
 }

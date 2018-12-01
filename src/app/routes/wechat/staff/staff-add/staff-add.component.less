@@ -1,0 +1,181 @@
+@import 'node_modules/@delon/theme/styles/default';
+@primary-color:#ff7700;
+
+.sub-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 20px;
+}
+
+.tip {
+  color: #c5c5c5;
+  line-height: 30px;
+}
+
+.add-new-work {
+  border: 1px dashed #ccc;
+  width: 160px;
+  height: 200px;
+  line-height: 200px;
+  text-align: center;
+  font-size: 14px;
+  color: #c5c5c5;
+  cursor: pointer;
+}
+
+.no-source {
+  color: #777;
+  .top {
+    border-bottom: 1px solid #c5c5c5;
+    text-align: center;
+
+    .icon-gantanhao {
+      font-size: 50px;
+      color: #000;
+    }
+    .text {
+      padding-bottom: 30px;
+      font-size: 15px;
+      color: #000;
+    }
+  }
+  p {
+    padding-top: 10px;
+  }
+
+  h3 {
+    margin-top: 10px;
+  }
+
+  .lh30 {
+    line-height: 30px;
+  }
+}
+
+.source {
+  position: relative;
+
+  button {
+    position: absolute;
+    top: -66px;
+    right: 0;
+  }
+
+  .source-content {
+    display: flex;
+
+    .left {
+      width: 100px;
+      border-right: 1px solid #e8e8e8;
+      text-align: center;
+      line-height: 30px;
+
+      p {
+        cursor: pointer;
+      }
+
+      .active-color {
+        color: @primary-color;
+      }
+    }
+    .right {
+      width: 600px;
+      display: flex;
+      flex-wrap: wrap;
+
+      .work-item {
+        margin-left: 30px;
+      }
+    }
+  }
+
+  .nzPaginationBox {
+    height: 30px;
+
+    .nzPagination {
+      padding: 0;
+    }
+  }
+}
+
+.select-video {
+  margin-right: 20px;
+  vertical-align: top;
+}
+
+.work-item {
+  width: 160px;
+  height: 160px;
+  border: 1px solid #e8e8e8;
+  position: relative;
+  text-align: center;
+  margin-bottom: 20px;
+  cursor: pointer;
+
+  .video-icon {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 65px;
+    right: 65px;
+  }
+
+  img {
+    width: 160px;
+    height: 160px;
+  }
+  p {
+    line-height: 40px;
+  }
+
+  .icon-success {
+    position: absolute;
+    right: 6px;
+    top: 6px;
+    color: @primary-color;
+    font-size: 22px;
+    background: #fff;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    border-radius: 50%;
+    text-align: center;
+  }
+
+  .work-item-hover {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    top: 0;
+    width: 160px;
+    height: 200px;
+
+    div {
+      width: 100px;
+      line-height: 34px;
+      text-align: center;
+      border: 1px solid @primary-color;
+      color: @primary-color;
+      font-size: 16px;
+      margin: 80px auto;
+    }
+  }
+}
+
+.add-work-right {
+  display: flex;
+  flex-wrap: wrap;
+
+  .work-item, .add-new-work {
+    height: 200px;
+    margin-right: 30px;
+  }
+}
+
+.img-item {
+  width: 100px;
+  height: 100px;
+  padding: 5px;
+  border: 1px dashed #e8e8e8;
+  border-radius: 4px;
+}
