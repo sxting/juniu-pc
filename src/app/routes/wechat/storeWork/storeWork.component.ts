@@ -19,6 +19,7 @@ export class StoreWorkComponent implements OnInit {
     private wechatService: WechatService,
     private modalSrv: NzModalService,
     private router: Router,
+    private route: ActivatedRoute,
     private localStorageService: LocalStorageService
   ) { }
 
@@ -42,7 +43,7 @@ export class StoreWorkComponent implements OnInit {
   selectedImageIds: any = [];
   selectedImages: any = [];
   selectedSourceItem: any = '';
-
+  wordList :any;
   groupId: any = 0;
   pageIndex: any = 1;
   pageSize: any = 9;
@@ -58,7 +59,8 @@ export class StoreWorkComponent implements OnInit {
   introduction: string = '';
 
   ngOnInit() {
-
+    this.storeId = this.route.snapshot.params['storeId'];
+    this.productionList();
   }
 
 
@@ -86,22 +88,7 @@ export class StoreWorkComponent implements OnInit {
         if(this.workType === 1 && this.selectedImageIds.length === 0) {
           this.errorAlter('您还没上传附件哦'); return false;
         }
-        if(this.workType === 0) {
-          this.addWorkList.push({
-            workName: this.workName,
-            workType: this.workType,
-            picUrl: this.selectedVideoImg,
-            pictureId: this.selectedSourceItem.pictureId,
-            videoId: this.selectedSourceItem.videoId,
-          })
-        } else {
-          this.addWorkList.push({
-            workName: this.workName,
-            workType: this.workType,
-            picUrl: this.selectedImages[0].pictureUrl,
-            iamgesArr: this.selectedImages,
-          });
-        }
+        this.materialAdd()
       },
       nzOnCancel: () => {},
     });
@@ -176,18 +163,17 @@ export class StoreWorkComponent implements OnInit {
   }
 
   onSourceItemClick(item: any) {
+    this.selectedSourceItem = item;
+    
     if(this.workType === 0) {
       this.selectedVideoId = item.materialId;
       this.selectedVideoImg = item.pictureUrl;
-      this.selectedSourceItem = item;
     } else {
       if(this.selectedImageIds.indexOf(item.materialId) < 0) {
-        console.log(this.selectedImageIds);
         if(this.selectedImageIds.length < 5) {
           this.selectedImageIds.push(item.materialId);
         }
       } else {
-        console.log(this.selectedImageIds);
         this.selectedImageIds.splice(this.selectedImageIds.indexOf(item.materialId), 1);
       }
     }
@@ -270,6 +256,93 @@ export class StoreWorkComponent implements OnInit {
       }
     )
   }
-
-
+  //新增作品素材 materialAdd
+  materialAdd() {
+    let that = this;
+    let ids = []
+    if(this.workType === 0){
+      this.materialListData.forEach(function (i:any) {
+        if(i.materialId === that.selectedVideoId){
+          ids = [{
+            sourceId:i.pictureId+','+i.videoId,
+            sourceType:'VIDEO',
+            belongType:'STORE',
+          }]
+        }
+      })
+    }else{
+      this.materialListData.forEach(function (i:any) {
+        that.selectedImageIds.forEach(function (n:any) {
+          if(n === i.materialId){
+            ids.push({
+              sourceId:i.pictureId,
+              sourceType:'IMAGE',
+              belongType:'STORE',
+            })
+          }
+        })
+      })
+    }
+    
+    let data = {
+      merchantId: this.merchantId,
+      sourceType:this.workType === 0 ? 'VIDEO' : 'IMAGE',
+      title:this.workName,
+      belongType:'STORE',
+      merchantMediaDTOS:ids,
+      belongTo:this.storeId
+    };
+    this.wechatService.materialAdd(data).subscribe(
+      (res: any) => {
+        if(res.success) {
+          this.productionList();
+        } else {
+          this.errorAlter(res.errorInfo)
+        }
+      }
+    )
+  }
+  //作品列表
+  productionList(){
+    let that = this;
+    let data ={
+      storeId:this.storeId
+    }
+    this.wechatService.productionList(data).subscribe(
+      (res: any) => {
+        if(res.success) {
+          this.addWorkList = [];
+          this.wordList = res.data;
+          res.data.forEach(i => {
+              that.addWorkList.push({
+                workName: i.merchantMediaDTOS[0].title,
+                workType: i.merchantMediaDTOS[0].sourceType === 'VIDEO'?0:1,
+                picUrl:Config.OSS_IMAGE_URL+`${i.merchantMediaDTOS[0].sourceId.split(',')[0]}/resize_${that.imgW}_${that.imgH}/mode_fill`,
+                pictureId: i.merchantMediaDTOS[0].sourceId.split(',')[0],
+                videoId: i.merchantMediaDTOS[0].sourceId.split(',')[1],
+                productionId:i.productionId
+              })
+          });
+        } else {
+          this.errorAlter(res.errorInfo)
+        }
+      }
+    )
+  }
+  //描述:店铺作品删除
+  productionDel(productionId){
+    let that = this;
+    let data ={
+      productionId:productionId
+    }
+    this.wechatService.productionDel(data).subscribe(
+      (res: any) => {
+        if(res.success) {
+          this.productionList();
+        } else {
+          this.errorAlter(res.errorInfo)
+        }
+      }
+    )
+  }
 }

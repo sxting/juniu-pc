@@ -21,8 +21,10 @@ export class StaffListComponent implements OnInit {
 
   storeId: any = this.route.snapshot.params['storeId'];
   dataList: any[] = [];
-  theadName: any[] = ['员工编号', '员工姓名', '职位', '手机号', '所属门店', '操作'];
-  countPage: any = 0;
+  theadName: any[] = ['员工编号', '员工姓名', '职位', '手机号', '操作'];
+  pageIndex: any = 1;
+  pageSize: any = 10;
+  countTotal: any = 0;
 
   ngOnInit() {
     this.getStaffList();
@@ -33,11 +35,12 @@ export class StaffListComponent implements OnInit {
   }
 
   editStaffClick(item: any) {
-    this.router.navigate(['/wechat/staff/add', {staffId: item.staffId, staffName: item.staffName}])
+    this.router.navigate(['/wechat/staff/add', {staffId: item.staffId, staffName: item.staffName, storeId: this.storeId}])
   }
 
-  paginate(e: any) {
-
+  paginate(event: any) {
+    this.pageIndex = event;
+    this.getStaffList();
   }
 
 
@@ -46,12 +49,15 @@ export class StaffListComponent implements OnInit {
 
   getStaffList() {
     let data = {
-      storeId: this.storeId
+      storeId: this.storeId,
+      pageSize: this.pageSize,
+      pageNo: this.pageIndex
     };
     this.wechatService.getStaffArtisanList(data).subscribe(
       (res: any) => {
         if (res.success) {
-          // this.dataList = res.data.items;
+          this.dataList = res.data.content;
+          this.countTotal = res.data.totalElements;
         } else {
           this.errorAlter(res.errorInfo)
         }

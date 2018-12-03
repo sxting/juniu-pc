@@ -545,6 +545,16 @@ export class WxStoreComponent implements OnInit {
                         end = new Date('2018-12-12 ' + time[1]);
                     }
                     this.pictureDetails = res.data.bannerColl;
+                    this.tags = res.data.label.split(' ');
+                    this.pictureDetails2 = [];
+                    if(res.data.environment&&res.data.environment.split(',').length>0){
+                        res.data.environment.split(',').forEach(element => {
+                            self.pictureDetails2.push({
+                                imageId:element,
+                                imageUrl:element
+                            })
+                        });
+                    }
                     self.form = this.fb.group({
                         storeName: [res.data.branchName, []],
                         address: [adress, []],
@@ -638,6 +648,8 @@ export class WxStoreComponent implements OnInit {
         else {
             let displayColl = [];
             let bannerColl = [];
+            let bannerColl2 = [];
+            
 
             if (this.switch1) displayColl.push('PRODUCT');
             if (this.switch2) displayColl.push('CRAFTSMAN');
@@ -660,11 +672,18 @@ export class WxStoreComponent implements OnInit {
                     bannerColl.push(item.imageId);
                 })
             }
-            // this.showPics.forEach(function (i: any) {
-            //     if (i.imageId) {
-            //         bannerColl.push(i.imageId)
-            //     }
-            // })
+            if (this.showPics2.length > 0) {
+                this.showPics2.forEach((item: any, index: number) => {
+                    if (item.imageId) {
+                        bannerColl2.push(item.imageId)
+                    }
+                });
+            } else if (that.pictureDetails2) {
+                that.pictureDetails2.forEach(function (item: any) {
+                    bannerColl2.push(item.imageId);
+                })
+            }
+            console.log(that.pictureDetails2)
             let data = {
                 address: this.data.address,
                 branchName: this.data.branchName,
@@ -678,8 +697,11 @@ export class WxStoreComponent implements OnInit {
                 bannerColl: bannerColl,
                 businessHours: businessHours,
                 storeId: this.storeId,
+                environment:bannerColl2.join(','),
+                label:this.tags.join(' '),
                 timestamp: new Date().getTime()
             }
+            console.log(data);
             this.modifyDetail(data,type);
         }
     }

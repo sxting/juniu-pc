@@ -182,17 +182,6 @@ export class WechatService {
             });
     }
 
-
-    // //查询手艺人列表  https://biz.juniuo.com/account/merchant/staff/select.json?storeId=1530602323164136822988
-    // getStaffList(data) {
-    //   let apiUrl = Config.API1 + 'account/merchant/staff/select.json';
-    //   return this.http.get(apiUrl, data)
-    //     .map((response: Response) => response)
-    //     .catch(error => {
-    //       return Observable.throw(error);
-    //     });
-    // }
-
     //查询素材分组列表
     getMaterialGroups(data) {
       let apiUrl = Config.API1 + '/account/merchant/material/groups.json';
@@ -367,6 +356,34 @@ export class WechatService {
     productionAdd(data) {
         let apiUrl =  Config.API1 + 'account/merchant/store/production/add.json';
         return this.http.post(apiUrl,'', data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+
+    //新增店铺作品
+    materialAdd(data) {
+        let apiUrl =  Config.API1 + 'account/merchant/store/production/add.json';
+        return this.http.post(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    //描述:店铺作品列表
+    productionList(data) {
+        let apiUrl = Config.API1 + 'account/merchant/store/production/list.json';
+        return this.http.get(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    //描述:店铺作品删除
+    productionDel(data) {
+        let apiUrl = Config.API1 + 'account/merchant/store/production/del.json';
+        return this.http.get(apiUrl, data)
             .map((response: Response) => response)
             .catch(error => {
                 return Observable.throw(error);
