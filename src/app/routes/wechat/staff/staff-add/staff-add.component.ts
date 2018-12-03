@@ -33,7 +33,7 @@ export class StaffAddComponent implements OnInit {
 
   submitting: boolean = false;
   form: FormGroup;
-  staffId: any = this.route.snapshot.params['storeId'];
+  staffId: any = this.route.snapshot.params['staffId'];
   staffName: any = this.route.snapshot.params['staffName'];
   addWorkList: any = [];
 
@@ -59,7 +59,9 @@ export class StaffAddComponent implements OnInit {
   advantage: string = '';
   introduction: string = '';
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.getStaffArtisanDetail();
+  }
 
   onAddNewWorkClick(tpl: any) {
     this.workName = '';
@@ -214,10 +216,6 @@ export class StaffAddComponent implements OnInit {
     this.addWorkList.splice(this.workItemHoverIndex, 1)
   }
 
-  submit() {
-
-  }
-
 
   /*=======分界线=======*/
   errorAlter(err: any) {
@@ -269,6 +267,49 @@ export class StaffAddComponent implements OnInit {
     )
   }
 
+  //查询手艺人信息
+  getStaffArtisanDetail() {
+    let data = {
+      staffId: this.staffId,
+      storeId: this.storeId
+    };
+    this.wechatService.getStaffArtisanDetail(data).subscribe(
+      (res: any) => {
+        if(res.success) {
+          this.advantage = res.data.advantage;
+          this.introduction = res.data.introduction;
+          let self = this;
+          res.data.productionList.forEach(function(item1: any) {
+            if(item1.sourceType === 'VIDEO') {
+              self.addWorkList.push({
+                workName: item1.title,
+                workType: 0,
+                picUrl: Config.OSS_IMAGE_URL+`${item1.merchantMediaDTOS[0].sourceId.split(',')[0]}/resize_${self.imgW}_${self.imgH}/mode_fill`,
+                pictureId: item1.merchantMediaDTOS[0].sourceId.split(',')[0],
+                videoId: item1.merchantMediaDTOS[0].sourceId.split(',')[1],
+              })
+            } else {
+              let productionItem = [];
+              item1.merchantMediaDTOS.forEach(function(item2: any) {
+                productionItem.push({
+                  pictureId: item2.sourceId
+                });
+              });
+              self.addWorkList.push({
+                workName: item1.title,
+                workType: 1,
+                picUrl: Config.OSS_IMAGE_URL+`${item1.merchantMediaDTOS[0].sourceId}/resize_${self.imgW}_${self.imgH}/mode_fill`,
+                iamgesArr: productionItem
+              })
+            }
+          })
+        } else {
+          this.errorAlter(res.errorInfo)
+        }
+      }
+    )
+  }
+
   //保存手艺人信息
   saveStaffSetArtisan() {
     let data: any = {
@@ -310,13 +351,13 @@ export class StaffAddComponent implements OnInit {
     this.wechatService.saveStaffSetArtisan(data).subscribe(
       (res: any) => {
         if(res.success) {
-
+          window.history.back();
+          // this.router.navigate(['', {}])
         } else {
           this.errorAlter(res.errorInfo)
         }
       }
     )
-
   }
 
 }
