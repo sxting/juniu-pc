@@ -35,7 +35,23 @@
         <nz-form-explain class="errorTips"  *ngIf="form.get('productNo').dirty && form.get('productNo').errors">商品编号只能为数字</nz-form-explain>
       </nz-form-control>
     </nz-form-item>
-    
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzSm="7" nzFor="card_img">项目图片(选填)</nz-form-label>
+      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+        <div class="pics_box clearfix">
+          <div class="img-box">
+            <img class="upload-img" src="./assets/img/upload.png">
+            <input type="file" accept="image" (change)="uploadImage($event)">
+            <img class="image" [src]="imagePath" *ngIf="imagePath">
+            <nz-spin *ngIf="spinBoolean" style="height: 102px;
+            line-height: 102px;
+            text-align: center;" [nzSize]="'large'"></nz-spin>
+            <i *ngIf="imagePath" class="iconfont icon-deleternormal" (click)="deleteImage()"></i>
+          </div>
+        </div>
+        <nz-form-explain style="margin-top: 10px">商品图片用于在线购买的展示</nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="currentPrice">售价(元)</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
@@ -86,23 +102,7 @@
       </nz-form-control>
     </nz-form-item>
     <div  class="{{!showDiv?'displayNone':''}}">
-      <nz-form-item>
-        <nz-form-label nzXs="24" nzSm="7" nzFor="card_img">项目图片(选填)</nz-form-label>
-        <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-          <div class="pics_box clearfix">
-            <div class="img-box">
-              <img class="upload-img" src="./assets/img/upload.png">
-              <input type="file" accept="image" (change)="uploadImage($event)">
-              <img class="image" [src]="imagePath" *ngIf="imagePath">
-              <nz-spin *ngIf="spinBoolean" style="height: 102px;
-              line-height: 102px;
-              text-align: center;" [nzSize]="'large'"></nz-spin>
-              <i *ngIf="imagePath" class="iconfont icon-deleternormal" (click)="deleteImage()"></i>
-            </div>
-          </div>
-          <nz-form-explain style="margin-top: 10px">商品图片用于在线购买的展示</nz-form-explain>
-        </nz-form-control>
-      </nz-form-item>
+   
   
   
       <nz-form-item>

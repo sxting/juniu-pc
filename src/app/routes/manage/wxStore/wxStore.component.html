@@ -61,17 +61,65 @@
     </nz-form-item>
 
 
-    <nz-form-item>
-      <nz-form-label nzXs="24" nzSm="7">服务环境</nz-form-label>
-      <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <juniu-upload-img [image]="pictureDetails2" [uploadNum]="10" [syncAlipay]="syncAlipay" [bizType]="'shop'" [isClear]="isClear"
-          (img)="getPictureDetails2($event)"></juniu-upload-img>
-        <div style="font-size:14px;line-height:16px;color:#b7b7b7;">
-          上传店铺服务环境照片，最多上传10张门店图片。推荐分辨率750*360.
-        </div>
-      </nz-form-control>
-    </nz-form-item>
-  </form>
+ 
+ 
+</form>
+
+   
+<nz-form-item>
+  <nz-form-label nzXs="24" nzSm="7">展示门店</nz-form-label>
+  <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+    <nz-switch nzCheckedChildren="开" [ngModel]="switch4" (ngModelChange)="switchFun(4)" nzUnCheckedChildren="关"></nz-switch>
+  </nz-form-control>
+</nz-form-item>
+<nz-form-item>
+  <nz-form-label nzXs="24" nzSm="7">展示商品</nz-form-label>
+  <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+    <nz-switch nzCheckedChildren="开" [ngModel]="switch1" (ngModelChange)="switchFun(1)" nzUnCheckedChildren="关"></nz-switch>
+    <span *ngIf="switch1">
+      已展示{{productIdsCount}}个商品
+      <span class="setClick" (click)="shezhi(modalContent1,'对应商品')" *ngIf="switch1">点击设置></span>
+    </span>
+  </nz-form-control>
+</nz-form-item>
+<nz-form-item>
+  <nz-form-label nzXs="24" nzSm="7">展示技师</nz-form-label>
+  <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+    <nz-switch nzCheckedChildren="开" [ngModel]="switch2" (ngModelChange)="switchFun(2)" nzUnCheckedChildren="关"></nz-switch>
+    <span *ngIf="switch2">
+      已展示{{staffIdsCount}}个技师
+      <span class="setClick" (click)="shezhi(modalContent2,'对应技师')" *ngIf="switch2">点击设置></span>
+    </span>
+  </nz-form-control>
+</nz-form-item>
+<nz-form-item>
+  <nz-form-label nzXs="24" nzSm="7">展示卡级</nz-form-label>
+  <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+    <nz-switch nzCheckedChildren="开" [ngModel]="switch3" (ngModelChange)="switchFun(3)" nzUnCheckedChildren="关"></nz-switch>
+    <span *ngIf="switch3">
+      已展示{{cardConfigRuleCount}}个卡级
+      <span class="setClick" (click)="shezhi(modalContent3,'对应卡')" *ngIf="switch3">点击设置></span>
+    </span>
+  </nz-form-control>
+</nz-form-item>
+<nz-form-item>
+  <nz-form-label nzXs="24" nzSm="7"  nzFor="stock">更多设置</nz-form-label>
+  <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+   <span class="iconfont {{showDiv?'icon-shangla':'icon-xiala1'}}" style="cursor: pointer;color:#ff6600;" (click)="showDivFun()">点击收起</span>
+  </nz-form-control>
+</nz-form-item>
+<div  class="{{!showDiv?'displayNone':''}}">
+
+  <nz-form-item>
+    <nz-form-label nzXs="24" nzSm="7">服务环境</nz-form-label>
+    <nz-form-control nzXs="24" nzSm="12" nzMd="10">
+      <juniu-upload-img [image]="pictureDetails2" [uploadNum]="10" [syncAlipay]="syncAlipay" [bizType]="'shop'" [isClear]="isClear"
+        (img)="getPictureDetails2($event)"></juniu-upload-img>
+      <div style="font-size:14px;line-height:16px;color:#b7b7b7;">
+        上传店铺服务环境照片，最多上传10张门店图片。推荐分辨率750*360.
+      </div>
+    </nz-form-control>
+  </nz-form-item>
   <nz-form-item>
     <nz-form-label nzXs="24" nzSm="7">店铺标签</nz-form-label>
     <nz-form-control nzXs="24" nzSm="12" nzMd="10">
@@ -102,42 +150,6 @@
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-label nzXs="24" nzSm="7">展示门店</nz-form-label>
-    <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-      <nz-switch nzCheckedChildren="开" [ngModel]="switch4" (ngModelChange)="switchFun(4)" nzUnCheckedChildren="关"></nz-switch>
-    </nz-form-control>
-  </nz-form-item>
-  <nz-form-item>
-    <nz-form-label nzXs="24" nzSm="7">展示商品</nz-form-label>
-    <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-      <nz-switch nzCheckedChildren="开" [ngModel]="switch1" (ngModelChange)="switchFun(1)" nzUnCheckedChildren="关"></nz-switch>
-      <span *ngIf="switch1">
-        已展示{{productIdsCount}}个商品
-        <span class="setClick" (click)="shezhi(modalContent1,'对应商品')" *ngIf="switch1">点击设置></span>
-      </span>
-    </nz-form-control>
-  </nz-form-item>
-  <nz-form-item>
-    <nz-form-label nzXs="24" nzSm="7">展示技师</nz-form-label>
-    <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-      <nz-switch nzCheckedChildren="开" [ngModel]="switch2" (ngModelChange)="switchFun(2)" nzUnCheckedChildren="关"></nz-switch>
-      <span *ngIf="switch2">
-        已展示{{staffIdsCount}}个技师
-        <span class="setClick" (click)="shezhi(modalContent2,'对应技师')" *ngIf="switch2">点击设置></span>
-      </span>
-    </nz-form-control>
-  </nz-form-item>
-  <nz-form-item>
-    <nz-form-label nzXs="24" nzSm="7">展示卡级</nz-form-label>
-    <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-      <nz-switch nzCheckedChildren="开" [ngModel]="switch3" (ngModelChange)="switchFun(3)" nzUnCheckedChildren="关"></nz-switch>
-      <span *ngIf="switch3">
-        已展示{{cardConfigRuleCount}}个卡级
-        <span class="setClick" (click)="shezhi(modalContent3,'对应卡')" *ngIf="switch3">点击设置></span>
-      </span>
-    </nz-form-control>
-  </nz-form-item>
-  <nz-form-item>
     <nz-form-label nzXs="24" nzSm="7">店铺作品</nz-form-label>
     <nz-form-control nzXs="24" nzSm="12" nzMd="10">
       <span class="setClick" (click)="goZuopin('dianpu')">点击设置></span>
@@ -149,6 +161,7 @@
       <span class="setClick" (click)="goZuopin('jishi')">点击设置></span>
     </nz-form-control>
   </nz-form-item>
+  </div>
   <nz-form-item>
     <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
       <button nz-button nzType="primary" type="submit" (click)="submit()" [nzLoading]="submitting">提交</button>

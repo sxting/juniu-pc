@@ -60,7 +60,7 @@ export class WxStoreComponent implements OnInit {
     staffList: any;
     staffIdsArr: any;
 
-
+    showDiv= false;
 
 
     tags = [];
@@ -508,6 +508,9 @@ export class WxStoreComponent implements OnInit {
 
     change(ret: {}): void {
         console.log('nzChange', ret);
+    }
+    showDivFun(){
+        this.showDiv = !this.showDiv;
     }
     storeDetail() {
         let self = this;
