@@ -361,4 +361,32 @@ export class WechatService {
                 return Observable.throw(error);
             });
     }
+
+    //新增店铺作品
+    materialAdd(data) {
+        let apiUrl =  Config.API1 + 'account/merchant/store/production/add.json';
+        return this.http.post(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    //描述:店铺作品列表
+    productionList(data) {
+        let apiUrl = Config.API1 + 'account/merchant/store/production/list.json';
+        return this.http.get(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    //描述:店铺作品删除
+    productionDel(data) {
+        let apiUrl = Config.API1 + 'account/merchant/store/production/del.json';
+        return this.http.get(apiUrl, data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
 }
