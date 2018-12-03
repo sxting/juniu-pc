@@ -58,7 +58,6 @@ export class StoreWorkComponent implements OnInit {
   introduction: string = '';
 
   ngOnInit() {
-    this.getStaffList();
 
   }
 
@@ -229,21 +228,6 @@ export class StoreWorkComponent implements OnInit {
     });
   }
 
-  getStaffList() {
-    let data = {
-      storeId: this.storeId
-    };
-    this.wechatService.getStaffList(data).subscribe(
-      (res: any) => {
-        if (res.success) {
-          this.staffList = res.data.items;
-        } else {
-          this.errorAlter(res.errorInfo)
-        }
-      },
-      error => this.errorAlter(error)
-    )
-  }
 
   //素材分组
   getMaterialGroups() {

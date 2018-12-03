@@ -351,4 +351,14 @@ export class WechatService {
                 return Observable.throw(error);
             });
     }
+
+    //新增店铺作品 /merchant/store/production/add.json
+    productionAdd(data) {
+        let apiUrl =  Config.API1 + 'account/merchant/store/production/add.json';
+        return this.http.post(apiUrl,'', data)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
 }

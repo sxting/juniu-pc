@@ -924,7 +924,7 @@ export class WxStoreComponent implements OnInit {
       goZuopin(type){
         let that = this;
         this.modalSrv.confirm({
-            nzTitle: '当前页面内容已做修改，请先保存后在去编辑?',
+            nzTitle: '请先保存后在去设置?',
             nzOnOk: () => {that.submit(type)},
             nzOkText : '保存并去设置'
           });
