@@ -20,7 +20,7 @@
               <img src="{{item.picUrl}}" alt="">
               <p>{{item.workName}}</p>
               <div class="work-item-hover" *ngIf="index === workItemHoverIndex">
-                <div (click)="onDeleteWorkItemClick()">删除</div>
+                <div (click)="productionDel(item.productionId)">删除</div>
               </div>
             </div>
             <div class="add-new-work" (click)="onAddNewWorkClick(newWorkAlert)">+添加新作品</div>
