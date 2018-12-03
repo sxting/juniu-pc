@@ -282,6 +282,7 @@ export class StaffAddComponent implements OnInit {
           res.data.productionList.forEach(function(item1: any) {
             if(item1.sourceType === 'VIDEO') {
               self.addWorkList.push({
+                productionId: item1.productionId,
                 workName: item1.title,
                 workType: 0,
                 picUrl: Config.OSS_IMAGE_URL+`${item1.merchantMediaDTOS[0].sourceId.split(',')[0]}/resize_${self.imgW}_${self.imgH}/mode_fill`,
@@ -296,6 +297,7 @@ export class StaffAddComponent implements OnInit {
                 });
               });
               self.addWorkList.push({
+                productionId: item1.productionId,
                 workName: item1.title,
                 workType: 1,
                 picUrl: Config.OSS_IMAGE_URL+`${item1.merchantMediaDTOS[0].sourceId}/resize_${self.imgW}_${self.imgH}/mode_fill`,
@@ -322,6 +324,7 @@ export class StaffAddComponent implements OnInit {
     let self = this;
     this.addWorkList.forEach(function(item: any) {
       let productionItem = {
+        productionId: item.productionId ? item.productionId : '',
         belongTo: self.staffId,
         belongType: "STAFF",
         merchantId: self.merchantId,
@@ -329,6 +332,9 @@ export class StaffAddComponent implements OnInit {
         sourceType: item.workType === 1 ? "IMAGE" : "VIDEO",
         title: item.workName
       };
+      if(!item.productionId) {
+        delete productionItem.productionId
+      }
       if(item.workType === 1) {
         item.iamgesArr.forEach(function(item2: any) {
           productionItem.merchantMediaDTOS.push({
