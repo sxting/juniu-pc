@@ -54,6 +54,8 @@ export class SetMaterialComponent implements OnInit {
     showButton:any = false;
     groupId2:any;
     checkType:any='image';
+    imgW: any = 200;
+    imgH: any = 240;
     videoAlert:any='';
     // addNameNg:any = '';
     // addNameNg:any = '';
@@ -232,6 +234,7 @@ export class SetMaterialComponent implements OnInit {
       }
     //查询素材列表、分页
     materialListFun(){
+        let self = this;
         let data = {
             merchantId: JSON.parse(sessionStorage.getItem(USER_INFO))['merchantId'],
             groupId:this.groupId,
@@ -248,7 +251,7 @@ export class SetMaterialComponent implements OnInit {
                     this.imgbox.forEach(element => {
                         element.check = false;
                         element.pictureUrl = Config.OSS_IMAGE_URL
-                        + `${element.pictureId.replace(",","")}/resize_80_60/mode_fill`;
+                        + `${element.pictureId.replace(",","")}/resize_${self.imgW}_${self.imgH}/mode_fill`;
                     });
                 } else {
                     this.modalSrv.error({

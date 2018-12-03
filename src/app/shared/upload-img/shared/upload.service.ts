@@ -95,6 +95,34 @@ export class UploadService {
     });
     return returnReponse;
   }
+    /**
+   * 权限控制
+   * @param files
+   * @returns {Promise<T>}
+   */
+  menuRoute(data) {
+    let apiUrl = Config.API1 + 'account/merchant/module/menu/route.json';
+    var returnReponse = new Promise((resolve, reject) => {
+      this.http.get(apiUrl, data).subscribe(
+        (res: any) => {
+          if (res['success']) {
+            this.responseData = res['data'];
+            resolve(this.responseData);
+          } else {
+            resolve(false);
+            this.modalSrv.error({
+              nzTitle: '温馨提示',
+              nzContent: res['errorInfo']
+            });
+          }
+        },
+        error => {
+          reject(error);
+        }
+      );
+    });
+    return returnReponse;
+  }
 }
 
 
