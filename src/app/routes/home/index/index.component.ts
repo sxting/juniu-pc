@@ -189,12 +189,7 @@ export class IndexComponent implements OnInit {
         }
         this.manageService.permissionFun(data)
 
-        // this.UploadService.menuRoute(data).then((result: any) => {
-        //     if(result){
-        //         console.log(result)
-        //     }
-            
-        //   });
+ 
     }
 
     handlePieValueFormat(value: any) {

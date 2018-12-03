@@ -12,13 +12,16 @@ import { USER_INFO } from '@shared/define/juniu-define';
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { HttpEvent } from '@angular/common/http';
 import { HttpRequest } from 'selenium-webdriver/http';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class UploadService {
   responseData: any;
 
 
-  constructor(private modalSrv: NzModalService,private localStorageService: LocalStorageService, private http: _HttpClient, ) {
+  constructor(private modalSrv: NzModalService,private localStorageService: LocalStorageService,
+    private router: Router,
+     private http: _HttpClient, ) {
   }
 
   /**
@@ -100,14 +103,30 @@ export class UploadService {
    * @param files
    * @returns {Promise<T>}
    */
-  menuRoute(data) {
+  menuRoute(data,funtion?:any,selectData?:any,self?:any) {
+    let that = this;
     let apiUrl = Config.API1 + 'account/merchant/module/menu/route.json';
     var returnReponse = new Promise((resolve, reject) => {
       this.http.get(apiUrl, data).subscribe(
         (res: any) => {
           if (res['success']) {
-            this.responseData = res['data'];
-            resolve(this.responseData);
+            if (res.data.eventType === 'ROUTE') {
+              if (res.data.eventRoute) {
+                this.router.navigateByUrl(res.data.eventRoute + ';menuId=' + data.menuId);
+              }
+            } else if (res.data.eventType === 'NONE') {
+
+            } else if (res.data.eventType === 'API') {
+              funtion(selectData,self);
+              resolve(true);
+            } else if (res.data.eventType === 'REDIRECT') {
+              let href = res.data.eventRoute;
+              window.open(href);
+            }
+            if (res.data.eventMsg) {
+              this.errorAlert(res.data.eventMsg);
+            }
+            
           } else {
             resolve(false);
             this.modalSrv.error({
@@ -122,6 +141,12 @@ export class UploadService {
       );
     });
     return returnReponse;
+  }
+  errorAlert(err){
+    this.modalSrv.error({
+      nzTitle: '温馨提示',
+      nzContent: err
+    });
   }
 }
 

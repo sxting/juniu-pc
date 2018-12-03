@@ -22,7 +22,7 @@ export class SidebarComponent {
     }
   }
 
-  menuRouteHttp(menuId: any) {
+  menuRouteHttp(menuId: any,funtion?:any) {
     if (typeof (menuId) === 'string' && Number(menuId) + '' !== 'NaN') {
       this.manageService.menuRoute({ menuId: menuId, timestamp: new Date().getTime() }).subscribe(
         (res: any) => {
@@ -34,7 +34,7 @@ export class SidebarComponent {
             } else if (res.data.eventType === 'NONE') {
 
             } else if (res.data.eventType === 'API') {
-
+              funtion();
             } else if (res.data.eventType === 'REDIRECT') {
               let href = res.data.eventRoute;
               console.log(href)
