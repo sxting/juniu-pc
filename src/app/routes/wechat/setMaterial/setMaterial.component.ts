@@ -268,7 +268,8 @@ export class SetMaterialComponent implements OnInit {
     //查询素材分组列表 
     materialGroupsFun(){
         let data = {
-            merchantId: JSON.parse(sessionStorage.getItem(USER_INFO))['merchantId']
+            merchantId: JSON.parse(sessionStorage.getItem(USER_INFO))['merchantId'],
+            type:this.checkType
         };
         this.wechatService.materialGroups(data).subscribe(
             (res: any) => {
@@ -372,7 +373,8 @@ export class SetMaterialComponent implements OnInit {
     materialAddGroup(){
         let data = {
             merchantId: JSON.parse(sessionStorage.getItem(USER_INFO))['merchantId'],
-            groupName:this.addNameNg
+            groupName:this.addNameNg,
+            type:this.checkType
         };
         this.wechatService.materialAddGroup(data).subscribe(
             (res: any) => {
