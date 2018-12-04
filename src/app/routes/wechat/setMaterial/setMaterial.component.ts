@@ -133,8 +133,8 @@ export class SetMaterialComponent implements OnInit {
                         });
                     }else{
                         that.fileList.forEach(e => {
-                            ids +=(e.response.pictureId+',')
-                            ids2+=(e.response.videoId+',')
+                            ids +=(e.response.pictureId)
+                            ids2+=(e.response.videoId)
                         });
                     }
                     that.materialSave(that.checkType,ids,ids2);
