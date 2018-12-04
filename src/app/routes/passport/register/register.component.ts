@@ -51,9 +51,9 @@ export class UserRegisterComponent implements OnDestroy, OnInit {
             });
         } else {
             this.form = fb.group({
-                mail: [null, [Validators.required, Validators.maxLength(10)]],
-                password: [null, [Validators.required, Validators.minLength(6), UserRegisterComponent.checkPassword.bind(this)]],
-                confirm: [null, [Validators.required, Validators.minLength(6), UserRegisterComponent.passwordEquar]],
+                mail: [null, [Validators.required, Validators.maxLength(20)]],
+                password: [null, [Validators.required, Validators.minLength(6), Validators.maxLength(20), UserRegisterComponent.checkPassword.bind(this)]],
+                confirm: [null, [Validators.required, Validators.minLength(6), Validators.maxLength(20), UserRegisterComponent.passwordEquar]],
                 mobilePrefix: ['+86'],
                 mobile: [null, [Validators.required, Validators.pattern(/^1\d{10}$/)]],
                 captcha: [null, [Validators.required, Validators.minLength(6), Validators.maxLength(6)]],
