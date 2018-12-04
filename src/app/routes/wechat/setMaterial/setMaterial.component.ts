@@ -82,6 +82,7 @@ export class SetMaterialComponent implements OnInit {
         this.type = event.index === 0 ? true : false;
         this.buttonText =  event.index === 0 ?'上传图片':'上传视频';
         this.checkType = event.index === 0 ?'image':'video';
+        this.pageIndex = 1;
         this.materialGroupsFun();
     }
     fenzuCheck(ind,item){
@@ -94,7 +95,10 @@ export class SetMaterialComponent implements OnInit {
         this.materialListFun();
     }
 
-    
+    paginate(e){
+        this.pageIndex = e;
+        this.materialListFun();
+    }
     /**获取其他门店图片 */
     getPictureDetails(event: any) {
         console.log(event);
@@ -126,7 +130,17 @@ export class SetMaterialComponent implements OnInit {
             nzOnOk: () => {
                 let ids = '';
                 let ids2 = '';
-                if((that.fileList2.length>0||that.fileList.length>0)&&that.selectedOption2){
+                if(that.fileList2.length === 0){
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: `请选择${this.checkType==='image'?'图片':'视频'}`
+                    });
+                }else if(that.selectedOption2!==0&&!that.selectedOption2){
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: '请选择分组'
+                    });
+                }else if((that.fileList2.length>0||that.fileList.length>0)&&(that.selectedOption2||that.selectedOption2===0)){
                     if(that.checkType === 'image'){
                         that.fileList2.forEach(e => {
                             ids +=(e.response.pictureId+',')
@@ -138,17 +152,7 @@ export class SetMaterialComponent implements OnInit {
                         });
                     }
                     that.materialSave(that.checkType,ids,ids2);
-                }else if(that.fileList2.length === 0){
-                    this.modalSrv.error({
-                        nzTitle: '温馨提示',
-                        nzContent: `请选择${this.checkType==='image'?'图片':'视频'}`
-                    });
-                }else if(!that.selectedOption2){
-                    this.modalSrv.error({
-                        nzTitle: '温馨提示',
-                        nzContent: '请选择分组'
-                    });
-                }
+                } 
             }
         });
     }
@@ -182,29 +186,35 @@ export class SetMaterialComponent implements OnInit {
         }
         );
     }
+    
     nzCustomRequestFun2(e){
-        let that = this;
-        let apiUrl = Config.API1 + '/merchant/upload/material.json';
-        let formData: FormData = new FormData();
-        formData.append('multipartFile',e.file, e.file.name);
-        formData.append('type','image');
-        formData.append('merchantId', JSON.parse(sessionStorage.getItem(USER_INFO))['merchantId']);
-        that.uploading = true;
-        that.http.post(apiUrl, formData).subscribe(
-        (event: HttpEvent<{}>)  => {
-            that.uploading = false;
-            if (event['success']) {
-                e.onProgress(event, e.file);
-                e.onSuccess(event['data'], e.file, event);
-            } else {
-                e.onError(event['errorInfo'], e.file);
-                that.errotInfo = event['errorInfo']
+        if(e.file.size>5*1024* 1024){
+           e.onError(('请上传小于5mb的图片'+''), e.file)
+        }else{
+            let that = this;
+            let apiUrl = Config.API1 + '/merchant/upload/material.json';
+            let formData: FormData = new FormData();
+            formData.append('multipartFile',e.file, e.file.name);
+            formData.append('type','image');
+            formData.append('merchantId', JSON.parse(sessionStorage.getItem(USER_INFO))['merchantId']);
+            that.uploading = true;
+            that.http.post(apiUrl, formData).subscribe(
+            (event: HttpEvent<{}>)  => {
+                that.uploading = false;
+                if (event['success']) {
+                    e.onProgress(event, e.file);
+                    e.onSuccess(event['data'], e.file, event);
+                } else {
+                    e.onError(event['errorInfo'], e.file);
+                    that.errotInfo = event['errorInfo']
+                }
+            },
+            error => {
+                e.onError(error, e.file);
             }
-        },
-        error => {
-            e.onError(error, e.file);
+            );
         }
-        );
+        
     }
     moveChange(e){
         console.log(e);
@@ -215,9 +225,24 @@ export class SetMaterialComponent implements OnInit {
 
     moveChange2(e){
         let that = this;
+        console.log(e);
         that.fileList2 = e.fileList;
         if(e.type === "error")  that.errorAlter(e.file.error);
     }
+    beforeUpload = (file: File) => {
+        const isLt5M = file.size / 1024 / 1024 < 5;
+        if (!isLt5M) {
+          this.errorAlter('请上传小于5m的图片');
+        }
+        return isLt5M;
+      }
+      beforeUpload2 = (file: File) => {
+        const isLt10M = file.size / 1024 / 1024 < 5;
+        if (!isLt10M) {
+          this.errorAlter('请上传小于10m的视频');
+        }
+        return isLt10M;
+      }
     handlePreview = (file: UploadFile) => {
         this.previewImage = file.url || file.thumbUrl;
         this.previewVisible = true;
@@ -308,20 +333,14 @@ export class SetMaterialComponent implements OnInit {
         });
     }
     //删除分组
-    deReName(){
+    deReName(ref:any){
         let that = this;
-        this.modalSrv.confirm({
+          this.modalSrv.create({
             nzTitle: '是否确认删除',
-            nzContent: '可选择仅删除组或者删除分组及组内图片，选择仅删除组，组内图片将归入未分组',
-            nzOnOk: () =>{
-                that.materialDelGroup('only')
-            },
-            nzOnCancel: () =>{
-                that.materialDelGroup('all')
-            },
-            nzCancelText:'删除组及图片',
-            nzOkText:'删除组'
-          });
+            nzContent: ref,
+            nzWidth: '500px',
+            nzFooter:null,
+        });   
     }
     //新增分组
     addName(ref:any){
@@ -352,6 +371,7 @@ export class SetMaterialComponent implements OnInit {
         };
         this.wechatService.materialDelGroup(data).subscribe(
             (res: any) => {
+                this.modalSrv.closeAll();
                 if (res.success) {
                     this.materialGroupsFun();
                 } else {

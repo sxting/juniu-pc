@@ -29,7 +29,7 @@ export class AddNewItemsComponent implements OnInit {
         private titleSrv: TitleService,
         private localStorageService: LocalStorageService
     ) { }
-   
+    formatterDollar = value => `${Math.floor(value)===0?'':Math.floor(value)}`;
     formData: any;
     form: FormGroup;
     loading: boolean = false;
@@ -384,8 +384,8 @@ export class AddNewItemsComponent implements OnInit {
                         productNo: [ res.data.productNo, [ Validators.pattern(`[0-9]+`)] ],
                         status: [ status, [ Validators.required  ] ],
                         storeType: [ storeType, [ Validators.required ] ],
-                        cutOffDays:[ res.data.cutOffDays],
-                        wxBuyLimitNum:[ res.data.wxBuyLimitNum ],
+                        cutOffDays:[ res.data.cutOffDays<=0?180:res.data.cutOffDays],
+                        wxBuyLimitNum:[ res.data.wxBuyLimitNum<0?'': res.data.wxBuyLimitNum],
                         idx :[ res.data.idx ],
                     };
                     this.picId = res.data.picId;
@@ -533,7 +533,15 @@ export class AddNewItemsComponent implements OnInit {
         this.showPics = event;
     }
     showDivFun(){
-        this.showDiv = !this.showDiv;
+        let data = {
+            menuId: '900502B1',
+            timestamp: new Date().getTime(),
+          };
+          this.uploadService.menuRoute(data).then((result: any) => {
+            if(result){
+                this.showDiv = !this.showDiv;
+            }
+          });
     }
     errorAlter(err: any) {
         this.modalSrv.error({
@@ -549,8 +557,8 @@ export class AddNewItemsComponent implements OnInit {
     }
 
     addLineNoteDetail(index: number) {
-        if (this.buyerNotes[index].details.length >= 10) {
-            this.errorAlter('您最多只能添加10组!!');
+        if (this.buyerNotes[index].details.length >= 5) {
+            this.errorAlter('您最多只能添加5组!!');
         } else {
             this.buyerNotes[index].details.push({ item: '' });
         }
@@ -566,8 +574,8 @@ export class AddNewItemsComponent implements OnInit {
     }
 
     addGroupBuynote() {
-        if (this.buyerNotes.length >= 10) {
-            this.errorAlter('您最多只能添加10组!!');
+        if (this.buyerNotes.length >= 5) {
+            this.errorAlter('您最多只能添加5组!!');
         } else {
             this.buyerNotes.push({
                 title: '',

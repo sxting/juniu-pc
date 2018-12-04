@@ -116,7 +116,9 @@ export class UploadService {
               }
             } else if (res.data.eventType === 'NONE') {
 
-            } else if (res.data.eventType === 'API') {
+            } else if (res.data.eventType === 'DISPLAY') {
+              resolve(true);
+            }  else if (res.data.eventType === 'API') {
               funtion(selectData,self);
               resolve(true);
             } else if (res.data.eventType === 'REDIRECT') {

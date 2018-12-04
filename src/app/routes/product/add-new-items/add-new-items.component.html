@@ -98,7 +98,7 @@
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7"  nzFor="stock">小程序展示详情</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-       <span class="iconfont {{showDiv?'icon-shangla':'icon-xiala1'}}" style="cursor: pointer;color:#ff6600;" (click)="showDivFun()">点击收起</span>
+       <span class="iconfont {{showDiv?'icon-shangla':'icon-xiala1'}}" style="cursor: pointer;color:#ff6600;" (click)="showDivFun()">{{showDiv?'点击收起':'点击展开'}}</span>
       </nz-form-control>
     </nz-form-item>
     <div  class="{{!showDiv?'displayNone':''}}">
@@ -152,25 +152,23 @@
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7"  nzFor="idx">商品权重</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <input nz-input formControlName="idx" autocomplete="off" maxlength="20" id="idx" placeholder="请输入数字">
+          <nz-input-number formControlName="idx" [nzFormatter]="formatterDollar" id="idx"  style="width:200px !important;"  [nzMin]="1" [nzMax]="99999" [nzStep]="1"></nz-input-number>
         <nz-form-explain style="margin-top: 10px">请输入整数，权重越大商品在小程序中展示位置越靠前，最大99999。</nz-form-explain>
-        <!-- <nz-form-explain class=errorTips *ngIf="form.get('idx').dirty && form.get('idx').errors">请输入整数，权重越大商品在小程序中展示位置越靠前，最大99999。</nz-form-explain> -->
       </nz-form-control>
     </nz-form-item>
   
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7"  nzFor="wxBuyLimitNum">限购数量</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        <input nz-input formControlName="wxBuyLimitNum" autocomplete="off" maxlength="20" id="wxBuyLimitNum" placeholder="请输入限购数量">
-        <nz-form-explain style="margin-top: 10px">请输入单次限购份数，不填默认不限制。</nz-form-explain>
-        <!-- <nz-form-explain class=errorTips *ngIf="form.get('productName').dirty && form.get('productName').errors">请输入单次限购份数，不填默认不限制。</nz-form-explain> -->
+          <nz-input-number formControlName="wxBuyLimitNum" [nzFormatter]="formatterDollar" style="width:200px !important;" id="wxBuyLimitNum" [nzMin]="1" [nzMax]="99999" [nzStep]="1"></nz-input-number>
+        <nz-form-explain style="margin-top: 10px">请输入单次限购份数(整数)，不填默认不限制。</nz-form-explain>
       </nz-form-control>
     </nz-form-item>
   
     <nz-form-item>
       <nz-form-label nzXs="24" nzSm="7"  nzFor="cutOffDays">核销截止日期</nz-form-label>
       <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-        自购买之日起 <nz-input-number formControlName="cutOffDays" style="width:100px !important;margin:0 10px;" id="cutOffDays" [nzMin]="7" [nzMax]="180" [nzStep]="1"></nz-input-number> 天内可使用可输入范围7-180天
+        自购买之日起 <nz-input-number formControlName="cutOffDays" [nzFormatter]="formatterDollar" style="width:100px !important;margin:0 10px;" id="cutOffDays" [nzMin]="7" [nzMax]="180" [nzStep]="1"></nz-input-number> 天内可使用可输入范围7-180天
         <nz-form-explain style="margin-top: 10px">可输入范围7-180天</nz-form-explain>
         <!-- <nz-form-explain class=errorTips *ngIf="form.get('cutOffDays').dirty && form.get('cutOffDays').errors">请输入单次限购份数</nz-form-explain> -->
       </nz-form-control>
