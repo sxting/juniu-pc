@@ -29,7 +29,7 @@ export class AddNewProductComponent implements OnInit {
         private titleSrv: TitleService,
         private localStorageService: LocalStorageService
     ) { }
-
+    formatterDollar = value => `${Math.floor(value)===0?'':Math.floor(value)}`;
     formData: any;
     form: FormGroup;
     loading: boolean = false;
@@ -389,9 +389,9 @@ export class AddNewProductComponent implements OnInit {
                         productNo: [res.data.productNo, [Validators.pattern(`[0-9]+`)]],
                         status: [status, [Validators.required]],
                         storeType: [storeType, [Validators.required]],
-                        cutOffDays:[ res.data.cutOffDays],
-                        wxBuyLimitNum:[ res.data.wxBuyLimitNum ],
-                        idx :[ res.data.idx ],
+                        cutOffDays:[ res.data.cutOffDays<=0?180:res.data.cutOffDays],
+                        wxBuyLimitNum:[ res.data.wxBuyLimitNum<0?'': res.data.wxBuyLimitNum ],
+                        idx :[ res.data.idx],
                     };
                     this.picId = res.data.picId;
                     this.imagePath = res.data.picUrl? Config.OSS_IMAGE_URL+`${this.picId}/resize_${102}_${102}/mode_fill`: '';
@@ -555,8 +555,8 @@ export class AddNewProductComponent implements OnInit {
     }
 
     addLineNoteDetail(index: number) {
-        if (this.buyerNotes[index].details.length >= 10) {
-            this.errorAlter('您最多只能添加10组!!');
+        if (this.buyerNotes[index].details.length >= 5) {
+            this.errorAlter('您最多只能添加5组!!');
         } else {
             this.buyerNotes[index].details.push({ item: '' });
         }
@@ -572,8 +572,8 @@ export class AddNewProductComponent implements OnInit {
     }
 
     addGroupBuynote() {
-        if (this.buyerNotes.length >= 10) {
-            this.errorAlter('您最多只能添加10组!!');
+        if (this.buyerNotes.length >= 5) {
+            this.errorAlter('您最多只能添加5组!!');
         } else {
             this.buyerNotes.push({
                 title: '',
