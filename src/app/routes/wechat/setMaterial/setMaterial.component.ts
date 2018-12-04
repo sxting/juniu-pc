@@ -371,6 +371,7 @@ export class SetMaterialComponent implements OnInit {
         };
         this.wechatService.materialDelGroup(data).subscribe(
             (res: any) => {
+                this.modalSrv.closeAll();
                 if (res.success) {
                     this.materialGroupsFun();
                 } else {
