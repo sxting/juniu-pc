@@ -82,6 +82,7 @@ export class SetMaterialComponent implements OnInit {
         this.type = event.index === 0 ? true : false;
         this.buttonText =  event.index === 0 ?'上传图片':'上传视频';
         this.checkType = event.index === 0 ?'image':'video';
+        this.pageIndex = 1;
         this.materialGroupsFun();
     }
     fenzuCheck(ind,item){
@@ -94,7 +95,10 @@ export class SetMaterialComponent implements OnInit {
         this.materialListFun();
     }
 
-    
+    paginate(e){
+        this.pageIndex = e;
+        this.materialListFun();
+    }
     /**获取其他门店图片 */
     getPictureDetails(event: any) {
         console.log(event);
@@ -126,7 +130,17 @@ export class SetMaterialComponent implements OnInit {
             nzOnOk: () => {
                 let ids = '';
                 let ids2 = '';
-                if((that.fileList2.length>0||that.fileList.length>0)&&that.selectedOption2){
+                if(that.fileList2.length === 0){
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: `请选择${this.checkType==='image'?'图片':'视频'}`
+                    });
+                }else if(that.selectedOption2!==0&&!that.selectedOption2){
+                    this.modalSrv.error({
+                        nzTitle: '温馨提示',
+                        nzContent: '请选择分组'
+                    });
+                }else if((that.fileList2.length>0||that.fileList.length>0)&&(that.selectedOption2||that.selectedOption2===0)){
                     if(that.checkType === 'image'){
                         that.fileList2.forEach(e => {
                             ids +=(e.response.pictureId+',')
@@ -138,17 +152,7 @@ export class SetMaterialComponent implements OnInit {
                         });
                     }
                     that.materialSave(that.checkType,ids,ids2);
-                }else if(that.fileList2.length === 0){
-                    this.modalSrv.error({
-                        nzTitle: '温馨提示',
-                        nzContent: `请选择${this.checkType==='image'?'图片':'视频'}`
-                    });
-                }else if(!that.selectedOption2){
-                    this.modalSrv.error({
-                        nzTitle: '温馨提示',
-                        nzContent: '请选择分组'
-                    });
-                }
+                } 
             }
         });
     }
@@ -329,20 +333,14 @@ export class SetMaterialComponent implements OnInit {
         });
     }
     //删除分组
-    deReName(){
+    deReName(ref:any){
         let that = this;
-        this.modalSrv.confirm({
+          this.modalSrv.create({
             nzTitle: '是否确认删除',
-            nzContent: '可选择仅删除组或者删除分组及组内图片，选择仅删除组，组内图片将归入未分组',
-            nzOnOk: () =>{
-                that.materialDelGroup('only')
-            },
-            nzOnCancel: () =>{
-                that.materialDelGroup('all')
-            },
-            nzCancelText:'删除组及图片',
-            nzOkText:'删除组'
-          });
+            nzContent: ref,
+            nzWidth: '500px',
+            nzFooter:null,
+        });   
     }
     //新增分组
     addName(ref:any){

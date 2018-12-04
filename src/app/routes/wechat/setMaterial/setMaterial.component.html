@@ -32,13 +32,13 @@
             <button nz-button nzType="primary" type="submit" style="margin: 0 auto;display: block;" [nzLoading]="submitting"  (click)="addName(addNamete)">新建分组</button>
         </div>
         <div nz-col nzSpan="17" class="rightBox">
-            <div>
+            <div >
                   <span>{{fenzuName}}({{countTotal}})</span>
-                  <span class="buttons" (click)="reName(reNamete)">重命名</span>
-                  <span class="buttons" (click)="deReName()">删除分组</span>
+                  <span class="buttons" *ngIf="groupId!==0" (click)="reName(reNamete)">重命名</span>
+                  <span class="buttons" *ngIf="groupId!==0" (click)="deReName(DelNamete)">删除分组</span>
             </div>
 
-            <div style="background: #e5e5e5;padding: 10px;margin-top: 10px;">
+            <div style="background: #e5e5e5;padding: 10px;margin-top: 10px;" *ngIf="countTotal>0" >
                 <label nz-checkbox [(ngModel)]="checked" (ngModelChange)="checkAll($event)">全选</label>
 
                 <div style="float:right;" *ngIf="showButton">
@@ -46,7 +46,7 @@
                   <span class="iconfont icon-delete buttons" (click)="DelSome()"></span>
                 </div>
             </div>
-            <div class="imgBox">
+            <div *ngIf="countTotal>0"  class="imgBox">
                 <div  *ngFor="let item of imgbox" class="imgMain ">
                     <img [src]="item.pictureUrl||'assets/img/product.png'" alt="" class="img">
                     <div class="zhezhao {{item.checked?'imgMain2':''}}">
@@ -65,6 +65,13 @@
                     </div>
                     
                 </div>
+            </div>
+            <div *ngIf="countTotal<=0"  class="icon-zanwuneirong iconfont">
+              <p style="font-size: 40px;
+              text-align: center;">暂无数据</p>
+            </div>
+            <div class="nzPaginationBox">
+                <nz-pagination class="nzPagination" [nzTotal]="countTotal" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
             </div>
         </div>
       </div>
@@ -178,4 +185,16 @@
   <div >
       <input type="text" nz-input [(ngModel)]="addNameNg" placeholder="请输入分组名称" maxlength="8" />
   </div>
+</ng-template>
+
+
+<!-- 删除 -->
+<ng-template #DelNamete >
+  <div >
+    可选择仅删除组或者删除分组及组内{{checkType==='image'?'图片':'视频'}}，选择仅删除组，组内{{checkType==='image'?'图片':'视频'}}将归入未分组
+  </div>
+<div style="text-align: right;margin-top:50px;">
+  <button nz-button nzType="default" style="margin-right:20px;" (click)="materialDelGroup('only')">删除组</button>
+  <button nz-button nzType="primary" (click)="materialDelGroup('all')">删除组及{{checkType==='image'?'图片':'视频'}}</button>
+</div>
 </ng-template>
