@@ -539,7 +539,15 @@ export class AddNewProductComponent implements OnInit {
         this.showPics = event;
     }
     showDivFun(){
-        this.showDiv = !this.showDiv;
+        let data = {
+            menuId: '900503B1',
+            timestamp: new Date().getTime(),
+          };
+          this.uploadService.menuRoute(data).then((result: any) => {
+            if(result){
+                this.showDiv = !this.showDiv;
+            }
+          });
     }
     errorAlter(err: any) {
         this.modalSrv.error({

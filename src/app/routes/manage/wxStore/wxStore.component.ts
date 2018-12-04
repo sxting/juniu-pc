@@ -10,6 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Validators } from '@angular/forms';
 import { ViewChild } from '@angular/core';
 import { ElementRef } from '@angular/core';
+import { UploadService } from '@shared/upload-img';
 
 @Component({
     selector: 'app-wxStore',
@@ -74,6 +75,7 @@ export class WxStoreComponent implements OnInit {
         private manageService: ManageService,
         private router: Router,
         private fb: FormBuilder,
+        private uploadService: UploadService,
         private route: ActivatedRoute,
         private http: _HttpClient
     ) {
@@ -510,7 +512,15 @@ export class WxStoreComponent implements OnInit {
         console.log('nzChange', ret);
     }
     showDivFun(){
-        this.showDiv = !this.showDiv;
+        let data = {
+            menuId: '901302B1',
+            timestamp: new Date().getTime(),
+          };
+          this.uploadService.menuRoute(data).then((result: any) => {
+            if(result){
+                this.showDiv = !this.showDiv;
+            }
+          });
     }
     storeDetail() {
         let self = this;
