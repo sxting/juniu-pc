@@ -228,6 +228,7 @@ export class StaffAddComponent implements OnInit {
   //素材分组
   getMaterialGroups() {
     let data = {
+      type: this.workType === 0 ? 'video' : 'image',
       merchantId: this.merchantId
     };
     this.wechatService.getMaterialGroups(data).subscribe(
