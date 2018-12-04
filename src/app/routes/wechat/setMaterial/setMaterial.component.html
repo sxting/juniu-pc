@@ -115,7 +115,8 @@
             [nzCustomRequest]="nzCustomRequestFun2"
             [nzShowButton]="fileList2.length < 5"
             [nzPreview]="handlePreview"
-            (nzChange)="moveChange2($event)">
+            (nzChange)="moveChange2($event)"
+            [nzBeforeUpload]="beforeUpload"      >
               <i class="anticon anticon-plus" (click)="bianda()"></i>
               <div class="ant-upload-text">点击上传</div>
           </nz-upload>
@@ -152,6 +153,7 @@
             (nzChange)="moveChange($event)"
             [nzCustomRequest]="nzCustomRequestFun"
             [nzShowButton]="fileList.length < 1"
+            [nzBeforeUpload]="beforeUpload2"
             [nzDisabled]="uploading"            >
             <button nz-button>
               <i nz-icon type="upload"></i><span>点击上传</span>

@@ -182,29 +182,35 @@ export class SetMaterialComponent implements OnInit {
         }
         );
     }
+    
     nzCustomRequestFun2(e){
-        let that = this;
-        let apiUrl = Config.API1 + '/merchant/upload/material.json';
-        let formData: FormData = new FormData();
-        formData.append('multipartFile',e.file, e.file.name);
-        formData.append('type','image');
-        formData.append('merchantId', JSON.parse(sessionStorage.getItem(USER_INFO))['merchantId']);
-        that.uploading = true;
-        that.http.post(apiUrl, formData).subscribe(
-        (event: HttpEvent<{}>)  => {
-            that.uploading = false;
-            if (event['success']) {
-                e.onProgress(event, e.file);
-                e.onSuccess(event['data'], e.file, event);
-            } else {
-                e.onError(event['errorInfo'], e.file);
-                that.errotInfo = event['errorInfo']
+        if(e.file.size>5*1024* 1024){
+           e.onError(('请上传小于5mb的图片'+''), e.file)
+        }else{
+            let that = this;
+            let apiUrl = Config.API1 + '/merchant/upload/material.json';
+            let formData: FormData = new FormData();
+            formData.append('multipartFile',e.file, e.file.name);
+            formData.append('type','image');
+            formData.append('merchantId', JSON.parse(sessionStorage.getItem(USER_INFO))['merchantId']);
+            that.uploading = true;
+            that.http.post(apiUrl, formData).subscribe(
+            (event: HttpEvent<{}>)  => {
+                that.uploading = false;
+                if (event['success']) {
+                    e.onProgress(event, e.file);
+                    e.onSuccess(event['data'], e.file, event);
+                } else {
+                    e.onError(event['errorInfo'], e.file);
+                    that.errotInfo = event['errorInfo']
+                }
+            },
+            error => {
+                e.onError(error, e.file);
             }
-        },
-        error => {
-            e.onError(error, e.file);
+            );
         }
-        );
+        
     }
     moveChange(e){
         console.log(e);
@@ -215,9 +221,24 @@ export class SetMaterialComponent implements OnInit {
 
     moveChange2(e){
         let that = this;
+        console.log(e);
         that.fileList2 = e.fileList;
         if(e.type === "error")  that.errorAlter(e.file.error);
     }
+    beforeUpload = (file: File) => {
+        const isLt5M = file.size / 1024 / 1024 < 5;
+        if (!isLt5M) {
+          this.errorAlter('请上传小于5m的图片');
+        }
+        return isLt5M;
+      }
+      beforeUpload2 = (file: File) => {
+        const isLt10M = file.size / 1024 / 1024 < 5;
+        if (!isLt10M) {
+          this.errorAlter('请上传小于10m的视频');
+        }
+        return isLt10M;
+      }
     handlePreview = (file: UploadFile) => {
         this.previewImage = file.url || file.thumbUrl;
         this.previewVisible = true;
