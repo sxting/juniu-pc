@@ -99,7 +99,7 @@
     <button nz-button nzType="primary" (click)="goSetMaterialPage()">上传素材</button>
     <div class="source-content">
       <div class="left">
-        <p [class.active-color]="groupId === 0" (click)="onGroupItemClick()">未分组</p>
+        <!--<p [class.active-color]="groupId === 0" (click)="onGroupItemClick()">未分组</p>-->
         <p [class.active-color]="groupId === item.groupId" *ngFor="let item of materialGroupList" (click)="onGroupItemClick(item)">{{item.groupName}}</p>
       </div>
       <div class="right" *ngIf="workType === 0">
