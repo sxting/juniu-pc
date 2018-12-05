@@ -89,6 +89,7 @@ export class SetMaterialComponent implements OnInit {
         this.fenzu.forEach(element => {
             element.check = false;
         });
+        this.showButton = false;
         this.fenzu[ind].check = true;
         this.groupId = item.groupId;
         this.fenzuName = item.groupName;
