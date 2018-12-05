@@ -130,7 +130,7 @@ export class SetMaterialComponent implements OnInit {
             nzOnOk: () => {
                 let ids = '';
                 let ids2 = '';
-                if(that.fileList2.length === 0){
+                if((this.checkType==='image'&&that.fileList2.length === 0)||(this.checkType==='video'&&that.fileList.length === 0)){
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
                         nzContent: `请选择${this.checkType==='image'?'图片':'视频'}`
