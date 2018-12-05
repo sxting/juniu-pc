@@ -237,7 +237,7 @@ export class SetMaterialComponent implements OnInit {
         return isLt5M;
       }
       beforeUpload2 = (file: File) => {
-        const isLt10M = file.size / 1024 / 1024 < 5;
+        const isLt10M = file.size / 1024 / 1024 < 10;
         if (!isLt10M) {
           this.errorAlter('请上传小于10m的视频');
         }
