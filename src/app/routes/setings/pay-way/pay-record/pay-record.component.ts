@@ -6,6 +6,7 @@ import {SetingsService} from "../../shared/setings.service";
 import {LocalStorageService} from "@shared/service/localstorage-service";
 import {STORES_INFO} from "@shared/define/juniu-define";
 import {Config} from "@shared/config/env.config";
+import NP from 'number-precision';
 
 @Component({
   selector: 'app-pay-record',
@@ -140,6 +141,9 @@ export class PayRecordComponent implements OnInit {
             (res: any) => {
                 if(res.success) {
                     this.dataList2 = res.data.content;
+                    this.dataList2.forEach(function(item: any) {
+                      item.shifu = NP.minus(item.totalAmount, item.fee)
+                    });
                     this.countPage = res.data.totalElements;
                 } else {
                     this.modalSrv.error({
