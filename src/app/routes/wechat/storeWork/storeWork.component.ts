@@ -218,7 +218,8 @@ export class StoreWorkComponent implements OnInit {
   //素材分组
   getMaterialGroups() {
     let data = {
-      merchantId: this.merchantId
+      merchantId: this.merchantId,
+      type: this.workType === 0 ? 'video' : 'image',
     };
     this.wechatService.getMaterialGroups(data).subscribe(
       (res: any) => {
