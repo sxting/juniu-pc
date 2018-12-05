@@ -559,7 +559,7 @@ export class WxStoreComponent implements OnInit {
                         end = new Date('2018-12-12 ' + time[1]);
                     }
                     this.pictureDetails = res.data.bannerColl;
-                    this.tags = res.data.label.split(' ');
+                    this.tags = res.data.label?res.data.label.split(' '):[];
                     this.pictureDetails2 = [];
                     if(res.data.environment&&res.data.environment.split(',').length>0){
                         res.data.environment.split(',').forEach(element => {
