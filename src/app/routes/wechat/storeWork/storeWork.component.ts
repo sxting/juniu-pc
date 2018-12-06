@@ -316,7 +316,7 @@ export class StoreWorkComponent implements OnInit {
           this.wordList = res.data;
           res.data.forEach(i => {
               that.addWorkList.push({
-                workName: i.merchantMediaDTOS[0].title,
+                workName: i.title,
                 workType: i.merchantMediaDTOS[0].sourceType === 'VIDEO'?0:1,
                 picUrl:Config.OSS_IMAGE_URL+`${i.merchantMediaDTOS[0].sourceId.split(',')[0]}/resize_${that.imgW}_${that.imgH}/mode_fill`,
                 pictureId: i.merchantMediaDTOS[0].sourceId.split(',')[0],
