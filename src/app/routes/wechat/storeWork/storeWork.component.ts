@@ -346,4 +346,7 @@ export class StoreWorkComponent implements OnInit {
       }
     )
   }
+  return(){
+    window.history.go(-1);
+  }
 }
