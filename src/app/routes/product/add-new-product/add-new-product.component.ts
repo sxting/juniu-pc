@@ -542,7 +542,7 @@ export class AddNewProductComponent implements OnInit {
         let data = {
             menuId: '900503B1',
             timestamp: new Date().getTime(),
-            storeId:this.storeId
+            storeId:''
           };
           this.uploadService.menuRoute(data).then((result: any) => {
             if(result){
