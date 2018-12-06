@@ -38,7 +38,7 @@
       <nz-form-item>
         <nz-form-label nzXs="24" nzSm="5">作品名称</nz-form-label>
         <nz-form-control nzXs="24" nzSm="15" nzMd="16">
-          <input type="text" nz-input placeholder="请填写作品名称" [ngModel]="workName" (ngModelChange)="workNameChange($event)" [ngModelOptions]="{standalone: true}">
+          <input type="text" nz-input placeholder="请填写作品名称" maxlength="10" [ngModel]="workName" (ngModelChange)="workNameChange($event)" [ngModelOptions]="{standalone: true}">
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
