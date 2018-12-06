@@ -536,7 +536,7 @@ export class AddNewItemsComponent implements OnInit {
         let data = {
             menuId: '900502B1',
             timestamp: new Date().getTime(),
-            storeId:''
+            storeId:this.storeId || ''
           };
           this.uploadService.menuRoute(data).then((result: any) => {
             if(result){
