@@ -98,7 +98,7 @@
       </div>
     </div>
     <!--无素材-->
-    <div *ngIf="materialList.length === 0" class="no-source">
+    <div *ngIf="materialList.length === 0 && materialGroupList.length <= 1" class="no-source">
       <div class="top">
         <div class="icon-gantanhao iconfont"></div>
         <div class="text">暂无素材</div>
@@ -117,5 +117,4 @@
       </div>
     </div>
   </ng-template>
-  
   
