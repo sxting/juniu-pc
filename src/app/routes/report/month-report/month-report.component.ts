@@ -237,12 +237,14 @@ export class MonthReportComponent implements OnInit {
     //导出Excel
     exportExcel() {
       let that = this;
+      let end = new Date(this.reportDate.getTime()+30*24*60*60*2*1000).getMonth()+1;
+      
       let year = this.reportDate.getFullYear();        //获取当前年份(2位)
+      let year2 = new Date(this.reportDate.getTime()+30*24*60*60*2*1000).getFullYear(); 
       let monthStart = this.reportDate.getMonth()+1 < 10 ? '0' + (this.reportDate.getMonth()+1) : '' + (this.reportDate.getMonth()+1);//获取当前月份(0-11,0代表1月)
-      let monthEnd = this.reportDate.getMonth()+2 < 10 ? '0' + (this.reportDate.getMonth()+2) : '' + (this.reportDate.getMonth()+2);//获取当前月份(0-11,0代表1月)
+      let monthEnd = end ? '0' + end : '' + end;//获取当前月份(0-11,0代表1月)
       let startDate = year+'-'+monthStart+'-01 00:00:00';
-      let endDate = year+'-'+monthEnd+'-01 00:00:00';
-
+      let endDate = year2+'-'+monthEnd+'-01 00:00:00';
       let token = this.localStorageService.getLocalstorage(APP_TOKEN);
       if (that.storeId) {
         window.open(Config.API + `/order/ordersExcelDownLoad.excel?token=${token}&start=${startDate}&end=${endDate}&storeId=${that.storeId}`);
