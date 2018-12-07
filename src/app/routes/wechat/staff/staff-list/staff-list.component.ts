@@ -30,6 +30,10 @@ export class StaffListComponent implements OnInit {
     this.getStaffList();
   }
 
+  goBack() {
+    window.history.back();
+  }
+
   addStaffClick() {
     this.router.navigate(['/wechat/staff/add', {}])
   }
