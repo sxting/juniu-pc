@@ -11,6 +11,7 @@ import { StoresInforService } from "@shared/stores-infor/shared/stores-infor.ser
 import { ManageService } from "../../manage/shared/manage.service";
 declare var echarts: any;
 import NP from 'number-precision'
+import { UploadService } from '@shared/upload-img';
 
 
 @Component({
@@ -104,6 +105,7 @@ export class IndexComponent implements OnInit {
     constructor(
         private http: _HttpClient,
         private msg: NzMessageService,
+        private UploadService: UploadService,
         private router: Router,
         private homeService: HomeService,
         private localStorageService: LocalStorageService,
@@ -186,6 +188,8 @@ export class IndexComponent implements OnInit {
             id:item.id
         }
         this.manageService.permissionFun(data)
+
+ 
     }
 
     handlePieValueFormat(value: any) {

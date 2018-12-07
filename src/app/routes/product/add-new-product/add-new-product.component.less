@@ -1,3 +1,5 @@
+@import 'node_modules/@delon/theme/styles/default';
+@primary-color:#ff7700;
 .add-categoryName-btn{
     position: absolute;
     display: inline-block;
@@ -125,4 +127,316 @@
 }
 .icon-deleternormal:hover{
   opacity: 1;
+}
+
+
+
+
+
+
+.content_juniu .marketing_means h2{
+  font-family: PingFangSC-Medium;
+  font-size: 16px;
+  color: #1A1A1A;
+}
+.marketing_means h2>span{
+    display: inline-block;
+    width: 4px;
+    height: 16px;
+    background-color: @primary-color;
+    margin-right: 10px;
+    transform: translateY(2px);
+}
+.edit_goods_infor ul{
+  font-family: PingFangSC-Regular;
+  font-size: 14px;
+  color: #666666;
+}
+.edit_goods_infor ul li{
+  position: relative
+}
+.edit_goods_infor ul .left-block {
+  display: inline-block;
+  width: 150px;
+  box-sizing: border-box;
+  padding-right: 20px;
+  text-align: right;
+  color: #666;
+}
+.edit_goods_infor ul .left-block .icon-asterisks-1-copy{
+  font-size: 16px;
+  color: @primary-color;
+}
+.edit_goods_infor ul .right-block {
+  display: inline-block;
+  /*position: relative;*/
+}
+.edit_goods_infor ul .right-block .sanjiao{
+    position: absolute;
+    display: inline-block;
+    right: -10px;
+    width: 14px;
+    top: 0;
+    line-height: 30px;
+    font-size: 12px;
+    background-color: #f5f5f5;
+    color: #999;
+    text-align: center;
+    border-radius: 4px;
+}
+.select_input_box{
+  position: relative;
+}
+.select_input_box .please_select{
+    display: inline-block;
+    width: 50px;
+    height: 30px;
+    text-align: center;
+    color: @primary-color;
+    border-radius: 4px;
+    margin-right: 10px
+}
+.edit_goods_infor ul .right-block .select_types{
+    position: absolute;
+    top: 40px;
+    z-index: 1000;
+    background-color: #fff;
+    width: auto;
+}
+.edit_goods_infor ul .right-block .select_types .types_box{
+  float: left;
+  display: inline-block;
+  border: 1px solid #E5E5E5;
+  margin-left: -1px;
+}
+.edit_goods_infor ul .right-block .select_types .types{
+  float: left;
+  display: inline-block;
+  height: 200px;
+  overflow-y: scroll;
+}
+.edit_goods_infor ul .right-block .select_types .types_box:first-of-type{
+  margin-left: 0;
+  border-radius: 4px 0 0 4px;
+}
+.edit_goods_infor ul .right-block .select_types .types_box:last-of-type{
+  border-radius: 0 4px 4px 0;
+}
+.edit_goods_infor ul .right-block .select_types .types li{
+  margin-top: 0;
+  line-height: 35px;
+  padding: 0 60px 0 10px;
+  font-family: tahoma,arial,"Hiragino Sans GB","Microsoft Yahei","\5b8b\4f53";
+  font-size: 14px;
+  color: #1a1a1a;
+  -webkit-font-smoothing: antialiased;
+  cursor: pointer;
+  position: relative;
+}
+.edit_goods_infor ul .right-block .select_types .types li:hover{
+      background-color: #f7f7f7;
+      font-weight: 700;
+}
+.edit_goods_infor ul .right-block .select_types .types li.hover{
+      background-color: #f7f7f7;
+      font-weight: 700;
+}
+.edit_goods_infor ul .right-block .select_types .types li .iconfont{
+  position: absolute;
+  right: 10px;
+  font-size: 10px;
+  color: #666
+}
+.edit_goods_infor ul .right-block .descriptions_form{
+  margin-bottom: 20px;
+}
+.edit_goods_infor ul .right-block .descriptions_form:last-of-type{
+  margin-bottom: 0px;
+}
+.edit_goods_infor ul>li{
+  // margin-top: 30px;
+  /*overflow: hidden;*/
+}
+.right-block input[type=text], .right-block input[type=date], .right-block input[type=number]{
+  border: 1px solid #E5E5E5;
+  border-radius: 4px;
+  height: 28px;
+  padding: 0 5px;
+  outline: none;
+  font-size: 14px;
+}
+.right-block input[type=text].prductName{
+  width: 300px;
+}
+.right-block input[type=text].prductTypes{
+  width: 180px;
+}
+.right-block input[type=text].price{
+  width: 90px;
+  text-align: center
+}
+.product-tip {
+  color: #999999;
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.img-box input[type=file] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: pink;
+  opacity: 0;
+}
+.img-box .image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.img-box .delete-pic{
+  font-size: 20px;
+  color: @primary-color;
+  position: absolute;
+  right: 0;
+  top: 0;
+  line-height: 21px;
+  cursor: pointer;
+}
+.icon-camera {
+  color: #E5E5E5;
+  font-size: 40px;
+}
+.edit_goods_infor .pics_box li{
+  float: left;
+  margin-top: 0;
+  margin-right: 10px
+}
+.mt20{
+  margin-top: 20px;
+}
+.mr30{
+  margin-right: 30px;
+}
+
+.Industry_field_title{
+  position: relative
+}
+.Industry_field{
+  position: absolute;
+  left: 150px;
+}
+.Industry_field span{
+    font-family: PingFangSC-Regular;
+    font-size: 15px;
+    color: #1a1a1a;
+    margin-right: 40px;
+    cursor: pointer;
+    font-weight: 600;
+}
+.Industry_field span:hover{
+  color: @primary-color;
+}
+.right-block input[type=text].juniu_input{
+  width: 290px;
+  height: 28px;
+  line-height: 28px;
+  text-align: left;
+  font-family: PingFangSC-Regular;
+  font-size: 14px;
+  color: #666666;
+  padding-left: 10px;
+}
+.desc_textarea{
+  width: 290px;
+  height: 90px;
+  line-height: 28px;
+  text-align: left;
+  font-family: PingFangSC-Regular;
+  font-size: 14px;
+  margin-top: 20px;
+  border: 1px solid #E5E5E5;
+  border-radius: 2px;
+  padding-left: 10px;
+  color: #666666;
+}
+.form_parent .descriptions_btns{
+  font-family: PingFangSC-Regular;
+  font-size: 14px;
+  color: @primary-color;
+  cursor: pointer
+}
+.form_parent .descriptions_btns:first-of-type{
+  margin: 0 20px 0 10px;
+}
+.double_btn{
+  width: 300px;
+  text-align: center
+}
+.double_btn span{
+  display: inline-block;
+  width: 100px;
+  height: 30px;
+  font-family: PingFangSC-Regular;
+  font-size: 14px;
+  color: @primary-color;
+  line-height: 30px;
+  border: 1px solid @primary-color;
+  text-align: center;
+  border-radius: 4px;
+  margin-top: 16px;
+  cursor: pointer
+}
+.double_btn span:first-of-type{
+  background: @primary-color;
+  color: #fff;
+  margin-right: 30px
+}
+input::-webkit-input-placeholder,
+textarea::-webkit-textarea-placeholder{
+  color: #ccc;
+}
+input:-moz-placeholder,
+textarea:-moz-placeholder{
+  color: #ccc;
+}
+input::-moz-placeholder,
+textarea::-moz-placeholder{
+  color: #ccc;
+}
+input:-ms-input-placeholder,
+textarea:-ms-input-placeholder{
+  color: #ccc;
+}
+.space {
+  display: inline-block;
+  width: 20px;
+  height: 1px;
+}
+.select-store-btn {
+  color: @primary-color;
+  cursor: pointer;
+}
+
+.save{
+  text-align: center;
+}
+.save button{
+  width: 100px;
+  height: 30px;
+  line-height: 30px;
+  background: @primary-color;
+  border-radius: 4px;
+  font-family: PingFangSC-Regular;
+  /* font-size: 18px; */
+  color: #FFFFFF;
+  text-align: center;
+  display: inline-block;
+  cursor: pointer
+}
+.displayNone{
+  display: none;
 }

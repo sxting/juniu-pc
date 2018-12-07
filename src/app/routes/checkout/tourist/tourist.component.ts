@@ -13,6 +13,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { Validators } from '@angular/forms';
 import { SetingsService } from '../../setings/shared/setings.service';
+import { UploadService } from '@shared/upload-img';
 declare var swal: any;
 @Component({
   selector: 'app-tourist',
@@ -169,6 +170,7 @@ export class TouristComponent implements OnInit {
     private checkoutService: CheckoutService,
     private modalSrv: NzModalService,
     private setingsService: SetingsService,
+    private UploadService: UploadService,
     private http: _HttpClient,
   ) {}
   ngOnInit() {
@@ -2026,6 +2028,40 @@ vipXqFun2() {
  permissionFun(menuId: any, id?: any) {
   
 }
+function (selectData:any,self?:any) {
+  let obj = this;
+  self.modalSrv.confirm({
+    nzTitle: '您是否确认退款',
+    nzOnOk() {
+      if (selectData['statusName'] === '已取消') {
+        self.errorAlter('该订单已取消，不得退款');
+      } else if (selectData['statusName'] === '未付款') {
+        self.errorAlter('该订单未付款，不得退款');
+      } else if (selectData['statusName'] === '处理中') {
+        self.errorAlter('该订单处理中，不得退款');
+      } else if (selectData['recordTypeName'] === '开卡') {
+        self.errorAlter('开卡业务，不得退款');
+      } else {
+        self.checkoutService.backOrder(selectData['orderId']).subscribe(
+          (res: any) => {
+            if (res) {
+              if (res.success) {
+                self.modalSrv.success({
+                  nzTitle: '退款成功',
+                });
+                self.getOrderHistoryListHttp();
+                self.searchMemberCard('', true);
+              } else {
+                self.errorAlter(res.errorInfo);
+              }
+            }
+          },
+          (error: any) => self.errorAlter(error),
+        );
+      }
+    },
+  });
+}
   /**退款 */
   refund(selectData: any) {
     let obj = this;
@@ -2034,64 +2070,65 @@ vipXqFun2() {
       menuId: menuId,
       timestamp: new Date().getTime(),
     };
+    this.UploadService.menuRoute(data,obj.function,selectData,obj)
     let self = this;
-     this.manageService.menuRoute(data).subscribe((res: any) => {
-      if (res.success) {
-        if (res.data.eventType === 'ROUTE') {
-          if (res.data.eventRoute) {
-              this.router.navigateByUrl(
-                res.data.eventRoute + ';menuId=' + menuId,)
-          }
-        } else if (res.data.eventType === 'NONE') {
-        } else if (res.data.eventType === 'API') {
-          this.modalSrv.confirm({
-            nzTitle: '您是否确认退款',
-            nzOnOk() {
-              if (selectData['statusName'] === '已取消') {
-                this.errorAlter('该订单已取消，不得退款');
-              } else if (selectData['statusName'] === '未付款') {
-                this.errorAlter('该订单未付款，不得退款');
-              } else if (selectData['statusName'] === '处理中') {
-                this.errorAlter('该订单处理中，不得退款');
-              } else if (selectData['recordTypeName'] === '开卡') {
-                this.errorAlter('开卡业务，不得退款');
-              } else {
-                obj.checkoutService.backOrder(selectData['orderId']).subscribe(
-                  (res: any) => {
-                    if (res) {
-                      if (res.success) {
-                        obj.modalSrv.success({
-                          nzTitle: '退款成功',
-                        });
-                        obj.getOrderHistoryListHttp();
-                        obj.searchMemberCard('', true);
-                      } else {
-                        obj.errorAlter(res.errorInfo);
-                      }
-                    }
-                  },
-                  (error: any) => this.errorAlter(error),
-                );
-              }
-            },
-          });
-        } else if (res.data.eventType === 'REDIRECT') {
-          let href = res.data.eventRoute;
-          window.open(href);
-        }
-        if (res.data.eventMsg) {
-          this.modalSrv.error({
-            nzTitle: '温馨提示',
-            nzContent: res.data.eventMsg,
-          });
-        }
-      } else {
-        this.modalSrv.error({
-          nzTitle: '温馨提示',
-          nzContent: res.errorInfo,
-        });
-      }
-    });
+    //  this.manageService.menuRoute(data).subscribe((res: any) => {
+    //   if (res.success) {
+    //     if (res.data.eventType === 'ROUTE') {
+    //       if (res.data.eventRoute) {
+    //           this.router.navigateByUrl(
+    //             res.data.eventRoute + ';menuId=' + menuId,)
+    //       }
+    //     } else if (res.data.eventType === 'NONE') {
+    //     } else if (res.data.eventType === 'API') {
+    //       this.modalSrv.confirm({
+    //         nzTitle: '您是否确认退款',
+    //         nzOnOk() {
+    //           if (selectData['statusName'] === '已取消') {
+    //             this.errorAlter('该订单已取消，不得退款');
+    //           } else if (selectData['statusName'] === '未付款') {
+    //             this.errorAlter('该订单未付款，不得退款');
+    //           } else if (selectData['statusName'] === '处理中') {
+    //             this.errorAlter('该订单处理中，不得退款');
+    //           } else if (selectData['recordTypeName'] === '开卡') {
+    //             this.errorAlter('开卡业务，不得退款');
+    //           } else {
+    //             obj.checkoutService.backOrder(selectData['orderId']).subscribe(
+    //               (res: any) => {
+    //                 if (res) {
+    //                   if (res.success) {
+    //                     obj.modalSrv.success({
+    //                       nzTitle: '退款成功',
+    //                     });
+    //                     obj.getOrderHistoryListHttp();
+    //                     obj.searchMemberCard('', true);
+    //                   } else {
+    //                     obj.errorAlter(res.errorInfo);
+    //                   }
+    //                 }
+    //               },
+    //               (error: any) => this.errorAlter(error),
+    //             );
+    //           }
+    //         },
+    //       });
+    //     } else if (res.data.eventType === 'REDIRECT') {
+    //       let href = res.data.eventRoute;
+    //       window.open(href);
+    //     }
+    //     if (res.data.eventMsg) {
+    //       this.modalSrv.error({
+    //         nzTitle: '温馨提示',
+    //         nzContent: res.data.eventMsg,
+    //       });
+    //     }
+    //   } else {
+    //     this.modalSrv.error({
+    //       nzTitle: '温馨提示',
+    //       nzContent: res.errorInfo,
+    //     });
+    //   }
+    // });
   }
 
   findByCustomerIdHttp(customerId: any) {

@@ -1,0 +1,171 @@
+.leftBox {
+  height: 100%;
+  min-width: 200px;
+  overflow-y: auto;
+}
+.rightBox {
+  height: 100%;
+  min-width: 400px;
+}
+.renlianFalse {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  top: 10px;
+  bottom: 10px;
+}
+
+.renlianTrue {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  top: 10px;
+  bottom: 10px;
+}
+
+.settingsCollapsedFalse {
+  position: absolute;
+  top: 60px;
+  left: 220px;
+  right: 20px;
+  bottom: 0;
+}
+.settingsCollapsedTrue {
+  position: absolute;
+  top: 60px;
+  left: 80px;
+  right: 20px;
+  bottom: 0;
+}
+.buttons {
+  color: #ff6600;
+  cursor: pointer;
+  margin-left: 10px;
+}
+.mainBox {
+  position: absolute;
+  top: 180px;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  overflow-y: auto;
+}
+.fenzuLi {
+  width: 80%;
+  margin: 10px auto;
+  text-align: center;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #e5e5e5;
+  cursor: pointer;
+}
+.checked {
+  color: #ff6600;
+  border: 1px solid #ff6600;
+}
+.imgBox {
+  display: flex;
+  flex-wrap: wrap;
+  text-align: center;
+  position: absolute;
+  top: 80px;
+  bottom: 70px;
+  overflow-y: auto;
+  color: #fff;
+  .img {
+    display: block;
+    width: 100%;
+    height: 240px;
+    border: 1px solid #e5e5e5;
+    // border-bottom: none;
+  }
+  // > div > div {
+  //   height: 40px;
+  //   line-height: 40px;
+  //   border: 1px solid #e5e5e5;
+  // }
+  .zhezhao {
+    position: absolute;
+    background: #e5e5e5;
+    width: 100%;
+    height: 100% !important;
+    top: 0;
+    opacity: 0;
+  }
+}
+.imgMain:hover {
+  // background: #ff6600;
+  position: relative;
+  .zhezhao {
+    opacity: 0.7;
+    .imgLable {
+      position: absolute;
+      left: 20px;
+      top: 20px;
+    }
+    .icon-shipin{
+      font-size: 100px;
+      color: #000;
+      top: 50%;
+      position: absolute;
+      left: 50%;
+      margin-left: -55px;
+      margin-top: -70px;
+      cursor: pointer;
+    }
+    .icon-dx {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      color: #ff6600;
+      cursor: pointer;
+    }
+  }
+}
+.imgMain2 {
+  opacity: 0.7 !important;
+  .imgLable {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+  }
+  .icon-shipin{
+    font-size: 100px;
+    color: #000;
+    top: 50%;
+    position: absolute;
+    left: 50%;
+    margin-left: -55px;
+    margin-top: -70px;
+    cursor: pointer;
+  }
+  .icon-dx {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    color: #ff6600;
+    cursor: pointer;
+  }
+}
+.imgMain {
+  width: 200px;
+  height: 240px;
+  // background: red;
+  // background: #ff6600;
+  margin: 10px;
+  position: relative;
+}
+.icon-zanwuneirong{
+  font-size: 200px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -100px;
+    margin-top: -200px;
+    color: #e5e5e5;
+}
+.nzPaginationBox{
+  position: absolute;
+    bottom: 0;
+    right: 20px;
+}
