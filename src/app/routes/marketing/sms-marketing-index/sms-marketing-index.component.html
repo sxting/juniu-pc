@@ -5,7 +5,8 @@
     <ul class="card">
         <li *ngFor="let item of list1">
             <div class="item" (click)="onItemClick(item.id, item.name, item.desc,item.menuId)">
-                <img [src]="item.img" alt="">
+                <img *ngIf="item.id === '001' || item.id === '002' || item.id === '003'" class="yingxiao-icon" src="/assets/img/yingxiao-icon.png" alt="">
+                <img class="img" [src]="item.img" alt="">
                 <p>{{item.name}}</p>
             </div>
         </li>
