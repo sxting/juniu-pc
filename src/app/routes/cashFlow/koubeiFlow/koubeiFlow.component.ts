@@ -45,7 +45,6 @@ export class KoubeiFlowComponent implements OnInit {
   orderItemDetailInfor: any;//详情页面的数据
   orderItemDetailInforList: any;//详情页面的列表数据
 
-
   //口碑拼团流水参数
   batchQuery = {
     storeId: this.storeId,
