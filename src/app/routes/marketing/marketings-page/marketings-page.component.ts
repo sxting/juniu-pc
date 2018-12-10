@@ -151,10 +151,12 @@ export class MarketingsPageComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-      this.moduleId = this.route.snapshot.params['menuId'];
+        this.moduleId = this.route.snapshot.params['menuId'];
         this.paramsId = this.route.snapshot.params['id'];
         this.paramsIdNumber = parseInt(this.paramsId);
         this.marketingId = this.route.snapshot.params['marketingId'] ? this.route.snapshot.params['marketingId'] : '';
+
+        console.log(this.paramsId);
 
         if(this.paramsId.indexOf('0') >= 0) {
             this.pageHeader1 = '短信营销';

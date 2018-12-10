@@ -13,8 +13,8 @@
     </ul>
 </nz-card>
 
-<nz-card nzTitle="微信抽奖" [nzBordered]="false" *ngIf="">
-    <ul class="card">
+<nz-card nzTitle="微信抽奖" [nzBordered]="false" *ngIf="1">
+    <ul class="card" style="display: block">
         <li *ngFor="let item of list2">
             <div class="item" (click)="onItemClick(item.id, item.name, item.desc)">
                 <img [src]="item.img" alt="">
