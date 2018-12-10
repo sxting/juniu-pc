@@ -5,6 +5,10 @@ import { WechatOrderGroupComponent } from './orderGroup/orderGroup.component';
 import { WechatStatisticsComponent } from './resultStatistics/wechatStatistics.component';
 import { WxreleaseGroupsComponent } from './wxreleaseGroups/wxreleaseGroups.component';
 import { PingjiaComponent } from './pingjia/pingjia.component';
+import { StaffListComponent } from './staff/staff-list/staff-list.component';
+import { StaffAddComponent } from './staff/staff-add/staff-add.component';
+import { SetMaterialComponent } from './setMaterial/setMaterial.component';
+import { StoreWorkComponent } from './storeWork/storeWork.component';
 
 
 const routes: Routes = [
@@ -13,7 +17,11 @@ const routes: Routes = [
   { path: 'resultStatistics', component: WechatStatisticsComponent },
   { path: 'wxreleaseGroups', component: WxreleaseGroupsComponent },
   { path: 'pingjia', component: PingjiaComponent },
-
+  { path: 'staff/list', component: StaffListComponent },
+  { path: 'staff/add', component: StaffAddComponent },
+  { path: 'setMaterial', component: SetMaterialComponent },
+  { path: 'storeWork', component: StoreWorkComponent },
+  
 ];
 
 @NgModule({

@@ -1,0 +1,31 @@
+<nz-card [nzBordered]="false">
+  <div class="top-btn-box">
+    <!--<button nz-button (click)="addStaffClick()" [nzType]="'primary'">-->
+      <!--<span>新增展示技师</span>-->
+    <!--</button>-->
+    <button nz-button (click)="goBack()" [nzType]="'primary'">
+      <span>返回</span>
+    </button>
+  </div>
+  <div>
+    <nz-table [nzNoResult]="'没有数据'" [nzData]="dataList" [nzShowPagination]="false">
+      <thead>
+      <tr>
+        <th *ngFor="let item of theadName"><span>{{item}}</span></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of dataList">
+        <td>{{item.staffId}}</td>
+        <td>{{item.staffName}}</td>
+        <td>{{item.roleName}}</td>
+        <td>{{item.contactPhone}}</td>
+        <td class="jn-color" (click)="editStaffClick(item)">编辑作品</td>
+      </tr>
+      </tbody>
+    </nz-table>
+    <div class="nzPaginationBox">
+      <nz-pagination class="nzPagination" (nzPageIndexClickChange)="paginate($event)" (nzPageIndexChange)="paginate($event)" [nzPageIndex]="1" [nzTotal]="countTotal"></nz-pagination>
+    </div>
+  </div>
+</nz-card>

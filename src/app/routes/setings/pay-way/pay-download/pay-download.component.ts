@@ -68,7 +68,7 @@ export class PayDownloadComponent implements OnInit {
   uploadImage(event: any) {
     event = event ? event : window.event;
     var file = event.srcElement ? event.srcElement.files : event.target.files;
-    this.uploadService.postWithFile(file, 'marketing', 'T', [{'height': 58, 'width': 78}]).then((result: any) => {
+    this.uploadService.postWithFile(file, 'marketing', 'F', [{'height': 58, 'width': 78}]).then((result: any) => {
       this.uploadImageResult = result;
       // console.log(result);
       this.imageId = this.uploadImageResult.pictureId;

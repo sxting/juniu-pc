@@ -150,7 +150,8 @@ export class StoreListComponent {
             let data = {
                 menuId: '901001B01',
                 timestamp: new Date().getTime(),
-                parameter: 'storeId=' + e
+                parameter: 'storeId=' + e,
+                storeId:e
             }
             this.menuRouteHttp(data);
         }

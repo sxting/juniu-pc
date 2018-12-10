@@ -1,0 +1,53 @@
+<g2-card>
+    <div class="stores-box">
+        <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false" [ifStoresAuth]="false" (storeIdOutput)="onSelectStoreClick($event)"></jn-stores-infor>
+    </div>
+
+    <div>
+        <div class="quan-input-box" style="position: relative;">
+            <span>输入金额:</span>
+            <input nz-input type="number" class="inputNumber" (keyup.enter)="scanPay(jiazai);" onkeyup="if(value>99999)value=99999;if(value<0)value=0.01;this.value=this.value.toString().match(/^\d+(?:\.\d{0,2})?/);" [(ngModel)]="receiptCode"  placeholder="请输入收款金额" (ngModelChange)="inputChange($event)">
+            <!-- <nz-input-number [(ngModel)]="receiptCode" [nzSize]="'large'" placeholder="请输入收款金额" (ngModelChange)="inputChange($event)" [nzMin]="0.01" [nzMax]="999999" style="margin-left:10px;width: 300px !important;    z-index: 999;position: relative;" [nzStep]="0.01"></nz-input-number> -->
+            <input nz-input  class="hidden" id="authCode1" (ngModelChange)="goToSubmitOrder($event)" style="width:128px;position: absolute;left:80px;top: 10px;"
+        [(ngModel)]="authCode">
+        </div>
+    </div>
+    <button nz-button nzType="primary" style="margin-left:90px;" type="submit" [nzLoading]="loading" [disabled]="receiptCode<=0||!receiptCode" (click)="scanPay(jiazai)">收款</button>
+    <div class="record-box">
+        <div class="sub-title">
+            <span></span>今日收银记录</div>
+
+        <nz-table [nzNoResult]="'没有数据'" [nzShowPagination]="false" [nzData]="shopyinList" #nzTable>
+            <thead nz-thead>
+                    <tr>
+                    <th>收银时间</th>
+                    <th>流水号</th>
+                    <th>渠道</th>
+                    <th>金额</th>
+                    <th>操作</th>
+                    </tr>
+            </thead>
+            <tbody nz-tbody>
+                <tr nz-tbody-tr *ngFor="let item of shopyinList">
+                    <td>{{item.juniuoModel.dateCreated}}</td>
+                <td>{{item.orderId}}</td>
+                <td>{{item.payTypeName||'-'}}</td>
+                <td>{{item.paidMoney/100}}</td>
+                <td>
+                <span class="button" *ngIf="item.orderType === 'ORDER'&&item.status !== 'REFUND'&&item.status !== 'CLOSE'" (click)="refund(item)">撤销</span>
+                <span *ngIf="item.orderType === 'ORDER'&&item.status === 'REFUND'">已退款</span>
+                <span  *ngIf="item.orderType === 'ORDER'&&item.status === 'CLOSE'">已取消</span>
+                </td>
+                </tr>
+            </tbody>
+        </nz-table>
+        <div class="nzPaginationBox">
+            <nz-pagination class="nzPagination" [nzTotal]="pageInfoNum" [nzPageSize]="10" (nzPageIndexChange)="getData($event)"></nz-pagination>
+        </div>
+    </div>
+</g2-card>
+
+<ng-template #jiazai>
+    <div style="text-align: center;
+    font-size: 25px;">收款{{receiptCode}}元，请扫描顾客二维码......</div>
+  </ng-template>

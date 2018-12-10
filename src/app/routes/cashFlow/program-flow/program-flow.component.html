@@ -21,13 +21,13 @@
           <nz-form-item>
             <nz-form-label nzFor="productId">订单时间</nz-form-label>
             <nz-form-control>
-              <nz-range-picker [nzDisabledDate]="disabledDate" [nzAllowClear]="false" nzFormat="yyyy-MM-dd" [(ngModel)]="dateRange" (ngModelChange)="onDateChange($event)"></nz-range-picker>
+              <nz-range-picker [nzDisabledDate]="disabledDate" [nzAllowClear]="false" nzShowTime nzFormat="yyyy-MM-dd HH:mm:ss" [(ngModel)]="dateRange" (ngModelChange)="onDateChange($event)"></nz-range-picker>
             </nz-form-control>
           </nz-form-item>
         </nz-col>
         <nz-col nzMd="8" nzSm="24" style="overflow: hidden;height: 56.5px;">
           <nz-form-item>
-            <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [storeId]="storeId" [ifStoresAll]="ifStoresAll"
+            <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [storeId]="storeId" 
                              (storeListPush)="storeListPush($event)" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
           </nz-form-item>
         </nz-col>
@@ -57,7 +57,7 @@
       </nz-row>
     </div>
     <div class="mb-md">
-      <nz-alert nzType="info" nzMessage="共有 {{totalElements}} 条数据  |   总金额：{{totalAmount}}万" nzShowIcon></nz-alert>
+      <nz-alert nzType="info" nzMessage="共有 {{totalElements}} 条数据  |   总金额：{{totalAmount}}元" nzShowIcon></nz-alert>
     </div>
     <!-- table -->
     <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="orderListInfor">
@@ -90,7 +90,7 @@
         </td>
         <td>{{item.actualAmount}}</td>
         <td *ngIf="activeIndex === 1">{{item.totalAmount}}</td>
-        <td *ngIf="activeIndex === 1">{{item.wxAppOrderProducts && item.wxAppOrderProducts[0].cardName? item.wxAppOrderProducts[0].cardName : '-'}}</td>
+        <td *ngIf="activeIndex === 1">{{item.wxAppOrderCards && item.wxAppOrderCards[0].cardName? item.wxAppOrderCards[0].cardName : '-'}}</td>
         <td *ngIf="activeIndex === 1">{{item.storeName}}</td>
         <td class="" *ngIf="activeIndex === 2">{{item.wxAppOrderPinTuans && item.wxAppOrderPinTuans[0].activityName? item.wxAppOrderPinTuans[0].activityName : '-'}}</td>
         <td class="" *ngIf="activeIndex === 0">{{item.wxAppOrderProducts && item.wxAppOrderProducts[0].itemName? item.wxAppOrderProducts[0].itemName : '-'}}</td>
@@ -164,10 +164,10 @@
           <td *ngIf="list.cardId != null && activeIndex === 0">{{list.deductAmount}}</td><!--扣卡-->
           <td *ngIf="list.cardId == null && activeIndex === 0">{{list.num}}</td>
 
-          <td style="color: #108EE9" *ngIf="activeIndex === 1">{{list.categoryName? list.categoryName : '-'}}</td>
-          <td *ngIf="activeIndex === 1">{{list.categoryName? list.categoryName : '-'}}</td>
-          <td *ngIf="activeIndex === 1">{{list.categoryName? list.categoryName : '-'}}</td>
-          <td *ngIf="activeIndex === 1">{{list.categoryName? list.categoryName : '-'}}</td>
+          <td style="color: #108EE9" *ngIf="activeIndex === 1">{{list.cardtypeName||'-'}}</td>
+          <td *ngIf="activeIndex === 1">{{list.cardName|| '-'}}</td>
+          <td *ngIf="activeIndex === 1">{{list.price||0}}</td>
+          <td *ngIf="activeIndex === 1">{{list.totalAmount||0}}</td>
 
           <td style="color: #108EE9" nz-th class="" *ngIf="activeIndex === 2">{{list.activityType}}</td>
           <td nz-th class="" *ngIf="activeIndex === 2">{{list.activityName}}</td>
@@ -178,11 +178,7 @@
           <td>{{totalNum}}</td>
           <td class="text-right">{{totalMoney}}</td>
         </tr>
-        <tr nz-tbody-tr *ngIf="orderItemDetailInforList && activeIndex === 1">
-          <td colspan="2" style="color: #000">总计</td>
-          <td>{{totalNum}}</td>
-          <td class="text-right">{{totalMoney}}</td>
-        </tr>
+    
         <tr nz-tbody-tr *ngIf="orderItemDetailInforList && activeIndex === 2">
           <td colspan="2" style="color: #000">总计</td>
           <td class="text-right">{{totalMoneyTwo}}</td>
@@ -193,7 +189,7 @@
       <table *ngIf="orderItemDetailInfor && (activeIndex === 2 || activeIndex === 1)">
         <tr class="ui-grid-row">
           <td class="">顾客微信昵称</td>
-          <td class="">{{orderItemDetailInfor.customerName? orderItemDetailInfor.customerName : '-'}}</td>
+          <td class="">{{orderItemDetailInfor.customerName|| '-'}}</td>
           <td class="" *ngIf="activeIndex === 1">性别</td>
           <td class="" *ngIf="activeIndex === 1">{{orderItemDetailInfor.customerGenderText}}</td>
           <td class="">手机号</td>

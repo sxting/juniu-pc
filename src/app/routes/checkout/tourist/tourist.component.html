@@ -645,6 +645,7 @@
                 <th>支付详情</th>
                 <th>服务技师</th>
                 <th>收款金额</th>
+                <th>支付状态</th>
               </tr>
             </thead>
             <tbody>
@@ -671,6 +672,10 @@
                 </td>
                 <td>{{item.serveStaffNames}}</td>
                 <td>{{item.money / 100}}</td>
+                <td>
+                  <span *ngIf="item.status === 'REFUND'" style="color:red;">{{item.statusName}}</span>
+                  <span *ngIf="item.status != 'REFUND'">{{item.statusName}}</span>
+              </td>
               </tr>
             </tbody>
 
@@ -945,10 +950,12 @@
     <p *ngIf="item.cardType === 'METERING'">卡余额：{{item.balance}}次</p>
     <p *ngIf="item.validate">有效期：{{item.validate}}天</p>
   </div>
-  <button class="buttons" nz-button nzType="primary" type="submit" (click)="orderPrintClick()">打印小票</button>
+  <button class="buttons" style="margin-right:20px;" nz-button nzType="primary" type="submit" (click)="handleCancel()">关闭</button>
+  <button class="buttons" nz-button  (click)="orderPrintClick()">打印小票</button>
 </nz-modal>
 <nz-modal style="z-index: 99999;" [(nzVisible)]="htmlModalVisible2" nzWidth="400" [nzFooter]="null" nzTitle="温馨提示" nzOkText="确定" (nzOnCancel)="handleCancel()">
   <h3>收款成功</h3>
-  <button class="buttons" nz-button nzType="primary" type="submit" (click)="orderPrintClick()">打印小票</button>
+  <button class="buttons" style="margin-right:20px;" nz-button nzType="primary" type="submit" (click)="handleCancel()">关闭</button>
+  <button class="buttons" nz-button  (click)="orderPrintClick()">打印小票</button>
 </nz-modal>
 <!-- <nz-spin></nz-spin> -->

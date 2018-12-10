@@ -5,6 +5,7 @@ import { ReportService } from "../shared/report.service";
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { ActivatedRoute } from '@angular/router';
+import * as differenceInDays from 'date-fns/difference_in_days';
 import NP from 'number-precision'
 
 @Component({
@@ -25,7 +26,9 @@ export class CommissionReportComponent implements OnInit {
 
     storeId: string = '';//门店
     storeList: any[] = [];
-    date: any;//time
+    dateRange: any;
+    startDate: string = '';//开始日期
+    endDate: string = '';//结束日期
     staffingDate: Date;//选择的时间
     merchantId: string = '';//商家ID
 
@@ -44,13 +47,15 @@ export class CommissionReportComponent implements OnInit {
     batchQuery = {
         storeId: this.storeId,
         merchantId: this.merchantId,
-        date: this.date
+        startDate: this.startDate,
+        endDate: this.endDate
     };
 
     batchQueryList = {
         storeId: this.storeId,
         merchantId: this.merchantId,
-        date: this.date,
+        startDate: this.startDate,
+        endDate: this.endDate,
         pageNo: this.pageIndex,
         pageSize: this.pageSize,
         sortField: this.sortField
@@ -67,24 +72,29 @@ export class CommissionReportComponent implements OnInit {
 
     ngOnInit() {
 
-      this.moduleId = this.route.snapshot.params['menuId'];
-      let year = new Date().getFullYear();        //获取当前年份(2位)
-      let month = new Date().getMonth()+1;       //获取当前月份(0-11,0代表1月)
-      let changemonth = month < 10 ? '0' + month : '' + month;
-      let day = new Date().getDate();        //获取当前日(1-31)
+        this.moduleId = this.route.snapshot.params['menuId'];
+        let year = new Date().getFullYear();        //获取当前年份(2位)
+        let month = new Date().getMonth()+1;       //获取当前月份(0-11,0代表1月)
+        let changemonth = month < 10 ? '0' + month : '' + month;
+        let day = new Date().getDate();        //获取当前日(1-31)
 
-      this.staffingDate = new Date(year+'-'+changemonth+'-'+day);
-      this.date = year+'-'+changemonth+'-'+day;
+        this.staffingDate = new Date(year+'-'+changemonth+'-'+day);
+        let startTime = new Date(new Date().getTime()); //今天
+        let endTime = new Date(new Date().getTime()); //今天
+        this.dateRange = [ startTime,endTime ];
+        this.startDate  = FunctionUtil.changeDate(startTime);
+        this.endDate = FunctionUtil.changeDate(endTime);
 
-      let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+        let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
         JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
-      this.ifStoresAll = UserInfo.staffType === "MERCHANT"? true : false;
+        this.ifStoresAll = UserInfo.staffType === "MERCHANT"? true : false;
     }
 
     //门店id
     getStoreId(event: any){
       this.storeId = event.storeId? event.storeId : '';
-      this.batchQuery.date = this.date;
+      this.batchQuery.startDate = this.startDate;
+      this.batchQuery.endDate = this.endDate;
       this.batchQuery.storeId = this.storeId;
       //请求员工提成信息
       this.getStaffingdeDuctionUp(this.batchQuery);
@@ -95,17 +105,19 @@ export class CommissionReportComponent implements OnInit {
       this.storeList = event.storeList? event.storeList : [];
     }
 
+    disabledDate = (current: Date): boolean => {
+        let endDate = new Date(new Date().getTime() + 24*60*60*1000); //今日 ==结束时
+        return differenceInDays(current, endDate) >= 0;
+    };
+
     //选择日期
-    reportDateAlert(e: any) {
-      this.staffingDate = e;
-      let year = this.staffingDate.getFullYear();        //获取当前年份(2位)
-      let month = this.staffingDate.getMonth()+1;       //获取当前月份(0-11,0代表1月)
-      let changemonth = month < 10 ? '0' + month : '' + month;
-      let day = this.staffingDate.getDate();        //获取当前日(1-31)
-      let changeday = day < 10 ? '0' + day : '' + day;
-      this.date = year+'-'+changemonth+'-'+changeday;
-      this.batchQuery.date = this.date;
-      //请求员工提成信息
+    onDateChange(date: Date) {
+      this.dateRange = date;
+      this.startDate = FunctionUtil.changeDate(this.dateRange[0]);
+      this.endDate = FunctionUtil.changeDate(this.dateRange[1]);
+      this.batchQuery.endDate = this.endDate;
+      this.batchQuery.startDate = this.startDate;
+      //获取商品报表信息
       this.getStaffingdeDuctionUp(this.batchQuery);
     }
 
@@ -116,7 +128,8 @@ export class CommissionReportComponent implements OnInit {
       let batchQuery: any = {
         storeId: this.storeId,
         merchantId: this.merchantId,
-        date: this.date,
+        startDate: this.startDate,
+        endDate: this.endDate,
         time: new Date().getTime()
       };
       this.reportService.getStaffingdeDuctionUp(batchQuery).subscribe(
@@ -148,7 +161,8 @@ export class CommissionReportComponent implements OnInit {
                   this.dataAssignData = dataAssign;
 
                   //员工提成列表
-                  self.batchQueryList.date = self.date;
+                  self.batchQueryList.startDate = self.startDate;
+                  self.batchQueryList.endDate = self.endDate;
                   self.getStaffingdeDuctionDown(this.batchQueryList);
 
               } else {
@@ -171,7 +185,8 @@ export class CommissionReportComponent implements OnInit {
       let batchQueryList: any = {
         storeId: this.storeId,
         merchantId: this.merchantId,
-        date: this.date,
+        startDate: this.startDate,
+        endDate: this.endDate,
         pageNo: this.pageIndex,
         pageSize: this.pageSize,
         sortField: this.sortField,

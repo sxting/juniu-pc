@@ -57,7 +57,7 @@
     </div>
     <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
       <nz-col nzMd="8" nzSm="24">
-        <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [ifStoresAll]="false" [ifStoresAuth]="ifStoresAuth"
+        <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [AllStoreBoolean]="false" [ifStoresAll]="false" [ifStoresAuth]="ifStoresAuth"
                          (storeListPush)="storeListPush($event)" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
       </nz-col>
       <nz-col nzMd="8" nzSm="24">
@@ -90,9 +90,9 @@
     <tbody nz-tbody class="ui-grid-tbody">
       <tr nz-tbody-tr *ngFor="let item of platformListInfor;let i = index">
         <td nz-td>{{item.date}}</td>
-        <td nz-td>{{item.platform}}</td>
+        <td nz-td>{{item.platform === 'KOUBEI'?'口碑':'美团'}}</td>
         <td nz-td>{{item.tradeCount}}</td>
-        <td nz-td>{{item.tradeAmount}}</td>
+        <td nz-td>{{item.tradeAmount/100}}</td>
         <td nz-td>{{item.rate}}%</td>
         <td nz-td>{{item.rateAmount}}</td>
       </tr>

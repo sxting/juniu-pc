@@ -20,7 +20,7 @@
         <nz-form-item>
           <nz-form-label nzFor="productId">选择日期</nz-form-label>
           <nz-form-control>
-            <nz-range-picker [nzDisabledDate]="disabledDate" [nzAllowClear]="false" nzFormat="yyyy-MM-dd HH:mm:ss" [(ngModel)]="dateRange"
+            <nz-range-picker [nzDisabledDate]="disabledDate" [nzAllowClear]="false" nzShowTime nzFormat="yyyy-MM-dd HH:mm:ss" [(ngModel)]="dateRange"
               (ngModelChange)="onDateChange($event)"></nz-range-picker>
           </nz-form-control>
         </nz-form-item>
@@ -53,7 +53,7 @@
   <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="dataList">
     <thead nz-thead class="ui-grid-thead">
       <tr>
-        <th nz-th class="" *ngFor="let item of theadName;let i = index" (click)="checkDetailInfor(orderDetail)">{{item}}</th>
+        <th nz-th class="" *ngFor="let item of theadName;let i = index" >{{item}}</th>
       </tr>
     </thead>
     <tbody nz-tbody class="ui-grid-tbody">
@@ -83,7 +83,7 @@
     <div class="orderpage_detail_list detail_list_bot">
       <table>
         <tr class="ui-grid-row">
-          <td class="">核销码</td>
+          <td class="">订单号</td>
           <td class="">{{alertDate?.dealGroupId}}</td>
           <td class="">核销时间</td>
           <td class="trans-status">{{alertDate?.verifyTime}}</td>
@@ -91,7 +91,7 @@
           <td class="trans-status">{{alertDate?.status==='REVERSE'?'已撤销':'已核销'}}</td>
         </tr>
         <tr class="ui-grid-row">
-          <td class="">订单号</td>
+          <td class="">核销码</td>
           <td class="">{{alertDate?.receiptCode}}</td>
           <td class="">核销门店</td>
           <td class="trans-status">{{alertDate?.storeName}}</td>

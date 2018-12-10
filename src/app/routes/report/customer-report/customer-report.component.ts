@@ -6,6 +6,7 @@ import { ReportService } from "../shared/report.service";
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as differenceInDays from 'date-fns/difference_in_days';
 import NP from 'number-precision'
 
 
@@ -21,7 +22,9 @@ export class CustomerReportComponent implements OnInit {
     storeId: string;//门店ID
     loading = false;
     yyyymmDate: any;//选择月份的日期
-    date: any;
+    dateRange: any;
+    startDate: string = '';//开始日期
+    endDate: string = '';//结束日期
     pageNo: any = 1;//页码
     pageSize: any = '10';//一页展示多少数据
     totalElements: any = 0;//商品总数
@@ -53,10 +56,11 @@ export class CustomerReportComponent implements OnInit {
     ) { }
 
     batchQuery = {
-      date: this.date,
-      storeId: this.storeId,
-      pageNo: this.pageNo,
-      pageSize: this.pageSize,
+        startDate: this.startDate,
+        endDate: this.endDate,
+        storeId: this.storeId,
+        pageNo: this.pageNo,
+        pageSize: this.pageSize,
     };
 
     ngOnInit() {
@@ -69,18 +73,18 @@ export class CustomerReportComponent implements OnInit {
             this.merchantId = userInfo.merchantId;
         }
         this.ifStoresAll = userInfo.staffType === "MERCHANT"? true : false;
-        let year = new Date().getFullYear();        //获取当前年份(2位)
-        let month = new Date().getMonth()+1;       //获取当前月份(0-11,0代表1月)
-        let changemonth = month < 10 ? '0' + month : '' + month;
-        let day = new Date().getDate();        //获取当前日(1-31)
-        this.yyyymmDate = new Date(year+'-'+changemonth+'-'+day);
-        this.date = year+'-'+changemonth+'-'+day;
+        let startTime = new Date(new Date().getTime()); //今天
+        let endTime = new Date(new Date().getTime()); //今天
+        this.dateRange = [ startTime,endTime ];
+        this.startDate  = FunctionUtil.changeDate(startTime);
+        this.endDate = FunctionUtil.changeDate(endTime);
     }
 
     //门店id
     getStoreId(event: any){
       this.storeId = event.storeId? event.storeId : '';
-      this.batchQuery.date = this.date;
+      this.batchQuery.startDate = this.startDate;
+      this.batchQuery.endDate = this.endDate;
       this.batchQuery.storeId = this.storeId;
       //请求员工提成信息
       this.getDayCustomerHttp(this.batchQuery);
@@ -91,16 +95,18 @@ export class CustomerReportComponent implements OnInit {
       this.storeList = event.storeList? event.storeList : [];
     }
 
+    disabledDate = (current: Date): boolean => {
+        let endDate = new Date(new Date().getTime() + 24*60*60*1000); //今日 ==结束时
+        return differenceInDays(current, endDate) >= 0;
+    };
+
     //选择日期
-    reportDateAlert(e: any) {
-      this.yyyymmDate = e;
-      let year = this.yyyymmDate.getFullYear();        //获取当前年份(2位)
-      let month = this.yyyymmDate.getMonth()+1;       //获取当前月份(0-11,0代表1月)
-      let changemonth = month < 10 ? '0' + month : '' + month;
-      let day = this.yyyymmDate.getDate();        //获取当前日(1-31)
-      let changeday = day < 10 ? '0' + day : '' + day;
-      this.date = year+'-'+changemonth+'-'+changeday;
-      this.batchQuery.date = this.date;
+    onDateChange(date: Date) {
+      this.dateRange = date;
+      this.startDate = FunctionUtil.changeDate(this.dateRange[0]);
+      this.endDate = FunctionUtil.changeDate(this.dateRange[1]);
+      this.batchQuery.endDate = this.endDate;
+      this.batchQuery.startDate = this.startDate;
       //获取商品报表信息
       this.getDayCustomerHttp(this.batchQuery);
     }

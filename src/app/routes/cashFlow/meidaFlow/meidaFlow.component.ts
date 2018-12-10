@@ -71,12 +71,13 @@ export class MeidaFlowComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+        JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+      // this.ifStoresAll = UserInfo.staffType === "MERCHANT"? true : false;
     this.moduleId = this.route.snapshot.params['menuId'];
-    let startDate = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000); //提前一周 ==开始时间
-    let endDate = new Date(new Date().getTime() - 24 * 60 * 60 * 1000); //今日 ==结束时
-    this.dateRange = [startDate, endDate];
-    this.startTime = FunctionUtil.changeDate(startDate) + ' 00:00:00';
-    this.endTime = FunctionUtil.changeDate(endDate) + ' 23:59:59';
+    this.startTime = FunctionUtil.changeDate(new Date()) + ' 00:00:00';
+    this.endTime = FunctionUtil.changeDate(new Date()) + ' 23:59:59';
+    this.dateRange = [this.startTime, this.endTime];
   }
   //返回门店数据
   storeListPush(event: any) {

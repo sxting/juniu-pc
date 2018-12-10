@@ -8,6 +8,9 @@ import { LocalStorageService } from '@shared/service/localstorage-service';
 import { STORES_INFO, USER_INFO } from '@shared/define/juniu-define';
 import { ActivatedRoute } from '@angular/router';
 import { Validators } from '@angular/forms';
+import { ViewChild } from '@angular/core';
+import { ElementRef } from '@angular/core';
+import { UploadService } from '@shared/upload-img';
 
 @Component({
     selector: 'app-wxStore',
@@ -22,8 +25,10 @@ export class WxStoreComponent implements OnInit {
     data: any = [];
     isClear: boolean = false;
     showPics: any = [];
+    showPics2: any = [];
     syncAlipay: string = 'F';
     allproducks: any = [];
+    
     objArr: any = [];
     allcards: any = [];
     list: any[] = [];
@@ -37,7 +42,7 @@ export class WxStoreComponent implements OnInit {
     nodes: any = [];
     eventCheckedKeys: any = [];
     pictureDetails: any = [];
-
+    pictureDetails2: any = [];
     staffIds: any = '';
     staffIdsCount: any = 0;
     cardConfigRuleIds: any = '';
@@ -55,6 +60,14 @@ export class WxStoreComponent implements OnInit {
     switch4: boolean = false;
     staffList: any;
     staffIdsArr: any;
+
+    showDiv= false;
+
+
+    tags = [];
+    inputVisible = false;
+    inputValue = '';
+    @ViewChild('inputElement') inputElement: ElementRef;
     constructor(
         private localStorageService: LocalStorageService,
         public msg: NzMessageService,
@@ -62,6 +75,7 @@ export class WxStoreComponent implements OnInit {
         private manageService: ManageService,
         private router: Router,
         private fb: FormBuilder,
+        private uploadService: UploadService,
         private route: ActivatedRoute,
         private http: _HttpClient
     ) {
@@ -198,6 +212,13 @@ export class WxStoreComponent implements OnInit {
         // this.shopEdit.pictureDetails = [];
         this.showPics = event;
 
+    }
+
+    getPictureDetails2(event:any){
+        console.log(event);
+        let that = this;
+        // this.shopEdit.pictureDetails = [];
+        this.showPics2 = event;
     }
     // 获取全部商品
     getAllbuySearchs() {
@@ -490,6 +511,18 @@ export class WxStoreComponent implements OnInit {
     change(ret: {}): void {
         console.log('nzChange', ret);
     }
+    showDivFun(){
+        let data = {
+            menuId: '901302B1',
+            timestamp: new Date().getTime(),
+            storeId:this.storeId
+          };
+          this.uploadService.menuRoute(data).then((result: any) => {
+            if(result){
+                this.showDiv = !this.showDiv;
+            }
+          });
+    }
     storeDetail() {
         let self = this;
         let data = {
@@ -526,6 +559,16 @@ export class WxStoreComponent implements OnInit {
                         end = new Date('2018-12-12 ' + time[1]);
                     }
                     this.pictureDetails = res.data.bannerColl;
+                    this.tags = res.data.label?res.data.label.split(' '):[];
+                    this.pictureDetails2 = [];
+                    if(res.data.environment&&res.data.environment.split(',').length>0){
+                        res.data.environment.split(',').forEach(element => {
+                            self.pictureDetails2.push({
+                                imageId:element,
+                                imageUrl:element
+                            })
+                        });
+                    }
                     self.form = this.fb.group({
                         storeName: [res.data.branchName, []],
                         address: [adress, []],
@@ -609,7 +652,7 @@ export class WxStoreComponent implements OnInit {
             arr.isLeaf = true;
         }
     }
-    submit() {
+    submit(type?:any) {
         let that = this;
         for (const i in this.form.controls) {
             this.form.controls[i].markAsDirty();
@@ -619,6 +662,8 @@ export class WxStoreComponent implements OnInit {
         else {
             let displayColl = [];
             let bannerColl = [];
+            let bannerColl2 = [];
+            
 
             if (this.switch1) displayColl.push('PRODUCT');
             if (this.switch2) displayColl.push('CRAFTSMAN');
@@ -641,11 +686,18 @@ export class WxStoreComponent implements OnInit {
                     bannerColl.push(item.imageId);
                 })
             }
-            // this.showPics.forEach(function (i: any) {
-            //     if (i.imageId) {
-            //         bannerColl.push(i.imageId)
-            //     }
-            // })
+            if (this.showPics2.length > 0) {
+                this.showPics2.forEach((item: any, index: number) => {
+                    if (item.imageId) {
+                        bannerColl2.push(item.imageId)
+                    }
+                });
+            } else if (that.pictureDetails2) {
+                that.pictureDetails2.forEach(function (item: any) {
+                    bannerColl2.push(item.imageId);
+                })
+            }
+            console.log(that.pictureDetails2)
             let data = {
                 address: this.data.address,
                 branchName: this.data.branchName,
@@ -659,9 +711,12 @@ export class WxStoreComponent implements OnInit {
                 bannerColl: bannerColl,
                 businessHours: businessHours,
                 storeId: this.storeId,
+                environment:bannerColl2.join(','),
+                label:this.tags.join(' '),
                 timestamp: new Date().getTime()
             }
-            this.modifyDetail(data);
+            console.log(data);
+            this.modifyDetail(data,type);
         }
     }
 
@@ -740,13 +795,19 @@ export class WxStoreComponent implements OnInit {
         );
     }
     // 修改门店详情（微信门店）
-    modifyDetail(data: any) {
+    modifyDetail(data: any,type?:any) {
         this.submitting = true;
+        let that = this;
         this.manageService.modifyDetail(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     this.submitting = false;
-                    this.router.navigate(['/manage/storeList']);
+                    if(type){
+                        if(type === 'jishi')this.router.navigate(['wechat/staff/list',{storeId : that.storeId}]);
+                        if(type === 'dianpu')this.router.navigate(['wechat/storeWork',{storeId : that.storeId}]);
+                    }else{
+                        this.router.navigate(['/manage/storeList']);
+                    }
                 } else {
                     this.submitting = false;
                     this.modalSrv.error({
@@ -865,4 +926,43 @@ export class WxStoreComponent implements OnInit {
         }
         return t;
     }
+
+    handleClose(removedTag: {}): void {
+        this.tags = this.tags.filter(tag => tag !== removedTag);
+      }
+    
+      sliceTagName(tag: string): string {
+        const isLongTag = tag.length > 20;
+        return isLongTag ? `${tag.slice(0, 20)}...` : tag;
+      }
+    
+      showInput(): void {
+        if(this.tags.length>9){
+            this.modalSrv.error({
+                nzTitle: '温馨提示',
+                nzContent: '最多十个标签'
+            });
+        }else{
+            this.inputVisible = true;
+            setTimeout(() => {
+            this.inputElement.nativeElement.focus();
+            }, 10);
+        }
+      }
+    
+      handleInputConfirm(): void {
+        if (this.inputValue && this.tags.indexOf(this.inputValue) === -1) {
+          this.tags.push(this.inputValue);
+        }
+        this.inputValue = '';
+        this.inputVisible = false;
+      }
+      goZuopin(type){
+        let that = this;
+        this.modalSrv.confirm({
+            nzTitle: '请先保存后在去设置?',
+            nzOnOk: () => {that.submit(type)},
+            nzOkText : '保存并去设置'
+          });
+      }
 }

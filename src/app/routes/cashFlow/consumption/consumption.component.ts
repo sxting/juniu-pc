@@ -33,7 +33,7 @@ export class ConsumptionComponent implements OnInit {
     '付款/退款时间',
     '会员信息',
     '订单类型',
-    '付款金额',
+    '付款金额/支付方式',
     '消费项目',
     '员工/提成',
     '门店/收银员',
@@ -51,7 +51,7 @@ export class ConsumptionComponent implements OnInit {
     { statusName: '会员', status: 'MEMBER' },
   ];
   statusList: any = [
-    { statusName: '已支付', status: 'PAID' },
+    { statusName: '已付款', status: 'PAID' },
     { statusName: '已退款', status: 'REFUND' },
   ];
   payList: any = [
@@ -88,7 +88,7 @@ export class ConsumptionComponent implements OnInit {
     pageSize: this.pageSize,
   };
   ifShow : any = false;
-  ifStoresAll:any;
+  ifStoresAll:any = false;
   ifStoresAuth:any;
   orderTypeTitle:any;
   expandForm:any;
@@ -109,6 +109,9 @@ export class ConsumptionComponent implements OnInit {
 
   selectOrderStatus(type) {}
   ngOnInit() {
+    let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+        JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+      this.ifStoresAll = UserInfo.staffType === "MERCHANT"? true : false;
     this.moduleId = this.route.snapshot.params['menuId'];
     this.startTime = FunctionUtil.changeDate(new Date()) + ' 00:00:00';
     this.endTime = FunctionUtil.changeDate(new Date()) + ' 23:59:59';
@@ -122,6 +125,7 @@ export class ConsumptionComponent implements OnInit {
   getStoreId(event: any) {
     let self = this;
     this.storeId = event.storeId ? event.storeId : '';
+    this.pageNo = 1; 
     this.koubeiProductVouchersListFirst();
   }
 

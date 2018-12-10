@@ -7,6 +7,7 @@ import { ManageService } from "../shared/manage.service";
 import { LocalStorageService } from '@shared/service/localstorage-service';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import NP from 'number-precision';
+import { USER_INFO } from '@shared/define/juniu-define';
 
 @Component({
   selector: 'app-rule-setting',
@@ -24,7 +25,7 @@ export class RuleSettingComponent implements OnInit {
   title: any = ['全部项目','已选项目'];
   allName: string = '';
   storeId: string = '';//门店ID
-  merchantId: string;//商家id
+  merchantId: string = '';//商家id
   deductRuleId: string = '';//编辑的商品rulesId
 
   //员工
@@ -79,7 +80,7 @@ export class RuleSettingComponent implements OnInit {
   ngOnInit() {
       let self = this;
       this.storeId = this.route.snapshot.params['storeId'];//门店ID
-      this.merchantId = this.route.snapshot.params['merchantId'];//门店ID
+      this.merchantId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['merchantId'];//门店ID
       this.deductRuleId = this.route.snapshot.params['deductRuleId'];//提成规则ID
       this.formData = {
           ruleName: [null, [Validators.required, Validators.maxLength(20)]],

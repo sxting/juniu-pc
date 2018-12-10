@@ -1,6 +1,6 @@
 <page-header [title]="'支付通道'">每天支付通道会与您自动结算，并将款项打到您配置的银行账户中。</page-header>
 <div style="opacity: 0; width: 0; height: 0;">
-  <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false"
+  <jn-stores-infor [moduleId]="moduleId" [AllStoreBoolean]="false" [ifStoresAll]="false"
                    (storeIdOutput)="onStoresChange($event)"></jn-stores-infor>
 </div>
 <div class="container">
@@ -53,9 +53,9 @@
                 <td>{{item.type.indexOf('alipay') > -1 ? '支付宝' : '微信'}}</td>
                 <!--"type":"pay.alipay.micropayv3",-->
                 <td>{{item.transactionNo}}</td>
-                <td>{{item.paidAmount}}</td>
+                <td>{{item.totalAmount}}</td>
                 <td>{{item.fee}}</td>
-                <td>{{item.settlementAmount}}</td>
+                <td>{{item.shifu}}</td>
             </tr>
             </tbody>
         </nz-table>

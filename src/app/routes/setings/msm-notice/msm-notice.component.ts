@@ -37,6 +37,7 @@ export class MsmNoticeComponent implements OnInit, OnDestroy {
     openCard: boolean = false;
     recharge: boolean = false;
     consume: boolean = false;
+    validity: boolean = false;
     reserveRemind: boolean = false;
     reserveSuccess: boolean = false;
     reserveRefuse: boolean = false;
@@ -173,6 +174,7 @@ export class MsmNoticeComponent implements OnInit, OnDestroy {
                         if (res.data.configList.indexOf('NOTICE_OPENCARD') > -1) this.openCard = true;
                         if (res.data.configList.indexOf('NOTICE_RECARGE') > -1) this.recharge = true;
                         if (res.data.configList.indexOf('NOTICE_CONSUME') > -1) this.consume = true;
+                        if (res.data.configList.indexOf('NOTICE_VALIDITY') > -1) this.validity = true;
                         if (res.data.configList.indexOf('RESERVE_TO_MERCHANT') > -1) this.reserveRemind = true;
                         if (res.data.configList.indexOf('RESERVE_SUCCESS_CUSTOMER') > -1) this.reserveSuccess = true;
                         if (res.data.configList.indexOf('RESERVE_REFUSE_CUSTOMER') > -1) this.reserveRefuse = true;

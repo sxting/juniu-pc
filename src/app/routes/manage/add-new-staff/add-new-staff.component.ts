@@ -46,6 +46,8 @@ export class AddNewStaffComponent implements OnInit {
     { label: 'Orange', value: 'Orange', checked: false },
   ];
   allStoreNum = 0;
+
+  passWordBoolean : boolean = false;
   constructor(
     private http: _HttpClient,
     private fb: FormBuilder,
@@ -288,15 +290,22 @@ export class AddNewStaffComponent implements OnInit {
             self.ifShow = false;
             self.RolesListInfor = self.merchantRoles;
           }
-          let storeId = res.data.storeIds;
           this.storeList.forEach(element => {
             element.checked = false;
           });
-          this.storeList.forEach(element => {
-            storeId.forEach(item => {
-              if (element.storeId === item) element.checked = true;
+          let storeId;
+          if(res.data.belongType === 'STORE'){
+            storeId = res.data.storeIds[0];
+          }else{
+            storeId = res.data.storeIds;
+            this.storeList.forEach(element => {
+              storeId.forEach(item => {
+                if (element.storeId === item) element.checked = true;
+              });
             });
-          });
+          }
+         
+          
           this.allStoreNumFun();
           let password =
             res.data.password.length > 16
@@ -337,7 +346,9 @@ export class AddNewStaffComponent implements OnInit {
       },
     );
   }
-
+  onChangesPassWord(){
+    this.passWordBoolean = true;
+  }
   // 新增员工
   submit() {
     let self = this;
@@ -356,10 +367,7 @@ export class AddNewStaffComponent implements OnInit {
         ? [this.form.controls.storeId.value]
         : storeIdList;
     let passwordValue = this.form.controls.password.value;
-    let password =
-      passwordValue.substring(passwordValue.length - 3) === '...'
-        ? this.passwordPre
-        : this.form.controls.password.value;
+    let password =this.passWordBoolean?this.form.controls.password.value:'';
     let params = {
       staffName: this.form.controls.staffName.value,
       belongType: this.form.controls.belongType.value,
@@ -431,6 +439,7 @@ export class AddNewStaffComponent implements OnInit {
     let data = {
       moduleId: this.moduleId,
       timestamp: new Date().getTime(),
+      allStore:false
     };
     this.manageService.selectStores(data).subscribe(
       (res: any) => {

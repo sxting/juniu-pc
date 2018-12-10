@@ -14,6 +14,7 @@ import { MeituanTichengListComponent } from './meituanTichengList/meituanTicheng
 import { meituanTichengComponent } from './meituanTicheng/meituanTicheng.component';
 import { KoubeiTichengComponent } from './koubeiTicheng/koubeiTicheng.component';
 import { KoubeiTichengListComponent } from './koubeiTichengList/koubeiTichengList.component';
+import { ShoudanComponent } from './shoudan/shoudan.component';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { KoubeiTichengListComponent } from './koubeiTichengList/koubeiTichengLis
         MeituanTichengListComponent,
         meituanTichengComponent,
         KoubeiTichengComponent,
-        KoubeiTichengListComponent
+        KoubeiTichengListComponent,
+        ShoudanComponent
     ],
     providers: [CheckoutService,MemberService],
 })

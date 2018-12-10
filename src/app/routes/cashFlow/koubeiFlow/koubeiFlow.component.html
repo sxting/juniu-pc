@@ -21,7 +21,7 @@
           <nz-form-item>
             <nz-form-label nzFor="productId">{{tabActiveType}}时间</nz-form-label>
             <nz-form-control>
-              <nz-range-picker [nzDisabledDate]="disabledDate" [nzAllowClear]="false" nzFormat="yyyy-MM-dd" [(ngModel)]="dateRange" (ngModelChange)="onDateChange($event)"></nz-range-picker>
+              <nz-range-picker [nzDisabledDate]="disabledDate" [nzAllowClear]="false" nzShowTime nzFormat="yyyy-MM-dd HH:mm:ss" [(ngModel)]="dateRange" (ngModelChange)="onDateChange($event)"></nz-range-picker>
             </nz-form-control>
           </nz-form-item>
         </nz-col>
@@ -39,7 +39,7 @@
           <nz-form-item>
             <nz-form-label nzFor="storeId">选择门店</nz-form-label>
             <nz-form-control>
-              <nz-select  style="width: 200px;" [(ngModel)]="storeId" (ngModelChange)="selectStore()" name="storeList" id="storeList" [nzPlaceHolder]="'请选择一个门店'" [nzShowSearch]="true">
+              <nz-select  style="width: 200px;" [(ngModel)]="storeId" (ngModelChange)="selectStore()"  name="storeList" id="storeList" [nzPlaceHolder]="'请选择一个门店'" [nzShowSearch]="true">
                 <nz-option *ngFor="let i of storeList; let idx = index" [nzLabel]="i.storeName" [nzValue]="i.storeId"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -62,7 +62,7 @@
     </div>
 
     <div class="mb-md">
-      <nz-alert nzType="info" nzMessage="共有 {{totalElements}} 条数据  |   总金额：{{totalAmount}}万" nzShowIcon></nz-alert>
+      <nz-alert nzType="info" nzMessage="共有 {{totalElements}} 条数据  |   总金额：{{totalAmount/100}}元" nzShowIcon></nz-alert>
     </div>
     <!-- table -->
     <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="orderListInfor">
@@ -84,16 +84,16 @@
       <tbody nz-tbody class="ui-grid-tbody">
         <tr nz-tbody-tr *ngFor="let item of orderListInfor; let i = index">
           <td style="color: #368ff7" *ngIf="activeIndex === 0">{{item.settleTime}}</td>
-          <td *ngIf="activeIndex === 0">{{item.verifyFrequency && item.verifyFrequency === '1'? '口碑商品' : '口碑次卡商品'}}</td>
+          <td *ngIf="activeIndex === 0">{{item.verifyFrequency && item.verifyFrequency === 'simple'? '口碑商品' : '口碑次卡商品'}}</td>
           <td *ngIf="activeIndex === 0">{{item.amount/100}}</td>
           <td *ngIf="activeIndex === 0">{{item.content.length > 8? item.content.substring(0,8)+'...' : item.content}} / {{item.useQuantity}}</td>
           <td *ngIf="activeIndex === 0">{{item.settleStoreName}}</td>
           <td nz-th class="" *ngIf="activeIndex === 1">{{item.time? item.time : '-'}}</td>
-          <td nz-th class="" *ngIf="activeIndex === 1">{{item.type}}</td>
+          <td nz-th class="" *ngIf="activeIndex === 1">{{item.type === 'PAID'?'已付款':'已退款'}}</td>
           <td nz-th class="" *ngIf="activeIndex === 1">{{item.amount/100}}</td>
           <td nz-th class="" *ngIf="activeIndex === 1">{{item.pintuanName? item.pintuanName: '-'}}</td>
           <td nz-th class="" *ngIf="activeIndex === 1">{{item.sellerStore? item.sellerStore : '-'}}</td>
-          <td style="color: #108EE9;cursor: pointer" (click)="checkDetailInfor(orderDetail,item.orderNo)">查看</td>
+          <td style="color: #108EE9;cursor: pointer" (click)="checkDetailInfor(orderDetail,item)">查看</td>
         </tr>
       </tbody>
     </nz-table>
@@ -107,33 +107,33 @@
 <ng-template #orderDetail>
   <div class="reserve-record-alert" style="padding-top: 25px;">
     <div class="orderpage_detail_list detail_list_bot">
-      <table *ngIf="orderItemDetailInfor">
+      <table>
         <tr class="ui-grid-row">
           <td class="" *ngIf="orderType === 'PAID'">订单编号</td>
           <td class="" *ngIf="orderType === 'REFUND'">退款单号</td><!--退款-->
-          <td class="">{{orderItemDetailInfor.groupNo}}</td>
+          <td class="">{{activeIndex === 0?listData.orderNo:listData2.orderNo}}</td>
           <td class="" *ngIf="orderType === 'PAID'">下单时间</td>
-          <td class="trans-status" *ngIf="orderType === 'PAID'">{{orderItemDetailInfor.openedTime}}</td>
+          <td class="trans-status" *ngIf="orderType === 'PAID'">{{activeIndex === 0?listData.settleTime:listData2.time}}</td>
           <td class="" *ngIf="orderType === 'REFUND'">退款时间</td><!--退款-->
-          <td class="" *ngIf="orderType === 'REFUND'">{{orderItemDetailInfor.settleTime}}</td>
-          <td class="">订单状态</td>
-          <td class="trans-status">{{orderItemDetailInfor.orderStatus}}</td>
+          <td class="" *ngIf="orderType === 'REFUND'">{{activeIndex === 0?listData.settleTime:listData2.time}}</td>
+          <td class=""></td>
+          <!-- <td class="trans-status">{{activeIndex === 0?listData.orderStatus:listData2.orderStatus}}</td> -->
         </tr>
         <tr class="ui-grid-row">
           <td class="" *ngIf="orderType === 'REFUND'">原订单号</td><!--退款-->
-          <td class="" *ngIf="orderType === 'REFUND'">218777837377837878378378788</td>
+          <td class="" *ngIf="orderType === 'REFUND'">{{activeIndex === 0?listData.orderNo:listData2.orderNo}}</td>
           <td class="" *ngIf="orderType === 'REFUND'">退款门店</td><!--退款-->
-          <td class="" *ngIf="orderType === 'REFUND'">{{orderItemDetailInfor.settleStoreName}}</td>
-          <td class="" *ngIf="orderType != 'REFUND'">交易号</td>
-          <td class="" *ngIf="orderType != 'REFUND'">736446463777228288111811</td>
+          <td class="" *ngIf="orderType === 'REFUND'">{{activeIndex === 0?listData.settleStoreName:listData2.sellerStore}}</td>
+          <td class="" *ngIf="orderType != 'REFUND'">核销码</td>
+          <td class="" *ngIf="orderType != 'REFUND'">{{activeIndex === 0?listData.settleNo:listData2.outBizNo}}</td>
           <td class="" *ngIf="orderType != 'REFUND'">收款门店</td>
-          <td class="" *ngIf="orderType != 'REFUND'">{{orderItemDetailInfor.sellerStoreName}}</td>
-          <td class="">支付方式</td>
-          <td class="">微信支付</td>
+          <td class="" *ngIf="orderType != 'REFUND'">{{activeIndex === 0?listData.settleStoreName:listData2.sellerStore}}</td>
+          <!-- <td class="">支付方式</td>
+          <td class="">微信支付</td> -->
         </tr>
       </table>
     </div>
-    <nz-table [nzNoResult]="'暂无流水信息'" #basicTable [nzShowPagination]="false" [nzData]="orderItemDetailInforList">
+    <nz-table [nzNoResult]="'暂无流水信息'" #basicTable [nzShowPagination]="false" [nzData]="arr">
       <thead nz-thead class="ui-grid-thead">
         <tr>
           <th nz-th class="" *ngIf="activeIndex === 0">商品分类</th>
@@ -143,18 +143,19 @@
 
           <th nz-th class="" *ngIf="activeIndex === 1">活动类型</th>
           <th nz-th class="" *ngIf="activeIndex === 1">活动名称</th>
-          <th nz-th class="" class="text-right">商家实收金额(元)</th>
+          <th nz-th class="" *ngIf="activeIndex === 1">商家实收金额(元)</th>
         </tr>
       </thead>
       <tbody nz-tbody class="ui-grid-tbody">
-        <tr nz-tbody-tr *ngFor="let list of orderItemDetailInforList">
-          <td style="color: #108EE9" *ngIf="activeIndex === 0">{{list.categoryName? list.categoryName : '-'}}</td>
-          <td *ngIf="activeIndex === 0">{{list.categoryName? list.categoryName : '-'}}</td>
-          <td *ngIf="activeIndex === 0">{{list.categoryName? list.categoryName : '-'}}</td>
+        <tr nz-tbody-tr >
+          <td style="color: #108EE9" *ngIf="activeIndex === 0">默认</td>
+          <td *ngIf="activeIndex === 0">{{listData.content|| '-'}}</td>
+          <td *ngIf="activeIndex === 0">{{listData.amount/100|| '-'}}</td>
 
-          <td style="color: #108EE9" *ngIf="activeIndex === 1">{{list.settleNumber}}人团</td>
-          <td *ngIf="activeIndex === 1">{{list.pinTuanName? list.pinTuanName : '-'}}</td>
-          <td class="text-right">{{list.amount/100}}</td>
+          <td style="color: #108EE9" *ngIf="activeIndex === 1">{{listData2.peopleCount}}人团</td>
+          <td *ngIf="activeIndex === 1">{{listData2.pintuanName|| '-'}}</td>
+          <td *ngIf="activeIndex === 1">{{listData2.amount/100|| '-'}}</td>
+          <td *ngIf="activeIndex === 0">{{listData.useQuantity}}</td>
         </tr>
       </tbody>
     </nz-table>
@@ -162,7 +163,7 @@
       <table *ngIf="orderItemDetailInfor && (activeIndex === 1)">
         <tr class="ui-grid-row">
           <td class="">顾客手机号</td>
-          <td class="" style="width: 200px;">{{orderItemDetailInfor.phone}}</td>
+          <td class="" style="width: 200px;">{{listData.phone}}</td>
         </tr>
       </table>
     </div>
