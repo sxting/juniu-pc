@@ -194,6 +194,9 @@ export class MarketingsPageComponent implements OnInit {
             this.couponType = '3'
         } else if(this.paramsId == '09') {
             this.couponType = '2'
+        }else if(this.paramsId == '14'){//新人专享==默认选择tab中的代金券
+          this.couponType = '2';
+          this.couponTypeTab = 'daijinquan';
         }
 
         if(this.paramsId === '01') {
@@ -993,6 +996,8 @@ export class MarketingsPageComponent implements OnInit {
                 break;
             case '13':
                 data.scene = 'WECHAT_PRODUCT_PROMOTION';
+            case '14':
+              data.scene = 'WECHAT_NEWER_ACTIVITY';
         }
 
         if(this.marketingId) {
@@ -1314,6 +1319,10 @@ export class MarketingsPageComponent implements OnInit {
     //获取优惠券列表
     getCouponDefList() {
         let couponDefType = this.couponTypeTab == 'daijinquan' ? 'MONEY' : this.couponTypeTab == 'zhekouquan' ? 'DISCOUNT' : this.couponTypeTab == 'lipinquan' ? 'GIFT' : '';
+
+        console.log(this.couponTypeTab);
+        console.log(couponDefType);
+
         let data = {
             merchantId: this.merchantId,
             couponDefType: couponDefType,
