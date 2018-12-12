@@ -44,7 +44,7 @@ export class profitReportComponent implements OnInit {
   totalProfit: any = 0;//总的利润
   reportProfitListPage: any = [];
   reportProfitListPageArr: any = [];//划分页码的数组
-
+  chart1:any;
   constructor(
     private http: _HttpClient,
     public msg: NzMessageService,
@@ -189,28 +189,31 @@ export class profitReportComponent implements OnInit {
           self.visitData = visitData;
           self.totalProfit = NP.round(totalProfit/100,2);
 
-          const chart1 = new G2.Chart({
-            container: 'c1',
-            height: '200',
-            padding: [50, 5, 5, 0],
-            forceFit: true,
-            label: null
-          });
-          chart1.source(visitData2);
-          chart1.legend(false);
-          chart1.axis(false);
-          chart1.tooltip({
+          if(!this.chart1){
+            this.chart1 = new G2.Chart({
+              container: 'c1',
+              height: '200',
+              padding: [50, 5, 5, 0],
+              forceFit: true,
+              label: null
+            });
+          }
+          
+          this.chart1.source(visitData2);
+          this.chart1.legend(false);
+          this.chart1.axis(false);
+          this.chart1.tooltip({
             showTitle: false,
             shared: false,
           });
-          chart1.area().position('year*value').color('year').shape('smooth');
-          chart1.line().position('year*value').color('year').size(2).shape('smooth').tooltip('year*value', function(year, value) {
+          this.chart1.area().position('year*value').color('year').shape('smooth');
+          this.chart1.line().position('year*value').color('year').size(2).shape('smooth').tooltip('year*value', function(year, value) {
             return {
               name: year,
               value: value
             }
           });
-          chart1.render();
+          this.chart1.render();
 
         } else {
           this.modalSrv.error({
