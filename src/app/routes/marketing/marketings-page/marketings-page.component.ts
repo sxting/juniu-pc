@@ -834,7 +834,7 @@ export class MarketingsPageComponent implements OnInit {
             }
         }
 
-        if(this.paramsId == '11') {
+        if(this.paramsId == '11' || this.paramsId == '14') {
             // 微信营销 节日主题活动
             data = {
                 marketingType: 'WECHAT', //
@@ -1498,8 +1498,8 @@ export class MarketingsPageComponent implements OnInit {
             send_menkan: [null, this.paramsId=='07' || this.paramsId=='08' || this.paramsId == '09' ? [Validators.compose([Validators.required, Validators.pattern(`[0-9]+`)])]:[] ],
             sms_content: ['', []],
             active_date: [null, this.paramsIdNumber <= 6 ? [] : [Validators.required]],
-            sms_send_date: [null, this.paramsId == '03' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' || this.paramsId == '07' || this.paramsId == '08' || this.paramsId == '09' ? [] : [Validators.required]],
-            sms_send_time: [null, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' || this.paramsId == '07' || this.paramsId == '08' || this.paramsId == '09' ? [] : [Validators.required]],
+            sms_send_date: [null, this.paramsId == '03' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' || this.paramsId == '07' || this.paramsId == '08' || this.paramsId == '09' || this.paramsId == '14'? [] : [Validators.required]],
+            sms_send_time: [null, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' || this.paramsId == '07' || this.paramsId == '08' || this.paramsId == '09' || this.paramsId == '14'? [] : [Validators.required]],
         });
 
         this.form2 = this.fb.group({

@@ -45,6 +45,7 @@ export class MarketingEffectCountComponent implements OnInit {
         {label: '节日主题活动', value: 'WECHAT_FESTIVAL_GIFT'},
         {label: '新品促销', value: 'WECHAT_NEW_PROMOTION'},
         {label: '指定项目促销', value: 'WECHAT_PRODUCT_PROMOTION'},
+        { label: '微信新人专享', value: 'WECHAT_NEWER_ACTIVITY' },
     ];
     empty: any = true;
     statusFlag: number = 0;
