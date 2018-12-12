@@ -80,6 +80,9 @@
           {{expandForm ? '收起' : '展开'}}
           <i class="anticon" [class.anticon-down]="!expandForm" [class.anticon-up]="expandForm"></i>
         </a>
+        <button nz-button (click)="exportExcel()" [nzType]="'primary'" style="position: absolute; margin-left: 20px">
+          <span>导出Excel</span>
+        </button>
       </nz-col>
     </nz-row>
   </div>
