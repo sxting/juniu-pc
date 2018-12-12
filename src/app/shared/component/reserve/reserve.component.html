@@ -17,6 +17,7 @@
         </div>
         <div *ngIf="(newReserveCount + 0) == 0">
           <span class="iconfont icon-ld"></span>预约记录
+
         </div>
         <div></div>
       </div>
@@ -27,7 +28,7 @@
       <div class="date-box">
         <span class="date-left-btn iconfont icon-left2" [class.prevent-color]="preventDateLeft" (click)="onDateChangeClick('left')"></span>
         <div class="date">
-            <nz-date-picker [nzFormat]="dateFormat" (ngModelChange)="dateChange($event)" [(ngModel)]="date"></nz-date-picker>
+          <nz-date-picker [nzFormat]="dateFormat" (ngModelChange)="dateChange($event)" [(ngModel)]="date"></nz-date-picker>
         </div>
         <span class="date-right-btn iconfont icon-right" [class.prevent-color]="preventDateRight" (click)="onDateChangeClick('right')"></span>
       </div>
@@ -127,122 +128,130 @@
 
 <!--点击预约信息弹出预约详情框-->
 <ng-template #orderMsg>
-    <div class="order-msg-alert">
-        <div class="alert-item">
-            <span class="order-msg-left">手机号</span>
-            <span class="order-msg-right">{{reservation.phone}}</span>
-        </div>
-        <div class="alert-item">
-            <span class="order-msg-left">预约时间</span>
-            <span class="order-msg-right">{{reservation.date}}  {{reservation.time}}</span>
-        </div>
-        <div class="alert-item" *ngIf="orderType == 'MAN'">
-            <span class="order-msg-left">手艺人</span>
-            <span class="order-msg-right">{{reservation.staffName}}</span>
-        </div>
-        <div class="alert-item" *ngIf="orderType == 'MAN' || orderType == 'PRODUCT'">
-            <span class="order-msg-left">商品</span>
-            <span class="order-msg-right">{{reservation.productName}}</span>
-        </div>
-        <div class="alert-item">
-            <span class="order-msg-left">人数</span>
-            <span class="order-msg-right">{{reservation.peopleNumber}}人</span>
-        </div>
-        <div class="alert-item">
-            <span class="order-msg-left">备注</span>
-            <span class="order-msg-right">{{reservation.note}}</span>
-        </div>
-        <div *ngIf="status === 'INIT'" class="reserve-init-box">
-            <button (click)="onAccpetBtnClick()">接受预约</button>
-            <button (click)="onRefuseBtnClick()">拒绝</button>
-        </div>
-        <div *ngIf="status === 'SUCCESS'" class="cancel-box">
-            <button class="cancel-btn" (click)="onCancelReservationClick()">取消预约</button>
-        </div>
+  <div class="order-msg-alert">
+    <div class="alert-item">
+      <span class="order-msg-left">门店</span>
+      <span class="order-msg-right">{{reservation.storeName}}</span>
     </div>
+    <div class="alert-item">
+      <span class="order-msg-left">手机号</span>
+      <span class="order-msg-right">{{reservation.phone}}</span>
+    </div>
+    <div class="alert-item">
+      <span class="order-msg-left">预约时间</span>
+      <span class="order-msg-right">{{reservation.date}}  {{reservation.time}}</span>
+    </div>
+    <div class="alert-item" *ngIf="orderType == 'MAN'">
+      <span class="order-msg-left">手艺人</span>
+      <span class="order-msg-right">{{reservation.staffName}}</span>
+    </div>
+    <div class="alert-item" *ngIf="orderType == 'MAN' || orderType == 'PRODUCT'">
+      <span class="order-msg-left">商品</span>
+      <span class="order-msg-right">{{reservation.productName}}</span>
+    </div>
+    <div class="alert-item">
+      <span class="order-msg-left">人数</span>
+      <span class="order-msg-right">{{reservation.peopleNumber}}人</span>
+    </div>
+    <div class="alert-item">
+      <span class="order-msg-left">备注</span>
+      <span class="order-msg-right">{{reservation.note}}</span>
+    </div>
+    <div *ngIf="status === 'INIT'" class="reserve-init-box">
+      <button (click)="onAccpetBtnClick()">接受预约</button>
+      <button (click)="onRefuseBtnClick()">拒绝</button>
+    </div>
+    <div *ngIf="status === 'SUCCESS'" class="cancel-box">
+      <button class="cancel-btn" (click)="onCancelReservationClick()">取消预约</button>
+    </div>
+  </div>
 </ng-template>
 
 <!--点击新建预约弹出框-->
 <ng-template #createOrder>
-    <div class="alert-item">
-        <span class="order-msg-left">手机号</span>
-        <input type="text" maxlength="11" [(ngModel)]="phone" placeholder="请输入顾客手机号">
-    </div>
-    <div class="alert-item">
-        <span class="order-msg-left">预约时间</span>
-        <span class="order-msg-right">{{date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()}} {{timeArr.timeShow[createReserveY]}}</span>
-        <!--<span class="order-msg-right">2017.05.18  19：30</span>-->
-    </div>
-    <div class="alert-item" *ngIf="orderType == 'MAN'">
-        <span class="order-msg-left">手艺人</span>
-        <span class="order-msg-right">{{craftsmanBindArr[createReserveX].staffName}}</span>
-    </div>
-    <div class="alert-item" *ngIf="orderType == 'MAN' || orderType == 'PRODUCT'">
-        <span class="order-msg-left">商品</span>
-        <select (change)="onSelectProductClick($event)">
-            <option *ngFor="let item of craftsmanProducts" [value]="item.productId + ','+ item.productName">{{item.productName}}</option>
-        </select>
-    </div>
-    <div class="alert-item">
-        <span class="order-msg-left">人数</span>
-        <select (change)="onSelectPeopleChange($event)">
-            <option *ngFor="let item of peopleNumberArr" [value]="item">{{item}}</option>
-        </select>
-    </div>
-    <div class="alert-item">
-        <span class="order-msg-left">备注</span>
-        <textarea placeholder="1-20个字" [(ngModel)]="note"></textarea>
-    </div>
+  <div class="alert-item">
+    <span class="order-msg-left">手机号</span>
+    <input type="text" maxlength="11" [(ngModel)]="phone" placeholder="请输入顾客手机号">
+  </div>
+  <div class="alert-item">
+    <span class="order-msg-left">预约时间</span>
+    <span class="order-msg-right">{{date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()}} {{timeArr.timeShow[createReserveY]}}</span>
+    <!--<span class="order-msg-right">2017.05.18  19：30</span>-->
+  </div>
+  <div class="alert-item" *ngIf="orderType == 'MAN'">
+    <span class="order-msg-left">手艺人</span>
+    <span class="order-msg-right">{{craftsmanBindArr[createReserveX].staffName}}</span>
+  </div>
+  <div class="alert-item" *ngIf="orderType == 'MAN' || orderType == 'PRODUCT'">
+    <span class="order-msg-left">商品</span>
+    <select (change)="onSelectProductClick($event)">
+      <option *ngFor="let item of craftsmanProducts" [value]="item.productId + ','+ item.productName">{{item.productName}}</option>
+    </select>
+  </div>
+  <div class="alert-item">
+    <span class="order-msg-left">人数</span>
+    <select (change)="onSelectPeopleChange($event)">
+      <option *ngFor="let item of peopleNumberArr" [value]="item">{{item}}</option>
+    </select>
+  </div>
+  <div class="alert-item">
+    <span class="order-msg-left">备注</span>
+    <textarea placeholder="1-20个字" [(ngModel)]="note"></textarea>
+  </div>
 </ng-template>
 
 <!--点击预约记录弹出框-->
 <ng-template #reserveRecord>
-    <div class="reserve-record-alert">
-        <div class="alert-tab-box">
-            <ul>
-                <li (click)="onRecordStatusClick('')" [class.jn-color]="reserveStatus == ''">全部预约</li>
-                <li (click)="onRecordStatusClick('INIT')" [class.jn-color]="reserveStatus == 'INIT'">待接受</li>
-                <li (click)="onRecordStatusClick('SUCCESS')" [class.jn-color]="reserveStatus == 'SUCCESS'">已接受</li>
-                <li (click)="onRecordStatusClick('CANCEL')" [class.jn-color]="reserveStatus == 'CANCEL'">已取消</li>
-            </ul>
-            <div class="alert-date-box">
-                <!--<nz-datepicker (ngModelChange)="recordDateChange($event)" [(ngModel)]="recordDate" ></nz-datepicker>-->
-            </div>
-        </div>
+  <div class="reserve-record-alert">
+    <div class="alert-tab-box">
+      <ul>
+        <li (click)="onRecordStatusClick('')" [class.jn-color]="reserveStatus == ''">全部预约</li>
+        <li (click)="onRecordStatusClick('INIT')" [class.jn-color]="reserveStatus == 'INIT'">待接受</li>
+        <li (click)="onRecordStatusClick('SUCCESS')" [class.jn-color]="reserveStatus == 'SUCCESS'">已接受</li>
+        <li (click)="onRecordStatusClick('CANCEL')" [class.jn-color]="reserveStatus == 'CANCEL'">已取消</li>
+      </ul>
+      <jn-stores-infor style="position: absolute;" [nzXs]="7" [moduleId]="moduleId" [storeId]="storeId"  [ifStoresAuth]="ifStoresAuth"
+                       (storeListPush)="storeListPush($event)" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
+      <div class="alert-date-box">
+        <!--<nz-datepicker (ngModelChange)="recordDateChange($event)" [(ngModel)]="recordDate" ></nz-datepicker>-->
 
-        <nz-table [nzNoResult]="'没有数据'" #nzTable [nzData]="reserveRecordList" [nzShowPagination]="false">
-            <thead>
-            <tr>
-                <th *ngFor="let item of theadName"><span>{{item}}</span></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let data of reserveRecordList;let ind = index">
-                <td>{{data.staffName || '---'}}</td>
-                <td>{{data.phone || '---'}}</td>
-                <td>{{data.date}} {{data.time}}</td>
-                <td>{{data.productName || '---'}}</td>
-                <td>{{data.peopleNumber || '---'}}<span *ngIf="data.peopleNumber">人</span></td>
-                <td class="record-candle-btn">
-                    <div *ngIf="data.status == 'INIT'" class="jn-color">
-                        <span (click)="onAlertCandleClick('SUCCESS', data.reservationsId)">接受</span> /
-                        <span (click)="onAlertCandleClick('REFUSE', data.reservationsId)">拒绝</span>
-                    </div>
-                    <div *ngIf="data.status == 'SUCCESS'">
-                        <span>已接受</span> /
-                        <span class="jn-color" (click)="onAlertCandleClick('CANCEL', data.reservationsId)">取消预约</span>
-                    </div>
-                    <div *ngIf="data.status == 'CANCEL' || data.status == 'REFUSE'">
-                        <span>已取消</span> /
-                        <span class="jn-color" (click)="onAlertCandleClick('DELETE', data.reservationsId)">删除</span>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </nz-table>
-
-        <div class="nzPaginationBox">
-            <nz-pagination class="nzPagination" (nzPageIndexClickChange)="paginate($event)" (nzPageIndexChange)="paginate($event)" [nzPageIndex]="1" [nzTotal]="countPage"></nz-pagination>
-        </div>
+      </div>
     </div>
+
+    <nz-table [nzNoResult]="'没有数据'" #nzTable [nzData]="reserveRecordList" [nzShowPagination]="false">
+      <thead>
+      <tr>
+        <th *ngFor="let item of theadName"><span>{{item}}</span></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let data of reserveRecordList;let ind = index">
+        <td>{{data.storeName || '---'}}</td>
+        <td>{{data.staffName || '---'}}</td>
+        <td>{{data.phone || '---'}}</td>
+        <td>{{data.date}} {{data.time}}</td>
+        <td>{{data.productName || '---'}}</td>
+        <td>{{data.peopleNumber || '---'}}<span *ngIf="data.peopleNumber">人</span></td>
+        <td class="record-candle-btn">
+          <div *ngIf="data.status == 'INIT'" class="jn-color">
+            <span (click)="onAlertCandleClick('SUCCESS', data.reservationsId)">接受</span> /
+            <span (click)="onAlertCandleClick('REFUSE', data.reservationsId)">拒绝</span>
+          </div>
+          <div *ngIf="data.status == 'SUCCESS'">
+            <span>已接受</span> /
+            <span class="jn-color" (click)="onAlertCandleClick('CANCEL', data.reservationsId)">取消预约</span>
+          </div>
+          <div *ngIf="data.status == 'CANCEL' || data.status == 'REFUSE'">
+            <span>已取消</span> /
+            <span class="jn-color" (click)="onAlertCandleClick('DELETE', data.reservationsId)">删除</span>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </nz-table>
+
+    <div class="nzPaginationBox">
+      <nz-pagination class="nzPagination" (nzPageIndexClickChange)="paginate($event)" (nzPageIndexChange)="paginate($event)" [nzPageIndex]="1" [nzTotal]="countPage"></nz-pagination>
+    </div>
+  </div>
 </ng-template>

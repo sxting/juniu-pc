@@ -200,6 +200,7 @@ export class StaffAddComponent implements OnInit {
   }
 
   goSetMaterialPage() {
+    this.saveStaffSetArtisan(true);
     this.router.navigateByUrl('/wechat/setMaterial');
     this.modalSrv.closeAll();
   }
@@ -314,7 +315,7 @@ export class StaffAddComponent implements OnInit {
   }
 
   //保存手艺人信息
-  saveStaffSetArtisan() {
+  saveStaffSetArtisan(upload?: any) {
     let data: any = {
       showStoreId: this.storeId,
       staffId: this.staffId,
@@ -358,7 +359,11 @@ export class StaffAddComponent implements OnInit {
     this.wechatService.saveStaffSetArtisan(data).subscribe(
       (res: any) => {
         if(res.success) {
-          window.history.back();
+          if(upload) {
+
+          } else {
+            window.history.back();
+          }
           // this.router.navigate(['', {}])
         } else {
           this.errorAlter(res.errorInfo)
