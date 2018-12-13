@@ -48,6 +48,53 @@
                 <span style="margin-right:10px;">核销券码:</span>
                 <input type="text" id="tauthCode" style="width:300px;" maxlength="16" nz-input [(ngModel)]="tauthCode" placeholder="请输入顾客核销码">
             </div>
+          <div class="sm-button" (click)="goToSubmitOrder()">点击查询</div>
+            <!--<div class="member-top-middle reserve-product" [class.selected-border]="orderType == 'PRODUCT'" (click)="orderTypeChange('PRODUCT')" (mouseenter)="onReserveTypeHover('PRODUCT')" (mouseleave)="onReserveTypeLeave()">-->
+            <div class="member-top-middle-product">
+              <span class="member-top-middle-product-pro">选择商品:</span>
+              <div class="member-top-middle-product-prodiv">
+                <div class="reserve-product" [ngClass]="{'reserve-product2': voucherCodes.includes('2020181207807010')}" (click)="onSelectChange('2020181207807010')">
+                  <div style="position: relative; text-align: left;">
+                    <span style="position: relative; width: 100%; font-size: 23px; padding-left: 10px; margin-top: -8px">发型总监设计</span>
+                    <span style="float: right; padding-right: 10px; position: relative">100¥</span>
+                  </div>
+                  <div style="float: left; position: relative">
+                    <span style="padding-left: 10px">核销码:2020181207807010</span>
+                  </div>
+                  <div *ngIf="voucherCodes.includes('2020181207807010')" class="selected-type iconfont icon-yousanjiaogou_ic"></div>
+                </div>
+                <div class="reserve-product" [ngClass]="{'reserve-product2': voucherCodes.includes('2020181207807011')}" (click)="onSelectChange('2020181207807011')">
+                  <div style="position: relative; text-align: left;">
+                    <span style="position: relative; width: 100%; font-size: 23px; padding-left: 10px; margin-top: -8px">发型总监设计</span>
+                    <span style="float: right; padding-right: 10px; position: relative">100¥</span>
+                  </div>
+                  <div style="float: left; position: relative">
+                    <span style="padding-left: 10px">核销码:2020181207807011</span>
+                  </div>
+                  <div *ngIf="voucherCodes.includes('2020181207807011')" class="selected-type iconfont icon-yousanjiaogou_ic"></div>
+                </div>
+                <div class="reserve-product" [ngClass]="{'reserve-product2': voucherCodes.includes('2020181207807012')}" (click)="onSelectChange('2020181207807012')">
+                  <div style="position: relative; text-align: left;">
+                    <span style="position: relative; width: 100%; font-size: 23px; padding-left: 10px; margin-top: -8px">发型总监设计</span>
+                    <span style="float: right; padding-right: 10px; position: relative">100¥</span>
+                  </div>
+                  <div style="float: left; position: relative">
+                    <span style="padding-left: 10px">核销码:2020181207807012</span>
+                  </div>
+                  <div *ngIf="voucherCodes.includes('2020181207807012')" class="selected-type iconfont icon-yousanjiaogou_ic"></div>
+                </div>
+                <div class="reserve-product" [ngClass]="{'reserve-product2': voucherCodes.includes('2020181207807013')}" (click)="onSelectChange('2020181207807013')">
+                  <div style="position: relative; text-align: left;">
+                    <span style="position: relative; width: 100%; font-size: 23px; padding-left: 10px; margin-top: -8px">发型总监设计</span>
+                    <span style="float: right; padding-right: 10px; position: relative">100¥</span>
+                  </div>
+                  <div style="float: left; position: relative">
+                    <span style="padding-left: 10px">核销码:2020181207807013</span>
+                  </div>
+                  <div *ngIf="voucherCodes.includes('2020181207807013')" class="selected-type iconfont icon-yousanjiaogou_ic"></div>
+                </div>
+              </div>
+            </div>
             <div class="member-top-middle">
                 <nz-form-item>
                     <nz-form-label style="float:left;">选择技师</nz-form-label>

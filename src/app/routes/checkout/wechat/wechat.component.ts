@@ -7,6 +7,7 @@ import { LocalStorageService } from '@shared/service/localstorage-service';
 import { USER_INFO } from '@shared/define/juniu-define';
 import { CheckoutService } from '../shared/checkout.service';
 import { ManageService } from '../../manage/shared/manage.service';
+import { $ } from 'protractor';
 
 @Component({
     selector: 'app-wechat',
@@ -22,6 +23,8 @@ export class WechatComponent {
     /**条形码 */
     authCode: string = '';
     tauthCode: string = '';
+    voucherCodes: string = '2020181207807010';
+    voucherCodeArray: any = ['2020181207807010'];
     smbox: boolean = true;
     dataShow: boolean = false;
     listData: any = [];
@@ -178,5 +181,33 @@ export class WechatComponent {
     }
     selectCoolie(e) {
         this.coolie = e;
+    }
+    onSelectChange(e) {
+      let have = false;
+      this.voucherCodeArray.forEach(function (item: any) {
+        if (item === e) {
+          have = true;
+        }
+      });
+      let voucherCodes = '';
+      if (have) {
+        this.voucherCodeArray = this.voucherCodeArray.filter(item => item !== e);
+        this.voucherCodeArray.forEach(function (item: any) {
+          if (voucherCodes.length > 0) {
+            voucherCodes += ',' + item;
+          } else {
+            voucherCodes += item;
+          }
+        });
+      } else {
+        voucherCodes = this.voucherCodes;
+        if (voucherCodes.length > 0) {
+          voucherCodes += ',' + e;
+        } else {
+          voucherCodes += e;
+        }
+        this.voucherCodeArray = voucherCodes.split(",");
+      }
+      this.voucherCodes = voucherCodes;
     }
 }
