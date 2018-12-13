@@ -80,7 +80,7 @@ export class AddNewStaffComponent implements OnInit {
       staffName: [null, [Validators.required]],
       phone: [
         null,
-        [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)],
+        [Validators.required, Validators.pattern(`^[1][2,3,4,5,6,7,8,9][0-9]{9}$`)],
       ],
       password: [
         null,
@@ -119,7 +119,7 @@ export class AddNewStaffComponent implements OnInit {
       ],
       phone: [
         phone,
-        [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)],
+        [Validators.required, Validators.pattern(`^[1][2,3,4,5,6,7,8,9][0-9]{9}$`)],
       ],
       password: [
         password,
@@ -234,7 +234,7 @@ export class AddNewStaffComponent implements OnInit {
               null,
               [
                 Validators.required,
-                Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`),
+                Validators.pattern(`^[1][2,3,4,5,6,7,8,9][0-9]{9}$`),
               ],
             ],
             password: [
@@ -319,7 +319,7 @@ export class AddNewStaffComponent implements OnInit {
               res.data.contactPhone,
               [
                 Validators.required,
-                Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`),
+                Validators.pattern(`^[1][2,3,4,5,6,7,8,9][0-9]{9}$`),
               ],
             ],
             password: [
