@@ -35,6 +35,7 @@ export class WechatComponent {
             JSON.parse(this.localStorageService.getLocalstorage(USER_INFO)).alipayShops : [] : [];
     merchantId: any;
     voucherData: any = [];
+    voucherCodeData: any = [];
     coolie: any;
     staffId: any;
     assign: any;
@@ -162,13 +163,26 @@ export class WechatComponent {
     voucherListHttp() {
         let data = {
             storeId: this.storeId
-        }
+        };
         this.checkoutService.voucherList(data).subscribe(
             (res: any) => {
                 this.voucherData = res.data;
             },
             error => this.errorAlter(error)
         );
+    }
+    queryVoucherCodesHttp() {
+      let data = {
+        storeId: this.storeId,
+        merchantId: this.merchantId,
+        voucherCode: this.tauthCode
+      };
+      this.checkoutService.wxorderQueryVoucher(data).subscribe(
+        (res: any) => {
+          this.voucherCodeData = res.data;
+        },
+        error => this.errorAlter(error)
+      );
     }
     errorAlter(err: any) {
         this.modalSrv.error({
