@@ -51,7 +51,7 @@ export class WechartMarketingIndexComponent implements OnInit {
 
     onItemClick(id: string, name: string, desc: string) {
       if(this.wxappAuth) {
-        this.router.navigate(['/marketing/page', {menuId: this.moduleId, id: id, name: encodeURIComponent(name), desc: encodeURIComponent(desc)}])
+          this.router.navigate(['/marketing/page', {menuId: id === '14'? '90070201B1' : this.moduleId, id: id, name: encodeURIComponent(name), desc: encodeURIComponent(desc)}])
       } else {
 
       }
