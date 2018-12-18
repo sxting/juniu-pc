@@ -342,7 +342,7 @@ export class CheckoutService {
     //描述:查询核销小程序购买的商品的核销码
     wxorderQueryVoucher(data: any) {
       let apiUrl = Config.API + 'order/wxorder/listVouchers.json';
-      return this.http.post(apiUrl, data)
+      return this.http.get(apiUrl, data)
         .map((response: Response) => response)
         .catch(error => {
           return Observable.throw(error);

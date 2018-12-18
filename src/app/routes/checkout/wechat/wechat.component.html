@@ -4,7 +4,23 @@
             <div class="member-top-middle">
                 <jn-stores-infor [moduleId]="moduleId" [AllStoreBoolean]="false" [ifStoresAll]="false" (storeIdOutput)="selectStoreInfo($event)"></jn-stores-infor>
             </div>
-            <div class="member-top-middle">
+            <div [hidden]="vouchersShow" class="sm-button {{checkoutShow?'sm-button2':''}} " (click)="scanPay()">扫描顾客核销码</div>
+            <div [hidden]="!vouchersShow" class="member-top-middle-product">
+              <span class="member-top-middle-product-pro">选择商品:</span>
+              <div class="member-top-middle-product-prodiv">
+                <div class="reserve-product" *ngFor="let voucherData of voucherCodeData; let voucherIndex=index" [ngClass]="{'reserve-product2': voucherCodes.includes(voucherData.voucherCode)}" (click)="onSelectChange(voucherData.voucherCode)">
+                  <div style="position: relative; text-align: left;">
+                    <span style="position: relative; width: 100%; font-size: 23px; padding-left: 10px; margin-top: -8px">{{voucherData.productName}}</span>
+                    <span style="float: right; padding-right: 10px; position: relative">{{voucherData.price / 100}}¥</span>
+                  </div>
+                  <div style="float: left; position: relative">
+                    <span style="padding-left: 10px">核销码:{{voucherData.voucherCode}}</span>
+                  </div>
+                  <div *ngIf="voucherCodes.includes(voucherData.voucherCode)" class="selected-type iconfont icon-yousanjiaogou_ic"></div>
+                </div>
+              </div>
+            </div>
+            <div [hidden]="!vouchersShow" class="member-top-middle">
                 <nz-form-item>
                     <nz-form-label style="float:left;">选择技师</nz-form-label>
                     <nz-form-control style="float:left;width: 300px;">
@@ -25,7 +41,7 @@
                     </nz-form-control>
                 </nz-form-item>
             </div>
-            <div class="member-top-middle">
+            <div [hidden]="!vouchersShow" class="member-top-middle">
                 <nz-form-item>
                     <nz-form-label style="display: inline-block">选择小工</nz-form-label>
                     <nz-form-control style="display: inline-block">
@@ -35,8 +51,13 @@
                     </nz-form-control>
                 </nz-form-item>
             </div>
-            <div class="sm-button {{checkoutShow?'sm-button2':''}} " (click)="scanPay()">扫描顾客核销码</div>
             <!-- <div class="gai"></div> -->
+            <div [hidden]="!vouchersShow" class="member-top-middle">
+              <nz-form-item>
+                <div class="sm-button" style="float: left; margin-left: 70px;" (click)="goToSubmitOrder()">确认核销</div>
+                <div class="ca-button" (click)="tabclick()" >取消</div>
+              </nz-form-item>
+            </div>
             <input type="text" nz-input id="authCode" [(ngModel)]="authCode" maxlength="16" name="authCode" (ngModelChange)="goToSubmitOrder($event)"
                 class="input pay-code-input">
         </nz-tab>
@@ -48,54 +69,24 @@
                 <span style="margin-right:10px;">核销券码:</span>
                 <input type="text" id="tauthCode" style="width:300px;" maxlength="16" nz-input [(ngModel)]="tauthCode" placeholder="请输入顾客核销码">
             </div>
-          <div class="sm-button" (click)="goToSubmitOrder()">点击查询</div>
+            <div [hidden]="vouchersShow" class="sm-button" (click)="goToQueryOrder()">点击查询</div>
             <!--<div class="member-top-middle reserve-product" [class.selected-border]="orderType == 'PRODUCT'" (click)="orderTypeChange('PRODUCT')" (mouseenter)="onReserveTypeHover('PRODUCT')" (mouseleave)="onReserveTypeLeave()">-->
-            <div class="member-top-middle-product">
+            <div [hidden]="!vouchersShow" class="member-top-middle-product">
               <span class="member-top-middle-product-pro">选择商品:</span>
               <div class="member-top-middle-product-prodiv">
-                <div class="reserve-product" [ngClass]="{'reserve-product2': voucherCodes.includes('2020181207807010')}" (click)="onSelectChange('2020181207807010')">
+                <div class="reserve-product" *ngFor="let voucherData of voucherCodeData; let voucherIndex=index" [ngClass]="{'reserve-product2': voucherCodes.includes(voucherData.voucherCode)}" (click)="onSelectChange(voucherData.voucherCode)">
                   <div style="position: relative; text-align: left;">
-                    <span style="position: relative; width: 100%; font-size: 23px; padding-left: 10px; margin-top: -8px">发型总监设计</span>
-                    <span style="float: right; padding-right: 10px; position: relative">100¥</span>
+                    <span style="position: relative; width: 100%; font-size: 23px; padding-left: 10px; margin-top: -8px">{{voucherData.productName}}</span>
+                    <span style="float: right; padding-right: 10px; position: relative">{{voucherData.price / 100}}¥</span>
                   </div>
                   <div style="float: left; position: relative">
-                    <span style="padding-left: 10px">核销码:2020181207807010</span>
+                    <span style="padding-left: 10px">核销码:{{voucherData.voucherCode}}</span>
                   </div>
-                  <div *ngIf="voucherCodes.includes('2020181207807010')" class="selected-type iconfont icon-yousanjiaogou_ic"></div>
-                </div>
-                <div class="reserve-product" [ngClass]="{'reserve-product2': voucherCodes.includes('2020181207807011')}" (click)="onSelectChange('2020181207807011')">
-                  <div style="position: relative; text-align: left;">
-                    <span style="position: relative; width: 100%; font-size: 23px; padding-left: 10px; margin-top: -8px">发型总监设计</span>
-                    <span style="float: right; padding-right: 10px; position: relative">100¥</span>
-                  </div>
-                  <div style="float: left; position: relative">
-                    <span style="padding-left: 10px">核销码:2020181207807011</span>
-                  </div>
-                  <div *ngIf="voucherCodes.includes('2020181207807011')" class="selected-type iconfont icon-yousanjiaogou_ic"></div>
-                </div>
-                <div class="reserve-product" [ngClass]="{'reserve-product2': voucherCodes.includes('2020181207807012')}" (click)="onSelectChange('2020181207807012')">
-                  <div style="position: relative; text-align: left;">
-                    <span style="position: relative; width: 100%; font-size: 23px; padding-left: 10px; margin-top: -8px">发型总监设计</span>
-                    <span style="float: right; padding-right: 10px; position: relative">100¥</span>
-                  </div>
-                  <div style="float: left; position: relative">
-                    <span style="padding-left: 10px">核销码:2020181207807012</span>
-                  </div>
-                  <div *ngIf="voucherCodes.includes('2020181207807012')" class="selected-type iconfont icon-yousanjiaogou_ic"></div>
-                </div>
-                <div class="reserve-product" [ngClass]="{'reserve-product2': voucherCodes.includes('2020181207807013')}" (click)="onSelectChange('2020181207807013')">
-                  <div style="position: relative; text-align: left;">
-                    <span style="position: relative; width: 100%; font-size: 23px; padding-left: 10px; margin-top: -8px">发型总监设计</span>
-                    <span style="float: right; padding-right: 10px; position: relative">100¥</span>
-                  </div>
-                  <div style="float: left; position: relative">
-                    <span style="padding-left: 10px">核销码:2020181207807013</span>
-                  </div>
-                  <div *ngIf="voucherCodes.includes('2020181207807013')" class="selected-type iconfont icon-yousanjiaogou_ic"></div>
+                  <div *ngIf="voucherCodes.includes(voucherData.voucherCode)" class="selected-type iconfont icon-yousanjiaogou_ic"></div>
                 </div>
               </div>
             </div>
-            <div class="member-top-middle">
+            <div [hidden]="!vouchersShow" class="member-top-middle">
                 <nz-form-item>
                     <nz-form-label style="float:left;">选择技师</nz-form-label>
                     <nz-form-control style="float:left;width: 300px;">
@@ -116,7 +107,7 @@
                     </nz-form-control>
                 </nz-form-item>
             </div>
-            <div class="member-top-middle">
+            <div [hidden]="!vouchersShow" class="member-top-middle">
                 <nz-form-item>
                     <nz-form-label style="display: inline-block">选择小工</nz-form-label>
                     <nz-form-control style="display: inline-block">
@@ -126,10 +117,10 @@
                     </nz-form-control>
                 </nz-form-item>
             </div>
-            <div class="member-top-middle">
+            <div [hidden]="!vouchersShow" class="member-top-middle">
               <nz-form-item>
                 <div class="sm-button" style="float: left; margin-left: 70px;" (click)="goToSubmitOrder()">确认核销</div>
-                <div class="ca-button" >取消</div>
+                <div class="ca-button" (click)="tabclick()" >取消</div>
               </nz-form-item>
             </div>
         </nz-tab>
