@@ -26,6 +26,7 @@ export class WechartMarketingListComponent implements OnInit {
         { label: '节日主题活动', value: 'WECHAT_FESTIVAL_GIFT' },
         { label: '新品促销', value: 'WECHAT_NEW_PROMOTION' },
         { label: '指定项目促销', value: 'WECHAT_PRODUCT_PROMOTION' },
+        { label: '微信新人专享', value: 'WECHAT_NEWER_ACTIVITY' },
     ];
     storeOptions: any;
     statusFlag: number = 0;
@@ -209,7 +210,8 @@ export class WechartMarketingListComponent implements OnInit {
         let list = [
             { id: '11', name: '节日主题活动', img: './assets/img/wechat_marketing_1.png', desc: '在小程序中创建节日主题活动，吸引线上用户到店消费。' },
             { id: '12', name: '新品促销', img: './assets/img/sms_marketing_5.png', desc: '在小程序上展示新品优惠，唤起顾客到店消费。' },
-            { id: '13', name: '指定项目促销', img: './assets/img/sms_marketing_6.png', desc: '在小程序上展示指定项目优惠，唤起顾客到店消费。' }
+            { id: '13', name: '指定项目促销', img: './assets/img/sms_marketing_6.png', desc: '在小程序上展示指定项目优惠，唤起顾客到店消费。' },
+            { id: '14', name: '新人专享', img: './assets/img/new-customer.png', desc: '用户第一次进入小程序后展示新人优惠，提高用户留存。'}
         ];
         let id: any = '', name: any = '', desc: any = '';
 
@@ -222,6 +224,8 @@ export class WechartMarketingListComponent implements OnInit {
                 break;
             case 'WECHAT_PRODUCT_PROMOTION':
                 id = list[2].id;name = list[2].name;desc = list[2].desc;
+            case 'WECHAT_NEWER_ACTIVITY':
+              id = list[3].id;name = list[3].name;desc = list[3].desc;
         }
 
         this.router.navigate(['/marketing/page', { menuId: this.moduleId, marketingId: marketingId, marketingStatus: marketingStatus, id: id, name: encodeURIComponent(name), desc: encodeURIComponent(desc)}]);
