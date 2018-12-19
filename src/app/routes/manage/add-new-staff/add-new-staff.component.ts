@@ -80,7 +80,7 @@ export class AddNewStaffComponent implements OnInit {
       staffName: [null, [Validators.required]],
       phone: [
         null,
-        [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)],
+        [Validators.required, Validators.pattern(`^[1][2,3,4,5,6,7,8,9][0-9]{9}$`)],
       ],
       password: [
         null,
@@ -105,7 +105,14 @@ export class AddNewStaffComponent implements OnInit {
     let staffName = this.form.controls.staffName.value;
     let phone = this.form.controls.phone.value;
     let password = this.form.controls.password.value;
-    let storeId = this.form.controls.storeId.value;
+    let storeIdList = [];
+    this.storeList.forEach(element => {
+      storeIdList.push(element.storeId);
+    });
+    let storeId =
+      this.form.controls.belongType.value === 'STORE'
+        ? this.form.controls.storeId.value[0]
+        : storeIdList;
     let roleId = this.RolesListInfor[0] ? this.RolesListInfor[0].roleId : '';
 
     this.formData = {
@@ -119,7 +126,7 @@ export class AddNewStaffComponent implements OnInit {
       ],
       phone: [
         phone,
-        [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)],
+        [Validators.required, Validators.pattern(`^[1][2,3,4,5,6,7,8,9][0-9]{9}$`)],
       ],
       password: [
         password,
@@ -234,7 +241,7 @@ export class AddNewStaffComponent implements OnInit {
               null,
               [
                 Validators.required,
-                Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`),
+                Validators.pattern(`^[1][2,3,4,5,6,7,8,9][0-9]{9}$`),
               ],
             ],
             password: [
@@ -319,7 +326,7 @@ export class AddNewStaffComponent implements OnInit {
               res.data.contactPhone,
               [
                 Validators.required,
-                Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`),
+                Validators.pattern(`^[1][2,3,4,5,6,7,8,9][0-9]{9}$`),
               ],
             ],
             password: [

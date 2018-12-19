@@ -46,7 +46,7 @@
                 <td>{{item.contactPhone}}</td>
                 <td class="push-notification-operation">
                    <p >
-                       <span (click)="WeChatpush(item.staffId)" class="iconfont icon-weixin" [class.isbind]="item.hasWechat"></span>
+                       <span (click)="WeChatpush(item.staffId, item.staffName)" class="iconfont icon-weixin" [class.isbind]="item.hasWechat"></span>
                        <span *ngIf="item.belongType === 'STORE'" (click)="smsNotice(item.staffId)" class="iconfont icon-duanxin" [class.isbind]="item.hasSms"></span>
                    </p>
                 </td>

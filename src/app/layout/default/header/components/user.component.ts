@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { SettingsService } from '@delon/theme';
 import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
@@ -15,7 +15,7 @@ import { USER_INFO } from "@shared/define/juniu-define";
     </div>
     <div nz-menu class="width-sm">
       <div nz-menu-item (click)="goSetPage()"><i class="anticon anticon-user mr-sm"></i>个人中心</div>
-      <!--<div nz-menu-item [nzDisabled]="true"><i class="anticon anticon-setting mr-sm"></i>设置</div>-->
+      <div nz-menu-item (click)="goWechatPage();false"><i class="anticon anticon-mail mr-sm"></i>微信通知</div>
       <li nz-menu-divider></li>
       <div nz-menu-item (click)="logout()"><i class="anticon anticon-setting mr-sm"></i>退出登录</div>
     </div>
@@ -27,10 +27,12 @@ export class HeaderUserComponent implements OnInit {
     private localStorageService: LocalStorageService,
     public settings: SettingsService,
     private router: Router,
+    private injector: Injector,
     @Inject(DA_SERVICE_TOKEN) private tokenService: ITokenService,
   ) { }
 
   staffName: any = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['staffName'];
+  staffId: any = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['staffId'];
 
   ngOnInit(): void {
     // this.staffName = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['staffName'];
@@ -49,6 +51,11 @@ export class HeaderUserComponent implements OnInit {
 
   goSetPage() {
     this.router.navigate(['/setings/administration', { menuId: '901106' }]);
+  }
+
+  goWechatPage() {
+    //this.injector.get("$templateCache").removeAll();
+    this.router.navigate(['/manage/wechat/notice' , {staffId : this.staffId, staffName : this.staffName, menuId : '901002'}]);
   }
 
   logout() {

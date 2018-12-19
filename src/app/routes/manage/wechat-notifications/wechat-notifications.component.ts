@@ -20,6 +20,7 @@ export class WechatNotificationsComponent implements OnInit {
     { name: '接收门店工作报表', value: 'WORK_REPORT_STORE' },
   ]; //到店通知
   staffId: string = '';
+  staffName: string = '';
   loading: boolean = false;
   submitting: boolean = false;
   qrcodeImages: string = ''; //二维码地址
@@ -47,6 +48,7 @@ export class WechatNotificationsComponent implements OnInit {
   ngOnInit() {
     let self = this;
     this.staffId = this.route.snapshot.params['staffId']; //员工ID
+    this.staffName = this.route.snapshot.params['staffName']; //员工名称
     this.faceQRcode(this.staffId); //微信二维码
   }
 

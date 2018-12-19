@@ -93,9 +93,10 @@ export class StaffListComponent implements OnInit {
 
 
     //微信推送
-    WeChatpush(staffId: string){
+    WeChatpush(staffId: string, staffName: string){
         let id = staffId;
-        this.router.navigate(['/manage/wechat/notice', {staffId : id, menuId: this.moduleId}]);
+        let name = staffName;
+        this.router.navigate(['/manage/wechat/notice', {staffId : id, staffName : name, menuId: this.moduleId}]);
     }
 
     //短信通知

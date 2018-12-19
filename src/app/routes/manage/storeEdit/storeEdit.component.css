@@ -121,7 +121,7 @@
 }
 #pickerBox {
     position: absolute;
-    z-index: 9999;
+    z-index: 9;
     top: 10px;
     right: 10px;
     width: 250px;

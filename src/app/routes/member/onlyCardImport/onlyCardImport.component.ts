@@ -132,7 +132,7 @@ export class OnlyCardImportComponent {
     }
     //校验并赋值
     checksumAssignment(text: string, type: string) {
-        var pattern = /^1[34578]\d{9}$/;
+        var pattern = /^1[23456789]\d{9}$/;
         var patternNumber = /^[0-9]\d*$/;
 
         if (this.storeId === '' || this.storeId === undefined) {
