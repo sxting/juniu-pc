@@ -5,6 +5,8 @@
                 <jn-stores-infor [moduleId]="moduleId" [AllStoreBoolean]="false" [ifStoresAll]="false" (storeIdOutput)="selectStoreInfo($event)"></jn-stores-infor>
             </div>
             <div [hidden]="vouchersShow" class="sm-button {{checkoutShow?'sm-button2':''}} " (click)="scanPay()">扫描顾客核销码</div>
+            <input [hidden]="vouchersShow" type="text" nz-input id="authCode" [(ngModel)]="authCode" maxlength="16" name="authCode" (ngModelChange)="goToQueryOrder($event)"
+                   class="input pay-code-input">
             <div [hidden]="!vouchersShow" class="member-top-middle-product">
               <span class="member-top-middle-product-pro">选择商品:</span>
               <div class="member-top-middle-product-prodiv">
@@ -58,8 +60,6 @@
                 <div class="ca-button" (click)="tabclick()" >取消</div>
               </nz-form-item>
             </div>
-            <input type="text" nz-input id="authCode" [(ngModel)]="authCode" maxlength="16" name="authCode" (ngModelChange)="goToSubmitOrder($event)"
-                class="input pay-code-input">
         </nz-tab>
         <nz-tab nzTitle="手动核销" (nzClick)="tabclick()">
             <div class="member-top-middle">

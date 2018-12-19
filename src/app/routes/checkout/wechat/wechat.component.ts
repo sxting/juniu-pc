@@ -67,14 +67,19 @@ export class WechatComponent {
         this.voucherData = [];
         this.voucherCodeData = [];
         let div = document.getElementById('tauthCode');
+        let div1 = document.getElementById('authCode');
         if (div)
           div.removeAttribute('disabled');
+        if (div1)
+          div1.removeAttribute('disabled');
     }
     tabclick() {
         this.qingchu();
     }
   /**扫码查询待核销列表 */
   goToQueryOrder(event?: any) {
+    console.log("goToQueryOrder");
+    console.log(event);
     let self = this;
     let div = document.getElementById('tauthCode');
     let div2 = document.getElementById('authCode');
@@ -120,7 +125,11 @@ export class WechatComponent {
     }
     /**扫码 */
     scanPay() {
+        console.log("this.authCod");
         let that = this;
+        this.authCode = '';
+        console.log(this.authCode);
+      document.getElementById("authCode").focus();
         setTimeout('document.getElementById("authCode").focus();', 50);
         this.modalSrv.info({
             nzTitle: '扫描条形码中。。。。',
