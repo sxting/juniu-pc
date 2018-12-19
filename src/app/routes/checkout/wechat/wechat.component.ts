@@ -78,8 +78,6 @@ export class WechatComponent {
     }
   /**扫码查询待核销列表 */
   goToQueryOrder(event?: any) {
-    console.log("goToQueryOrder");
-    console.log(event);
     let self = this;
     let div = document.getElementById('tauthCode');
     let div2 = document.getElementById('authCode');
@@ -128,8 +126,6 @@ export class WechatComponent {
         console.log("this.authCod");
         let that = this;
         this.authCode = '';
-        console.log(this.authCode);
-      document.getElementById("authCode").focus();
         setTimeout('document.getElementById("authCode").focus();', 50);
         this.modalSrv.info({
             nzTitle: '扫描条形码中。。。。',
@@ -199,14 +195,15 @@ export class WechatComponent {
       this.checkoutService.wxorderQueryVoucher(data).subscribe(
         (res: any) => {
           this.voucherCodeData = res.data;
-          let  voucherCodes = '';
-          this.voucherCodeData.forEach(function (item: any) {
-            if (voucherCodes.length > 0) {
-              voucherCodes += ',' + item.voucherCode;
-            } else {
-              voucherCodes += item.voucherCode;
-            }
-          });
+          let voucherCodes = this.voucherCodeData[0].voucherCode;
+          // 默认全部选择
+          // this.voucherCodeData.forEach(function (item: any) {
+          //   if (voucherCodes.length > 0) {
+          //     voucherCodes += ',' + item.voucherCode;
+          //   } else {
+          //     voucherCodes += item.voucherCode;
+          //   }
+          // });
           this.voucherCodeArray = voucherCodes.split(",");
           this.voucherCodes = voucherCodes;
           this.vouchersShow = true;
