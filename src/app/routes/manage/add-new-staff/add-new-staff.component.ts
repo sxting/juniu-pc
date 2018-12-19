@@ -105,7 +105,14 @@ export class AddNewStaffComponent implements OnInit {
     let staffName = this.form.controls.staffName.value;
     let phone = this.form.controls.phone.value;
     let password = this.form.controls.password.value;
-    let storeId = this.form.controls.storeId.value;
+    let storeIdList = [];
+    this.storeList.forEach(element => {
+      storeIdList.push(element.storeId);
+    });
+    let storeId =
+      this.form.controls.belongType.value === 'STORE'
+        ? this.form.controls.storeId.value[0]
+        : storeIdList;
     let roleId = this.RolesListInfor[0] ? this.RolesListInfor[0].roleId : '';
 
     this.formData = {
