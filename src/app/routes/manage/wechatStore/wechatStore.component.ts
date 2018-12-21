@@ -14,10 +14,18 @@ import { USER_INFO } from '@shared/define/juniu-define';
 export class WechatStoreComponent {
     merchantId: any;
     statusData: any;
+    list: any[] = [];
+
+  loading = true;
     constructor(private router: Router, public msg: NzMessageService, private localStorageService: LocalStorageService, private modalSrv: NzModalService,
         private manageService: ManageService, private http: _HttpClient) {
         this.merchantId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['merchantId'];
         this.checkFun();
+        this.loading = true;
+        this.http.get('/api/list', { count: 8 }).subscribe((res: any) => {
+      this.list = this.list.concat(res);
+      this.loading = false;
+    });
     }
 
     checkFun() {

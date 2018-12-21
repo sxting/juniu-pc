@@ -1,14 +1,13 @@
 <nz-card nzTitle="小程序版本选择" style="overflow:hidden" [nzBordered]="false" [nzBodyStyle]="{'height':'100%','overflow': 'hidden','margin':'30px'}">
     <ul>
-        <li class="item-box" *ngFor="let item of typeArr">
-            <div class="itemHeadBox">
-                <div class="itemHead">
-                    <div nz-col nzSpan="7" class="jiantou jiantou1"></div>
-                    <div nz-col nzSpan="10" style="text-align:center">{{item.versionName}}</div>
-                    <div nz-col nzSpan="7" class="jiantou"></div>
-                </div>
-            </div>
+        <li class="item-box" *ngFor="let item of typeArr" [style.color]="'#ff6600'" >
             <div class="itemImg"></div>
+            <div class="tabBar iconfont icon-biaoq">
+                <p class="tabBarText" >
+                    {{item.versionName}}
+                </p>
+            </div>
+            <div [style.color]="'#ff6600'" class="itemPrice">免费</div>
             <div class="itemBody">
                 <div class="icon-duihao iconfont" *ngFor="let obj of item.functionList">{{obj}}</div>
             </div>

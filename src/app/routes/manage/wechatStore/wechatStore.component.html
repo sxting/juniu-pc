@@ -1,5 +1,6 @@
-<nz-card nzTitle="小程序" style="overflow:hidden" [nzBordered]="false" [nzBodyStyle]="{'height':'100%','overflow': 'hidden','margin':'30px','background':'#f8f8f8'}">
-    <div>
+<div class="icon-gantanhao iconfont">您购买的小程序模版：美业版，剩余有效期已不足<span class="colorRed">30天</span>，为了不影响正常使用，请<span class="colorRed">立即续费>></span></div>
+<nz-card nzTitle="小程序" style="overflow:hidden" [nzBordered]="false" [nzBodyStyle]="{'height':'100%','overflow': 'hidden','margin':'30px','background':'#fff'}">
+    <!-- <div>
         <h1>线上版本</h1>
         <div style="overflow: hidden;position: relative;">
             <div nz-col nzSpan="20">
@@ -25,13 +26,45 @@
             <div nz-col nzSpan="4">
                 <button class="buttons" nz-button nzType="primary" (click)="jiechu()" type="submit">解除授权</button>
             </div>
-            <div style="position: absolute;
-            bottom: 0;
-            right: 0;">
-                <a (click)="gotoList()">点击去配置门店展示信息 > ></a>
-            </div>
+            
         </div>
-    </div>
+    </div> -->
+    <nz-radio-group [(ngModel)]="statusFlag" class="mr-md" style="position: absolute;right: 0;top: 10px;">
+        <label nz-radio-button [nzValue]="'1'" (click)="onStatusClick()">
+            <span>解除授权</span>
+        </label>
+        <label nz-radio-button [nzValue]="'0'" (click)="onStatusClick()">
+            <span>购买新模版</span>
+        </label>
+    </nz-radio-group>
+    <nz-list [nzLoading]="loading" [nzDataSource]="list" [nzRenderItem]="item" [nzGrid]="{gutter: 24, lg: 8, md: 12, sm: 24, xs: 24 }">
+        <ng-template #item let-item>
+          <nz-list-item>
+            <nz-card nzHoverable  style="width:100%;position: relative;" [nzActions]="[op1, op2]">
+                <div class="nowMB"><span class="iconfont icon-triangle-left"></span> 当前展示模版</div>
+              <ng-template #op1>
+                <a (click)="msg.success('操作一：' + item.id);">使用此模版</a>
+              </ng-template>
+              <ng-template #op2>
+                <a (click)="msg.success('操作二：' + item.id);">升级</a>
+              </ng-template>
+              <nz-card-meta [nzAvatar]="nzAvatar" [nzTitle]="nzTitle" [nzDescription]="nzDescription">
+                <ng-template #nzAvatar>
+                  <nz-avatar nzSize="large" [nzSrc]="item.avatar"></nz-avatar>
+                </ng-template>
+                <ng-template #nzTitle>
+                  <a (click)="msg.success('标题：' + item.id);">{{item.title}}</a>
+                </ng-template>
+                <ng-template #nzDescription>
+                  <div>购买时间 : 2018-05-10</div>
+                  <div>剩余有效期 : 永久</div>
+                </ng-template>
+              </nz-card-meta>
+            </nz-card>
+          </nz-list-item>
+        </ng-template>
+      </nz-list>
+      <div style="position: absolute;bottom: 20px;"><a (click)="gotoList()">点击去配置门店展示信息 > ></a></div>
 </nz-card>
 <nz-card nzTitle="小程序码下载" style="overflow:hidden" [nzBordered]="false" [nzBodyStyle]="{'height':'100%','overflow': 'hidden','margin':'30px','background':'#f8f8f8'}">
     <div style="overflow: hidden;position: relative;">
@@ -50,6 +83,7 @@
     <nz-table [nzNoResult]="'没有数据'" [nzShowPagination]="false" [nzData]="statusData?.recoreds">
         <thead>
             <tr>
+                <th>审核版本</th>
                 <th>版本号</th>
                 <th>提交审核时间</th>
                 <th>审核状态</th>
@@ -57,6 +91,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let item of statusData?.recoreds;let ind = index;">
+                    <td>{{item.auditVersion}}</td>
                 <td>{{item.auditVersion}}</td>
                 <td>{{item.submitTime}}</td>
                 <td *ngIf="item.status !== 'faild'">{{item.statusName}}</td>
