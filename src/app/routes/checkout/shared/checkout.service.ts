@@ -338,6 +338,16 @@ export class CheckoutService {
                 return Observable.throw(error);
             });
     }
+
+    //描述:查询核销小程序购买的商品的核销码
+    wxorderQueryVoucher(data: any) {
+      let apiUrl = Config.API + 'order/wxorder/listVouchers.json';
+      return this.http.get(apiUrl, data)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
     
     //描述:核销小程序购买的商品的核销码
     wxorderConsumeVoucher(data: any) {
@@ -348,6 +358,7 @@ export class CheckoutService {
                 return Observable.throw(error);
             });
     }
+
     //核销历史  order/wxorder/voucher/list.json
     voucherList(data: any) {
         let apiUrl = Config.API + 'order/wxorder/voucher/list.json';
