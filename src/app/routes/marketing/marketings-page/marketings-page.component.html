@@ -102,7 +102,7 @@
       </nz-form-control>
     </nz-form-item>
 
-    <nz-form-item *ngIf="paramsId == '03'">
+    <nz-form-item *ngIf="paramsId === '03'">
       <nz-form-label nzXs="24" nzSm="5" nzRequired>发送时间</nz-form-label>
       <nz-form-control nzXs="24" nzSm="15" nzMd="15">
         <div class="no-wrap">
@@ -123,7 +123,7 @@
       </nz-form-control>
     </nz-form-item>
 
-    <nz-form-item [class.dis-none]="paramsId == '03' || paramsId == '11' || paramsId == '12' || paramsId == '13' || paramsId == '07' || paramsId == '08' || paramsId == '09'">
+    <nz-form-item *ngIf="paramsId != '14'" [class.dis-none]="paramsId == '03' || paramsId == '11' || paramsId == '12' || paramsId == '13' || paramsId == '07' || paramsId == '08' || paramsId == '09'">
       <nz-form-label nzXs="24" nzSm="5" nzRequired>发送时间</nz-form-label>
       <nz-form-control nzXs="24" nzSm="15" nzMd="15">
         <nz-date-picker [nzShowToday]="false" [nzDisabled]="marketingStatus === 'RUNING' || marketingStatus === 'STOP'"
@@ -335,9 +335,9 @@
           <nz-form-control nzXs="24" nzSm="15" nzMd="15">
             <span class="btn" [class.btn-focus]="couponType === '2'"
                   [class.dis-none]="paramsId == '07' || paramsId == '08'" (click)="onCouponTypeClick('2')">代金券</span>
-            <span class="btn" [class.btn-focus]="couponType === '3'"
+            <span class="btn" [class.btn-focus]="couponType === '3'" *ngIf="paramsId != '14'"
                   [class.dis-none]="paramsId == '07' || paramsId == '09'" (click)="onCouponTypeClick('3')">折扣券</span>
-            <span class="btn" [class.btn-focus]="couponType === '4'"
+            <span class="btn" [class.btn-focus]="couponType === '4'" *ngIf="paramsId != '14'"
                   [class.dis-none]="paramsId == '08' || paramsId == '09'" (click)="onCouponTypeClick('4')">礼品券</span>
           </nz-form-control>
         </nz-form-item>
@@ -579,13 +579,13 @@
   <div>
     <nz-radio-group [(ngModel)]="couponTypeTab" (ngModelChange)="couponTabClick()">
       <label nz-radio-button nzValue="all"
-             [nzDisabled]="paramsId == '05' || paramsId == '12' || paramsId == '07'">全部优惠券</label>
+             [nzDisabled]="paramsId == '05' || paramsId == '12' || paramsId == '07' || paramsId == '14'">全部优惠券</label>
       <label nz-radio-button nzValue="daijinquan"
              [nzDisabled]="paramsId == '05' || paramsId == '12' || paramsId == '07'">代金券</label>
       <label nz-radio-button nzValue="zhekouquan"
-             [nzDisabled]="paramsId == '05' || paramsId == '12' || paramsId == '07'">折扣券</label>
-      <label nz-radio-button nzValue="lipinquan" [nzDisabled]="paramsId == '05' || paramsId == '12'">礼品券</label>
-      <label nz-radio-button nzValue="danpinquan" [nzDisabled]="paramsId != '05' && paramsId != '12'">单品券</label>
+             [nzDisabled]="paramsId == '05' || paramsId == '12' || paramsId == '07'  || paramsId == '14'">折扣券</label>
+      <label nz-radio-button nzValue="lipinquan" [nzDisabled]="paramsId == '05' || paramsId == '12'  || paramsId == '14'">礼品券</label>
+      <label nz-radio-button nzValue="danpinquan" [nzDisabled]="paramsId != '05' && paramsId != '12'  || paramsId == '14'">单品券</label>
     </nz-radio-group>
   </div>
   <div>

@@ -17,6 +17,7 @@ export class WechartMarketingIndexComponent implements OnInit {
     list2: any = [];
     list3: any = [];
 
+
     constructor(
       private route: ActivatedRoute,
       private router: Router,
@@ -35,7 +36,9 @@ export class WechartMarketingIndexComponent implements OnInit {
             { id: '13', name: '指定项目促销', img: './assets/img/sms_marketing_6.png', desc: '在小程序上展示指定项目优惠，唤起顾客到店消费。' }
         ];
         this.list2 = [
-            { id: '14', name: '大转盘', img: './assets/img/wechat_marketing_4.png', desc: '' }
+            { id: '14', name: '新人专享', img: './assets/img/new-customer.png', desc: '用户第一次进入小程序后展示新人优惠，提高用户留存。', iconFont: './assets/img/marketing-edition.png' }
+            // { id: '15', name: '大转盘', img: './assets/img/wechat_marketing_4.png', desc: '' }
+
         ];
 
         this.list3 = [
@@ -48,7 +51,7 @@ export class WechartMarketingIndexComponent implements OnInit {
 
     onItemClick(id: string, name: string, desc: string) {
       if(this.wxappAuth) {
-        this.router.navigate(['/marketing/page', {menuId: this.moduleId, id: id, name: encodeURIComponent(name), desc: encodeURIComponent(desc)}])
+          this.router.navigate(['/marketing/page', {menuId: id === '14'? '90070201B1' : this.moduleId, id: id, name: encodeURIComponent(name), desc: encodeURIComponent(desc)}])
       } else {
 
       }

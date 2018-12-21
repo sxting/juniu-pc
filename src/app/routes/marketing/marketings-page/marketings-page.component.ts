@@ -151,10 +151,12 @@ export class MarketingsPageComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-      this.moduleId = this.route.snapshot.params['menuId'];
+        this.moduleId = this.route.snapshot.params['menuId'];
         this.paramsId = this.route.snapshot.params['id'];
         this.paramsIdNumber = parseInt(this.paramsId);
         this.marketingId = this.route.snapshot.params['marketingId'] ? this.route.snapshot.params['marketingId'] : '';
+
+        console.log(this.paramsId);
 
         if(this.paramsId.indexOf('0') >= 0) {
             this.pageHeader1 = '短信营销';
@@ -192,6 +194,9 @@ export class MarketingsPageComponent implements OnInit {
             this.couponType = '3'
         } else if(this.paramsId == '09') {
             this.couponType = '2'
+        }else if(this.paramsId == '14'){//新人专享==默认选择tab中的代金券
+          this.couponType = '2';
+          this.couponTypeTab = 'daijinquan';
         }
 
         if(this.paramsId === '01') {
@@ -829,7 +834,7 @@ export class MarketingsPageComponent implements OnInit {
             }
         }
 
-        if(this.paramsId == '11') {
+        if(this.paramsId == '11' || this.paramsId == '14') {
             // 微信营销 节日主题活动
             data = {
                 marketingType: 'WECHAT', //
@@ -991,6 +996,8 @@ export class MarketingsPageComponent implements OnInit {
                 break;
             case '13':
                 data.scene = 'WECHAT_PRODUCT_PROMOTION';
+            case '14':
+              data.scene = 'WECHAT_NEWER_ACTIVITY';
         }
 
         if(this.marketingId) {
@@ -1312,6 +1319,10 @@ export class MarketingsPageComponent implements OnInit {
     //获取优惠券列表
     getCouponDefList() {
         let couponDefType = this.couponTypeTab == 'daijinquan' ? 'MONEY' : this.couponTypeTab == 'zhekouquan' ? 'DISCOUNT' : this.couponTypeTab == 'lipinquan' ? 'GIFT' : '';
+
+        console.log(this.couponTypeTab);
+        console.log(couponDefType);
+
         let data = {
             merchantId: this.merchantId,
             couponDefType: couponDefType,
@@ -1487,8 +1498,8 @@ export class MarketingsPageComponent implements OnInit {
             send_menkan: [null, this.paramsId=='07' || this.paramsId=='08' || this.paramsId == '09' ? [Validators.compose([Validators.required, Validators.pattern(`[0-9]+`)])]:[] ],
             sms_content: ['', []],
             active_date: [null, this.paramsIdNumber <= 6 ? [] : [Validators.required]],
-            sms_send_date: [null, this.paramsId == '03' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' || this.paramsId == '07' || this.paramsId == '08' || this.paramsId == '09' ? [] : [Validators.required]],
-            sms_send_time: [null, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' || this.paramsId == '07' || this.paramsId == '08' || this.paramsId == '09' ? [] : [Validators.required]],
+            sms_send_date: [null, this.paramsId == '03' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' || this.paramsId == '07' || this.paramsId == '08' || this.paramsId == '09' || this.paramsId == '14'? [] : [Validators.required]],
+            sms_send_time: [null, this.paramsId == '03' || this.paramsId == '04' || this.paramsId == '11' || this.paramsId == '12' || this.paramsId == '13' || this.paramsId == '07' || this.paramsId == '08' || this.paramsId == '09' || this.paramsId == '14'? [] : [Validators.required]],
         });
 
         this.form2 = this.fb.group({
