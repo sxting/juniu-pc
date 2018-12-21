@@ -55,7 +55,7 @@
                 <tr *ngFor="let item of data;let ind = index;">
                     <td>{{ind+1}}</td>
                     <td>
-                        {{item.scene==='WECHAT_FESTIVAL_GIFT'?'节日主题活动':item.scene==='WECHAT_NEW_PROMOTION'?'新品促销':'指定项目促销'}}
+                        {{item.scene==='WECHAT_FESTIVAL_GIFT'?'节日主题活动':item.scene==='WECHAT_NEW_PROMOTION'?'新品促销':item.scene==='WECHAT_NEWER_ACTIVITY'?'微信新人专享':'指定项目促销'}}
                     </td>
                     <td>{{item.couponDefType==='MONEY'?'代金券':item.couponDefType==='DISCOUNT'?'折扣券':'礼品券'}}</td>
                     <td>{{item.marketingName}}</td>
