@@ -1060,7 +1060,15 @@ export class ManageService {
         return Observable.throw(error);
       });
   }
-
+  listWxappTemplates2() {
+    let apiUrl = Config.API + '/marketing/wxapp/tpl/tplList.json';
+    return this.http
+      .get(apiUrl)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
   chooseTpl(data) {
     let apiUrl = Config.API + '/marketing/wxapp/chooseTpl.json';
     return this.http
@@ -1110,4 +1118,15 @@ export class ManageService {
         return Observable.throw(error);
       });
   }
+  //现有模版  
+  wxappHoldTpl() {
+    let apiUrl = Config.API + '/marketing/wxapp/tpl/holdTpl.json';
+    return this.http
+      .get(apiUrl)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+  
 }

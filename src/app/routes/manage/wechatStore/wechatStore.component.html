@@ -30,10 +30,10 @@
         </div>
     </div> -->
     <nz-radio-group [(ngModel)]="statusFlag" class="mr-md" style="position: absolute;right: 0;top: 10px;">
-        <label nz-radio-button [nzValue]="'1'" (click)="onStatusClick()">
+        <label nz-radio-button [nzValue]="'1'" (click)="jiechuClick(jiechu)">
             <span>解除授权</span>
         </label>
-        <label nz-radio-button [nzValue]="'0'" (click)="onStatusClick()">
+        <label nz-radio-button [nzValue]="'0'" (click)="gotoNew()">
             <span>购买新模版</span>
         </label>
     </nz-radio-group>
@@ -103,3 +103,12 @@
     </nz-table>
 
 </nz-card>
+
+<ng-template #jiechu>
+  <div class="banneImg"></div>
+  <h3>解除授权流程</h3>
+  <div>1.登录小程序后台，登录小程序后台请戳: <a href="https://mp.weixin.qq.com/" target="view_window">https://mp.weixin.qq.com/</a></div>
+  <div>2.点击设置-第三方服务-停止授权即可</div>
+  <div>3.重新登录桔牛授权即可</div>
+  <h4 style="margin-top: 40px;">如遇到问题，请联系桔牛客服010-80441899解决</h4>
+</ng-template>

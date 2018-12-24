@@ -9,7 +9,7 @@
             </div>
             <div [style.color]="'#ff6600'" class="itemPrice">免费</div>
             <div class="itemBody">
-                <div class="icon-duihao iconfont" *ngFor="let obj of item.functionList">{{obj}}</div>
+                <div class="icon-point-copy iconfont" *ngFor="let obj of item.functionList">{{obj}}</div>
             </div>
 
             <button class="buttons" nz-button nzType="primary" type="submit" (click)="checkFun(item)">{{item.versionName}}</button>

@@ -24,7 +24,7 @@ export class WechatTypeComponent {
 
     //wxStatus
     wxStatusHttp() {
-        this.manageService.listWxappTemplates().subscribe(
+        this.manageService.listWxappTemplates2().subscribe(
             (res: any) => {
                 if (res.success) {
                     this.typeArr = res.data;
