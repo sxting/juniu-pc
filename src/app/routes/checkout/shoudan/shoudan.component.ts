@@ -57,6 +57,7 @@ export class ShoudanComponent implements OnInit {
       money: NP.times(self.receiptCode, 100),
       storeId: this.storeId,
       wipeDecimal: false,
+      source:'SD'
     };
     console.log(data);
     this.createOrderFun(data);
@@ -119,6 +120,7 @@ export class ShoudanComponent implements OnInit {
       pageIndex: this.pageIndex,
       pageSize: this.pageSize,
       phone: phone,
+      shoudan:true
     };
     if (!data.phone) delete data.phone;
     this.checkoutService.getOrderHistoryList(data).subscribe(

@@ -292,9 +292,10 @@
                   <div nz-col style="text-align:left;" nzSpan="4">是否抹零</div>
                   <div nz-col nzSpan="20">
                     <nz-switch style="float:left;" (ngModelChange)="moling()" [ngModel]="isVerb" nzCheckedChildren="是" nzUnCheckedChildren="否"></nz-switch>
-                    <span style="float:right;">收款：
+                    <!-- <span style="float:right;">收款：
                       <input type="text" style="width:100px;" onkeyup="if(this.value<0)this.value = 0;if(this.value>99999999)this.value =99999999;"
-                        [(ngModel)]="inputValue" nz-input> </span>
+                        [(ngModel)]="inputValue" nz-input> </span> -->
+                        <span style="float:right;">收款：{{inputValue}}</span>
                   </div>
                 </div>
               </nz-form-item>

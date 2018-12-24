@@ -2010,6 +2010,7 @@ vipXqFun2() {
       pageIndex: this.pageIndex,
       pageSize: this.pageSize,
       phone: phone,
+      shoudan:false
     };
     if (!data.phone) delete data.phone;
     this.checkoutService.getOrderHistoryList(data).subscribe(
@@ -2222,10 +2223,7 @@ function (selectData:any,self?:any) {
 
     
     // this.xfList[ind].currentPrice = event.target.value * 100;
-    this.xfList[ind].discount = NP.times( NP.divide( NP.times(event.target.value ,100),this.xfList[ind].currentPrice1,this.xfList[ind].num),100)
-    console.log(this.xfList[ind])
-    
-    
+    this.xfList[ind].discount = NP.times( NP.divide( NP.times(event.target.value ,100),this.xfList[ind].currentPrice1,this.xfList[ind].num),100).toFixed(2)
     let that = this;
 
     this.totolMoneyFun();
