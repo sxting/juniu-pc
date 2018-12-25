@@ -332,30 +332,16 @@ export class TouristComponent implements OnInit {
         if (i.vipCard) {
           // i.totoleMoney = NP.round(NP.times(NP.divide(i.vipMoney, 100), i.num, NP.divide(i.discount, 100)), 2);
           if (i.vipCard.card.type === 'TIMES') {
-            i.totoleMoney = NP.times(
-              NP.divide(i.discount, 100),
-              NP.times(NP.divide(i.currentPrice, 100), 100),
-              i.num,
-            );
+            i.totoleMoney =NP.times(i.totoleMoney1,100)
           } else if (i.vipCard.card.type === 'METERING') {
-            i.totoleMoney = NP.times(
-              NP.divide(i.discount, 100),
-              NP.times(NP.divide(i.currentPrice, 100), 100),
-              i.num,
-            );
+            i.totoleMoney = NP.times(i.totoleMoney1,100)
           } else if (i.vipCard.card.type === 'REBATE') {
             i.totoleMoney = NP.times(
-              NP.divide(i.discount, 100),
-              NP.times(NP.divide(i.currentPrice, 100), 100),
+              NP.times(i.totoleMoney1,100),
               NP.divide(i.vipCard.card.rebate, 10),
-              i.num,
             );
           } else if (i.vipCard.card.type === 'STORED') {
-            i.totoleMoney = NP.times(
-              NP.divide(i.discount, 100),
-              NP.times(NP.divide(i.currentPrice, 100), 100),
-              i.num,
-            );
+            i.totoleMoney = NP.times(i.totoleMoney1,100)
           }
 
           i.totoleMoney = NP.divide(i.totoleMoney, 100);
@@ -1108,6 +1094,11 @@ export class TouristComponent implements OnInit {
     // create.faceId = this.selectFaceId;
     create.customerId = this.memberInfo.customerId;
     this.spinBoolean = true;
+    if (create.settleCardDTOList && create.settleCardDTOList.length > 0) {
+      create.settleCardDTOList.forEach(i => {
+        i.amount = NP.round(i.amount,0)
+      });
+    }
     console.log(create);
     if (this.xyVip) {
       that.rechargeAndOrderPayFun(create);
@@ -2223,7 +2214,9 @@ function (selectData:any,self?:any) {
 
     
     // this.xfList[ind].currentPrice = event.target.value * 100;
-    this.xfList[ind].discount = NP.times( NP.divide( NP.times(event.target.value ,100),this.xfList[ind].currentPrice1,this.xfList[ind].num),100).toFixed(2)
+    // this.xfList[ind].discount = NP.times( NP.divide( NP.times(event.target.value ,100),this.xfList[ind].currentPrice1,this.xfList[ind].num),100).toFixed(2)
+    this.xfList[ind].discount = NP.times( NP.divide( NP.times(event.target.value ,100),this.xfList[ind].currentPrice1,this.xfList[ind].num),100)
+    
     let that = this;
 
     this.totolMoneyFun();
