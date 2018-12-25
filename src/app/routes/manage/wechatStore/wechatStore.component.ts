@@ -15,18 +15,14 @@ export class WechatStoreComponent {
     merchantId: any;
     statusData: any;
     list: any[] = [];
-
+    tplArr: any[] = [];
   loading = true;
     constructor(private router: Router, public msg: NzMessageService, private localStorageService: LocalStorageService, private modalSrv: NzModalService,
         private manageService: ManageService, private http: _HttpClient) {
         this.merchantId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['merchantId'];
         this.checkFun();
-        this.loading = true;
-        this.http.get('/api/list', { count: 8 }).subscribe((res: any) => {
-      this.list = this.list.concat(res);
-      this.loading = false;
-      this.wxappHoldTplHttp()
-    });
+        this.loading = false;
+        this.wxappHoldTplHttp()
     }
 
     checkFun() {
@@ -115,7 +111,7 @@ export class WechatStoreComponent {
         this.manageService.wxappHoldTpl().subscribe(
             (res: any) => {
                 if (res.success) {
-                    console.log(res);
+                    this.tplArr = res.data;
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',

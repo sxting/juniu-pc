@@ -37,28 +37,41 @@
             <span>购买新模版</span>
         </label>
     </nz-radio-group>
-    <nz-list [nzLoading]="loading" [nzDataSource]="list" [nzRenderItem]="item" [nzGrid]="{gutter: 24, lg: 8, md: 12, sm: 24, xs: 24 }">
+    <nz-list [nzLoading]="loading" [nzDataSource]="tplArr" [nzRenderItem]="item" [nzGrid]="{gutter: 24, lg: 8, md: 12, sm: 24, xs: 24 }">
         <ng-template #item let-item>
           <nz-list-item>
             <nz-card nzHoverable  style="width:100%;position: relative;" [nzActions]="[op1, op2]">
                 <div class="nowMB"><span class="iconfont icon-triangle-left"></span> 当前展示模版</div>
               <ng-template #op1>
-                <a (click)="msg.success('操作一：' + item.id);">使用此模版</a>
+                <a (click)="msg.success('操作一：' + item.tplId);">使用此模版</a>
               </ng-template>
               <ng-template #op2>
-                <a (click)="msg.success('操作二：' + item.id);">升级</a>
+                <a (click)="msg.success('操作二：' + item.tplId);">升级</a>
               </ng-template>
               <nz-card-meta [nzAvatar]="nzAvatar" [nzTitle]="nzTitle" [nzDescription]="nzDescription">
                 <ng-template #nzAvatar>
-                  <nz-avatar nzSize="large" [nzSrc]="item.avatar"></nz-avatar>
+                  <nz-avatar nzSize="large" [nzSrc]="item.tplImage"></nz-avatar>
                 </ng-template>
                 <ng-template #nzTitle>
-                  <a (click)="msg.success('标题：' + item.id);">{{item.title}}</a>
+                  <div>{{item.tplName}}
+                    <nz-popover [nzTitle]="'体验版小程序二维码'" [nzPlacement]="'bottom'">
+                    <span class="icon-erweima1 iconfont" nz-popover style="color: #999;"></span>
+                    <ng-template #nzTemplate>
+                      <div class="erweimaBox">
+                        <img class="" *ngIf="item.experienceCode" [src]="item.experienceCode" />
+                      </div>
+                    </ng-template>
+                  </nz-popover></div>
                 </ng-template>
                 <ng-template #nzDescription>
-                  <div>购买时间 : 2018-05-10</div>
-                  <div>剩余有效期 : 永久</div>
+                  <div>剩余有效期 : {{item.effectiveTime<0?'永久':item.effectiveTime+'天'}}</div>
                 </ng-template>
+                <ng-template #contentTemplate>
+                    <div>
+                      <p>Content</p>
+                      <p>Content</p>
+                    </div>
+                  </ng-template>
               </nz-card-meta>
             </nz-card>
           </nz-list-item>
