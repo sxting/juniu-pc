@@ -25,6 +25,7 @@ import { KoubeiGLComponent } from './koubeiGL/koubeiGL.component';
 import { WechatTypeComponent } from './wechatType/wechatType.component';
 import { WechatOrderComponent } from './wechatOrder/wechatOrder.component';
 import { SetingsService } from '../setings/shared/setings.service';
+import { SoftTransferService } from '../setings/software-buy/soft-transfer.service';
 
 
 
@@ -53,6 +54,6 @@ import { SetingsService } from '../setings/shared/setings.service';
         RuleSettingComponent,
         KoubeiGLComponent
     ],
-    providers: [SetingsService]
+    providers: [SetingsService,SoftTransferService]
 })
 export class manageModule { }

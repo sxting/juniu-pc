@@ -6,6 +6,7 @@ import { LocalStorageService } from '@shared/service/localstorage-service';
 import { USER_INFO } from '@shared/define/juniu-define';
 import { Router } from '@angular/router';
 import { SetingsService } from '../../setings/shared/setings.service';
+import { SoftTransferService } from '../../setings/software-buy/soft-transfer.service';
 
 @Component({
     selector: 'app-wechatType',
@@ -22,8 +23,10 @@ export class WechatTypeComponent {
     codeImgUrl;
     result: any;
     payType: any = '';
-    isVisible = true;
-    constructor(public msg: NzMessageService, private router: Router,
+    isVisible = false;
+    result2;
+    payTypeB = false;
+    constructor(public msg: NzMessageService, private router: Router,public item: SoftTransferService,
         private localStorageService: LocalStorageService,private setingsService: SetingsService, private modalSrv: NzModalService,
          private manageService: ManageService, private http: _HttpClient) {
         this.wxStatusHttp();
@@ -51,7 +54,7 @@ export class WechatTypeComponent {
     }
     checkFun(e: any) {
         if(e.currentEffectiveDays<0) this.wxappChangeTplHttp(e) ;
-        else this.wxappPreorderHttp(e.tplId)
+        else this.wxappPreorderHttp(e.tplId,e)
     }
     wxappChangeTplHttp(e){
         let data = {
@@ -127,7 +130,7 @@ export class WechatTypeComponent {
     }
 
     //预支付订单
-    wxappPreorderHttp(tplId){
+    wxappPreorderHttp(tplId,e){
         let data = {
             tplId : tplId
         }
@@ -135,6 +138,8 @@ export class WechatTypeComponent {
             (res: any) => {
                 if (res.success) {
                     this.result = res.data;
+                    this.result2 = e;
+                    this.isVisible = true;
                     // this.router.navigate(['/manage/wechatStore']);
                 } else {
                     this.modalSrv.error({
@@ -148,12 +153,18 @@ export class WechatTypeComponent {
             }
         );
     }
+    handleCancel(){
+        this.isVisible = false;
+        this.payType = '';
+        this.codeImgUrl = '';
+        clearInterval(this.timer);
+    }
     //获取支付二维码
     timer;
   getPayUrl() {
     let data = {
       amount: this.result.orderAmount, //价格
-      body: this.result.packageName, //版本名称
+      body: this.result.templateName, //版本名称
       orderNo: this.result.orderNo, //订单号
       payType: this.payType, //支付方式
     };
@@ -171,7 +182,7 @@ export class WechatTypeComponent {
               });
               clearInterval(self.timer);
             }
-            // self.getPayUrlQuery();
+            self.getPayUrlQuery();    　　                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
           }, 5000)
         } else {
           this.modalSrv.error({
@@ -181,5 +192,32 @@ export class WechatTypeComponent {
         }
       }
     )
+  }
+  //查询支付结果
+  getPayUrlQuery() {
+    let data = {
+      // orderId: this.result.orderNo,
+      orderNo: this.result.orderNo,
+    };
+    this.manageService.paymentSuccess(data).subscribe(
+      (res: any) => {
+        if(res.success) {
+          //描述:查询支付二维码 订单的支付状态tradeState: SUCCESS—支付成功 REFUND—转入退款 NOTPAY—未支付 CLOSED—已关闭 REVERSE—已冲正 REVOK—已撤销
+          if(res.data) {
+            clearInterval(this.timer);
+            this.msg.success('支付成功');
+            this.router.navigate(['/manage/wechatStore']);
+          }
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      }
+    )
+  }
+  changeEchartsTab(e){
+      this.getPayUrl()
   }
 }

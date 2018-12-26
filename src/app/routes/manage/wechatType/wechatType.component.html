@@ -6,7 +6,7 @@
         </nz-radio-group>
     <nz-card nzTitle="小程序版本选择" style="overflow:hidden" [nzBordered]="false" [nzBodyStyle]="{'position':'relative', 'height':'100%','overflow': 'hidden','margin':'30px'}">
             
-        <ul>
+        <ul class="typeBox">
             <li class="item-box" *ngFor="let item of typeArr" [style.color]="item.color" (mouseenter)="mouseenter(item)" (mouseleave) ="mouseLeave(item)">
                 <div class="itemImg"><img [src]="item.tplImage" style="width:100%;height:100%;" *ngIf="!item.hover" alt=""><img [src]="item.experienceCode" *ngIf="item.hover" style="width:100%;height:100%;" alt=""></div>
                 <div class="tabBar iconfont icon-biaoq">
@@ -16,10 +16,10 @@
                 </div>
                 <div [style.color]="item.color" class="itemPrice">{{item.price===0?'免费':item.price/100+'元'}}</div>
                 <div class="itemBody">
-                    <div class="icon-point-copy iconfont" *ngFor="let obj of item.descriptions">{{obj}}</div>
+                    <div class="icon-point-copy iconfont" [style.color]="item.color" *ngFor="let obj of item.descriptions"><span style="color:#000 !important;">{{obj}}</span></div>
                 </div>
     
-                <button class="buttons" nz-button nzType="primary" type="submit" (click)="checkFun(item)">{{item.effectiveTime<0?'免费使用':'立即使用'}}</button>
+                <button class="buttons" nz-button nzType="primary" [style.backgroundColor]="item.color" type="submit" (click)="checkFun(item)">{{item.effectiveTime<0?'免费使用':'立即使用'}}</button>
             </li>
         </ul>
     </nz-card>
@@ -47,35 +47,35 @@
         </div>
 </ng-template>
 
-<nz-modal [(nzVisible)]="isVisible" nzTitle="订购详情" [nzWidth]="800" nzOkText="null"  nzCancelText="取消" (nzOnOk)="null"  (nzOnCancel)="handleCancel()" >
+<nz-modal [(nzVisible)]="isVisible" nzTitle="订购详情" [nzWidth]="800" [nzOkText]="null"  nzCancelText="取消" (nzOnOk)="null"  (nzOnCancel)="handleCancel()" >
         <nz-form-item >
-            <nz-form-label nzXs="24" nzSm="7">选择版本</nz-form-label>
+            <nz-form-label nzXs="24" nzSm="7">订购模版</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                
+                {{result2&&result2.tplName}}
             </nz-form-control>
         </nz-form-item>
         <nz-form-item >
         <nz-form-label nzXs="24" nzSm="7">应付金额</nz-form-label>
         <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-            
+                {{result2&&result2.price/100}}
         </nz-form-control>
         </nz-form-item>
         <nz-form-item >
             <nz-form-label nzXs="24" nzSm="7">有效期</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                
+                    {{result2&&(result2.currentEffectiveDays<-1?'永久':result2.currentEffectiveDays+'天')}}
             </nz-form-control>
         </nz-form-item>
         <nz-form-item >
             <nz-form-label nzXs="24" nzSm="7">支付方式</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
                 <div>
-                    <nz-radio-group [(ngModel)]="size">
-                        <label nz-radio-button nzValue="small"><span>支付宝</span></label>
-                        <label nz-radio-button nzValue="default"><span>微信</span></label>
+                    <nz-radio-group [(ngModel)]="payType" (ngModelChange)="changeEchartsTab($event)">
+                        <label nz-radio-button [nzValue]="'ALIPAY'" [nzDisabled]="payType === 'WECHAT'"><span>支付宝</span></label>
+                        <label nz-radio-button [nzValue]="'WECHAT'" [nzDisabled]="payType === 'ALIPAY'"><span>微信</span></label>
                     </nz-radio-group>
-                    <div class="erweimaB">
-                        <img src="" alt="">
+                    <div class="erweimaB" *ngIf="codeImgUrl" >
+                        <img [src]="codeImgUrl" alt="">
                     </div>
                 </div>
                 

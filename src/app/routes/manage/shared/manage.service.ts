@@ -1157,4 +1157,26 @@ export class ManageService {
         return Observable.throw(error);
       });
   }
+
+  //使用模版
+    wxappCheckAudit() {
+      let apiUrl = Config.API1 + '/account/merchant/wxapp/tpl/checkAudit.json';
+      return this.http
+        .get(apiUrl)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
+
+    //系统购买支付结果查询 /account/merchant/module/package/paymentSuccess.json?orderNo=
+    paymentSuccess(data: any) {
+      let apiUrl = Config.API1 + '/account/merchant/wxapp/tpl/paymentSuccess.json';
+      return this.http
+        .get(apiUrl,data)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
 }
