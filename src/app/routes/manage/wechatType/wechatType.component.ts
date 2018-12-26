@@ -26,6 +26,7 @@ export class WechatTypeComponent {
     isVisible = false;
     result2;
     payTypeB = false;
+    statusFlag;
     constructor(public msg: NzMessageService, private router: Router,public item: SoftTransferService,
         private localStorageService: LocalStorageService,private setingsService: SetingsService, private modalSrv: NzModalService,
          private manageService: ManageService, private http: _HttpClient) {

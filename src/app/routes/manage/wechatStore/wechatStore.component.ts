@@ -20,7 +20,7 @@ export class WechatStoreComponent {
     tplArr: any[] = [];
     loading = true;
     showBar = false;
-
+    statusFlag;
     payType: any = '';
     isVisible = false;
     result2;
