@@ -103,7 +103,7 @@ export class PayWayStep3Component implements OnInit {
             if(this.item.type === 'qiye') {
                 this.form = this.fb.group({
                     // kaihu_name: ['', [Validators.required]],
-                    kaihuren: ['', [Validators.required]],
+                    kaihuren: [this.item['fuzer'], [Validators.required]],
                     kaihur_shenfz: ['', [Validators.required, Validators.pattern(/^\d{15}$|^\d{18}$|^\d{17}(\d|X|x)$/)]],
                     kaihur_tel: ['', [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
                     kaihuhang: [null, [Validators.required]],
@@ -114,7 +114,7 @@ export class PayWayStep3Component implements OnInit {
             } else {
                 this.form = this.fb.group({
                     // kaihu_name: ['', [Validators.required]],
-                    kaihuren: ['', [Validators.required]],
+                    kaihuren: [this.item['fuzer'], [Validators.required]],
                     kaihur_shenfz: ['', [Validators.required, Validators.pattern(/^\d{15}$|^\d{18}$|^\d{17}(\d|X|x)$/)]],
                     kaihur_tel: ['', [Validators.required, Validators.pattern(`^[1][3,4,5,7,8][0-9]{9}$`)]],
                     kaihuhang: [null, [Validators.required]],
