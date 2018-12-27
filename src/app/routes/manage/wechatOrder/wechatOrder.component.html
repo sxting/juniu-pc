@@ -1,65 +1,74 @@
 <page-header></page-header>
 <div class="">
     <div class="existing-main">
-        <div>
-            <div class="member-top-middle">
-                <li class="fl" style="margin-right:15px">
-                    <div class="fr" style="position:relative;">
-                        <span class="mr10 mr">订单查询</span>
-                        <input type="text" [(ngModel)]="pinTuanName" (ngModelChange)="orderFun($event)" style="width:288px" placeholder="请输入订单号"
-                        />
-                        <span class="icon-sou iconfont" (click)="searchName()"></span>
-                    </div>
-                </li>
+      <div class="member-top-middle">
+          <li class="fl" style="margin-right:15px">
+              <div class="fr" style="position:relative;">
+                  <span class="mr10 mr">订单查询</span>
+                  <input type="text" [(ngModel)]="pinTuanName" (ngModelChange)="orderFun($event)" style="width:288px" placeholder="请输入订单号"
+                  />
+                  <span class="icon-sou iconfont" (click)="searchName()"></span>
+              </div>
+          </li>
 
-                <li class="fl">
-                    <span class="mr10 fl title" style="margin-right:15px">下单时间</span>
-                    <nz-range-picker [(ngModel)]="dateRange" (ngModelChange)="onChange($event)"></nz-range-picker>
-                </li>
+          <li class="fl">
+              <span class="mr10 fl title" style="margin-right:15px">下单时间</span>
+              <nz-range-picker [(ngModel)]="dateRange" (ngModelChange)="onChange($event)"></nz-range-picker>
+          </li>
 
-                <div class="fr" style="position:relative;margin-top:10px;clear: both;float: left;">
-                    <jn-stores-infor [moduleId]="moduleId" [AllStoreBoolean]="false" [ifStoresAll]="false" (storeIdOutput)="selectStoreInfo($event)"></jn-stores-infor>
-                </div>
-            </div>
-            <div class="existing-table" style="margin-top:60px;">
-                <table class="existingGroups-table">
-                    <thead>
-                        <tr>
-                            <td>下单时间</td>
-                            <td>订单编号</td>
-                            <td>商品名称</td>
-                            <td>订单状态</td>
-                            <td>订单金额(元)</td>
-                            <td>实付金额(元)</td>
-                            <td>操作</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of wxorderListData;let ind = index;">
-                            <td>{{item.juniuoModel.dateCreated}}</td>
-                            <td>{{item.orderId}}</td>
-                            <td>
-                                <div style="overflow: hidden;
-                                text-overflow:ellipsis;
-                                white-space: nowrap;width:200px;    margin: 0 auto;">{{item.productInfo}}</div>
-                            </td>
-                            <td>{{item.statusName}}</td>
-                            <td>{{item.money/100}}</td>
-                            <td>{{item.paidMoney/100}}</td>
-                            <td>
-                                <span class="buttons" (click)="getwxorderDetail(item.orderId,chakanxiangqing)">查看详情</span>
-                            </td>
+          <div class="fr" style="position:relative;margin-top:10px;clear: both;float: left;">
+              <jn-stores-infor [moduleId]="moduleId" [AllStoreBoolean]="false" [ifStoresAll]="false" (storeIdOutput)="selectStoreInfo($event)"></jn-stores-infor>
+          </div>
 
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="nzPaginationBox">
-                <nz-pagination class="nzPagination" [nzTotal]="countTotal" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
-            </div>
-        </div>
+          <div class="frdiv">
+            <li class="fl">
+              <span class="mr10 fl title" style="margin-right:15px">订单状态</span>
+              <nz-select style="width: 200px;" [(ngModel)]="orderStatus" (ngModelChange)="selectStatusInfo($event)" name="statusList" [nzShowSearch]="true">
+                <nz-option *ngFor="let i of statusList; let idx = index" [nzLabel]="i.statusName" [nzValue]="i.status"></nz-option>
+              </nz-select>
+            </li>
+          </div>
+      </div>
+  </div>
+  <div style="margin-top:10px;">
+    <div class="mb-md">
+      <nz-alert nzType="info" nzMessage="共有 {{totalElements}} 条数据  |  总金额：{{total/100 || 0 }}元 " nzShowIcon></nz-alert>
     </div>
+    <table class="existingGroups-table">
+      <thead>
+      <tr>
+        <td>下单时间</td>
+        <td>订单编号</td>
+        <td>商品名称</td>
+        <td>订单状态</td>
+        <td>订单金额(元)</td>
+        <td>实付金额(元)</td>
+        <td>操作</td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of wxorderListData;let ind = index;">
+        <td>{{item.juniuoModel.dateCreated}}</td>
+        <td>{{item.orderId}}</td>
+        <td>
+          <div style="overflow: hidden;
+                          text-overflow:ellipsis;
+                          white-space: nowrap;width:200px;    margin: 0 auto;">{{item.productInfo}}</div>
+        </td>
+        <td>{{item.statusName}}</td>
+        <td>{{item.money/100}}</td>
+        <td>{{item.paidMoney/100}}</td>
+        <td>
+          <span class="buttons" (click)="getwxorderDetail(item.orderId,chakanxiangqing)">查看详情</span>
+        </td>
 
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="nzPaginationBox">
+    <nz-pagination class="nzPagination" [nzTotal]="countTotal" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
+  </div>
 </div>
 
 <!--查看详情-->
