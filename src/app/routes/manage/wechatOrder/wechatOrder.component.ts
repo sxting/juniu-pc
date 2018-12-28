@@ -4,6 +4,7 @@ import { _HttpClient } from '@delon/theme';
 import { ActivatedRoute } from '@angular/router';
 import { TemplateRef } from '@angular/core';
 import { ManageService } from '../shared/manage.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-wechatOrder',
@@ -25,7 +26,7 @@ export class WechatOrderComponent {
     detailData: any;
     wxorderListData: any = [];
     constructor(public msg: NzMessageService, private route: ActivatedRoute, private manageService: ManageService,
-        private modalSrv: NzModalService, private http: _HttpClient) {
+        private modalSrv: NzModalService, private http: _HttpClient, private datePipe: DatePipe) {
         this.moduleId = this.route.snapshot.params['menuId'];
     }
     selectStoreInfo(e: any) {
