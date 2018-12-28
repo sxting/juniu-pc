@@ -75,7 +75,7 @@ export class PayWayStep2Component implements OnInit {
             this.form = this.fb.group({
                 hangye_type: [data.merchantDetail.industrId + '', Validators.required],
                 yingyezz_name: [data.merchantName + '', Validators.required],
-                yingyezz_code: [data.merchantDetail.businessLicense, Validators.required],
+                yingyezz_code: [data.merchantDetail.businessLicense, Validators.pattern(/^[a-zA-Z0-9]{15}$|^[a-zA-Z0-9]{18}$/)],
                 shanghu_jc: [data.merchantDetail.merchantShortName, Validators.required],
                 shanghu_address: [this.shanghuAddress, Validators.required],
                 detail_address: [data.merchantDetail.address, Validators.required],
@@ -89,7 +89,7 @@ export class PayWayStep2Component implements OnInit {
             this.form = this.fb.group({
                 hangye_type: ['', Validators.required],
                 yingyezz_name: ['', Validators.required],
-                yingyezz_code: ['', Validators.required],
+                yingyezz_code: ['', Validators.pattern(/^[a-zA-Z0-9]{15}$|^[a-zA-Z0-9]{18}$/)],
                 shanghu_jc: ['', Validators.required],
                 shanghu_address: [null, Validators.required],
                 detail_address: ['', Validators.required],

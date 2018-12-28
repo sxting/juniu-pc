@@ -112,7 +112,7 @@ export class StoreEditComponent implements OnInit {
             zoom: 16,
             scrollWheel: true
         }
-        if (that.data) data['center'] = [that.data.longitude,that.data.latitude];
+        if (that.data&&that.data['longitude']&&that.data['latitude']) data['center'] = [that.data.longitude,that.data.latitude];
         console.log(data)
         var map = new AMap.Map('container', data)
         // AMapUI.loadUI(['misc/PoiPicker', 'misc/PositionPicker'], function (PoiPicker, PositionPicker) {
@@ -227,7 +227,8 @@ export class StoreEditComponent implements OnInit {
                         provinceCode: res.data.provinceCode,
                         timestamp: new Date().getTime()
                     }
-                    this.mapFun(true);
+                    if(this.data.longitude&this.data.latitude) this.mapFun(true);
+                    else this.mapFun();
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
