@@ -113,13 +113,13 @@
         <nz-form-item >
         <nz-form-label nzXs="24" nzSm="7">应付金额</nz-form-label>
         <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                {{result2&&result2.price/100}}
+                {{result&&result.orderAmount/100}}元
         </nz-form-control>
         </nz-form-item>
         <nz-form-item >
             <nz-form-label nzXs="24" nzSm="7">有效期</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                    {{result2&&(result2.currentEffectiveDays<-1?'永久':result2.currentEffectiveDays+'天')}}
+                    {{result&&(result.effectiveTime)}}
             </nz-form-control>
         </nz-form-item>
         <nz-form-item >

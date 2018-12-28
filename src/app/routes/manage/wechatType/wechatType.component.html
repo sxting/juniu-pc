@@ -14,7 +14,7 @@
                         {{item.tplName}}
                     </p>
                 </div>
-                <div [style.color]="item.color" class="itemPrice">{{item.price===0?'免费':item.price/100+'元'}}</div>
+                <div [style.color]="item.color" class="itemPrice">{{item.price===0?'免费':item.price/100+'元/店'}}</div>
                 <div class="itemBody">
                     <div class="icon-point-copy iconfont" [style.color]="item.color" *ngFor="let obj of item.descriptions"><span style="color:#000 !important;">{{obj}}</span></div>
                 </div>
@@ -25,7 +25,7 @@
     </nz-card>
 </div>
 <ng-template #vipCard>
-    <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="data">
+    <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="data2">
             <thead>
                 <tr>
                     <th>购买时间</th>
@@ -57,13 +57,13 @@
         <nz-form-item >
         <nz-form-label nzXs="24" nzSm="7">应付金额</nz-form-label>
         <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                {{result2&&result2.price/100}}
+                {{result&&result.orderAmount/100}}元
         </nz-form-control>
         </nz-form-item>
         <nz-form-item >
             <nz-form-label nzXs="24" nzSm="7">有效期</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
-                    {{result2&&(result2.currentEffectiveDays<-1?'永久':result2.currentEffectiveDays+'天')}}
+                {{result&&(result.effectiveTime)}}
             </nz-form-control>
         </nz-form-item>
         <nz-form-item >
