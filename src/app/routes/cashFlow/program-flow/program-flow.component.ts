@@ -30,6 +30,7 @@ export class ProgramFlowComponent implements OnInit {
   tabBtnText: string = '小程序商品';
   queryType: string = 'PRODUCT'; //PRODUCT商品流水、OPENCARD开卡流水、PINTUAN拼团流水
   tabLists: any = ['小程序商品', '小程序开卡', '小程序拼团'];
+  // tabLists: any = ['小程序商品', '小程序开卡', '小程序拼团', '核销记录'];
   statusList: any = [
     { statusName: '已支付', status: 'PAID' },
     { statusName: '已退款', status: 'REFUND' },
@@ -167,10 +168,14 @@ export class ProgramFlowComponent implements OnInit {
       this.tabText = '会员卡';
       this.tabBtnText = '小程序开卡';
       this.queryType = 'OPENCARD';
-    } else {
+    } else if (this.activeIndex === 2) {
       this.tabText = '小程序拼团活动';
       this.tabBtnText = '小程序拼团';
       this.queryType = 'PINTUAN';
+    } else {
+      this.tabText = '核销记录';
+      this.tabBtnText = '核销记录';
+      this.queryType = 'VOUCHER';
     }
     this.pageNo = 1;
     this.batchQueryInfor(); //根据查询条件筛选列表信息。

@@ -25,6 +25,17 @@ export class WechatOrderComponent {
     start: any;
     detailData: any;
     wxorderListData: any = [];
+    orderStatus : any = '';
+    totalElements : any = 0;
+    sumPaidMoney : any = 0;
+    statusList: any = [
+      { statusName: '全部', status: '' },
+      { statusName: '未付款', status: 'INIT' },
+      { statusName: '已付款', status: 'PAID' },
+      { statusName: '已退款', status: 'REFUND' },
+      { statusName: '已取消', status: 'CLOSE' },
+      { statusName: '已核销', status: 'FINISH' },
+    ];
     constructor(public msg: NzMessageService, private route: ActivatedRoute, private manageService: ManageService,
         private modalSrv: NzModalService, private http: _HttpClient, private datePipe: DatePipe) {
         this.moduleId = this.route.snapshot.params['menuId'];
@@ -32,6 +43,10 @@ export class WechatOrderComponent {
     selectStoreInfo(e: any) {
         this.storeId = e.storeId;
         this.getWxorderList()
+    }
+    selectStatusInfo(e: any) {
+      this.orderStatus = e;
+      this.getWxorderList()
     }
     orderFun(event?: any) {
         this.orderId = event;
@@ -66,6 +81,7 @@ export class WechatOrderComponent {
             storeId: this.storeId,
             start: this.start,
             end: this.end,
+            status: this.orderStatus,
             paseSize: 10,
             pageNo: this.pageNo,
         }
@@ -80,6 +96,7 @@ export class WechatOrderComponent {
                 if (res.success) {
                     this.wxorderListData = res.data.content;
                     this.countTotal = res.data.totalElements;
+                    this.sumPaidMoney = res.data.sumPaidMoney;
                 } else {
                     this.errorAlter(res.errorInfo)
                 }
