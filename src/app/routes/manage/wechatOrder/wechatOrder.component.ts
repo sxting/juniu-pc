@@ -4,6 +4,7 @@ import { _HttpClient } from '@delon/theme';
 import { ActivatedRoute } from '@angular/router';
 import { TemplateRef } from '@angular/core';
 import { ManageService } from '../shared/manage.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-wechatOrder',
@@ -26,7 +27,7 @@ export class WechatOrderComponent {
     wxorderListData: any = [];
     orderStatus : any = '';
     totalElements : any = 0;
-    total : any = 0;
+    sumPaidMoney : any = 0;
     statusList: any = [
       { statusName: '全部', status: '' },
       { statusName: '未付款', status: 'INIT' },
@@ -36,7 +37,7 @@ export class WechatOrderComponent {
       { statusName: '已核销', status: 'FINISH' },
     ];
     constructor(public msg: NzMessageService, private route: ActivatedRoute, private manageService: ManageService,
-        private modalSrv: NzModalService, private http: _HttpClient) {
+        private modalSrv: NzModalService, private http: _HttpClient, private datePipe: DatePipe) {
         this.moduleId = this.route.snapshot.params['menuId'];
     }
     selectStoreInfo(e: any) {
@@ -95,6 +96,7 @@ export class WechatOrderComponent {
                 if (res.success) {
                     this.wxorderListData = res.data.content;
                     this.countTotal = res.data.totalElements;
+                    this.sumPaidMoney = res.data.sumPaidMoney;
                 } else {
                     this.errorAlter(res.errorInfo)
                 }

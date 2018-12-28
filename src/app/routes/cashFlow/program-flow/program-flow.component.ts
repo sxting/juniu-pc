@@ -29,7 +29,8 @@ export class ProgramFlowComponent implements OnInit {
   tabText: string = '小程序商品';
   tabBtnText: string = '小程序商品';
   queryType: string = 'PRODUCT'; //PRODUCT商品流水、OPENCARD开卡流水、PINTUAN拼团流水
-  tabLists: any = ['小程序商品', '小程序开卡', '小程序拼团', '核销记录'];
+  tabLists: any = ['小程序商品', '小程序开卡', '小程序拼团'];
+  // tabLists: any = ['小程序商品', '小程序开卡', '小程序拼团', '核销记录'];
   statusList: any = [
     { statusName: '已支付', status: 'PAID' },
     { statusName: '已退款', status: 'REFUND' },
