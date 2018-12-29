@@ -1060,7 +1060,15 @@ export class ManageService {
         return Observable.throw(error);
       });
   }
-
+  listWxappTemplates2() {
+    let apiUrl = Config.API1 + '/account/merchant/wxapp/tpl/tplList.json';
+    return this.http
+      .get(apiUrl)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
   chooseTpl(data) {
     let apiUrl = Config.API + '/marketing/wxapp/chooseTpl.json';
     return this.http
@@ -1070,7 +1078,6 @@ export class ManageService {
         return Observable.throw(error);
       });
   }
-
   wxappStatus(data) {
     let apiUrl = Config.API + '/marketing/wxapp/status.json';
     return this.http
@@ -1110,4 +1117,66 @@ export class ManageService {
         return Observable.throw(error);
       });
   }
+  //现有模版  
+  wxappHoldTpl() {
+    let apiUrl = Config.API1 + '/account/merchant/wxapp/tpl/holdTpl.json';
+    return this.http
+      .get(apiUrl)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+  // 购买记录，data: {items: 数组, page: 分页}
+  wxappOrderList(data: any) {
+    let apiUrl = Config.API1 + '/account/merchant/wxapp/tpl/orderList.json';
+    return this.http
+      .get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+  //预支付订单
+  wxappPreorder(data: any) {
+    let apiUrl = Config.API1 + '/account/merchant/wxapp/tpl/preorder.json';
+    return this.http
+      .get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+  //选择模版
+  wxappChangeTpl(data: any) {
+    let apiUrl = Config.API1 + '/account/merchant/wxapp/tpl/changeTpl.json';
+    return this.http
+      .get(apiUrl, data)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+
+  //使用模版
+    wxappCheckAudit() {
+      let apiUrl = Config.API1 + '/account/merchant/wxapp/tpl/checkAudit.json';
+      return this.http
+        .get(apiUrl)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
+
+    //系统购买支付结果查询 /account/merchant/module/package/paymentSuccess.json?orderNo=
+    paymentSuccess(data: any) {
+      let apiUrl = Config.API1 + '/account/merchant/wxapp/tpl/paymentSuccess.json';
+      return this.http
+        .get(apiUrl,data)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
+    }
 }

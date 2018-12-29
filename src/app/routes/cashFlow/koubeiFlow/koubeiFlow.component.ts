@@ -46,6 +46,7 @@ export class KoubeiFlowComponent implements OnInit {
   listData:any;
   listData2:any;
   arr:any =[1,2,3]
+
   //口碑拼团流水参数
   batchQuery = {
     storeId: this.storeId,
@@ -78,7 +79,7 @@ export class KoubeiFlowComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    
+
     this.moduleId = this.route.snapshot.params['menuId'];
     let startDate = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000); //提前一周 ==开始时间
     let endDate = new Date(new Date().getTime()); //今日 ==结束时
@@ -173,7 +174,7 @@ export class KoubeiFlowComponent implements OnInit {
   paginate(event: any) {
     this.pageNo = event;
     this.batchQuery.pageNo = this.pageNo;
-    this.getTabListInfor(); 
+    this.getTabListInfor();
   }
 
   // 多条件查询
@@ -194,7 +195,7 @@ export class KoubeiFlowComponent implements OnInit {
     // 信息不完整 都重组不了数据 MD
     if(this.activeIndex === 0) this.listData = order;
     if(this.activeIndex === 1) this.listData2 = order;
-    
+
   }
 
   //口碑拼团流水订单详情
