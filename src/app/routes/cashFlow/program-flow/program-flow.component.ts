@@ -7,6 +7,7 @@ import { StoresInforService } from '@shared/stores-infor/shared/stores-infor.ser
 import { CashFlowService } from '../shared/cashFlow.service';
 import { FormGroup } from '@angular/forms';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
+import { DatePipe } from '@angular/common';
 import * as differenceInDays from 'date-fns/difference_in_days';
 import NP from 'number-precision';
 
@@ -26,14 +27,20 @@ export class ProgramFlowComponent implements OnInit {
   activeIndex: any = 0;
   totalElements: any = 0; //商品总数  expandForm = false;//展开
   orderType: string = 'PAID';
+  voucherType: string = '';
   tabText: string = '小程序商品';
   tabBtnText: string = '小程序商品';
   queryType: string = 'PRODUCT'; //PRODUCT商品流水、OPENCARD开卡流水、PINTUAN拼团流水
-  tabLists: any = ['小程序商品', '小程序开卡', '小程序拼团'];
-  // tabLists: any = ['小程序商品', '小程序开卡', '小程序拼团', '核销记录'];
+  // tabLists: any = ['小程序商品', '小程序开卡', '小程序拼团'];
+  tabLists: any = ['小程序商品', '小程序开卡', '小程序拼团', '核销记录'];
   statusList: any = [
     { statusName: '已支付', status: 'PAID' },
     { statusName: '已退款', status: 'REFUND' },
+  ]; //订单状态查询
+  voucherStatusList: any = [
+    { statusName: '全部', status: '' },
+    { statusName: '小程序商品', status: 'WXAPP' },
+    { statusName: '小程序拼团', status: 'WXPT' },
   ]; //订单状态查询
   ifStoresAll: boolean = false;
   pageNo: any = 1; //页码
@@ -65,6 +72,7 @@ export class ProgramFlowComponent implements OnInit {
     cardName: this.checkName,
     productName: this.checkName,
     activityName: this.checkName,
+    voucherType: this.voucherType,
     startDate: this.startTime,
     endDate: this.endTime,
     pageNo: this.pageNo,
@@ -80,6 +88,7 @@ export class ProgramFlowComponent implements OnInit {
     private modalSrv: NzModalService,
     private storesInforService: StoresInforService,
     private cashFlowService: CashFlowService,
+    private datePipe: DatePipe,
   ) {}
 
   ngOnInit() {
@@ -158,6 +167,11 @@ export class ProgramFlowComponent implements OnInit {
     // this.batchQueryInfor();//根据查询条件筛选列表信息
   }
 
+  selectVoucherStatusType() {
+    this.pageNo = 1;
+
+  }
+
   // 切换tab按钮
   changeEchartsTab(e: any) {
     this.activeIndex = e.index;
@@ -173,7 +187,7 @@ export class ProgramFlowComponent implements OnInit {
       this.tabBtnText = '小程序拼团';
       this.queryType = 'PINTUAN';
     } else {
-      this.tabText = '核销记录';
+      this.tabText = '核销码';
       this.tabBtnText = '核销记录';
       this.queryType = 'VOUCHER';
     }
@@ -257,6 +271,40 @@ export class ProgramFlowComponent implements OnInit {
     );
   }
 
+  // 小程序列表数据
+  programVoucherListInfor(data: any) {
+    let self = this;
+    this.loading = true;
+    this.cashFlowService.programVoucherListInfor(data).subscribe(
+      (res: any) => {
+        if (res.success) {
+          this.loading = false;
+          res.data.content.forEach(function(item: any) {
+            // WXAPP:微信商品 WXPT:微信拼团
+            if (item.voucherType === 'WXAPP') {
+              item.orderTypeText = '小程序商品';
+            } else if (item.voucherType === 'WXPT') {
+              item.orderTypeText = '小程序拼团';
+            } else {
+              item.orderTypeText = '';
+            }
+          });
+          self.orderListInfor = res.data.content;
+          self.totalAmount = res.data.totalAmount / 100;
+          self.totalElements = res.data.totalElements;
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo,
+          });
+        }
+      },
+      error => {
+        FunctionUtil.errorAlter(error);
+      },
+    );
+  }
+
   // 小程序订单详情数据
   programOrderDetailInfor(data: any) {
     let self = this;
@@ -300,7 +348,8 @@ export class ProgramFlowComponent implements OnInit {
           }
           let totalNum = 0;
           let totalMoney = 0;
-          if (self.activeIndex == 0) {
+          let voucherSource = res.data.source;
+          if (self.activeIndex == 0 || voucherSource=='WXAPP') {
             res.data.wxAppOrderProducts.forEach(function(item: any) {
               item.num = item.num ? item.num : 1;
               totalNum += parseInt(item.num);
@@ -309,7 +358,7 @@ export class ProgramFlowComponent implements OnInit {
             self.orderItemDetailInforList = res.data.wxAppOrderProducts;
             self.totalNum = totalNum;
             self.totalMoney = NP.round(totalMoney, 2);
-          } else if (self.activeIndex == 2) {
+          } else if (self.activeIndex == 2 || voucherSource=='WXPT') {
             res.data.wxAppOrderPinTuans.forEach(function(item: any) {
               totalMoney += NP.round(item.price, 2);
             });
@@ -361,15 +410,26 @@ export class ProgramFlowComponent implements OnInit {
       this.batchQuery.cardName = this.checkName;
       this.batchQuery.productName = '';
       this.batchQuery.activityName = '';
-    } else {
+    } else if (this.activeIndex === 2) {
       this.batchQuery.cardName = '';
       this.batchQuery.productName = '';
       this.batchQuery.activityName = this.checkName;
+    } else {
+      this.batchQuery.voucherType = this.voucherType;
+      this.batchQuery.productName = '';
+      this.batchQuery.activityName = '';
     }
     this.batchQuery.startDate = this.startTime;
     this.batchQuery.endDate = this.endTime;
     this.batchQuery.pageNo = this.pageNo;
     this.batchQuery.pageSize = this.pageSize;
-    this.programListInfor(this.batchQuery); //调取列表页面的接口
+
+    if (this.activeIndex === 3) {
+      this.programVoucherListInfor(this.batchQuery); //调取列表页面的接口
+    } else {
+      this.programListInfor(this.batchQuery); //调取列表页面的接口
+    }
+
+
   }
 }

@@ -6,7 +6,7 @@
     </nz-tabset>
     <div nz-form [nzLayout]="'inline'" class="search__form">
       <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
-        <nz-col nzMd="8" nzSm="24">
+        <nz-col nzMd="8" nzSm="24" *ngIf="activeIndex != 3">
           <nz-form-item>
             <nz-form-label nzFor="orderType">订单类型</nz-form-label>
             <nz-form-control>
@@ -17,9 +17,23 @@
             </nz-form-control>
           </nz-form-item>
         </nz-col>
+        <nz-col nzMd="8" nzSm="24" *ngIf="activeIndex === 3">
+          <nz-form-item>
+            <nz-form-label nzFor="voucherType">核销类型</nz-form-label>
+            <nz-form-control>
+              <nz-select style="width: 200px;" [(ngModel)]="voucherType" (ngModelChange)="selectVoucherStatusType()" name="voucherStatusList" nzPlaceHolder="全部类型"
+                         [nzShowSearch]="true">
+                <nz-option *ngFor="let i of voucherStatusList; let idx = index" [nzLabel]="i.statusName" [nzValue]="i.status"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </nz-col>
         <nz-col nzMd="8" nzSm="24">
           <nz-form-item>
-            <nz-form-label nzFor="productId">订单时间</nz-form-label>
+            <nz-form-label nzFor="productId">
+              <span *ngIf="activeIndex != 3">订单时间</span>
+              <span *ngIf="activeIndex === 3">核销时间</span>
+            </nz-form-label>
             <nz-form-control>
               <nz-range-picker [nzDisabledDate]="disabledDate" [nzAllowClear]="false" nzShowTime nzFormat="yyyy-MM-dd HH:mm:ss" [(ngModel)]="dateRange" (ngModelChange)="onDateChange($event)"></nz-range-picker>
             </nz-form-control>
@@ -32,7 +46,7 @@
           </nz-form-item>
         </nz-col>
 
-        <nz-col nzMd="8" nzSm="24" *ngIf="expandForm">
+        <nz-col nzMd="8" nzSm="24" *ngIf="expandForm && (activeIndex === 0 || activeIndex === 2)">
           <nz-form-item>
             <nz-form-label nzFor="checkName">搜 索</nz-form-label>
             <nz-form-control>
@@ -49,7 +63,7 @@
         </nz-col>
         <nz-col [nzSpan]="expandForm ? 24 : 8" [class.text-right]="expandForm" style="width:200px">
           <button nz-button type="submit" [nzType]="'primary'" [nzLoading]="loading" (click)="getData()">查询</button>
-          <a (click)="expandForm=!expandForm">
+          <a *ngIf="activeIndex != 3" (click)="expandForm=!expandForm">
             {{expandForm ? '收起' : '展开'}}
             <i class="anticon" [class.anticon-down]="!expandForm" [class.anticon-up]="expandForm"></i>
           </a>
@@ -63,9 +77,15 @@
     <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="orderListInfor">
       <thead nz-thead class="ui-grid-thead">
         <tr>
-          <th nz-th class="">付款/退款时间</th>
+          <th nz-th class="">
+            <span *ngIf="activeIndex != 3">付款/退款时间</span>
+            <span *ngIf="activeIndex === 3">核销时间</span>
+          </th>
           <th nz-th class="" *ngIf="activeIndex === 1">会员信息</th>
-          <th nz-th class="">订单类型</th>
+          <th nz-th class="">
+            <span *ngIf="activeIndex != 3">订单类型</span>
+            <span *ngIf="activeIndex === 3">核销类型</span>
+          </th>
           <th nz-th class="" *ngIf="(activeIndex === 0) || (activeIndex === 2)">商家实收金额</th>
           <th nz-th class="" *ngIf="activeIndex === 1">实收金额</th>
           <th nz-th class="" *ngIf="activeIndex === 1">充值金额</th>
@@ -74,28 +94,41 @@
           <th nz-th class="" *ngIf="activeIndex === 2">拼团活动</th>
           <th nz-th class="" *ngIf="activeIndex === 0">购买项目</th>
           <th nz-th class="" *ngIf="(activeIndex === 0) || (activeIndex === 2)">购买门店</th>
+          <th nz-th class="" *ngIf="activeIndex === 3">核销码</th>
+          <th nz-th class="" *ngIf="activeIndex === 3">核销商品</th>
+          <th nz-th class="" *ngIf="activeIndex === 3">核销门店</th>
+          <th nz-th class="" *ngIf="activeIndex === 3">订单金额(元)</th>
+          <th nz-th class="" *ngIf="activeIndex === 3">收银员</th>
           <th nz-th class="">操作</th>
         </tr>
       </thead>
       <tbody nz-tbody class="ui-grid-tbody">
       <tr nz-tbody-tr *ngFor="let item of orderListInfor; let i = index">
-        <td style="color: #368ff7">{{item.payTime}}</td>
+        <td *ngIf="activeIndex != 3" style="color: #368ff7">{{item.payTime}}</td>
+        <td *ngIf="activeIndex === 3" style="color: #368ff7">{{item.usedDate | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
         <td *ngIf="activeIndex === 1">
           <p>{{item.customerName? item.customerName : '-'}}</p>
           <p>{{item.phone}}</p>
         </td>
-        <td>
+        <td *ngIf="activeIndex != 3">
           <p>{{tabBtnText}}</p>
           <p *ngIf="item.status != 'FINISH'" [class.color-red]="item.orderTypeText === '退款单'">{{item.orderTypeText}}</p>
         </td>
-        <td>{{item.actualAmount}}</td>
+        <td *ngIf="activeIndex === 3">{{item.orderTypeText}}</td>
+        <td *ngIf="activeIndex != 3">{{item.actualAmount}}</td>
         <td *ngIf="activeIndex === 1">{{item.totalAmount}}</td>
         <td *ngIf="activeIndex === 1">{{item.wxAppOrderCards && item.wxAppOrderCards[0].cardName? item.wxAppOrderCards[0].cardName : '-'}}</td>
         <td *ngIf="activeIndex === 1">{{item.storeName}}</td>
         <td class="" *ngIf="activeIndex === 2">{{item.wxAppOrderPinTuans && item.wxAppOrderPinTuans[0].activityName? item.wxAppOrderPinTuans[0].activityName : '-'}}</td>
         <td class="" *ngIf="activeIndex === 0">{{item.wxAppOrderProducts && item.wxAppOrderProducts[0].itemName? item.wxAppOrderProducts[0].itemName : '-'}}</td>
         <td class="" *ngIf="(activeIndex === 0) || (activeIndex === 2)">{{item.storeName}}</td>
-        <td style="color: #108EE9;cursor: pointer" (click)="checkDetailInfor(orderDetail,item.orderNo)">查看</td>
+        <td *ngIf="activeIndex === 3">{{item.voucherCode}}</td>
+        <td *ngIf="activeIndex === 3">{{item.productName}}</td>
+        <td *ngIf="activeIndex === 3">{{item.usedStoreName}}</td>
+        <td *ngIf="activeIndex === 3">{{item.price / 100}}</td>
+        <td *ngIf="activeIndex === 3">{{item.opName}}</td>
+        <td *ngIf="activeIndex != 3" style="color: #108EE9;cursor: pointer" (click)="checkDetailInfor(orderDetail,item.orderNo)">查看</td>
+        <td *ngIf="activeIndex === 3" style="color: #108EE9;cursor: pointer" (click)="checkDetailInfor(orderDetail,item.orderId)">查看详情</td>
       </tr>
       </tbody>
     </nz-table>
@@ -115,7 +148,7 @@
           <td class="" *ngIf="orderItemDetailInfor.status === 'REFUND'">退款单号</td><!--退款-->
           <td class="">{{orderItemDetailInfor.orderNo}}</td>
           <td class="" *ngIf="orderItemDetailInfor.status != 'REFUND'">下单时间</td>
-          <td class="trans-status" *ngIf="orderItemDetailInfor.status != 'REFUND'">{{orderItemDetailInfor.createTime}}</td>
+          <td class="trans-status" style="width: 150px;" *ngIf="orderItemDetailInfor.status != 'REFUND'">{{orderItemDetailInfor.createTime}}</td>
           <td class="" *ngIf="orderItemDetailInfor.status === 'REFUND'">退款时间</td><!--退款-->
           <td class="" *ngIf="orderItemDetailInfor.status === 'REFUND'">{{orderItemDetailInfor.payTime}}</td>
           <td class="">订单状态</td>
@@ -131,7 +164,7 @@
           <td class="" *ngIf="orderItemDetailInfor.status != 'REFUND'">收款门店</td>
           <td class="" *ngIf="orderItemDetailInfor.status != 'REFUND'">{{orderItemDetailInfor.storeName}}</td>
           <td class="">支付方式</td>
-          <td class="">{{orderItemDetailInfor.payType}}</td>
+          <td style="width: 100px">{{orderItemDetailInfor.payType}}</td>
         </tr>
       </table>
     </div>
