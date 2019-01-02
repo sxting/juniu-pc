@@ -28,6 +28,8 @@ export class WechatOrderComponent {
     orderStatus : any = '';
     totalElements : any = 0;
     sumPaidMoney : any = 0;
+    refundTotal:any = 0;
+    refundTotalMoney:any = 0;
     statusList: any = [
       { statusName: '全部', status: '' },
       { statusName: '未付款', status: 'INIT' },
@@ -97,6 +99,8 @@ export class WechatOrderComponent {
                     this.wxorderListData = res.data.content;
                     this.countTotal = res.data.totalElements;
                     this.sumPaidMoney = res.data.sumPaidMoney;
+                    this.refundTotal = res.data.refundTotal;
+                    this.refundTotalMoney = res.data.refundTotalMoney;
                 } else {
                     this.errorAlter(res.errorInfo)
                 }

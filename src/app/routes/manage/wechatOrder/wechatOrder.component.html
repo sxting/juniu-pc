@@ -32,7 +32,8 @@
   </div>
   <div style="margin-top:10px;">
     <div class="mb-md">
-      <nz-alert nzType="info" nzMessage="共有 {{countTotal}} 条数据  |  实付总金额：{{sumPaidMoney/100 || 0 }}元 " nzShowIcon></nz-alert>
+      <nz-alert *ngIf="orderStatus==='REFUND'" nzType="info" nzMessage="共有1 {{countTotal}} 条数据  |  实付总金额：{{sumPaidMoney/100 || 0 }}元 | 退款数据{{refundTotal || 0 }}条 退款金额：{{refundTotalMoney/100 || 0 }}元" nzShowIcon></nz-alert>
+      <nz-alert *ngIf="orderStatus!='REFUND'" nzType="info" nzMessage="共有2 {{countTotal}} 条数据  |  实付总金额1：{{sumPaidMoney/100 || 0 }}元" nzShowIcon></nz-alert>
     </div>
     <table class="existingGroups-table">
       <thead>
