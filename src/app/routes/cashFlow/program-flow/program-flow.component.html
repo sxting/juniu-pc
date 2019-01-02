@@ -171,55 +171,55 @@
     <nz-table *ngIf="ifShow" [nzNoResult]="'暂无流水信息'" #basicTable [nzShowPagination]="false" [nzData]="orderItemDetailInforList">
       <thead nz-thead class="ui-grid-thead">
       <tr>
-        <th nz-th class="" *ngIf="activeIndex === 0">商品分类</th>
-        <th nz-th class="" *ngIf="activeIndex === 0">商品名称</th>
-        <th nz-th class="" *ngIf="activeIndex === 2">活动类型</th>
-        <th nz-th class="" *ngIf="activeIndex === 2">活动名称</th>
+        <th nz-th class="" *ngIf="activeIndex === 0 || detailSource=='WXAPP'">商品分类</th>
+        <th nz-th class="" *ngIf="activeIndex === 0 || detailSource=='WXAPP'">商品名称</th>
+        <th nz-th class="" *ngIf="activeIndex === 2 || detailSource=='WXPT'">活动类型</th>
+        <th nz-th class="" *ngIf="activeIndex === 2 || detailSource=='WXPT'">活动名称</th>
 
         <th nz-th class="" *ngIf="activeIndex === 1">会员卡类型</th>
         <th nz-th class="" *ngIf="activeIndex === 1">会员卡名称</th>
         <th nz-th class="" *ngIf="activeIndex === 1">售价</th>
         <th nz-th class="" *ngIf="activeIndex === 1">充值金额</th>
 
-        <th nz-th class="" *ngIf="!ifShowThis && activeIndex === 0">单价(元)</th>
-        <th nz-th class="" *ngIf="ifShowThis && activeIndex === 0">使用会员卡</th><!--扣卡-->
-        <th nz-th class="" *ngIf="ifShowThis && activeIndex === 0">扣卡金额</th><!--扣卡-->
-        <th nz-th class="" *ngIf="!ifShowThis && activeIndex === 0">数量(件)</th>
-        <th nz-th class="" class="text-right" *ngIf="activeIndex === 0 || activeIndex === 2">商家实收金额(元)</th>
+        <th nz-th class="" *ngIf="!ifShowThis && (activeIndex === 0 || detailSource=='WXAPP')">单价(元)</th>
+        <th nz-th class="" *ngIf="ifShowThis && (activeIndex === 0 || detailSource=='WXAPP')">使用会员卡</th><!--扣卡-->
+        <th nz-th class="" *ngIf="ifShowThis && (activeIndex === 0 || detailSource=='WXAPP')">扣卡金额</th><!--扣卡-->
+        <th nz-th class="" *ngIf="!ifShowThis && (activeIndex === 0 || detailSource=='WXAPP')">数量(件)</th>
+        <th nz-th class="" class="text-right" *ngIf="activeIndex === 0 || activeIndex === 2 || activeIndex === 3">商家实收金额(元)</th>
       </tr>
       </thead>
       <tbody nz-tbody class="ui-grid-tbody">
         <tr nz-tbody-tr *ngFor="let list of orderItemDetailInforList">
-          <td style="color: #108EE9" *ngIf="activeIndex === 0">{{list.categoryName? list.categoryName : '-'}}</td>
-          <td *ngIf="activeIndex === 0">{{list.itemName}}</td>
-          <td *ngIf="list.cardId == null && activeIndex === 0">{{list.price}}</td>
-          <td *ngIf="list.cardId != null && activeIndex === 0">{{list.cardName? list.cardName : '-'}}</td><!--扣卡-->
-          <td *ngIf="list.cardId != null && activeIndex === 0">{{list.deductAmount}}</td><!--扣卡-->
-          <td *ngIf="list.cardId == null && activeIndex === 0">{{list.num}}</td>
+          <td style="color: #108EE9" *ngIf="activeIndex === 0 || detailSource=='WXAPP'">{{list.categoryName? list.categoryName : '-'}}</td>
+          <td *ngIf="activeIndex === 0 || detailSource=='WXAPP'">{{list.itemName}}</td>
+          <td *ngIf="list.cardId == null && (activeIndex === 0 || detailSource=='WXAPP')">{{list.price}}</td>
+          <td *ngIf="list.cardId != null && (activeIndex === 0 || detailSource=='WXAPP')">{{list.cardName? list.cardName : '-'}}</td><!--扣卡-->
+          <td *ngIf="list.cardId != null && (activeIndex === 0 || detailSource=='WXAPP')">{{list.deductAmount}}</td><!--扣卡-->
+          <td *ngIf="list.cardId == null && (activeIndex === 0 || detailSource=='WXAPP')">{{list.num}}</td>
 
           <td style="color: #108EE9" *ngIf="activeIndex === 1">{{list.cardtypeName||'-'}}</td>
           <td *ngIf="activeIndex === 1">{{list.cardName|| '-'}}</td>
           <td *ngIf="activeIndex === 1">{{list.price||0}}</td>
           <td *ngIf="activeIndex === 1">{{list.totalAmount||0}}</td>
 
-          <td style="color: #108EE9" nz-th class="" *ngIf="activeIndex === 2">{{list.activityType}}</td>
-          <td nz-th class="" *ngIf="activeIndex === 2">{{list.activityName}}</td>
-          <td class="text-right" *ngIf="activeIndex === 0 || activeIndex === 2">{{list.actualAmount}}</td>
+          <td style="color: #108EE9" nz-th class="" *ngIf="activeIndex === 2 || detailSource=='WXPT'">{{list.activityType}}</td>
+          <td nz-th class="" *ngIf="activeIndex === 2 || detailSource=='WXPT'">{{list.activityName}}</td>
+          <td class="text-right" *ngIf="activeIndex === 0 || activeIndex === 2 || activeIndex === 3">{{list.actualAmount}}</td>
         </tr>
-        <tr nz-tbody-tr *ngIf="orderItemDetailInforList && activeIndex === 0">
+        <tr nz-tbody-tr *ngIf="orderItemDetailInforList && (activeIndex === 0 || detailSource=='WXAPP')">
           <td colspan="3" style="color: #000">总计</td>
           <td>{{totalNum}}</td>
           <td class="text-right">{{totalMoney}}</td>
         </tr>
     
-        <tr nz-tbody-tr *ngIf="orderItemDetailInforList && activeIndex === 2">
+        <tr nz-tbody-tr *ngIf="orderItemDetailInforList && (activeIndex === 2 || detailSource=='WXPT')">
           <td colspan="2" style="color: #000">总计</td>
           <td class="text-right">{{totalMoneyTwo}}</td>
         </tr>
       </tbody>
     </nz-table>
     <div class="orderpage_detail_list_bottom detail_list_bot">
-      <table *ngIf="orderItemDetailInfor && (activeIndex === 2 || activeIndex === 1)">
+      <table *ngIf="orderItemDetailInfor && (activeIndex === 2 || activeIndex === 1 || activeIndex === 3)">
         <tr class="ui-grid-row">
           <td class="">顾客微信昵称</td>
           <td class="">{{orderItemDetailInfor.customerName|| '-'}}</td>

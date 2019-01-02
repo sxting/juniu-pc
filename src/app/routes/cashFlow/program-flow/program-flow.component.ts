@@ -58,6 +58,7 @@ export class ProgramFlowComponent implements OnInit {
   totalMoney: any;
   orderItemDetailInfor: any; //订单详情页面
   orderItemDetailInforList: any;
+  detailSource: any = '';
   totalMoneyTwo: number = 0;
   orderTypeListText: any; //弹框的订单状态
   customerGenderText: string; //顾客性别
@@ -308,6 +309,7 @@ export class ProgramFlowComponent implements OnInit {
   // 小程序订单详情数据
   programOrderDetailInfor(data: any) {
     let self = this;
+    self.detailSource = '';
     this.loading = true;
     this.cashFlowService.programOrderDetailInfor(data).subscribe(
       (res: any) => {
@@ -348,8 +350,10 @@ export class ProgramFlowComponent implements OnInit {
           }
           let totalNum = 0;
           let totalMoney = 0;
-          let voucherSource = res.data.source;
-          if (self.activeIndex == 0 || voucherSource=='WXAPP') {
+          if (self.activeIndex == 3) {
+            self.detailSource = res.data.source;
+          }
+          if (self.activeIndex == 0 || self.detailSource=='WXAPP') {
             res.data.wxAppOrderProducts.forEach(function(item: any) {
               item.num = item.num ? item.num : 1;
               totalNum += parseInt(item.num);
@@ -358,7 +362,7 @@ export class ProgramFlowComponent implements OnInit {
             self.orderItemDetailInforList = res.data.wxAppOrderProducts;
             self.totalNum = totalNum;
             self.totalMoney = NP.round(totalMoney, 2);
-          } else if (self.activeIndex == 2 || voucherSource=='WXPT') {
+          } else if (self.activeIndex == 2 || self.detailSource=='WXPT') {
             res.data.wxAppOrderPinTuans.forEach(function(item: any) {
               totalMoney += NP.round(item.price, 2);
             });
