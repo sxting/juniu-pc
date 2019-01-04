@@ -44,10 +44,10 @@ export class HeaderNotifyComponent implements OnInit, OnDestroy {
     this.getMessageCount();
 
     let self = this;
-    // self.time = setInterval(function () {
-    //   self.getMessageCount();
-    //   // self.getMessageList();
-    // }, 30000)
+    self.time = setInterval(function () {
+      self.getMessageCount();
+      // self.getMessageList();
+    }, 30000)
 
 
 

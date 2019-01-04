@@ -1,5 +1,5 @@
 .item-box {
-    width: 304px;
+    width: 340px;
     height: 617px;
     cursor: pointer;
     position: relative;
@@ -34,18 +34,18 @@
         }
     }
     .itemImg{
-        background-image: url('../../../../assets/img/wechatjpg.png')  ;
-        width: 200px;
-        height: 200px;
-        background-position: left center;
-        background-repeat: no-repeat;
-        background-size: 100%;
+        // background-image: url('../../../../assets/img/wechatjpg.png')  ;
+        width: 340px;
+        height: 340px;
+        // background-position: left center;
+        // background-repeat: no-repeat;
+        // background-size: 100%;
         margin: 0 auto;
     }
     .itemBody{
-        padding: 20px;
+        padding:0 20px;
         .iconfont{
-            margin: 20px 0;
+            margin: 10px 0;
             font-family: PingFangSC-Regular;
             font-size: 14px;
             color: #272828;
@@ -53,7 +53,7 @@
             line-height: 14px;
         }
         .iconfont::before{
-            color: #FFA000 !important;
+            // color: #FFA000 !important;
             margin-right: 5px;
         }
     }
@@ -62,6 +62,49 @@
         left: 50%;
         margin-left: -60px;
         width: 120px;
-        bottom: 40px;
+        bottom: 20px;
+        border: none;
     }
   }
+
+
+  .tabBar{
+    font-size: 36px;
+    position: absolute;
+    top: 311px;
+    .tabBarText{
+        position: absolute;
+        color: #fff !important;
+        top: 15px;
+        font-size: 15px;
+        text-align: center;
+        width: 100%;
+    }
+  }
+  .itemPrice{
+      margin: 24px 0 0 20px;
+      font-size: 22px;
+  }
+  .cardholdersVip-top{
+    background: #fff;
+    width: 100%;
+    padding: 20px;
+}
+.nzPaginationBox{
+    margin: 20px;
+    overflow: hidden;
+}
+.nzPagination{
+    float: right;
+}
+.erweimaB{
+    width: 300px;
+    height: 300px;
+    margin-top: 30px;
+}
+.typeBox{
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+    flex-wrap: wrap;
+}

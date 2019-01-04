@@ -84,8 +84,9 @@ export class CheckVipcardDetailinforComponent implements OnInit {
         this.cardType = this.route.snapshot.params['cardType'] ? this.route.snapshot.params['cardType'] : FunctionUtil.getUrlString('cardType');
         this.configId = this.route.snapshot.params['configId'] ? this.route.snapshot.params['configId'] : FunctionUtil.getUrlString('configId');
         this.storeId = this.route.snapshot.params['storeId'] ? this.route.snapshot.params['storeId'] : FunctionUtil.getUrlString('storeId');
+      this.storeId = this.storeId ? this.storeId : '';
 
-        if(self.cardType === 'STORED'){
+      if(self.cardType === 'STORED'){
             this.cardTypeName = '储值卡';
         }else if(self.cardType === 'METERING'){
             this.cardTypeName = '计次卡';
