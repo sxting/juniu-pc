@@ -33,3 +33,4 @@ import { ShoudanComponent } from './shoudan/shoudan.component';
     providers: [CheckoutService,MemberService],
 })
 export class CheckoutModule { }
+
