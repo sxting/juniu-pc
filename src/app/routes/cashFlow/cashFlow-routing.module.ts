@@ -5,6 +5,7 @@ import { OpenCardComponent } from './openCard/openCard.component';
 import { MeidaFlowComponent } from './meidaFlow/meidaFlow.component';
 import { KoubeiFlowComponent } from './koubeiFlow/koubeiFlow.component';
 import { ProgramFlowComponent } from './program-flow/program-flow.component';
+import { PaycodeFlowComponent } from './paycode-flow/paycode-flow.component';
 
 const routes: Routes = [
     {path: 'Consumption', component: ConsumptionComponent},
@@ -12,6 +13,7 @@ const routes: Routes = [
     {path: 'meidaFlow', component: MeidaFlowComponent},
     {path: 'koubeiFlow', component: KoubeiFlowComponent},
     {path: 'programFlow', component: ProgramFlowComponent},
+    {path: 'paycodeFlow', component: PaycodeFlowComponent},
 ];
 
 @NgModule({

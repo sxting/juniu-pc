@@ -167,6 +167,7 @@ export class ConsumptionComponent implements OnInit {
     let self = this;
     let data = {
       type: 'CONSUME',
+      queryType: 'CONSUME',
       storeId: this.storeId,
       startDate: this.startTime,
       endDate: this.endTime,
@@ -323,6 +324,7 @@ export class ConsumptionComponent implements OnInit {
     let apiUrl = Config.API + 'order/download/consume/records/export.excel';
     let data = {
       type: 'CONSUME',
+      queryType: 'CONSUME',
       storeId: this.storeId,
       startDate: this.startTime,
       endDate: this.endTime,
@@ -335,7 +337,7 @@ export class ConsumptionComponent implements OnInit {
       key: this.phone,
     };
     let token = this.localStorageService.getLocalstorage(APP_TOKEN);
-    let param = 'token=' + token + "&type=CONSUME&pageSize=10&pageNum=" + this.pageNo;
+    let param = 'token=' + token + "&type=CONSUME&queryType=CONSUME&pageSize=10&pageNum=" + this.pageNo;
     if (data.storeId) param += '&storeId=' + data.storeId;
     if (data.startDate) param += '&startDate=' + data.startDate;
     if (data.endDate) param += '&endDate=' + data.endDate;
