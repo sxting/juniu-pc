@@ -13,7 +13,7 @@ const routes: Routes = [
     {path: 'meidaFlow', component: MeidaFlowComponent},
     {path: 'koubeiFlow', component: KoubeiFlowComponent},
     {path: 'programFlow', component: ProgramFlowComponent},
-    {path: 'paycode', component: PaycodeFlowComponent},
+    {path: 'paycodeFlow', component: PaycodeFlowComponent},
 ];
 
 @NgModule({
