@@ -25,8 +25,11 @@
         </div>
         <div class="use-btn" [class.disabled]="!package.selectable">
           <span *ngIf="!package.selectable">购买</span>
-          <span *ngIf="package.selectable && package.useState">续费</span>
-          <span *ngIf="package.selectable && !package.useState">现在升级</span>
+          <span *ngIf="storeId">
+            <span *ngIf="package.selectable && package.useState">续费</span>
+            <span *ngIf="package.selectable && !package.useState">现在升级</span>
+          </span>
+          <span *ngIf="!storeId">选择此版本</span>
         </div>
       </div>
     </li>

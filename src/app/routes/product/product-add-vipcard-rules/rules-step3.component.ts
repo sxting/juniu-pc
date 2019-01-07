@@ -356,7 +356,7 @@ export class RulesStep3Component implements OnInit {
             price: parseFloat(self.item['pay_account'])*100,//售价
             rebate: self.item['cardType'] === 'REBATE'? parseFloat(self.item['amount']) : 0,
             validate: validate,
-            validateType: self.item['validateType']
+            validateType:self.item['cardType'] === 'TIMES'? 'days' : self.item['validateType'] 
         };
         let params = {
             background: self.item['picId'],
