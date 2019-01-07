@@ -97,6 +97,11 @@ export class PaycodeFlowComponent implements OnInit {
   getData() {
     this.koubeiProductVouchersListFirst();
   }
+  //订单类型
+  selectStatusType() {
+    this.pageNo = 1;
+    // this.batchQueryInfor();//根据查询条件筛选列表信息
+  }
   selectOrderStatus(type) {}
   ngOnInit() {
     let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
