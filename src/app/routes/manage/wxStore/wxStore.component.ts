@@ -515,7 +515,7 @@ export class WxStoreComponent implements OnInit {
         let data = {
             menuId: '901302B1',
             timestamp: new Date().getTime(),
-            storeId:this.storeId
+            parameter: 'storeId=' +this.storeId
           };
           this.uploadService.menuRoute(data).then((result: any) => {
             if(result){
