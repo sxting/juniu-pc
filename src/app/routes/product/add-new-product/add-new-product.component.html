@@ -191,7 +191,8 @@
     </div>
     <nz-form-item>
       <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 10, offset: 7 }">
-        <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">保存</button>
+        <button *ngIf="canSave" nz-button nzType="primary" type="submit" [nzLoading]="submitting">保存</button>
+        <button *ngIf="!canSave" nz-button nzType="primary" type="submit" disabled [nzLoading]="submitting">保存</button>
       </nz-form-control>
     </nz-form-item>
   </form>
