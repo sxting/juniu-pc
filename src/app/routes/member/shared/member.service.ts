@@ -394,7 +394,7 @@ allTaglibs(data: any) {
     statisticsInfo(data: any) {
         let apiUrl = Config.API + 'member/statisticsInfo.json';
         let params = FunctionUtil.obectToURLSearchParams(data);
-        return this.http.post(apiUrl, null, data)
+        return this.http.post(apiUrl, data)
             .map((response: Response) => response)
             .catch(error => {
                 return Observable.throw(error);
