@@ -91,7 +91,7 @@ export class ProgramFlowComponent implements OnInit {
     private cashFlowService: CashFlowService,
     private datePipe: DatePipe,
   ) {}
-
+  selectOrderStatus(type) {}
   ngOnInit() {
     this.moduleId = this.route.snapshot.params['menuId'];
     let startDate = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000); //提前一周 ==开始时间

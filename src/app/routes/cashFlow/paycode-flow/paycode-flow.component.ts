@@ -191,7 +191,7 @@ export class PaycodeFlowComponent implements OnInit {
       endDate: this.endTime,
       pageNum: this.pageNo,
       pageSize: 10,
-      status: this.orderStatus,
+      status: this.orderType,
       payType: this.payType,
       orderId: this.orderId,
     };
