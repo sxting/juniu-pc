@@ -40,6 +40,7 @@ export class AddNewItemsComponent implements OnInit {
     productId: string = '';//商品ID
     ItemsStatus: any = [{ name: '上架', value: '1'}, { name: '下架', value: '0'},];//上下架状态
     storeStatus: any = [{ name: '全部门店(默认)', value: 'ALL'},{ name: '自定义', value: 'CUSTOMIZE'}];
+    canSave: boolean = true;//查看门店登录还是商家登陆
     storeId: string = '';//查看门店登录还是商家登陆
     merchantId: string = '';
     //上传图片的时候
@@ -75,7 +76,7 @@ export class AddNewItemsComponent implements OnInit {
         this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
         this.storeId = this.route.snapshot.params['storeId'] ? this.route.snapshot.params['storeId'] : FunctionUtil.getUrlString('storeId');
         this.productId = this.route.snapshot.params['productId'] ? this.route.snapshot.params['productId'] : FunctionUtil.getUrlString('productId');
-
+        this.canSave = true;
         this.formData = {
             categoryInfor: [ null, [ Validators.required ] ],
             productName:[ null, [ Validators.required ] ],
@@ -361,10 +362,17 @@ export class AddNewItemsComponent implements OnInit {
                             });
                         }
                     }
-                    console.log(descPicIdArr)
+                    console.log(descPicIdArr);
                     
                     self.pictureDetails = descPicIdArr;
-                    
+                    let productCreateStoreId = res.data.storeId ? res.data.storeId : "";
+                    let opUserStoreId = self.storeId ? self.storeId : "";
+                    console.log("productCreateStoreId=" + productCreateStoreId + "||opUserStoreId=" + opUserStoreId);
+                    if (productCreateStoreId == opUserStoreId) {
+                      self.canSave = true;
+                    } else {
+                      self.canSave = false;
+                    }
                     let descriptions: any = [];
                     let buyerNotes: any = [];
                     let transforBuyerNotes: any = [];
