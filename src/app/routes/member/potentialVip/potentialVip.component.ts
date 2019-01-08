@@ -153,13 +153,17 @@ export class PotentialVipComponent {
                         } else if (element.gender === 2) {
                             element.genderName = "不详";
                         }
-                        if (element.customerSource === 'JUNIU') {
-                            element.customerSourceName = '桔牛'
-                        } else if (element.customerSource === 'KOUBEI') {
-                            element.customerSourceName = '口碑'
-                        } else if (element.customerSource === 'WECHAT') {
-                            element.customerSourceName = '微信'
-                        }
+                      if (element.customerSource === 'JUNIU') {
+                        element.customerSourceName = '桔牛';
+                      } else if (element.customerSource === 'KOUBEI') {
+                        element.customerSourceName = '口碑';
+                      } else if (element.customerSource === 'WECHAT') {
+                        element.customerSourceName = '微信';
+                      } else if (element.customerSource === 'RESERVE') {
+                        element.customerSourceName = '预约';
+                      } else if (element.customerSource === 'IMPPORT') {
+                        element.customerSourceName = '导入';
+                      }
                     });
                     this.data = res.data.pageInfos;
                     this.Total = res.data.pageInfo.countTotal;
