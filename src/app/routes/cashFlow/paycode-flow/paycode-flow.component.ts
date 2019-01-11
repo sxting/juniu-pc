@@ -10,6 +10,8 @@ import * as differenceInDays from 'date-fns/difference_in_days';
 import { FunctionUtil } from '@shared/funtion/funtion-util';
 import { ManageService } from '../../manage/shared/manage.service';
 import { CheckoutService } from '../../checkout/shared/checkout.service';
+import { Config } from '@shared/config/env.config';
+import { APP_TOKEN, USER_INFO } from '@shared/define/juniu-define';
 
 @Component({
   selector: 'app-paycodeFlow',
@@ -111,6 +113,7 @@ export class PaycodeFlowComponent implements OnInit {
     this.startTime = FunctionUtil.changeDate(new Date()) + ' 00:00:00';
     this.endTime = FunctionUtil.changeDate(new Date()) + ' 23:59:59';
     this.dateRange = [this.startTime, this.endTime];
+    this.merchantId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['merchantId'];
   }
   //返回门店数据
   storeListPush(event: any) {
@@ -323,5 +326,49 @@ export class PaycodeFlowComponent implements OnInit {
       nzTitle: '温馨提示',
       nzContent: err,
     });
+  }
+
+  // 导出Excel
+  exportExcel() {
+    console.log(this.totalElements);
+    if (Number(this.totalElements) >= 1000) {
+      this.msg.warning('导出的数据量不能超过1000条，请重新选择条件!!');
+      return;
+    }
+    if (
+      this.startTime &&
+      this.endTime &&
+      new Date(this.endTime).getTime() - new Date(this.startTime).getTime() >
+      31 * 24 * 60 * 60 * 1000
+    ) {
+      this.modalSrv.error({
+        nzTitle: '温馨提示',
+        nzContent: '时间间隔不能大于31天',
+      });
+      return;
+    }
+    let apiUrl = Config.API + 'order/download/consume/records/export.excel';
+    let data = {
+      type: 'SHOUDAN',
+      queryType: 'SHOUDAN',
+      storeId: this.storeId,
+      startDate: this.startTime,
+      endDate: this.endTime,
+      pageNum: this.pageNo,
+      pageSize: 10,
+      status: this.orderType,
+      payType: this.payType,
+      orderId: this.orderId,
+    };
+    let token = this.localStorageService.getLocalstorage(APP_TOKEN);
+    let param = 'token=' + token + "&pageSize=10&pageNum=" + this.pageNo;
+    if (data.storeId) param += '&storeId=' + data.storeId;
+    if (data.startDate) param += '&startDate=' + data.startDate;
+    if (data.endDate) param += '&endDate=' + data.endDate;
+    if (data.status) param += '&status=' + data.status;
+    if (data.queryType) param += '&queryType=' + data.queryType;
+    if (data.type) param += '&type=' + data.type;
+    if (data.payType) param += '&payType=' + data.payType;
+    window.location.href = apiUrl + '?merchantId=' + this.merchantId + '&' + param;
   }
 }

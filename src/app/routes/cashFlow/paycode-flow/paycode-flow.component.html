@@ -48,6 +48,9 @@
 
       <nz-col [nzSpan]="expandForm ? 24 : 8" [class.text-right]="expandForm" style="width:200px">
         <button nz-button type="submit" [nzType]="'primary'" [nzLoading]="loading" (click)="getData()">查询</button>
+        <button nz-button (click)="exportExcel()" [nzType]="'primary'" style="position: absolute; margin-left: 20px">
+          <span>导出Excel</span>
+        </button>
       </nz-col>
     </nz-row>
   </div>
