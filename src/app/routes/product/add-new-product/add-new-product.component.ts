@@ -53,7 +53,7 @@ export class AddNewProductComponent implements OnInit {
     moduleId: string;
     ifShow: boolean = false;//门店错误提示
     spinBoolean: boolean = false;
-
+    canSave: boolean = true;
 
     pictureDetails: any;
     picIds: any = ''; //图片列表
@@ -68,11 +68,11 @@ export class AddNewProductComponent implements OnInit {
     get stock() { return this.form.controls['stock']; }
 
     ngOnInit() {
-
         let self = this;
         this.moduleId = this.route.snapshot.params['menuId'] ? this.route.snapshot.params['menuId'] : '';//门店
+        this.storeId = this.route.snapshot.params['storeId'] ? this.route.snapshot.params['storeId'] : FunctionUtil.getUrlString('storeId');
         this.productId = this.route.snapshot.params['productId'] ? this.route.snapshot.params['productId'] : FunctionUtil.getUrlString('productId');
-
+        this.canSave = true;
         this.formData = {
             categoryInfor: [null, [Validators.required]],
             productName: [null, [Validators.required]],
@@ -96,8 +96,6 @@ export class AddNewProductComponent implements OnInit {
         let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
             JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
         this.merchantId = UserInfo.merchantId ? UserInfo.merchantId : '';
-        this.storeId = UserInfo.staffType === "MERCHANT" ? '' : this.cityStoreList[0].storeId;
-
         if (this.productId) {
             this.getProductDetailInfor();//查看商品详情
         } else {
@@ -365,10 +363,17 @@ export class AddNewProductComponent implements OnInit {
                             });
                         }
                     }
-                    console.log(descPicIdArr)
+                    console.log(descPicIdArr);
                     
                     self.pictureDetails = descPicIdArr;
-                    
+                    let productCreateStoreId = res.data.storeId ? res.data.storeId : "";
+                    let opUserStoreId = self.storeId ? self.storeId : "";
+                    console.log("productCreateStoreId=" + productCreateStoreId + "||opUserStoreId=" + opUserStoreId);
+                    if (productCreateStoreId == opUserStoreId) {
+                      self.canSave = true;
+                    } else {
+                      self.canSave = false;
+                    }
                     let descriptions: any = [];
                     let buyerNotes: any = [];
                     let transforBuyerNotes: any = [];

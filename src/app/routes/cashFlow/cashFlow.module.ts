@@ -7,6 +7,8 @@ import { OpenCardComponent } from './openCard/openCard.component';
 import { MeidaFlowComponent } from './meidaFlow/meidaFlow.component';
 import { KoubeiFlowComponent } from './koubeiFlow/koubeiFlow.component';
 import { ProgramFlowComponent } from './program-flow/program-flow.component';
+import { PaycodeFlowComponent } from './paycode-flow/paycode-flow.component';
+import { CheckoutService } from '../checkout/shared/checkout.service';
 
 
 @NgModule({
@@ -19,8 +21,9 @@ import { ProgramFlowComponent } from './program-flow/program-flow.component';
     OpenCardComponent,
     MeidaFlowComponent,
     KoubeiFlowComponent,
-    ProgramFlowComponent
+    ProgramFlowComponent,
+    PaycodeFlowComponent
   ],
-  providers: [CashFlowService]
+  providers: [CashFlowService, CheckoutService]
 })
 export class CashFlowModule { }
