@@ -1152,10 +1152,6 @@ export class TouristComponent implements OnInit {
             }
             this.vipXqFun();
             // this.searchMemberCard(true);
-          }else if (data.paymentResult === 'INIT'){
-            this.modalSrv.error({
-              nzContent: '支付未完成',
-            });
           }else {
             this.modalSrv.error({
               nzContent: '支付失败',
