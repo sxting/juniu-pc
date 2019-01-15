@@ -1120,11 +1120,12 @@ export class TouristComponent implements OnInit {
       (res: any) => {
         if (res.success) {
           let data: any = res.data;
-          if (data.paymentResult === 'CLOSE') {
-            this.modalSrv.error({
-              nzContent: '支付失败',
-            });
-          } else {
+          // if (data.paymentResult === 'CLOSE') {
+          //   this.modalSrv.error({
+          //     nzContent: '支付失败',
+          //   });
+          // }
+          if (data.paymentResult === 'SUCESS') {
             // this.modalSrv.closeAll();
             this.xfCardList = '';
             this.orderId = data.orderId;
@@ -1151,6 +1152,14 @@ export class TouristComponent implements OnInit {
             }
             this.vipXqFun();
             // this.searchMemberCard(true);
+          }else if (data.paymentResult === 'INIT'){
+            this.modalSrv.error({
+              nzContent: '支付未完成',
+            });
+          }else {
+            this.modalSrv.error({
+              nzContent: '支付失败',
+            });
           }
         } else {
           this.errorAlter(res.errorInfo);
