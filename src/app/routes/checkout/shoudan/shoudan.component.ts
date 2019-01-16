@@ -77,17 +77,17 @@ export class ShoudanComponent implements OnInit {
         this.authCode = '';
         if (res.success) {
           let data: any = res.data;
-          if (data.paymentResult === 'CLOSE') {
-            this.modalSrv.error({
-              nzContent: '支付失败',
-            });
-          } else {
+          if (data.paymentResult === 'SUCESS') {
             let arr :any = `<p>收款成功,</p><p>收款金额:${self.receiptCode}元,</p><p>收款门店:${self.branchName}</p>`;
             this.modalSrv.closeAll();
             this.modalSrv.success({
               nzContent: arr,
             });
             this.getOrderHistoryListHttp();
+          }else{
+            this.modalSrv.error({
+              nzContent: '支付失败',
+            });
           }
         } else {
           this.errorAlter(res.errorInfo);
