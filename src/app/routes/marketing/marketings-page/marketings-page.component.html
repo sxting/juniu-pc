@@ -63,11 +63,11 @@
             </span>
           </p>
         </div>
-        <div *ngIf="paramsId == '01' || paramsId == '02'">最近
+        <div *ngIf="paramsId == '01' || paramsId == '02'">超过
           <input class="width-auto" nz-input formControlName="activity_obj_days"
                  placeholder="请输入天数" (change)="onLastTimeInputChange()">
-          <span *ngIf="paramsId == '01'">天内未到店消费过的持卡会员</span>
-          <span *ngIf="paramsId == '02'">天内未到店消费过的潜在会员</span>
+          <span *ngIf="paramsId == '01'">天未到店消费过的持卡会员</span>
+          <span *ngIf="paramsId == '02'">天未到店消费过的潜在会员</span>
         </div>
         <div *ngIf="paramsId == '03'">过生日的会员</div>
         <div *ngIf="paramsId == '04' || paramsId == '05' || paramsId == '06'">
