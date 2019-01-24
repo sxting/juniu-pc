@@ -1,0 +1,312 @@
+@import 'node_modules/@delon/theme/styles/default';
+@primary-color:#ff7700;
+.main_wrap {
+    font-family: PingFangSC-Regular;
+    position: absolute;
+    top: 56px;
+    right: 20px;
+    bottom: 0;
+    left: 260px;
+    z-index: 1;
+}
+
+* {
+    box-sizing: content-box !important;
+}
+
+.position {
+    height: 40px;
+    line-height: 40px;
+}
+
+.position span {
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    line-height: 40px;
+    color: #1A1A1A;
+}
+
+.position span:last-of-type {
+    color: @primary-color;
+}
+
+.existing-main {
+    padding-top: 20px;
+    width: 98%;
+    height: 100%;
+    background: #fff;
+    overflow-x: auto;
+    padding-left: 20px;
+    padding-bottom: 30px;
+}
+
+.btns_switch {
+    border-bottom: 1px solid #e9e9e9;
+    padding-left: 20px;
+    background-color: #fff;
+    margin-top: -1px;
+    margin-bottom: 0;
+    cursor: pointer;
+}
+
+.btns_switch li {
+    font-family: PingFangSC-Regular;
+    font-size: 16px;
+    color: #222222;
+    line-height: 50px;
+    width: 70px;
+    float: left;
+    margin-left: 20px;
+    text-align: center;
+}
+
+.btns_switch li:first-of-type {
+    margin-left: 0px;
+}
+
+.btns_switch li.btns_active {
+    color: @primary-color;
+    border-bottom: 2px solid @primary-color;
+}
+
+.member-top-middle {
+    margin-bottom: 35px;
+}
+
+.member-top-middle>span {
+    margin-right: 10px;
+}
+
+.member-top-middle>select {
+    width: 374px;
+    height: 28px;
+    padding-left: 10px;
+}
+
+.existing-table {
+    margin-top: 30px;
+}
+
+.clearfix {
+    position: relative;
+}
+
+.existing-button {
+    display: flex;
+    position: absolute;
+    right: 20px;
+    top: 0;
+}
+
+.existing-button>div {
+    width: 80px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #1A1A1A;
+}
+
+.existing-button>div:nth-of-type(1) {
+    border-radius: 100px 0 0 100px;
+    border: 1px solid #e5e5e5;
+}
+
+.existing-button>div:nth-of-type(2) {
+    border-radius: 0 100px 100px 0;
+    border: 1px solid #e5e5e5;
+}
+
+.existing-button-color {
+    background: @primary-color;
+    color: #fff !important;
+}
+
+.alert-order-msg {
+    top: 80px !important;
+    padding-right: 20px !important;
+    padding-top: 20px;
+}
+
+
+/*分类弹框*/
+
+.content-title {
+    font-family: 'PingFangSC-Medium';
+    font-size: 16px;
+    color: #333333;
+    height: 16px;
+    padding-left: 10px;
+    line-height: 16px;
+    border-left: 4px solid @primary-color;
+    margin-bottom: 20px;
+}
+
+.alert-order-msg-bg .alert-order-msg {
+    width: 500px;
+    /* height: 510px; */
+    margin-left: -280px;
+}
+
+.alert-order-msg-main {
+    padding-left: 50px;
+}
+
+.alert-order-msg-main>div {
+    display: flex;
+    margin-top: 30px;
+}
+
+.addStaffBox-main-left {
+    width: 76px;
+    text-align: right;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #666666;
+    line-height: 24px;
+    height: 24px;
+    margin-right: 20px;
+}
+
+.alert-order-msg-main>div .nameinput {
+    width: 228px;
+    height: 24px;
+    padding-left: 6px;
+}
+
+.alert-create-box-main {
+    width: 300px;
+    /* height: 360px; */
+    margin: 10px auto 0;
+}
+
+.btn-box .commit-btn {
+    display: inline-block;
+    margin-left: 130px;
+    margin-right: 20px;
+    color: #ffffff;
+    background-color: @primary-color;
+}
+
+.btn-box .cancel-btn {
+    display: inline-block;
+}
+
+.cancel-btn,
+.commit-btn {
+    width: 80px;
+    height: 30px;
+    border: 1px solid @primary-color;
+    color: @primary-color;
+    line-height: 30px;
+    text-align: center;
+    font-family: 'PingFangSC-Regular';
+    font-size: 14px;
+    margin: 20px auto;
+    background-color: #fff;
+    display: block;
+    border-radius: 4px;
+}
+
+.alert-create-box-main table {
+    border: 1px solid #e5e5e5;
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+    text-align: center;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #666666;
+    margin-top: 20px;
+}
+
+.alert-create-box-main table td,
+.alert-create-box-main table tr {
+    border: 1px solid #e5e5e5;
+    height: 30px;
+    line-height: 30px;
+}
+
+.alert-create-box-main table input {
+    border: none;
+}
+
+.alert-create-box-main table td:first-of-type {
+    background: #f2f2f2;
+}
+
+.tablebtn td {
+    background: #fff !important;
+    cursor: pointer;
+}
+
+.tablebtn td:last-of-type {
+    color: @primary-color;
+}
+
+.right-select {
+    height: 28px;
+    border: 1px solid #E5E5E5;
+    background-color: #fff;
+    outline: none;
+    font-size: 14px;
+    color: #1A1A1A;
+    width: 85%;
+    float: right;
+}
+
+.selectBox {
+    height: 30px;
+    line-height: 30px;
+    margin-top: 10px;
+    text-align: left;
+}
+
+.cardNameBox {
+    height: 30px;
+    line-height: 30px;
+    text-align: left;
+}
+
+.cardNameBox input {
+    width: 80%;
+    float: right;
+    height: 30px;
+}
+
+.tableBigBox {
+    height: 270px;
+    overflow-y: auto;
+    width: 310px;
+}
+
+.alert-order-msg {
+    height: 360px;
+}
+.existingGroups-table{
+    width: 100%;
+    text-align: center;    
+}
+.existingGroups-table tr{
+    height: 40px;
+    line-height: 40px;
+}
+.existingGroups-table thead tr{
+    background: #f2f2f2;
+}
+.buttons{
+    cursor: pointer;
+    color: @primary-color;
+    margin-right: 10px;
+}
+
+
+.nzPaginationBox{
+    margin: 20px;
+    overflow: hidden;
+}
+.nzPagination{
+    float: right;
+}
