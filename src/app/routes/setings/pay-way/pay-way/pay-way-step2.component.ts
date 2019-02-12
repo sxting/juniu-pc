@@ -31,6 +31,8 @@ export class PayWayStep2Component implements OnInit {
 
 
     shanghuAddress: any;
+    ifShanghuNameShowNum: boolean = false;//查看是否商户简称为纯数字
+    ifShowBlankTips: boolean = false;//查找是否有空格
 
     constructor(
         public item: TransferService,
@@ -103,6 +105,27 @@ export class PayWayStep2Component implements OnInit {
 
     }
 
+    //  判断商户简称是否为纯数字
+    changeShanghuJc(){
+      var reg = /^[0-9]\d*$/;
+      this.ifShanghuNameShowNum = reg.test(this.form.controls.shanghu_jc.value)?  true : false;//判断是否是纯数字
+      if(!this.ifShanghuNameShowNum){
+        console.log(this.form.controls.shanghu_jc.value.length);
+        console.log(this.form.controls.shanghu_jc.value);
+        if(this.form.controls.shanghu_jc.value.length < 4 || this.form.controls.shanghu_jc.value.length > 15){
+          this.ifShanghuNameShowNum = true;
+        } else {
+          this.ifShanghuNameShowNum = false;
+        }
+      }
+    }
+
+  changeYingyezzName(){
+    console.log(this.form.controls.yingyezz_name.value);
+    let str = this.form.controls.yingyezz_name.value;
+    this.ifShowBlankTips = str.indexOf(" ") == -1? false : true;
+  }
+
     selectCity(event: any) {
         console.log(event);
         if (event) {
@@ -127,8 +150,10 @@ export class PayWayStep2Component implements OnInit {
         this.item = Object.assign(this.item, this.form.value);
 
         console.dir(this.item);
-
-        ++this.item.step;
+        console.log(this.ifShanghuNameShowNum);
+        if(!this.ifShanghuNameShowNum && !ifShowBlankTips){
+          ++this.item.step;
+        }
     }
 
 

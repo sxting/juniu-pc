@@ -62,7 +62,8 @@
             <nz-select formControlName="kaihuhang" [nzShowSearch]="true" (ngModelChange)="onBankChange($event)" [nzPlaceHolder]="'请选择开户行'">
                 <nz-option *ngFor="let item of bankList" [nzLabel]="item.bankName" [nzValue]="item.bankId"></nz-option>
             </nz-select>
-            <nz-form-explain class="error-color" *ngIf="kaihuhang.dirty && kaihuhang.errors">请选择开户名称</nz-form-explain>
+          <nz-form-explain>找不到的支行，联系银行填上一级支行</nz-form-explain>
+          <nz-form-explain class="error-color" *ngIf="kaihuhang.dirty && kaihuhang.errors">请选择开户名称</nz-form-explain>
         </nz-form-control>
     </nz-form-item>
     <nz-form-item>
