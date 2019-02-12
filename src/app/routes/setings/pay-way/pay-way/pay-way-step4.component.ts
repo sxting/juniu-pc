@@ -228,7 +228,7 @@ export class PayWayStep4Component implements OnInit {
       },
       bankAccount: {
         accountCode: item.type === 'qiye' ? item['jiesuan_zhanghao'] : item['yinhang_kaohao'], //银行卡号 , *
-        accountName: item['kaihuren'], //开户人 , *
+        accountName: item.type === 'qiye' ? item['yingyezz_name'] : item['kaihuren'], //开户人 , *
         accountType: item.type === 'qiye' ? 1 : 2,//1:企业 ;2:个人 , *
         address: '', //持卡人地址 ,为空
         bankId: item['kaihuhang'],//开户银行 , *

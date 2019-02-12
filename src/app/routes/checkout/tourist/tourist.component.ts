@@ -815,7 +815,7 @@ export class TouristComponent implements OnInit {
     that.totolMoneyFun();
   }
 
-  
+
   scanPay(tpl: TemplateRef<{}>) {
     let self = this;
     this.modalSrv.create({
@@ -1078,7 +1078,7 @@ export class TouristComponent implements OnInit {
           ? (create.orderItem[0]['balance'] - create.orderItem[0]['price'])
           : 0;
         }
-      
+
       create.originMoney = create.money;
     } else {
       if (this.xfList && this.xfList.length > 0) {
@@ -2023,7 +2023,7 @@ vipXqFun2() {
   }
  //权限控制
  permissionFun(menuId: any, id?: any) {
-  
+
 }
 function (selectData:any,self?:any) {
   let obj = this;
@@ -2217,11 +2217,11 @@ function (selectData:any,self?:any) {
   shijiaChange(event, ind) {
     // console.log( event.target.value *100 /this.xfList[ind].currentPrice1)
 
-    
+
     // this.xfList[ind].currentPrice = event.target.value * 100;
     // this.xfList[ind].discount = NP.times( NP.divide( NP.times(event.target.value ,100),this.xfList[ind].currentPrice1,this.xfList[ind].num),100).toFixed(2)
     this.xfList[ind].discount = NP.times( NP.divide( NP.times(event.target.value ,100),this.xfList[ind].currentPrice1,this.xfList[ind].num),100)
-    
+
     let that = this;
 
     this.totolMoneyFun();

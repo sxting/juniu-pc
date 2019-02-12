@@ -15,7 +15,7 @@ import { USER_INFO } from "@shared/define/juniu-define";
     </div>
     <div nz-menu class="width-sm">
       <div nz-menu-item (click)="goSetPage()"><i class="anticon anticon-user mr-sm"></i>个人中心</div>
-      <div nz-menu-item (click)="goWechatPage();false"><i class="anticon anticon-mail mr-sm"></i>微信通知</div>
+      <div nz-menu-item *ngIf="loginName" (click)="goWechatPage();false"><i class="anticon anticon-mail mr-sm"></i>微信通知</div>
       <li nz-menu-divider></li>
       <div nz-menu-item (click)="logout()"><i class="anticon anticon-setting mr-sm"></i>退出登录</div>
     </div>
@@ -33,7 +33,7 @@ export class HeaderUserComponent implements OnInit {
 
   staffName: any = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['staffName'];
   staffId: any = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['staffId'];
-
+  loginName = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['loginName']?JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['loginName']:'';
   ngOnInit(): void {
     // this.staffName = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['staffName'];
     this.tokenService.change().subscribe((res: any) => {

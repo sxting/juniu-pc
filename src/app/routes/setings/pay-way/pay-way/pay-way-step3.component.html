@@ -8,7 +8,11 @@
             <!--<nz-form-explain class="error-color" *ngIf="kaihu_name.dirty && kaihu_name.errors">请输入开户名称</nz-form-explain>-->
         <!--</nz-form-control>-->
     <!--</nz-form-item>-->
-    <nz-form-item>
+  <nz-form-item *ngIf="item.type === 'qiye'">
+    <nz-form-label nzSpan="5">对公账户名称</nz-form-label>
+    <nz-form-control nzSpan="16">{{item['yingyezz_name']}}</nz-form-control>
+  </nz-form-item>
+    <nz-form-item *ngIf="item.type === 'geti'">
         <nz-form-label nzSpan="5" nzRequired nzFor="kaihuren">开户人</nz-form-label>
         <nz-form-control nzSpan="16">
             <nz-input-group nzCompact>
@@ -58,7 +62,8 @@
             <nz-select formControlName="kaihuhang" [nzShowSearch]="true" (ngModelChange)="onBankChange($event)" [nzPlaceHolder]="'请选择开户行'">
                 <nz-option *ngFor="let item of bankList" [nzLabel]="item.bankName" [nzValue]="item.bankId"></nz-option>
             </nz-select>
-            <nz-form-explain class="error-color" *ngIf="kaihuhang.dirty && kaihuhang.errors">请选择开户名称</nz-form-explain>
+          <nz-form-explain>找不到的支行，联系银行填上一级支行</nz-form-explain>
+          <nz-form-explain class="error-color" *ngIf="kaihuhang.dirty && kaihuhang.errors">请选择开户名称</nz-form-explain>
         </nz-form-control>
     </nz-form-item>
     <nz-form-item>

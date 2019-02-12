@@ -8,16 +8,15 @@
         <img src="/assets/img/wechat_pay.svg" alt="wechat">
         <img src="/assets/img/alipay.svg" alt="alipay">
         <!--审核中和审核未通过以及未申请-->
-        <div *ngIf="status != '1'">
-            <p class="no-set">暂未设置</p>
-            <button nz-button (click)="goPayWay()">点击设置</button>
-        </div>
-        <!--审核通过显示-->
-        <div class="setted" *ngIf="status == '1'">
-            <p class="color-000">已设置</p>
+        <div>
+            <p *ngIf="status == '0' || status == ''" class="no-set">审核中</p>
+            <p *ngIf="status == '2'" class="no-set">审核失败</p>
+            <p *ngIf="status == '3'" class="no-set">暂未设置</p>
+            <button *ngIf="status == '2' || status == '3'" nz-button (click)="goPayWay()">点击设置</button>
             <!--<p>微信支付费率：{{statusData.wechatRate/10}}%</p>-->
             <!--<p>支付宝支付费率：{{statusData.alipaysRate/10}}%</p>-->
-            <button nz-button [disabled]="!haveData" class="fix-btn" (click)="goPayWay()">点击修改</button>
+            <p *ngIf="status == '1'" class="color-000">审核通过</p>
+            <!--<button *ngIf="status == '1'" nz-button [disabled]="!haveData" class="fix-btn" (click)="goPayWay()">点击修改</button>-->
         </div>
     </nz-card>
     <nz-table [nzNoResult]="'没有数据'" [nzData]="dataList1" [nzShowPagination]="false">

@@ -12,9 +12,10 @@
       <nz-form-label nzSpan="5" nzRequired nzFor="yingyezz_name">营业执照名称</nz-form-label>
       <nz-form-control nzSpan="16">
         <nz-input-group nzCompact>
-          <input nz-input formControlName="yingyezz_name" placeholder="请输入营业执照名称">
+          <input nz-input formControlName="yingyezz_name" placeholder="请输入营业执照名称" (change)="changeYingyezzName()">
         </nz-input-group>
-        <nz-form-explain class="error-color" *ngIf="yingyezz_name.dirty && yingyezz_name.errors">请输入正确的营业执照名称</nz-form-explain>
+        <nz-form-explain class="error-color" *ngIf="yingyezz_name.dirty && yingyezz_name.errors">请输入正确的营业执照名称。</nz-form-explain>
+        <nz-form-explain style="color: #f5222d" class="error-color" *ngIf="yingyezz_name.dirty && ifShowBlankTips">营业执照名称不允许有空格。</nz-form-explain>
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
@@ -23,17 +24,18 @@
             <nz-input-group nzCompact>
                 <input nz-input formControlName="yingyezz_code" placeholder="请输入营业执照编码">
             </nz-input-group>
-            <nz-form-explain class="error-color" *ngIf="yingyezz_code.dirty && yingyezz_code.errors">请输入正确的营业执照编码</nz-form-explain>
+            <nz-form-explain class="error-color" *ngIf="yingyezz_code.dirty && yingyezz_code.errors" maxlength="15" minlength="4">请输入正确的营业执照编码，不允许有空格。</nz-form-explain>
         </nz-form-control>
     </nz-form-item>
     <nz-form-item>
         <nz-form-label nzSpan="5" nzRequired nzFor="shanghu_jc">商户简称</nz-form-label>
         <nz-form-control nzSpan="16">
             <nz-input-group nzCompact>
-                <input nz-input formControlName="shanghu_jc" placeholder="请输入商户简称">
+                <input nz-input formControlName="shanghu_jc" placeholder="请输入商户简称" (change)="changeShanghuJc()">
             </nz-input-group>
             <nz-form-explain class="error-color" *ngIf="shanghu_jc.dirty && shanghu_jc.errors">请输入商户简称</nz-form-explain>
             <nz-form-explain class="color-ccc">商户简称显示在支付结果页</nz-form-explain>
+            <nz-form-explain style="color: #f5222d" class="error-color errorTips" *ngIf="shanghu_jc.dirty && ifShanghuNameShowNum">4-15位汉字、数字、字母或符号，不能为纯数字。</nz-form-explain>
         </nz-form-control>
     </nz-form-item>
     <nz-form-item>
@@ -72,7 +74,7 @@
             </nz-input-group>
             <ng-container *ngIf="shenfz_number.dirty">
                 <nz-form-explain class="error-color" *ngIf="shenfz_number.errors?.required">请输入负责人身份证号码</nz-form-explain>
-                <nz-form-explain class="error-color" *ngIf="shenfz_number.errors?.pattern">请输入合法的身份证号码</nz-form-explain>
+                <nz-form-explain class="error-color" *ngIf="shenfz_number.errors?.pattern">请输入合法的身份证号码，有X的请大写</nz-form-explain>
             </ng-container>
         </nz-form-control>
     </nz-form-item>
