@@ -150,7 +150,7 @@ export class PayWayStep2Component implements OnInit {
         this.item = Object.assign(this.item, this.form.value);
 
         console.dir(this.item);
-        console.log(this.ifShanghuNameShowNum);
+        console.log(this.ifShowBlankTips);
         if(!this.ifShanghuNameShowNum && !this.ifShowBlankTips){
           ++this.item.step;
         }
