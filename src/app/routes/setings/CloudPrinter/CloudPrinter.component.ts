@@ -121,13 +121,10 @@ export class CloudPrinterComponent implements OnInit {
      * 选择是否有易联云帐号
      */
     onSelecthasAccountNo(){
-      console.log(this.form.value.account);
       this.account = this.form.value.account;
-      console.log(this.account);
     }
 
     submit() {
-
         for (const i in this.form.controls) {
             this.form.controls[i].markAsDirty();
             this.form.controls[i].updateValueAndValidity();
@@ -137,12 +134,12 @@ export class CloudPrinterComponent implements OnInit {
 
         this.storeId = this.form.value.selected_store;
         this.deviceName = this.form.value.device_name;
-        this.yunApiKey = this.form.value.yun_api_key;
+        this.yunApiKey = this.account == '0'? '5199aff5b41ff05c187156afcb44ee23c06ae6e7' : this.form.value.yun_api_key;
         this.yunDeviceId = this.form.value.yun_device_id;
         this.yunDeviceKey = this.form.value.yun_device_key;
         this.yunDeviceSimNo = this.form.value.yun_device_sim_no;
-        this.yunUserId = this.form.value.yun_user_id;
-        this.yunUsername = this.form.value.yun_username;
+        this.yunUserId = this.account == '0'? '6791' : this.form.value.yun_user_id;
+        this.yunUsername = this.account == '0'? 'juniuo' : this.form.value.yun_username;
 
         this.editPrint();
     }
@@ -162,7 +159,6 @@ export class CloudPrinterComponent implements OnInit {
     }
 
     /*======我是分界线=====*/
-
     //获取打印机列表
     getPrintList() {
         this.setingsService.getPrintList().subscribe(
