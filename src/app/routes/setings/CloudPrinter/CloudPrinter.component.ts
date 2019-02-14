@@ -33,6 +33,8 @@ export class CloudPrinterComponent implements OnInit {
     yunUserId: any; //用户ID
     yunUsername: any; //用户名
     printerDeviceId: any;
+    itemsAccounts: any[] = [{ name: '我没有易联云帐号', value: '0' },{ name: '我有易联云帐号', value: '1' }];
+    account: any = this.itemsAccounts[0].value;
 
     printList: any[] = [];
     moduleId: any;
@@ -97,6 +99,7 @@ export class CloudPrinterComponent implements OnInit {
                 yun_device_key: [this.yunDeviceKey, Validators.required],
                 yun_device_sim_no: [this.yunDeviceSimNo, []],
                 selected_store: [this.storeId, Validators.required],
+                account: [this.account, Validators.required]
             });
         }
         else {
@@ -109,11 +112,22 @@ export class CloudPrinterComponent implements OnInit {
                 yun_device_key: ['', Validators.required],
                 yun_device_sim_no: ['', []],
                 selected_store: ['', Validators.required],
+                account: [this.account, Validators.required]
             });
         }
     }
 
+    /**
+     * 选择是否有易联云帐号
+     */
+    onSelecthasAccountNo(){
+      console.log(this.form.value.account);
+      this.account = this.form.value.account;
+      console.log(this.account);
+    }
+
     submit() {
+
         for (const i in this.form.controls) {
             this.form.controls[i].markAsDirty();
             this.form.controls[i].updateValueAndValidity();
@@ -279,7 +293,7 @@ export class CloudPrinterComponent implements OnInit {
             moduleId: this.moduleId,
             timestamp: new Date().getTime(),
             allStore:false
-        }
+        };
         let that = this;
         this.setingsService.selectStores(data).subscribe(
             (res: any) => {
