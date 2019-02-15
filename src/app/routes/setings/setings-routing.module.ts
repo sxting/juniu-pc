@@ -14,6 +14,10 @@ import { SoftwareBuyRecordComponent } from "./software-buy-record/software-buy-r
 import { NameManageComponent } from "./name-manage/name-manage.component";
 import { KoubeiHXYDComponent } from './koubeiHXYD/koubeiHXYD.component';
 import { MeituanHXYDComponent } from './meituanHXYD/meituanHXYD.component';
+import { YXyingyongComponent } from './YXyingyong/YXyingyong.component';
+import { YXyindaoComponent } from './YXyindao/YXyindao.component';
+import { YXxuanzeComponent } from './YXxuanze/YXxuanze.component';
+
 const routes: Routes = [
   { path: 'administration', component: AdministrationComponent },
   { path: 'hardware/install', component: HardwareInstallComponent },
@@ -29,7 +33,10 @@ const routes: Routes = [
   { path: 'name/manage', component: NameManageComponent },
   { path: 'meituanHXYD', component: MeituanHXYDComponent },
   { path: 'koubeiHXYD', component: KoubeiHXYDComponent },
-
+  { path: 'YXyingyong', component: YXyingyongComponent },
+  { path: 'YXyindao', component: YXyindaoComponent },
+  { path: 'YXxuanze', component: YXxuanzeComponent },
+  
 ];
 
 @NgModule({

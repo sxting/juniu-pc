@@ -235,7 +235,7 @@ export class KanjiaJLComponent implements OnInit {
             platform: 'WECHAT_SP'
         }
 
-        this.wechatService.pinTuanOrderDetail(data).subscribe(
+        this.KanjiaService.pinTuanOrderDetail(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     this.pinTuanOrderDetailObj = res.data;
@@ -288,9 +288,8 @@ export class KanjiaJLComponent implements OnInit {
             startTime: this.startTime,
             endTime: this.endTime,
             orderNo: this.orderNo1,
-            groupStatus: this.status1,
+            orderStatus: this.status1,
             pageNo: this.pageIndex,
-            platform: 'WECHAT_SP',
             pageSize: this.pageSize
         }
         if (!data.startTime && !data.endTime) {
@@ -303,11 +302,11 @@ export class KanjiaJLComponent implements OnInit {
         if (!data.orderNo) {
             delete data.orderNo;
         }
-        if (!data.groupStatus) {
-            delete data.groupStatus;
+        if (!data.orderStatus) {
+            delete data.orderStatus;
         }
 
-        this.wechatService.orderList(data).subscribe(
+        this.KanjiaService.orderList(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     this.resArr = res.data.elements;

@@ -203,14 +203,14 @@ export class AddKanjiaComponent implements OnInit {
                         activityName: this.pinTuanName.value,//"活动名称"
                         activityNotices: buyerNotes,
                         activityPicColl: this.picIds2.split(','),//"活动图片集"
+                        joinLimitCount:-1,//"限购次数, 默认为-1"
+                        joinTimeLimit: this.timeLimit.value,//"砍价限时"
+                        joinTimeLimitUnit: "HOUR",//"限时时间单位"
                         activityRule: {
                             bargainCount: this.bargainCount.value,//"砍价次数，-1为没有砍价次数上限直到底价为止"
-                            buyLimitCount: 1,//"限购次数, 默认为1"
                             initiatorBargainCount: 1,//"发起者砍价次数，默认为1"
                             participantBargainCount: 1,//"参与者砍价次数，默认为1"
                             strategy: "LOW_PRICE_RANDOM",//"砍价策略"
-                            timeLimit: this.timeLimit.value,//"砍价限时"
-                            timeLimitUnit: "HOUR"//"限时时间单位"
                         },
                         storeIds: this.uniq(this.selectStoresIds.split(',')),//"门店"
                         voucherRule: {
@@ -227,8 +227,8 @@ export class AddKanjiaComponent implements OnInit {
                 if (!data.activityId) {
                     delete data.activityId;
                 }
-                if (!data.activityRule.timeLimit) {
-                    data.activityRule.timeLimit = 24;
+                if (!data.joinTimeLimit) {
+                    data.joinTimeLimit = 24;
                 }
                 if (!data.activityGmtEnd || !data.activityGmtStart) {
                     this.errorAlter('请选择活动日期');
@@ -846,10 +846,11 @@ export class AddKanjiaComponent implements OnInit {
         let year = date.getFullYear();
         let month = date.getMonth() + 1;
         let day = date.getDate();
-        return year + '-' + (month.toString().length > 1 ? month : ('0' + month)) + '-' + (day.toString().length > 1 ? day : ('0' + day));
-        // if (type === 'end') {
-        //     return year + '-' + (month.toString().length > 1 ? month : ('0' + month)) + '-' + (day.toString().length > 1 ? day : ('0' + day)) + ' 23:59:59';
-        // }
+        if (type === 'start') {
+            return year + '-' + (month.toString().length > 1 ? month : ('0' + month)) + '-' + (day.toString().length > 1 ? day : ('0' + day))+ ' 00:00:00';
+        }else if (type === 'end') {
+            return year + '-' + (month.toString().length > 1 ? month : ('0' + month)) + '-' + (day.toString().length > 1 ? day : ('0' + day)) + ' 23:59:59';
+        }
     }
     /**
     * 校验购买须知及其详细内容

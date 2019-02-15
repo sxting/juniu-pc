@@ -1,0 +1,51 @@
+<nz-card
+  style="overflow:hidden"
+  [nzBordered]="false"
+  [nzBodyStyle]="{
+    height: '100%',
+    overflow: 'hidden',
+    margin: '30px',
+    background: '#fff'
+  }"
+>
+  <div>您选择了：砍价营销；售价：1680元/年/店</div>
+  <div class="checkBox">
+    <div style="border-bottom: 1px solid rgb(233, 233, 233);padding-bottom:10px;">
+        请选择门店
+      <label
+        nz-checkbox
+        [(ngModel)]="allChecked"
+        (ngModelChange)="updateAllChecked()"
+        [nzIndeterminate]="indeterminate"
+        style="float:right;"
+      >
+        全选
+      </label>
+    </div>
+    <nz-checkbox-wrapper style="width: 100%;" (nzOnChange)="log($event)">
+      <div>
+        <div *ngFor="let item of checkOptionsOne" style="margin-top:10px;">
+          <label
+            nz-checkbox
+            [nzValue]="item.value"
+            [ngModel]="item.checked"
+            >{{ item.label }}</label
+          >
+        </div>
+      </div>
+    </nz-checkbox-wrapper>
+  </div>
+  已选择{{storeNum}}家门店，共需付xxxx元
+  <br />
+
+  <button class="buttons" nz-button nzType="primary" (click)="submit()" [nzLoading]="submitting" type="submit">立即支付</button>
+
+
+
+
+  <div class="bottom">
+      <div>付费须知</div>
+      <div>1.砍价营销活动的载体是微信小程序，所以购买前需先申请微信小程序并授权给桔牛。</div>
+      <div>2.为了不影响正常使用，请确保所有门店已购买标准版、营销版、美业版等任意一个系统版本</div>
+  </div>
+</nz-card>

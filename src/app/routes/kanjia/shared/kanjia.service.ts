@@ -22,7 +22,9 @@ export class KanjiaService {
     let apiUrl;
     if (status === '1') {
       apiUrl =
-        this.api + '/activity/merchant/editor/modify.json?activityType=BARGAIN&activityId='+Params.activityId;
+        this.api +
+        '/activity/merchant/editor/modify.json?activityType=BARGAIN&activityId=' +
+        Params.activityId;
     } else {
       apiUrl =
         this.api + '/activity/merchant/editor/create.json?activityType=BARGAIN';
@@ -38,20 +40,22 @@ export class KanjiaService {
   groupsDetail(Params?: any) {
     let apiUrl = this.api + '/activity/merchant/searcher/query.json';
     if (Params) {
-        let params = FunctionUtil.obectToURLSearchParams(Params);
-        return this.http.get(apiUrl, Params)
-            .map((response: Response) => response)
-            .catch(error => {
-                return Observable.throw(error);
-            });
+      let params = FunctionUtil.obectToURLSearchParams(Params);
+      return this.http
+        .get(apiUrl, Params)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
     } else {
-        return this.http.get(apiUrl)
-            .map((response: Response) => response)
-            .catch(error => {
-                return Observable.throw(error);
-            });
+      return this.http
+        .get(apiUrl)
+        .map((response: Response) => response)
+        .catch(error => {
+          return Observable.throw(error);
+        });
     }
-}
+  }
   //退款
   searcherBatchQuery(Params: any) {
     let apiUrl = this.api + '/activity/merchant/searcher/batchQuery.json';
@@ -97,4 +101,48 @@ export class KanjiaService {
         return Observable.throw(error);
       });
   }
+
+  //砍价效果列表
+  effectList(Params: any) {
+    let apiUrl = this.api + '/activity/merchant/bargain/effect/list.json';
+    let params = FunctionUtil.obectToURLSearchParams(Params);
+    return this.http
+      .get(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+  //拼团效果详情
+  effectDetail(Params: any) {
+    let apiUrl = this.api + '/activity/merchant/bargain/effect/detail.json';
+    let params = FunctionUtil.obectToURLSearchParams(Params);
+    return this.http
+      .get(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+  //砍价记录列表
+  orderList(Params: any) {
+    let apiUrl =  this.api + '/activity/merchant/bargain/record/list.json';
+    let params = FunctionUtil.obectToURLSearchParams(Params);
+    return this.http
+      .get(apiUrl, Params)
+      .map((response: Response) => response)
+      .catch(error => {
+        return Observable.throw(error);
+      });
+  }
+  //订单详情
+  pinTuanOrderDetail(Params: any) {
+    let apiUrl = this.api + '/activity/merchant/bargain/record/detail.json';
+    let params = FunctionUtil.obectToURLSearchParams(Params);
+    return this.http.get(apiUrl, Params)
+        .map((response: Response) => response)
+        .catch(error => {
+            return Observable.throw(error);
+        });
+}
 }

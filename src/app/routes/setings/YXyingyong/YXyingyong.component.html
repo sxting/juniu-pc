@@ -1,0 +1,37 @@
+
+
+  <nz-card  style="overflow:hidden" [nzBordered]="false" [nzBodyStyle]="{'height':'100%','overflow': 'hidden','margin':'30px','background':'#fff'}">
+    <nz-list [nzLoading]="loading" [nzDataSource]="tplArr" [nzRenderItem]="item" [nzGrid]="{gutter: 24, lg: 6, md: 12, sm: 24, xs: 24 }">
+        <ng-template #item let-item>
+          <nz-list-item>
+            <nz-card nzHoverable  style="width:100%;position: relative;padding:0" [nzBodyStyle]="{'padding':'0px'}" [nzActions]="[op1]">
+              <ng-template #op1>
+                <div (click)="shiyong(item)">立即购买</div>
+              </ng-template>
+              <nz-card-meta [nzAvatar]="nzAvatar" [nzTitle]="nzTitle" [nzDescription]="nzDescription" >
+
+          
+                <ng-template #nzDescription>
+                  <div class="kanjianBanner">
+                    <div class="kanjiaz"></div>
+                    <div class="kanjiaBar">
+                        <div>付费门店：10家</div>
+                        <div class="btn">购买门店</div>
+                      </div>
+                  </div>
+            
+                  <div class="main main2" style="margin-top: 20px;">
+                    <div class="l">砍价</div>
+                    <div class="r">300/店／年</div>
+                  </div>
+                  <div class="main" style="margin-bottom: 20px;">
+                      老带新利器，通过分享砍价的方式激活老用户同时拉新
+                  </div>
+                </ng-template>
+              </nz-card-meta>
+            </nz-card>
+          </nz-list-item>
+        </ng-template>
+      </nz-list>
+
+</nz-card>
