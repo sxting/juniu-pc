@@ -209,6 +209,8 @@ export class TouristComponent implements OnInit {
     this.changeType = e.index === 0 ? true : false;
     this.vipCardList = [];
     this.settleCardDTOList = [];
+    this.index = e.index;
+    this.xfCardList = undefined;
   }
   cardTypeChange(e: any) {
     this.cardTypeChangeIndex = e.index;

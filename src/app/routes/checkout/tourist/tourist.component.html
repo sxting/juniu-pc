@@ -4,7 +4,8 @@
   justify-content: space-between;">
     <nz-tabset (nzSelectChange)="change($event)" [nzSelectedIndex]="index">
       <nz-tab nzTitle="消费"></nz-tab>
-      <nz-tab nzTitle="售卡/充值"></nz-tab>
+      <nz-tab nzTitle="售卡"></nz-tab>
+      <nz-tab nzTitle="充值"></nz-tab>
     </nz-tabset>
     <!-- <jn-stores-infor [moduleId]="moduleId" [ifStoresAll]="false" [ifStoresAuth]="true" (storeIdOutput)="selectStoreInfo($event.storeId)"></jn-stores-infor> -->
 
@@ -20,7 +21,7 @@
   </div>
 
   <!-- 消费 -->
-  <nz-card *ngIf="changeType" [nzBordered]="false" [nzBodyStyle]="{'height':'100%'}" style="position: absolute;left: 0;top: 68px;right: 0;bottom: 0;min-height:460px;min-width:860px;">
+  <nz-card *ngIf="index ===0" [nzBordered]="false" [nzBodyStyle]="{'height':'100%'}" style="position: absolute;left: 0;top: 68px;right: 0;bottom: 0;min-height:460px;min-width:860px;">
     <nz-card style="background:#fff;" [nzBodyStyle]="{'height':'100%'}" class="{{renlian?'renlianTrue':'renlianFalse'}}">
       <div nz-row class="absoluteBox">
         <div nz-col class="absoluteLeft">
@@ -314,8 +315,219 @@
 
     </nz-card>
   </nz-card>
-  <!-- 售卡/充值 -->
-  <nz-card *ngIf="!changeType" [nzBordered]="false" [nzBodyStyle]="{'height':'100%'}" style="position: absolute;left: 0;top: 68px;right: 0;bottom: 0;min-height:460px;min-width:860px;">
+  <!-- 售卡 -->
+  <nz-card *ngIf="index ===1" [nzBordered]="false" [nzBodyStyle]="{'height':'100%'}" style="position: absolute;left: 0;top: 68px;right: 0;bottom: 0;min-height:460px;min-width:860px;">
+    <nz-card style="background:#fff;" [nzBodyStyle]="{'height':'100%'}" class="{{renlian?'renlianTrue':'renlianFalse'}}">
+      <div nz-row class="absoluteBox">
+        <div nz-col class="absoluteLeft">
+          <!-- <div class="shouyinTop">
+              <h3 class="flex-1 text-lg borderLeft">人脸识别</h3>
+              <div class="renlianBOX">
+
+              </div>
+            </div> -->
+          <div class="shouyinMiddle">
+            <!-- <nz-input-group nzSearch style="width:280px;margin-top:30px;" [nzSuffix]="suffixIconButton">
+              <input type="text" [(ngModel)]="vipsearch" nz-input placeholder="请输入手机号/姓名">
+            </nz-input-group>
+            <ng-template #suffixIconButton>
+              <button nz-button nzType="primary" (click)="searchMemberCard()" nzSearch>
+                查询会员
+              </button>
+            </ng-template> -->
+            <nz-input-group nzSearch style="width:280px;" [nzSuffix]="suffixIconButton1">
+              <input type="text" [(ngModel)]="vipsearch" *ngIf="hasAuth" (ngModelChange)="searchMemberCard($event)" nz-input placeholder="请输入手机号/姓名">
+              <input type="text" [(ngModel)]="vipsearch" *ngIf="!hasAuth" disabled nz-input placeholder="请输入手机号/姓名">
+            </nz-input-group>
+            <ng-template #suffixIconButton1>
+              <button nz-button nzType="primary" *ngIf="hasAuth" (click)="searchMemberCard()" nzSearch>
+                查询会员
+              </button>
+              <button nz-button nzType="primary" *ngIf="!hasAuth" disabled (click)="searchMemberCard()" nzSearch>
+                查询会员
+              </button>
+            </ng-template>
+            <div class="vipArrBox" *ngIf="vipDataBoolean">
+              <nz-radio-group [(ngModel)]="radioValue" style="display: block;" (ngModelChange)="vipDataRadio($event)">
+                <label nz-radio *ngFor="let item of vipData;let ind = index;" (click)="vipDataRadio(ind)" nzValue="{{ind}}">姓名：{{item.customer.customerName}} 电话：{{item.customer.phone}}</label>
+              </nz-radio-group>
+            </div>
+            <div class="kaitongVIP iconfont icon-iconfonticon02" (click)="kaitongVipFun(kaitongVip)">开通新会员</div>
+          </div>
+          <div class="shouyinBottom">
+            <div>
+              <h3 class="flex-1 text-lg borderLeft">开通新会员卡</h3>
+              <nz-tabset (nzSelectChange)="cardTypeChange($event)">
+                <nz-tab nzTitle="储值卡"></nz-tab>
+                <nz-tab nzTitle="折扣卡"></nz-tab>
+                <nz-tab nzTitle="计次卡"></nz-tab>
+                <nz-tab nzTitle="期限卡"></nz-tab>
+              </nz-tabset>
+              <div class="cardTypeListBox">
+                <div *ngFor="let item of cardTypeListArr?.list;let ind1 = index;" style="flex-wrap: wrap;display: flex;">
+                  <div *ngFor="let rule of item.rules;let ind2 = index;" class="{{rule.click?'click':''}}" (click)="cardPick(ind1,ind2)">
+                    <div class="TOP">
+                      <div class="ziBox">
+                        <div *ngIf="item.type === 'STORED'">储</div>
+                        <div *ngIf="item.type === 'REBATE'">折</div>
+                        <div *ngIf="item.type === 'METERING'">次</div>
+                        <div *ngIf="item.type === 'TIMES'">期</div>
+                      </div>
+                      <div>
+                        <p class="cardName">
+                          <span *ngIf="item.type === 'REBATE'">({{rule.rebate}}折)</span>{{item.cardConfigName}}</p>
+                        <p class="cardMoney cardMoneyP" style="font-size:14px;">
+                          <span>
+                            <span class="money1">¥{{rule.price / 100}}</span>
+                            <span>元</span>
+                          </span>
+                          <span *ngIf="item.type !== 'TIMES'">
+                            <span class="money1">{{item.type === 'METERING'?rule.balance:rule.balance / 100}}</span>
+                            <span *ngIf="item.type === 'REBATE'||item.type === 'STORED'">元</span>
+                            <span *ngIf="item.type === 'METERING'">次</span>
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                    <div class="icon-success iconfont" *ngIf="rule.click"></div>
+                    <div class="BOTTOM">
+                      <span *ngIf="rule.applyProductType === 'SERVICE'">限全部服务项目可用</span>
+                      <span *ngIf="rule.applyProductType === 'ALL'">限全部商品可用</span>
+                      <span style="display: inline-block;width: 90px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" *ngIf="rule.applyProductType === 'CUSTOMIZE'">{{rule.applyProductNames?'限'+rule.applyProductNames+'使用':'部分商品可用'}}</span>
+                      <span style="float:right;margin-right:10px;">有效期: {{rule.validate}}天</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div nz-col class="absoluteRight">
+          <div class="shouyinRight">
+            <div class="xfqingdan">
+              <h3 class="flex-1 text-lg borderLeft">消费清单</h3>
+              <div *ngIf="memberInfo" class="vipBar">
+                <div class="img {{memberInfo?.gender===2?'nv':'nan'}}"></div>
+                <div class="vipBarRight">
+                  <div>{{memberInfo?.customerName}}</div>
+                  <div>{{memberInfo?.phone}}
+                    <span class="icon-jiantou iconfont" (click)="vipXQ(VipXQ)">会员详情</span>
+                  </div>
+                </div>
+                <span (click)="vipXqFun()" class="close icon-tubiao06 iconfont "></span>
+              </div>
+              <div class="vipBar swxzVIP" *ngIf="!memberInfo">
+                <div class="icon-gerenxinxi iconfont"></div>
+                <div class="zwxx">暂无会员信息</div>
+              </div>
+              <div *ngIf="xfCardList" class="xfBox shoukaMiddle">
+                <div class="huise" *ngIf="xfCardList">
+                  <div class="xfTop">
+                    <div class="xfLeft icon-jinzhi iconfont" (click)="xfCloseCard(ind)"></div>
+                    <div style="width:310px;" (click)="xfCheckCard(xfCardList.title)">
+                      <div class="xfRight">{{xyVip ?xfCardList.cardName : xfCardList.cardConfigName}}</div>
+                      <div class="xfxiala icon-xiala1 iconfont"></div>
+                    </div>
+                  </div>
+                  <div style="height:auto !important;overflow: hidden;padding-bottom: 10px;">
+                    <div nz-col nzXs="24" nz-row nzType="flex" class="shopTypeBox">
+                      <div nz-col nzSpan="12">
+                        <div nz-col nzSpan="10" class="textAline">{{selectedValue1Name}}</div>
+                        <div nz-col nzSpan="12" class="colorRed">
+                          <nz-select style="width: 100px;" [(ngModel)]="selectedValue1" nzAllowClear nzPlaceHolder="选择员工">
+                            <nz-option *ngFor="let item of staffGroupData" nzValue="{{item.staffId}}" nzLabel="{{item.staffName}}"></nz-option>
+                          </nz-select>
+                        </div>
+                      </div>
+                      <div nz-col nzSpan="10">
+
+                      </div>
+                    </div>
+                    <div nz-col nzXs="24" nz-row nzType="flex" class="shopTypeBox">
+                      <div nz-col nzSpan="12">
+                        <div nz-col nzSpan="10" class="textAline">{{selectedValue2Name}}</div>
+                        <div nz-col nzSpan="12" class="colorRed">
+                          <nz-select style="width: 100px;" [(ngModel)]="selectedValue2" nzAllowClear nzPlaceHolder="选择员工">
+                            <nz-option *ngFor="let item of staffGroupData" nzValue="{{item.staffId}}" nzLabel="{{item.staffName}}"></nz-option>
+                          </nz-select>
+                        </div>
+                      </div>
+                      <div nz-col nzSpan="10">
+
+                      </div>
+                    </div>
+                    <div nz-col nzXs="24" nz-row nzType="flex" class="shopTypeBox">
+                      <div nz-col nzSpan="12" *ngIf="xfCardList.type !== 'STORED'">
+                        <div nz-col nzSpan="10" class="textAline" *ngIf="xfCardList.CardTypeS === 'chongzhi'">充值</div>
+                        <div nz-col nzSpan="10" class="textAline" *ngIf="xfCardList.CardTypeS === 'kaika'">售价</div>
+                        <div nz-col nzSpan="12" *ngIf="!xyVip">
+                          ¥{{xfCardList.rules[xfCardList.ruleIndex].price/100}}
+                        </div>
+                        <!-- <div nz-col nzSpan="12" *ngIf="xfCardList.type === 'STORED'&&xyVip">
+                          ¥{{xfCardList.rules[xfCardList.ruleIndex].price/100}}
+                        </div> -->
+                        <div nz-col nzSpan="12" *ngIf="(xfCardList.type === 'REBATE')&&xyVip">
+                          <input nz-input style="width:200px" id="name" name="name" type="numeber" maxlength="10" [(ngModel)]="REBATEValue" (ngModelChange)="REBATEValueFun($event)"
+                            placeholder="充值金额">
+                        </div>
+                      </div>
+                      <div nz-col nzSpan="24" *ngIf="xfCardList.CardTypeS === 'chongzhi'&&xfCardList.type === 'STORED'">
+                        <div nz-col nzSpan="5" class="textAline" *ngIf="xfCardList.CardTypeS === 'chongzhi'&&xfCardList.type === 'STORED'">充值</div>
+                        <div nz-col nzSpan="6" *ngIf="(xfCardList.type === 'STORED')&&xyVip">
+                          <input nz-input style="width:100px" id="name" name="name" type="numeber" maxlength="10" [(ngModel)]="STOREDValue" (ngModelChange)="STOREDValueFun($event)"
+                            placeholder="充值金额">
+                        </div>
+
+                        <div nz-col nzSpan="6" class="textAline" *ngIf="xfCardList.CardTypeS === 'chongzhi'&&xfCardList.type === 'STORED'">赠送</div>
+                        <div nz-col nzSpan="6" *ngIf="(xfCardList.type === 'STORED')&&xyVip">
+                          <input nz-input style="width:100px" id="name" name="name" type="numeber" maxlength="10" [(ngModel)]="STOREDextraMoney" (ngModelChange)="STOREDextraMoneyFun($event)"
+                            placeholder="赠送金额">
+                        </div>
+                      </div>
+                      <!-- <div nz-col nzSpan="10">
+                        <div nz-col nzSpan="16" class="textAline">储 值</div>
+                        <div nz-col nzSpan="6" class="colorRed">¥500</div>
+                      </div> -->
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div *ngIf="!xfCardList" class="xfBox shoukaMiddle">
+                <div class="kongbaiBox kongbaiBox2">
+                  <div class="iconfont icon-zanwuyinhangqia"></div>
+                  <div class="ziti">选择会员卡到消费清单</div>
+                </div>
+              </div>
+            </div>
+            <div class="xiaoji shoukaBottom">
+              <nz-form-item class="formItem ">
+                <div class="lineHeight50 formItemBorder">
+                  <nz-form-label style="text-align:left;" nzSpan="6">是否抹零</nz-form-label>
+                  <nz-form-control nzSpan="18">
+                    <nz-switch style="float:left;" (ngModelChange)="moling()" [ngModel]="isVerb2" nzCheckedChildren="是" nzUnCheckedChildren="否"></nz-switch>
+                    <span style="float:right;">收款：{{isVerb2?isVerbVipCardmoney:vipCardmoney}}元</span>
+                  </nz-form-control>
+                </div>
+              </nz-form-item>
+              <nz-form-item class="formItem ">
+                <div class="lineHeight50">
+                  <div style="text-align:right;">
+                    <button class="buttons" nz-button nzType="primary" type="submit" (click)="jiesuan(jiesuanAlert)">结算</button>
+                  </div>
+                </div>
+              </nz-form-item>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </nz-card>
+  </nz-card>
+  <!-- 充值 -->
+  
+  <nz-card *ngIf="index ===2" [nzBordered]="false" [nzBodyStyle]="{'height':'100%'}" style="position: absolute;left: 0;top: 68px;right: 0;bottom: 0;min-height:460px;min-width:860px;">
     <nz-card style="background:#fff;" [nzBodyStyle]="{'height':'100%'}" class="{{renlian?'renlianTrue':'renlianFalse'}}">
       <div nz-row class="absoluteBox">
         <div nz-col class="absoluteLeft">
@@ -371,50 +583,7 @@
                   <!-- <div class="chongzhi" *ngIf="" >充值</div> -->
                 </div>
               </div>
-              <h3 class="flex-1 text-lg borderLeft">开通新会员卡</h3>
-              <nz-tabset (nzSelectChange)="cardTypeChange($event)">
-                <nz-tab nzTitle="储值卡"></nz-tab>
-                <nz-tab nzTitle="折扣卡"></nz-tab>
-                <nz-tab nzTitle="计次卡"></nz-tab>
-                <nz-tab nzTitle="期限卡"></nz-tab>
-              </nz-tabset>
-              <div class="cardTypeListBox">
-                <div *ngFor="let item of cardTypeListArr?.list;let ind1 = index;" style="flex-wrap: wrap;display: flex;">
-                  <div *ngFor="let rule of item.rules;let ind2 = index;" class="{{rule.click?'click':''}}" (click)="cardPick(ind1,ind2)">
-                    <div class="TOP">
-                      <div class="ziBox">
-                        <div *ngIf="item.type === 'STORED'">储</div>
-                        <div *ngIf="item.type === 'REBATE'">折</div>
-                        <div *ngIf="item.type === 'METERING'">次</div>
-                        <div *ngIf="item.type === 'TIMES'">期</div>
-                      </div>
-                      <div>
-                        <p class="cardName">
-                          <span *ngIf="item.type === 'REBATE'">({{rule.rebate}}折)</span>{{item.cardConfigName}}</p>
-                        <p class="cardMoney cardMoneyP" style="font-size:14px;">
-                          <span>
-                            <span class="money1">¥{{rule.price / 100}}</span>
-                            <span>元</span>
-                          </span>
-                          <span *ngIf="item.type !== 'TIMES'">
-                            <span class="money1">{{item.type === 'METERING'?rule.balance:rule.balance / 100}}</span>
-                            <span *ngIf="item.type === 'REBATE'||item.type === 'STORED'">元</span>
-                            <span *ngIf="item.type === 'METERING'">次</span>
-                          </span>
-                        </p>
-                      </div>
-                    </div>
-                    <div class="icon-success iconfont" *ngIf="rule.click"></div>
-                    <div class="BOTTOM">
-                      <span *ngIf="rule.applyProductType === 'SERVICE'">限全部服务项目可用</span>
-                      <span *ngIf="rule.applyProductType === 'ALL'">限全部商品可用</span>
-                      <span style="display: inline-block;width: 90px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" *ngIf="rule.applyProductType === 'CUSTOMIZE'">{{rule.applyProductNames?'限'+rule.applyProductNames+'使用':'部分商品可用'}}</span>
-                      <span style="float:right;margin-right:10px;">有效期: {{rule.validate}}天</span>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
+           
             </div>
           </div>
         </div>
