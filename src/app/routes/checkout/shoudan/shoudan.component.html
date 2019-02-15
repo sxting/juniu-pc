@@ -19,25 +19,25 @@
 
         <nz-table [nzNoResult]="'没有数据'" [nzShowPagination]="false" [nzData]="shopyinList" #nzTable>
             <thead nz-thead>
-                    <tr>
-                    <th>收银时间</th>
-                    <th>流水号</th>
-                    <th>渠道</th>
-                    <th>金额</th>
-                    <th>操作</th>
-                    </tr>
+              <tr>
+                <th>收银时间</th>
+                <th>流水号</th>
+                <th>渠道</th>
+                <th>金额</th>
+                <th>操作</th>
+              </tr>
             </thead>
             <tbody nz-tbody>
                 <tr nz-tbody-tr *ngFor="let item of shopyinList">
-                    <td>{{item.juniuoModel.dateCreated}}</td>
-                <td>{{item.orderId}}</td>
-                <td>{{item.payTypeName||'-'}}</td>
-                <td>{{item.paidMoney/100}}</td>
-                <td>
-                <span class="button" *ngIf="item.orderType === 'ORDER'&&item.status !== 'REFUND'&&item.status !== 'CLOSE'" (click)="refund(item)">撤销</span>
-                <span *ngIf="item.orderType === 'ORDER'&&item.status === 'REFUND'">已退款</span>
-                <span  *ngIf="item.orderType === 'ORDER'&&item.status === 'CLOSE'">已取消</span>
-                </td>
+                  <td>{{item.juniuoModel.dateCreated}}</td>
+                  <td>{{item.orderId}}</td>
+                  <td>{{item.payTypeName||'-'}}</td>
+                  <td>{{item.paidMoney/100}}</td>
+                  <td>
+                    <span class="button" style="color: #FF6600" *ngIf="item.orderType === 'ORDER'&&item.status !== 'REFUND'&&item.status !== 'CLOSE'" (click)="refund(item)">撤销</span>
+                    <span *ngIf="item.orderType === 'ORDER'&&item.status === 'REFUND'">已退款</span>
+                    <span  *ngIf="item.orderType === 'ORDER'&&item.status === 'CLOSE'">已取消</span>
+                  </td>
                 </tr>
             </tbody>
         </nz-table>

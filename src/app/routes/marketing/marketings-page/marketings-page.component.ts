@@ -104,40 +104,41 @@ export class MarketingsPageComponent implements OnInit {
     lastBuyTime: any = 0; //最后一次消费时间
     limitLastTime: boolean = false; //是否限制最后一次消费时间
     calculateMemberNum: any = 0; //发送短信数量
+    recordcalculateMemberNum: any = 0;//记录发送短信的数量
     needSendKey: any = '';
     memberType: any = 'ALL';
 
-  name: string = '';
-  errorAlert: string = '';
-  title: string = '';
-  leftTitle: string = '';
-  rightTitle: string = '';
-  dataList: any[] = []; // 处理过的全部数据列表
+    name: string = '';
+    errorAlert: string = '';
+    title: string = '';
+    leftTitle: string = '';
+    rightTitle: string = '';
+    dataList: any[] = []; // 处理过的全部数据列表
 
-    disabledDate = (current: Date): boolean => {
-        // return differenceInDays(current, new Date(new Date().getTime() + 24*60*60*1000)) < 0;
-        return differenceInDays(current, new Date(new Date().getTime())) < 0;
-    };
+      disabledDate = (current: Date): boolean => {
+          // return differenceInDays(current, new Date(new Date().getTime() + 24*60*60*1000)) < 0;
+          return differenceInDays(current, new Date(new Date().getTime())) < 0;
+      };
 
-  labelList: any[] = [];
-  labelIdsArr: any = [];
-  labelsArr: any = [];
-  labelMemberNum: any = 0;
+    labelList: any[] = [];
+    labelIdsArr: any = [];
+    labelsArr: any = [];
+    labelMemberNum: any = 0;
 
-  selectIds: string = '';
-  selectNames: string = '';
-  selectNum: any = 0;
-  selectIdsArr: any = [];
-  dataIdsArr: any = []; //查询出的符合条件的会员ids；
+    selectIds: string = '';
+    selectNames: string = '';
+    selectNum: any = 0;
+    selectIdsArr: any = [];
+    dataIdsArr: any = []; //查询出的符合条件的会员ids；
 
-  memberKey: any = '';
+    memberKey: any = '';
 
-    //编辑
-    marketingId: any = '';
-    marketingStatus: any = '';
-    targetNames: any = [];
+      //编辑
+      marketingId: any = '';
+      marketingStatus: any = '';
+      targetNames: any = [];
 
-  moduleId: any = '';
+    moduleId: any = '';
 
     constructor(
         private route: ActivatedRoute,
@@ -516,6 +517,7 @@ export class MarketingsPageComponent implements OnInit {
         if(res.success) {
           this.needSendKey = res.data.needSendKey;
           this.calculateMemberNum = res.data.count;
+          this.recordcalculateMemberNum = res.data.count;//记录发送短信的数量
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',
@@ -551,6 +553,10 @@ export class MarketingsPageComponent implements OnInit {
     //短信内容框输入值改变
     smsInputChange() {
         this.smsInputValue = this.form.value.sms_content;
+        console.log(this.smsInputValue.length);
+        console.log(Math.ceil(this.smsInputValue.length / 70));
+        let smsNum = Math.ceil(this.smsInputValue.length / 70);
+        this.calculateMemberNum = smsNum == 0 ? this.recordcalculateMemberNum : this.recordcalculateMemberNum * smsNum;
     }
 
     //点击短信内容标签
@@ -1036,6 +1042,7 @@ export class MarketingsPageComponent implements OnInit {
                     this.marketingStatus = data.marketingStatus;
                     this.smsInputValue = data.sendSmsContent;
                     this.calculateMemberNum = data.needSendKeyCount;
+                    this.recordcalculateMemberNum = data.needSendKeyCount;//记录发送短信的数量
                     this.selectNum = data.targetNames ? data.targetNames.length : 0;
                     this.targetNames = data.targetNames;
                     this.selectIds = data.targetIds;
@@ -1213,7 +1220,10 @@ export class MarketingsPageComponent implements OnInit {
         this.marketingService.getCalculateMemberNum(data).subscribe(
             (res: any) => {
                 if(res.success) {
-                    this.calculateMemberNum = res.data.count;
+                    let smsNum = Math.ceil(this.smsInputValue.length / 70);
+                    console.log(smsNum);
+                    this.recordcalculateMemberNum = res.data.count;//记录发送短信的数量
+                    this.calculateMemberNum = smsNum == 0? res.data.count : parseInt(res.data.count) * smsNum;
                     this.needSendKey = res.data.needSendKey;
                 } else {
                     this.modalSrv.error({
@@ -1592,6 +1602,7 @@ export class MarketingsPageComponent implements OnInit {
     getCalculateMemberNumber(e: any) {
         if(e) {
             this.calculateMemberNum = e.calculateMemberNum;
+            this.recordcalculateMemberNum = e.calculateMemberNum;
         }
     }
     getNeedSendKey(e: any) {

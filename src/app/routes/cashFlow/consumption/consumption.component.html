@@ -98,13 +98,18 @@
     </thead>
     <tbody nz-tbody class="ui-grid-tbody">
       <tr nz-tbody-tr *ngFor="let item of reportOrderList; let i = index">
-        <td style="color: #368ff7">{{item.juniuoModel.dateCreated}}</td>
+        <td style="color: #368ff7">
+          <p>{{item.juniuoModel.dateCreated}}</p>
+          <p style="color: rgba(0, 0, 0, 0.65)">{{item.orderId}}</p>
+        </td>
         <td>
           <div *ngIf="item.bizType === 'FIT'">散客</div>
           <div *ngIf="item.bizType !== 'FIT'">{{item.customerName}}</div>
-          <div *ngIf="item.bizType !== 'FIT'">{{item.phone}}</div> 
+          <div *ngIf="item.bizType !== 'FIT'">{{item.phone}}</div>
         </td>
-        <td>{{item.statusName || '-'}}<br />
+        <td>
+          <span *ngIf="item.orderType != 'REFUND'">{{item.statusName || '-'}}</span>
+          <br />
           <span *ngIf="item.orderType === 'REFUND'" style="color:red;">退款单</span>
         </td>
         <td>{{item.paidMoney/100 || 0 }}

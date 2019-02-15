@@ -31,7 +31,7 @@ export class SoftBuyStep2Component implements OnInit {
     {title: '门店名称', index: 'branchName'},
     {title: '现有版本', index: 'currentVersion'},
     {title: '剩余天数', index: 'daysRemaining'},
-    {title: '抵用金额', index: 'amountOffsetData'},
+    {title: '现有版本可抵扣金额', index: 'amountOffsetData'},
     {
       title: '实付金额',
       index: 'realAmountData',
