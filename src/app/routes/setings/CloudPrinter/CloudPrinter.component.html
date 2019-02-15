@@ -36,7 +36,7 @@
           <nz-form-label nzXs="24" nzSm="5" nzFor="yun_username">易联云后台账号</nz-form-label>
           <nz-form-control nzXs="24" nzSm="12" nzMd="10">
             <nz-radio-group formControlName="account" style="width: 390px;">
-              <label nz-radio *ngFor="let item of itemsAccounts" [nzValue]="item.value" (click)="onSelecthasAccountNo(item.value)">{{item.name}}</label>
+              <label nz-radio *ngFor="let item of itemsAccounts" [nzValue]="item.value" (click)="onSelecthasAccountNo()">{{item.name}}</label>
             </nz-radio-group>
           </nz-form-control>
         </nz-form-item>

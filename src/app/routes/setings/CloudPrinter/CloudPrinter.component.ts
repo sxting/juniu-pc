@@ -122,9 +122,51 @@ export class CloudPrinterComponent implements OnInit {
      */
     onSelecthasAccountNo(){
       this.account = this.form.value.account;
+
+      // 这边需要判断是什么状态，没有账号的话就赋值 没有的话就需要填写的数据
+
+      let yunUsername = this.form.controls.yun_username.value;
+      let yunUserId = this.form.controls.yun_user_id.value;
+      let yunApiKey = this.form.controls.yun_api_key.value;
+      let deviceName = this.form.controls.device_name.value;
+      let yunDeviceId = this.form.controls.yun_device_id.value;
+      let yunDeviceKey = this.form.controls.yunDeviceKey.value;
+      let yunDeviceSimNo = this.form.controls.yun_device_sim_no.value;
+      let storeId = this.form.controls.selected_store.value;
+
+      // if( this.account == '0' ){//没有帐号
+      //   console.log('哈哈');
+      //   this.form = this.fb.group({
+      //     yun_username: ['juniuo', Validators.required],
+      //     yun_user_id: ['6791', Validators.required],
+      //     yun_api_key: ['5199aff5b41ff05c187156afcb44ee23c06ae6e7', Validators.required],
+      //     device_name: [deviceName, Validators.required],
+      //     yun_device_id: [yunDeviceId, Validators.required],
+      //     yun_device_key: [yunDeviceKey, Validators.required],
+      //     yun_device_sim_no: [yunDeviceSimNo, []],
+      //     selected_store: [storeId, Validators.required],
+      //     account: [this.account, Validators.required]
+      //   });
+      //
+      // }else{
+      //   console.log('lala');
+      //   this.form = this.fb.group({
+      //     yun_username: [yunUsername, Validators.required],
+      //     yun_user_id: [yunUserId, Validators.required],
+      //     yun_api_key: [yunApiKey, Validators.required],
+      //     device_name: [deviceName, Validators.required],
+      //     yun_device_id: [yunDeviceId, Validators.required],
+      //     yun_device_key: [yunDeviceKey, Validators.required],
+      //     yun_device_sim_no: [yunDeviceSimNo, []],
+      //     selected_store: [storeId, Validators.required],
+      //     account: [this.account, Validators.required]
+      //   });
+      // }
     }
 
     submit() {
+        console.log(this.form.controls);
+
         for (const i in this.form.controls) {
             this.form.controls[i].markAsDirty();
             this.form.controls[i].updateValueAndValidity();
@@ -134,13 +176,12 @@ export class CloudPrinterComponent implements OnInit {
 
         this.storeId = this.form.value.selected_store;
         this.deviceName = this.form.value.device_name;
-        this.yunApiKey = this.account == '0'? '5199aff5b41ff05c187156afcb44ee23c06ae6e7' : this.form.value.yun_api_key;
+        this.yunApiKey = this.form.value.yun_api_key;
         this.yunDeviceId = this.form.value.yun_device_id;
         this.yunDeviceKey = this.form.value.yun_device_key;
         this.yunDeviceSimNo = this.form.value.yun_device_sim_no;
-        this.yunUserId = this.account == '0'? '6791' : this.form.value.yun_user_id;
-        this.yunUsername = this.account == '0'? 'juniuo' : this.form.value.yun_username;
-
+        this.yunUserId = this.form.value.yun_user_id;
+        this.yunUsername = this.form.value.yun_username;
         this.editPrint();
     }
 
@@ -158,7 +199,8 @@ export class CloudPrinterComponent implements OnInit {
         });
     }
 
-    /*======我是分界线=====*/
+    /*========================   我是分界线   ==================*/
+
     //获取打印机列表
     getPrintList() {
         this.setingsService.getPrintList().subscribe(
