@@ -33,6 +33,7 @@ export class PayWayStep2Component implements OnInit {
     shanghuAddress: any;
     ifShanghuNameShowNum: boolean = false;//查看是否商户简称为纯数字
     ifShowBlankTips: boolean = false;//查找是否有空格
+    ifCantHaveBlankTips: boolean = false;//查找商户简称是否有空格
 
     constructor(
         public item: TransferService,
@@ -118,6 +119,8 @@ export class PayWayStep2Component implements OnInit {
           this.ifShanghuNameShowNum = false;
         }
       }
+      this.ifCantHaveBlankTips = this.form.controls.shanghu_jc.value.indexOf(" ") == -1? false : true;
+      console.log(this.ifCantHaveBlankTips);
     }
 
   changeYingyezzName(){
@@ -150,8 +153,8 @@ export class PayWayStep2Component implements OnInit {
         this.item = Object.assign(this.item, this.form.value);
 
         console.dir(this.item);
-        console.log(this.ifShowBlankTips);
-        if(!this.ifShanghuNameShowNum && !this.ifShowBlankTips){
+        console.log(this.ifCantHaveBlankTips);
+        if(!this.ifShanghuNameShowNum && !this.ifShowBlankTips && !ifCantHaveBlankTips){
           ++this.item.step;
         }
     }

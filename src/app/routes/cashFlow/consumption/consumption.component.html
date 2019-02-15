@@ -108,9 +108,8 @@
           <div *ngIf="item.bizType !== 'FIT'">{{item.phone}}</div>
         </td>
         <td>
-          <span *ngIf="item.orderType != 'REFUND'">{{item.statusName || '-'}}</span>
-          <br />
-          <span *ngIf="item.orderType === 'REFUND'" style="color:red;">退款单</span>
+          <p *ngIf="item.orderType != 'REFUND'">{{item.statusName || '-'}}</p>
+          <p *ngIf="item.orderType === 'REFUND'" style="color:red;">退款单</p>
         </td>
         <td>{{item.paidMoney/100 || 0 }}
           <br/>
