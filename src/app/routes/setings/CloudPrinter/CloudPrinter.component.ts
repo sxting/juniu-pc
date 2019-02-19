@@ -89,6 +89,10 @@ export class CloudPrinterComponent implements OnInit {
     get selected_store() { return this.form.controls['selected_store']; }
 
     formInit() {
+        console.log(this.account);
+        let yun_username = this.account == '0'? 'juniuo' : '';
+        let yun_user_id = this.account == '0'? '6791' : '';
+        let yun_api_key = this.account == '0'? '5199aff5b41ff05c187156afcb44ee23c06ae6e7' : '';
         if (this.printerDeviceId) {
             this.form = this.fb.group({
                 yun_username: [this.yunUsername, Validators.required],
@@ -104,9 +108,9 @@ export class CloudPrinterComponent implements OnInit {
         }
         else {
             this.form = this.fb.group({
-                yun_username: ['', Validators.required],
-                yun_user_id: ['', Validators.required],
-                yun_api_key: ['', Validators.required],
+                yun_username: [yun_username, Validators.required],
+                yun_user_id: [yun_user_id, Validators.required],
+                yun_api_key: [yun_api_key, Validators.required],
                 device_name: ['', Validators.required],
                 yun_device_id: ['', Validators.required],
                 yun_device_key: ['', Validators.required],
@@ -121,47 +125,43 @@ export class CloudPrinterComponent implements OnInit {
      * 选择是否有易联云帐号
      */
     onSelecthasAccountNo(){
-      this.account = this.form.value.account;
-
+      this.account = this.form.controls.account.value;
       // 这边需要判断是什么状态，没有账号的话就赋值 没有的话就需要填写的数据
-
       let yunUsername = this.form.controls.yun_username.value;
       let yunUserId = this.form.controls.yun_user_id.value;
       let yunApiKey = this.form.controls.yun_api_key.value;
       let deviceName = this.form.controls.device_name.value;
       let yunDeviceId = this.form.controls.yun_device_id.value;
-      let yunDeviceKey = this.form.controls.yunDeviceKey.value;
+      let yunDeviceKey = this.form.controls.yun_device_key.value;
       let yunDeviceSimNo = this.form.controls.yun_device_sim_no.value;
       let storeId = this.form.controls.selected_store.value;
-
-      // if( this.account == '0' ){//没有帐号
-      //   console.log('哈哈');
-      //   this.form = this.fb.group({
-      //     yun_username: ['juniuo', Validators.required],
-      //     yun_user_id: ['6791', Validators.required],
-      //     yun_api_key: ['5199aff5b41ff05c187156afcb44ee23c06ae6e7', Validators.required],
-      //     device_name: [deviceName, Validators.required],
-      //     yun_device_id: [yunDeviceId, Validators.required],
-      //     yun_device_key: [yunDeviceKey, Validators.required],
-      //     yun_device_sim_no: [yunDeviceSimNo, []],
-      //     selected_store: [storeId, Validators.required],
-      //     account: [this.account, Validators.required]
-      //   });
-      //
-      // }else{
-      //   console.log('lala');
-      //   this.form = this.fb.group({
-      //     yun_username: [yunUsername, Validators.required],
-      //     yun_user_id: [yunUserId, Validators.required],
-      //     yun_api_key: [yunApiKey, Validators.required],
-      //     device_name: [deviceName, Validators.required],
-      //     yun_device_id: [yunDeviceId, Validators.required],
-      //     yun_device_key: [yunDeviceKey, Validators.required],
-      //     yun_device_sim_no: [yunDeviceSimNo, []],
-      //     selected_store: [storeId, Validators.required],
-      //     account: [this.account, Validators.required]
-      //   });
-      // }
+      if( this.account == '0' ){//没有帐号
+        console.log('哈哈');
+        this.form = this.fb.group({
+          yun_username: ['juniuo', Validators.required],
+          yun_user_id: ['6791', Validators.required],
+          yun_api_key: ['5199aff5b41ff05c187156afcb44ee23c06ae6e7', Validators.required],
+          device_name: [deviceName, Validators.required],
+          yun_device_id: [yunDeviceId, Validators.required],
+          yun_device_key: [yunDeviceKey, Validators.required],
+          yun_device_sim_no: [yunDeviceSimNo, []],
+          selected_store: [storeId, Validators.required],
+          account: [this.account, Validators.required]
+        });
+      }else{
+        console.log('lala');
+        this.form = this.fb.group({
+          yun_username: ['', Validators.required],
+          yun_user_id: ['', Validators.required],
+          yun_api_key: ['', Validators.required],
+          device_name: [deviceName, Validators.required],
+          yun_device_id: [yunDeviceId, Validators.required],
+          yun_device_key: [yunDeviceKey, Validators.required],
+          yun_device_sim_no: [yunDeviceSimNo, []],
+          selected_store: [storeId, Validators.required],
+          account: [this.account, Validators.required]
+        });
+      }
     }
 
     submit() {
@@ -239,6 +239,11 @@ export class CloudPrinterComponent implements OnInit {
                     this.yunDeviceSimNo = res.data.yunDeviceSimNo;
                     this.yunUserId = res.data.yunUserId;
                     this.yunUsername = res.data.yunUsername;
+                    if(this.yunUsername == 'juniuo' && this.yunUserId == '6791' && this.yunApiKey == '5199aff5b41ff05c187156afcb44ee23c06ae6e7'){
+                      this.account = '0';
+                    }else{
+                      this.account = '1';
+                    }
                     this.formInit();
                 } else {
                     this.modalSrv.error({
