@@ -35,8 +35,12 @@ export class CloudPrinterComponent implements OnInit {
     printerDeviceId: any;
     itemsAccounts: any[] = [{ name: '我没有易联云帐号', value: '0' },{ name: '我有易联云帐号', value: '1' }];
     account: any = this.itemsAccounts[0].value;
+    recordYunUsername: string = '';//记录
+    recordYunUserId: string = '';
+    recordYunApiKey: string = '';
 
-    printList: any[] = [];
+
+  printList: any[] = [];
     moduleId: any;
     constructor(
         private localStorageService: LocalStorageService,
@@ -127,14 +131,16 @@ export class CloudPrinterComponent implements OnInit {
     onSelecthasAccountNo(){
       this.account = this.form.controls.account.value;
       // 这边需要判断是什么状态，没有账号的话就赋值 没有的话就需要填写的数据
-      let yunUsername = this.form.controls.yun_username.value;
-      let yunUserId = this.form.controls.yun_user_id.value;
-      let yunApiKey = this.form.controls.yun_api_key.value;
+      let yunUsername = this.printerDeviceId? this.recordYunUsername : '';
+      let yunUserId = this.printerDeviceId? this.recordYunUserId : '';
+      let yunApiKey = this.printerDeviceId? this.recordYunApiKey : '';
+
       let deviceName = this.form.controls.device_name.value;
       let yunDeviceId = this.form.controls.yun_device_id.value;
       let yunDeviceKey = this.form.controls.yun_device_key.value;
       let yunDeviceSimNo = this.form.controls.yun_device_sim_no.value;
       let storeId = this.form.controls.selected_store.value;
+
       if( this.account == '0' ){//没有帐号
         console.log('哈哈');
         this.form = this.fb.group({
@@ -151,9 +157,9 @@ export class CloudPrinterComponent implements OnInit {
       }else{
         console.log('lala');
         this.form = this.fb.group({
-          yun_username: ['', Validators.required],
-          yun_user_id: ['', Validators.required],
-          yun_api_key: ['', Validators.required],
+          yun_username: [yunUsername, Validators.required],
+          yun_user_id: [yunUserId, Validators.required],
+          yun_api_key: [yunApiKey, Validators.required],
           device_name: [deviceName, Validators.required],
           yun_device_id: [yunDeviceId, Validators.required],
           yun_device_key: [yunDeviceKey, Validators.required],
@@ -239,6 +245,10 @@ export class CloudPrinterComponent implements OnInit {
                     this.yunDeviceSimNo = res.data.yunDeviceSimNo;
                     this.yunUserId = res.data.yunUserId;
                     this.yunUsername = res.data.yunUsername;
+                    this.recordYunUsername =  res.data.yunUsername;
+                    this.recordYunUserId =  res.data.yunUserId;
+                    this.recordYunApiKey =  res.data.yunApiKey;
+
                     if(this.yunUsername == 'juniuo' && this.yunUserId == '6791' && this.yunApiKey == '5199aff5b41ff05c187156afcb44ee23c06ae6e7'){
                       this.account = '0';
                     }else{
