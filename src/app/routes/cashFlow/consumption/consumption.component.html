@@ -168,7 +168,7 @@
           <td class="">退款单号</td>
           <td class="">{{reportOrderDetail? reportOrderDetail.refundOrderId : '-'}}</td>
           <td class="">退款时间</td>
-          <td class="trans-status">{{reportOrderDetail.juniuoModel.dateCreated? reportOrderDetail.juniuoModel.dateCreated : '-'}}</td>
+          <td class="trans-status">{{reportOrderDetail.refundOrder? reportOrderDetail.refundOrder.payDate : '-'}}</td>
         </tr>
       </table>
     </div>

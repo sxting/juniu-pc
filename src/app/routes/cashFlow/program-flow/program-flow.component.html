@@ -144,25 +144,25 @@
     <div class="orderpage_detail_list detail_list_bot">
       <table *ngIf="orderItemDetailInfor">
         <tr class="ui-grid-row">
-          <td class="" *ngIf="orderItemDetailInfor.status != 'REFUND'">订单编号</td>
-          <td class="" *ngIf="orderItemDetailInfor.status === 'REFUND'">退款单号</td><!--退款-->
+          <td class="" *ngIf="orderItemDetailInfor.orderType === 'ORDER'">订单编号</td>
+          <td class="" *ngIf="orderItemDetailInfor.status === 'REFUND'&&orderItemDetailInfor.orderType === 'REFUND'">退款单号</td><!--退款-->
           <td class="">{{orderItemDetailInfor.orderNo}}</td>
-          <td class="" *ngIf="orderItemDetailInfor.status != 'REFUND'">下单时间</td>
-          <td class="trans-status" style="width: 150px;" *ngIf="orderItemDetailInfor.status != 'REFUND'">{{orderItemDetailInfor.createTime}}</td>
-          <td class="" *ngIf="orderItemDetailInfor.status === 'REFUND'">退款时间</td><!--退款-->
-          <td class="" *ngIf="orderItemDetailInfor.status === 'REFUND'">{{orderItemDetailInfor.payTime}}</td>
+          <td class="" *ngIf="orderItemDetailInfor.orderType === 'ORDER'">下单时间</td>
+          <td class="trans-status" style="width: 150px;" *ngIf="orderItemDetailInfor.orderType === 'ORDER'">{{orderItemDetailInfor.createTime}}</td>
+          <td class="" *ngIf="orderItemDetailInfor.status === 'REFUND'&&orderItemDetailInfor.orderType === 'REFUND'">退款时间</td><!--退款-->
+          <td class="" *ngIf="orderItemDetailInfor.status === 'REFUND'&&orderItemDetailInfor.orderType === 'REFUND'">{{orderItemDetailInfor.payTime}}</td>
           <td class="">订单状态</td>
           <td class="trans-status">{{orderTypeListText}}</td>
         </tr>
         <tr class="ui-grid-row">
-          <td class="" *ngIf="orderItemDetailInfor.status === 'REFUND'">原订单号</td><!--退款-->
-          <td class="" *ngIf="orderItemDetailInfor.status === 'REFUND'">{{orderItemDetailInfor.originOrderNo? orderItemDetailInfor.originOrderNo : '-'}}</td>
-          <td class="" *ngIf="orderItemDetailInfor.status === 'REFUND'">退款门店</td><!--退款-->
-          <td class="" *ngIf="orderItemDetailInfor.status === 'REFUND'">{{orderItemDetailInfor.storeName}}</td>
-          <td class="" *ngIf="orderItemDetailInfor.status != 'REFUND'">交易号</td>
-          <td class="" *ngIf="orderItemDetailInfor.status != 'REFUND'">{{orderItemDetailInfor.transactionNo}}</td>
-          <td class="" *ngIf="orderItemDetailInfor.status != 'REFUND'">收款门店</td>
-          <td class="" *ngIf="orderItemDetailInfor.status != 'REFUND'">{{orderItemDetailInfor.storeName}}</td>
+          <td class="" *ngIf="orderItemDetailInfor.orderType === 'REFUND'">原订单号</td><!--退款-->
+          <td class="" *ngIf="orderItemDetailInfor.orderType === 'REFUND'">{{orderItemDetailInfor.originOrderNo? orderItemDetailInfor.originOrderNo : '-'}}</td>
+          <td class="" *ngIf="orderItemDetailInfor.orderType === 'REFUND'">退款门店</td><!--退款-->
+          <td class="" *ngIf="orderItemDetailInfor.orderType === 'REFUND'">{{orderItemDetailInfor.storeName}}</td>
+          <td class="" *ngIf="orderItemDetailInfor.orderType === 'ORDER'">交易号</td>
+          <td class="" *ngIf="orderItemDetailInfor.orderType === 'ORDER'">{{orderItemDetailInfor.transactionNo}}</td>
+          <td class="" *ngIf="orderItemDetailInfor.orderType === 'ORDER'">收款门店</td>
+          <td class="" *ngIf="orderItemDetailInfor.orderType === 'ORDER'">{{orderItemDetailInfor.storeName}}</td>
           <td class="">支付方式</td>
           <td style="width: 100px">{{orderItemDetailInfor.payType}}</td>
         </tr>
