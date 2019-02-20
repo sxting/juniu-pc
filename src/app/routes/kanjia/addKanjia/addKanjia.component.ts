@@ -559,8 +559,8 @@ export class AddKanjiaComponent implements OnInit {
            
                     let inventory = res.data.activityItem.itemStock ? res.data.activityItem.itemStock : null;
                     let time = [];
-                    this._startTime = new Date(res.data.realGmtStart);
-                    this._endTime = new Date(res.data.realGmtEnd);
+                    this._startTime = new Date(res.data.activityGmtStart);
+                    this._endTime = new Date(res.data.activityGmtEnd);
                     time.push(this._startTime);
                     time.push(this._endTime);
                     this.canMofidy = this.status === '1'|| this.status === '2'? true : false;
@@ -577,9 +577,16 @@ export class AddKanjiaComponent implements OnInit {
                     this.startTime = res.data.activityStartDate;
                     this.endTime = res.data.activityEndDate;
 
-                    let pictureDetails, pictureDetails2;
-                    if (res.data.activityPicColl) {
-                        pictureDetails = res.data.activityPicColl.length > 0 ? res.data.activityPicColl : '';
+                    let pictureDetails = [], pictureDetails2= [];
+                    if (res.data.picColl) {
+                        pictureDetails.push(res.data.cover);
+                        // pictureDetails = res.data.picColl.length > 0 ? res.data.picColl : '';
+                        if(res.data.picColl.length>0){
+                            res.data.picColl.forEach(element => {
+                                pictureDetails.push(element);
+                            });
+                        }
+
                     }
                     self.pictureDetails2 = pictureDetails;
                     console.log(pictureDetails)
