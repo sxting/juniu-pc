@@ -1,7 +1,7 @@
 
 
   <nz-card  style="overflow:hidden" [nzBordered]="false" [nzBodyStyle]="{'height':'100%','overflow': 'hidden','margin':'30px','background':'#fff'}">
-    <nz-list [nzLoading]="loading" [nzDataSource]="tplArr" [nzRenderItem]="item" [nzGrid]="{gutter: 24, lg: 6, md: 12, sm: 24, xs: 24 }">
+    <nz-list [nzLoading]="loading" [nzDataSource]="dataList" [nzRenderItem]="item" [nzGrid]="{gutter: 24, lg: 6, md: 12, sm: 24, xs: 24 }">
         <ng-template #item let-item>
           <nz-list-item>
             <nz-card nzHoverable  style="width:100%;position: relative;padding:0" [nzBodyStyle]="{'padding':'0px'}" [nzActions]="[op1]">
@@ -14,18 +14,18 @@
                 <ng-template #nzDescription>
                   <div class="kanjianBanner">
                     <div class="kanjiaz"></div>
-                    <div class="kanjiaBar">
-                        <div>付费门店：10家</div>
-                        <div class="btn">购买门店</div>
+                    <div class="kanjiaBar"  >
+                        <div *ngIf="item.usedStoreCount&&item.usedStoreCount>0">付费门店：{{item.usedStoreCount}}家</div>
+                        <div class="btn" (click)="goumaiFun(goumaiAlert,item.packageId)">购买记录</div>
                       </div>
                   </div>
             
                   <div class="main main2" style="margin-top: 20px;">
-                    <div class="l">砍价</div>
-                    <div class="r">300/店／年</div>
+                    <div class="l">{{item.packageName}}</div>
+                    <div class="r">{{item.price}} /店／年</div>
                   </div>
                   <div class="main" style="margin-bottom: 20px;">
-                      老带新利器，通过分享砍价的方式激活老用户同时拉新
+                      {{item.descriptions[0]}}
                   </div>
                 </ng-template>
               </nz-card-meta>
@@ -35,3 +35,26 @@
       </nz-list>
 
 </nz-card>
+
+<ng-template #goumaiAlert>
+  <nz-table [nzNoResult]="'没有数据'" [nzShowPagination]="false" [nzData]="goumaiList">
+    <thead>
+      <tr>
+        <th>购买时间</th>
+        <th>购买门店</th>
+        <th>金额</th>
+        <th>有效期</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of goumaiList;let ind = index;">
+        <td>{{item.juniuoModel.dateCreated}}</td>
+        <td>{{item.orderId}}</td>
+        <td>{{item.bizTypeName}}</td>
+        <td>{{item.payTypeName}}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+
+</ng-template>
