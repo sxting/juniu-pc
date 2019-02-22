@@ -74,7 +74,7 @@ export class KanjiaXGComponent implements OnInit {
                         })
                         this.resData = res.data.elements;
                     }
-                    this.countTotal = res.data.totalSize;
+                    this.countTotal = res.data.totalCount;
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',

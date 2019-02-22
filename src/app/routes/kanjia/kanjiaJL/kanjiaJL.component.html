@@ -45,7 +45,7 @@
                         <tr *ngFor="let item of resArr;let ind = index;">
                             <td>{{item.orderTime}}</td>
                             <td>{{item.activityName}}</td>
-                            <td>{{item.orderStatus}}</td>
+                            <td>{{item.orderStatusName}}</td>
                             <td>{{item.participantCount}}</td>
                             <td>
                                 <span class="buttons" (click)="chakanXQ(chakanxiangqing,item.orderNo)">查看详情</span>
@@ -72,7 +72,7 @@
                 <td class="">砍价活动</td>
                 <td class="" style="width:350px;">{{pinTuanOrderDetailObj?.activityName}}</td>
                 <td class="">砍价状态</td>
-                <td class="trans-status" style="width:350px;">{{pinTuanOrderDetailObj?.orderStatus==='JOINING'?'拼团中':pinTuanOrderDetailObj?.orderStatus==='FINISH'?'拼团成功':'拼团失败'}}</td>
+                <td class="trans-status" style="width:350px;">{{pinTuanOrderDetailObj?.orderStatus==='BARGAINING'?'拼团中':pinTuanOrderDetailObj?.orderStatus==='BARGAIN_SUCCESS'?'拼团成功':'拼团失败'}}</td>
             </tr>
             <tr>
                 <td class="">发起砍价</td>
@@ -106,17 +106,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let item of hexiaoXQarr">
-                                    <td>{{item.orderNo}}</td>
-                                    <td>{{item.orderTime}}</td>
-                                    <td>{{item.paymentStatus}}</td>
-                                    <td>{{item.settleStatus}}</td>
-                                    <td >{{item.settleCode}}</td>
-                                    <td>{{item.settleTime}}</td>
-                                    <td>{{item.settleStoreName}}</td>
+                                <tr>
+                                    <td>{{pinTuanOrderDetailObj.orderNo}}</td>
+                                    <td>{{pinTuanOrderDetailObj.orderTime}}</td>
+                                    <td>{{pinTuanOrderDetailObj.paymentStatus}}</td>
+                                    <td>{{pinTuanOrderDetailObj.settleStatus}}</td>
+                                    <td >{{pinTuanOrderDetailObj.settleCode}}</td>
+                                    <td>{{pinTuanOrderDetailObj.settleTime}}</td>
+                                    <td>{{pinTuanOrderDetailObj.settleStoreName}}</td>
                                     <td>
-                                        <span (click)="pintuanRefundHttp(item.orderNo)" *ngIf="item.enableRefund" class="buttons">退款</span>
-                                        <span  *ngIf="!item.enableRefund" class="buttons2">退款</span>
+                                        <span (click)="pintuanRefundHttp(pinTuanOrderDetailObj.orderNo)" *ngIf="pinTuanOrderDetailObj.enableRefund" class="buttons">退款</span>
+                                        <span  *ngIf="!pinTuanOrderDetailObj.enableRefund" class="buttons2">退款</span>
                                     </td>
                                 </tr>
                             </tbody>

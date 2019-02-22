@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import {SetingsService} from "../shared/setings.service";
 import {NzModalService} from "ng-zorro-antd";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-YXyingyong',
@@ -16,7 +17,8 @@ export class YXyingyongComponent implements OnInit {
   goumaiArr = [];
   constructor(
     private setingsService: SetingsService,
-    private modalSrv: NzModalService,
+        private router: Router,
+        private modalSrv: NzModalService,
   ) { }
 
 
@@ -46,7 +48,12 @@ export class YXyingyongComponent implements OnInit {
       }
     )
   }
-
+  shiyong(item){
+    this.router.navigate(['/setings/YXyindao',{price:item.price,packageId:item.packageId}]);
+  }
+  faqikanjia(){
+    this.router.navigate(['/kanjia/kanjiaList']);
+  }
   getPurchaseRecordFun(packageId,tpl){
     let data = {
       packageId: packageId,
@@ -56,7 +63,19 @@ export class YXyingyongComponent implements OnInit {
     this.setingsService.getPurchaseRecord(data).subscribe(
       (res: any) => {
         if(res.success) {
-          this.goumaiArr = res.data.items;
+          let arr = []
+          res.data.items.forEach(item => {
+            item.storeMapper.forEach(element => {
+              let obj = {};
+              obj['storeName'] = element.storeName;
+              obj['storeId'] = element.storeId;
+              obj['paymentTime'] = item.paymentTime;
+              obj['amount'] = item.amount / item.storeCount;
+              arr.push(obj)
+            });
+          });
+          this.goumaiArr = arr;
+          
           this.modalSrv.create({
             nzTitle: '购买记录',
             nzContent: tpl,

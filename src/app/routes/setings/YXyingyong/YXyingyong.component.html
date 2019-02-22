@@ -4,9 +4,12 @@
     <nz-list [nzLoading]="loading" [nzDataSource]="dataList" [nzRenderItem]="item" [nzGrid]="{gutter: 24, lg: 6, md: 12, sm: 24, xs: 24 }">
         <ng-template #item let-item>
           <nz-list-item>
-            <nz-card nzHoverable  style="width:100%;position: relative;padding:0" [nzBodyStyle]="{'padding':'0px'}" [nzActions]="[op1]">
+            <nz-card nzHoverable  style="width:100%;position: relative;padding:0" [nzBodyStyle]="{'padding':'0px'}" [nzActions]="item.usedStoreCount&&item.usedStoreCount>0?[op1,op2]:[op1]">
               <ng-template #op1>
                 <div (click)="shiyong(item)">立即购买</div>
+              </ng-template>
+              <ng-template #op2>
+                <div (click)="faqikanjia()">发起砍价</div>
               </ng-template>
               <nz-card-meta [nzAvatar]="nzAvatar" [nzTitle]="nzTitle" [nzDescription]="nzDescription" >
 
@@ -37,7 +40,7 @@
 </nz-card>
 
 <ng-template #goumaiAlert>
-  <nz-table [nzNoResult]="'没有数据'" [nzShowPagination]="false" [nzData]="goumaiList">
+  <nz-table [nzNoResult]="'没有数据'" [nzShowPagination]="false" [nzData]="goumaiArr">
     <thead>
       <tr>
         <th>购买时间</th>
@@ -48,11 +51,11 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of goumaiList;let ind = index;">
-        <td>{{item.juniuoModel.dateCreated}}</td>
-        <td>{{item.orderId}}</td>
-        <td>{{item.bizTypeName}}</td>
-        <td>{{item.payTypeName}}</td>
+      <tr *ngFor="let item of goumaiArr;let ind = index;">
+        <td>{{item.paymentTime}}</td>
+        <td>{{item.storeName}}</td>
+        <td>{{item.amount}}</td>
+        <td>365</td>
       </tr>
     </tbody>
   </nz-table>

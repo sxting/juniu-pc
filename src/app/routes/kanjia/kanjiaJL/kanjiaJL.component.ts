@@ -108,13 +108,13 @@ export class KanjiaJLComponent implements OnInit {
             this.status1 = '';
         }
         if (statusFlag === 1) {
-            this.status1 = 'FINISH';
+            this.status1 = 'BARGAIN_SUCCESS';
         }
         if (statusFlag === 2) {
-            this.status1 = 'JOINING';
+            this.status1 = 'BARGAINING';
         }
         if (statusFlag === 3) {
-            this.status1 = 'CANCLE';
+            this.status1 = 'BARGAIN_FAIL';
         }
         this.pageIndex = 1;
         this.orderListHttp();
@@ -158,7 +158,7 @@ export class KanjiaJLComponent implements OnInit {
         this.tkstatus = status;
         // this.ptxx = true;
         this.modalSrv.create({
-            nzTitle: '拼团信息',
+            nzTitle: '砍价信息',
             nzContent: tpl,
             nzWidth: '750px',
             nzOnOk: () => {
@@ -231,45 +231,13 @@ export class KanjiaJLComponent implements OnInit {
             }
         });
         let data = {
-            groupNo: orderNo,
-            platform: 'WECHAT_SP'
+            orderNo: orderNo
         }
 
         this.KanjiaService.pinTuanOrderDetail(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     this.pinTuanOrderDetailObj = res.data;
-                    this.hexiaoXQarr = res.data.vouchers;
-                    let shangpinNum = 0;
-                    let hexiaoNum = 0;
-                    this.hexiaoXQarr.forEach(function (i: any) {
-                        // if (i.status === 'PRE_PAYMENT') {
-                        //   i.statusName = '未支付'
-                        // }
-                        if (i.orderStatus === 'PAID') {
-                            i.statusName = '已支付'
-                        }
-                        if (i.orderStatus === 'CANCEL') {
-                            i.statusName = '支付取消'
-                        }
-                        if (i.orderStatus === 'PAYMENT_TIMEOUT') {
-                            i.statusName = '支付超时'
-                        }
-                        if (i.settleStatus === 'VALID') {
-                            i.statusName2 = '未使用'
-                        }
-                        if (i.settleStatus === 'SETTLE') {
-                            i.statusName2 = '已核销'
-                        }
-                        if (i.settleStatus === 'REFUND') {
-                            i.statusName2 = '已退款'
-                        }
-                        if (i.settleStatus === 'EXPIRE_REFUND') {
-                            i.statusName2 = '过期自动退款'
-                        }
-                    })
-                    this.pinTuanOrderDetailObj.hexiaoNum = hexiaoNum;
-                    this.pinTuanOrderDetailObj.shangpinNum = this.hexiaoXQarr.length;
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
@@ -310,7 +278,13 @@ export class KanjiaJLComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     this.resArr = res.data.elements;
-                    this.countTotal = res.data.totalSize;
+                    this.resArr.forEach(element => {
+                        if(element.orderStatus === 'BARGAIN_SUCCESS') element.orderStatusName = '砍价成功';
+                        if(element.orderStatus === 'BARGAINING') element.orderStatusName = '砍价中';
+                        if(element.orderStatus === 'BARGAIN_FAIL') element.orderStatusName = '砍价失败';
+                        
+                    });
+                    this.countTotal = res.data.totalCount;
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
