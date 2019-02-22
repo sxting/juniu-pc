@@ -198,7 +198,7 @@
         <textarea nz-input formControlName="sms_content" maxlength="300" placeholder="请输入短信内容，不输入内容则默认不发送短信通知，最多输入300字" value="{{smsInputValue}}"
                   (change)="smsInputChange()"></textarea>
         <nz-form-explain [class.dis-none]="paramsId == '07' || paramsId == '08' || paramsId == '09'">
-          共需发送{{calculateMemberNum}}条短信 (每超过70字就多发1条短信)
+          共需发送{{calculateMemberNum}}条短信 (每超过70字多发1条短信)
         </nz-form-explain>
         <nz-form-explain>
           点击标签即可插入相应系统字段:

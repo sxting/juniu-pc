@@ -41,7 +41,7 @@
         </nz-col>
         <nz-col nzMd="8" nzSm="24" style="overflow: hidden;height: 56.5px;">
           <nz-form-item>
-            <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [storeId]="storeId" 
+            <jn-stores-infor [nzXs]="7" [moduleId]="moduleId" [storeId]="storeId"
                              (storeListPush)="storeListPush($event)" (storeIdOutput)="getStoreId($event)"></jn-stores-infor>
           </nz-form-item>
         </nz-col>
@@ -104,7 +104,10 @@
       </thead>
       <tbody nz-tbody class="ui-grid-tbody">
       <tr nz-tbody-tr *ngFor="let item of orderListInfor; let i = index">
-        <td *ngIf="activeIndex != 3" style="color: #368ff7">{{item.payTime}}</td>
+        <td *ngIf="activeIndex != 3" style="color: #368ff7">
+          {{item.payTime}}
+          <p style="color: #333;">{{item.orderNo}}</p>
+        </td>
         <td *ngIf="activeIndex === 3" style="color: #368ff7">{{item.usedDate | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
         <td *ngIf="activeIndex === 1">
           <p>{{item.customerName? item.customerName : '-'}}</p>
@@ -211,7 +214,7 @@
           <td>{{totalNum}}</td>
           <td class="text-right">{{totalMoney}}</td>
         </tr>
-    
+
         <tr nz-tbody-tr *ngIf="orderItemDetailInforList && (activeIndex === 2 || detailSource=='WXPT')">
           <td colspan="2" style="color: #000">总计</td>
           <td class="text-right">{{totalMoneyTwo}}</td>

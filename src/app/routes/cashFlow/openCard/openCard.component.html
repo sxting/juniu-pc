@@ -62,7 +62,7 @@
         <nz-form-item>
           <nz-form-label nzFor="phone">搜 索</nz-form-label>
           <nz-form-control>
-            <input nz-input name="orderNo" [(ngModel)]="orderName" placeholder="请输入项目名称" id="orderNo">
+            <input nz-input name="orderNo" [(ngModel)]="orderName" placeholder="请输入项目名称" id="orderName">
           </nz-form-control>
         </nz-form-item>
       </nz-col>
@@ -70,7 +70,7 @@
         <nz-form-item>
           <nz-form-label nzFor="phone">搜 索</nz-form-label>
           <nz-form-control>
-            <input nz-input name="orderNo" [(ngModel)]="phone" placeholder="请输入会员手机号/姓名" id="orderNo">
+            <input nz-input name="orderNo" [(ngModel)]="phone" placeholder="请输入会员手机号/姓名" id="phone">
           </nz-form-control>
         </nz-form-item>
       </nz-col>
@@ -96,14 +96,17 @@
     </thead>
     <tbody nz-tbody class="ui-grid-tbody">
       <tr nz-tbody-tr *ngFor="let item of reportOrderList; let i = index">
-        <td style="color: #368ff7">{{item.juniuoModel.dateCreated}}</td>
+        <td style="color: #368ff7">
+          <p>{{item.juniuoModel.dateCreated}}</p>
+          <p style="color: #333333">{{item.orderId}}</p>
+        </td>
         <td>{{(item.customerName +'/'+item.phone) || '-'}}</td>
-        <td>{{item.statusName || '-'}}
-            <br />
+        <td>
+            <span *ngIf="item.orderType != 'REFUND'">{{item.statusName || '-'}}</span>
             <span *ngIf="item.orderType === 'REFUND'" style="color:red;">退款单</span>
         </td>
         <td>{{item.bizTypeName || '-'}}</td>
-        
+
         <td>{{item.paidMoney/100}}</td>
         <td>{{(item.paidMoney+item.extraMoney)/100}}</td>
 
