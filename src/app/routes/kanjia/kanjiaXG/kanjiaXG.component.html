@@ -21,12 +21,12 @@
                         <tbody>
                             <tr *ngFor="let item of resData">
                                 <td>{{item.activityName}}</td>
-                                <td>{{item.openedGroupCount}}</td>
-                                <td>{{item.finishGroupCount}}</td>
+                                <td>{{item.launchCount}}</td>
+                                <td>{{item.paymentCount}}</td>
                                 <td>{{item.chentuanlv.toFixed(2)}}%</td>
-                                <td>{{item.buyCount}}</td>
-                                <td>{{item.settleAmount}}</td>
-                                <td>{{item.hexiaolv.toFixed(2)}}%</td>
+                                <td>{{item.settleCount}}</td>
+                                <td>{{item.hexiaolv.toFixed(2) }}</td>
+                                <td>{{item.totalAmount}}%</td>
                                 <td>
                                     <span class="buttons" (click)="chakan(xiaoguotu,item.activityId)">查看详情</span>
                                     <!-- <span class="buttons" (click)="chakan(item.pinTuanId)">导出Excel</span> -->
@@ -66,16 +66,16 @@
                 <div>
                     <div class="member-home-bottom-t">
                         <div class="member-home-t-t member-home-t-t2"></div>
-                        <div class="member-home-t-b">今日团单数(件)</div>
+                        <div class="member-home-t-b">今日砍价数</div>
                     </div>
                     <div class="member-home-bottom-b">
                         <div class="member-home-b-l">
                             <div class="member-home-b-l-t member-home-t-t"></div>
-                            <div class="member-home-b-l-b member-home-t-b member-home-t-b-color">{{xiaoguoRes?.todayGroupCount || 0}}</div>
+                            <div class="member-home-b-l-b member-home-t-b member-home-t-b-color">{{xiaoguoRes?.todayBargainCount || 0}}</div>
                         </div>
                         <div class="member-home-b-r">
                             <div class="member-home-b-l-t member-home-t-t"></div>
-                            <div class="member-home-b-l-b member-home-t-b">总团单数(件)：{{xiaoguoRes?.totalGroupCount || 0}}</div>
+                            <div class="member-home-b-l-b member-home-t-b">总砍价数(件)：{{xiaoguoRes?.totalBargainCount || 0}}</div>
                         </div>
                     </div>
                 </div>
@@ -126,7 +126,7 @@
                         </div>
                         <div style="width:33%;height:100%;text-align:center;">
                             <div id="echart_second" class="{{!empty?'echartShow':''}}" style="width:330px;height:310px;"></div>
-                            <div>团单成功率</div>
+                            <div>砍价数</div>
                         </div>
                         <div style="width:33%;height:100%;text-align:center;">
                             <div id="echart_third" class="{{!empty?'echartShow':''}}" style="width:330px;height:310px;"></div>

@@ -93,11 +93,11 @@ export class KanjiaXGComponent implements OnInit {
             (res: any) => {
                 if (res.success) {
                     this.xiaoguoRes = res.data;
-                    this.xiaoguoRes.hexiaolv = this.xiaoguoRes.todayGroupCount === 0 ? 0 : ((this.xiaoguoRes.todaySettleCount / this.xiaoguoRes.todayGroupCount).toFixed(4));
+                    this.xiaoguoRes.hexiaolv = this.xiaoguoRes.totalBargainCount === 0 ? 0 : ((this.xiaoguoRes.todaySettleCount / this.xiaoguoRes.totalBargainCount).toFixed(4));
                     this.xiaoguoRes.hexiaolv = this.xiaoguoRes.hexiaolv * 100;
-                    this.Echart(res.data.amountView, 'echart_first', '收益金额', '#333');
-                    this.Echart(res.data.groupView, 'echart_second', '团单成功率', '#333');
-                    this.Echart(res.data.settleView, 'echart_third', '核销量', '#333');
+                    this.Echart(res.data.settleAmountChart, 'echart_first', '收益金额', '#333');
+                    this.Echart(res.data.bargainCountChart, 'echart_second', '砍价数', '#333');
+                    this.Echart(res.data.settleCountChart, 'echart_third', '核销量', '#333');
                 } else {
                     this.modalSrv.error({
                         nzTitle: '温馨提示',
