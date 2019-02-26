@@ -15,6 +15,7 @@ export class YXyingyongComponent implements OnInit {
   storeId = '';
   goumaiList= [];
   goumaiArr = [];
+  loading;
   constructor(
     private setingsService: SetingsService,
         private router: Router,
