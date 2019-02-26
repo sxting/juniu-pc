@@ -68,7 +68,7 @@ export class KanjiaXGComponent implements OnInit {
                     if (res.data.elements) {
                         res.data.elements.forEach(function (i: any) {
                             i.hexiaolv = i.paymentCount === 0 ? 0 : ((i.settleCount / i.paymentCount).toFixed(4));
-                            i.chentuanlv = i.paymentCount === 0 ? 0 : ((i.paymentCount / i.launchCount).toFixed(4));
+                            i.chentuanlv = i.paymentCount === 0 ? 0 : ((i.paymentCount / i.bargainSuccessCount).toFixed(4));
                             i.hexiaolv = i.hexiaolv * 100;
                             i.chentuanlv = i.chentuanlv * 100;
                         })
