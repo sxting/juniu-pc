@@ -27,6 +27,9 @@ import { SoftwareBuyRecordComponent } from "./software-buy-record/software-buy-r
 import { NameManageComponent } from "./name-manage/name-manage.component";
 import { KoubeiHXYDComponent } from './koubeiHXYD/koubeiHXYD.component';
 import { MeituanHXYDComponent } from './meituanHXYD/meituanHXYD.component';
+import { YXyingyongComponent } from './YXyingyong/YXyingyong.component';
+import { YXyindaoComponent } from './YXyindao/YXyindao.component';
+import { YXxuanzeComponent } from './YXxuanze/YXxuanze.component';
 
 const COMPONENT_NOROUNT = [
     PayWayStep1Component,
@@ -39,7 +42,10 @@ const COMPONENT_NOROUNT = [
     SoftBuyStep3Component,
     SoftBuyStep4Component,
     KoubeiHXYDComponent,
-    MeituanHXYDComponent
+    MeituanHXYDComponent,
+    YXyingyongComponent,
+    YXyindaoComponent,
+    YXxuanzeComponent
 ];
 
 @NgModule({

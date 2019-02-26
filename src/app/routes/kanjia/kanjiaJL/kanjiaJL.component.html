@@ -1,0 +1,125 @@
+<page-header></page-header>
+<div class="">
+    <div class="existing-main">
+
+        <ul class="btns_switch clearfix" *ngIf="!switchExcelBtns">
+            <li [class.btns_active]="statusFlag == 0" (click)="onStatusClick(0)">全部记录</li>
+            <li [class.btns_active]="statusFlag == 1" (click)="onStatusClick(1)">砍价成功</li>
+            <li [class.btns_active]="statusFlag == 2" (click)="onStatusClick(2)">砍价中</li>
+            <li [class.btns_active]="statusFlag == 3" (click)="onStatusClick(3)">砍价失败</li>
+            <!-- <div class="hexiaoduizhang" (click)="checkingKoubeiProductList()">核销对账</div> -->
+        </ul>
+        <div *ngIf="!switchExcelBtns">
+            <div class="member-top-middle">
+                <li class="fl" style="margin-right:15px">
+                    <div class="fr" style="position:relative;">
+                        <span class="mr10 mr">活动名称</span>
+                        <input type="text" [(ngModel)]="pinTuanName" style="width:342px" placeholder="请输入活动名称" />
+                        <span class="icon-sou iconfont" (click)="searchName('name')"></span>
+                    </div>
+                </li>
+
+                <li class="fl">
+                    <span class="mr10 fl title" style="margin-right:15px">砍价日期</span>
+                    <nz-range-picker [(ngModel)]="dateRange" (ngModelChange)="onChange($event)" nzShowTime></nz-range-picker>
+                </li>
+
+                <div class="fr" style="position:relative;margin-top:10px;clear: both;float: left;">
+                    <span class="mr10 mr">订单编号</span>
+                    <input type="text" [(ngModel)]="orderNo1" style="width:342px" placeholder="请输入订单号" />
+                    <span class="icon-sou iconfont" (click)="searchName('id')"></span>
+                </div>
+            </div>
+            <div class="existing-table" style="margin-top:60px;">
+                <table class="existingGroups-table">
+                    <thead>
+                        <tr>
+                            <td>发起砍价日期</td>
+                            <td>活动名称</td>
+                            <td>砍价状态</td>
+                            <td>参与砍价人数</td>
+                            <td>操作</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of resArr;let ind = index;">
+                            <td>{{item.orderTime}}</td>
+                            <td>{{item.activityName}}</td>
+                            <td>{{item.orderStatusName}}</td>
+                            <td>{{item.participantCount}}</td>
+                            <td>
+                                <span class="buttons" (click)="chakanXQ(chakanxiangqing,item.orderNo)">查看详情</span>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="nzPaginationBox">
+                <nz-pagination class="nzPagination" [nzTotal]="countTotal" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!--查看详情-->
+<ng-template #chakanxiangqing>
+    <h3 class="flex-1 text-lg borderLeft">团单详情</h3>
+    <div class="orderpage_detail_list">
+        <table>
+            <tr class="ui-grid-row">
+                <td class="">砍价活动</td>
+                <td class="" style="width:350px;">{{pinTuanOrderDetailObj?.activityName}}</td>
+                <td class="">砍价状态</td>
+                <td class="trans-status" style="width:350px;">{{pinTuanOrderDetailObj?.orderStatus==='BARGAINING'?'拼团中':pinTuanOrderDetailObj?.orderStatus==='BARGAIN_SUCCESS'?'拼团成功':'拼团失败'}}</td>
+            </tr>
+            <tr>
+                <td class="">发起砍价</td>
+                <td class="" style="width:220px;">{{pinTuanOrderDetailObj?.orderTime}}</td>
+                <td class="">邀请人数</td>
+                <td class="" style="width:220px;">{{pinTuanOrderDetailObj?.participantCount}}</td>
+            </tr>
+            <tr>
+                <td class="">砍价门店</td>
+                <td class="" style="width:220px;">{{pinTuanOrderDetailObj?.storeName}}</td>
+                <td class="">订单金额</td>
+                <td class="" style="width:220px;">{{pinTuanOrderDetailObj?.orderAmount/100}}</td>
+            </tr>
+        </table>
+    </div>
+
+    <h3 class="flex-1 text-lg borderLeft" style="margin-top:20px;">订单信息</h3>
+    <p *ngIf="showTips" style="text-align: center;">暂无订单信息</p>
+    <div>
+                        <table nz-table class="existingGroups-table">
+                            <thead>
+                                <tr>
+                                    <td>订单号</td>
+                                    <td>下单时间</td>
+                                    <td>支付状态</td>
+                                    <td>核销状态</td>
+                                    <td>核销码</td>
+                                    <td>核销时间</td>
+                                    <td>核销门店</td>
+                                    <td>操作</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{pinTuanOrderDetailObj.orderNo}}</td>
+                                    <td>{{pinTuanOrderDetailObj.orderTime}}</td>
+                                    <td>{{pinTuanOrderDetailObj.paymentStatus}}</td>
+                                    <td>{{pinTuanOrderDetailObj.settleStatus}}</td>
+                                    <td >{{pinTuanOrderDetailObj.settleCode}}</td>
+                                    <td>{{pinTuanOrderDetailObj.settleTime}}</td>
+                                    <td>{{pinTuanOrderDetailObj.settleStoreName}}</td>
+                                    <td>
+                                        <span (click)="pintuanRefundHttp(pinTuanOrderDetailObj.orderNo)" *ngIf="pinTuanOrderDetailObj.enableRefund" class="buttons">退款</span>
+                                        <span  *ngIf="!pinTuanOrderDetailObj.enableRefund" class="buttons2">退款</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+    </div>
+</ng-template>

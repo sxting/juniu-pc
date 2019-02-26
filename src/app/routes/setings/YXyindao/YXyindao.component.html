@@ -1,0 +1,52 @@
+<div class="page">
+  <div class="header">
+    <div class="headerZi"></div>
+    <div class="headerMain">
+      引导用户邀请好友帮砍 为店铺裂变拉新 获得大量粉丝
+    </div>
+    <div class="headerButtonBox">
+      <div>
+        <div class="headerButtonL">{{price }}/店/年</div>
+        <div class="headerButtonR" (click)="goto()"></div>
+      </div>
+    </div>
+    <div class="headerYD">
+      <div *ngFor="let item of tplArr">
+        <img class="image" [src]="item.img" />
+        <h2>{{ item.h1 }}</h2>
+        <div class="hh2">{{ item.h2 }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="middle">
+    <h2>商家发起砍价流程</h2>
+    <div class="middleMain">
+      <div *ngFor="let item of tplarr2">
+        <h2>{{ item.h1 }}</h2>
+        <img class="image" [src]="item.img" />
+      </div>
+    </div>
+  </div>
+
+  <div class="middle">
+    <h2>用户发起砍价流程</h2>
+    <div class="bottomMain">
+      <div *ngFor="let item of tplarr3">
+        <div>
+          <div>{{ item.h1 }}</div>
+          <img class="image" [src]="item.img2" />
+        </div>
+        <img class="image" [src]="item.img" />
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom">
+    <div>
+      <img src="./assets/img/wechat_marketing_5.png" alt="" />
+      <div class="maomiao">扫描体验</div>
+      <div class="btm2">可致电：400-0011139，了解更多产品信息</div>
+    </div>
+  </div>
+</div>

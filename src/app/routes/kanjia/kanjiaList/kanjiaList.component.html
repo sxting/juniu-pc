@@ -1,0 +1,60 @@
+<page-header></page-header>
+<div>
+    <div class="existing-main">
+        <div class="member-top-middle">
+            <span>活动名称</span>
+            <div style="width: 243px;display:inline-block;" class="wxgroupList">
+                <nz-input-group nzSuffixIcon="anticon anticon-search" (click)="search()">
+                    <input [(ngModel)]="activityName" nz-input maxlength="20" placeholder="请输入活动名称">
+                </nz-input-group>
+            </div>
+            <span style="    margin-left: 60px;">活动起止日期</span>
+            <nz-range-picker (ngModelChange)="onChange($event)" [(ngModel)]="rangepicker" nzShowTime></nz-range-picker>
+            
+            <div style="margin: 20px 0;">
+                <button (click)="xzgroup()" nzType="primary" nz-button>新增砍价活动</button>
+            </div>
+
+        </div>
+        <ul class="btns_switch clearfix">
+            <li [class.btns_active]="statusFlag == 0" (click)="onStatusClick(0)">进行中</li>
+            <li [class.btns_active]="statusFlag == 1" (click)="onStatusClick(1)">未开始</li>
+            <li [class.btns_active]="statusFlag == 2" (click)="onStatusClick(2)">已结束</li>
+
+        </ul>
+
+        <div class="existing-table">
+            <table class="existingGroups-table">
+                <thead>
+                    <tr>
+                        <td>活动名称</td>
+                        <td>商品原价</td>
+                        <td>商品底价</td>
+                        <td>活动起止时间</td>
+                        <td>操作</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of resArr">
+                        <td>{{item.activityName}}</td>
+                        <td>{{item.originalPrice/100}}</td>
+                        <td>{{item.activityPrice/100}}</td>
+                        <td>{{item.gmtStart}}--{{item.gmtEnd}}</td>
+                        
+                        <td>
+                            <span class="buttons" (click)="chankanXQ(item.activityId)">{{statusFlag===1?'编辑':'查看详情'}}</span>
+                            <span class="buttons" *ngIf="statusFlag===1" (click)="pintuanStartHttp(item.activityId)">立即开始</span>
+                            <span class="buttons" *ngIf="statusFlag!==2" (click)="caozuo(item.activityId)">{{statusFlag===1?'删除':'结束拼团'}}</span>
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="nzPaginationBox">
+            <nz-pagination class="nzPagination" [nzTotal]="countTotal" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
+        </div>
+        <!-- <p-paginator rows="10" (onPageChange)="paginate($event)" totalRecords="{{countTotal}}"></p-paginator> -->
+    </div>
+
+</div>
