@@ -97,6 +97,15 @@ export class AddKanjiaComponent implements OnInit {
     shopboolean: any = false;
 
     radiocheck = true;
+
+    //上下架时间
+    timestatus: any;//上下架状态
+    soldOutDate: Date = null;
+    putawayDate: Date = new Date();
+    disabled: boolean = false;
+    today = new Date(); // 开始时间
+    
+    
     constructor(
         private wechatService: WechatService,
         private KanjiaService: KanjiaService,
@@ -287,6 +296,11 @@ export class AddKanjiaComponent implements OnInit {
             this.ctrsBoo = false;
         }
     }
+
+      disabledStartDate = (putawayDate: Date): boolean => {
+                return putawayDate.getTime() < (this.today.getTime()+60*24*60*1000);
+    };
+
     cityNameFun(choiseStoreIdList?: any) {
 
         let storeList = this.cityList;
