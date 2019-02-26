@@ -44,7 +44,7 @@
                         <td>
                             <span class="buttons" (click)="chankanXQ(item.activityId)">{{statusFlag===1?'编辑':'查看详情'}}</span>
                             <span class="buttons" *ngIf="statusFlag===1" (click)="pintuanStartHttp(item.activityId)">立即开始</span>
-                            <span class="buttons" *ngIf="statusFlag!==2" (click)="caozuo(item.activityId)">{{statusFlag===1?'删除':'结束拼团'}}</span>
+                            <span class="buttons" *ngIf="statusFlag!==2" (click)="caozuo(item.activityId)">{{statusFlag===1?'删除':'结束砍价'}}</span>
                         </td>
 
                     </tr>
