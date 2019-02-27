@@ -298,7 +298,11 @@ export class AddKanjiaComponent implements OnInit {
     }
 
       disabledStartDate = (putawayDate: Date): boolean => {
-                return putawayDate.getTime() < (this.today.getTime()+60*24*60*1000);
+          if(this.pinTuanId){
+            return putawayDate.getTime() < (this.today.getTime());
+          }else{
+            return putawayDate.getTime() <= (this.today.getTime()+60*24*60*1000);
+          }
     };
 
     cityNameFun(choiseStoreIdList?: any) {
