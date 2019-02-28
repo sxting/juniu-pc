@@ -62,6 +62,8 @@ export class AddNewItemsComponent implements OnInit {
     syncAlipay: string = 'F';
     isClear: boolean = false;
     showDiv: boolean = false;
+    pageNo: any;
+
     get categoryInfor() { return this.form.controls.categoryInfor; }
     get currentPrice() { return this.form.controls['currentPrice']; }
     get costPrice() { return this.form.controls['costPrice']; }
@@ -70,7 +72,7 @@ export class AddNewItemsComponent implements OnInit {
     ngOnInit() {
         let self = this;
         this.moduleId = this.route.snapshot.params['menuId']? this.route.snapshot.params['menuId'] : '';//门店
-
+        this.pageNo = this.route.snapshot.params['pageNo'] ? this.route.snapshot.params['pageNo'] : 1;//list页面的页码
         let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
           JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
         this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
@@ -92,7 +94,7 @@ export class AddNewItemsComponent implements OnInit {
         this.form = this.fb.group(self.formData);
         this.getCategoryListInfor();//获取商品分类信息
     }
-    
+
     //获取门店数据
     storeListPush(event){
       this.cityStoreList = event.storeList? event.storeList : [];
@@ -308,7 +310,7 @@ export class AddNewItemsComponent implements OnInit {
             )
         }
     }
-  
+
     //上传图片接口
     uploadImage(event: any) {
         event = event ? event : window.event;
@@ -363,7 +365,7 @@ export class AddNewItemsComponent implements OnInit {
                         }
                     }
                     console.log(descPicIdArr);
-                    
+
                     self.pictureDetails = descPicIdArr;
                     let productCreateStoreId = res.data.storeId ? res.data.storeId : "";
                     let opUserStoreId = self.storeId ? self.storeId : "";
@@ -452,7 +454,7 @@ export class AddNewItemsComponent implements OnInit {
         });
         return staffListInfor;
     }
-    
+
     submit() {
         let self = this;
         let that = this;
@@ -510,7 +512,7 @@ export class AddNewItemsComponent implements OnInit {
         if(!params.cutOffDays) delete params.cutOffDays;
         if(!params.wxBuyLimitNum) delete params.wxBuyLimitNum;
         if(!params.idx) delete params.idx;
-        console.log(params)
+        console.log(params);
         if(this.ifShow == false){
           this.submitting = true;
           this.productService.saveAddProductInfor(params).subscribe(
@@ -518,7 +520,7 @@ export class AddNewItemsComponent implements OnInit {
               self.submitting = false;
               if (res.success) {
                 self.msg.success(`提交成功`);
-                self.router.navigate(['/product/service/items/list']);
+                self.router.navigate(['/product/service/items/list',{ pageNo: self.pageNo, menuId: self.moduleId }]);
               } else {
                 this.modalSrv.error({
                   nzTitle: '温馨提示',

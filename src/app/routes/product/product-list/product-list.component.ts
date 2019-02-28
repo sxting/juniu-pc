@@ -58,8 +58,8 @@ export class ProductListComponent implements OnInit {
 
     ngOnInit() {
         this.moduleId = this.route.snapshot.params['menuId'];
+        this.pageNo = this.route.snapshot.params['pageNo'] ? this.route.snapshot.params['pageNo'] : 1;//list页面的页码
         this.getStoresInfor();//查看门店
-
     }
 
     //操作上下架商品
@@ -93,7 +93,7 @@ export class ProductListComponent implements OnInit {
 
     //查看详情
     editProduct( ids: string ){
-        this.router.navigate(['/product/add/product', { productId: ids, storeId:this.storeId , merchantId: this.merchantId ,menuId: this.moduleId }]);
+        this.router.navigate(['/product/add/product', { pageNo: this.pageNo, productId: ids, storeId:this.storeId , merchantId: this.merchantId ,menuId: this.moduleId }]);
     }
 
     // 下架操作http请求
@@ -196,6 +196,7 @@ export class ProductListComponent implements OnInit {
             this.storeId = UserInfo.staffType === "MERCHANT"? '' : storeList[0].storeId;
             self.batchQuery.merchantId = this.merchantId;
             self.batchQuery.storeId = this.storeId;
+            self.batchQuery.pageNo = this.pageNo;
             //获取线下商品列表
             self.getProductListHttp(self.batchQuery);
 

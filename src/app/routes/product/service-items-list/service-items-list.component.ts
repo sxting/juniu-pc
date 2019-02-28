@@ -62,12 +62,14 @@ export class ServiceItemsListComponent implements OnInit {
 
     ngOnInit() {
         this.moduleId = this.route.snapshot.params['menuId'];
+        this.pageNo = this.route.snapshot.params['pageNo'] ? this.route.snapshot.params['pageNo'] : 1;//list页面的页码
+
         this.getStoresInfor();//门店
     }
 
     //查看详情
     editProduct( ids: string ){
-        this.router.navigate(['/product/add/new/items', { productId: ids, storeId: this.storeId , merchantId: this.merchantId, menuId: this.moduleId }]);
+        this.router.navigate(['/product/add/new/items', { pageNo: this.pageNo, productId: ids, storeId: this.storeId , merchantId: this.merchantId, menuId: this.moduleId }]);
     }
 
     //操作上下架商品
@@ -203,6 +205,7 @@ export class ServiceItemsListComponent implements OnInit {
             this.storeId = UserInfo.staffType === "MERCHANT"? '' : this.storeList[0].storeId;
             this.batchQuery.merchantId = this.merchantId;
             this.batchQuery.storeId = this.storeId;
+            this.batchQuery.pageNo = this.pageNo;
             //获取列表信息
             this.getServiceItemsListHttp(this.batchQuery);
 
