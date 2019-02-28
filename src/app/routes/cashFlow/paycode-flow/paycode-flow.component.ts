@@ -36,6 +36,7 @@ export class PaycodeFlowComponent implements OnInit {
     '付款／退款时间',
     '订单类型',
     '金额',
+    '支付费率',
     '门店',
     '操作',
   ]; //表头 '服务技师',先隐藏
