@@ -80,7 +80,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let item of statusData?.recoreds;let ind = index;">
-                    <td>{{item.auditVersion}}</td>
+                <td>{{item.tplName}}</td>
                 <td>{{item.auditVersion}}</td>
                 <td>{{item.submitTime}}</td>
                 <td *ngIf="item.status !== 'faild'">{{item.statusName}}</td>
