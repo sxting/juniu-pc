@@ -21,7 +21,6 @@ export class PayDownloadComponent implements OnInit {
 
   storeId: any = '';
   moduleId: any = '';
-
   imgPath: any = '';
 
   form: FormGroup;
@@ -33,17 +32,22 @@ export class PayDownloadComponent implements OnInit {
   color: string = this.myColor;
 
   merchantId: string = '';
+  loading: boolean = false;
+  status: string = '3'; //审核中0   审核通过1   审核未通过2   3未申请
 
-  constructor(private localStorageService: LocalStorageService,
-              private route: ActivatedRoute,
-              private modalSrv: NzModalService,
-              private uploadService: UploadService,
-              private setingsService: SetingsService,) {
+
+  constructor(
+    private localStorageService: LocalStorageService,
+    private route: ActivatedRoute,
+    private modalSrv: NzModalService,
+    private uploadService: UploadService,
+    private setingsService: SetingsService,) {
   }
 
   ngOnInit() {
     this.merchantId = JSON.parse(this.localStorageService.getLocalstorage(USER_INFO))['merchantId'];
     this.moduleId = this.route.snapshot.params['menuId'];
+    this.getPayWayStatus();//获取是否审核通过
   }
 
   onStoresChange(e) {
@@ -86,4 +90,38 @@ export class PayDownloadComponent implements OnInit {
   downloadQronline() {
     this.imgPath = `${Config.API}finance/store/download/qronline.do?storeId=${this.storeId}&logoId=${this.imageId}&color=${this.color}&merchantId=${this.merchantId}`;
   }
+
+
+  // 查看是否审核通过 ==== 进件状态查询
+  getPayWayStatus() {
+    let data = {
+      storeId: this.storeId,
+    };
+    this.loading = true;
+    this.setingsService.getPayWayStatus(data).subscribe(
+      (res: any) => {
+        if(res.success) {
+          this.loading = false;
+          //status: string = '3'; //审核中0   审核通过1   审核未通过2   3未申请
+          if(res.data.examineStatus == '0') {
+            this.status = '0';
+          } else if(res.data.examineStatus == '1') {
+            this.status = '1'
+          } else if(res.data.examineStatus == '2' || res.data.examineStatus == '3') {
+            this.status = '2'
+          }
+          if(res.data.applyStatus == '0') {
+            this.status = '3'
+          }
+          console.log(this.status);
+        } else {
+          this.modalSrv.error({
+            nzTitle: '温馨提示',
+            nzContent: res.errorInfo
+          });
+        }
+      }
+    )
+  }
+
 }

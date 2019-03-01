@@ -63,6 +63,7 @@ export class AddNewProductComponent implements OnInit {
     isClear: boolean = false;
     showDiv: boolean = false;
     pageNo: any;//list页面的页码
+    putaway: string;
 
     get categoryInfor() { return this.form.controls.categoryInfor; }
     get currentPrice() { return this.form.controls['currentPrice']; }
@@ -73,7 +74,7 @@ export class AddNewProductComponent implements OnInit {
         let self = this;
         this.moduleId = this.route.snapshot.params['menuId'] ? this.route.snapshot.params['menuId'] : '';//门店
         this.pageNo = this.route.snapshot.params['pageNo'] ? this.route.snapshot.params['pageNo'] : 1;//list页面的页码
-
+        this.putaway = this.route.snapshot.params['putaway'] ? this.route.snapshot.params['putaway'] : '1';//list页面的上下架
         this.storeId = this.route.snapshot.params['storeId'] ? this.route.snapshot.params['storeId'] : FunctionUtil.getUrlString('storeId');
         this.productId = this.route.snapshot.params['productId'] ? this.route.snapshot.params['productId'] : FunctionUtil.getUrlString('productId');
         this.canSave = true;
@@ -524,7 +525,7 @@ export class AddNewProductComponent implements OnInit {
                     self.submitting = false;
                     if (res.success) {
                         self.msg.success(`提交成功`);
-                        self.router.navigate(['/product/list', { pageNo: self.pageNo, menuId: self.moduleId }]);
+                        self.router.navigate(['/product/list', { putaway: this.putaway, pageNo: self.pageNo, menuId: self.moduleId }]);
                     } else {
                         this.modalSrv.error({
                             nzTitle: '温馨提示',

@@ -63,6 +63,7 @@ export class AddNewItemsComponent implements OnInit {
     isClear: boolean = false;
     showDiv: boolean = false;
     pageNo: any;
+    putaway: string = '1';
 
     get categoryInfor() { return this.form.controls.categoryInfor; }
     get currentPrice() { return this.form.controls['currentPrice']; }
@@ -73,6 +74,8 @@ export class AddNewItemsComponent implements OnInit {
         let self = this;
         this.moduleId = this.route.snapshot.params['menuId']? this.route.snapshot.params['menuId'] : '';//门店
         this.pageNo = this.route.snapshot.params['pageNo'] ? this.route.snapshot.params['pageNo'] : 1;//list页面的页码
+        this.putaway = this.route.snapshot.params['putaway'] ? this.route.snapshot.params['putaway'] : '1';//list页面的页码
+
         let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
           JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
         this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
@@ -520,7 +523,7 @@ export class AddNewItemsComponent implements OnInit {
               self.submitting = false;
               if (res.success) {
                 self.msg.success(`提交成功`);
-                self.router.navigate(['/product/service/items/list',{ pageNo: self.pageNo, menuId: self.moduleId }]);
+                self.router.navigate(['/product/service/items/list',{ putaway: self.putaway, pageNo: self.pageNo, menuId: self.moduleId }]);
               } else {
                 this.modalSrv.error({
                   nzTitle: '温馨提示',
