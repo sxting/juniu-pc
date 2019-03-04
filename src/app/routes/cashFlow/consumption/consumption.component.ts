@@ -223,7 +223,7 @@ export class ConsumptionComponent implements OnInit {
     this.cashFlowService.recordStatistics(data).subscribe(
       (res: any) => {
         if (res.success) {
-          this.total = res.data;
+          this.total = res.data.sumAmount;
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',

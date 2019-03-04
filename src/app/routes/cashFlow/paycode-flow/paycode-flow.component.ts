@@ -65,6 +65,8 @@ export class PaycodeFlowComponent implements OnInit {
   dataList: any;
   totalElements: any = 0;
   totalAmount: any = 0;
+  feeAmount:any = 0;
+  receiveAmount:any = 0;
   alertDate: any;
   moduleId: any;
   ifStoresAll: any;
@@ -243,8 +245,10 @@ export class PaycodeFlowComponent implements OnInit {
     this.cashFlowService.recordStatistics(data).subscribe(
       (res: any) => {
         if (res.success) {
-          this.total = res.data;
-          this.totalAmount = res.data;
+          this.total = res.data.sumAmount;
+          this.totalAmount = res.data.sumAmount;
+          this.feeAmount = res.data.feeAmount;
+          this.receiveAmount = res.data.receiveAmount;
         } else {
           this.modalSrv.error({
             nzTitle: '温馨提示',
