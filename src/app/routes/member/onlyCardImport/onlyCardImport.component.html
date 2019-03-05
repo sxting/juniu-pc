@@ -85,7 +85,7 @@
             <div class="addStaffBox-main-right">
                 <nz-select [(ngModel)]="cardConfigRuleId" style="width:240px;" (ngModelChange)="selectRules($event)" [nzPlaceHolder]="'请选择一个'+typeName+'规则'"
                     [nzShowSearch]="true">
-                    <nz-option *ngFor="let list of rulesList" [nzLabel]="'卡金额:'+list.balance/100+';售价:'+list.price/100+';有效期:'+list.validate"
+                    <nz-option *ngFor="let list of rulesList" [nzLabel]="'卡金额:'+ (list.cardType==='METERING'? list.balance: list.balance/100) +';售价:'+list.price/100+';有效期:'+list.validate"
                         [nzValue]="list.ruleId"></nz-option>
                 </nz-select>
             </div>
