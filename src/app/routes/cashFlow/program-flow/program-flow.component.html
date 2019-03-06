@@ -128,7 +128,7 @@
         <td *ngIf="activeIndex === 3">{{item.voucherCode}}</td>
         <td *ngIf="activeIndex === 3">{{item.productName}}</td>
         <td *ngIf="activeIndex === 3">{{item.usedStoreName}}</td>
-        <td *ngIf="activeIndex === 3">{{item.price / 100}}</td>
+        <td *ngIf="activeIndex === 3">{{item.paidMoney / 100}}</td>
         <td *ngIf="activeIndex === 3">{{item.opName}}</td>
         <td *ngIf="activeIndex != 3" style="color: #108EE9;cursor: pointer" (click)="checkDetailInfor(orderDetail,item.orderNo)">查看</td>
         <td *ngIf="activeIndex === 3" style="color: #108EE9;cursor: pointer" (click)="checkDetailInfor(orderDetail,item.orderId)">查看详情</td>
