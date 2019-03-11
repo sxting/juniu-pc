@@ -15,7 +15,7 @@ import NP from 'number-precision';
 })
 export class PayRecordComponent implements OnInit {
 
-  loading: boolean = false;
+    loading: boolean = false;
 
     theadName: any[] = ['结算时间', '金额', '操作'];
     // theadName: any[] = ['结算时间', '收款账号', '备注', '金额', '操作'];
@@ -25,7 +25,7 @@ export class PayRecordComponent implements OnInit {
 
     //审核状态
     status: string = '3'; //审核中0   审核通过1   审核未通过2   3未申请
-  statusData: any;
+    statusData: any;
 
     date: any = '';
     pageNo: any = 1;
@@ -34,11 +34,11 @@ export class PayRecordComponent implements OnInit {
 
     storeId: any = '';
 
-  moduleId: any = '';
-  merchantId: string = '';
-  token: string = '';
+    moduleId: any = '';
+    merchantId: string = '';
+    token: string = '';
 
-  haveData: boolean = true;
+    haveData: boolean = true;
 
     constructor(private router: Router,
                 private route: ActivatedRoute,

@@ -42,6 +42,7 @@ export class CrossShopComponent implements OnInit {
     pageIndex: number = 1;//弹框第几页吗
     storeList: any = [];//门店列表
     storeId: string = '';
+    targetStoreId: string = '';
     merchantId: string = JSON.parse(this.localStorageService.getLocalstorage('User-Info'))['merchantId'];
     consumeType: string;//消费类型
     dateRange: Date = null;
@@ -77,6 +78,7 @@ export class CrossShopComponent implements OnInit {
       pageSize: this.pageSize,
       consumeType: this.consumeType,
       storeId: this.storeId,
+      targetStoreId: this.storeId,
       start: this.startTime,
       end: this.endTime,
     };
@@ -98,12 +100,14 @@ export class CrossShopComponent implements OnInit {
     //点击查看详情
     checkDetailInfor(tpl: any,id: string) {
         let self = this;
+        this.targetStoreId = id;
         this.modalSrv.create({
             nzTitle: '结算详情',
             nzContent: tpl,
             nzWidth: '800px',
             nzFooter: null,
         });
+        this.batchQueryAlert.targetStoreId = this.targetStoreId;
         this.batchQueryAlert.consumeType = this.consumeType;
         this.batchQueryAlert.storeId = this.storeId;
       console.log(this.startTime);

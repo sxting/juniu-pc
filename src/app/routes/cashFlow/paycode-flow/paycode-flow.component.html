@@ -56,7 +56,7 @@
   </div>
 
   <div class="mb-md">
-    <nz-alert nzType="info" nzMessage="共有{{totalElements || 0}}条数据  |   总金额：{{totalAmount/100}}元" nzShowIcon></nz-alert>
+    <nz-alert nzType="info" nzMessage="共有{{totalElements || 0}}条数据  |   总金额：{{totalAmount/100}}元    手续费：{{feeAmount/100}}元    实际到账：{{receiveAmount/100}}元" nzShowIcon></nz-alert>
   </div>
   <!-- table -->
   <nz-table [nzNoResult]="'没有数据'" #basicTable [nzShowPagination]="false" [nzData]="reportOrderList">
@@ -76,6 +76,8 @@
         <br/>
         {{item.payTypeName || '-'}}
       </td>
+      <td>{{item.feeAmount/100 || '-'}}</td>
+      <td>{{item.receiveAmount/100 || '-'}}</td>
       <td class="panduan">
         <span>{{item.storeName || '-'}}/</span>
         <span>{{item.operationUserName || '-'}}</span>

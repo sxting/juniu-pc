@@ -38,6 +38,6 @@
         </tbody>
     </nz-table>
     <div class="nzPaginationBox">
-        <nz-pagination class="nzPagination" style="float: right;padding: 20px 0" [nzTotal]="totalElements" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
+        <nz-pagination class="nzPagination" style="float: right;padding: 20px 0"  [nzPageIndex]="pageNo" [nzTotal]="totalElements" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
     </div>
 </nz-card>
