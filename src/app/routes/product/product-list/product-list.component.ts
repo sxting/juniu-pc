@@ -34,6 +34,11 @@ export class ProductListComponent implements OnInit {
     productListInfor: any[] =[];
     moduleId: any;
     timestamp: any = new Date().getTime();//当前时间的时间戳
+    ifStoresAll: boolean = true;
+    productName: string = '';
+    categoryId: string = '';
+    categoryList: any = [];//分类列表
+    storeList: any = [];
 
     constructor(
         private http: _HttpClient,
@@ -53,13 +58,52 @@ export class ProductListComponent implements OnInit {
         putaway: this.putaway,
         categoryType: 'GOODS',
         storeId: this.storeId,
-        merchantId: this.merchantId
+        merchantId: this.merchantId,
+        productName: this.productName,
+        categoryId: this.categoryId
     };
 
     ngOnInit() {
         this.moduleId = this.route.snapshot.params['menuId'];
-        this.getStoresInfor();//查看门店
+        let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+          JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+        this.ifStoresAll = UserInfo.staffType === "MERCHANT"? true : false;
+        this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
+        this.getCategoryListInfor();//获取商品分类信息
 
+    }
+
+    //返回门店数据
+    storeListPush(event: any) {
+      this.storeList = event.storeList ? event.storeList : [];
+    }
+
+    //门店id
+    getStoreId(event: any) {
+      let self = this;
+      this.storeId = event.storeId ? event.storeId : '';
+      this.pageNo = 1;
+      this.batchQuery.pageNo = this.pageNo;
+      this.batchQuery.merchantId = this.merchantId;
+      this.batchQuery.storeId = this.storeId;
+      this.getProductListHttp(this.batchQuery);//获取列表信息
+    }
+
+    //查询选择商品分类信息
+    selectCategoryType(){
+      this.batchQuery.categoryId = this.categoryId;
+      this.pageNo = 1;
+      this.batchQuery.pageNo = this.pageNo;
+      this.getProductListHttp(this.batchQuery);//获取列表信息
+    }
+
+    //查询商品名称及其编号
+    changeProductName(){
+      console.log(this.productName);
+      this.batchQuery.productName = this.productName;
+      this.pageNo = 1;
+      this.batchQuery.pageNo = this.pageNo;
+      this.getProductListHttp(this.batchQuery);//获取列表信息
     }
 
     //操作上下架商品
@@ -88,6 +132,7 @@ export class ProductListComponent implements OnInit {
         this.statusFlag = Number(this.putaway);
         this.batchQuery.putaway = this.putaway;
         this.batchQuery.pageNo = 1;
+        this.pageNo = 1;
         this.getProductListHttp(this.batchQuery);
     }
 
@@ -178,27 +223,24 @@ export class ProductListComponent implements OnInit {
         this.getProductListHttp(this.batchQuery);
     }
 
-    //门店初始化
-    getStoresInfor() {
+    // 获取到商品分类信息
+    getCategoryListInfor() {
       let self = this;
+      this.loading = true;
       let data = {
-        moduleId: this.moduleId,
-        timestamp: this.timestamp
+        categoryType: 'GOODS'
       };
-      this.productService.selectStores(data).subscribe(
+      this.productService.getCategoryListInfor(data).subscribe(
         (res: any) => {
           if (res.success) {
-            let storeList = res.data.items;
-            let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
-              JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
-            this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
-
-            this.storeId = UserInfo.staffType === "MERCHANT"? '' : storeList[0].storeId;
-            self.batchQuery.merchantId = this.merchantId;
-            self.batchQuery.storeId = this.storeId;
-            //获取线下商品列表
-            self.getProductListHttp(self.batchQuery);
-
+            this.loading = false;
+            let categoryList = res.data;
+            let list = {
+              categoryName: '全部类型',
+              categoryId: ''
+            };
+            categoryList.splice(0, 0, list); //给数组第一位插入值
+            this.categoryList = categoryList;
           } else {
             this.modalSrv.error({
               nzTitle: '温馨提示',

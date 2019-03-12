@@ -35,6 +35,10 @@ export class ServiceItemsListComponent implements OnInit {
     storeList: any = [];
     moduleId: string;
     timestamp: any = new Date().getTime();//当前时间的时间戳
+    ifStoresAll: boolean = true;
+    productName: string = '';
+    categoryId: string = '';
+    categoryList: any = [];//分类列表
 
     constructor(
         private http: _HttpClient,
@@ -57,17 +61,56 @@ export class ServiceItemsListComponent implements OnInit {
         putaway: this.putaway,
         categoryType: 'SERVICE',
         storeId: this.storeId,
-        merchantId: this.merchantId
+        merchantId: this.merchantId,
+        productName: this.productName,
+        categoryId: this.categoryId
     };
 
     ngOnInit() {
         this.moduleId = this.route.snapshot.params['menuId'];
-        this.getStoresInfor();//门店
+        let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+          JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+        this.ifStoresAll = UserInfo.staffType === "MERCHANT"? true : false;
+        this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
+        this.getCategoryListInfor();//获取商品分类信息
     }
 
     //查看详情
     editProduct( ids: string ){
         this.router.navigate(['/product/add/new/items', { productId: ids, storeId: this.storeId , merchantId: this.merchantId, menuId: this.moduleId }]);
+    }
+
+    //返回门店数据
+    storeListPush(event: any) {
+      this.storeList = event.storeList ? event.storeList : [];
+    }
+
+    //门店id
+    getStoreId(event: any) {
+      let self = this;
+      this.storeId = event.storeId ? event.storeId : '';
+      this.pageNo = 1;
+      this.batchQuery.pageNo = 1;
+      this.batchQuery.merchantId = this.merchantId;
+      this.batchQuery.storeId = this.storeId;
+      this.getServiceItemsListHttp(this.batchQuery);//获取列表信息
+    }
+
+    //查询选择商品分类信息
+    selectCategoryType(){
+      this.pageNo = 1;
+      this.batchQuery.pageNo = 1;
+      this.batchQuery.categoryId = this.categoryId;
+      this.getServiceItemsListHttp(this.batchQuery);//获取列表信息
+    }
+
+    //查询商品名称及其编号
+    changeProductName(){
+      this.pageNo = 1;
+      console.log(this.productName);
+      this.batchQuery.pageNo = 1;
+      this.batchQuery.productName = this.productName;
+      this.getServiceItemsListHttp(this.batchQuery);//获取列表信息
     }
 
     //操作上下架商品
@@ -97,6 +140,7 @@ export class ServiceItemsListComponent implements OnInit {
         this.statusFlag = Number(this.putaway + '');
         this.batchQuery.putaway = this.putaway;
         this.batchQuery.pageNo = 1;
+        this.pageNo = 1;
         this.getServiceItemsListHttp(this.batchQuery);
     }
 
@@ -185,27 +229,24 @@ export class ServiceItemsListComponent implements OnInit {
         this.getServiceItemsListHttp(this.batchQuery);
     }
 
-    //门店初始化
-    getStoresInfor() {
+    // 获取到商品分类信息
+    getCategoryListInfor() {
       let self = this;
+      this.loading = true;
       let data = {
-        moduleId: this.moduleId,
-        timestamp: this.timestamp
+        categoryType: 'SERVICE'
       };
-      this.productService.selectStores(data).subscribe(
+      this.productService.getCategoryListInfor(data).subscribe(
         (res: any) => {
           if (res.success) {
-            let storeList = res.data.items;
-            this.storeList = storeList;
-            let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
-              JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
-            this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
-            this.storeId = UserInfo.staffType === "MERCHANT"? '' : this.storeList[0].storeId;
-            this.batchQuery.merchantId = this.merchantId;
-            this.batchQuery.storeId = this.storeId;
-            //获取列表信息
-            this.getServiceItemsListHttp(this.batchQuery);
-
+            this.loading = false;
+            let categoryList = res.data;
+            let list = {
+              categoryName: '全部类型',
+              categoryId: ''
+            };
+            categoryList.splice(0, 0, list); //给数组第一位插入值
+            this.categoryList = categoryList;
           } else {
             this.modalSrv.error({
               nzTitle: '温馨提示',
