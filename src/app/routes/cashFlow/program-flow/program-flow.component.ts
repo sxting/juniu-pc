@@ -30,9 +30,8 @@ export class ProgramFlowComponent implements OnInit {
   voucherType: string = '';
   tabText: string = '小程序商品';
   tabBtnText: string = '小程序商品';
-  queryType: string = 'PRODUCT'; //PRODUCT商品流水、OPENCARD开卡流水、PINTUAN拼团流水
-  // tabLists: any = ['小程序商品', '小程序开卡', '小程序拼团'];
-  tabLists: any = ['小程序商品', '小程序开卡', '小程序拼团', '核销记录'];
+  queryType: string = 'PRODUCT'; //PRODUCT商品流水、OPENCARD开卡流水、PINTUAN拼团流水 BARGAIN小程序砍价
+  tabLists: any = ['小程序商品', '小程序开卡', '小程序拼团', '小程序砍价', '核销记录'];
   statusList: any = [
     { statusName: '已支付', status: 'PAID' },
     { statusName: '已退款', status: 'REFUND' },
@@ -119,9 +118,7 @@ export class ProgramFlowComponent implements OnInit {
 
   //校验核销开始时间
   disabledDate = (current: Date): boolean => {
-    // let date = '2017-01-01 23:59:59';
     let endDate = new Date(new Date().getTime()); //今日 ==结束时
-    // return differenceInDays(current, new Date(date)) < 0;
     return differenceInDays(current, new Date()) > 0;
   };
 
@@ -170,12 +167,12 @@ export class ProgramFlowComponent implements OnInit {
 
   selectVoucherStatusType() {
     this.pageNo = 1;
-
   }
 
   // 切换tab按钮
   changeEchartsTab(e: any) {
     this.activeIndex = e.index;
+    console.log(this.activeIndex);
     if (this.activeIndex === 0) {
       this.tabBtnText = this.tabText = '小程序商品';
       this.queryType = 'PRODUCT';
@@ -187,7 +184,11 @@ export class ProgramFlowComponent implements OnInit {
       this.tabText = '小程序拼团活动';
       this.tabBtnText = '小程序拼团';
       this.queryType = 'PINTUAN';
-    } else {
+    } else if(this.activeIndex === 3){
+      this.tabText = '砍价活动';
+      this.tabBtnText = '小程序砍价';
+      this.queryType = 'BARGAIN';
+    }else {
       this.tabText = '核销码';
       this.tabBtnText = '核销记录';
       this.queryType = 'VOUCHER';
@@ -316,16 +317,8 @@ export class ProgramFlowComponent implements OnInit {
         if (res.success) {
           this.loading = false;
           self.orderItemDetailInfor = res.data;
-          self.ifShow =
-            res.data.wxAppOrderProducts != null ||
-            res.data.wxAppOrderPinTuans != null
-              ? true
-              : false;
-          self.ifShowThis =
-            res.data.wxAppOrderProducts &&
-            res.data.wxAppOrderProducts[0].cardId === null
-              ? false
-              : true;
+          self.ifShow = res.data.wxAppOrderProducts != null || res.data.wxAppOrderPinTuans != null? true : false;
+          self.ifShowThis = res.data.wxAppOrderProducts && res.data.wxAppOrderProducts[0].cardId === null ? false : true;
           // 订单状态
           if (res.data.orderType === 'REFUND') {
             //退款单
@@ -350,7 +343,7 @@ export class ProgramFlowComponent implements OnInit {
           }
           let totalNum = 0;
           let totalMoney = 0;
-          if (self.activeIndex == 3) {
+          if (self.activeIndex == 4) {
             self.detailSource = res.data.source;
           }
           if (self.activeIndex == 0 || self.detailSource=='WXAPP') {
@@ -378,12 +371,15 @@ export class ProgramFlowComponent implements OnInit {
           } else {
             self.ifShow = res.data.wxAppOrderCards != null ? true : false;
             self.orderItemDetailInforList = res.data.wxAppOrderCards;
-            self.orderItemDetailInforList.forEach(i => {
-              if (i.cardType === 'STORED') i.cardtypeName = '储值卡';
-              if (i.cardType === 'METERING') i.cardtypeName = '计次卡';
-              if (i.cardType === 'REBATE') i.cardtypeName = '折扣卡';
-              if (i.cardType === 'TIMES') i.cardtypeName = '期限卡';
-            });
+            console.log(self.orderItemDetailInforList);
+            if(self.orderItemDetailInforList){
+              self.orderItemDetailInforList.forEach(i => {
+                if (i.cardType === 'STORED') i.cardtypeName = '储值卡';
+                if (i.cardType === 'METERING') i.cardtypeName = '计次卡';
+                if (i.cardType === 'REBATE') i.cardtypeName = '折扣卡';
+                if (i.cardType === 'TIMES') i.cardtypeName = '期限卡';
+              });
+            }
           }
         } else {
           this.modalSrv.error({
@@ -418,7 +414,11 @@ export class ProgramFlowComponent implements OnInit {
       this.batchQuery.cardName = '';
       this.batchQuery.productName = '';
       this.batchQuery.activityName = this.checkName;
-    } else {
+    } else if (this.activeIndex === 3) {//砍价
+      this.batchQuery.cardName = '';
+      this.batchQuery.productName = '';
+      this.batchQuery.activityName = this.checkName;
+    } else {//核销
       this.batchQuery.voucherType = this.voucherType;
       this.batchQuery.productName = '';
       this.batchQuery.activityName = '';
@@ -428,12 +428,10 @@ export class ProgramFlowComponent implements OnInit {
     this.batchQuery.pageNo = this.pageNo;
     this.batchQuery.pageSize = this.pageSize;
 
-    if (this.activeIndex === 3) {
+    if (this.activeIndex === 4) {
       this.programVoucherListInfor(this.batchQuery); //调取列表页面的接口
     } else {
       this.programListInfor(this.batchQuery); //调取列表页面的接口
     }
-
-
   }
 }
