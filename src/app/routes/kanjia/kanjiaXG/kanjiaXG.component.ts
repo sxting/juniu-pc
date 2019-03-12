@@ -117,7 +117,7 @@ export class KanjiaXGComponent implements OnInit {
                 numArr.push(i.amount / 100);
             }
             if (div === 'echart_second') {
-                numArr.push(i.totalGroupCount === 0 ? 0 : (i.finishGroupCount / i.totalGroupCount).toFixed(2));
+                numArr.push(i.count);
             }
             if (div === 'echart_third') {
                 numArr.push(i.count);
