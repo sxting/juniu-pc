@@ -130,6 +130,15 @@ export class WechatService {
                 return Observable.throw(error);
             });
     }
+    kanjiaRefund(Params: any) {
+        let apiUrl =  this.api + '/activity/merchant/refund.json';
+        let params = FunctionUtil.obectToURLSearchParams(Params);
+        return this.http.get(apiUrl, Params)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
     //拼团详情
     groupsDetail(Params?: any) {
         let apiUrl = this.api + '/merchant/activity/detail.json';

@@ -300,9 +300,10 @@ export class KanjiaJLComponent implements OnInit {
     //退款
     pintuanRefundHttp(orderNo) {
         let data = {
-            orderNo: orderNo
+            orderNo: orderNo,
+            activityType : 'BARGAIN'
         }
-        this.wechatService.pintuanRefund(data).subscribe(
+        this.wechatService.kanjiaRefund(data).subscribe(
             (res: any) => {
                 if (res.success) {
                     this.modalSrv.closeAll();
