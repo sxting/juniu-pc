@@ -226,7 +226,7 @@
       <table *ngIf="orderItemDetailInfor && (activeIndex != 0)">
         <tr class="ui-grid-row">
           <td class="">顾客微信昵称</td>
-          <td class="">{{orderItemDetailInfor.customerName|| '-'}}</td>
+          <td class="">{{orderItemDetailInfor.customerName || '-'}}</td>
           <td class="" *ngIf="activeIndex === 1">性别</td>
           <td class="" *ngIf="activeIndex === 1">{{orderItemDetailInfor.customerGenderText}}</td>
           <td class="">手机号</td>

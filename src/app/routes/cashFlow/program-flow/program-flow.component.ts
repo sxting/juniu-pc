@@ -373,13 +373,6 @@ export class ProgramFlowComponent implements OnInit {
             });
             self.orderItemDetailInforList = res.data.wxAppOrderPinTuans;
             self.totalMoneyTwo = NP.round(totalMoney, 2);
-            if (res.data.customerGender == '1') {
-              self.customerGenderText = '男';
-            } else if (res.data.customerGender == '0') {
-              self.customerGenderText = '女';
-            } else {
-              self.customerGenderText = '不详';
-            }
           } else {
             self.ifShow = res.data.wxAppOrderCards != null ? true : false;
             self.orderItemDetailInforList = res.data.wxAppOrderCards;
