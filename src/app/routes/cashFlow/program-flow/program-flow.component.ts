@@ -172,7 +172,6 @@ export class ProgramFlowComponent implements OnInit {
   // 切换tab按钮
   changeEchartsTab(e: any) {
     this.activeIndex = e.index;
-    console.log(this.activeIndex);
     if (this.activeIndex === 0) {
       this.tabBtnText = this.tabText = '小程序商品';
       this.queryType = 'PRODUCT';
@@ -356,6 +355,19 @@ export class ProgramFlowComponent implements OnInit {
             self.totalNum = totalNum;
             self.totalMoney = NP.round(totalMoney, 2);
           } else if (self.activeIndex == 2 || self.detailSource=='WXPT') {
+            res.data.wxAppOrderPinTuans.forEach(function(item: any) {
+              totalMoney += NP.round(item.price, 2);
+            });
+            self.orderItemDetailInforList = res.data.wxAppOrderPinTuans;
+            self.totalMoneyTwo = NP.round(totalMoney, 2);
+            if (res.data.customerGender == '1') {
+              self.customerGenderText = '男';
+            } else if (res.data.customerGender == '0') {
+              self.customerGenderText = '女';
+            } else {
+              self.customerGenderText = '不详';
+            }
+          } else if (self.activeIndex == 3 || self.detailSource=='BARGAIN') {
             res.data.wxAppOrderPinTuans.forEach(function(item: any) {
               totalMoney += NP.round(item.price, 2);
             });

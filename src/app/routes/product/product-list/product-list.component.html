@@ -16,28 +16,28 @@
 <nz-card [nzBordered]="false">
     <nz-table [nzNoResult]="'暂无实物产品'" #basicTable [nzShowPagination]="false" [nzData]="productListInfor">
         <thead nz-thead class="ui-grid-thead">
-        <tr>
-            <th nz-th class="">产品编码</th>
-            <th nz-th class="">产品分类</th>
-            <th nz-th class="">产品名称</th>
-            <th nz-th class="">库存</th>
-            <th nz-th class="">售价(元)</th>
-            <th nz-th class="">操作</th>
-        </tr>
+          <tr>
+              <th nz-th class="">产品编码</th>
+              <th nz-th class="">产品分类</th>
+              <th nz-th class="">产品名称</th>
+              <th nz-th class="">库存</th>
+              <th nz-th class="">售价(元)</th>
+              <th nz-th class="">操作</th>
+          </tr>
         </thead>
         <tbody nz-tbody class="ui-grid-tbody">
-        <tr nz-tbody-tr *ngFor="let item of productListInfor;let i = index">
-            <td nz-td>{{item.productNo? item.productNo : '-'}}</td>
-            <td nz-td>{{item.categoryName}}</td>
-            <td nz-td>{{item.productName}}</td>
-            <td nz-td>{{item.stock}}</td>
-            <td nz-td>{{item.currentPrice/100}}</td>
-            <td nz-td class="operation" style="cursor: pointer">
+          <tr nz-tbody-tr *ngFor="let item of productListInfor;let i = index">
+              <td nz-td>{{item.productNo? item.productNo : '-'}}</td>
+              <td nz-td>{{item.categoryName}}</td>
+              <td nz-td>{{item.productName}}</td>
+              <td nz-td>{{item.stock}}</td>
+              <td nz-td>{{item.currentPrice/100}}</td>
+              <td nz-td class="operation" style="cursor: pointer">
                 <span style="color: #FF6600" (click)="editProduct(item.productId)">查看详情</span>
                 <span class="iconfont icon-line1"></span>
                 <span style="color: #ff7700" (click)="operationProduct(item.productId,item.putaway)">{{statusFlag == 1? '下架':'上架'}}</span>
-            </td>
-        </tr>
+              </td>
+          </tr>
         </tbody>
     </nz-table>
     <div class="nzPaginationBox">
