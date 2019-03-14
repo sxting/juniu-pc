@@ -1,0 +1,141 @@
+<page-header></page-header>
+<div>
+    <section class="content_juniu">
+        <div class="marketing_means">
+            <div class="mainBox">
+                <div class="existing-table">
+                    <table class="existingGroups-table">
+                        <thead>
+                            <tr>
+                                <td>活动名称</td>
+                                <td>发起砍价总数</td>
+                                <td>已支付总数</td>
+                                <td>砍价成功率</td>
+                                <td>核销数</td>
+                                <td>核销率</td>
+                                <td>活动收益</td>
+                                <td>操作</td>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of resData">
+                                <td>{{item.activityName}}</td>
+                                <td>{{item.launchCount}}</td>
+                                <td>{{item.paymentCount}}</td>
+                                <td>{{item.chentuanlv.toFixed(2)}}%</td>
+                                <td>{{item.settleCount}}</td>
+                                <td>{{item.hexiaolv.toFixed(2) }}%</td>
+                                <td>{{item.totalAmount/100}}</td>
+                                <td>
+                                    <span class="buttons" (click)="chakan(xiaoguotu,item.activityId)">查看详情</span>
+                                    <!-- <span class="buttons" (click)="chakan(item.pinTuanId)">导出Excel</span> -->
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="nzPaginationBox">
+                    <nz-pagination class="nzPagination" [nzTotal]="countTotal" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<ng-template #xiaoguotu>
+    <div>
+        <div class="member-home-top">
+            <div class="member-home-bottom">
+                <div>
+                    <div class="member-home-bottom-t">
+                        <div class="member-home-t-t  member-home-t-t1"></div>
+                        <div class="member-home-t-b">今日活动收益金额(元)</div>
+                    </div>
+                    <div class="member-home-bottom-b">
+                        <div class="member-home-b-l">
+                            <div class="member-home-b-l-t member-home-t-t"></div>
+                            <div class="member-home-b-l-b member-home-t-b member-home-t-b-color">{{xiaoguoRes?.todaySettleAmount/100 || 0}}</div>
+                        </div>
+                        <div class="member-home-b-r">
+                            <div class="member-home-b-l-t member-home-t-t"></div>
+                            <div class="member-home-b-l-b member-home-t-b">总收益:{{xiaoguoRes?.totalSettleAmount/100 || 0}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="member-home-bottom-t">
+                        <div class="member-home-t-t member-home-t-t2"></div>
+                        <div class="member-home-t-b">今日砍价数</div>
+                    </div>
+                    <div class="member-home-bottom-b">
+                        <div class="member-home-b-l">
+                            <div class="member-home-b-l-t member-home-t-t"></div>
+                            <div class="member-home-b-l-b member-home-t-b member-home-t-b-color">{{xiaoguoRes?.todayBargainCount || 0}}</div>
+                        </div>
+                        <div class="member-home-b-r">
+                            <div class="member-home-b-l-t member-home-t-t"></div>
+                            <div class="member-home-b-l-b member-home-t-b">总砍价数(件)：{{xiaoguoRes?.totalBargainCount || 0}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="member-home-bottom-t">
+                        <div class="member-home-t-t member-home-t-t2"></div>
+                        <div class="member-home-t-b">今日核销数(件)</div>
+                    </div>
+                    <div class="member-home-bottom-b">
+                        <div class="member-home-b-l">
+                            <div class="member-home-b-l-t member-home-t-t"></div>
+                            <div class="member-home-b-l-b member-home-t-b member-home-t-b-color">{{xiaoguoRes?.todaySettleCount || 0}}</div>
+                        </div>
+                        <div class="member-home-b-r">
+                            <div class="member-home-b-l-t member-home-t-t"></div>
+                            <div class="member-home-b-l-b member-home-t-b">总核销数(件)：{{xiaoguoRes?.totalSettleCount || 0}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="member-home-bottom-t">
+                        <div class="member-home-t-t member-home-t-t3"></div>
+                        <div class="member-home-t-b">今日核销率</div>
+                    </div>
+                    <div class="member-home-bottom-b">
+                        <div class="member-home-b-l">
+                            <div class="member-home-b-l-t member-home-t-t"></div>
+                            <div class="member-home-b-l-b member-home-t-b  member-home-t-b-color">{{xiaoguoRes?.hexiaolv.toFixed(2) || 0}}%</div>
+                        </div>
+                        <div class="member-home-b-r">
+                            <div class="member-home-b-l-t member-home-t-t"></div>
+                            <div class="member-home-b-l-b member-home-t-b"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="member-bottom">
+            <div class="middle">
+                <div class="middle-left">
+                    <div class="middle-r-title">走势图</div>
+                    <div style="display:flex;width:100%;height:300px;">
+                        <div style="width:33%;height:100%;text-align:center;">
+                            <div id="echart_first" class="{{!empty?'echartShow':''}}" style="width:330px;height:310px;"></div>
+                            <div>收益金额</div>
+                        </div>
+                        <div style="width:33%;height:100%;text-align:center;">
+                            <div id="echart_second" class="{{!empty?'echartShow':''}}" style="width:330px;height:310px;"></div>
+                            <div>砍价数</div>
+                        </div>
+                        <div style="width:33%;height:100%;text-align:center;">
+                            <div id="echart_third" class="{{!empty?'echartShow':''}}" style="width:330px;height:310px;"></div>
+                            <div>核销量</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

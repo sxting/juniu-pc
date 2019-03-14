@@ -6,7 +6,7 @@
     </nz-tabset>
     <div nz-form [nzLayout]="'inline'" class="search__form">
       <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
-        <nz-col nzMd="8" nzSm="24" *ngIf="activeIndex != 3">
+        <nz-col nzMd="8" nzSm="24" *ngIf="activeIndex != 4">
           <nz-form-item>
             <nz-form-label nzFor="orderType">订单类型</nz-form-label>
             <nz-form-control>
@@ -17,7 +17,7 @@
             </nz-form-control>
           </nz-form-item>
         </nz-col>
-        <nz-col nzMd="8" nzSm="24" *ngIf="activeIndex === 3">
+        <nz-col nzMd="8" nzSm="24" *ngIf="activeIndex === 4">
           <nz-form-item>
             <nz-form-label nzFor="voucherType">核销类型</nz-form-label>
             <nz-form-control>
@@ -31,8 +31,8 @@
         <nz-col nzMd="8" nzSm="24">
           <nz-form-item>
             <nz-form-label nzFor="productId">
-              <span *ngIf="activeIndex != 3">订单时间</span>
-              <span *ngIf="activeIndex === 3">核销时间</span>
+              <span *ngIf="activeIndex != 4">订单时间</span>
+              <span *ngIf="activeIndex === 4">核销时间</span>
             </nz-form-label>
             <nz-form-control>
               <nz-range-picker [nzDisabledDate]="disabledDate" [nzAllowClear]="false" nzShowTime nzFormat="yyyy-MM-dd HH:mm:ss" [(ngModel)]="dateRange" (ngModelChange)="onDateChange($event)"></nz-range-picker>
@@ -46,9 +46,9 @@
           </nz-form-item>
         </nz-col>
 
-        <nz-col nzMd="8" nzSm="24" *ngIf="expandForm && (activeIndex === 0 || activeIndex === 2)">
+        <nz-col nzMd="8" nzSm="24" *ngIf="expandForm && (activeIndex === 0 || activeIndex === 2 || activeIndex === 3)">
           <nz-form-item>
-            <nz-form-label nzFor="checkName">搜 索</nz-form-label>
+            <nz-form-label nzFor="checkName">{{ activeIndex === 3? '活动查询' : '搜 索'}}</nz-form-label>
             <nz-form-control>
               <input nz-input name="checkName" [(ngModel)]="checkName" placeholder="请输入{{tabText}}名称" id="checkName">
             </nz-form-control>
@@ -63,7 +63,7 @@
         </nz-col>
         <nz-col [nzSpan]="expandForm ? 24 : 8" [class.text-right]="expandForm" style="width:200px">
           <button nz-button type="submit" [nzType]="'primary'" [nzLoading]="loading" (click)="getData()">查询</button>
-          <a *ngIf="activeIndex != 3" (click)="expandForm=!expandForm">
+          <a *ngIf="activeIndex != 4" (click)="expandForm=!expandForm">
             {{expandForm ? '收起' : '展开'}}
             <i class="anticon" [class.anticon-down]="!expandForm" [class.anticon-up]="expandForm"></i>
           </a>
@@ -78,65 +78,67 @@
       <thead nz-thead class="ui-grid-thead">
         <tr>
           <th nz-th class="">
-            <span *ngIf="activeIndex != 3">付款/退款时间</span>
-            <span *ngIf="activeIndex === 3">核销时间</span>
+            <span *ngIf="activeIndex != 4">付款/退款时间</span>
+            <span *ngIf="activeIndex === 4">核销时间</span>
           </th>
           <th nz-th class="" *ngIf="activeIndex === 1">会员信息</th>
           <th nz-th class="">
-            <span *ngIf="activeIndex != 3">订单类型</span>
-            <span *ngIf="activeIndex === 3">核销类型</span>
+            <span *ngIf="activeIndex != 4">订单类型</span>
+            <span *ngIf="activeIndex === 4">核销类型</span>
           </th>
-          <th nz-th class="" *ngIf="(activeIndex === 0) || (activeIndex === 2)">商家实收金额</th>
+          <th nz-th class="" *ngIf="(activeIndex === 0) || (activeIndex === 2) || (activeIndex === 3)">商家实收金额</th>
           <th nz-th class="" *ngIf="activeIndex === 1">实收金额</th>
           <th nz-th class="" *ngIf="activeIndex === 1">充值金额</th>
           <th nz-th class="" *ngIf="activeIndex === 1">卡名称</th>
           <th nz-th class="" *ngIf="activeIndex === 1">开卡门店</th>
+          <th nz-th class="" *ngIf="activeIndex === 3">活动名称</th>
           <th nz-th class="" *ngIf="activeIndex === 2">拼团活动</th>
           <th nz-th class="" *ngIf="activeIndex === 0">购买项目</th>
-          <th nz-th class="" *ngIf="(activeIndex === 0) || (activeIndex === 2)">购买门店</th>
-          <th nz-th class="" *ngIf="activeIndex === 3">核销码</th>
-          <th nz-th class="" *ngIf="activeIndex === 3">核销商品</th>
-          <th nz-th class="" *ngIf="activeIndex === 3">核销门店</th>
-          <th nz-th class="" *ngIf="activeIndex === 3">订单金额(元)</th>
-          <th nz-th class="" *ngIf="activeIndex === 3">收银员</th>
+          <th nz-th class="" *ngIf="(activeIndex === 0) || (activeIndex === 2) || (activeIndex === 3)">购买门店</th>
+          <th nz-th class="" *ngIf="activeIndex === 4">核销码</th>
+          <th nz-th class="" *ngIf="activeIndex === 4">核销商品</th>
+          <th nz-th class="" *ngIf="activeIndex === 4">核销门店</th>
+          <th nz-th class="" *ngIf="activeIndex === 4">订单金额(元)</th>
+          <th nz-th class="" *ngIf="activeIndex === 4">收银员</th>
           <th nz-th class="">操作</th>
         </tr>
       </thead>
       <tbody nz-tbody class="ui-grid-tbody">
       <tr nz-tbody-tr *ngFor="let item of orderListInfor; let i = index">
-        <td *ngIf="activeIndex != 3" style="color: #368ff7">
+        <td *ngIf="activeIndex != 4" style="color: #368ff7">
           {{item.payTime}}
           <p style="color: #333;">{{item.orderNo}}</p>
         </td>
-        <td *ngIf="activeIndex === 3" style="color: #368ff7">{{item.usedDate | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+        <td *ngIf="activeIndex === 4" style="color: #368ff7">{{item.usedDate | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
         <td *ngIf="activeIndex === 1">
           <p>{{item.customerName? item.customerName : '-'}}</p>
           <p>{{item.phone}}</p>
         </td>
-        <td *ngIf="activeIndex != 3">
+        <td *ngIf="activeIndex != 4">
           <p>{{tabBtnText}}</p>
           <p *ngIf="item.status != 'FINISH'" [class.color-red]="item.orderTypeText === '退款单'">{{item.orderTypeText}}</p>
         </td>
-        <td *ngIf="activeIndex === 3">{{item.orderTypeText}}</td>
-        <td *ngIf="activeIndex != 3">{{item.actualAmount}}</td>
+        <td *ngIf="activeIndex === 4">{{item.orderTypeText}}</td>
+        <td *ngIf="activeIndex != 4">{{item.actualAmount}}</td>
         <td *ngIf="activeIndex === 1">{{item.totalAmount}}</td>
         <td *ngIf="activeIndex === 1">{{item.wxAppOrderCards && item.wxAppOrderCards[0].cardName? item.wxAppOrderCards[0].cardName : '-'}}</td>
         <td *ngIf="activeIndex === 1">{{item.storeName}}</td>
         <td class="" *ngIf="activeIndex === 2">{{item.wxAppOrderPinTuans && item.wxAppOrderPinTuans[0].activityName? item.wxAppOrderPinTuans[0].activityName : '-'}}</td>
         <td class="" *ngIf="activeIndex === 0">{{item.wxAppOrderProducts && item.wxAppOrderProducts[0].itemName? item.wxAppOrderProducts[0].itemName : '-'}}</td>
-        <td class="" *ngIf="(activeIndex === 0) || (activeIndex === 2)">{{item.storeName}}</td>
-        <td *ngIf="activeIndex === 3">{{item.voucherCode}}</td>
-        <td *ngIf="activeIndex === 3">{{item.productName}}</td>
-        <td *ngIf="activeIndex === 3">{{item.usedStoreName}}</td>
-        <td *ngIf="activeIndex === 3">{{item.paidMoney / 100}}</td>
-        <td *ngIf="activeIndex === 3">{{item.opName}}</td>
-        <td *ngIf="activeIndex != 3" style="color: #108EE9;cursor: pointer" (click)="checkDetailInfor(orderDetail,item.orderNo)">查看</td>
-        <td *ngIf="activeIndex === 3" style="color: #108EE9;cursor: pointer" (click)="checkDetailInfor(orderDetail,item.orderId)">查看详情</td>
+        <td class="" *ngIf="activeIndex === 3">{{item.wxAppOrderPinTuans && item.wxAppOrderPinTuans[0].activityName? item.wxAppOrderPinTuans[0].activityName : '-'}}</td>
+        <td class="" *ngIf="(activeIndex === 0) || (activeIndex === 2) || (activeIndex === 3)">{{item.storeName}}</td>
+        <td *ngIf="activeIndex === 4">{{item.voucherCode}}</td>
+        <td *ngIf="activeIndex === 4">{{item.productName}}</td>
+        <td *ngIf="activeIndex === 4">{{item.usedStoreName}}</td>
+        <td *ngIf="activeIndex === 4">{{item.paidMoney / 100}}</td>
+        <td *ngIf="activeIndex === 4">{{item.opName}}</td>
+        <td *ngIf="activeIndex != 4" style="color: #108EE9;cursor: pointer" (click)="checkDetailInfor(orderDetail,item.orderNo)">查看</td>
+        <td *ngIf="activeIndex === 4" style="color: #108EE9;cursor: pointer" (click)="checkDetailInfor(orderDetail,item.orderId)">查看详情</td>
       </tr>
       </tbody>
     </nz-table>
     <div class="nzPaginationBox clearfix">
-      <nz-pagination class="nzPagination" style="float: right;padding: 20px 0" [nzTotal]="totalElements" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
+      <nz-pagination class="nzPagination" style="float: right;padding: 20px 0" [nzPageIndex]="pageNo" [nzTotal]="totalElements" [nzPageSize]="10" (nzPageIndexChange)="paginate($event)"></nz-pagination>
     </div>
   </div>
 </nz-card>
@@ -173,23 +175,23 @@
     </div>
     <nz-table *ngIf="ifShow" [nzNoResult]="'暂无流水信息'" #basicTable [nzShowPagination]="false" [nzData]="orderItemDetailInforList">
       <thead nz-thead class="ui-grid-thead">
-      <tr>
-        <th nz-th class="" *ngIf="activeIndex === 0 || detailSource=='WXAPP'">商品分类</th>
-        <th nz-th class="" *ngIf="activeIndex === 0 || detailSource=='WXAPP'">商品名称</th>
-        <th nz-th class="" *ngIf="activeIndex === 2 || detailSource=='WXPT'">活动类型</th>
-        <th nz-th class="" *ngIf="activeIndex === 2 || detailSource=='WXPT'">活动名称</th>
+        <tr>
+          <th nz-th class="" *ngIf="activeIndex === 0 || detailSource=='WXAPP'">商品分类</th>
+          <th nz-th class="" *ngIf="activeIndex === 0 || detailSource=='WXAPP'">商品名称</th>
+          <th nz-th class="" *ngIf="(activeIndex === 2 || detailSource=='WXPT')||(activeIndex === 3 || detailSource=='BARGAIN')">活动类型</th>
+          <th nz-th class="" *ngIf="(activeIndex === 2 || detailSource=='WXPT')||(activeIndex === 3 || detailSource=='BARGAIN')">活动名称</th>
 
-        <th nz-th class="" *ngIf="activeIndex === 1">会员卡类型</th>
-        <th nz-th class="" *ngIf="activeIndex === 1">会员卡名称</th>
-        <th nz-th class="" *ngIf="activeIndex === 1">售价</th>
-        <th nz-th class="" *ngIf="activeIndex === 1">充值金额</th>
+          <th nz-th class="" *ngIf="activeIndex === 1">会员卡类型</th>
+          <th nz-th class="" *ngIf="activeIndex === 1">会员卡名称</th>
+          <th nz-th class="" *ngIf="activeIndex === 1">售价</th>
+          <th nz-th class="" *ngIf="activeIndex === 1">充值金额</th>
 
-        <th nz-th class="" *ngIf="!ifShowThis && (activeIndex === 0 || detailSource=='WXAPP')">单价(元)</th>
-        <th nz-th class="" *ngIf="ifShowThis && (activeIndex === 0 || detailSource=='WXAPP')">使用会员卡</th><!--扣卡-->
-        <th nz-th class="" *ngIf="ifShowThis && (activeIndex === 0 || detailSource=='WXAPP')">扣卡金额</th><!--扣卡-->
-        <th nz-th class="" *ngIf="!ifShowThis && (activeIndex === 0 || detailSource=='WXAPP')">数量(件)</th>
-        <th nz-th class="" class="text-right" *ngIf="activeIndex === 0 || activeIndex === 2 || activeIndex === 3">商家实收金额(元)</th>
-      </tr>
+          <th nz-th class="" *ngIf="!ifShowThis && (activeIndex === 0 || detailSource=='WXAPP')">单价(元)</th>
+          <th nz-th class="" *ngIf="ifShowThis && (activeIndex === 0 || detailSource=='WXAPP')">使用会员卡</th><!--扣卡-->
+          <th nz-th class="" *ngIf="ifShowThis && (activeIndex === 0 || detailSource=='WXAPP')">扣卡金额</th><!--扣卡-->
+          <th nz-th class="" *ngIf="!ifShowThis && (activeIndex === 0 || detailSource=='WXAPP')">数量(件)</th>
+          <th nz-th class="" class="text-right" *ngIf="activeIndex != 1">商家实收金额(元)</th>
+        </tr>
       </thead>
       <tbody nz-tbody class="ui-grid-tbody">
         <tr nz-tbody-tr *ngFor="let list of orderItemDetailInforList">
@@ -205,27 +207,26 @@
           <td *ngIf="activeIndex === 1">{{list.price||0}}</td>
           <td *ngIf="activeIndex === 1">{{list.totalAmount||0}}</td>
 
-          <td style="color: #108EE9" nz-th class="" *ngIf="activeIndex === 2 || detailSource=='WXPT'">{{list.activityType}}</td>
-          <td nz-th class="" *ngIf="activeIndex === 2 || detailSource=='WXPT'">{{list.activityName}}</td>
-          <td class="text-right" *ngIf="activeIndex === 0 || activeIndex === 2 || activeIndex === 3">{{list.actualAmount}}</td>
+          <td style="color: #108EE9" nz-th class="" *ngIf="(activeIndex === 2 || detailSource=='WXPT')||(activeIndex === 3 || detailSource=='BARGAIN')">{{list.activityType =='BARGAIN'? '砍价商品': list.activityType}}</td>
+          <td nz-th class="" *ngIf="(activeIndex === 2 || detailSource=='WXPT')||(activeIndex === 3 || detailSource=='BARGAIN')">{{list.activityName}}</td>
+          <td class="text-right" *ngIf="activeIndex != 1">{{list.actualAmount}}</td>
         </tr>
         <tr nz-tbody-tr *ngIf="orderItemDetailInforList && (activeIndex === 0 || detailSource=='WXAPP')">
           <td colspan="3" style="color: #000">总计</td>
           <td>{{totalNum}}</td>
           <td class="text-right">{{totalMoney}}</td>
         </tr>
-
-        <tr nz-tbody-tr *ngIf="orderItemDetailInforList && (activeIndex === 2 || detailSource=='WXPT')">
+        <tr nz-tbody-tr *ngIf="orderItemDetailInforList && ((activeIndex === 2 || detailSource=='WXPT') || (activeIndex === 3 || detailSource=='BARGAIN'))">
           <td colspan="2" style="color: #000">总计</td>
           <td class="text-right">{{totalMoneyTwo}}</td>
         </tr>
       </tbody>
     </nz-table>
     <div class="orderpage_detail_list_bottom detail_list_bot">
-      <table *ngIf="orderItemDetailInfor && (activeIndex === 2 || activeIndex === 1 || activeIndex === 3)">
+      <table *ngIf="orderItemDetailInfor && (activeIndex != 0)">
         <tr class="ui-grid-row">
           <td class="">顾客微信昵称</td>
-          <td class="">{{orderItemDetailInfor.customerName|| '-'}}</td>
+          <td class="">{{orderItemDetailInfor.customerName || '-'}}</td>
           <td class="" *ngIf="activeIndex === 1">性别</td>
           <td class="" *ngIf="activeIndex === 1">{{orderItemDetailInfor.customerGenderText}}</td>
           <td class="">手机号</td>

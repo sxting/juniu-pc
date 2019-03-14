@@ -187,6 +187,13 @@ export class WechatComponent {
         this.checkoutService.voucherList(data).subscribe(
             (res: any) => {
                 this.voucherData = res.data;
+                this.voucherData.forEach(item => {
+                    if(item.voucherType === 'WXAPP') item.voucherName = '微信核销';
+                    else if(item.voucherType === 'WXPT') item.voucherName = '微信拼团';
+                    else if(item.voucherType === 'BARGAIN') item.voucherName = '微信砍价';
+                    else item.voucherName = '-';
+                    
+                });
             },
             error => this.errorAlter(error)
         );

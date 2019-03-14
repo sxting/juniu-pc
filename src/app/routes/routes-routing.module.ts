@@ -35,6 +35,7 @@ const routes: Routes = [
       { path: 'report', loadChildren: './report/report.module#ReportModule' },
       { path: 'wechat', loadChildren: './wechat/wechat.module#WechatModule' },
       { path: 'cashFlow', loadChildren: './cashFlow/cashFlow.module#CashFlowModule' },
+      { path: 'kanjia', loadChildren: './kanjia/kanjia.module#KanjiaModule' },
       
     ]
   },

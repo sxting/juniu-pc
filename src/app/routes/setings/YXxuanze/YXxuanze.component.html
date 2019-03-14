@@ -1,0 +1,79 @@
+<nz-card
+  style="overflow:hidden"
+  [nzBordered]="false"
+  [nzBodyStyle]="{
+    height: '100%',
+    overflow: 'hidden',
+    margin: '30px',
+    background: '#fff'
+  }"
+  *ngIf="zhifu"
+>
+  <div>您选择了：砍价营销；售价：1680元/年/店</div>
+  <div class="checkBox">
+    <div style="border-bottom: 1px solid rgb(233, 233, 233);padding-bottom:10px;">
+        请选择门店
+      <label
+        nz-checkbox
+        [(ngModel)]="allChecked"
+        (ngModelChange)="updateAllChecked()"
+        [nzIndeterminate]="indeterminate"
+        style="float:right;"
+      >
+        全选
+      </label>
+    </div>
+    <nz-checkbox-wrapper style="width: 100%;" (nzOnChange)="log($event)">
+      <div>
+        <div *ngFor="let item of checkOptionsOne" style="margin-top:10px;">
+          <label
+            nz-checkbox
+            [nzValue]="item.value"
+            [ngModel]="item.checked"
+            >{{ item.label }}</label
+          >
+        </div>
+      </div>
+    </nz-checkbox-wrapper>
+  </div>
+  已选择{{storeNum}}家门店，共需付{{Allprice}}元
+  <br />
+
+  <button class="buttons" *ngIf="storeIdsArr&&storeIdsArr.length>0" nz-button nzType="primary" (click)="submit()" [nzLoading]="submitting" type="submit">立即支付</button>
+
+
+
+
+  <div class="bottom">
+      <div>付费须知</div>
+      <div>1.砍价营销活动的载体是微信小程序，所以购买前需先申请微信小程序并授权给桔牛。</div>
+      <div>2.为了不影响正常使用，请确保所有门店已购买标准版、营销版、美业版等任意一个系统版本</div>
+  </div>
+</nz-card>
+
+<nz-card
+  style="overflow:hidden"
+  [nzBordered]="false"
+  [nzBodyStyle]="{
+    height: '100%',
+    overflow: 'hidden',
+    margin: '30px',
+    background: '#fff'
+  }"
+  *ngIf="!zhifu"
+>
+<div class="step3" >
+  <div>您选择了：{{storeIdsArr.length}}家门店，需付款：{{Allprice}}元</div>
+  <div class="pay-way-btn-box">
+    <button nz-button [nzType]="payType === 'ALIPAY' ? 'primary' : ''" [disabled]="payType === 'WECHAT'" (click)="onPayWayClick('ALIPAY')">支付宝付款</button>
+    <button nz-button [nzType]="payType === 'WECHAT' ? 'primary' : ''" [disabled]="payType === 'ALIPAY'" (click)="onPayWayClick('WECHAT')">微信付款</button>
+  </div>
+  <div class="qr-code-box" *ngIf="payType">
+    <p>扫描下方二维码付款</p>
+    <img [src]="codeImgUrl" alt="">
+  </div>
+  <div class="btn-box">
+    <!-- <button nz-button (click)="prev()"></button> -->
+  </div>
+</div>
+</nz-card>

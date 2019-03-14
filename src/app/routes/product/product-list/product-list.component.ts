@@ -70,7 +70,8 @@ export class ProductListComponent implements OnInit {
         this.ifStoresAll = UserInfo.staffType === "MERCHANT"? true : false;
         this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
         this.getCategoryListInfor();//获取商品分类信息
-
+      this.pageNo = this.route.snapshot.params['pageNo'] ? this.route.snapshot.params['pageNo'] : 1;//list页面的页码
+      this.putaway = this.route.snapshot.params['putaway'] ? this.route.snapshot.params['putaway'] : '1';//list页面的页码
     }
 
     //返回门店数据
@@ -138,7 +139,7 @@ export class ProductListComponent implements OnInit {
 
     //查看详情
     editProduct( ids: string ){
-        this.router.navigate(['/product/add/product', { productId: ids, storeId:this.storeId , merchantId: this.merchantId ,menuId: this.moduleId }]);
+        this.router.navigate(['/product/add/product', { putaway: this.putaway, pageNo: this.pageNo, productId: ids, storeId:this.storeId , merchantId: this.merchantId ,menuId: this.moduleId }]);
     }
 
     // 下架操作http请求
@@ -241,6 +242,20 @@ export class ProductListComponent implements OnInit {
             };
             categoryList.splice(0, 0, list); //给数组第一位插入值
             this.categoryList = categoryList;
+            let storeList = res.data.items;
+            let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+              JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+            this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
+
+            this.storeId = UserInfo.staffType === "MERCHANT"? '' : storeList[0].storeId;
+            self.batchQuery.merchantId = this.merchantId;
+            self.batchQuery.storeId = this.storeId;
+            self.batchQuery.pageNo = this.pageNo;
+            self.batchQuery.putaway = this.putaway;
+
+            //获取线下商品列表
+            self.getProductListHttp(self.batchQuery);
+
           } else {
             this.modalSrv.error({
               nzTitle: '温馨提示',
