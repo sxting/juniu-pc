@@ -9,7 +9,7 @@
     <p>如果您已经是口碑商家，您只需要<a>点击关联</a> 即可用桔牛系统管理线上线下所有门店和生意。</p>
     <p>如果您还不是口碑商家，您可以先到口碑平台进行<a>开店</a>。(不知道如何开店？<a>联系我们</a>为您提供运营支持)</p>
     <div style="margin-top:20px;">
-        <button class="buttons" style="margin-right:20px;" nz-button nzType="primary" (click)="bindkoubei(modalContent3)" type="submit">点击关联</button>
+        <button class="buttons" *ngIf="userInfo.alipayPid"  style="margin-right:20px;" nz-button nzType="primary" (click)="bindkoubei(modalContent3)" type="submit">点击关联</button>
         <button class="buttons" nz-button (click)="matching()">去口碑平台开店</button>
     </div>
 </nz-card>
