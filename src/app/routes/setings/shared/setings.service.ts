@@ -6,11 +6,12 @@ import 'rxjs/add/operator/catch';
 import { Config } from '../../../shared/config/env.config';
 import { FunctionUtil } from '../../../shared/funtion/funtion-util';
 import { NzModalService } from 'ng-zorro-antd';
-import { _HttpClient } from '@delon/theme';
+import { _HttpClient, MenuService } from '@delon/theme';
 
 @Injectable()
 export class SetingsService {
-    constructor(private http: _HttpClient, private modalSrv: NzModalService) { }
+    
+    constructor(private http: _HttpClient,private menuService: MenuService, private modalSrv: NzModalService) { }
     api1 = Config.API + 'reserve'; //预约
     api2 = Config.API + 'product'; //商品
     api3 = Config.API + 'account'; //员工
@@ -484,5 +485,63 @@ export class SetingsService {
                 return Observable.throw(error);
             });
     }
+    ///merchant/module/refreshMenus.json
+    refreshMenus() {
+        let apiUrl = this.api6 + '/refreshMenus.json';
+        return this.http.get(apiUrl)
+            .map((response: Response) => response)
+            .catch(error => {
+                return Observable.throw(error);
+            });
+    }
+    //菜单更改
 
+    refreshMenusHttp(){
+        this.refreshMenus().subscribe((res: any) => {
+          if (res.success) {
+            this.menuCheck(res.data)
+          } else {
+            this.modalSrv.error({
+              nzTitle: '温馨提示',
+              nzContent: res.errorInfo,
+            });
+          }
+        });
+      }
+      menuCheck(menuList){
+        if (menuList) {
+          this.forEachFun(menuList);
+          let menu = [{
+            text: "主导航",
+            group: true,
+            hideInBreadcrumb: true,
+            children: []
+          }]
+          menu[0].children = menuList;
+          menu[0].children.forEach(function (i: any, m: any) {
+            i.index = m;
+          })
+          console.log(menu);
+          // console.log(data);
+          // console.log(res);
+          // 应用信息：包括站点名、描述、年份
+          // this.settingService.setApp(res.app);
+          // 用户信息：包括姓名、头像、邮箱地址
+          // this.settingService.setUser(res.user);
+          // ACL：设置权限为全量
+          // this.aclService.setFull(true);
+          // 初始化菜单
+          this.menuService.add(menu);
+        }
+      }
+      forEachFun(arr) {
+        let that = this;
+        arr.forEach(function (i: any, m: any) {
+          i.reuse = false;
+          i.children = i.subset;
+          if (i.hasSubset) {
+            that.forEachFun(i.subset);
+          }
+        })
+      }
 }

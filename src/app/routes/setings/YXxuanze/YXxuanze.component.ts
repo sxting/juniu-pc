@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { _HttpClient } from '@delon/theme';
+import { _HttpClient, MenuService } from '@delon/theme';
 import { SetingsService } from '../shared/setings.service';
 import { NzModalService } from 'ng-zorro-antd';
 import { ActivatedRoute } from '@angular/router';
@@ -30,6 +30,7 @@ export class YXxuanzeComponent implements OnInit {
     private modalSrv: NzModalService,
     private router: Router,
     private route: ActivatedRoute,
+    private menuService: MenuService,
   ) {}
 
   ngOnInit() {
@@ -174,6 +175,7 @@ export class YXxuanzeComponent implements OnInit {
   }
   succFun() {
     this.router.navigate(['/setings/YXyingyong']);
+    this.setingsService.refreshMenusHttp();
   }
   //查询支付结果
   getPayUrlQuery() {
@@ -206,4 +208,5 @@ export class YXxuanzeComponent implements OnInit {
       }
     });
   }
+
 }

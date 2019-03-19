@@ -135,7 +135,9 @@ export class SoftBuyStep3Component implements OnInit, OnDestroy {
                 nzContent: '支付成功',
                 nzOnOk: function () {
                     self.item.orderNo = self.result.orderNo;
-                    ++self.item.step
+                    ++self.item.step;
+                    self.setingsService.refreshMenusHttp();
+                    
                 },
                 nzCancelText: null,
             });
