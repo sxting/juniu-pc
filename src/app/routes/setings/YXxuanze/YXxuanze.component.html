@@ -9,7 +9,7 @@
   }"
   *ngIf="zhifu"
 >
-  <div>您选择了：砍价营销；售价：1680元/年/店</div>
+  <div>您选择了：砍价营销；售价：{{price/100}}元/年/店</div>
   <div class="checkBox">
     <div style="border-bottom: 1px solid rgb(233, 233, 233);padding-bottom:10px;">
         请选择门店
@@ -36,7 +36,7 @@
       </div>
     </nz-checkbox-wrapper>
   </div>
-  已选择{{storeNum}}家门店，共需付{{Allprice}}元
+  已选择{{storeNum}}家门店，共需付{{Allprice/100}}元
   <br />
 
   <button class="buttons" *ngIf="storeIdsArr&&storeIdsArr.length>0" nz-button nzType="primary" (click)="submit()" [nzLoading]="submitting" type="submit">立即支付</button>
