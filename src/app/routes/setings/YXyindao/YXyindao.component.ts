@@ -32,9 +32,9 @@ export class YXyindaoComponent implements OnInit {
     },
   ];
   tplarr2 = [
-    { h1: '步骤一：订购插件', img: './assets/img/header1.png' },
-    { h1: '步骤二：发布砍价活动', img: './assets/img/header1.png' },
-    { h1: '步骤三：查看活动信息', img: './assets/img/header1.png' },
+    { h1: '步骤一：订购插件', img: './assets/img/1.jpg' },
+    { h1: '步骤二：发布砍价活动', img: './assets/img/2.jpg' },
+    { h1: '步骤三：查看活动信息', img: './assets/img/3.jpg' },
   ];
   tplarr3 = [
     {
