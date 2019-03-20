@@ -1,7 +1,7 @@
 
 
   <nz-card  style="overflow:hidden" [nzBordered]="false" [nzBodyStyle]="{'height':'100%','overflow': 'hidden','margin':'30px','background':'#fff'}">
-    <nz-list [nzLoading]="loading" [nzDataSource]="dataList" [nzRenderItem]="item" [nzGrid]="{gutter: 24, lg: 6, md: 12, sm: 24, xs: 24 }">
+    <nz-list [nzLoading]="loading" [nzDataSource]="dataList" [nzRenderItem]="item" [nzGrid]="{gutter: 24, lg:8, md: 12, sm: 24, xs: 24 }">
         <ng-template #item let-item>
           <nz-list-item>
             <nz-card nzHoverable  style="width:100%;position: relative;padding:0" [nzBodyStyle]="{'padding':'0px'}" [nzActions]="item.usedStoreCount&&item.usedStoreCount>0?[op1,op2]:[op1]">
