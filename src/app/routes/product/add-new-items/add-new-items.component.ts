@@ -64,6 +64,7 @@ export class AddNewItemsComponent implements OnInit {
     showDiv: boolean = false;
     pageNo: any;
     putaway: string = '1';
+    LoginIdentity: string = '';//查看是商家登陆还是门店登陆
 
     get categoryInfor() { return this.form.controls.categoryInfor; }
     get currentPrice() { return this.form.controls['currentPrice']; }
@@ -78,10 +79,11 @@ export class AddNewItemsComponent implements OnInit {
 
         let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
           JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+        this.LoginIdentity = UserInfo.staffType;//登陆身份 MERCHANT
+
         this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
         this.storeId = this.route.snapshot.params['storeId'] ? this.route.snapshot.params['storeId'] : FunctionUtil.getUrlString('storeId');
         this.productId = this.route.snapshot.params['productId'] ? this.route.snapshot.params['productId'] : FunctionUtil.getUrlString('productId');
-        this.canSave = true;
         this.formData = {
             categoryInfor: [ null, [ Validators.required ] ],
             productName:[ null, [ Validators.required ] ],
@@ -370,12 +372,10 @@ export class AddNewItemsComponent implements OnInit {
                     console.log(descPicIdArr);
 
                     self.pictureDetails = descPicIdArr;
-                    let productCreateStoreId = res.data.storeId ? res.data.storeId : "";
-                    let opUserStoreId = self.storeId ? self.storeId : "";
-                    console.log("productCreateStoreId=" + productCreateStoreId + "||opUserStoreId=" + opUserStoreId);
-                    if (productCreateStoreId == opUserStoreId) {
+
+                    if((this.LoginIdentity == 'MERCHANT' && res.data.storeId == '') || (this.LoginIdentity == 'STORE' && res.data.storeId)){
                       self.canSave = true;
-                    } else {
+                    }else {
                       self.canSave = false;
                     }
                     let descriptions: any = [];

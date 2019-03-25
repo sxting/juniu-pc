@@ -54,6 +54,7 @@ export class AddNewProductComponent implements OnInit {
     ifShow: boolean = false;//门店错误提示
     spinBoolean: boolean = false;
     canSave: boolean = true;
+    LoginIdentity: string = '';//查看是商家登陆还是门店登陆
 
     pictureDetails: any;
     picIds: any = ''; //图片列表
@@ -77,7 +78,6 @@ export class AddNewProductComponent implements OnInit {
         this.putaway = this.route.snapshot.params['putaway'] ? this.route.snapshot.params['putaway'] : '1';//list页面的上下架
         this.storeId = this.route.snapshot.params['storeId'] ? this.route.snapshot.params['storeId'] : FunctionUtil.getUrlString('storeId');
         this.productId = this.route.snapshot.params['productId'] ? this.route.snapshot.params['productId'] : FunctionUtil.getUrlString('productId');
-        this.canSave = true;
         this.formData = {
             categoryInfor: [null, [Validators.required]],
             productName: [null, [Validators.required]],
@@ -93,6 +93,9 @@ export class AddNewProductComponent implements OnInit {
         };
         this.form = this.fb.group(self.formData);
         this.getCategoryListInfor();//获取商品分类信息
+        let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+          JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+        this.LoginIdentity = UserInfo.staffType;//登陆身份 MERCHANT
     }
 
     //获取门店数据
@@ -371,13 +374,10 @@ export class AddNewProductComponent implements OnInit {
                     console.log(descPicIdArr);
 
                     self.pictureDetails = descPicIdArr;
-                    let productCreateStoreId = res.data.storeId ? res.data.storeId : "";
-                    let opUserStoreId = self.storeId ? self.storeId : "";
-                    console.log("productCreateStoreId=" + productCreateStoreId + "||opUserStoreId=" + opUserStoreId);
-                    if (productCreateStoreId == opUserStoreId) {
-                      self.canSave = true;
-                    } else {
-                      self.canSave = false;
+                    if((this.LoginIdentity == 'MERCHANT' && res.data.storeId == '') || (this.LoginIdentity == 'STORE' && res.data.storeId)){
+                        self.canSave = true;
+                    }else {
+                        self.canSave = false;
                     }
                     let descriptions: any = [];
                     let buyerNotes: any = [];
