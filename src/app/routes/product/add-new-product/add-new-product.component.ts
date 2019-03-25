@@ -374,18 +374,10 @@ export class AddNewProductComponent implements OnInit {
                     console.log(descPicIdArr);
 
                     self.pictureDetails = descPicIdArr;
-                    // let productCreateStoreId = res.data.storeId ? res.data.storeId : "";
-                    // let opUserStoreId = self.storeId ? self.storeId : "";
-                    // console.log("productCreateStoreId=" + productCreateStoreId + "||opUserStoreId=" + opUserStoreId);
-                    // if (productCreateStoreId == opUserStoreId) {
-                    //   self.canSave = true;
-                    // } else {
-                    //   self.canSave = false;
-                    // }
                     if((this.LoginIdentity == 'MERCHANT' && res.data.storeId == '') || (this.LoginIdentity == 'STORE' && res.data.storeId)){
-                      self.canSave = true;
+                        self.canSave = true;
                     }else {
-                      self.canSave = true;
+                        self.canSave = false;
                     }
                     let descriptions: any = [];
                     let buyerNotes: any = [];
