@@ -5,14 +5,14 @@ let config = env === 'development' ? {
   ENV: 'DEV',
   //  API: '//biz.juniuo.com/merchant/',
   // API1: '//biz.juniuo.com/',
-    API: 'http://biz.juniuo.com/merchant/',
-    API1: 'http://biz.juniuo.com/',
+    API: 'https://biz.juniuo.com/merchant/',
+    API1: 'https://biz.juniuo.com/',
   IMGURL: 'http://ts.diankayi.net/',
   OSS_IMAGE_URL: '//oss.juniuo.com/juniuo-pic/picture/juniuo/'
 } : {
   ENV: 'PRODAPI',
-  API: 'http://biz.juniuo.com/merchant/',
-  API1: 'http://biz.juniuo.com/',
+  API: 'https://biz.juniuo.com/merchant/',
+  API1: 'https://biz.juniuo.com/',
   // API: '//biz.juniuo.com/merchant/',
   // API1: '//biz.juniuo.com/',
   IMGURL: 'http://ts.diankayi.net/',
