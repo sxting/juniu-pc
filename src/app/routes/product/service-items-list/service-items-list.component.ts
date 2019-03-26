@@ -39,6 +39,7 @@ export class ServiceItemsListComponent implements OnInit {
     productName: string = '';
     categoryId: string = '';
     categoryList: any = [];//分类列表
+    onOff: boolean = false;//pageNo的开关
 
     constructor(
         private http: _HttpClient,
@@ -57,13 +58,13 @@ export class ServiceItemsListComponent implements OnInit {
      **/
     batchQuery = {
       pageSize: this.pageSize,
-        pageNo: this.pageNo,
-        putaway: this.putaway,
-        categoryType: 'SERVICE',
-        storeId: this.storeId,
-        merchantId: this.merchantId,
-        productName: this.productName,
-        categoryId: this.categoryId
+      pageNo: this.pageNo,
+      putaway: this.putaway,
+      categoryType: 'SERVICE',
+      storeId: this.storeId,
+      merchantId: this.merchantId,
+      productName: this.productName,
+      categoryId: this.categoryId
     };
 
     ngOnInit() {
@@ -73,7 +74,10 @@ export class ServiceItemsListComponent implements OnInit {
         this.ifStoresAll = UserInfo.staffType === "MERCHANT"? true : false;
         this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
         this.getCategoryListInfor();//获取商品分类信息
-        this.pageNo = this.route.snapshot.params['pageNo'] ? this.route.snapshot.params['pageNo'] : 1;//list页面的页码
+        this.pageNo = this.route.snapshot.params['pageNo']? this.route.snapshot.params['pageNo'] : 1;//list页面的页码
+
+        this.onOff = this.route.snapshot.params['pageNo']? false : true;
+
         this.putaway = this.route.snapshot.params['putaway'] ? this.route.snapshot.params['putaway'] : '1';//list页面的页码
     }
 
@@ -91,7 +95,7 @@ export class ServiceItemsListComponent implements OnInit {
     getStoreId(event: any) {
       let self = this;
       this.storeId = event.storeId ? event.storeId : '';
-      this.pageNo = 1;
+      this.pageNo = this.onOff == false? this.pageNo : 1;
       this.batchQuery.pageNo = 1;
       this.batchQuery.merchantId = this.merchantId;
       this.batchQuery.storeId = this.storeId;
@@ -198,6 +202,7 @@ export class ServiceItemsListComponent implements OnInit {
     getServiceItemsListHttp(data: any){
         this.loading = true;
         let that = this;
+        console.log(data);
         this.productService.getProductListInfor(data).subscribe(
             (res: any) => {
                 if (res.success) {
@@ -253,14 +258,18 @@ export class ServiceItemsListComponent implements OnInit {
             this.storeList = storeList;
             let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
               JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
-            this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
             this.storeId = UserInfo.staffType === "MERCHANT"? '' : this.storeList[0].storeId;
+
             this.batchQuery.merchantId = this.merchantId;
             this.batchQuery.storeId = this.storeId;
-            this.batchQuery.pageNo = this.pageNo;
             self.batchQuery.putaway = this.putaway;
+
+            console.log(this.pageNo);
+
+            self.batchQuery.pageNo = self.pageNo;
+
             //获取列表信息
-            this.getServiceItemsListHttp(this.batchQuery);
+            self.getServiceItemsListHttp(this.batchQuery);
 
           } else {
             this.modalSrv.error({

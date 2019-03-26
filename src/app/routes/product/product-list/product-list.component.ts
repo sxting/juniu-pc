@@ -39,6 +39,7 @@ export class ProductListComponent implements OnInit {
     categoryId: string = '';
     categoryList: any = [];//分类列表
     storeList: any = [];
+    onOff: boolean = false;
 
     constructor(
         private http: _HttpClient,
@@ -65,12 +66,14 @@ export class ProductListComponent implements OnInit {
 
     ngOnInit() {
         this.moduleId = this.route.snapshot.params['menuId'];
-        let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
-          JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
-        this.ifStoresAll = UserInfo.staffType === "MERCHANT"? true : false;
-        this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
-        this.getCategoryListInfor();//获取商品分类信息
+      let UserInfo = JSON.parse(this.localStorageService.getLocalstorage('User-Info')) ?
+        JSON.parse(this.localStorageService.getLocalstorage('User-Info')) : [];
+      this.ifStoresAll = UserInfo.staffType === "MERCHANT"? true : false;
+      this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
+      this.getCategoryListInfor();//获取商品分类信息
       this.pageNo = this.route.snapshot.params['pageNo'] ? this.route.snapshot.params['pageNo'] : 1;//list页面的页码
+      this.onOff = this.route.snapshot.params['pageNo']? false : true;
+
       this.putaway = this.route.snapshot.params['putaway'] ? this.route.snapshot.params['putaway'] : '1';//list页面的页码
     }
 
@@ -83,7 +86,8 @@ export class ProductListComponent implements OnInit {
     getStoreId(event: any) {
       let self = this;
       this.storeId = event.storeId ? event.storeId : '';
-      this.pageNo = 1;
+      this.pageNo = this.onOff == false? this.pageNo : 1;
+
       this.batchQuery.pageNo = this.pageNo;
       this.batchQuery.merchantId = this.merchantId;
       this.batchQuery.storeId = this.storeId;
