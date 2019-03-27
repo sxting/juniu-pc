@@ -34,7 +34,7 @@ let config2 = env === 'development' ? {
   // API1: '//biz.juniuo.com/',
   IMGURL: 'http://ts.diankayi.net/',
   OSS_IMAGE_URL: 'http://fdfs.juniuo.com/juniuo-pic/picture/juniuo/',
-  OSS_VIDEO_URL: 'https://juniuo-pic.oss-cn-beijing.aliyuncs.com/picture/201811/28/'  
+  OSS_VIDEO_URL: 'https://juniuo-pic.oss-cn-beijing.aliyuncs.com/picture/201811/28/'
 };
 console.log(window.location.host.indexOf('b.juniuo'))
 export const Config: any = JSON.parse(JSON.stringify(window.location.host.indexOf('b.juniuo')>-1?config:config2));
