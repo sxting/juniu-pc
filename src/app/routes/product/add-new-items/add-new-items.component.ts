@@ -523,7 +523,7 @@ export class AddNewItemsComponent implements OnInit {
               self.submitting = false;
               if (res.success) {
                 self.msg.success(`提交成功`);
-                self.router.navigate(['/product/service/items/list',{ putaway: self.putaway, pageNo: self.pageNo, menuId: self.moduleId }]);
+                self.router.navigate(['/product/service/items/list',{ putaway: self.putaway, pageNo: self.pageNo, menuId: self.moduleId,storeId: self.storeId }]);
               } else {
                 this.modalSrv.error({
                   nzTitle: '温馨提示',

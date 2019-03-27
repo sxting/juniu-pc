@@ -75,9 +75,7 @@ export class ServiceItemsListComponent implements OnInit {
         this.merchantId = UserInfo.merchantId? UserInfo.merchantId : '';
         this.getCategoryListInfor();//获取商品分类信息
         this.pageNo = this.route.snapshot.params['pageNo']? this.route.snapshot.params['pageNo'] : 1;//list页面的页码
-
         this.onOff = this.route.snapshot.params['pageNo']? false : true;
-
         this.putaway = this.route.snapshot.params['putaway'] ? this.route.snapshot.params['putaway'] : '1';//list页面的页码
     }
 
@@ -263,9 +261,6 @@ export class ServiceItemsListComponent implements OnInit {
             this.batchQuery.merchantId = this.merchantId;
             this.batchQuery.storeId = this.storeId;
             self.batchQuery.putaway = this.putaway;
-
-            console.log(this.pageNo);
-
             self.batchQuery.pageNo = self.pageNo;
 
             //获取列表信息
