@@ -287,6 +287,17 @@ export class FunctionUtil {
     arr = Object.keys(unique).map(function (u) { return JSON.parse(u); });
     return arr;
   }
+
+  //去除数组中重复值2222
+  static deleteRepeat(oldArr: any) {
+    let hash = {};
+    let newArr = oldArr.reduceRight((item, next) => {
+      hash[next.roleId] ? '' : hash[next.roleId] = true && item.push(next);
+      return item
+    }, []);
+    return newArr;
+  }
+
   static obectToSetTime(object?: any) {
     if (object) {
       object.timestamp = new Date().getTime()
