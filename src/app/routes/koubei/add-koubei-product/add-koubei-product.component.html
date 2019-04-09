@@ -45,9 +45,10 @@
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
-            <nz-form-label nzXs="24" nzSm="7" nzFor="categoryName">商品分类</nz-form-label>
+            <nz-form-label nzXs="24" nzSm="7" nzFor="categoryName" nzRequired>商品分类</nz-form-label>
             <nz-form-control nzXs="24" nzSm="12" nzMd="10">
                 <nz-cascader [nzPlaceHolder]="'请选择商品分类'" formControlName="categoryName" [nzOptions]="koubeiItemCategorys" (nzSelect)="onSelectionChange($event)"></nz-cascader>
+                <nz-form-explain class="errorTips" *ngIf="form.get('categoryName').dirty && form.get('categoryName').errors">请选择商品分类</nz-form-explain>
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
