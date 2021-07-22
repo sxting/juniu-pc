@@ -98,7 +98,7 @@
     "stylelint": "^9.2.0",
     "stylelint-config-standard": "^18.2.0",
     "webpack-bundle-analyzer": "^2.11.2",
-    "xlsx": "^0.12.12",
+    "xlsx": "^0.17.0",
     "less": "~2.7.0",
     "ng-alain": "^1.0.1"
   },
